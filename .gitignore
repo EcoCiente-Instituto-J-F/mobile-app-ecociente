@@ -1,0 +1,29 @@
+# Gradle
+.gradle/
+build/
+**/build/
+
+# Arquivos locais do Android Studio
+local.properties
+.idea/
+*.iml
+
+# Logs
+*.log
+
+# Arquivos temporários
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Chaves de assinatura
+*.jks
+*.keystore
+keystore.properties
+
+# Native
+.externalNativeBuild/
+.cxx/
+
+# Capturas
+captures/

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#063E35"
+    tools:context=".controller.Carregamento">
+
+    <TextView
+        android:id="@+id/textoPorcentagem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:text="@string/carregando_zero"
+        android:textColor="@color/branco"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/conjuntoPlantas"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/conjuntoPlantas"
+        android:layout_width="wrap_content"
+        android:layout_height="90dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="bottom|center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/contornoBarra"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/imagemPlantaPequena"
+            android:layout_width="52dp"
+            android:layout_height="43dp"
+            android:layout_gravity="bottom"
+            android:contentDescription="@string/planta_pequena"
+            android:scaleType="fitCenter"
+            android:src="@drawable/planta_carregar_1"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/imagemPlantaMedia"
+            android:layout_width="66dp"
+            android:layout_height="61dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="4dp"
+            android:contentDescription="@string/planta_media"
+            android:scaleType="fitCenter"
+            android:src="@drawable/planta_carregar_2"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/imagemPlantaGrande"
+            android:layout_width="82dp"
+            android:layout_height="80dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="4dp"
+            android:contentDescription="@string/planta_grande"
+            android:scaleType="fitCenter"
+            android:src="@drawable/planta_carregar_3"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/contornoBarra"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="90dp"
+        app:cardBackgroundColor="@android:color/transparent"
+        app:cardCornerRadius="19dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="false"
+        app:strokeColor="@color/branco"
+        app:strokeWidth="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <FrameLayout
+            android:id="@+id/areaPreenchimentoBarra"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="4dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/preenchimentoBarra"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start|center_vertical"
+                app:cardBackgroundColor="@color/branco"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="0dp"
+                app:cardUseCompatPadding="false" />
+
+        </FrameLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
