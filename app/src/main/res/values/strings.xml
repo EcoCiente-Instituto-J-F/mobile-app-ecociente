@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">EcoCiente</string>
+    <string name="carregando_zero">Carregando - 0%</string>
+    <string name="carregando_porcentagem">Carregando - %1$d%%</string>
+    <string name="planta_pequena">Planta pequena</string>
+    <string name="planta_media">Planta média</string>
+    <string name="planta_grande">Planta grande</string>
+    <string name="erro_reproduzir_video">Não foi possível reproduzir a animação da logo.</string>
+    <string name="login">Login</string>
+    <string name="cadastrar_se">Cadastrar-se</string>
+    <string name="email">E-mail</string>
+    <string name="senha">Senha</string>
+    <string name="esqueceu_senha">Esqueceu a senha?</string>
+    <string name="logo_ecociente">Logo EcoCiente</string>
+</resources>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "488554144813",
+    "project_id": "ecociente-9325f",
+    "storage_bucket": "ecociente-9325f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488554144813:android:e33c599678c438638204a4",
+        "android_client_info": {
+          "package_name": "com.example.ecociente"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsb6S08S_UwGVcjci0EHVx0eMNTMhP0Qw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
