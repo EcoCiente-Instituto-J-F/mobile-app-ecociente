@@ -12,7 +12,20 @@
           "package_name": "com.example.ecociente"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "488554144813-put8ha679fhuem57t4dphgd9l8a523v1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ecociente",
+            "certificate_hash": "9fe209fe68b5371dae068fd0417ff184bf5083e8"
+          }
+        },
+        {
+          "client_id": "488554144813-i1bh7l5sipvh33478g6gottprk8mo06q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBsb6S08S_UwGVcjci0EHVx0eMNTMhP0Qw"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "488554144813-i1bh7l5sipvh33478g6gottprk8mo06q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -11,34 +11,22 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.VideoView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.ecociente.MainActivity;
 import com.example.ecociente.R;
 
 public class SplashScreen extends AppCompatActivity {
-
     private static final String MARCADOR_LOG = "SplashScreen";
-
     private static final float FATOR_ZOOM_VIDEO = 2.10f;
-
     private static final float LARGURA_ORIGINAL_VIDEO = 894f;
     private static final float ALTURA_ORIGINAL_VIDEO = 496f;
-
     private static final long TEMPO_APOS_VIDEO = 1_500L;
-
     private static final long TEMPO_MAXIMO_COBERTURA = 1_000L;
-
     private final Handler manipulador = new Handler(Looper.getMainLooper());
-
     private FrameLayout areaVideo;
     private VideoView videoAnimacaoLogo;
     private View coberturaVideo;
-
-    private boolean telaPrincipalAberta = false;
+    private boolean carregamentoAberto = false;
     private boolean coberturaRemovida = false;
-
     private final Runnable removerCoberturaPorSeguranca = this::removerCoberturaVideo;
 
     @Override
@@ -49,23 +37,16 @@ public class SplashScreen extends AppCompatActivity {
 
         buscarComponentes();
 
-        areaVideo.post(() -> {
-            ajustarTamanhoDoVideo();
-            reproduzirVideo();
-        });
+        areaVideo.post(() -> {ajustarTamanhoDoVideo();reproduzirVideo();});
     }
 
     private void buscarComponentes() {
-
         areaVideo = findViewById(R.id.areaVideo);
-
         videoAnimacaoLogo = findViewById(R.id.videoAnimacaoLogo);
-
         coberturaVideo = findViewById(R.id.coberturaVideo);
     }
 
     private void ajustarTamanhoDoVideo() {
-
         int larguraVisivelDaTela = areaVideo.getWidth();
 
         int larguraAmpliadaDoVideo = Math.round(larguraVisivelDaTela * FATOR_ZOOM_VIDEO);
@@ -87,18 +68,12 @@ public class SplashScreen extends AppCompatActivity {
 
         videoAnimacaoLogo.setOnPreparedListener(this::prepararReprodutor);
 
-        videoAnimacaoLogo.setOnCompletionListener(
-                reprodutor -> {
-                    manipulador.postDelayed(this::abrirTelaPrincipal, TEMPO_APOS_VIDEO);
-                }
-        );
+        videoAnimacaoLogo.setOnCompletionListener(reprodutor -> manipulador.postDelayed(this::abrirCarregamento, TEMPO_APOS_VIDEO));
 
-        videoAnimacaoLogo.setOnErrorListener(
-                (reprodutor, codigoErro, detalheErro) -> {
+        videoAnimacaoLogo.setOnErrorListener((reprodutor, codigoErro, detalheErro) -> {Log.e(MARCADOR_LOG, "Erro ao reproduzir o vídeo. Código: " + codigoErro + " | Detalhe: " + detalheErro);
 
-                    Log.e(MARCADOR_LOG, "Erro ao reproduzir o vídeo. Código: " + codigoErro + " | Detalhe: " + detalheErro);
+                    manipulador.postDelayed(this::abrirCarregamento, 1_000L);
 
-                    manipulador.postDelayed(this::abrirTelaPrincipal, 1_000L);
                     return true;
                 }
         );
@@ -111,10 +86,8 @@ public class SplashScreen extends AppCompatActivity {
         reprodutor.setVolume(0f, 0f);
         reprodutor.setLooping(false);
 
-        reprodutor.setOnInfoListener(
-                (mediaPlayer, informacao, detalhe) -> {
+        reprodutor.setOnInfoListener((mediaPlayer, informacao, detalhe) -> {
                     if (informacao == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-
                         removerCoberturaVideo();
                         return true;
                     }
@@ -125,7 +98,10 @@ public class SplashScreen extends AppCompatActivity {
 
         videoAnimacaoLogo.start();
 
-        manipulador.postDelayed(removerCoberturaPorSeguranca, TEMPO_MAXIMO_COBERTURA);
+        manipulador.postDelayed(
+                removerCoberturaPorSeguranca,
+                TEMPO_MAXIMO_COBERTURA
+        );
     }
 
     private void removerCoberturaVideo() {
@@ -137,21 +113,28 @@ public class SplashScreen extends AppCompatActivity {
 
         manipulador.removeCallbacks(removerCoberturaPorSeguranca);
 
-        coberturaVideo.animate().alpha(0f).setDuration(120L).withEndAction(() -> {
+        coberturaVideo
+                .animate()
+                .alpha(0f)
+                .setDuration(120L)
+                .withEndAction(() -> {
                     coberturaVideo.setVisibility(View.GONE);
                     coberturaVideo.setAlpha(1f);
-                }).start();
+                })
+                .start();
     }
 
-    private void abrirTelaPrincipal() {
-        if (telaPrincipalAberta || isFinishing()) {
+    private void abrirCarregamento() {
+        if (carregamentoAberto || isFinishing()) {
             return;
         }
 
-        telaPrincipalAberta = true;
-        Intent rota = new Intent(SplashScreen.this, Login.class);
+        carregamentoAberto = true;
 
-        rota.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent rota = new Intent(
+                SplashScreen.this,
+                Carregamento.class
+        );
 
         startActivity(rota);
         finish();
@@ -159,7 +142,6 @@ public class SplashScreen extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-
         manipulador.removeCallbacksAndMessages(null);
 
         if (coberturaVideo != null) {
@@ -167,7 +149,6 @@ public class SplashScreen extends AppCompatActivity {
         }
 
         if (videoAnimacaoLogo != null) {
-
             videoAnimacaoLogo.setOnPreparedListener(null);
             videoAnimacaoLogo.setOnCompletionListener(null);
             videoAnimacaoLogo.setOnErrorListener(null);
