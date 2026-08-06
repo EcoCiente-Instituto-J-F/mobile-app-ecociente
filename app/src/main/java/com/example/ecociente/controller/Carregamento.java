@@ -124,7 +124,7 @@ public class Carregamento extends AppCompatActivity {
         }
 
         if (indiceFaixaAtual >= FAIXAS_DE_PROGRESSO.length) {
-            abrirSplashScreen();
+            abrirLogin();
             return;
         }
 
@@ -139,7 +139,7 @@ public class Carregamento extends AppCompatActivity {
         indiceFaixaAtual++;
 
         if (novaPorcentagem == 100) {
-            manipulador.postDelayed(this::abrirSplashScreen, 700L);
+            manipulador.postDelayed(this::abrirLogin, 700L);
             return;
         }
 
@@ -224,7 +224,7 @@ public class Carregamento extends AppCompatActivity {
         }
     }
 
-    private void abrirSplashScreen() {
+    private void abrirLogin() {
         if (proximaTelaAberta || isFinishing()) {
             return;
         }
@@ -233,7 +233,7 @@ public class Carregamento extends AppCompatActivity {
 
         manipulador.removeCallbacksAndMessages(null);
 
-        Intent rota = new Intent(Carregamento.this, SplashScreen.class);
+        Intent rota = new Intent(Carregamento.this, Login.class);
 
         startActivity(rota);
         finish();
