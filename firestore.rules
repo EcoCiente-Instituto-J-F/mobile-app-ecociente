@@ -1,0 +1,12 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Códigos de recuperação de senha só podem ser lidos/escritos pelas
+    // Cloud Functions (Admin SDK, que ignora estas regras). Nenhum acesso
+    // direto do app é permitido.
+    match /codigosRecuperacao/{email} {
+      allow read, write: if false;
+    }
+  }
+}

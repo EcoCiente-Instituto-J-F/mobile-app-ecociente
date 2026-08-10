@@ -241,7 +241,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Esqueceu a senha?"
+                    android:text="@string/esqueceu_senha"
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="9sp"
                     app:layout_constraintEnd_toEndOf="parent"

@@ -9,6 +9,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +49,7 @@ public class Login extends AppCompatActivity {
     private MaterialButton botaoGoogle;
     private MaterialButton botaoFacebook;
     private ImageView iconeOlhoSenha;
+    private TextView textoEsqueceuSenha;
     private FirebaseAuth autenticacao;
     private CredentialManager gerenciadorCredenciais;
     private CallbackManager gerenciadorRetornoFacebook;
@@ -72,6 +74,7 @@ public class Login extends AppCompatActivity {
         botaoGoogle = findViewById(R.id.botaoGoogle);
         botaoFacebook = findViewById(R.id.botaoFacebook);
         iconeOlhoSenha = findViewById(R.id.iconeOlhoSenha);
+        textoEsqueceuSenha = findViewById(R.id.textoEsqueceuSenha);
     }
 
     private void inicializarAutenticacao() {
@@ -90,6 +93,12 @@ public class Login extends AppCompatActivity {
         botaoFacebook.setOnClickListener(clique -> fazerLoginComFacebook());
 
         iconeOlhoSenha.setOnClickListener(clique -> alternarVisibilidadeSenha());
+
+        textoEsqueceuSenha.setOnClickListener(clique -> irParaEsqueciSenha());
+    }
+
+    private void irParaEsqueciSenha() {
+        startActivity(new Intent(Login.this, EsqueciSenha.class));
     }
 
     private void fazerLoginComEmail() {

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_esqueci_senha"
+    app:startDestination="@id/esqueciSenhaEmailFragment">
+
+    <fragment
+        android:id="@+id/esqueciSenhaEmailFragment"
+        android:name="com.example.ecociente.controller.EsqueciSenhaEmailFragment"
+        android:label="EsqueciSenhaEmail"
+        tools:layout="@layout/fragment_esqueci_senha_email">
+
+        <action
+            android:id="@+id/acaoParaCodigo"
+            app:destination="@id/esqueciSenhaCodigoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/esqueciSenhaCodigoFragment"
+        android:name="com.example.ecociente.controller.EsqueciSenhaCodigoFragment"
+        android:label="EsqueciSenhaCodigo"
+        tools:layout="@layout/fragment_esqueci_senha_codigo">
+
+        <argument
+            android:name="email"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/acaoParaNovaSenha"
+            app:destination="@id/esqueciSenhaNovaSenhaFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/esqueciSenhaNovaSenhaFragment"
+        android:name="com.example.ecociente.controller.EsqueciSenhaNovaSenhaFragment"
+        android:label="EsqueciSenhaNovaSenha"
+        tools:layout="@layout/fragment_esqueci_senha_nova_senha">
+
+        <argument
+            android:name="email"
+            app:argType="string" />
+
+        <argument
+            android:name="codigo"
+            app:argType="string" />
+    </fragment>
+
+</navigation>
