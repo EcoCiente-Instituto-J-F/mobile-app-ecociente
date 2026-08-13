@@ -9,6 +9,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,6 +54,7 @@ public class Login extends AppCompatActivity {
     private CallbackManager gerenciadorRetornoFacebook;
     private boolean senhaVisivel = false;
     private boolean loginEmAndamento = false;
+    private TextView abaCadastro;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -72,6 +74,7 @@ public class Login extends AppCompatActivity {
         botaoGoogle = findViewById(R.id.botaoGoogle);
         botaoFacebook = findViewById(R.id.botaoFacebook);
         iconeOlhoSenha = findViewById(R.id.iconeOlhoSenha);
+        abaCadastro = findViewById(R.id.abaCadastro);
     }
 
     private void inicializarAutenticacao() {
@@ -84,12 +87,10 @@ public class Login extends AppCompatActivity {
 
     private void configurarCliques() {
         botaoLogin.setOnClickListener(clique -> fazerLoginComEmail());
-
         botaoGoogle.setOnClickListener(clique -> fazerLoginComGoogle());
-
         botaoFacebook.setOnClickListener(clique -> fazerLoginComFacebook());
-
         iconeOlhoSenha.setOnClickListener(clique -> alternarVisibilidadeSenha());
+        abaCadastro.setOnClickListener(clique -> abrirCadastro());
     }
 
     private void fazerLoginComEmail() {
@@ -332,6 +333,12 @@ public class Login extends AppCompatActivity {
 
     private void mostrarMensagem(@NonNull String mensagem) {
         Toast.makeText(this, mensagem, Toast.LENGTH_SHORT).show();
+    }
+
+    private void abrirCadastro() {
+        Intent rota = new Intent(Login.this, Cadastro.class);
+        startActivity(rota);
+        finish();
     }
 
     @Override

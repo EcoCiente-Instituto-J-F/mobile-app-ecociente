@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:overScrollMode="never">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="30dp">
+
+        <TextView
+            android:id="@+id/tituloCadastro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_semibold"
+            android:text="Cadastrar-se"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textoEtapa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_regular"
+            android:text="Passo 2 de 2  • ●"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tituloCadastro" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/containerEndereco"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/branco"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textoEtapa"
+            app:strokeColor="@color/verde_escuro_principal"
+            app:strokeWidth="1dp">
+
+            <EditText
+                android:id="@+id/campoEndereco"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="postalAddress"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/nunito_medium"
+                android:hint="Endereço"
+                android:imeOptions="actionNext"
+                android:inputType="textPostalAddress"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:textColor="@color/verde_escuro_principal"
+                android:textColorHint="@color/cinza_escuro_textos"
+                android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/linhaNumeroCep"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerEndereco">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/branco"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/verde_escuro_principal"
+                app:strokeWidth="1dp">
+
+                <EditText
+                    android:id="@+id/campoNumero"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/nunito_medium"
+                    android:hint="Número"
+                    android:imeOptions="actionNext"
+                    android:inputType="text"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textColorHint="@color/cinza_escuro_textos"
+                    android:textSize="12sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="@color/branco"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/verde_escuro_principal"
+                app:strokeWidth="1dp">
+
+                <EditText
+                    android:id="@+id/campoCep"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:autofillHints="postalCode"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/nunito_medium"
+                    android:hint="CEP"
+                    android:imeOptions="actionNext"
+                    android:inputType="number"
+                    android:maxLength="8"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textColorHint="@color/cinza_escuro_textos"
+                    android:textSize="12sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/containerComplemento"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/branco"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linhaNumeroCep"
+            app:strokeColor="@color/verde_escuro_principal"
+            app:strokeWidth="1dp">
+
+            <EditText
+                android:id="@+id/campoComplemento"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/nunito_medium"
+                android:hint="Complemento (Opcional)"
+                android:imeOptions="actionNext"
+                android:inputType="textCapSentences"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:textColor="@color/verde_escuro_principal"
+                android:textColorHint="@color/cinza_escuro_textos"
+                android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/containerCidade"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/branco"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerComplemento"
+            app:strokeColor="@color/verde_escuro_principal"
+            app:strokeWidth="1dp">
+
+            <EditText
+                android:id="@+id/campoCidade"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="postalAddressLocality"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/nunito_medium"
+                android:hint="Cidade"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:textColor="@color/verde_escuro_principal"
+                android:textColorHint="@color/cinza_escuro_textos"
+                android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/containerEstado"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/branco"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerCidade"
+            app:strokeColor="@color/verde_escuro_principal"
+            app:strokeWidth="1dp">
+
+            <Spinner
+                android:id="@+id/campoEstado"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botaoCadastrar"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/nunito_semibold"
+            android:text="Cadastrar-se"
+            android:textAllCaps="false"
+            android:textColor="@color/branco"
+            android:textSize="17sp"
+            app:backgroundTint="@color/verde_escuro_principal"
+            app:cornerRadius="12dp"
+            app:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerEstado" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

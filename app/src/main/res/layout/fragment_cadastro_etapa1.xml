@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:overScrollMode="never">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="30dp">
+
+        <TextView
+            android:id="@+id/tituloCadastro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_semibold"
+            android:text="Cadastrar-se"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textoEtapa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_regular"
+            android:text="Passo 1 de 2  ● •"
+            android:textColor="@color/black"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tituloCadastro" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/containerNome"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/branco"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textoEtapa"
+            app:strokeColor="@color/verde_escuro_principal"
+            app:strokeWidth="1dp">
+
+            <EditText
+                android:id="@+id/campoNome"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="name"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/nunito_medium"
+                android:hint="Nome e sobrenome"
+                android:imeOptions="actionNext"
+                android:inputType="textCapWords"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:textColor="@color/verde_escuro_principal"
+                android:textColorHint="@color/cinza_escuro_textos"
+                android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/containerDataNascimento"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/branco"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerNome"
+            app:strokeColor="@color/verde_escuro_principal"
+            app:strokeWidth="1dp">
+
+            <EditText
+                android:id="@+id/campoDataNascimento"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/nunito_medium"
+                android:hint="Data de nascimento"
+                android:imeOptions="actionNext"
+                android:inputType="date"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:textColor="@color/verde_escuro_principal"
+                android:textColorHint="@color/cinza_escuro_textos"
+                android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/containerEmailCadastro"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/branco"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerDataNascimento"
+            app:strokeColor="@color/verde_escuro_principal"
+            app:strokeWidth="1dp">
+
+            <EditText
+                android:id="@+id/campoEmailCadastro"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="emailAddress"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/nunito_medium"
+                android:hint="Email"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:textColor="@color/verde_escuro_principal"
+                android:textColorHint="@color/cinza_escuro_textos"
+                android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/containerSenhaCadastro"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/branco"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerEmailCadastro"
+            app:strokeColor="@color/verde_escuro_principal"
+            app:strokeWidth="1dp">
+
+            <EditText
+                android:id="@+id/campoSenhaCadastro"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="newPassword"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/nunito_medium"
+                android:hint="Senha"
+                android:imeOptions="actionNext"
+                android:inputType="textPassword"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:textColor="@color/verde_escuro_principal"
+                android:textColorHint="@color/cinza_escuro_textos"
+                android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/containerConfirmarSenha"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/branco"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerSenhaCadastro"
+            app:strokeColor="@color/verde_escuro_principal"
+            app:strokeWidth="1dp">
+
+            <EditText
+                android:id="@+id/campoConfirmarSenha"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:autofillHints="newPassword"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/nunito_medium"
+                android:hint="Confirmar senha"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
+                android:textColor="@color/verde_escuro_principal"
+                android:textColorHint="@color/cinza_escuro_textos"
+                android:textSize="12sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botaoContinuar"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/nunito_semibold"
+            android:text="Continuar"
+            android:textAllCaps="false"
+            android:textColor="@color/branco"
+            android:textSize="17sp"
+            app:backgroundTint="@color/verde_escuro_principal"
+            app:cornerRadius="12dp"
+            app:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerConfirmarSenha" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
