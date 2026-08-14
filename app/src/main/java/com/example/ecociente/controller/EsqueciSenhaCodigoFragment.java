@@ -15,19 +15,17 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import com.example.ecociente.R;
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.functions.FirebaseFunctions;
-import java.util.HashMap;
-import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 // Passo 2 do "Esqueci a senha": 4 caixas de dígito que avançam o foco sozinhas,
-// e confirma o código com a Cloud Function antes de deixar seguir pra próxima tela.
+// e confirma o código com o backend antes de deixar seguir pra próxima tela.
 public class EsqueciSenhaCodigoFragment extends Fragment {
     private EditText digito1;
     private EditText digito2;
     private EditText digito3;
     private EditText digito4;
     private MaterialButton botaoVerificar;
-    private FirebaseFunctions funcoes;
     private String email;
     private boolean verificacaoEmAndamento = false;
 
@@ -48,8 +46,6 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
         digito3 = view.findViewById(R.id.digito3);
         digito4 = view.findViewById(R.id.digito4);
         botaoVerificar = view.findViewById(R.id.botaoVerificar);
-
-        funcoes = FirebaseFunctions.getInstance();
 
         configurarAvancoAutomatico(digito1, null, digito2);
         configurarAvancoAutomatico(digito2, digito1, digito3);
@@ -108,26 +104,29 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
 
         definirVerificacaoEmAndamento(true);
 
-        Map<String, Object> dados = new HashMap<>();
-        dados.put("email", email);
-        dados.put("codigo", codigo);
+        try {
+            JSONObject corpo = new JSONObject();
+            corpo.put("email", email);
+            corpo.put("codigo", codigo);
 
-        funcoes.getHttpsCallable("verificarCodigoRecuperacao")
-                .call(dados)
-                .addOnCompleteListener(tarefa -> {
-                    definirVerificacaoEmAndamento(false);
+            ApiEsqueciSenha.chamar("verificarCodigoRecuperacao", corpo, (sucesso, mensagemErro) -> {
+                definirVerificacaoEmAndamento(false);
 
-                    if (!tarefa.isSuccessful()) {
-                        mostrarMensagem("Código incorreto ou expirado");
-                        return;
-                    }
+                if (!sucesso) {
+                    mostrarMensagem(mensagemErro);
+                    return;
+                }
 
-                    Bundle argumentos = new Bundle();
-                    argumentos.putString("email", email);
-                    argumentos.putString("codigo", codigo);
+                Bundle argumentos = new Bundle();
+                argumentos.putString("email", email);
+                argumentos.putString("codigo", codigo);
 
-                    Navigation.findNavController(requireView()).navigate(R.id.acaoParaNovaSenha, argumentos);
-                });
+                Navigation.findNavController(requireView()).navigate(R.id.acaoParaNovaSenha, argumentos);
+            });
+        } catch (JSONException erro) {
+            definirVerificacaoEmAndamento(false);
+            mostrarMensagem("Erro inesperado. Tente novamente");
+        }
     }
 
     private void definirVerificacaoEmAndamento(boolean emAndamento) {

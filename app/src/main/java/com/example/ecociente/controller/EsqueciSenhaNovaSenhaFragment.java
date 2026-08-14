@@ -1,6 +1,8 @@
 package com.example.ecociente.controller;
 
+
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -13,14 +15,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import com.example.ecociente.MainActivity;
 import com.example.ecociente.R;
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.functions.FirebaseFunctions;
-import java.util.HashMap;
-import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-// Passo 3 do "Esqueci a senha": define a nova senha e chama a Cloud Function
+// Passo 3 do "Esqueci a senha": define a nova senha e chama o backend
 // que revalida o código e efetivamente troca a senha no Firebase Auth.
 public class EsqueciSenhaNovaSenhaFragment extends Fragment {
     private EditText campoSenha;
@@ -28,7 +28,6 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
     private MaterialButton botaoContinuar;
     private ImageView iconeOlhoSenha;
     private ImageView iconeOlhoConfirmarSenha;
-    private FirebaseFunctions funcoes;
     private String email;
     private String codigo;
     private boolean senhaVisivel = false;
@@ -53,8 +52,6 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
         botaoContinuar = view.findViewById(R.id.botaoContinuar);
         iconeOlhoSenha = view.findViewById(R.id.iconeOlhoSenha);
         iconeOlhoConfirmarSenha = view.findViewById(R.id.iconeOlhoConfirmarSenha);
-
-        funcoes = FirebaseFunctions.getInstance();
 
         botaoContinuar.setOnClickListener(clique -> redefinirSenha());
 
@@ -93,24 +90,27 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
 
         definirRedefinicaoEmAndamento(true);
 
-        Map<String, Object> dados = new HashMap<>();
-        dados.put("email", email);
-        dados.put("codigo", codigo);
-        dados.put("novaSenha", senha);
+        try {
+            JSONObject corpo = new JSONObject();
+            corpo.put("email", email);
+            corpo.put("codigo", codigo);
+            corpo.put("novaSenha", senha);
 
-        funcoes.getHttpsCallable("redefinirSenhaComCodigo")
-                .call(dados)
-                .addOnCompleteListener(tarefa -> {
-                    definirRedefinicaoEmAndamento(false);
+            ApiEsqueciSenha.chamar("redefinirSenhaComCodigo", corpo, (sucesso, mensagemErro) -> {
+                definirRedefinicaoEmAndamento(false);
 
-                    if (!tarefa.isSuccessful()) {
-                        mostrarMensagem("Não foi possível redefinir a senha. Tente novamente");
-                        return;
-                    }
+                if (!sucesso) {
+                    mostrarMensagem(mensagemErro);
+                    return;
+                }
 
-                    mostrarMensagem("Senha redefinida com sucesso");
-                    voltarParaLogin();
-                });
+                mostrarMensagem("Senha redefinida com sucesso");
+                voltarParaLogin();
+            });
+        } catch (JSONException erro) {
+            definirRedefinicaoEmAndamento(false);
+            mostrarMensagem("Erro inesperado. Tente novamente");
+        }
     }
 
     private void voltarParaLogin() {

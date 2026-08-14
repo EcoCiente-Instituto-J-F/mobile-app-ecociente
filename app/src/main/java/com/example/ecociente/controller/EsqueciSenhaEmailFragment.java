@@ -12,16 +12,14 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import com.example.ecociente.R;
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.functions.FirebaseFunctions;
-import java.util.HashMap;
-import java.util.Map;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-// Passo 1 do "Esqueci a senha": pede o email e chama a Cloud Function
+// Passo 1 do "Esqueci a senha": pede o email e chama o backend (Vercel)
 // que gera e envia o código de 4 dígitos por email.
 public class EsqueciSenhaEmailFragment extends Fragment {
     private EditText campoEmail;
     private MaterialButton botaoEnviarCodigo;
-    private FirebaseFunctions funcoes;
     private boolean envioEmAndamento = false;
 
     @Nullable
@@ -36,8 +34,6 @@ public class EsqueciSenhaEmailFragment extends Fragment {
 
         campoEmail = view.findViewById(R.id.campoEmail);
         botaoEnviarCodigo = view.findViewById(R.id.botaoEnviarCodigo);
-
-        funcoes = FirebaseFunctions.getInstance();
 
         botaoEnviarCodigo.setOnClickListener(clique -> enviarCodigo());
     }
@@ -56,26 +52,29 @@ public class EsqueciSenhaEmailFragment extends Fragment {
 
         definirEnvioEmAndamento(true);
 
-        Map<String, Object> dados = new HashMap<>();
-        dados.put("email", email);
+        try {
+            JSONObject corpo = new JSONObject();
+            corpo.put("email", email);
 
-        funcoes.getHttpsCallable("enviarCodigoRecuperacao")
-                .call(dados)
-                .addOnCompleteListener(tarefa -> {
-                    definirEnvioEmAndamento(false);
+            ApiEsqueciSenha.chamar("enviarCodigoRecuperacao", corpo, (sucesso, mensagemErro) -> {
+                definirEnvioEmAndamento(false);
 
-                    if (!tarefa.isSuccessful()) {
-                        mostrarMensagem("Não foi possível enviar o código. Tente novamente");
-                        return;
-                    }
+                if (!sucesso) {
+                    mostrarMensagem(mensagemErro);
+                    return;
+                }
 
-                    mostrarMensagem("Se o email existir, você receberá um código");
+                mostrarMensagem("Se o email existir, você receberá um código");
 
-                    Bundle argumentos = new Bundle();
-                    argumentos.putString("email", email);
+                Bundle argumentos = new Bundle();
+                argumentos.putString("email", email);
 
-                    Navigation.findNavController(requireView()).navigate(R.id.acaoParaCodigo, argumentos);
-                });
+                Navigation.findNavController(requireView()).navigate(R.id.acaoParaCodigo, argumentos);
+            });
+        } catch (JSONException erro) {
+            definirEnvioEmAndamento(false);
+            mostrarMensagem("Erro inesperado. Tente novamente");
+        }
     }
 
     private void definirEnvioEmAndamento(boolean emAndamento) {

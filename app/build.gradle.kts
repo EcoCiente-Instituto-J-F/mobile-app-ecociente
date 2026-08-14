@@ -44,7 +44,6 @@ dependencies {
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
     implementation("com.facebook.android:facebook-login:18.2.3")
-    implementation("com.google.firebase:firebase-functions")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
