@@ -6,4 +6,14 @@
     </style>
 
     <style name="Theme.EcoCiente" parent="Base.Theme.EcoCiente" />
+
+    <!-- Tema de diálogo pro fluxo "Esqueci a senha": flutua por cima do Login,
+         com fundo escurecido atrás, em vez de ocupar a tela inteira. -->
+    <style name="Theme.EcoCiente.Dialogo" parent="Theme.Material3.DayNight.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+    </style>
 </resources>

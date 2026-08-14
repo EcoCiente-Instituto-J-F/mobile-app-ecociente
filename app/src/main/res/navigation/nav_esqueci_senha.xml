@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- email/código não passam mais por argumento de navegação: ficam no
+     EsqueciSenhaViewModel, compartilhado pelos 3 Fragments (escopo na Activity). -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -22,10 +24,6 @@
         android:label="EsqueciSenhaCodigo"
         tools:layout="@layout/fragment_esqueci_senha_codigo">
 
-        <argument
-            android:name="email"
-            app:argType="string" />
-
         <action
             android:id="@+id/acaoParaNovaSenha"
             app:destination="@id/esqueciSenhaNovaSenhaFragment" />
@@ -35,15 +33,6 @@
         android:id="@+id/esqueciSenhaNovaSenhaFragment"
         android:name="com.example.ecociente.controller.EsqueciSenhaNovaSenhaFragment"
         android:label="EsqueciSenhaNovaSenha"
-        tools:layout="@layout/fragment_esqueci_senha_nova_senha">
-
-        <argument
-            android:name="email"
-            app:argType="string" />
-
-        <argument
-            android:name="codigo"
-            app:argType="string" />
-    </fragment>
+        tools:layout="@layout/fragment_esqueci_senha_nova_senha" />
 
 </navigation>

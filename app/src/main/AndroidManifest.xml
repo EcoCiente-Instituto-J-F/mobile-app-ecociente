@@ -26,6 +26,7 @@
             android:name=".controller.EsqueciSenha"
             android:exported="false"
             android:screenOrientation="portrait"
+            android:theme="@style/Theme.EcoCiente.Dialogo"
             android:windowSoftInputMode="adjustResize" />
 
         <activity

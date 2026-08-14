@@ -1,8 +1,6 @@
 package com.example.ecociente.controller;
 
-
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -15,24 +13,22 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.esquecisenha.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-// Passo 3 do "Esqueci a senha": define a nova senha e chama o backend
-// que revalida o código e efetivamente troca a senha no Firebase Auth.
+// Passo 3 do "Esqueci a senha" (View do MVVM): define a nova senha; quem
+// revalida o código e troca a senha de fato é o EsqueciSenhaViewModel.
 public class EsqueciSenhaNovaSenhaFragment extends Fragment {
     private EditText campoSenha;
     private EditText campoConfirmarSenha;
     private MaterialButton botaoContinuar;
     private ImageView iconeOlhoSenha;
     private ImageView iconeOlhoConfirmarSenha;
-    private String email;
-    private String codigo;
+    private EsqueciSenhaViewModel viewModel;
     private boolean senhaVisivel = false;
     private boolean confirmarSenhaVisivel = false;
-    private boolean redefinicaoEmAndamento = false;
 
     @Nullable
     @Override
@@ -44,14 +40,14 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle estadoSalvo) {
         super.onViewCreated(view, estadoSalvo);
 
-        email = requireArguments().getString("email");
-        codigo = requireArguments().getString("codigo");
-
         campoSenha = view.findViewById(R.id.campoSenha);
         campoConfirmarSenha = view.findViewById(R.id.campoConfirmarSenha);
         botaoContinuar = view.findViewById(R.id.botaoContinuar);
         iconeOlhoSenha = view.findViewById(R.id.iconeOlhoSenha);
         iconeOlhoConfirmarSenha = view.findViewById(R.id.iconeOlhoConfirmarSenha);
+
+        viewModel = new ViewModelProvider(requireActivity()).get(EsqueciSenhaViewModel.class);
+        viewModel.getCarregando().observe(getViewLifecycleOwner(), this::definirCarregando);
 
         botaoContinuar.setOnClickListener(clique -> redefinirSenha());
 
@@ -65,10 +61,6 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
     }
 
     private void redefinirSenha() {
-        if (redefinicaoEmAndamento) {
-            return;
-        }
-
         String senha = campoSenha.getText().toString();
 
         String confirmarSenha = campoConfirmarSenha.getText().toString();
@@ -88,29 +80,15 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
             return;
         }
 
-        definirRedefinicaoEmAndamento(true);
+        viewModel.redefinirSenha(senha).observe(getViewLifecycleOwner(), resultado -> {
+            if (!resultado.isSucesso()) {
+                mostrarMensagem(resultado.getMensagemErro());
+                return;
+            }
 
-        try {
-            JSONObject corpo = new JSONObject();
-            corpo.put("email", email);
-            corpo.put("codigo", codigo);
-            corpo.put("novaSenha", senha);
-
-            ApiEsqueciSenha.chamar("redefinirSenhaComCodigo", corpo, (sucesso, mensagemErro) -> {
-                definirRedefinicaoEmAndamento(false);
-
-                if (!sucesso) {
-                    mostrarMensagem(mensagemErro);
-                    return;
-                }
-
-                mostrarMensagem("Senha redefinida com sucesso");
-                voltarParaLogin();
-            });
-        } catch (JSONException erro) {
-            definirRedefinicaoEmAndamento(false);
-            mostrarMensagem("Erro inesperado. Tente novamente");
-        }
+            mostrarMensagem("Senha redefinida com sucesso");
+            voltarParaLogin();
+        });
     }
 
     private void voltarParaLogin() {
@@ -122,11 +100,9 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
         requireActivity().finish();
     }
 
-    private void definirRedefinicaoEmAndamento(boolean emAndamento) {
-        redefinicaoEmAndamento = emAndamento;
-
-        botaoContinuar.setEnabled(!emAndamento);
-        botaoContinuar.setAlpha(emAndamento ? 0.55f : 1f);
+    private void definirCarregando(boolean carregando) {
+        botaoContinuar.setEnabled(!carregando);
+        botaoContinuar.setAlpha(carregando ? 0.55f : 1f);
     }
 
     // Mesmo padrão de toggle de olho usado em Login/Cadastro; retorna o novo estado de visibilidade.

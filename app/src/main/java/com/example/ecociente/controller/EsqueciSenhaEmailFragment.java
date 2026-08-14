@@ -9,18 +9,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import com.example.ecociente.R;
+import com.example.ecociente.esquecisenha.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-// Passo 1 do "Esqueci a senha": pede o email e chama o backend (Vercel)
-// que gera e envia o código de 4 dígitos por email.
+// Passo 1 do "Esqueci a senha" (View do MVVM): só desenha a tela e observa o
+// EsqueciSenhaViewModel, que é quem fala com o backend e guarda o estado.
 public class EsqueciSenhaEmailFragment extends Fragment {
     private EditText campoEmail;
     private MaterialButton botaoEnviarCodigo;
-    private boolean envioEmAndamento = false;
+    private EsqueciSenhaViewModel viewModel;
 
     @Nullable
     @Override
@@ -35,14 +35,14 @@ public class EsqueciSenhaEmailFragment extends Fragment {
         campoEmail = view.findViewById(R.id.campoEmail);
         botaoEnviarCodigo = view.findViewById(R.id.botaoEnviarCodigo);
 
+        // Escopo na Activity: o mesmo ViewModel é compartilhado pelos 3 passos.
+        viewModel = new ViewModelProvider(requireActivity()).get(EsqueciSenhaViewModel.class);
+        viewModel.getCarregando().observe(getViewLifecycleOwner(), this::definirCarregando);
+
         botaoEnviarCodigo.setOnClickListener(clique -> enviarCodigo());
     }
 
     private void enviarCodigo() {
-        if (envioEmAndamento) {
-            return;
-        }
-
         String email = campoEmail.getText().toString().trim();
 
         if (email.isEmpty()) {
@@ -50,38 +50,20 @@ public class EsqueciSenhaEmailFragment extends Fragment {
             return;
         }
 
-        definirEnvioEmAndamento(true);
+        viewModel.enviarCodigo(email).observe(getViewLifecycleOwner(), resultado -> {
+            if (!resultado.isSucesso()) {
+                mostrarMensagem(resultado.getMensagemErro());
+                return;
+            }
 
-        try {
-            JSONObject corpo = new JSONObject();
-            corpo.put("email", email);
-
-            ApiEsqueciSenha.chamar("enviarCodigoRecuperacao", corpo, (sucesso, mensagemErro) -> {
-                definirEnvioEmAndamento(false);
-
-                if (!sucesso) {
-                    mostrarMensagem(mensagemErro);
-                    return;
-                }
-
-                mostrarMensagem("Se o email existir, você receberá um código");
-
-                Bundle argumentos = new Bundle();
-                argumentos.putString("email", email);
-
-                Navigation.findNavController(requireView()).navigate(R.id.acaoParaCodigo, argumentos);
-            });
-        } catch (JSONException erro) {
-            definirEnvioEmAndamento(false);
-            mostrarMensagem("Erro inesperado. Tente novamente");
-        }
+            mostrarMensagem("Se o email existir, você receberá um código");
+            Navigation.findNavController(requireView()).navigate(R.id.acaoParaCodigo);
+        });
     }
 
-    private void definirEnvioEmAndamento(boolean emAndamento) {
-        envioEmAndamento = emAndamento;
-
-        botaoEnviarCodigo.setEnabled(!emAndamento);
-        botaoEnviarCodigo.setAlpha(emAndamento ? 0.55f : 1f);
+    private void definirCarregando(boolean carregando) {
+        botaoEnviarCodigo.setEnabled(!carregando);
+        botaoEnviarCodigo.setAlpha(carregando ? 0.55f : 1f);
     }
 
     private void mostrarMensagem(@NonNull String mensagem) {
