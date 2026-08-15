@@ -1,4 +1,4 @@
-package com.example.ecociente.controller;
+package com.example.ecociente.views;
 
 import static com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL;
 import android.content.Intent;
@@ -23,9 +23,8 @@ import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.exceptions.GetCredentialCancellationException;
 import androidx.credentials.exceptions.GetCredentialException;
 import androidx.lifecycle.ViewModelProvider;
-import com.example.ecociente.MainActivity;
 import com.example.ecociente.R;
-import com.example.ecociente.login.LoginViewModel;
+import com.example.ecociente.viewmodels.LoginViewModel;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -39,7 +38,7 @@ import java.util.Arrays;
 
 // View do login (MVVM): só cuida de UI e de obter credenciais do Google/Facebook
 // (APIs que exigem uma Activity). Autenticar no Firebase é responsabilidade do
-// LoginViewModel/LoginRepository (pacote com.example.ecociente.login).
+// LoginViewModel/LoginRepository (pacotes viewmodels/ e repository/).
 public class Login extends AppCompatActivity {
     private static final String TAG = "LoginEcoCiente";
     private EditText campoEmail;

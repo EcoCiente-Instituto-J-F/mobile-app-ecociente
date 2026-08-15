@@ -1,4 +1,4 @@
-package com.example.ecociente.controller;
+package com.example.ecociente.views;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import com.example.ecociente.R;
-import com.example.ecociente.esquecisenha.EsqueciSenhaViewModel;
+import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 
 // Passo 2 do "Esqueci a senha" (View do MVVM): 4 caixas de dígito que avançam

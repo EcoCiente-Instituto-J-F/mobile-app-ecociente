@@ -1,4 +1,4 @@
-package com.example.ecociente.login;
+package com.example.ecociente.model;
 
 import androidx.annotation.NonNull;
 
@@ -12,11 +12,11 @@ public final class ResultadoLogin {
         this.mensagemErro = mensagemErro;
     }
 
-    static ResultadoLogin sucesso() {
+    public static ResultadoLogin sucesso() {
         return new ResultadoLogin(true, "");
     }
 
-    static ResultadoLogin erro(@NonNull String mensagem) {
+    public static ResultadoLogin erro(@NonNull String mensagem) {
         return new ResultadoLogin(false, mensagem);
     }
 

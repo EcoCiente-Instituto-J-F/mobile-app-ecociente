@@ -13,29 +13,29 @@
         android:theme="@style/Theme.EcoCiente">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".views.MainActivity"
             android:exported="false" />
 
         <activity
-            android:name=".controller.Login"
+            android:name=".views.Login"
             android:exported="false"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".controller.EsqueciSenha"
+            android:name=".views.EsqueciSenha"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.EcoCiente.Dialogo"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".controller.Carregamento"
+            android:name=".views.Carregamento"
             android:exported="false"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".controller.SplashScreen"
+            android:name=".views.SplashScreen"
             android:exported="true"
             android:screenOrientation="portrait">
 

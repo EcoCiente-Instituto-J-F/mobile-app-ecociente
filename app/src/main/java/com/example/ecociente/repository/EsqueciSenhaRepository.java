@@ -1,29 +1,30 @@
-package com.example.ecociente.esquecisenha;
+package com.example.ecociente.repository;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import com.example.ecociente.model.ResultadoApi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 // Camada de dados (Model) do fluxo "esqueci a senha": só sabe montar as
 // chamadas HTTP pro backend e devolver o resultado como LiveData, sem
 // nenhuma lógica de tela (isso fica no ViewModel).
-class EsqueciSenhaRepository {
+public class EsqueciSenhaRepository {
 
     @NonNull
-    LiveData<ResultadoApi> enviarCodigo(@NonNull String email) {
+    public LiveData<ResultadoApi> enviarCodigo(@NonNull String email) {
         return chamar("enviarCodigoRecuperacao", corpo(email, null, null));
     }
 
     @NonNull
-    LiveData<ResultadoApi> verificarCodigo(@NonNull String email, @NonNull String codigo) {
+    public LiveData<ResultadoApi> verificarCodigo(@NonNull String email, @NonNull String codigo) {
         return chamar("verificarCodigoRecuperacao", corpo(email, codigo, null));
     }
 
     @NonNull
-    LiveData<ResultadoApi> redefinirSenha(@NonNull String email, @NonNull String codigo, @NonNull String novaSenha) {
+    public LiveData<ResultadoApi> redefinirSenha(@NonNull String email, @NonNull String codigo, @NonNull String novaSenha) {
         return chamar("redefinirSenhaComCodigo", corpo(email, codigo, novaSenha));
     }
 

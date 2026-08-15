@@ -1,21 +1,22 @@
-package com.example.ecociente.login;
+package com.example.ecociente.repository;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import com.example.ecociente.model.ResultadoLogin;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 // Camada de dados (Model) do login: só sabe falar com o FirebaseAuth e devolver
 // o resultado como LiveData, sem nenhuma lógica de tela (isso fica no ViewModel).
-class LoginRepository {
+public class LoginRepository {
     private static final String TAG = "LoginEcoCiente";
     private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
 
     @NonNull
-    LiveData<ResultadoLogin> signInWithEmailAndPassword(@NonNull String email, @NonNull String senha) {
+    public LiveData<ResultadoLogin> signInWithEmailAndPassword(@NonNull String email, @NonNull String senha) {
         MutableLiveData<ResultadoLogin> resultado = new MutableLiveData<>();
 
         autenticacao.signInWithEmailAndPassword(email, senha).addOnCompleteListener(tarefa -> {
@@ -33,7 +34,7 @@ class LoginRepository {
     }
 
     @NonNull
-    LiveData<ResultadoLogin> signInWithCredential(@NonNull AuthCredential credencial, @NonNull String nomeProvedor) {
+    public LiveData<ResultadoLogin> signInWithCredential(@NonNull AuthCredential credencial, @NonNull String nomeProvedor) {
         MutableLiveData<ResultadoLogin> resultado = new MutableLiveData<>();
 
         autenticacao.signInWithCredential(credencial).addOnCompleteListener(tarefa -> {

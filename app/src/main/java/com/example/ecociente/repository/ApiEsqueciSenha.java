@@ -1,4 +1,4 @@
-package com.example.ecociente.esquecisenha;
+package com.example.ecociente.repository;
 
 import android.os.Handler;
 import android.os.Looper;

@@ -1,4 +1,4 @@
-package com.example.ecociente.controller;
+package com.example.ecociente.views;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;

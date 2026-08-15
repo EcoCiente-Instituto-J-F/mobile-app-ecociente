@@ -11,7 +11,7 @@
     android:paddingTop="28dp"
     android:paddingEnd="28dp"
     android:paddingBottom="28dp"
-    tools:context=".controller.EsqueciSenhaNovaSenhaFragment">
+    tools:context=".views.EsqueciSenhaNovaSenhaFragment">
 
     <TextView
         android:id="@+id/tituloNovaSenha"

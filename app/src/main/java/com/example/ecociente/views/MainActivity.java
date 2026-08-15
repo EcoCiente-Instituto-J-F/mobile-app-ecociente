@@ -1,7 +1,8 @@
-package com.example.ecociente;
+package com.example.ecociente.views;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+import com.example.ecociente.R;
 
 public class MainActivity extends AppCompatActivity {
     @Override

@@ -1,4 +1,4 @@
-package com.example.ecociente.esquecisenha;
+package com.example.ecociente.model;
 
 import androidx.annotation.NonNull;
 
@@ -12,11 +12,11 @@ public final class ResultadoApi {
         this.mensagemErro = mensagemErro;
     }
 
-    static ResultadoApi sucesso() {
+    public static ResultadoApi sucesso() {
         return new ResultadoApi(true, "");
     }
 
-    static ResultadoApi erro(@NonNull String mensagem) {
+    public static ResultadoApi erro(@NonNull String mensagem) {
         return new ResultadoApi(false, mensagem);
     }
 

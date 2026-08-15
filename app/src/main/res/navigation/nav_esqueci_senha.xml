@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/esqueciSenhaEmailFragment"
-        android:name="com.example.ecociente.controller.EsqueciSenhaEmailFragment"
+        android:name="com.example.ecociente.views.EsqueciSenhaEmailFragment"
         android:label="EsqueciSenhaEmail"
         tools:layout="@layout/fragment_esqueci_senha_email">
 
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/esqueciSenhaCodigoFragment"
-        android:name="com.example.ecociente.controller.EsqueciSenhaCodigoFragment"
+        android:name="com.example.ecociente.views.EsqueciSenhaCodigoFragment"
         android:label="EsqueciSenhaCodigo"
         tools:layout="@layout/fragment_esqueci_senha_codigo">
 
@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/esqueciSenhaNovaSenhaFragment"
-        android:name="com.example.ecociente.controller.EsqueciSenhaNovaSenhaFragment"
+        android:name="com.example.ecociente.views.EsqueciSenhaNovaSenhaFragment"
         android:label="EsqueciSenhaNovaSenha"
         tools:layout="@layout/fragment_esqueci_senha_nova_senha" />
 

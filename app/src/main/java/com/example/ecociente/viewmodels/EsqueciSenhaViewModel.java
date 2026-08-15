@@ -1,10 +1,12 @@
-package com.example.ecociente.esquecisenha;
+package com.example.ecociente.viewmodels;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.example.ecociente.model.ResultadoApi;
+import com.example.ecociente.repository.EsqueciSenhaRepository;
 
 // ViewModel compartilhado pelos 3 passos do fluxo "esqueci a senha" (criado com
 // escopo na Activity, então sobrevive à troca de Fragment). Guarda o estado do

@@ -1,4 +1,4 @@
-package com.example.ecociente.controller;
+package com.example.ecociente.views;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
-import com.example.ecociente.esquecisenha.EsqueciSenhaViewModel;
+import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 
 // Passo 3 do "Esqueci a senha" (View do MVVM): define a nova senha; quem

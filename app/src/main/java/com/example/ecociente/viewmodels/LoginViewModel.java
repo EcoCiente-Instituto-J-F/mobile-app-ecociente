@@ -1,10 +1,12 @@
-package com.example.ecociente.login;
+package com.example.ecociente.viewmodels;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.example.ecociente.model.ResultadoLogin;
+import com.example.ecociente.repository.LoginRepository;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;

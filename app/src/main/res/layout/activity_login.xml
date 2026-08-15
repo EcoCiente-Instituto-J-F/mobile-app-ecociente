@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/verde_escuro_principal"
-    tools:context=".controller.Login">
+    tools:context=".views.Login">
 
     <ImageView
         android:id="@+id/imagemLogo"
