@@ -19,8 +19,7 @@ import org.json.JSONObject;
 // (não é Firebase - por isso é HTTP puro em vez do SDK do Firebase Functions).
 // Fonte de dados "crua" usada pelo EsqueciSenhaRepository (camada de dados do MVVM).
 final class ApiEsqueciSenha {
-    // TODO: trocar pela URL real depois do deploy em vercel.com (ex: https://seu-projeto.vercel.app/api/)
-    private static final String URL_BASE = "https://SEU-PROJETO.vercel.app/api/";
+    private static final String URL_BASE = "https://mobile-app-ecociente.vercel.app/api/";
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
