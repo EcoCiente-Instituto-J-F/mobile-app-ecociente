@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="#063E35"
     android:keepScreenOn="true"
-    tools:context=".controller.SplashScreen">
+    tools:context=".views.SplashScreen">
 
     <FrameLayout
         android:id="@+id/areaVideo"

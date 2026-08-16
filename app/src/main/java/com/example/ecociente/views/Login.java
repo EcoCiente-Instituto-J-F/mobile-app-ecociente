@@ -1,4 +1,4 @@
-package com.example.ecociente.controller;
+package com.example.ecociente.views;
 
 import static com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL;
 import android.content.Intent;
@@ -9,6 +9,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,8 +22,9 @@ import androidx.credentials.GetCredentialRequest;
 import androidx.credentials.GetCredentialResponse;
 import androidx.credentials.exceptions.GetCredentialCancellationException;
 import androidx.credentials.exceptions.GetCredentialException;
-import com.example.ecociente.MainActivity;
+import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.viewmodels.LoginViewModel;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -32,14 +34,11 @@ import com.facebook.login.LoginResult;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FacebookAuthProvider;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import java.util.Arrays;
 
+// View do login (MVVM): só cuida de UI e de obter credenciais do Google/Facebook
+// (APIs que exigem uma Activity). Autenticar no Firebase é responsabilidade do
+// LoginViewModel/LoginRepository (pacotes viewmodels/ e repository/).
 public class Login extends AppCompatActivity {
     private static final String TAG = "LoginEcoCiente";
     private EditText campoEmail;
@@ -48,11 +47,11 @@ public class Login extends AppCompatActivity {
     private MaterialButton botaoGoogle;
     private MaterialButton botaoFacebook;
     private ImageView iconeOlhoSenha;
-    private FirebaseAuth autenticacao;
+    private TextView textoEsqueceuSenha;
     private CredentialManager gerenciadorCredenciais;
     private CallbackManager gerenciadorRetornoFacebook;
+    private LoginViewModel viewModel;
     private boolean senhaVisivel = false;
-    private boolean loginEmAndamento = false;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -72,14 +71,16 @@ public class Login extends AppCompatActivity {
         botaoGoogle = findViewById(R.id.botaoGoogle);
         botaoFacebook = findViewById(R.id.botaoFacebook);
         iconeOlhoSenha = findViewById(R.id.iconeOlhoSenha);
+        textoEsqueceuSenha = findViewById(R.id.textoEsqueceuSenha);
     }
 
     private void inicializarAutenticacao() {
-        autenticacao = FirebaseAuth.getInstance();
-
         gerenciadorCredenciais = CredentialManager.create(getApplicationContext());
 
         gerenciadorRetornoFacebook = CallbackManager.Factory.create();
+
+        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
+        viewModel.getCarregando().observe(this, this::definirLoginEmAndamento);
     }
 
     private void configurarCliques() {
@@ -90,13 +91,15 @@ public class Login extends AppCompatActivity {
         botaoFacebook.setOnClickListener(clique -> fazerLoginComFacebook());
 
         iconeOlhoSenha.setOnClickListener(clique -> alternarVisibilidadeSenha());
+
+        textoEsqueceuSenha.setOnClickListener(clique -> irParaEsqueciSenha());
+    }
+
+    private void irParaEsqueciSenha() {
+        startActivity(new Intent(Login.this, EsqueciSenha.class));
     }
 
     private void fazerLoginComEmail() {
-        if (loginEmAndamento) {
-            return;
-        }
-
         String email = campoEmail.getText().toString().trim();
 
         String senha = campoSenha.getText().toString();
@@ -106,29 +109,17 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        definirLoginEmAndamento(true);
+        viewModel.entrarComEmail(email, senha).observe(this, resultado -> {
+            if (!resultado.isSucesso()) {
+                mostrarMensagem(resultado.getMensagemErro());
+                return;
+            }
 
-        autenticacao.signInWithEmailAndPassword(email, senha).addOnCompleteListener(this, tarefa -> {
-                    definirLoginEmAndamento(false);
-
-                    if (tarefa.isSuccessful()) {
-                        finalizarLogin();
-                        return;
-                    }
-
-                    Log.e(TAG, "Erro no login por e-mail", tarefa.getException());
-
-                    mostrarMensagem("E-mail ou senha incorretos");
-                });
+            finalizarLogin();
+        });
     }
 
     private void fazerLoginComGoogle() {
-        if (loginEmAndamento) {
-            return;
-        }
-
-        definirLoginEmAndamento(true);
-
         GetGoogleIdOption opcaoGoogle = new GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
                         .setServerClientId(getString(R.string.default_web_client_id))
@@ -152,8 +143,6 @@ public class Login extends AppCompatActivity {
 
                     @Override
                     public void onError(@NonNull GetCredentialException erro) {
-                        definirLoginEmAndamento(false);
-
                         Log.e(TAG, "Erro ao obter credencial Google", erro);
 
                         if (erro instanceof GetCredentialCancellationException) {
@@ -169,8 +158,6 @@ public class Login extends AppCompatActivity {
 
     private void tratarCredencialGoogle(@NonNull Credential credencial) {
         if (!(credencial instanceof CustomCredential)) {
-            definirLoginEmAndamento(false);
-
             mostrarMensagem("Credencial do Google inválida");
             return;
         }
@@ -178,8 +165,6 @@ public class Login extends AppCompatActivity {
         CustomCredential credencialPersonalizada = (CustomCredential) credencial;
 
         if (!TYPE_GOOGLE_ID_TOKEN_CREDENTIAL.equals(credencialPersonalizada.getType())) {
-            definirLoginEmAndamento(false);
-
             mostrarMensagem("Credencial do Google não reconhecida");
             return;
         }
@@ -187,21 +172,20 @@ public class Login extends AppCompatActivity {
         try {
             GoogleIdTokenCredential credencialGoogle = GoogleIdTokenCredential.createFrom(credencialPersonalizada.getData());
 
-            autenticarGoogleNoFirebase(credencialGoogle.getIdToken());
+            viewModel.entrarComGoogle(credencialGoogle.getIdToken()).observe(this, resultado -> {
+                if (!resultado.isSucesso()) {
+                    mostrarMensagem(resultado.getMensagemErro());
+                    return;
+                }
+
+                finalizarLogin();
+            });
 
         } catch (Exception erro) {
-            definirLoginEmAndamento(false);
-
             Log.e(TAG, "Erro ao interpretar token Google", erro);
 
             mostrarMensagem("Não foi possível validar a conta Google");
         }
-    }
-
-    private void autenticarGoogleNoFirebase(@NonNull String tokenGoogle) {
-        AuthCredential credencialFirebase = GoogleAuthProvider.getCredential(tokenGoogle, null);
-
-        autenticarCredencialSocial(credencialFirebase, "Google");
     }
 
     private void configurarRetornoFacebook() {
@@ -220,15 +204,11 @@ public class Login extends AppCompatActivity {
 
                             @Override
                             public void onCancel() {
-                                definirLoginEmAndamento(false);
-
                                 mostrarMensagem("Login com Facebook cancelado");
                             }
 
                             @Override
                             public void onError(@NonNull FacebookException erro) {
-                                definirLoginEmAndamento(false);
-
                                 Log.e(TAG, "Erro no login do Facebook", erro);
 
                                 mostrarMensagem("Não foi possível entrar com o Facebook");
@@ -238,51 +218,23 @@ public class Login extends AppCompatActivity {
     }
 
     private void fazerLoginComFacebook() {
-        if (loginEmAndamento) {
-            return;
-        }
-
-        definirLoginEmAndamento(true);
-
         LoginManager
                 .getInstance()
                 .logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
     }
 
     private void autenticarFacebookNoFirebase(@NonNull AccessToken tokenFacebook) {
-        AuthCredential credencialFirebase = FacebookAuthProvider.getCredential(tokenFacebook.getToken());
+        viewModel.entrarComFacebook(tokenFacebook.getToken()).observe(this, resultado -> {
+            if (!resultado.isSucesso()) {
+                mostrarMensagem(resultado.getMensagemErro());
+                return;
+            }
 
-        autenticarCredencialSocial(credencialFirebase, "Facebook");
-    }
-
-    private void autenticarCredencialSocial(@NonNull AuthCredential credencial, @NonNull String nomeProvedor) {
-        autenticacao
-                .signInWithCredential(credencial)
-                .addOnCompleteListener(this, tarefa -> {
-                    definirLoginEmAndamento(false);
-
-                    if (tarefa.isSuccessful()) {
-                        finalizarLogin();
-                        return;
-                    }
-
-                    Exception erro = tarefa.getException();
-
-                    Log.e(TAG, "Erro no Firebase com " + nomeProvedor, erro);
-
-                    if (erro instanceof FirebaseAuthUserCollisionException) {
-
-                        mostrarMensagem("Já existe uma conta com esse e-mail usando outro método de login");
-                        return;
-                    }
-
-                    mostrarMensagem("Não foi possível entrar com " + nomeProvedor);
-                });
+            finalizarLogin();
+        });
     }
 
     private void definirLoginEmAndamento(boolean emAndamento) {
-        loginEmAndamento = emAndamento;
-
         botaoLogin.setEnabled(!emAndamento);
         botaoGoogle.setEnabled(!emAndamento);
         botaoFacebook.setEnabled(!emAndamento);
@@ -294,12 +246,7 @@ public class Login extends AppCompatActivity {
         botaoFacebook.setAlpha(transparencia);
     }
 
-    private void finalizarLogin() {FirebaseUser usuarioAtual = autenticacao.getCurrentUser();
-        if (usuarioAtual == null) {
-            mostrarMensagem("Não foi possível identificar o usuário");
-            return;
-        }
-
+    private void finalizarLogin() {
         mostrarMensagem("Login realizado com sucesso");
 
         Intent rota = new Intent(Login.this, MainActivity.class);

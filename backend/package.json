@@ -1,0 +1,12 @@
+{
+  "name": "ecociente-backend",
+  "description": "Backend do fluxo de recuperação de senha do EcoCiente, hospedado no Vercel",
+  "private": true,
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "nodemailer": "^6.9.15"
+  }
+}

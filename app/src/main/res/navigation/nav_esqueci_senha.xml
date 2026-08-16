@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- email/código não passam mais por argumento de navegação: ficam no
+     EsqueciSenhaViewModel, compartilhado pelos 3 Fragments (escopo na Activity). -->
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_esqueci_senha"
+    app:startDestination="@id/esqueciSenhaEmailFragment">
+
+    <fragment
+        android:id="@+id/esqueciSenhaEmailFragment"
+        android:name="com.example.ecociente.views.EsqueciSenhaEmailFragment"
+        android:label="EsqueciSenhaEmail"
+        tools:layout="@layout/fragment_esqueci_senha_email">
+
+        <action
+            android:id="@+id/acaoParaCodigo"
+            app:destination="@id/esqueciSenhaCodigoFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/esqueciSenhaCodigoFragment"
+        android:name="com.example.ecociente.views.EsqueciSenhaCodigoFragment"
+        android:label="EsqueciSenhaCodigo"
+        tools:layout="@layout/fragment_esqueci_senha_codigo">
+
+        <action
+            android:id="@+id/acaoParaNovaSenha"
+            app:destination="@id/esqueciSenhaNovaSenhaFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/esqueciSenhaNovaSenhaFragment"
+        android:name="com.example.ecociente.views.EsqueciSenhaNovaSenhaFragment"
+        android:label="EsqueciSenhaNovaSenha"
+        tools:layout="@layout/fragment_esqueci_senha_nova_senha" />
+
+</navigation>

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#063E35"
-    tools:context=".controller.Carregamento">
+    tools:context=".views.Carregamento">
 
     <TextView
         android:id="@+id/textoPorcentagem"
