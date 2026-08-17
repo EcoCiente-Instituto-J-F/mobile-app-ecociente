@@ -2,6 +2,7 @@ package com.example.ecociente.repository;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,6 +20,8 @@ import org.json.JSONObject;
 // (não é Firebase - por isso é HTTP puro em vez do SDK do Firebase Functions).
 // Fonte de dados "crua" usada pelo EsqueciSenhaRepository (camada de dados do MVVM).
 final class ApiEsqueciSenha {
+    // Filtra no Logcat por "EsqueciSenhaApi" pra ver requisição/resposta de cada chamada.
+    private static final String TAG = "EsqueciSenhaApi";
     private static final String URL_BASE = "https://mobile-app-ecociente.vercel.app/api/";
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
@@ -31,6 +34,8 @@ final class ApiEsqueciSenha {
 
     // Faz a chamada numa thread separada e devolve o resultado na thread principal.
     static void chamar(@NonNull String endpoint, @NonNull JSONObject corpo, @NonNull Retorno retorno) {
+        Log.d(TAG, "-> " + endpoint + " " + corpo);
+
         EXECUTOR.execute(() -> {
             boolean sucesso = false;
             String mensagemErro = "Não foi possível conectar ao servidor";
@@ -42,8 +47,11 @@ final class ApiEsqueciSenha {
                 if (!sucesso) {
                     mensagemErro = resposta.optString("erro", mensagemErro);
                 }
+
+                Log.d(TAG, "<- " + endpoint + " " + resposta);
             } catch (Exception erro) {
                 // Falha de rede/timeout/JSON inválido - mensagem genérica já cobre esses casos.
+                Log.e(TAG, "<- " + endpoint + " falhou", erro);
             }
 
             boolean sucessoFinal = sucesso;

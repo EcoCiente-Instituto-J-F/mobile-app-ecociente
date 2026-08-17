@@ -22,6 +22,12 @@ if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(lerCredencial()),
   });
+
+  // Em serverless (Vercel/Lambda), a função "congela" entre execuções e a
+  // conexão gRPC do Firestore pode ficar quebrada ao "descongelar", causando
+  // erros intermitentes tipo "5 NOT_FOUND". Forçar REST evita esse problema
+  // (recomendação oficial do Google pra ambientes serverless).
+  admin.firestore().settings({ preferRest: true });
 }
 
 module.exports = admin;
