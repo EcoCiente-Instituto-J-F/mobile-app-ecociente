@@ -10,8 +10,6 @@ function erroHttp(status, mensagem) {
 }
 
 // Lê o código salvo e valida existência/expiração/tentativas.
-// Não altera nada além do contador de tentativas em caso de erro
-// (a escrita/exclusão do código em si fica a cargo de quem chama).
 async function lerCodigoValido(email, codigo) {
   const referencia = admin.firestore().collection("codigosRecuperacao").doc(email);
   const documento = await referencia.get();

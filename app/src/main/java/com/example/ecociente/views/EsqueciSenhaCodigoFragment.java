@@ -18,8 +18,7 @@ import com.example.ecociente.R;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 
-// Passo 2 do "Esqueci a senha" (View do MVVM): 4 caixas de dígito que avançam
-// o foco sozinhas; a validação do código acontece no EsqueciSenhaViewModel.
+// Passo 2: 4 caixas de dígito com avanço automático de foco.
 public class EsqueciSenhaCodigoFragment extends Fragment {
     private EditText digito1;
     private EditText digito2;

@@ -22,7 +22,6 @@ async function enviarEmail(email, codigo) {
   });
 }
 
-// Passo 1: gera o código de 4 dígitos e envia por email.
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ erro: "Método não permitido" });
@@ -34,8 +33,7 @@ module.exports = async (req, res) => {
     return res.status(400).json({ erro: "Informe um email" });
   }
 
-  // A resposta é sempre de sucesso, exista ou não o usuário, pra não
-  // permitir descobrir emails cadastrados por tentativa e erro.
+  // Resposta sempre de sucesso, exista ou não o usuário (evita enumerar emails).
   try {
     const usuario = await admin.auth().getUserByEmail(email);
     const codigo = gerarCodigo();

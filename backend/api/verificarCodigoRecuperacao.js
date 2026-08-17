@@ -1,6 +1,5 @@
 const { lerCodigoValido } = require("../lib/validarCodigo");
 
-// Passo 2: só valida o código, sem alterar nada (feedback pra tela "Verificar").
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ erro: "Método não permitido" });

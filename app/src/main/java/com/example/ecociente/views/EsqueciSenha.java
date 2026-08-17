@@ -4,8 +4,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
 
-// Activity "casca": só hospeda o NavHostFragment com os 3 passos do fluxo
-// (email -> código -> nova senha). Toda a lógica fica nos Fragments.
+// Só hospeda o NavHostFragment dos 3 passos (email -> código -> nova senha).
 public class EsqueciSenha extends AppCompatActivity {
 
     @Override

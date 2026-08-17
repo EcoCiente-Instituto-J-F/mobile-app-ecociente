@@ -8,9 +8,7 @@ import com.example.ecociente.model.ResultadoApi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Camada de dados (Model) do fluxo "esqueci a senha": só sabe montar as
-// chamadas HTTP pro backend e devolver o resultado como LiveData, sem
-// nenhuma lógica de tela (isso fica no ViewModel).
+// Monta as chamadas HTTP pro backend e devolve o resultado como LiveData.
 public class EsqueciSenhaRepository {
 
     @NonNull

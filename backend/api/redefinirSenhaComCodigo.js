@@ -1,7 +1,6 @@
 const admin = require("../lib/firebaseAdmin");
 const { lerCodigoValido } = require("../lib/validarCodigo");
 
-// Passo 3: revalida o código (nunca confiar só na checagem do passo 2) e troca a senha.
 module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).json({ erro: "Método não permitido" });
