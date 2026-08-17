@@ -18,8 +18,7 @@ import com.example.ecociente.R;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 
-// Passo 3 do "Esqueci a senha" (View do MVVM): define a nova senha; quem
-// revalida o código e troca a senha de fato é o EsqueciSenhaViewModel.
+// Passo 3: define a nova senha.
 public class EsqueciSenhaNovaSenhaFragment extends Fragment {
     private EditText campoSenha;
     private EditText campoConfirmarSenha;
@@ -105,7 +104,6 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
         botaoContinuar.setAlpha(carregando ? 0.55f : 1f);
     }
 
-    // Mesmo padrão de toggle de olho usado em Login/Cadastro; retorna o novo estado de visibilidade.
     private boolean alternarVisibilidade(EditText campo, ImageView icone, boolean visivelAtual) {
         if (visivelAtual) {
             campo.setTransformationMethod(PasswordTransformationMethod.getInstance());

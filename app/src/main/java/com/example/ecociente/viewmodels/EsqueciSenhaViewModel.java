@@ -8,10 +8,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.repository.EsqueciSenhaRepository;
 
-// ViewModel compartilhado pelos 3 passos do fluxo "esqueci a senha" (criado com
-// escopo na Activity, então sobrevive à troca de Fragment). Guarda o estado do
-// fluxo (email, código) e expõe o resultado de cada chamada como LiveData -
-// os Fragments só observam, sem lidar com rede/estado de carregamento.
+// Compartilhado pelos 3 Fragments (escopo na Activity), guarda email/código
+// entre os passos e expõe o resultado de cada chamada como LiveData.
 public class EsqueciSenhaViewModel extends ViewModel {
     private final EsqueciSenhaRepository repositorio = new EsqueciSenhaRepository();
     private final MutableLiveData<Boolean> carregando = new MutableLiveData<>(false);

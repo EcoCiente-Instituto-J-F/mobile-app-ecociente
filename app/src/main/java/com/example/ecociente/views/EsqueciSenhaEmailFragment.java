@@ -15,8 +15,7 @@ import com.example.ecociente.R;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 
-// Passo 1 do "Esqueci a senha" (View do MVVM): só desenha a tela e observa o
-// EsqueciSenhaViewModel, que é quem fala com o backend e guarda o estado.
+// Passo 1: pede o email e pede pro ViewModel enviar o código.
 public class EsqueciSenhaEmailFragment extends Fragment {
     private EditText campoEmail;
     private MaterialButton botaoEnviarCodigo;
@@ -35,7 +34,6 @@ public class EsqueciSenhaEmailFragment extends Fragment {
         campoEmail = view.findViewById(R.id.campoEmail);
         botaoEnviarCodigo = view.findViewById(R.id.botaoEnviarCodigo);
 
-        // Escopo na Activity: o mesmo ViewModel é compartilhado pelos 3 passos.
         viewModel = new ViewModelProvider(requireActivity()).get(EsqueciSenhaViewModel.class);
         viewModel.getCarregando().observe(getViewLifecycleOwner(), this::definirCarregando);
 

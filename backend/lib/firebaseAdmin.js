@@ -1,11 +1,7 @@
 const admin = require("firebase-admin");
 
-// O Vercel não faz parte do projeto Firebase, então precisa de uma chave de
-// conta de serviço explícita pra poder usar o Admin SDK (Auth + Firestore).
-//
-// A chave vem em base64 (FIREBASE_SERVICE_ACCOUNT_KEY_BASE64) em vez de JSON
-// cru: colar o JSON direto no campo de variável de ambiente da Vercel quebra
-// por causa das quebras de linha dentro da private_key. Base64 evita isso.
+// Chave em base64 pra não quebrar com as quebras de linha da private_key
+// ao colar direto num campo de env var.
 function lerCredencial() {
   const valorBase64 = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_BASE64;
 
@@ -14,7 +10,6 @@ function lerCredencial() {
     return JSON.parse(json);
   }
 
-  // Mantido por compatibilidade, caso alguém prefira colar o JSON direto.
   return JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 }
 
@@ -22,6 +17,10 @@ if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(lerCredencial()),
   });
+
+  // Evita erro intermitente "5 NOT_FOUND" causado pela conexão gRPC
+  // congelando/descongelando entre execuções serverless.
+  admin.firestore().settings({ preferRest: true });
 }
 
 module.exports = admin;
