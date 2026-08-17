@@ -1,4 +1,4 @@
-const admin = require("./firebaseAdmin");
+const { admin, db } = require("./firebaseAdmin");
 
 const VALIDADE_CODIGO_MS = 10 * 60 * 1000; // 10 minutos
 const MAXIMO_TENTATIVAS = 5;
@@ -11,7 +11,7 @@ function erroHttp(status, mensagem) {
 
 // Lê o código salvo e valida existência/expiração/tentativas.
 async function lerCodigoValido(email, codigo) {
-  const referencia = admin.firestore().collection("codigosRecuperacao").doc(email);
+  const referencia = db.collection("codigosRecuperacao").doc(email);
   const documento = await referencia.get();
 
   if (!documento.exists) {

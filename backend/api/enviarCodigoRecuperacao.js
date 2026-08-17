@@ -1,4 +1,4 @@
-const admin = require("../lib/firebaseAdmin");
+const { admin, db } = require("../lib/firebaseAdmin");
 const nodemailer = require("nodemailer");
 
 function gerarCodigo() {
@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
     const usuario = await admin.auth().getUserByEmail(email);
     const codigo = gerarCodigo();
 
-    await admin.firestore().collection("codigosRecuperacao").doc(email).set({
+    await db.collection("codigosRecuperacao").doc(email).set({
       codigo,
       criadoEm: admin.firestore.Timestamp.now(),
       tentativas: 0,

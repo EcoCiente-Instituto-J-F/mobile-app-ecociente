@@ -1,4 +1,4 @@
-const admin = require("../lib/firebaseAdmin");
+const { admin } = require("../lib/firebaseAdmin");
 const { lerCodigoValido } = require("../lib/validarCodigo");
 
 module.exports = async (req, res) => {
