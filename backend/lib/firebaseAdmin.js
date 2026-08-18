@@ -1,4 +1,5 @@
 const admin = require("firebase-admin");
+const { getFirestore } = require("firebase-admin/firestore");
 
 // Chave em base64 pra não quebrar com as quebras de linha da private_key
 // ao colar direto num campo de env var.
@@ -13,14 +14,13 @@ function lerCredencial() {
   return JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY);
 }
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(lerCredencial()),
-  });
+const app = admin.apps.length
+  ? admin.app()
+  : admin.initializeApp({ credential: admin.credential.cert(lerCredencial()) });
 
-  // Evita erro intermitente "5 NOT_FOUND" causado pela conexão gRPC
-  // congelando/descongelando entre execuções serverless.
-  admin.firestore().settings({ preferRest: true });
-}
+// O banco desse projeto não é o "(default)" especial, é um banco nomeado
+// "default" - por isso precisa apontar pro ID explicitamente.
+const db = getFirestore(app, "default");
+db.settings({ preferRest: true });
 
-module.exports = admin;
+module.exports = { admin, db };
