@@ -9,7 +9,7 @@ function erroHttp(status, mensagem) {
   return erro;
 }
 
-// Lê o código salvo e valida existência/expiração/tentativas.
+// lê o código salvo e valida existência/expiração/tentativas
 async function lerCodigoValido(email, codigo) {
   const referencia = db.collection("codigosRecuperacao").doc(email);
   const documento = await referencia.get();

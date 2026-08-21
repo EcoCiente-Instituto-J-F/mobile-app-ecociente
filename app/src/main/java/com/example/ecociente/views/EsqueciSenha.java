@@ -4,7 +4,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
 
-// Só hospeda o NavHostFragment dos 3 passos (email -> código -> nova senha).
+// hospeda o NavHostFragment com os 3 passos (email, código, nova senha)
 public class EsqueciSenha extends AppCompatActivity {
 
     @Override

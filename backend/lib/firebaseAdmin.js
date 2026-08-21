@@ -1,8 +1,7 @@
 const admin = require("firebase-admin");
 const { getFirestore } = require("firebase-admin/firestore");
 
-// Chave em base64 pra não quebrar com as quebras de linha da private_key
-// ao colar direto num campo de env var.
+// base64 pra não quebrar com as quebras de linha da private_key ao colar na Vercel
 function lerCredencial() {
   const valorBase64 = process.env.FIREBASE_SERVICE_ACCOUNT_KEY_BASE64;
 
@@ -18,9 +17,8 @@ const app = admin.apps.length
   ? admin.app()
   : admin.initializeApp({ credential: admin.credential.cert(lerCredencial()) });
 
-// O banco desse projeto não é o "(default)" especial, é um banco nomeado
-// "default" - por isso precisa apontar pro ID explicitamente.
+// o banco desse projeto não é o "(default)" especial, é um banco nomeado "default"
 const db = getFirestore(app, "default");
-db.settings({ preferRest: true });
+db.settings({ preferRest: true }); // evita o erro intermitente de gRPC no serverless
 
 module.exports = { admin, db };

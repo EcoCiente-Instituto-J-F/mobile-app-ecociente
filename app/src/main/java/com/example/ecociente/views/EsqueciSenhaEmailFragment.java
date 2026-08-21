@@ -15,7 +15,7 @@ import com.example.ecociente.R;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 
-// Passo 1: pede o email e pede pro ViewModel enviar o código.
+// tela 1: email
 public class EsqueciSenhaEmailFragment extends Fragment {
     private EditText campoEmail;
     private MaterialButton botaoEnviarCodigo;

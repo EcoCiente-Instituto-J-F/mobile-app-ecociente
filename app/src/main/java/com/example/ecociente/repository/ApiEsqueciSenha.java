@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Cliente HTTP do backend na Vercel (não é Firebase, por isso HTTP puro).
+// cliente HTTP do backend na Vercel (não é Firebase, por isso é HTTP puro mesmo)
 final class ApiEsqueciSenha {
     private static final String TAG = "EsqueciSenhaApi";
     private static final String URL_BASE = "https://mobile-app-ecociente.vercel.app/api/";

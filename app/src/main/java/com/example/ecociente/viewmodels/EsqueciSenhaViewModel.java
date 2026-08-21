@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.repository.EsqueciSenhaRepository;
 
-// Compartilhado pelos 3 Fragments (escopo na Activity), guarda email/código
-// entre os passos e expõe o resultado de cada chamada como LiveData.
+// compartilhado pelos 3 fragments (escopo na Activity), guarda email/código
+// entre as telas e expõe o resultado de cada chamada como LiveData
 public class EsqueciSenhaViewModel extends ViewModel {
     private final EsqueciSenhaRepository repositorio = new EsqueciSenhaRepository();
     private final MutableLiveData<Boolean> carregando = new MutableLiveData<>(false);

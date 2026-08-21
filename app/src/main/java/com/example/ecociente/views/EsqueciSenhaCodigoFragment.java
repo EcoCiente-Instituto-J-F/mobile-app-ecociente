@@ -18,7 +18,7 @@ import com.example.ecociente.R;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 
-// Passo 2: 4 caixas de dígito com avanço automático de foco.
+// tela 2: código de 4 dígitos
 public class EsqueciSenhaCodigoFragment extends Fragment {
     private EditText digito1;
     private EditText digito2;
@@ -54,7 +54,7 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
         botaoVerificar.setOnClickListener(clique -> verificarCodigo());
     }
 
-    // Ao digitar um dígito, pula pro próximo campo; ao apagar num campo vazio, volta pro anterior.
+    // pula pro próximo campo ao digitar, volta pro anterior se apagar vazio
     private void configurarAvancoAutomatico(EditText campoAtual, @Nullable EditText campoAnterior, @Nullable EditText proximoCampo) {
         campoAtual.addTextChangedListener(new TextWatcher() {
             @Override

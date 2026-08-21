@@ -18,7 +18,7 @@ import com.example.ecociente.R;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 
-// Passo 3: define a nova senha.
+// tela 3: nova senha
 public class EsqueciSenhaNovaSenhaFragment extends Fragment {
     private EditText campoSenha;
     private EditText campoConfirmarSenha;

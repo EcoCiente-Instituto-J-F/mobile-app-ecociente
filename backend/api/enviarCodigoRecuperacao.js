@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
     return res.status(400).json({ erro: "Informe um email" });
   }
 
-  // Resposta sempre de sucesso, exista ou não o usuário (evita enumerar emails).
+  // sempre retorna sucesso, exista ou não o usuário (evita enumerar email)
   try {
     const usuario = await admin.auth().getUserByEmail(email);
     const codigo = gerarCodigo();
