@@ -1,6 +1,27 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
+}
+
+val propriedadesEnv = Properties()
+
+val arquivoEnv = rootProject.file(".env")
+
+if (arquivoEnv.exists()) {
+    arquivoEnv.inputStream().use { entrada ->
+        propriedadesEnv.load(entrada)
+    }
+}
+
+fun obterVariavelAmbiente(nome: String): String {
+    return System.getenv(nome)
+        ?: propriedadesEnv.getProperty(nome)
+        ?: error(
+            "Variável de ambiente não encontrada: $nome. " +
+                    "Adicione-a no arquivo .env da raiz do projeto."
+        )
 }
 
 android {
@@ -14,25 +35,30 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner =
-            "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        resValue("string", "facebook_app_id", obterVariavelAmbiente("FACEBOOK_APP_ID"))
+
+        resValue("string", "fb_login_protocol_scheme", obterVariavelAmbiente("FACEBOOK_LOGIN_PROTOCOL_SCHEME"))
+
+        resValue("string", "facebook_client_token", obterVariavelAmbiente("FACEBOOK_CLIENT_TOKEN"))
+    }
+
+    buildFeatures {
+        resValues = true
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-
-            proguardFiles(
-                getDefaultProguardFile(
-                    "proguard-android-optimize.txt"
-                ),
-                "proguard-rules.pro"
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
+
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
