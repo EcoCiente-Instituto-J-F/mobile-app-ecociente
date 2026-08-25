@@ -1,19 +1,62 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.EcoCiente" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style
+        name="Base.Theme.EcoCiente"
+        parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/verde_escuro_principal</item>
+        <item name="colorOnPrimary">@color/branco</item>
+        <item name="colorSecondary">@color/rosa_ecociente</item>
+        <item name="colorOnSecondary">@color/branco</item>
     </style>
 
-    <style name="Theme.EcoCiente" parent="Base.Theme.EcoCiente" />
+    <style
+        name="Theme.EcoCiente"
+        parent="Base.Theme.EcoCiente" />
 
-    <!-- Tema de diálogo pro fluxo "Esqueci a senha": flutua por cima do Login,
-         com fundo escurecido atrás, em vez de ocupar a tela inteira. -->
-    <style name="Theme.EcoCiente.Dialogo" parent="Theme.Material3.DayNight.Dialog">
+    <style
+        name="Theme.EcoCiente.Dialogo"
+        parent="Theme.Material3.DayNight.Dialog">
+
         <item name="android:windowIsFloating">true</item>
+
         <item name="android:backgroundDimEnabled">true</item>
+
         <item name="android:windowBackground">@android:color/transparent</item>
+
         <item name="android:windowMinWidthMajor">90%</item>
+
         <item name="android:windowMinWidthMinor">90%</item>
+    </style>
+
+    <style
+        name="ShapeAppearance.EcoCiente.DatePicker"
+        parent="ShapeAppearance.Material3.Corner.Medium">
+
+        <item name="cornerFamily">rounded</item>
+
+        <item name="cornerSize">24dp</item>
+    </style>
+
+    <style
+        name="Widget.EcoCiente.MaterialCalendar"
+        parent="Widget.Material3.MaterialCalendar">
+
+        <item name="backgroundTint">@color/branco</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.EcoCiente.DatePicker</item>
+    </style>
+
+    <style
+        name="ThemeOverlay.EcoCiente.MaterialDatePicker"
+        parent="ThemeOverlay.Material3.MaterialCalendar">
+
+        <item name="materialCalendarStyle">@style/Widget.EcoCiente.MaterialCalendar</item>
+        <item name="colorPrimary">@color/verde_escuro_principal</item>
+        <item name="colorOnPrimary">@color/branco</item>
+        <item name="colorSecondary">@color/rosa_ecociente</item>
+        <item name="colorOnSecondary">@color/branco</item>
+        <item name="colorSurface">@color/branco</item>
+        <item name="colorOnSurface">@color/verde_escuro_principal</item>
+        <item name="colorOnSurfaceVariant">@color/verde_escuro_principal</item>
+        <item name="colorSurfaceContainerHigh">@color/branco</item>
     </style>
 </resources>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.INTERNET" />
+
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission
+        android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -40,10 +44,15 @@
             android:screenOrientation="portrait">
 
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action
+                    android:name="android.intent.action.MAIN" />
+
+                <category
+                    android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
+
         </activity>
 
         <meta-data
@@ -63,14 +72,24 @@
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
 
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
+            <intent-filter>
 
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
+                <action
+                    android:name="android.intent.action.VIEW" />
 
-            <data android:scheme="@string/fb_login_protocol_scheme" />
-        </intent-filter>
+                <category
+                    android:name="android.intent.category.DEFAULT" />
+
+                <category
+                    android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="@string/fb_login_protocol_scheme" />
+
+            </intent-filter>
+
         </activity>
+
     </application>
+
 </manifest>

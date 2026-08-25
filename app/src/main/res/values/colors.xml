@@ -2,6 +2,8 @@
 
 <resources>
     <color name="verde_escuro_principal">#064E3B</color>
+    <color name="verde_claro_ecociente">#CCD9CA</color>
+    <color name="rosa_ecociente">#D64573</color>
     <color name="branco">#FFFFFF</color>
     <color name="cinza_escuro_textos">#999999</color>
     <color name="black">#000000</color>

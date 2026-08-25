@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tituloCadastro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunito_bold"
+        android:text="Cadastrar-se"
+        android:textColor="@color/verde_escuro_principal"
+        android:textSize="25sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/containerEtapas"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginTop="1dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tituloCadastro">
+
+        <TextView
+            android:id="@+id/textoPassoCadastro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_semibold"
+            android:text="Passo 1 de 2"
+            android:textColor="#414141"
+            android:textSize="11sp" />
+
+        <View
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:layout_marginStart="9dp"
+            android:background="@drawable/fundo_ponto_verde" />
+
+        <View
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/fundo_ponto_cinza" />
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollCadastroEtapa1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:paddingTop="8dp"
+        android:paddingBottom="22dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/containerEtapas">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tituloDadosPessoais"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="Dados pessoais"
+                android:textColor="@color/verde_escuro_principal"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/containerNome"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="7dp"
+                app:cardBackgroundColor="#FAFCFB"
+                app:cardCornerRadius="11dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tituloDadosPessoais"
+                app:strokeColor="#357967"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="13dp"
+                    android:paddingEnd="13dp">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:contentDescription="Ícone usuário"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_usuario_cadastro" />
+
+                    <EditText
+                        android:id="@+id/campoNome"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:autofillHints="name"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/nunito_medium"
+                        android:hint="Nome e sobrenome"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPersonName|textCapWords"
+                        android:padding="0dp"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textColorHint="#8E9592"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/containerDataNascimento"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="#FAFCFB"
+                app:cardCornerRadius="11dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/containerNome"
+                app:strokeColor="#357967"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="13dp"
+                    android:paddingEnd="13dp">
+
+                    <ImageView
+                        android:id="@+id/iconeCalendario"
+                        android:layout_width="17dp"
+                        android:layout_height="17dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:contentDescription="Abrir calendário"
+                        android:focusable="true"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_calendario_cadastro" />
+
+                    <EditText
+                        android:id="@+id/campoDataNascimento"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/nunito_medium"
+                        android:hint="Data de nascimento"
+                        android:imeOptions="actionNext"
+                        android:inputType="number"
+                        android:maxLength="10"
+                        android:padding="0dp"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textColorHint="#8E9592"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/containerEmailCadastro"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="#FAFCFB"
+                app:cardCornerRadius="11dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/containerDataNascimento"
+                app:strokeColor="#357967"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="13dp"
+                    android:paddingEnd="13dp">
+
+                    <ImageView
+                        android:layout_width="17dp"
+                        android:layout_height="15dp"
+                        android:contentDescription="Ícone e-mail"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/icon_email" />
+
+                    <EditText
+                        android:id="@+id/campoEmailCadastro"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:autofillHints="emailAddress"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/nunito_medium"
+                        android:hint="Email"
+                        android:imeOptions="actionNext"
+                        android:inputType="textEmailAddress"
+                        android:padding="0dp"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textColorHint="#8E9592"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/containerSenhaCadastro"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="#FAFCFB"
+                app:cardCornerRadius="11dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/containerEmailCadastro"
+                app:strokeColor="#357967"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="13dp"
+                    android:paddingEnd="13dp">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="17dp"
+                        android:contentDescription="Ícone senha"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/icon_senha" />
+
+                    <EditText
+                        android:id="@+id/campoSenhaCadastro"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="11dp"
+                        android:layout_weight="1"
+                        android:autofillHints="newPassword"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/nunito_medium"
+                        android:hint="Senha"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPassword"
+                        android:padding="0dp"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textColorHint="#8E9592"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/containerConfirmarSenha"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                app:cardBackgroundColor="#FAFCFB"
+                app:cardCornerRadius="11dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/containerSenhaCadastro"
+                app:strokeColor="#357967"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="13dp"
+                    android:paddingEnd="13dp">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="17dp"
+                        android:contentDescription="Ícone senha"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/icon_senha" />
+
+                    <EditText
+                        android:id="@+id/campoConfirmarSenha"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="11dp"
+                        android:layout_weight="1"
+                        android:autofillHints="newPassword"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/nunito_medium"
+                        android:hint="Confirmar senha"
+                        android:imeOptions="actionNext"
+                        android:inputType="textPassword"
+                        android:padding="0dp"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textColorHint="#8E9592"
+                        android:textSize="11sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tituloCondominio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="Condomínio"
+                android:textColor="@color/verde_escuro_principal"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/containerConfirmarSenha" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardOpcaoCondominio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                app:cardBackgroundColor="#F3F8F6"
+                app:cardCornerRadius="11dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tituloCondominio"
+                app:strokeColor="#D7E6E1"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:id="@+id/linhaPossuiCodigoCondominio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:minHeight="46dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="10dp"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="5dp">
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/checkPossuiCodigoCondominio"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:minWidth="0dp"
+                        android:minHeight="0dp"
+                        android:padding="0dp"
+                        app:buttonIconTint="@color/checkbox_check_branco"
+                        app:buttonTint="@color/verde_escuro_principal" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="7dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunito_semibold"
+                            android:text="Possui código de condomínio"
+                            android:textColor="#3E4A46"
+                            android:textSize="10sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="1dp"
+                            android:fontFamily="@font/nunito_regular"
+                            android:text="Use o código fornecido pelo seu condomínio."
+                            android:textColor="#7B8581"
+                            android:textSize="8sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/containerCodigoCondominio"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="#E1E3E2"
+                app:cardCornerRadius="11dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardOpcaoCondominio"
+                app:strokeColor="#B6BAB8"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingStart="13dp"
+                    android:paddingEnd="13dp">
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="17dp"
+                        android:alpha="0.65"
+                        android:contentDescription="Ícone código do condomínio"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/icon_senha"/>
+
+                    <EditText
+                        android:id="@+id/campoCodigoCondominio"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="11dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:enabled="false"
+                        android:fontFamily="@font/nunito_medium"
+                        android:hint="Código do condomínio"
+                        android:imeOptions="actionDone"
+                        android:inputType="textCapCharacters"
+                        android:padding="0dp"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textColorHint="#737775"
+                        android:textSize="11sp"/>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <FrameLayout
+                android:id="@+id/containerBotaoContinuar"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/containerCodigoCondominio">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/botaoContinuar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Continuar"
+                    android:textAllCaps="false"
+                    android:textColor="@color/branco"
+                    android:textSize="14sp"
+                    app:backgroundTint="@color/verde_escuro_principal"
+                    app:cornerRadius="11dp"
+                    app:elevation="0dp"/>
+
+                <ProgressBar
+                    android:id="@+id/indicadorCarregamentoCadastroEtapa1"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:indeterminateTint="@color/branco"
+                    android:visibility="gone"/>
+            </FrameLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

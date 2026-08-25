@@ -27,3 +27,6 @@ keystore.properties
 
 # Capturas
 captures/
+
+# Variáveis locais do aplicativo Android
+.env
