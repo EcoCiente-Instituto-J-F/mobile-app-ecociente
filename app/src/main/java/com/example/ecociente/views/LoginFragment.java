@@ -1,6 +1,7 @@
 package com.example.ecociente.views;
 
 import static com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CancellationSignal;
@@ -38,7 +39,6 @@ import com.facebook.login.LoginResult;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import com.google.android.material.button.MaterialButton;
-
 import java.util.Arrays;
 
 public class LoginFragment extends Fragment {
@@ -57,7 +57,10 @@ public class LoginFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle estadoSalvo) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle estadoSalvo) {
         return inflater.inflate(R.layout.fragment_login, container, false);
     }
 
@@ -117,7 +120,8 @@ public class LoginFragment extends Fragment {
         startActivity(rota);
     }
 
-    private void fazerLoginComEmail() {String email = campoEmail.getText().toString().trim();
+    private void fazerLoginComEmail() {
+        String email = campoEmail.getText().toString().trim();
         String senha = campoSenha.getText().toString();
 
         if (email.isEmpty()) {
@@ -126,7 +130,6 @@ public class LoginFragment extends Fragment {
             campoEmail.requestFocus();
             return;
         }
-
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             mostrarMensagem("Informe um e-mail válido.");
@@ -142,53 +145,63 @@ public class LoginFragment extends Fragment {
             return;
         }
 
-        viewModel.entrarComEmail(email, senha).observe(getViewLifecycleOwner(), resultado -> {
+        viewModel
+                .entrarComEmail(email, senha)
+                .observe(
+                        getViewLifecycleOwner(),
+                        resultado -> {
                             if (!resultado.isSucesso()) {
                                 mostrarMensagem(resultado.getMensagemErro());
                                 return;
                             }
                             finalizarLogin();
-                        }
-                );
+                        });
     }
 
-
     private void fazerLoginComGoogle() {
-        GetGoogleIdOption opcaoGoogle = new GetGoogleIdOption.Builder().setFilterByAuthorizedAccounts(false).setServerClientId(getString(R.string.default_web_client_id)).setAutoSelectEnabled(false).build();
+        GetGoogleIdOption opcaoGoogle =
+                new GetGoogleIdOption.Builder()
+                        .setFilterByAuthorizedAccounts(false)
+                        .setServerClientId(getString(R.string.default_web_client_id))
+                        .setAutoSelectEnabled(false)
+                        .build();
 
-        GetCredentialRequest solicitacao = new GetCredentialRequest.Builder().addCredentialOption(opcaoGoogle).build();
+        GetCredentialRequest solicitacao =
+                new GetCredentialRequest.Builder().addCredentialOption(opcaoGoogle).build();
 
         sinalCancelamentoGoogle = new CancellationSignal();
 
-        gerenciadorCredenciais.getCredentialAsync(requireActivity(), solicitacao, sinalCancelamentoGoogle, ContextCompat.getMainExecutor(requireContext()),
+        gerenciadorCredenciais.getCredentialAsync(
+                requireActivity(),
+                solicitacao,
+                sinalCancelamentoGoogle,
+                ContextCompat.getMainExecutor(requireContext()),
                 new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
-                            @Override
-                            public void onResult(@NonNull GetCredentialResponse resposta) {
-                                if (!isAdded()) {
-                                    return;
-                                }
-                                tratarCredencialGoogle(resposta.getCredential());
-                            }
-
-                            @Override
-                            public void onError(@NonNull GetCredentialException erro) {
-                                Log.e(TAG, "Erro ao obter credencial Google", erro);
-
-                                if (!isAdded()) {
-                                    return;
-                                }
-
-                                if (erro instanceof GetCredentialCancellationException) {
-                                    mostrarMensagem("Login com Google cancelado");
-                                    return;
-                                }
-
-                                mostrarMensagem("Não foi possível entrar com o Google");
-                            }
+                    @Override
+                    public void onResult(@NonNull GetCredentialResponse resposta) {
+                        if (!isAdded()) {
+                            return;
                         }
-                );
-    }
+                        tratarCredencialGoogle(resposta.getCredential());
+                    }
 
+                    @Override
+                    public void onError(@NonNull GetCredentialException erro) {
+                        Log.e(TAG, "Erro ao obter credencial Google", erro);
+
+                        if (!isAdded()) {
+                            return;
+                        }
+
+                        if (erro instanceof GetCredentialCancellationException) {
+                            mostrarMensagem("Login com Google cancelado");
+                            return;
+                        }
+
+                        mostrarMensagem("Não foi possível entrar com o Google");
+                    }
+                });
+    }
 
     private void tratarCredencialGoogle(@NonNull Credential credencial) {
         if (!(credencial instanceof CustomCredential)) {
@@ -204,16 +217,20 @@ public class LoginFragment extends Fragment {
         }
 
         try {
-            GoogleIdTokenCredential credencialGoogle = GoogleIdTokenCredential.createFrom(credencialPersonalizada.getData());
+            GoogleIdTokenCredential credencialGoogle =
+                    GoogleIdTokenCredential.createFrom(credencialPersonalizada.getData());
 
-            viewModel.entrarComGoogle(credencialGoogle.getIdToken()).observe(getViewLifecycleOwner(), resultado -> {
+            viewModel
+                    .entrarComGoogle(credencialGoogle.getIdToken())
+                    .observe(
+                            getViewLifecycleOwner(),
+                            resultado -> {
                                 if (!resultado.isSucesso()) {
                                     mostrarMensagem(resultado.getMensagemErro());
                                     return;
                                 }
                                 finalizarLogin();
-                            }
-                    );
+                            });
 
         } catch (Exception erro) {
             Log.e(TAG, "Erro ao interpretar token Google", erro);
@@ -223,7 +240,9 @@ public class LoginFragment extends Fragment {
     }
 
     private void configurarRetornoFacebook() {
-        LoginManager.getInstance().registerCallback(gerenciadorRetornoFacebook,
+        LoginManager.getInstance()
+                .registerCallback(
+                        gerenciadorRetornoFacebook,
                         new FacebookCallback<LoginResult>() {
                             @Override
                             public void onSuccess(@NonNull LoginResult resultado) {
@@ -241,23 +260,26 @@ public class LoginFragment extends Fragment {
 
                                 mostrarMensagem("Não foi possível entrar com o Facebook");
                             }
-                        }
-                );
+                        });
     }
 
     private void fazerLoginComFacebook() {
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
+        LoginManager.getInstance()
+                .logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
     }
 
     private void autenticarFacebookNoFirebase(@NonNull AccessToken tokenFacebook) {
-        viewModel.entrarComFacebook(tokenFacebook.getToken()).observe(getViewLifecycleOwner(), resultado -> {
+        viewModel
+                .entrarComFacebook(tokenFacebook.getToken())
+                .observe(
+                        getViewLifecycleOwner(),
+                        resultado -> {
                             if (!resultado.isSucesso()) {
                                 mostrarMensagem(resultado.getMensagemErro());
                                 return;
                             }
                             finalizarLogin();
-                        }
-                );
+                        });
     }
 
     private void definirLoginEmAndamento(boolean emAndamento) {
@@ -278,227 +300,109 @@ public class LoginFragment extends Fragment {
         botaoGoogle.setAlpha(transparencia);
         botaoFacebook.setAlpha(transparencia);
 
-        if (getActivity()
-                        instanceof Login
-        ) {
+        if (getActivity() instanceof Login) {
 
-            ((Login) getActivity())
-                    .definirNavegacaoHabilitada(
-                            !emAndamento
-                    );
+            ((Login) getActivity()).definirNavegacaoHabilitada(!emAndamento);
         }
     }
-
 
     private void finalizarLogin() {
 
-        if (
-                !isAdded()
-        ) {
+        if (!isAdded()) {
 
             return;
         }
 
+        mostrarMensagem("Login realizado com sucesso");
 
-        mostrarMensagem(
-                "Login realizado com sucesso"
-        );
+        Intent rota = new Intent(requireContext(), MainActivity.class);
 
+        rota.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        Intent rota =
-                new Intent(
-                        requireContext(),
-                        MainActivity.class
-                );
+        startActivity(rota);
 
-
-        rota.addFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK
-                        |
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK
-        );
-
-
-        startActivity(
-                rota
-        );
-
-
-        requireActivity()
-                .finish();
+        requireActivity().finish();
     }
-
 
     private void alternarVisibilidadeSenha() {
 
-        if (
-                senhaVisivel
-        ) {
+        if (senhaVisivel) {
 
-            campoSenha
-                    .setTransformationMethod(
-                            PasswordTransformationMethod
-                                    .getInstance()
-                    );
+            campoSenha.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
+            iconeOlhoSenha.setImageResource(R.drawable.icon_olho_fechado);
 
-            iconeOlhoSenha
-                    .setImageResource(
-                            R.drawable.icon_olho_fechado
-                    );
+            iconeOlhoSenha.setContentDescription("Mostrar senha");
 
-
-            iconeOlhoSenha
-                    .setContentDescription(
-                            "Mostrar senha"
-                    );
-
-
-            senhaVisivel =
-                    false;
-
+            senhaVisivel = false;
 
         } else {
 
-            campoSenha
-                    .setTransformationMethod(
-                            HideReturnsTransformationMethod
-                                    .getInstance()
-                    );
+            campoSenha.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
 
+            iconeOlhoSenha.setImageResource(R.drawable.icon_olho_aberto);
 
-            iconeOlhoSenha
-                    .setImageResource(
-                            R.drawable.icon_olho_aberto
-                    );
+            iconeOlhoSenha.setContentDescription("Ocultar senha");
 
-
-            iconeOlhoSenha
-                    .setContentDescription(
-                            "Ocultar senha"
-                    );
-
-
-            senhaVisivel =
-                    true;
+            senhaVisivel = true;
         }
 
-
-        campoSenha.setSelection(
-                campoSenha
-                        .getText()
-                        .length()
-        );
+        campoSenha.setSelection(campoSenha.getText().length());
     }
 
+    private void mostrarMensagem(@NonNull String mensagem) {
 
-    private void mostrarMensagem(
-            @NonNull String mensagem
-    ) {
-
-        if (
-                !isAdded()
-        ) {
+        if (!isAdded()) {
 
             return;
         }
 
-
-        Toast.makeText(
-                requireContext(),
-                mensagem,
-                Toast.LENGTH_SHORT
-        ).show();
+        Toast.makeText(requireContext(), mensagem, Toast.LENGTH_SHORT).show();
     }
-
 
     @Override
     public void onActivityResult(
-            int codigoSolicitacao,
-            int codigoResultado,
-            @Nullable Intent dados
-    ) {
+            int codigoSolicitacao, int codigoResultado, @Nullable Intent dados) {
 
-        super.onActivityResult(
-                codigoSolicitacao,
-                codigoResultado,
-                dados
-        );
+        super.onActivityResult(codigoSolicitacao, codigoResultado, dados);
 
+        if (gerenciadorRetornoFacebook != null) {
 
-        if (
-                gerenciadorRetornoFacebook
-                        != null
-        ) {
-
-            gerenciadorRetornoFacebook
-                    .onActivityResult(
-                            codigoSolicitacao,
-                            codigoResultado,
-                            dados
-                    );
+            gerenciadorRetornoFacebook.onActivityResult(codigoSolicitacao, codigoResultado, dados);
         }
     }
-
 
     @Override
     public void onDestroyView() {
 
-        if (
-                sinalCancelamentoGoogle
-                        != null
-        ) {
+        if (sinalCancelamentoGoogle != null) {
 
             sinalCancelamentoGoogle.cancel();
 
-            sinalCancelamentoGoogle =
-                    null;
+            sinalCancelamentoGoogle = null;
         }
 
+        if (gerenciadorRetornoFacebook != null) {
 
-        if (
-                gerenciadorRetornoFacebook
-                        != null
-        ) {
-
-            LoginManager
-                    .getInstance()
-                    .unregisterCallback(
-                            gerenciadorRetornoFacebook
-                    );
+            LoginManager.getInstance().unregisterCallback(gerenciadorRetornoFacebook);
         }
 
+        if (getActivity() instanceof Login) {
 
-        if (
-                getActivity()
-                        instanceof Login
-        ) {
-
-            ((Login) getActivity())
-                    .definirNavegacaoHabilitada(
-                            true
-                    );
+            ((Login) getActivity()).definirNavegacaoHabilitada(true);
         }
 
+        campoEmail = null;
 
-        campoEmail =
-                null;
+        campoSenha = null;
 
-        campoSenha =
-                null;
+        botaoLogin = null;
 
-        botaoLogin =
-                null;
+        botaoGoogle = null;
 
-        botaoGoogle =
-                null;
+        botaoFacebook = null;
 
-        botaoFacebook =
-                null;
-
-        iconeOlhoSenha =
-                null;
-
+        iconeOlhoSenha = null;
 
         super.onDestroyView();
     }

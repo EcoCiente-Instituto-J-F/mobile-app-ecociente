@@ -1,0 +1,70 @@
+name: CI Android - EcoCiente
+
+on:
+  pull_request:
+    branches:
+      - main
+
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-android-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  JAVA_VERSION: "17"
+
+  #valores fictícios usados somente durante o CI
+  #ci não realiza login real com Facebook
+  FACEBOOK_APP_ID: "000000000000000"
+  FACEBOOK_LOGIN_PROTOCOL_SCHEME: "fb000000000000000"
+  FACEBOOK_CLIENT_TOKEN: "ci-placeholder"
+
+jobs:
+  ci-android:
+    name: Gradle, Java, Testes e Android
+
+    runs-on: ubuntu-latest
+
+    timeout-minutes: 25
+
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v7
+
+      - name: Validar Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v6
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      - name: Verificar versão do Java
+        run: java -version
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v6
+
+      - name: Dar permissão ao Gradle Wrapper
+        run: chmod +x ./gradlew
+
+      - name: Verificar Gradle
+        run: ./gradlew --version
+
+      - name: Executar testes unitários
+        run: ./gradlew testDebugUnitTest --no-daemon --stacktrace
+
+      - name: Executar Android Lint
+        run: ./gradlew lintDebug --no-daemon --stacktrace
+
+      - name: Compilar aplicativo Android
+        run: ./gradlew assembleDebug --no-daemon --stacktrace

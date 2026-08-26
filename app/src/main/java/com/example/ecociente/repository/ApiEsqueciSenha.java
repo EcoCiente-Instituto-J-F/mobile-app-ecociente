@@ -30,31 +30,36 @@ final class ApiEsqueciSenha {
     private ApiEsqueciSenha() {}
 
     // Faz a chamada numa thread separada e devolve o resultado na thread principal.
-    static void chamar(@NonNull String endpoint, @NonNull JSONObject corpo, @NonNull Retorno retorno) {
-        EXECUTOR.execute(() -> {
-            boolean sucesso = false;
-            String mensagemErro = "Não foi possível conectar ao servidor";
+    static void chamar(
+            @NonNull String endpoint, @NonNull JSONObject corpo, @NonNull Retorno retorno) {
+        EXECUTOR.execute(
+                () -> {
+                    boolean sucesso = false;
+                    String mensagemErro = "Não foi possível conectar ao servidor";
 
-            try {
-                JSONObject resposta = enviar(endpoint, corpo);
-                sucesso = resposta.optBoolean("sucesso", false);
+                    try {
+                        JSONObject resposta = enviar(endpoint, corpo);
+                        sucesso = resposta.optBoolean("sucesso", false);
 
-                if (!sucesso) {
-                    mensagemErro = resposta.optString("erro", mensagemErro);
-                }
-            } catch (Exception erro) {
-                // Falha de rede/timeout/JSON inválido - mensagem genérica já cobre esses casos.
-            }
+                        if (!sucesso) {
+                            mensagemErro = resposta.optString("erro", mensagemErro);
+                        }
+                    } catch (Exception erro) {
+                        // Falha de rede/timeout/JSON inválido - mensagem genérica já cobre esses
+                        // casos.
+                    }
 
-            boolean sucessoFinal = sucesso;
-            String mensagemFinal = mensagemErro;
+                    boolean sucessoFinal = sucesso;
+                    String mensagemFinal = mensagemErro;
 
-            PRINCIPAL.post(() -> retorno.aoConcluir(sucessoFinal, mensagemFinal));
-        });
+                    PRINCIPAL.post(() -> retorno.aoConcluir(sucessoFinal, mensagemFinal));
+                });
     }
 
-    private static JSONObject enviar(String endpoint, JSONObject corpo) throws IOException, JSONException {
-        HttpURLConnection conexao = (HttpURLConnection) new URL(URL_BASE + endpoint).openConnection();
+    private static JSONObject enviar(String endpoint, JSONObject corpo)
+            throws IOException, JSONException {
+        HttpURLConnection conexao =
+                (HttpURLConnection) new URL(URL_BASE + endpoint).openConnection();
 
         try {
             conexao.setRequestMethod("POST");

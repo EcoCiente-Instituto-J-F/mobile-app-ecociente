@@ -26,22 +26,38 @@ fun obterVariavelAmbiente(nome: String): String {
 
 android {
     namespace = "com.example.ecociente"
+
     compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.ecociente"
+
         minSdk = 24
         targetSdk = 36
+
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner =
+            "androidx.test.runner.AndroidJUnitRunner"
 
-        resValue("string", "facebook_app_id", obterVariavelAmbiente("FACEBOOK_APP_ID"))
+        resValue(
+            "string",
+            "facebook_app_id",
+            obterVariavelAmbiente("FACEBOOK_APP_ID")
+        )
 
-        resValue("string", "fb_login_protocol_scheme", obterVariavelAmbiente("FACEBOOK_LOGIN_PROTOCOL_SCHEME"))
+        resValue(
+            "string",
+            "fb_login_protocol_scheme",
+            obterVariavelAmbiente("FACEBOOK_LOGIN_PROTOCOL_SCHEME")
+        )
 
-        resValue("string", "facebook_client_token", obterVariavelAmbiente("FACEBOOK_CLIENT_TOKEN"))
+        resValue(
+            "string",
+            "facebook_client_token",
+            obterVariavelAmbiente("FACEBOOK_CLIENT_TOKEN")
+        )
     }
 
     buildFeatures {
@@ -51,7 +67,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }

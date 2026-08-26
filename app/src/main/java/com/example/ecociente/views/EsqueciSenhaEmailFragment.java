@@ -24,7 +24,10 @@ public class EsqueciSenhaEmailFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle estadoSalvo) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle estadoSalvo) {
         return inflater.inflate(R.layout.fragment_esqueci_senha_email, container, false);
     }
 
@@ -50,15 +53,20 @@ public class EsqueciSenhaEmailFragment extends Fragment {
             return;
         }
 
-        viewModel.enviarCodigo(email).observe(getViewLifecycleOwner(), resultado -> {
-            if (!resultado.isSucesso()) {
-                mostrarMensagem(resultado.getMensagemErro());
-                return;
-            }
+        viewModel
+                .enviarCodigo(email)
+                .observe(
+                        getViewLifecycleOwner(),
+                        resultado -> {
+                            if (!resultado.isSucesso()) {
+                                mostrarMensagem(resultado.getMensagemErro());
+                                return;
+                            }
 
-            mostrarMensagem("Se o email existir, você receberá um código");
-            Navigation.findNavController(requireView()).navigate(R.id.acaoParaCodigo);
-        });
+                            mostrarMensagem("Se o email existir, você receberá um código");
+                            Navigation.findNavController(requireView())
+                                    .navigate(R.id.acaoParaCodigo);
+                        });
     }
 
     private void definirCarregando(boolean carregando) {

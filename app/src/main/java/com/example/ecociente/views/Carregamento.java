@@ -8,24 +8,21 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.ecociente.R;
-
 import java.util.Random;
 
 public class Carregamento extends AppCompatActivity {
     private static final int[][] FAIXAS_DE_PROGRESSO = {
-            {1, 14},
-            {15, 24},
-            {25, 33},
-            {34, 49},
-            {50, 64},
-            {65, 79},
-            {80, 94},
-            {95, 99},
-            {100, 100}
+        {1, 14},
+        {15, 24},
+        {25, 33},
+        {34, 49},
+        {50, 64},
+        {65, 79},
+        {80, 94},
+        {95, 99},
+        {100, 100}
     };
 
     private static final int[] SEQUENCIA_DAS_PLANTAS = {0, 1, 2, 3, 2, 1};
@@ -54,28 +51,28 @@ public class Carregamento extends AppCompatActivity {
 
     private boolean proximaTelaAberta = false;
 
-    private final Runnable animarPlantas = new Runnable() {
-        @Override
-        public void run() {
+    private final Runnable animarPlantas =
+            new Runnable() {
+                @Override
+                public void run() {
 
-            if (isFinishing() || proximaTelaAberta) {
-                return;
-            }
+                    if (isFinishing() || proximaTelaAberta) {
+                        return;
+                    }
 
-            indiceSequenciaPlantas++;
+                    indiceSequenciaPlantas++;
 
-            if (indiceSequenciaPlantas >= SEQUENCIA_DAS_PLANTAS.length) {
-                indiceSequenciaPlantas = 0;
-            }
+                    if (indiceSequenciaPlantas >= SEQUENCIA_DAS_PLANTAS.length) {
+                        indiceSequenciaPlantas = 0;
+                    }
 
-            int quantidadeDePlantas = SEQUENCIA_DAS_PLANTAS[indiceSequenciaPlantas];
+                    int quantidadeDePlantas = SEQUENCIA_DAS_PLANTAS[indiceSequenciaPlantas];
 
-            atualizarPlantas(quantidadeDePlantas);
+                    atualizarPlantas(quantidadeDePlantas);
 
-            manipulador.postDelayed(this, TEMPO_ENTRE_PLANTAS
-            );
-        }
-    };
+                    manipulador.postDelayed(this, TEMPO_ENTRE_PLANTAS);
+                }
+            };
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -159,33 +156,39 @@ public class Carregamento extends AppCompatActivity {
     private void atualizarTela(int porcentagem) {
         porcentagemAtual = porcentagem;
 
-        textoPorcentagem.setText(
-                getString(R.string.carregando_porcentagem, porcentagem)
-        );
+        textoPorcentagem.setText(getString(R.string.carregando_porcentagem, porcentagem));
 
         atualizarLarguraDaBarra();
     }
 
     private void atualizarLarguraDaBarra() {
-        areaPreenchimentoBarra.post(() -> {
-            int larguraDisponivel = areaPreenchimentoBarra.getWidth() - areaPreenchimentoBarra.getPaddingLeft() - areaPreenchimentoBarra.getPaddingRight();
+        areaPreenchimentoBarra.post(
+                () -> {
+                    int larguraDisponivel =
+                            areaPreenchimentoBarra.getWidth()
+                                    - areaPreenchimentoBarra.getPaddingLeft()
+                                    - areaPreenchimentoBarra.getPaddingRight();
 
-            int novaLargura = Math.round(larguraDisponivel * (porcentagemAtual / 100f));
+                    int novaLargura = Math.round(larguraDisponivel * (porcentagemAtual / 100f));
 
-            if (porcentagemAtual > 0) {
-                int larguraMinima = areaPreenchimentoBarra.getHeight() - areaPreenchimentoBarra.getPaddingTop() - areaPreenchimentoBarra.getPaddingBottom();
+                    if (porcentagemAtual > 0) {
+                        int larguraMinima =
+                                areaPreenchimentoBarra.getHeight()
+                                        - areaPreenchimentoBarra.getPaddingTop()
+                                        - areaPreenchimentoBarra.getPaddingBottom();
 
-                novaLargura = Math.max(novaLargura, larguraMinima);
-            }
+                        novaLargura = Math.max(novaLargura, larguraMinima);
+                    }
 
-            novaLargura = Math.min(novaLargura, larguraDisponivel);
+                    novaLargura = Math.min(novaLargura, larguraDisponivel);
 
-            FrameLayout.LayoutParams parametros = (FrameLayout.LayoutParams) preenchimentoBarra.getLayoutParams();
+                    FrameLayout.LayoutParams parametros =
+                            (FrameLayout.LayoutParams) preenchimentoBarra.getLayoutParams();
 
-            parametros.width = novaLargura;
+                    parametros.width = novaLargura;
 
-            preenchimentoBarra.setLayoutParams(parametros);
-        });
+                    preenchimentoBarra.setLayoutParams(parametros);
+                });
     }
 
     private void atualizarPlantas(int quantidadeDePlantas) {
@@ -215,12 +218,19 @@ public class Carregamento extends AppCompatActivity {
                 return;
             }
 
-            planta.animate().alpha(0f).scaleX(0.80f).scaleY(0.80f).setDuration(250L).withEndAction(() -> {
-                        planta.setVisibility(View.INVISIBLE);
-                        planta.setAlpha(1f);
-                        planta.setScaleX(1f);
-                        planta.setScaleY(1f);
-                    }).start();
+            planta.animate()
+                    .alpha(0f)
+                    .scaleX(0.80f)
+                    .scaleY(0.80f)
+                    .setDuration(250L)
+                    .withEndAction(
+                            () -> {
+                                planta.setVisibility(View.INVISIBLE);
+                                planta.setAlpha(1f);
+                                planta.setScaleX(1f);
+                                planta.setScaleY(1f);
+                            })
+                    .start();
         }
     }
 

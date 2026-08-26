@@ -45,10 +45,12 @@ public class LoginViewModel extends ViewModel {
         carregando.setValue(true);
 
         MediatorLiveData<ResultadoLogin> resultado = new MediatorLiveData<>();
-        resultado.addSource(chamada, valor -> {
-            carregando.setValue(false);
-            resultado.setValue(valor);
-        });
+        resultado.addSource(
+                chamada,
+                valor -> {
+                    carregando.setValue(false);
+                    resultado.setValue(valor);
+                });
 
         return resultado;
     }
