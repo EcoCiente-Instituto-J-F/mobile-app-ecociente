@@ -2,6 +2,7 @@ package com.example.ecociente.repository;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -15,10 +16,9 @@ import java.util.concurrent.Executors;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Cliente HTTP simples pro backend de "esqueci a senha", hospedado no Vercel
-// (não é Firebase - por isso é HTTP puro em vez do SDK do Firebase Functions).
-// Fonte de dados "crua" usada pelo EsqueciSenhaRepository (camada de dados do MVVM).
+// Cliente HTTP do backend na Vercel (não é Firebase, por isso HTTP puro).
 final class ApiEsqueciSenha {
+    private static final String TAG = "EsqueciSenhaApi";
     private static final String URL_BASE = "https://mobile-app-ecociente.vercel.app/api/";
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
@@ -29,37 +29,35 @@ final class ApiEsqueciSenha {
 
     private ApiEsqueciSenha() {}
 
-    // Faz a chamada numa thread separada e devolve o resultado na thread principal.
-    static void chamar(
-            @NonNull String endpoint, @NonNull JSONObject corpo, @NonNull Retorno retorno) {
-        EXECUTOR.execute(
-                () -> {
-                    boolean sucesso = false;
-                    String mensagemErro = "Não foi possível conectar ao servidor";
+    static void chamar(@NonNull String endpoint, @NonNull JSONObject corpo, @NonNull Retorno retorno) {
+        Log.d(TAG, "-> " + endpoint + " " + corpo);
 
-                    try {
-                        JSONObject resposta = enviar(endpoint, corpo);
-                        sucesso = resposta.optBoolean("sucesso", false);
+        EXECUTOR.execute(() -> {
+            boolean sucesso = false;
+            String mensagemErro = "Não foi possível conectar ao servidor";
 
-                        if (!sucesso) {
-                            mensagemErro = resposta.optString("erro", mensagemErro);
-                        }
-                    } catch (Exception erro) {
-                        // Falha de rede/timeout/JSON inválido - mensagem genérica já cobre esses
-                        // casos.
-                    }
+            try {
+                JSONObject resposta = enviar(endpoint, corpo);
+                sucesso = resposta.optBoolean("sucesso", false);
 
-                    boolean sucessoFinal = sucesso;
-                    String mensagemFinal = mensagemErro;
+                if (!sucesso) {
+                    mensagemErro = resposta.optString("erro", mensagemErro);
+                }
 
-                    PRINCIPAL.post(() -> retorno.aoConcluir(sucessoFinal, mensagemFinal));
-                });
+                Log.d(TAG, "<- " + endpoint + " " + resposta);
+            } catch (Exception erro) {
+                Log.e(TAG, "<- " + endpoint + " falhou", erro);
+            }
+
+            boolean sucessoFinal = sucesso;
+            String mensagemFinal = mensagemErro;
+
+            PRINCIPAL.post(() -> retorno.aoConcluir(sucessoFinal, mensagemFinal));
+        });
     }
 
-    private static JSONObject enviar(String endpoint, JSONObject corpo)
-            throws IOException, JSONException {
-        HttpURLConnection conexao =
-                (HttpURLConnection) new URL(URL_BASE + endpoint).openConnection();
+    private static JSONObject enviar(String endpoint, JSONObject corpo) throws IOException, JSONException {
+        HttpURLConnection conexao = (HttpURLConnection) new URL(URL_BASE + endpoint).openConnection();
 
         try {
             conexao.setRequestMethod("POST");

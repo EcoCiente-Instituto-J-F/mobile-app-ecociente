@@ -18,8 +18,7 @@ import com.example.ecociente.R;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 
-// Passo 3 do "Esqueci a senha" (View do MVVM): define a nova senha; quem
-// revalida o código e troca a senha de fato é o EsqueciSenhaViewModel.
+// Passo 3: define a nova senha.
 public class EsqueciSenhaNovaSenhaFragment extends Fragment {
     private EditText campoSenha;
     private EditText campoConfirmarSenha;
@@ -32,10 +31,7 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            @Nullable ViewGroup container,
-            @Nullable Bundle estadoSalvo) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle estadoSalvo) {
         return inflater.inflate(R.layout.fragment_esqueci_senha_nova_senha, container, false);
     }
 
@@ -54,19 +50,13 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
 
         botaoContinuar.setOnClickListener(clique -> redefinirSenha());
 
-        iconeOlhoSenha.setOnClickListener(
-                clique -> {
-                    senhaVisivel = alternarVisibilidade(campoSenha, iconeOlhoSenha, senhaVisivel);
-                });
+        iconeOlhoSenha.setOnClickListener(clique -> {
+            senhaVisivel = alternarVisibilidade(campoSenha, iconeOlhoSenha, senhaVisivel);
+        });
 
-        iconeOlhoConfirmarSenha.setOnClickListener(
-                clique -> {
-                    confirmarSenhaVisivel =
-                            alternarVisibilidade(
-                                    campoConfirmarSenha,
-                                    iconeOlhoConfirmarSenha,
-                                    confirmarSenhaVisivel);
-                });
+        iconeOlhoConfirmarSenha.setOnClickListener(clique -> {
+            confirmarSenhaVisivel = alternarVisibilidade(campoConfirmarSenha, iconeOlhoConfirmarSenha, confirmarSenhaVisivel);
+        });
     }
 
     private void redefinirSenha() {
@@ -89,19 +79,15 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
             return;
         }
 
-        viewModel
-                .redefinirSenha(senha)
-                .observe(
-                        getViewLifecycleOwner(),
-                        resultado -> {
-                            if (!resultado.isSucesso()) {
-                                mostrarMensagem(resultado.getMensagemErro());
-                                return;
-                            }
+        viewModel.redefinirSenha(senha).observe(getViewLifecycleOwner(), resultado -> {
+            if (!resultado.isSucesso()) {
+                mostrarMensagem(resultado.getMensagemErro());
+                return;
+            }
 
-                            mostrarMensagem("Senha redefinida com sucesso");
-                            voltarParaLogin();
-                        });
+            mostrarMensagem("Senha redefinida com sucesso");
+            voltarParaLogin();
+        });
     }
 
     private void voltarParaLogin() {
@@ -118,8 +104,6 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
         botaoContinuar.setAlpha(carregando ? 0.55f : 1f);
     }
 
-    // Mesmo padrão de toggle de olho usado em Login/Cadastro; retorna o novo estado de
-    // visibilidade.
     private boolean alternarVisibilidade(EditText campo, ImageView icone, boolean visivelAtual) {
         if (visivelAtual) {
             campo.setTransformationMethod(PasswordTransformationMethod.getInstance());
