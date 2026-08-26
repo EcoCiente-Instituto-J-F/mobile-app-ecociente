@@ -43,10 +43,12 @@ public class EsqueciSenhaViewModel extends ViewModel {
         carregando.setValue(true);
 
         MediatorLiveData<ResultadoApi> resultado = new MediatorLiveData<>();
-        resultado.addSource(chamada, valor -> {
-            carregando.setValue(false);
-            resultado.setValue(valor);
-        });
+        resultado.addSource(
+                chamada,
+                valor -> {
+                    carregando.setValue(false);
+                    resultado.setValue(valor);
+                });
 
         return resultado;
     }

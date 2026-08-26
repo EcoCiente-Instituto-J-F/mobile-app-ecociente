@@ -37,7 +37,11 @@ public class SplashScreen extends AppCompatActivity {
 
         buscarComponentes();
 
-        areaVideo.post(() -> {ajustarTamanhoDoVideo();reproduzirVideo();});
+        areaVideo.post(
+                () -> {
+                    ajustarTamanhoDoVideo();
+                    reproduzirVideo();
+                });
     }
 
     private void buscarComponentes() {
@@ -51,9 +55,11 @@ public class SplashScreen extends AppCompatActivity {
 
         int larguraAmpliadaDoVideo = Math.round(larguraVisivelDaTela * FATOR_ZOOM_VIDEO);
 
-        int alturaAmpliadaDoVideo = Math.round(larguraAmpliadaDoVideo * ALTURA_ORIGINAL_VIDEO / LARGURA_ORIGINAL_VIDEO);
+        int alturaAmpliadaDoVideo =
+                Math.round(larguraAmpliadaDoVideo * ALTURA_ORIGINAL_VIDEO / LARGURA_ORIGINAL_VIDEO);
 
-        FrameLayout.LayoutParams parametros = new FrameLayout.LayoutParams(larguraAmpliadaDoVideo, alturaAmpliadaDoVideo);
+        FrameLayout.LayoutParams parametros =
+                new FrameLayout.LayoutParams(larguraAmpliadaDoVideo, alturaAmpliadaDoVideo);
 
         parametros.gravity = Gravity.CENTER;
 
@@ -61,22 +67,30 @@ public class SplashScreen extends AppCompatActivity {
     }
 
     private void reproduzirVideo() {
-        Uri caminhoVideo = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.logo_video_splash);
+        Uri caminhoVideo =
+                Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.logo_video_splash);
 
         coberturaVideo.setVisibility(View.VISIBLE);
         coberturaVideo.setAlpha(1f);
 
         videoAnimacaoLogo.setOnPreparedListener(this::prepararReprodutor);
 
-        videoAnimacaoLogo.setOnCompletionListener(reprodutor -> manipulador.postDelayed(this::abrirCarregamento, TEMPO_APOS_VIDEO));
+        videoAnimacaoLogo.setOnCompletionListener(
+                reprodutor -> manipulador.postDelayed(this::abrirCarregamento, TEMPO_APOS_VIDEO));
 
-        videoAnimacaoLogo.setOnErrorListener((reprodutor, codigoErro, detalheErro) -> {Log.e(MARCADOR_LOG, "Erro ao reproduzir o vídeo. Código: " + codigoErro + " | Detalhe: " + detalheErro);
+        videoAnimacaoLogo.setOnErrorListener(
+                (reprodutor, codigoErro, detalheErro) -> {
+                    Log.e(
+                            MARCADOR_LOG,
+                            "Erro ao reproduzir o vídeo. Código: "
+                                    + codigoErro
+                                    + " | Detalhe: "
+                                    + detalheErro);
 
                     manipulador.postDelayed(this::abrirCarregamento, 1_000L);
 
                     return true;
-                }
-        );
+                });
 
         videoAnimacaoLogo.setVideoURI(caminhoVideo);
         videoAnimacaoLogo.requestFocus();
@@ -86,22 +100,19 @@ public class SplashScreen extends AppCompatActivity {
         reprodutor.setVolume(0f, 0f);
         reprodutor.setLooping(false);
 
-        reprodutor.setOnInfoListener((mediaPlayer, informacao, detalhe) -> {
+        reprodutor.setOnInfoListener(
+                (mediaPlayer, informacao, detalhe) -> {
                     if (informacao == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
                         removerCoberturaVideo();
                         return true;
                     }
 
                     return false;
-                }
-        );
+                });
 
         videoAnimacaoLogo.start();
 
-        manipulador.postDelayed(
-                removerCoberturaPorSeguranca,
-                TEMPO_MAXIMO_COBERTURA
-        );
+        manipulador.postDelayed(removerCoberturaPorSeguranca, TEMPO_MAXIMO_COBERTURA);
     }
 
     private void removerCoberturaVideo() {
@@ -117,10 +128,11 @@ public class SplashScreen extends AppCompatActivity {
                 .animate()
                 .alpha(0f)
                 .setDuration(120L)
-                .withEndAction(() -> {
-                    coberturaVideo.setVisibility(View.GONE);
-                    coberturaVideo.setAlpha(1f);
-                })
+                .withEndAction(
+                        () -> {
+                            coberturaVideo.setVisibility(View.GONE);
+                            coberturaVideo.setAlpha(1f);
+                        })
                 .start();
     }
 
@@ -131,10 +143,7 @@ public class SplashScreen extends AppCompatActivity {
 
         carregamentoAberto = true;
 
-        Intent rota = new Intent(
-                SplashScreen.this,
-                Carregamento.class
-        );
+        Intent rota = new Intent(SplashScreen.this, Carregamento.class);
 
         startActivity(rota);
         finish();

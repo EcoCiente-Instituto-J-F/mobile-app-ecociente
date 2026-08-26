@@ -29,7 +29,10 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle estadoSalvo) {
+    public View onCreateView(
+            @NonNull LayoutInflater inflater,
+            @Nullable ViewGroup container,
+            @Nullable Bundle estadoSalvo) {
         return inflater.inflate(R.layout.fragment_esqueci_senha_codigo, container, false);
     }
 
@@ -55,56 +58,69 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
     }
 
     // Ao digitar um dígito, pula pro próximo campo; ao apagar num campo vazio, volta pro anterior.
-    private void configurarAvancoAutomatico(EditText campoAtual, @Nullable EditText campoAnterior, @Nullable EditText proximoCampo) {
-        campoAtual.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+    private void configurarAvancoAutomatico(
+            EditText campoAtual,
+            @Nullable EditText campoAnterior,
+            @Nullable EditText proximoCampo) {
+        campoAtual.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence s, int start, int count, int after) {}
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
-            @Override
-            public void afterTextChanged(Editable texto) {
-                if (texto.length() == 1 && proximoCampo != null) {
-                    proximoCampo.requestFocus();
-                }
-            }
-        });
+                    @Override
+                    public void afterTextChanged(Editable texto) {
+                        if (texto.length() == 1 && proximoCampo != null) {
+                            proximoCampo.requestFocus();
+                        }
+                    }
+                });
 
-        campoAtual.setOnKeyListener((v, keyCode, evento) -> {
-            boolean apagouComCampoVazio = keyCode == KeyEvent.KEYCODE_DEL
-                    && evento.getAction() == KeyEvent.ACTION_DOWN
-                    && campoAtual.getText().length() == 0;
+        campoAtual.setOnKeyListener(
+                (v, keyCode, evento) -> {
+                    boolean apagouComCampoVazio =
+                            keyCode == KeyEvent.KEYCODE_DEL
+                                    && evento.getAction() == KeyEvent.ACTION_DOWN
+                                    && campoAtual.getText().length() == 0;
 
-            if (apagouComCampoVazio && campoAnterior != null) {
-                campoAnterior.setText("");
-                campoAnterior.requestFocus();
-                return true;
-            }
+                    if (apagouComCampoVazio && campoAnterior != null) {
+                        campoAnterior.setText("");
+                        campoAnterior.requestFocus();
+                        return true;
+                    }
 
-            return false;
-        });
+                    return false;
+                });
     }
 
     private void verificarCodigo() {
-        String codigo = digito1.getText().toString()
-                + digito2.getText().toString()
-                + digito3.getText().toString()
-                + digito4.getText().toString();
+        String codigo =
+                digito1.getText().toString()
+                        + digito2.getText().toString()
+                        + digito3.getText().toString()
+                        + digito4.getText().toString();
 
         if (codigo.length() != 4) {
             mostrarMensagem("Digite os 4 dígitos do código");
             return;
         }
 
-        viewModel.verificarCodigo(codigo).observe(getViewLifecycleOwner(), resultado -> {
-            if (!resultado.isSucesso()) {
-                mostrarMensagem(resultado.getMensagemErro());
-                return;
-            }
+        viewModel
+                .verificarCodigo(codigo)
+                .observe(
+                        getViewLifecycleOwner(),
+                        resultado -> {
+                            if (!resultado.isSucesso()) {
+                                mostrarMensagem(resultado.getMensagemErro());
+                                return;
+                            }
 
-            Navigation.findNavController(requireView()).navigate(R.id.acaoParaNovaSenha);
-        });
+                            Navigation.findNavController(requireView())
+                                    .navigate(R.id.acaoParaNovaSenha);
+                        });
     }
 
     private void definirCarregando(boolean carregando) {

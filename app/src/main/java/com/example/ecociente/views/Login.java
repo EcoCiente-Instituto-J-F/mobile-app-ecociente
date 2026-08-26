@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -17,7 +16,6 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
 import com.example.ecociente.R;
 import com.google.android.material.card.MaterialCardView;
 
@@ -33,11 +31,9 @@ public class Login extends AppCompatActivity {
     private static final String CHAVE_CIDADE = "cidade";
     private static final String CHAVE_ESTADO = "estado";
 
-    private static final String CHAVE_POSSUI_CODIGO_CONDOMINIO =
-            "possuiCodigoCondominio";
+    private static final String CHAVE_POSSUI_CODIGO_CONDOMINIO = "possuiCodigoCondominio";
 
-    private static final String CHAVE_CODIGO_CONDOMINIO =
-            "codigoCondominio";
+    private static final String CHAVE_CODIGO_CONDOMINIO = "codigoCondominio";
 
     private View raizLogin;
     private View conteudoPainelLogin;
@@ -76,18 +72,11 @@ public class Login extends AppCompatActivity {
          * Os espaços das barras do Android e do teclado
          * são tratados manualmente logo abaixo.
          */
-        WindowCompat.setDecorFitsSystemWindows(
-                getWindow(),
-                false
-        );
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
-        setContentView(
-                R.layout.activity_login
-        );
+        setContentView(R.layout.activity_login);
 
-        recuperarDadosSalvos(
-                estadoSalvo
-        );
+        recuperarDadosSalvos(estadoSalvo);
 
         inicializarComponentes();
 
@@ -101,95 +90,54 @@ public class Login extends AppCompatActivity {
 
         if (estadoSalvo == null) {
 
-            abrirLogin(
-                    false
-            );
+            abrirLogin(false);
 
         } else {
 
-            indicadorAba.post(
-                    this::sincronizarInterfaceComFragmentAtual
-            );
+            indicadorAba.post(this::sincronizarInterfaceComFragmentAtual);
         }
     }
 
     private void inicializarComponentes() {
 
-        raizLogin =
-                findViewById(
-                        R.id.raizLogin
-                );
+        raizLogin = findViewById(R.id.raizLogin);
 
-        conteudoPainelLogin =
-                findViewById(
-                        R.id.conteudoPainelLogin
-                );
+        conteudoPainelLogin = findViewById(R.id.conteudoPainelLogin);
 
-        seletorLoginCadastro =
-                findViewById(
-                        R.id.seletorLoginCadastro
-                );
+        seletorLoginCadastro = findViewById(R.id.seletorLoginCadastro);
 
-        indicadorAba =
-                findViewById(
-                        R.id.indicadorAba
-                );
+        indicadorAba = findViewById(R.id.indicadorAba);
 
-        abaLogin =
-                findViewById(
-                        R.id.abaLogin
-                );
+        abaLogin = findViewById(R.id.abaLogin);
 
-        abaCadastro =
-                findViewById(
-                        R.id.abaCadastro
-                );
+        abaCadastro = findViewById(R.id.abaCadastro);
     }
 
     private void configurarInsetsDoSistema() {
 
-        final int paddingEsquerdaPainel =
-                conteudoPainelLogin.getPaddingLeft();
+        final int paddingEsquerdaPainel = conteudoPainelLogin.getPaddingLeft();
 
-        final int paddingTopoPainel =
-                conteudoPainelLogin.getPaddingTop();
+        final int paddingTopoPainel = conteudoPainelLogin.getPaddingTop();
 
-        final int paddingDireitaPainel =
-                conteudoPainelLogin.getPaddingRight();
+        final int paddingDireitaPainel = conteudoPainelLogin.getPaddingRight();
 
-        final int paddingInferiorPainel =
-                conteudoPainelLogin.getPaddingBottom();
+        final int paddingInferiorPainel = conteudoPainelLogin.getPaddingBottom();
 
         ViewCompat.setOnApplyWindowInsetsListener(
                 raizLogin,
-
                 (view, insets) -> {
-
-                    Insets barraStatus =
-                            insets.getInsets(
-                                    WindowInsetsCompat.Type.statusBars()
-                            );
+                    Insets barraStatus = insets.getInsets(WindowInsetsCompat.Type.statusBars());
 
                     Insets barraNavegacao =
-                            insets.getInsets(
-                                    WindowInsetsCompat.Type.navigationBars()
-                            );
+                            insets.getInsets(WindowInsetsCompat.Type.navigationBars());
 
-                    Insets teclado =
-                            insets.getInsets(
-                                    WindowInsetsCompat.Type.ime()
-                            );
+                    Insets teclado = insets.getInsets(WindowInsetsCompat.Type.ime());
 
                     /*
                      * Impede logo/conteúdo de ficar
                      * atrás da barra superior.
                      */
-                    view.setPadding(
-                            0,
-                            barraStatus.top,
-                            0,
-                            0
-                    );
+                    view.setPadding(0, barraStatus.top, 0, 0);
 
                     /*
                      * Quando não há teclado:
@@ -198,60 +146,39 @@ public class Login extends AppCompatActivity {
                      * Quando há teclado:
                      * utiliza a altura do próprio teclado.
                      */
-                    int espacoInferior =
-                            Math.max(
-                                    barraNavegacao.bottom,
-                                    teclado.bottom
-                            );
+                    int espacoInferior = Math.max(barraNavegacao.bottom, teclado.bottom);
 
                     conteudoPainelLogin.setPadding(
                             paddingEsquerdaPainel,
                             paddingTopoPainel,
                             paddingDireitaPainel,
-                            paddingInferiorPainel
-                                    +
-                                    espacoInferior
-                    );
+                            paddingInferiorPainel + espacoInferior);
 
                     return insets;
-                }
-        );
+                });
 
         WindowInsetsControllerCompat controlador =
-                WindowCompat.getInsetsController(
-                        getWindow(),
-                        raizLogin
-                );
+                WindowCompat.getInsetsController(getWindow(), raizLogin);
 
         /*
          * Status bar fica sobre fundo verde.
          */
-        controlador.setAppearanceLightStatusBars(
-                false
-        );
+        controlador.setAppearanceLightStatusBars(false);
 
         /*
          * Barra de navegação normalmente fica
          * sobre a área branca.
          */
-        controlador.setAppearanceLightNavigationBars(
-                true
-        );
+        controlador.setAppearanceLightNavigationBars(true);
 
-        ViewCompat.requestApplyInsets(
-                raizLogin
-        );
+        ViewCompat.requestApplyInsets(raizLogin);
     }
 
     private void configurarAjusteAutomaticoAoTeclado() {
 
         observadorFoco =
                 (focoAntigo, focoNovo) -> {
-
-                    if (
-                            !(focoNovo
-                                    instanceof EditText)
-                    ) {
+                    if (!(focoNovo instanceof EditText)) {
                         return;
                     }
 
@@ -259,13 +186,7 @@ public class Login extends AppCompatActivity {
                      * Primeiro ajuste enquanto
                      * o teclado está surgindo.
                      */
-                    focoNovo.postDelayed(
-                            () ->
-                                    trazerCampoParaAreaVisivel(
-                                            focoNovo
-                                    ),
-                            260
-                    );
+                    focoNovo.postDelayed(() -> trazerCampoParaAreaVisivel(focoNovo), 260);
 
                     /*
                      * Segundo ajuste depois que
@@ -275,442 +196,239 @@ public class Login extends AppCompatActivity {
                      * Código do condomínio etc.
                      * ficarem escondidos.
                      */
-                    focoNovo.postDelayed(
-                            () ->
-                                    trazerCampoParaAreaVisivel(
-                                            focoNovo
-                                    ),
-                            480
-                    );
+                    focoNovo.postDelayed(() -> trazerCampoParaAreaVisivel(focoNovo), 480);
                 };
 
-        raizLogin
-                .getViewTreeObserver()
-                .addOnGlobalFocusChangeListener(
-                        observadorFoco
-                );
+        raizLogin.getViewTreeObserver().addOnGlobalFocusChangeListener(observadorFoco);
     }
 
-    private void trazerCampoParaAreaVisivel(
-            View campo
-    ) {
+    private void trazerCampoParaAreaVisivel(View campo) {
 
-        if (
-                !campo.isAttachedToWindow()
-                        ||
-                        !campo.hasFocus()
-        ) {
+        if (!campo.isAttachedToWindow() || !campo.hasFocus()) {
             return;
         }
 
-        int folgaAbaixo =
-                dpParaPx(
-                        110
-                );
+        int folgaAbaixo = dpParaPx(110);
 
-        Rect area =
-                new Rect(
-                        0,
-                        0,
-                        campo.getWidth(),
-                        campo.getHeight()
-                                +
-                                folgaAbaixo
-                );
+        Rect area = new Rect(0, 0, campo.getWidth(), campo.getHeight() + folgaAbaixo);
 
         /*
          * O NestedScrollView pai recebe a solicitação
          * e desloca o formulário automaticamente.
          */
-        campo.requestRectangleOnScreen(
-                area,
-                true
-        );
+        campo.requestRectangleOnScreen(area, true);
     }
 
-    private int dpParaPx(
-            int dp
-    ) {
+    private int dpParaPx(int dp) {
 
-        return Math.round(
-                dp
-                        *
-                        getResources()
-                                .getDisplayMetrics()
-                                .density
-        );
+        return Math.round(dp * getResources().getDisplayMetrics().density);
     }
 
     private void configurarNavegacao() {
 
         abaLogin.setOnClickListener(
                 view -> {
-
-                    if (
-                            !navegacaoHabilitada
-                    ) {
+                    if (!navegacaoHabilitada) {
                         return;
                     }
 
-                    abrirLogin(
-                            true
-                    );
-                }
-        );
+                    abrirLogin(true);
+                });
 
         abaCadastro.setOnClickListener(
                 view -> {
-
-                    if (
-                            !navegacaoHabilitada
-                    ) {
+                    if (!navegacaoHabilitada) {
                         return;
                     }
 
-                    abrirCadastroEtapa1(
-                            true
-                    );
-                }
-        );
+                    abrirCadastroEtapa1(true);
+                });
     }
 
     private void configurarBotaoVoltar() {
 
         getOnBackPressedDispatcher()
                 .addCallback(
-
                         this,
-
-                        new OnBackPressedCallback(
-                                true
-                        ) {
+                        new OnBackPressedCallback(true) {
 
                             @Override
                             public void handleOnBackPressed() {
 
-                                if (
-                                        !navegacaoHabilitada
-                                ) {
+                                if (!navegacaoHabilitada) {
                                     return;
                                 }
 
                                 Fragment fragmentAtual =
                                         getSupportFragmentManager()
                                                 .findFragmentById(
-                                                        R.id.containerFragmentAutenticacao
-                                                );
+                                                        R.id.containerFragmentAutenticacao);
 
-                                if (
-                                        fragmentAtual
-                                                instanceof CadastroEtapa2Fragment
-                                ) {
+                                if (fragmentAtual instanceof CadastroEtapa2Fragment) {
 
                                     voltarCadastroEtapa1();
 
                                     return;
                                 }
 
-                                if (
-                                        fragmentAtual
-                                                instanceof CadastroEtapa1Fragment
-                                ) {
+                                if (fragmentAtual instanceof CadastroEtapa1Fragment) {
 
-                                    abrirLogin(
-                                            true
-                                    );
+                                    abrirLogin(true);
 
                                     return;
                                 }
 
                                 finish();
                             }
-                        }
-                );
+                        });
     }
 
     public void abrirLogin() {
 
-        abrirLogin(
-                true
-        );
+        abrirLogin(true);
     }
 
-    private void abrirLogin(
-            boolean animar
-    ) {
+    private void abrirLogin(boolean animar) {
 
         Fragment fragmentAtual =
-                getSupportFragmentManager()
-                        .findFragmentById(
-                                R.id.containerFragmentAutenticacao
-                        );
+                getSupportFragmentManager().findFragmentById(R.id.containerFragmentAutenticacao);
 
-        if (
-                fragmentAtual
-                        instanceof LoginFragment
-        ) {
+        if (fragmentAtual instanceof LoginFragment) {
 
-            atualizarVisualAba(
-                    false,
-                    animar
-            );
+            atualizarVisualAba(false, animar);
 
             return;
         }
 
-        FragmentTransaction transacao =
-                getSupportFragmentManager()
-                        .beginTransaction();
+        FragmentTransaction transacao = getSupportFragmentManager().beginTransaction();
 
-        if (
-                animar
-        ) {
+        if (animar) {
 
-            transacao.setCustomAnimations(
-                    R.anim.fade_in,
-                    R.anim.fade_out
-            );
+            transacao.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
         }
 
-        transacao
-                .replace(
-                        R.id.containerFragmentAutenticacao,
-                        new LoginFragment()
-                )
-                .commit();
+        transacao.replace(R.id.containerFragmentAutenticacao, new LoginFragment()).commit();
 
-        atualizarVisualAba(
-                false,
-                animar
-        );
+        atualizarVisualAba(false, animar);
     }
 
     public void abrirCadastroEtapa1() {
 
-        abrirCadastroEtapa1(
-                true
-        );
+        abrirCadastroEtapa1(true);
     }
 
-    private void abrirCadastroEtapa1(
-            boolean animar
-    ) {
+    private void abrirCadastroEtapa1(boolean animar) {
 
         Fragment fragmentAtual =
-                getSupportFragmentManager()
-                        .findFragmentById(
-                                R.id.containerFragmentAutenticacao
-                        );
+                getSupportFragmentManager().findFragmentById(R.id.containerFragmentAutenticacao);
 
-        if (
-                fragmentAtual
-                        instanceof CadastroEtapa1Fragment
-        ) {
+        if (fragmentAtual instanceof CadastroEtapa1Fragment) {
 
-            atualizarVisualAba(
-                    true,
-                    animar
-            );
+            atualizarVisualAba(true, animar);
 
             return;
         }
 
-        FragmentTransaction transacao =
-                getSupportFragmentManager()
-                        .beginTransaction();
+        FragmentTransaction transacao = getSupportFragmentManager().beginTransaction();
 
-        if (
-                animar
-        ) {
+        if (animar) {
 
-            transacao.setCustomAnimations(
-                    R.anim.fade_in,
-                    R.anim.fade_out
-            );
+            transacao.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
         }
 
         transacao
-                .replace(
-                        R.id.containerFragmentAutenticacao,
-                        new CadastroEtapa1Fragment()
-                )
+                .replace(R.id.containerFragmentAutenticacao, new CadastroEtapa1Fragment())
                 .commit();
 
-        atualizarVisualAba(
-                true,
-                animar
-        );
+        atualizarVisualAba(true, animar);
     }
 
     public void abrirCadastroEtapa2() {
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(
-                        R.anim.slide_in_right,
-                        R.anim.slide_out_left
-                )
-                .replace(
-                        R.id.containerFragmentAutenticacao,
-                        new CadastroEtapa2Fragment()
-                )
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                .replace(R.id.containerFragmentAutenticacao, new CadastroEtapa2Fragment())
                 .commit();
 
-        atualizarVisualAba(
-                true,
-                false
-        );
+        atualizarVisualAba(true, false);
     }
 
     public void voltarCadastroEtapa1() {
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .setCustomAnimations(
-                        R.anim.slide_in_left,
-                        R.anim.slide_out_right
-                )
-                .replace(
-                        R.id.containerFragmentAutenticacao,
-                        new CadastroEtapa1Fragment()
-                )
+                .setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right)
+                .replace(R.id.containerFragmentAutenticacao, new CadastroEtapa1Fragment())
                 .commit();
 
-        atualizarVisualAba(
-                true,
-                false
-        );
+        atualizarVisualAba(true, false);
     }
 
-    private void atualizarVisualAba(
-            boolean cadastroSelecionado,
-            boolean animar
-    ) {
+    private void atualizarVisualAba(boolean cadastroSelecionado, boolean animar) {
 
         seletorLoginCadastro.post(
                 () -> {
+                    float destino = cadastroSelecionado ? indicadorAba.getWidth() : 0f;
 
-                    float destino =
-                            cadastroSelecionado
-                                    ?
-                                    indicadorAba.getWidth()
-                                    :
-                                    0f;
+                    if (animar) {
 
-                    if (
-                            animar
-                    ) {
-
-                        indicadorAba
-                                .animate()
-                                .translationX(
-                                        destino
-                                )
-                                .setDuration(
-                                        200
-                                )
-                                .start();
+                        indicadorAba.animate().translationX(destino).setDuration(200).start();
 
                     } else {
 
-                        indicadorAba.setTranslationX(
-                                destino
-                        );
+                        indicadorAba.setTranslationX(destino);
                     }
 
-                    int branco =
-                            ContextCompat.getColor(
-                                    this,
-                                    R.color.branco
-                            );
+                    int branco = ContextCompat.getColor(this, R.color.branco);
 
-                    int verde =
-                            ContextCompat.getColor(
-                                    this,
-                                    R.color.verde_escuro_principal
-                            );
+                    int verde = ContextCompat.getColor(this, R.color.verde_escuro_principal);
 
-                    if (
-                            cadastroSelecionado
-                    ) {
+                    if (cadastroSelecionado) {
 
-                        abaLogin.setTextColor(
-                                verde
-                        );
+                        abaLogin.setTextColor(verde);
 
-                        abaCadastro.setTextColor(
-                                branco
-                        );
+                        abaCadastro.setTextColor(branco);
 
                     } else {
 
-                        abaLogin.setTextColor(
-                                branco
-                        );
+                        abaLogin.setTextColor(branco);
 
-                        abaCadastro.setTextColor(
-                                verde
-                        );
+                        abaCadastro.setTextColor(verde);
                     }
-                }
-        );
+                });
     }
 
     private void sincronizarInterfaceComFragmentAtual() {
 
         Fragment fragmentAtual =
-                getSupportFragmentManager()
-                        .findFragmentById(
-                                R.id.containerFragmentAutenticacao
-                        );
+                getSupportFragmentManager().findFragmentById(R.id.containerFragmentAutenticacao);
 
         boolean cadastroSelecionado =
-                fragmentAtual
-                        instanceof CadastroEtapa1Fragment
-                        ||
-                        fragmentAtual
-                                instanceof CadastroEtapa2Fragment;
+                fragmentAtual instanceof CadastroEtapa1Fragment
+                        || fragmentAtual instanceof CadastroEtapa2Fragment;
 
-        atualizarVisualAba(
-                cadastroSelecionado,
-                false
-        );
+        atualizarVisualAba(cadastroSelecionado, false);
     }
 
-    public void definirNavegacaoHabilitada(
-            boolean habilitada
-    ) {
+    public void definirNavegacaoHabilitada(boolean habilitada) {
 
-        navegacaoHabilitada =
-                habilitada;
+        navegacaoHabilitada = habilitada;
 
-        abaLogin.setEnabled(
-                habilitada
-        );
+        abaLogin.setEnabled(habilitada);
 
-        abaCadastro.setEnabled(
-                habilitada
-        );
+        abaCadastro.setEnabled(habilitada);
     }
 
-    public void salvarDadosEtapa1(
-            String nome,
-            String dataNascimento,
-            String email,
-            String senha
-    ) {
+    public void salvarDadosEtapa1(String nome, String dataNascimento, String email, String senha) {
 
-        this.nome =
-                nome;
+        this.nome = nome;
 
-        this.dataNascimento =
-                dataNascimento;
+        this.dataNascimento = dataNascimento;
 
-        this.email =
-                email;
+        this.email = email;
 
-        this.senha =
-                senha;
+        this.senha = senha;
     }
 
     public void salvarDadosEtapa2(
@@ -719,38 +437,27 @@ public class Login extends AppCompatActivity {
             String cep,
             String complemento,
             String cidade,
-            String estado
-    ) {
+            String estado) {
 
-        this.endereco =
-                endereco;
+        this.endereco = endereco;
 
-        this.numero =
-                numero;
+        this.numero = numero;
 
-        this.cep =
-                cep;
+        this.cep = cep;
 
-        this.complemento =
-                complemento;
+        this.complemento = complemento;
 
-        this.cidade =
-                cidade;
+        this.cidade = cidade;
 
-        this.estado =
-                estado;
+        this.estado = estado;
     }
 
     public void salvarDadosCodigoCondominio(
-            boolean possuiCodigoCondominio,
-            String codigoCondominio
-    ) {
+            boolean possuiCodigoCondominio, String codigoCondominio) {
 
-        this.possuiCodigoCondominio =
-                possuiCodigoCondominio;
+        this.possuiCodigoCondominio = possuiCodigoCondominio;
 
-        this.codigoCondominio =
-                codigoCondominio;
+        this.codigoCondominio = codigoCondominio;
     }
 
     public String getNome() {
@@ -801,161 +508,69 @@ public class Login extends AppCompatActivity {
         return codigoCondominio;
     }
 
-    private void recuperarDadosSalvos(
-            Bundle estadoSalvo
-    ) {
+    private void recuperarDadosSalvos(Bundle estadoSalvo) {
 
-        if (
-                estadoSalvo
-                        == null
-        ) {
+        if (estadoSalvo == null) {
             return;
         }
 
-        nome =
-                estadoSalvo.getString(
-                        CHAVE_NOME,
-                        ""
-                );
+        nome = estadoSalvo.getString(CHAVE_NOME, "");
 
-        dataNascimento =
-                estadoSalvo.getString(
-                        CHAVE_DATA_NASCIMENTO,
-                        ""
-                );
+        dataNascimento = estadoSalvo.getString(CHAVE_DATA_NASCIMENTO, "");
 
-        email =
-                estadoSalvo.getString(
-                        CHAVE_EMAIL,
-                        ""
-                );
+        email = estadoSalvo.getString(CHAVE_EMAIL, "");
 
-        endereco =
-                estadoSalvo.getString(
-                        CHAVE_ENDERECO,
-                        ""
-                );
+        endereco = estadoSalvo.getString(CHAVE_ENDERECO, "");
 
-        numero =
-                estadoSalvo.getString(
-                        CHAVE_NUMERO,
-                        ""
-                );
+        numero = estadoSalvo.getString(CHAVE_NUMERO, "");
 
-        cep =
-                estadoSalvo.getString(
-                        CHAVE_CEP,
-                        ""
-                );
+        cep = estadoSalvo.getString(CHAVE_CEP, "");
 
-        complemento =
-                estadoSalvo.getString(
-                        CHAVE_COMPLEMENTO,
-                        ""
-                );
+        complemento = estadoSalvo.getString(CHAVE_COMPLEMENTO, "");
 
-        cidade =
-                estadoSalvo.getString(
-                        CHAVE_CIDADE,
-                        ""
-                );
+        cidade = estadoSalvo.getString(CHAVE_CIDADE, "");
 
-        estado =
-                estadoSalvo.getString(
-                        CHAVE_ESTADO,
-                        ""
-                );
+        estado = estadoSalvo.getString(CHAVE_ESTADO, "");
 
-        possuiCodigoCondominio =
-                estadoSalvo.getBoolean(
-                        CHAVE_POSSUI_CODIGO_CONDOMINIO,
-                        false
-                );
+        possuiCodigoCondominio = estadoSalvo.getBoolean(CHAVE_POSSUI_CODIGO_CONDOMINIO, false);
 
-        codigoCondominio =
-                estadoSalvo.getString(
-                        CHAVE_CODIGO_CONDOMINIO,
-                        ""
-                );
+        codigoCondominio = estadoSalvo.getString(CHAVE_CODIGO_CONDOMINIO, "");
     }
 
     @Override
-    protected void onSaveInstanceState(
-            Bundle estadoSaida
-    ) {
+    protected void onSaveInstanceState(Bundle estadoSaida) {
 
-        estadoSaida.putString(
-                CHAVE_NOME,
-                nome
-        );
+        estadoSaida.putString(CHAVE_NOME, nome);
 
-        estadoSaida.putString(
-                CHAVE_DATA_NASCIMENTO,
-                dataNascimento
-        );
+        estadoSaida.putString(CHAVE_DATA_NASCIMENTO, dataNascimento);
 
-        estadoSaida.putString(
-                CHAVE_EMAIL,
-                email
-        );
+        estadoSaida.putString(CHAVE_EMAIL, email);
 
-        estadoSaida.putString(
-                CHAVE_ENDERECO,
-                endereco
-        );
+        estadoSaida.putString(CHAVE_ENDERECO, endereco);
 
-        estadoSaida.putString(
-                CHAVE_NUMERO,
-                numero
-        );
+        estadoSaida.putString(CHAVE_NUMERO, numero);
 
-        estadoSaida.putString(
-                CHAVE_CEP,
-                cep
-        );
+        estadoSaida.putString(CHAVE_CEP, cep);
 
-        estadoSaida.putString(
-                CHAVE_COMPLEMENTO,
-                complemento
-        );
+        estadoSaida.putString(CHAVE_COMPLEMENTO, complemento);
 
-        estadoSaida.putString(
-                CHAVE_CIDADE,
-                cidade
-        );
+        estadoSaida.putString(CHAVE_CIDADE, cidade);
 
-        estadoSaida.putString(
-                CHAVE_ESTADO,
-                estado
-        );
+        estadoSaida.putString(CHAVE_ESTADO, estado);
 
-        estadoSaida.putBoolean(
-                CHAVE_POSSUI_CODIGO_CONDOMINIO,
-                possuiCodigoCondominio
-        );
+        estadoSaida.putBoolean(CHAVE_POSSUI_CODIGO_CONDOMINIO, possuiCodigoCondominio);
 
-        estadoSaida.putString(
-                CHAVE_CODIGO_CONDOMINIO,
-                codigoCondominio
-        );
+        estadoSaida.putString(CHAVE_CODIGO_CONDOMINIO, codigoCondominio);
 
-        super.onSaveInstanceState(
-                estadoSaida
-        );
+        super.onSaveInstanceState(estadoSaida);
     }
 
     @Override
     protected void onDestroy() {
 
-        if (
-                raizLogin != null
-                        &&
-                        observadorFoco != null
-                        &&
-                        raizLogin
-                                .getViewTreeObserver()
-                                .isAlive()
-        ) {
+        if (raizLogin != null
+                && observadorFoco != null
+                && raizLogin.getViewTreeObserver().isAlive()) {
 
             raizLogin.getViewTreeObserver().removeOnGlobalFocusChangeListener(observadorFoco);
         }

@@ -22,7 +22,8 @@ public class EsqueciSenhaRepository {
     }
 
     @NonNull
-    public LiveData<ResultadoApi> redefinirSenha(@NonNull String email, @NonNull String codigo, @NonNull String novaSenha) {
+    public LiveData<ResultadoApi> redefinirSenha(
+            @NonNull String email, @NonNull String codigo, @NonNull String novaSenha) {
         return chamar("redefinirSenhaComCodigo", corpo(email, codigo, novaSenha));
     }
 
@@ -35,8 +36,14 @@ public class EsqueciSenhaRepository {
             return resultado;
         }
 
-        ApiEsqueciSenha.chamar(endpoint, corpo, (sucesso, mensagemErro) ->
-                resultado.setValue(sucesso ? ResultadoApi.sucesso() : ResultadoApi.erro(mensagemErro)));
+        ApiEsqueciSenha.chamar(
+                endpoint,
+                corpo,
+                (sucesso, mensagemErro) ->
+                        resultado.setValue(
+                                sucesso
+                                        ? ResultadoApi.sucesso()
+                                        : ResultadoApi.erro(mensagemErro)));
 
         return resultado;
     }

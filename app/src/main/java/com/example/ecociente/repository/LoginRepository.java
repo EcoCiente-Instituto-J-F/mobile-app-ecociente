@@ -16,44 +16,56 @@ public class LoginRepository {
     private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
 
     @NonNull
-    public LiveData<ResultadoLogin> signInWithEmailAndPassword(@NonNull String email, @NonNull String senha) {
+    public LiveData<ResultadoLogin> signInWithEmailAndPassword(
+            @NonNull String email, @NonNull String senha) {
         MutableLiveData<ResultadoLogin> resultado = new MutableLiveData<>();
 
-        autenticacao.signInWithEmailAndPassword(email, senha).addOnCompleteListener(tarefa -> {
-            if (tarefa.isSuccessful()) {
-                resultado.setValue(confirmarUsuarioLogado());
-                return;
-            }
+        autenticacao
+                .signInWithEmailAndPassword(email, senha)
+                .addOnCompleteListener(
+                        tarefa -> {
+                            if (tarefa.isSuccessful()) {
+                                resultado.setValue(confirmarUsuarioLogado());
+                                return;
+                            }
 
-            Log.e(TAG, "Erro no login por e-mail", tarefa.getException());
+                            Log.e(TAG, "Erro no login por e-mail", tarefa.getException());
 
-            resultado.setValue(ResultadoLogin.erro("E-mail ou senha incorretos"));
-        });
+                            resultado.setValue(ResultadoLogin.erro("E-mail ou senha incorretos"));
+                        });
 
         return resultado;
     }
 
     @NonNull
-    public LiveData<ResultadoLogin> signInWithCredential(@NonNull AuthCredential credencial, @NonNull String nomeProvedor) {
+    public LiveData<ResultadoLogin> signInWithCredential(
+            @NonNull AuthCredential credencial, @NonNull String nomeProvedor) {
         MutableLiveData<ResultadoLogin> resultado = new MutableLiveData<>();
 
-        autenticacao.signInWithCredential(credencial).addOnCompleteListener(tarefa -> {
-            if (tarefa.isSuccessful()) {
-                resultado.setValue(confirmarUsuarioLogado());
-                return;
-            }
+        autenticacao
+                .signInWithCredential(credencial)
+                .addOnCompleteListener(
+                        tarefa -> {
+                            if (tarefa.isSuccessful()) {
+                                resultado.setValue(confirmarUsuarioLogado());
+                                return;
+                            }
 
-            Exception erro = tarefa.getException();
+                            Exception erro = tarefa.getException();
 
-            Log.e(TAG, "Erro no Firebase com " + nomeProvedor, erro);
+                            Log.e(TAG, "Erro no Firebase com " + nomeProvedor, erro);
 
-            if (erro instanceof FirebaseAuthUserCollisionException) {
-                resultado.setValue(ResultadoLogin.erro("Já existe uma conta com esse e-mail usando outro método de login"));
-                return;
-            }
+                            if (erro instanceof FirebaseAuthUserCollisionException) {
+                                resultado.setValue(
+                                        ResultadoLogin.erro(
+                                                "Já existe uma conta com esse e-mail usando outro método de login"));
+                                return;
+                            }
 
-            resultado.setValue(ResultadoLogin.erro("Não foi possível entrar com " + nomeProvedor));
-        });
+                            resultado.setValue(
+                                    ResultadoLogin.erro(
+                                            "Não foi possível entrar com " + nomeProvedor));
+                        });
 
         return resultado;
     }
