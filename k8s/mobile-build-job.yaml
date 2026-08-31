@@ -1,0 +1,64 @@
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: ecociente-mobile-build
+  namespace: ecociente
+
+spec:
+  backoffLimit: 0
+
+  template:
+    metadata:
+      labels:
+        app: ecociente-mobile-build
+
+    spec:
+      restartPolicy: Never
+
+      containers:
+        - name: mobile-build
+
+          image: ecociente/ecociente:mobile-build-1.0.0
+          imagePullPolicy: Always
+
+          workingDir: /app
+
+          command:
+            - /bin/sh
+            - -c
+
+          args:
+            - |
+              echo "Iniciando build do EcoCiente Mobile no Kubernetes..."
+
+              ./gradlew \
+                testDebugUnitTest \
+                lintDebug \
+                assembleDebug \
+                --no-daemon
+
+              echo "Build concluido com sucesso."
+
+              echo "APK gerado:"
+              ls -lh app/build/outputs/apk/debug
+
+          volumeMounts:
+            - name: mobile-env
+              mountPath: /app/.env
+              subPath: .env
+              readOnly: true
+
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+
+      volumes:
+        - name: mobile-env
+          secret:
+            secretName: ecociente-mobile-env
