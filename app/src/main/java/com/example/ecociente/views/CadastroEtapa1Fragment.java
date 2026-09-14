@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,18 +19,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.model.ResultadoCadastro;
+import com.example.ecociente.viewmodels.CadastroViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -46,6 +45,8 @@ public class CadastroEtapa1Fragment extends Fragment {
     private EditText campoCodigoCondominio;
 
     private ImageView iconeCalendario;
+    private ImageView iconeOlhoSenhaCadastro;
+    private ImageView iconeOlhoConfirmarSenha;
 
     private LinearLayout containerEtapas;
     private LinearLayout linhaPossuiCodigoCondominio;
@@ -58,9 +59,11 @@ public class CadastroEtapa1Fragment extends Fragment {
 
     private ProgressBar indicadorCarregamento;
 
-    private FirebaseAuth autenticacaoFirebase;
+    private CadastroViewModel viewModel;
 
     private boolean alterandoData = false;
+    private boolean senhaVisivel = false;
+    private boolean confirmarSenhaVisivel = false;
 
     @Nullable
     @Override
@@ -79,11 +82,15 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         inicializarComponentes(view);
 
-        autenticacaoFirebase = FirebaseAuth.getInstance();
+        viewModel = new ViewModelProvider(requireActivity()).get(CadastroViewModel.class);
+
+        viewModel.getCarregando().observe(getViewLifecycleOwner(), this::definirCarregando);
 
         configurarMascaraData();
 
         configurarCalendario();
+
+        configurarVisibilidadeSenha();
 
         configurarCodigoCondominio();
 
@@ -107,6 +114,10 @@ public class CadastroEtapa1Fragment extends Fragment {
         campoCodigoCondominio = view.findViewById(R.id.campoCodigoCondominio);
 
         iconeCalendario = view.findViewById(R.id.iconeCalendario);
+
+        iconeOlhoSenhaCadastro = view.findViewById(R.id.iconeOlhoSenhaCadastro);
+
+        iconeOlhoConfirmarSenha = view.findViewById(R.id.iconeOlhoConfirmarSenha);
 
         containerEtapas = view.findViewById(R.id.containerEtapas);
 
@@ -185,6 +196,48 @@ public class CadastroEtapa1Fragment extends Fragment {
     private void configurarCalendario() {
 
         iconeCalendario.setOnClickListener(view -> abrirCalendario());
+    }
+
+    private void configurarVisibilidadeSenha() {
+
+        iconeOlhoSenhaCadastro.setOnClickListener(
+                view ->
+                        senhaVisivel =
+                                alternarVisibilidadeSenha(
+                                        campoSenha, iconeOlhoSenhaCadastro, senhaVisivel));
+
+        iconeOlhoConfirmarSenha.setOnClickListener(
+                view ->
+                        confirmarSenhaVisivel =
+                                alternarVisibilidadeSenha(
+                                        campoConfirmarSenha,
+                                        iconeOlhoConfirmarSenha,
+                                        confirmarSenhaVisivel));
+    }
+
+    private boolean alternarVisibilidadeSenha(
+            EditText campo, ImageView icone, boolean visivelAtualmente) {
+
+        if (visivelAtualmente) {
+
+            campo.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+            icone.setImageResource(R.drawable.icon_olho_fechado);
+
+            icone.setContentDescription("Mostrar senha");
+
+        } else {
+
+            campo.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+
+            icone.setImageResource(R.drawable.icon_olho_aberto);
+
+            icone.setContentDescription("Ocultar senha");
+        }
+
+        campo.setSelection(campo.getText().length());
+
+        return !visivelAtualmente;
     }
 
     private void abrirCalendario() {
@@ -450,98 +503,31 @@ public class CadastroEtapa1Fragment extends Fragment {
             return;
         }
 
-        definirCarregando(true);
-
-        autenticacaoFirebase
-                .createUserWithEmailAndPassword(email, senha)
-                .addOnCompleteListener(
-                        requireActivity(),
-                        tarefa -> {
-                            if (!isAdded()) {
-                                return;
-                            }
-
-                            if (tarefa.isSuccessful()) {
-
-                                atualizarNomeUsuario();
-
-                                return;
-                            }
-
-                            definirCarregando(false);
-
-                            tratarErroCadastro(tarefa.getException());
-                        });
+        viewModel
+                .cadastrar(
+                        telaAutenticacao.getNome(), email, senha, telaAutenticacao.montarDadosCadastro())
+                .observe(getViewLifecycleOwner(), this::tratarResultadoCadastro);
     }
 
-    private void atualizarNomeUsuario() {
+    private void tratarResultadoCadastro(ResultadoCadastro resultado) {
 
-        FirebaseUser usuario = autenticacaoFirebase.getCurrentUser();
+        if (!isAdded()) {
+            return;
+        }
 
-        if (usuario == null) {
+        if (!resultado.isSucesso()) {
 
-            definirCarregando(false);
-
-            mostrarMensagem("A conta foi criada, mas não foi possível carregar o usuário.");
+            mostrarMensagem(resultado.getMensagemErro());
 
             return;
         }
 
-        String nome = ((Login) requireActivity()).getNome();
+        if (resultado.getAviso() != null) {
 
-        UserProfileChangeRequest perfil =
-                new UserProfileChangeRequest.Builder().setDisplayName(nome).build();
-
-        usuario.updateProfile(perfil)
-                .addOnCompleteListener(
-                        tarefa -> {
-                            if (!isAdded()) {
-                                return;
-                            }
-
-                            definirCarregando(false);
-
-                            if (!tarefa.isSuccessful()) {
-
-                                mostrarMensagem(
-                                        "Conta criada, mas não foi possível atualizar o nome do perfil.");
-                            }
-
-                            entrarNoEcoCiente();
-                        });
-    }
-
-    private void tratarErroCadastro(Exception erro) {
-
-        if (erro instanceof FirebaseAuthUserCollisionException) {
-
-            mostrarMensagem("Já existe uma conta cadastrada com este e-mail.");
-
-            return;
+            mostrarMensagem(resultado.getAviso());
         }
 
-        if (erro instanceof FirebaseAuthWeakPasswordException) {
-
-            mostrarMensagem("A senha informada é muito fraca.");
-
-            return;
-        }
-
-        if (erro instanceof FirebaseAuthInvalidCredentialsException) {
-
-            mostrarMensagem("O e-mail informado é inválido.");
-
-            return;
-        }
-
-        if (erro != null && erro.getLocalizedMessage() != null) {
-
-            mostrarMensagem(erro.getLocalizedMessage());
-
-            return;
-        }
-
-        mostrarMensagem("Não foi possível criar sua conta.");
+        entrarNoEcoCiente();
     }
 
     private void definirCarregando(boolean carregando) {
@@ -559,6 +545,10 @@ public class CadastroEtapa1Fragment extends Fragment {
         campoConfirmarSenha.setEnabled(!carregando);
 
         iconeCalendario.setEnabled(!carregando);
+
+        iconeOlhoSenhaCadastro.setEnabled(!carregando);
+
+        iconeOlhoConfirmarSenha.setEnabled(!carregando);
 
         checkPossuiCodigoCondominio.setEnabled(!carregando);
 
@@ -696,6 +686,10 @@ public class CadastroEtapa1Fragment extends Fragment {
         campoCodigoCondominio = null;
 
         iconeCalendario = null;
+
+        iconeOlhoSenhaCadastro = null;
+
+        iconeOlhoConfirmarSenha = null;
 
         containerEtapas = null;
 

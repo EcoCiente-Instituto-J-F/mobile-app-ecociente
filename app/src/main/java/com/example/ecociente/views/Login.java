@@ -1,5 +1,7 @@
 package com.example.ecociente.views;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
@@ -7,6 +9,9 @@ import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -18,6 +23,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.example.ecociente.R;
 import com.google.android.material.card.MaterialCardView;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Login extends AppCompatActivity {
 
@@ -34,6 +41,8 @@ public class Login extends AppCompatActivity {
     private static final String CHAVE_POSSUI_CODIGO_CONDOMINIO = "possuiCodigoCondominio";
 
     private static final String CHAVE_CODIGO_CONDOMINIO = "codigoCondominio";
+
+    private static final String CHAVE_TIPO_PERFIL = "tipoPerfil";
 
     private View raizLogin;
     private View conteudoPainelLogin;
@@ -62,6 +71,27 @@ public class Login extends AppCompatActivity {
 
     private boolean possuiCodigoCondominio = false;
     private String codigoCondominio = "";
+
+    private String tipoPerfilSelecionado = "usuario";
+
+    private final ActivityResultLauncher<Intent> lancadorSelecaoPerfil =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    resultado -> {
+                        if (resultado.getResultCode() != Activity.RESULT_OK
+                                || resultado.getData() == null) {
+                            return;
+                        }
+
+                        String tipoPerfil =
+                                resultado
+                                        .getData()
+                                        .getStringExtra(SelecaoPerfil.EXTRA_TIPO_PERFIL);
+
+                        tipoPerfilSelecionado = tipoPerfil != null ? tipoPerfil : "usuario";
+
+                        abrirCadastroEtapa1(true);
+                    });
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -241,7 +271,7 @@ public class Login extends AppCompatActivity {
                         return;
                     }
 
-                    abrirCadastroEtapa1(true);
+                    lancadorSelecaoPerfil.launch(new Intent(this, SelecaoPerfil.class));
                 });
     }
 
@@ -508,6 +538,31 @@ public class Login extends AppCompatActivity {
         return codigoCondominio;
     }
 
+    public String getTipoPerfilSelecionado() {
+        return tipoPerfilSelecionado;
+    }
+
+    @NonNull
+    public Map<String, Object> montarDadosCadastro() {
+
+        Map<String, Object> dadosUsuario = new HashMap<>();
+
+        dadosUsuario.put("nome", nome);
+        dadosUsuario.put("dataNascimento", dataNascimento);
+        dadosUsuario.put("email", email);
+        dadosUsuario.put("endereco", endereco);
+        dadosUsuario.put("numero", numero);
+        dadosUsuario.put("cep", cep);
+        dadosUsuario.put("complemento", complemento);
+        dadosUsuario.put("cidade", cidade);
+        dadosUsuario.put("estado", estado);
+        dadosUsuario.put("possuiCodigoCondominio", possuiCodigoCondominio);
+        dadosUsuario.put("codigoCondominio", codigoCondominio);
+        dadosUsuario.put("tipoPerfil", tipoPerfilSelecionado);
+
+        return dadosUsuario;
+    }
+
     private void recuperarDadosSalvos(Bundle estadoSalvo) {
 
         if (estadoSalvo == null) {
@@ -535,6 +590,8 @@ public class Login extends AppCompatActivity {
         possuiCodigoCondominio = estadoSalvo.getBoolean(CHAVE_POSSUI_CODIGO_CONDOMINIO, false);
 
         codigoCondominio = estadoSalvo.getString(CHAVE_CODIGO_CONDOMINIO, "");
+
+        tipoPerfilSelecionado = estadoSalvo.getString(CHAVE_TIPO_PERFIL, "usuario");
     }
 
     @Override
@@ -561,6 +618,8 @@ public class Login extends AppCompatActivity {
         estadoSaida.putBoolean(CHAVE_POSSUI_CODIGO_CONDOMINIO, possuiCodigoCondominio);
 
         estadoSaida.putString(CHAVE_CODIGO_CONDOMINIO, codigoCondominio);
+
+        estadoSaida.putString(CHAVE_TIPO_PERFIL, tipoPerfilSelecionado);
 
         super.onSaveInstanceState(estadoSaida);
     }
