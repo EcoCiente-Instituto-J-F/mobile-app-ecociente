@@ -17,14 +17,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.model.ResultadoCadastro;
+import com.example.ecociente.viewmodels.CadastroViewModel;
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,7 +42,7 @@ public class CadastroEtapa2Fragment extends Fragment {
 
     private ProgressBar indicadorCarregamento;
 
-    private FirebaseAuth autenticacaoFirebase;
+    private CadastroViewModel viewModel;
 
     private boolean alterandoCep = false;
 
@@ -66,7 +63,9 @@ public class CadastroEtapa2Fragment extends Fragment {
 
         inicializarComponentes(view);
 
-        autenticacaoFirebase = FirebaseAuth.getInstance();
+        viewModel = new ViewModelProvider(requireActivity()).get(CadastroViewModel.class);
+
+        viewModel.getCarregando().observe(getViewLifecycleOwner(), this::definirCarregando);
 
         configurarBotaoVoltar();
 
@@ -289,98 +288,31 @@ public class CadastroEtapa2Fragment extends Fragment {
             return;
         }
 
-        definirCarregando(true);
-
-        autenticacaoFirebase
-                .createUserWithEmailAndPassword(email, senha)
-                .addOnCompleteListener(
-                        requireActivity(),
-                        tarefa -> {
-                            if (!isAdded()) {
-                                return;
-                            }
-
-                            if (tarefa.isSuccessful()) {
-
-                                atualizarNomeUsuario();
-
-                                return;
-                            }
-
-                            definirCarregando(false);
-
-                            tratarErroCadastro(tarefa.getException());
-                        });
+        viewModel
+                .cadastrar(
+                        telaAutenticacao.getNome(), email, senha, telaAutenticacao.montarDadosCadastro())
+                .observe(getViewLifecycleOwner(), this::tratarResultadoCadastro);
     }
 
-    private void atualizarNomeUsuario() {
+    private void tratarResultadoCadastro(ResultadoCadastro resultado) {
 
-        FirebaseUser usuario = autenticacaoFirebase.getCurrentUser();
+        if (!isAdded()) {
+            return;
+        }
 
-        if (usuario == null) {
+        if (!resultado.isSucesso()) {
 
-            definirCarregando(false);
-
-            mostrarMensagem("A conta foi criada, mas não foi possível carregar o usuário.");
+            mostrarMensagem(resultado.getMensagemErro());
 
             return;
         }
 
-        String nome = ((Login) requireActivity()).getNome();
+        if (resultado.getAviso() != null) {
 
-        UserProfileChangeRequest perfil =
-                new UserProfileChangeRequest.Builder().setDisplayName(nome).build();
-
-        usuario.updateProfile(perfil)
-                .addOnCompleteListener(
-                        tarefa -> {
-                            if (!isAdded()) {
-                                return;
-                            }
-
-                            definirCarregando(false);
-
-                            if (!tarefa.isSuccessful()) {
-
-                                mostrarMensagem(
-                                        "Conta criada, mas não foi possível atualizar o nome do perfil.");
-                            }
-
-                            entrarNoEcoCiente();
-                        });
-    }
-
-    private void tratarErroCadastro(Exception erro) {
-
-        if (erro instanceof FirebaseAuthUserCollisionException) {
-
-            mostrarMensagem("Já existe uma conta cadastrada com este e-mail.");
-
-            return;
+            mostrarMensagem(resultado.getAviso());
         }
 
-        if (erro instanceof FirebaseAuthWeakPasswordException) {
-
-            mostrarMensagem("A senha informada é muito fraca.");
-
-            return;
-        }
-
-        if (erro instanceof FirebaseAuthInvalidCredentialsException) {
-
-            mostrarMensagem("O e-mail informado é inválido.");
-
-            return;
-        }
-
-        if (erro != null && erro.getLocalizedMessage() != null) {
-
-            mostrarMensagem(erro.getLocalizedMessage());
-
-            return;
-        }
-
-        mostrarMensagem("Não foi possível criar sua conta.");
+        entrarNoEcoCiente();
     }
 
     private void definirCarregando(boolean carregando) {

@@ -34,6 +34,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
@@ -240,6 +241,13 @@ public class LoginFragment extends Fragment {
     }
 
     private void configurarRetornoFacebook() {
+        if (!FacebookSdk.isInitialized()) {
+            Log.w(TAG, "Facebook SDK não inicializado, login por Facebook desabilitado");
+
+            botaoFacebook.setEnabled(false);
+            return;
+        }
+
         LoginManager.getInstance()
                 .registerCallback(
                         gerenciadorRetornoFacebook,
@@ -382,7 +390,7 @@ public class LoginFragment extends Fragment {
             sinalCancelamentoGoogle = null;
         }
 
-        if (gerenciadorRetornoFacebook != null) {
+        if (gerenciadorRetornoFacebook != null && FacebookSdk.isInitialized()) {
 
             LoginManager.getInstance().unregisterCallback(gerenciadorRetornoFacebook);
         }
