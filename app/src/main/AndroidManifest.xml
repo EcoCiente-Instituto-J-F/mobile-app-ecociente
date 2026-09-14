@@ -40,11 +40,6 @@
             android:theme="@style/Theme.EcoCiente.Dialogo" />
 
         <activity
-            android:name=".views.Carregamento"
-            android:exported="false"
-            android:screenOrientation="portrait" />
-
-        <activity
             android:name=".views.SplashScreen"
             android:exported="true"
             android:screenOrientation="portrait">

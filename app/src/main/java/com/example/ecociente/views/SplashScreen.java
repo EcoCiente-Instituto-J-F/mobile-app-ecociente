@@ -25,7 +25,7 @@ public class SplashScreen extends AppCompatActivity {
     private FrameLayout areaVideo;
     private VideoView videoAnimacaoLogo;
     private View coberturaVideo;
-    private boolean carregamentoAberto = false;
+    private boolean loginAberto = false;
     private boolean coberturaRemovida = false;
     private final Runnable removerCoberturaPorSeguranca = this::removerCoberturaVideo;
 
@@ -76,7 +76,7 @@ public class SplashScreen extends AppCompatActivity {
         videoAnimacaoLogo.setOnPreparedListener(this::prepararReprodutor);
 
         videoAnimacaoLogo.setOnCompletionListener(
-                reprodutor -> manipulador.postDelayed(this::abrirCarregamento, TEMPO_APOS_VIDEO));
+                reprodutor -> manipulador.postDelayed(this::abrirLogin, TEMPO_APOS_VIDEO));
 
         videoAnimacaoLogo.setOnErrorListener(
                 (reprodutor, codigoErro, detalheErro) -> {
@@ -87,7 +87,7 @@ public class SplashScreen extends AppCompatActivity {
                                     + " | Detalhe: "
                                     + detalheErro);
 
-                    manipulador.postDelayed(this::abrirCarregamento, 1_000L);
+                    manipulador.postDelayed(this::abrirLogin, 1_000L);
 
                     return true;
                 });
@@ -136,14 +136,14 @@ public class SplashScreen extends AppCompatActivity {
                 .start();
     }
 
-    private void abrirCarregamento() {
-        if (carregamentoAberto || isFinishing()) {
+    private void abrirLogin() {
+        if (loginAberto || isFinishing()) {
             return;
         }
 
-        carregamentoAberto = true;
+        loginAberto = true;
 
-        Intent rota = new Intent(SplashScreen.this, Carregamento.class);
+        Intent rota = new Intent(SplashScreen.this, Login.class);
 
         startActivity(rota);
         finish();
