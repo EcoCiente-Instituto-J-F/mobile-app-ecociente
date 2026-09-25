@@ -32,6 +32,21 @@
         Logo EcoCiente
     </string>
 
+    <string name="chat_eko">Eko</string>
+    <string name="chat_titulo_inicial">Como Posso te ajudar?</string>
+    <string name="chat_descricao_inicial">Comece uma conversa sobre reciclagem\ne descarte consciente</string>
+    <string name="chat_opcao_material">Identificar material reciclável?</string>
+    <string name="chat_opcao_reciclar">Como reciclar um material?</string>
+    <string name="chat_opcao_cooperativa">Identificar cooperativa próxima?</string>
+    <string name="chat_titulo_conversa">Eko</string>
+    <string name="chat_voltar">Voltar</string>
+    <string name="chat_hint_mensagem">Digite sua pergunta...</string>
+    <string name="chat_enviar">Enviar mensagem</string>
+    <string name="chat_avatar_eko">Avatar do Eko</string>
+    <string name="chat_avatar_usuario">Avatar do usuário</string>
+    <string name="chat_erro_conexao">Não consegui me conectar ao EcoCiente agora. Verifique se a API está ligada e tente novamente.</string>
+    <string name="chat_erro_resposta">Não foi possível obter uma resposta válida. Tente novamente.</string>
+
     <string-array name="estados_brasil">
 
         <item>Acre (AC)</item>
