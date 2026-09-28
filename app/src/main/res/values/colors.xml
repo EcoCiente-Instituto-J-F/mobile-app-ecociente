@@ -7,4 +7,7 @@
     <color name="branco">#FFFFFF</color>
     <color name="cinza_escuro_textos">#999999</color>
     <color name="black">#000000</color>
+    <color name="verde_mensagem_chat">#E2EEE4</color>
+    <color name="verde_icone_chat">#D9E6D8</color>
+    <color name="cinza_borda_chat">#D9DEDC</color>
 </resources>
