@@ -32,20 +32,39 @@
         Logo EcoCiente
     </string>
 
-    <string name="chat_eko">Eko</string>
-    <string name="chat_titulo_inicial">Como Posso te ajudar?</string>
-    <string name="chat_descricao_inicial">Comece uma conversa sobre reciclagem\ne descarte consciente</string>
-    <string name="chat_opcao_material">Identificar material reciclável?</string>
-    <string name="chat_opcao_reciclar">Como reciclar um material?</string>
-    <string name="chat_opcao_cooperativa">Identificar cooperativa próxima?</string>
-    <string name="chat_titulo_conversa">Eko</string>
-    <string name="chat_voltar">Voltar</string>
-    <string name="chat_hint_mensagem">Digite sua pergunta...</string>
-    <string name="chat_enviar">Enviar mensagem</string>
-    <string name="chat_avatar_eko">Avatar do Eko</string>
-    <string name="chat_avatar_usuario">Avatar do usuário</string>
-    <string name="chat_erro_conexao">Não consegui me conectar ao EcoCiente agora. Verifique se a API está ligada e tente novamente.</string>
-    <string name="chat_erro_resposta">Não foi possível obter uma resposta válida. Tente novamente.</string>
+    <string name="home_saudacao">Olá, %1$s!</string>
+    <string name="home_usuario_padrao">EcoCiente</string>
+    <string name="mensagem_motivacional_padrao">Pequenas atitudes, grandes transformações.</string>
+    <string name="notificacoes">Notificações</string>
+    <string name="foto_perfil">Foto do perfil</string>
+    <string name="icone_analise_quiz">Ícone da análise do quiz</string>
+    <string name="analise_quiz">Análise do seu quiz</string>
+    <string name="acompanhe_quizzes">Acompanhe seu desempenho nos últimos quizzes</string>
+    <string name="media_acertos">Média acertos</string>
+    <string name="grafico_desempenho">Gráfico de desempenho nos últimos quizzes</string>
+    <string name="icone_conteudos">Ícone de conteúdos</string>
+    <string name="conteudos_para_voce">Conteúdos para você</string>
+    <string name="ver_todos">Ver todos</string>
+    <string name="guia">Guia</string>
+    <string name="dica">Dica</string>
+    <string name="artigo">Artigo</string>
+    <string name="quiz">Quiz</string>
+    <string name="perfil">Perfil</string>
+    <string name="home">Home</string>
+    <string name="assistente">Assistente EcoCiente</string>
+    <string name="imagem_guia">Imagem do guia sobre separação de papel</string>
+    <string name="imagem_dica">Imagem da dica sobre redução de plástico</string>
+    <string name="imagem_artigo">Imagem do artigo sobre compostagem</string>
+    <string name="titulo_guia_home">Como separar papel corretamente</string>
+    <string name="titulo_dica_home">Como reduzir o uso de plástico</string>
+    <string name="titulo_artigo_home">Compostagem caseira</string>
+    <string name="tempo_leitura">Tempo de leitura</string>
+    <string name="quatro_minutos_leitura">4 min de leitura</string>
+    <string name="tres_minutos_leitura">3 min de leitura</string>
+    <string name="cinco_minutos_leitura">5 min de leitura</string>
+    <string name="funcionalidade_em_breve">Esta funcionalidade será disponibilizada em breve.</string>
+    <string name="erro_carregar_perfil">Não foi possível confirmar seu perfil agora.</string>
+    <string name="tentar_novamente">Tentar novamente</string>
 
     <string-array name="estados_brasil">
 
@@ -78,5 +97,11 @@
         <item>Tocantins (TO)</item>
 
     </string-array>
+
+    <!-- Chatbot Eko -->
+    <string name="chat_opcao_material">Materiais</string>
+    <string name="chat_opcao_reciclar">Como reciclar?</string>
+    <string name="chat_opcao_cooperativa">Encontrar cooperativa</string>
+    <string name="chat_erro_conexao">Não foi possível se conectar. Tente novamente.</string>
 
 </resources>

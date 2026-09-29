@@ -18,7 +18,8 @@
 
         <activity
             android:name=".views.MainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".views.ChatActivity"

@@ -77,7 +77,6 @@ android {
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
-
         targetCompatibility = JavaVersion.VERSION_11
     }
 }
@@ -86,19 +85,33 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:34.16.0"))
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
+
     implementation("androidx.credentials:credentials:1.3.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.3.0")
+
     implementation("com.google.android.libraries.identity.googleid:googleid:1.1.1")
+
     implementation("com.facebook.android:facebook-login:18.2.3")
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+
     implementation(libs.lifecycle.viewmodel)
     implementation(libs.lifecycle.livedata)
+
+    /*
+     * Pull-to-refresh:
+     * permite arrastar a Home para baixo como no Instagram.
+     */
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
     testImplementation(libs.junit)
+
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }

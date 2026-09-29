@@ -1,0 +1,225 @@
+package com.example.ecociente.views;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import com.example.ecociente.R;
+import com.example.ecociente.model.PerfilAcesso;
+import com.example.ecociente.repository.NotificacaoMotivacionalRepository;
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+public class MainActivity extends AppCompatActivity {
+    private static final long INTERVALO_MENSAGEM_MILLIS = 15_000L;
+
+    private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
+    private final FirebaseFirestore bancoFirestore = FirebaseFirestore.getInstance();
+    private final NotificacaoMotivacionalRepository repositorioNotificacao =
+            new NotificacaoMotivacionalRepository();
+    private final Handler atualizadorMensagem = new Handler(Looper.getMainLooper());
+    private final Runnable tarefaAtualizarMensagem = this::buscarMensagemMotivacional;
+
+    private TextView textoMensagemMotivacional;
+    private boolean homeCarregada = false;
+    private boolean atividadeVisivel = false;
+
+    @Override
+    protected void onCreate(Bundle estadoSalvo) {
+        super.onCreate(estadoSalvo);
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.branco));
+        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.branco));
+        setContentView(R.layout.activity_main);
+        configurarEstadoInicial();
+        validarPerfilECarregarHome();
+    }
+
+    private void configurarEstadoInicial() {
+        MaterialButton botaoTentarNovamente = findViewById(R.id.botaoTentarNovamente);
+        botaoTentarNovamente.setOnClickListener(
+                view -> {
+                    findViewById(R.id.estadoErroHome).setVisibility(View.GONE);
+                    findViewById(R.id.indicadorCarregamentoHome).setVisibility(View.VISIBLE);
+                    validarPerfilECarregarHome();
+                });
+    }
+
+    private void validarPerfilECarregarHome() {
+        FirebaseUser usuario = autenticacao.getCurrentUser();
+
+        if (usuario == null) {
+            abrirLogin("Entre na sua conta para continuar.", false);
+            return;
+        }
+
+        bancoFirestore
+                .collection("usuarios")
+                .document(usuario.getUid())
+                .get()
+                .addOnSuccessListener(documento -> validarDocumentoPerfil(usuario, documento))
+                .addOnFailureListener(erro -> mostrarErroCarregamento());
+    }
+
+    private void validarDocumentoPerfil(
+            @NonNull FirebaseUser usuario, @NonNull DocumentSnapshot documento) {
+        if (!documento.exists()) {
+            abrirLogin("Complete seu cadastro antes de acessar a home.", true);
+            return;
+        }
+
+        String tipoPerfil = documento.getString("tipoPerfil");
+        Boolean possuiCodigoCondominio = documento.getBoolean("possuiCodigoCondominio");
+        String endereco = documento.getString("endereco");
+
+        if (!PerfilAcesso.ehUsuarioComum(tipoPerfil, possuiCodigoCondominio, endereco)) {
+            abrirLogin("Esta home é exclusiva para usuários sem vínculo com condomínio.", true);
+            return;
+        }
+
+        String nome = documento.getString("nome");
+
+        if (nome == null || nome.trim().isEmpty()) {
+            nome = usuario.getDisplayName();
+        }
+
+        carregarHome(nome);
+    }
+
+    private void carregarHome(String nomeCompleto) {
+        setContentView(R.layout.activity_home_usuario_comum);
+        homeCarregada = true;
+
+        TextView textoSaudacao = findViewById(R.id.textoSaudacao);
+        textoMensagemMotivacional = findViewById(R.id.textoMensagemMotivacional);
+        textoSaudacao.setText(getString(R.string.home_saudacao, obterPrimeiroNome(nomeCompleto)));
+
+        configurarAcoesTemporarias();
+
+        if (atividadeVisivel) {
+            iniciarAtualizacaoMensagem();
+        }
+    }
+
+    private void configurarAcoesTemporarias() {
+        int[] elementos = {
+            R.id.botaoNotificacoes,
+            R.id.cardAnaliseQuiz,
+            R.id.acaoVerTodos,
+            R.id.cardConteudoGuia,
+            R.id.cardConteudoDica,
+            R.id.cardConteudoArtigo,
+            R.id.navGuia,
+            R.id.navQuiz,
+            R.id.navAssistente,
+            R.id.navPerfil
+        };
+
+        for (int id : elementos) {
+            findViewById(id)
+                    .setOnClickListener(
+                            view ->
+                                    Toast.makeText(
+                                                    this,
+                                                    R.string.funcionalidade_em_breve,
+                                                    Toast.LENGTH_SHORT)
+                                            .show());
+        }
+    }
+
+    private void iniciarAtualizacaoMensagem() {
+        atualizadorMensagem.removeCallbacks(tarefaAtualizarMensagem);
+        buscarMensagemMotivacional();
+    }
+
+    private void buscarMensagemMotivacional() {
+        if (!atividadeVisivel || !homeCarregada) {
+            return;
+        }
+
+        repositorioNotificacao.buscar(
+                mensagem -> {
+                    if (mensagem != null
+                            && textoMensagemMotivacional != null
+                            && !isFinishing()
+                            && !mensagem.equals(textoMensagemMotivacional.getText().toString())) {
+                        textoMensagemMotivacional
+                                .animate()
+                                .alpha(0f)
+                                .setDuration(140L)
+                                .withEndAction(
+                                        () -> {
+                                            textoMensagemMotivacional.setText(mensagem);
+                                            textoMensagemMotivacional
+                                                    .animate()
+                                                    .alpha(1f)
+                                                    .setDuration(180L)
+                                                    .start();
+                                        })
+                                .start();
+                    }
+
+                    atualizadorMensagem.removeCallbacks(tarefaAtualizarMensagem);
+                    atualizadorMensagem.postDelayed(
+                            tarefaAtualizarMensagem, INTERVALO_MENSAGEM_MILLIS);
+                });
+    }
+
+    private void mostrarErroCarregamento() {
+        findViewById(R.id.indicadorCarregamentoHome).setVisibility(View.GONE);
+        findViewById(R.id.estadoErroHome).setVisibility(View.VISIBLE);
+    }
+
+    private void abrirLogin(String mensagem, boolean encerrarSessao) {
+        if (encerrarSessao) {
+            autenticacao.signOut();
+        }
+
+        Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show();
+        Intent rota = new Intent(this, Login.class);
+        rota.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(rota);
+        finish();
+    }
+
+    @NonNull
+    private String obterPrimeiroNome(String nomeCompleto) {
+        if (nomeCompleto == null || nomeCompleto.trim().isEmpty()) {
+            return getString(R.string.home_usuario_padrao);
+        }
+
+        return nomeCompleto.trim().split("\\s+")[0];
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        atividadeVisivel = true;
+
+        if (homeCarregada) {
+            iniciarAtualizacaoMensagem();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        atividadeVisivel = false;
+        atualizadorMensagem.removeCallbacks(tarefaAtualizarMensagem);
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        atualizadorMensagem.removeCallbacksAndMessages(null);
+        textoMensagemMotivacional = null;
+        super.onDestroy();
+    }
+}
