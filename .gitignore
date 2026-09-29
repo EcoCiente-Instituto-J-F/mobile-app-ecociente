@@ -4,6 +4,7 @@
 .gradle
 build
 **/build
+**/node_modules
 
 .idea
 .vscode

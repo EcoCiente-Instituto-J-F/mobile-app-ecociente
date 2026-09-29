@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:clickable="true"
+    android:focusable="true"
+
+    android:foreground="?attr/selectableItemBackground"
+
+    app:cardBackgroundColor="@color/branco"
+
+    app:cardCornerRadius="10dp"
+
+    app:cardElevation="0dp"
+
+    app:strokeColor="@color/cinza_borda_clara_home"
+
+    app:strokeWidth="1dp">
+
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:orientation="vertical"
+
+        android:padding="7dp">
+
+
+        <FrameLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="88dp">
+
+
+            <ImageView
+                android:id="@+id/imagemConteudoDica"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_marginTop="4dp"
+
+                android:contentDescription="@string/imagem_dica"
+
+                android:padding="5dp"
+
+                android:scaleType="centerInside"
+
+                android:src="@drawable/png_greenplastic" />
+
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_gravity="start|top"
+
+                android:background="@drawable/fundo_selo_conteudo_home"
+
+                android:fontFamily="@font/nunito_bold"
+
+                android:paddingStart="5dp"
+                android:paddingTop="2dp"
+                android:paddingEnd="5dp"
+                android:paddingBottom="2dp"
+
+                android:text="@string/dica"
+
+                android:textColor="@color/verde_escuro_principal"
+
+                android:textSize="8sp" />
+
+        </FrameLayout>
+
+
+        <TextView
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            android:layout_marginTop="5dp"
+
+            android:layout_weight="1"
+
+            android:ellipsize="end"
+
+            android:fontFamily="@font/nunito_regular"
+
+            android:maxLines="3"
+
+            android:text="@string/titulo_dica_home"
+
+            android:textColor="@color/preto_texto_home"
+
+            android:textSize="10sp" />
+
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+
+            android:gravity="center_vertical"
+
+            android:orientation="horizontal">
+
+
+            <ImageView
+
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+
+                android:contentDescription="@string/tempo_leitura"
+
+                android:scaleType="centerInside"
+
+                android:src="@drawable/icon_relogio" />
+
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="4dp"
+
+                android:fontFamily="@font/nunito_semibold"
+
+                android:text="@string/tres_minutos_leitura"
+
+                android:textColor="@color/cinza_secundario_home"
+
+                android:textSize="8sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
