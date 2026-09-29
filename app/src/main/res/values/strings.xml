@@ -98,4 +98,10 @@
 
     </string-array>
 
+    <!-- Chatbot Eko -->
+    <string name="chat_opcao_material">Materiais</string>
+    <string name="chat_opcao_reciclar">Como reciclar?</string>
+    <string name="chat_opcao_cooperativa">Encontrar cooperativa</string>
+    <string name="chat_erro_conexao">Não foi possível se conectar. Tente novamente.</string>
+
 </resources>

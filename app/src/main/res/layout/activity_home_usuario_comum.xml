@@ -719,7 +719,7 @@
 
             android:src="@drawable/icon_chatbot_verde"
 
-            android:tint="@color/verde_escuro_principal"
+            app:tint="@color/verde_escuro_principal"
 
             android:tintMode="src_in" />
 
