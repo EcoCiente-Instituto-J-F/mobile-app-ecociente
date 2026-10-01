@@ -20,8 +20,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.model.ResultadoCadastro;
+import com.example.ecociente.ui.FieldFeedback;
+import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.CadastroViewModel;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,7 +43,14 @@ public class CadastroEtapa2Fragment extends Fragment {
 
     private MaterialButton botaoCadastrar;
 
+    private MaterialCardView containerEndereco;
+    private MaterialCardView containerNumero;
+    private MaterialCardView containerCep;
+    private MaterialCardView containerCidade;
+    private MaterialCardView containerEstado;
+
     private ProgressBar indicadorCarregamento;
+    private Motion motion;
 
     private CadastroViewModel viewModel;
 
@@ -73,9 +83,22 @@ public class CadastroEtapa2Fragment extends Fragment {
 
         configurarListaEstados();
 
+        configurarFeedbackDeCampos();
+
         configurarCadastro();
 
         recuperarDadosPreenchidos();
+
+        motion.staggerIn(
+                view.findViewById(R.id.tituloCadastroEtapa2),
+                view.findViewById(R.id.containerEtapasEtapa2),
+                containerEndereco,
+                view.findViewById(R.id.linhaNumeroCep),
+                view.findViewById(R.id.containerComplemento),
+                containerCidade,
+                containerEstado,
+                botaoCadastrar
+        );
     }
 
     private void inicializarComponentes(View view) {
@@ -98,7 +121,14 @@ public class CadastroEtapa2Fragment extends Fragment {
 
         botaoCadastrar = view.findViewById(R.id.botaoCadastrar);
 
+        containerEndereco = view.findViewById(R.id.containerEndereco);
+        containerNumero = view.findViewById(R.id.containerNumero);
+        containerCep = view.findViewById(R.id.containerCep);
+        containerCidade = view.findViewById(R.id.containerCidade);
+        containerEstado = view.findViewById(R.id.containerEstado);
+
         indicadorCarregamento = view.findViewById(R.id.indicadorCarregamentoCadastro);
+        motion = new Motion();
     }
 
     private void configurarBotaoVoltar() {
@@ -195,9 +225,31 @@ public class CadastroEtapa2Fragment extends Fragment {
         return Math.round(dp * getResources().getDisplayMetrics().density);
     }
 
+    private void configurarFeedbackDeCampos() {
+        int verde = ContextCompat.getColor(requireContext(), R.color.verde_escuro_principal);
+
+        campoEndereco.addTextChangedListener(limparErroAoDigitar(containerEndereco, verde));
+        campoNumero.addTextChangedListener(limparErroAoDigitar(containerNumero, verde));
+        campoCep.addTextChangedListener(limparErroAoDigitar(containerCep, verde));
+        campoCidade.addTextChangedListener(limparErroAoDigitar(containerCidade, verde));
+        campoEstado.addTextChangedListener(limparErroAoDigitar(containerEstado, verde));
+    }
+
+    private TextWatcher limparErroAoDigitar(MaterialCardView card, int normalColor) {
+        return new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) { }
+            @Override public void onTextChanged(CharSequence s, int st, int before, int count) { }
+            @Override public void afterTextChanged(Editable s) {
+                FieldFeedback.clear(card, normalColor);
+            }
+        };
+    }
+
     private void configurarCadastro() {
 
         botaoCadastrar.setOnClickListener(view -> validarEtapa2());
+        Motion.pressFeedback(botaoCadastrar);
+        Motion.pressFeedback(botaoVoltarEtapa1);
     }
 
     private void validarEtapa2() {
@@ -215,47 +267,30 @@ public class CadastroEtapa2Fragment extends Fragment {
         String estado = campoEstado.getText().toString().trim();
 
         if (endereco.isEmpty()) {
-
-            mostrarMensagem("Digite seu endereço.");
-
-            campoEndereco.requestFocus();
-
+            mostrarErroCampo(containerEndereco, campoEndereco, "Digite seu endereço.");
             return;
         }
 
         if (numero.isEmpty()) {
-
-            mostrarMensagem("Digite o número do endereço.");
-
-            campoNumero.requestFocus();
-
+            mostrarErroCampo(containerNumero, campoNumero, "Digite o número do endereço.");
             return;
         }
 
         if (cep.length() != 9) {
-
-            mostrarMensagem("Digite um CEP válido.");
-
-            campoCep.requestFocus();
-
+            mostrarErroCampo(containerCep, campoCep, "Digite um CEP válido.");
             return;
         }
 
         if (cidade.isEmpty()) {
-
-            mostrarMensagem("Digite sua cidade.");
-
-            campoCidade.requestFocus();
-
+            mostrarErroCampo(containerCidade, campoCidade, "Digite sua cidade.");
             return;
         }
 
         if (estado.isEmpty() || !estadoValido(estado)) {
-
-            mostrarMensagem("Selecione um estado.");
-
+            FieldFeedback.error(containerEstado, "Selecione um estado.", motion);
+            FieldFeedback.showErrorSnackbar(requireView(), "Selecione um estado.");
+            campoEstado.requestFocus();
             campoEstado.showDropDown();
-
             return;
         }
 
@@ -309,7 +344,7 @@ public class CadastroEtapa2Fragment extends Fragment {
 
         if (resultado.getAviso() != null) {
 
-            mostrarMensagem(resultado.getAviso());
+            Toast.makeText(requireContext(), resultado.getAviso(), Toast.LENGTH_SHORT).show();
         }
 
         entrarNoEcoCiente();
@@ -409,13 +444,23 @@ public class CadastroEtapa2Fragment extends Fragment {
         requireActivity().finish();
     }
 
+    private void mostrarErroCampo(
+            MaterialCardView card,
+            EditText campo,
+            String mensagem
+    ) {
+        FieldFeedback.error(card, mensagem, motion);
+        FieldFeedback.showErrorSnackbar(requireView(), mensagem);
+        campo.requestFocus();
+    }
+
     private void mostrarMensagem(String mensagem) {
 
         if (!isAdded()) {
             return;
         }
 
-        Toast.makeText(requireContext(), mensagem, Toast.LENGTH_SHORT).show();
+        FieldFeedback.showErrorSnackbar(requireView(), mensagem);
     }
 
     @Override
@@ -446,7 +491,18 @@ public class CadastroEtapa2Fragment extends Fragment {
 
         botaoCadastrar = null;
 
+        containerEndereco = null;
+        containerNumero = null;
+        containerCep = null;
+        containerCidade = null;
+        containerEstado = null;
+
         indicadorCarregamento = null;
+
+        if (motion != null) {
+            motion.cancelAll();
+            motion = null;
+        }
 
         super.onDestroyView();
     }

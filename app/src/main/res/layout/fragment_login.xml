@@ -69,23 +69,36 @@
                     android:padding="0dp"
                     android:textColor="@color/verde_escuro_principal"
                     android:textColorHint="@color/cinza_escuro_textos"
-                    android:textSize="12sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
+        <TextView
+            android:id="@+id/erroEmailLogin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/nunito_medium"
+            android:textColor="@color/rosa_ecociente"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerEmail" />
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/containerSenha"
             android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="12dp"
             app:cardBackgroundColor="@color/branco"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/containerEmail"
+            app:layout_constraintTop_toBottomOf="@id/erroEmailLogin"
             app:strokeColor="@color/verde_escuro_principal"
             app:strokeWidth="1dp">
 
@@ -125,7 +138,7 @@
                         android:padding="0dp"
                         android:textColor="@color/verde_escuro_principal"
                         android:textColorHint="@color/cinza_escuro_textos"
-                        android:textSize="12sp" />
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -148,6 +161,19 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
+            android:id="@+id/erroSenhaLogin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/nunito_medium"
+            android:textColor="@color/rosa_ecociente"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerSenha" />
+
+        <TextView
             android:id="@+id/textoEsqueceuSenha"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -157,26 +183,41 @@
             android:fontFamily="@font/nunito_medium"
             android:text="@string/esqueceu_senha"
             android:textColor="@color/verde_escuro_principal"
-            android:textSize="9sp"
+            android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/containerSenha" />
+            app:layout_constraintTop_toBottomOf="@id/erroSenhaLogin" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/botaoLogin"
+        <FrameLayout
+            android:id="@+id/containerBotaoLogin"
             android:layout_width="0dp"
             android:layout_height="52dp"
             android:layout_marginTop="38dp"
-            android:fontFamily="@font/nunito_semibold"
-            android:text="@string/login"
-            android:textAllCaps="false"
-            android:textColor="@color/branco"
-            android:textSize="17sp"
-            app:backgroundTint="@color/verde_escuro_principal"
-            app:cornerRadius="12dp"
-            app:elevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textoEsqueceuSenha" />
+            app:layout_constraintTop_toBottomOf="@id/textoEsqueceuSenha">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botaoLogin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/nunito_semibold"
+                android:text="@string/login"
+                android:textAllCaps="false"
+                android:textColor="@color/branco"
+                android:textSize="17sp"
+                app:backgroundTint="@color/verde_escuro_principal"
+                app:cornerRadius="12dp"
+                app:elevation="0dp" />
+
+            <ProgressBar
+                android:id="@+id/indicadorCarregamentoLogin"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:indeterminateTint="@color/branco"
+                android:visibility="gone" />
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/divisorOu"
@@ -187,7 +228,7 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/botaoLogin">
+            app:layout_constraintTop_toBottomOf="@id/containerBotaoLogin">
 
             <View
                 android:layout_width="0dp"

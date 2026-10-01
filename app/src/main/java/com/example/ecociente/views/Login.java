@@ -1,6 +1,8 @@
 package com.example.ecociente.views;
 
 import android.app.Activity;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import com.example.ecociente.R;
 import com.google.android.material.card.MaterialCardView;
 import java.util.HashMap;
@@ -403,7 +406,15 @@ public class Login extends AppCompatActivity {
 
                     if (animar) {
 
-                        indicadorAba.animate().translationX(destino).setDuration(200).start();
+                        indicadorAba.setPivotX(indicadorAba.getWidth() / 2f);
+                        AnimatorSet transicao = new AnimatorSet();
+                        transicao.playTogether(
+                                ObjectAnimator.ofFloat(indicadorAba, View.TRANSLATION_X,
+                                        indicadorAba.getTranslationX(), destino),
+                                ObjectAnimator.ofFloat(indicadorAba, View.SCALE_X, 1f, 1.08f, 1f));
+                        transicao.setDuration(340);
+                        transicao.setInterpolator(new FastOutSlowInInterpolator());
+                        transicao.start();
 
                     } else {
 
