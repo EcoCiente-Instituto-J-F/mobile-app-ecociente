@@ -13,6 +13,17 @@
         name="Theme.EcoCiente"
         parent="Base.Theme.EcoCiente" />
 
+
+    <style
+        name="Theme.EcoCiente.Quiz"
+        parent="Theme.EcoCiente">
+
+        <item name="android:windowBackground">@color/branco</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:colorAccent">@color/verde_escuro_principal</item>
+    </style>
+
     <style
         name="Theme.EcoCiente.Dialogo"
         parent="Theme.Material3.DayNight.Dialog">

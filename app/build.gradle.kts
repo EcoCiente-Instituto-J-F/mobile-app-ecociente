@@ -97,6 +97,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation("androidx.interpolator:interpolator:1.0.0")
 
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)

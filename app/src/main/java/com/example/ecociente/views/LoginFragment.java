@@ -5,16 +5,20 @@ import static com.google.android.libraries.identity.googleid.GoogleIdTokenCreden
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CancellationSignal;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
+import android.view.inputmethod.EditorInfo;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -29,6 +33,8 @@ import androidx.credentials.exceptions.GetCredentialException;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.FieldFeedback;
+import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.LoginViewModel;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -40,6 +46,7 @@ import com.facebook.login.LoginResult;
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
 import java.util.Arrays;
 
 public class LoginFragment extends Fragment {
@@ -50,6 +57,12 @@ public class LoginFragment extends Fragment {
     private MaterialButton botaoGoogle;
     private MaterialButton botaoFacebook;
     private ImageView iconeOlhoSenha;
+    private MaterialCardView containerEmail;
+    private MaterialCardView containerSenha;
+    private TextView erroEmail;
+    private TextView erroSenha;
+    private ProgressBar indicadorCarregamento;
+    private Motion motion;
     private CredentialManager gerenciadorCredenciais;
     private CallbackManager gerenciadorRetornoFacebook;
     private CancellationSignal sinalCancelamentoGoogle;
@@ -73,7 +86,9 @@ public class LoginFragment extends Fragment {
         inicializarAutenticacao();
         configurarRetornoFacebook();
         configurarCliques();
+        configurarFeedbackDeCampos();
         recuperarEmailPreenchido();
+        motion.staggerIn(view.findViewById(R.id.tituloLogin), containerEmail, containerSenha, botaoLogin, botaoGoogle, botaoFacebook);
     }
 
     private void buscarComponentes(View view) {
@@ -83,6 +98,12 @@ public class LoginFragment extends Fragment {
         botaoGoogle = view.findViewById(R.id.botaoGoogle);
         botaoFacebook = view.findViewById(R.id.botaoFacebook);
         iconeOlhoSenha = view.findViewById(R.id.iconeOlhoSenha);
+        containerEmail = view.findViewById(R.id.containerEmail);
+        containerSenha = view.findViewById(R.id.containerSenha);
+        erroEmail = view.findViewById(R.id.erroEmailLogin);
+        erroSenha = view.findViewById(R.id.erroSenhaLogin);
+        indicadorCarregamento = view.findViewById(R.id.indicadorCarregamentoLogin);
+        motion = new Motion();
     }
 
     private void inicializarAutenticacao() {
@@ -97,10 +118,42 @@ public class LoginFragment extends Fragment {
         botaoGoogle.setOnClickListener(clique -> fazerLoginComGoogle());
         botaoFacebook.setOnClickListener(clique -> fazerLoginComFacebook());
         iconeOlhoSenha.setOnClickListener(clique -> alternarVisibilidadeSenha());
+        campoSenha.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                fazerLoginComEmail();
+                return true;
+            }
+            return false;
+        });
 
         View textoEsqueceuSenha = requireView().findViewById(R.id.textoEsqueceuSenha);
 
         textoEsqueceuSenha.setOnClickListener(clique -> irParaEsqueciSenha());
+        Motion.pressFeedback(botaoLogin);
+        Motion.pressFeedback(botaoGoogle);
+        Motion.pressFeedback(botaoFacebook);
+    }
+
+    private void configurarFeedbackDeCampos() {
+        int verde = ContextCompat.getColor(requireContext(), R.color.verde_escuro_principal);
+        campoEmail.setOnFocusChangeListener((v, focused) -> {
+            String email = campoEmail.getText().toString().trim();
+            if (focused || Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                FieldFeedback.clear(containerEmail, erroEmail, verde);
+            } else if (!email.isEmpty()) {
+                FieldFeedback.error(containerEmail, erroEmail, "Informe um e-mail válido.", motion);
+            }
+        });
+        campoEmail.addTextChangedListener(limparErroAoDigitar(containerEmail, erroEmail, verde));
+        campoSenha.addTextChangedListener(limparErroAoDigitar(containerSenha, erroSenha, verde));
+    }
+
+    private TextWatcher limparErroAoDigitar(MaterialCardView card, TextView message, int normalColor) {
+        return new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) { }
+            @Override public void onTextChanged(CharSequence s, int st, int b, int c) { }
+            @Override public void afterTextChanged(Editable s) { FieldFeedback.clear(card, message, normalColor); }
+        };
     }
 
     private void recuperarEmailPreenchido() {
@@ -126,21 +179,21 @@ public class LoginFragment extends Fragment {
         String senha = campoSenha.getText().toString();
 
         if (email.isEmpty()) {
-            mostrarMensagem("Preencha o e-mail.");
+            mostrarErroCampo(containerEmail, erroEmail, "Preencha o e-mail.");
 
             campoEmail.requestFocus();
             return;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            mostrarMensagem("Informe um e-mail válido.");
+            mostrarErroCampo(containerEmail, erroEmail, "Informe um e-mail válido.");
 
             campoEmail.requestFocus();
             return;
         }
 
         if (senha.isEmpty()) {
-            mostrarMensagem("Preencha a senha.");
+            mostrarErroCampo(containerSenha, erroSenha, "Preencha a senha.");
 
             campoSenha.requestFocus();
             return;
@@ -152,7 +205,7 @@ public class LoginFragment extends Fragment {
                         getViewLifecycleOwner(),
                         resultado -> {
                             if (!resultado.isSucesso()) {
-                                mostrarMensagem(resultado.getMensagemErro());
+                                mostrarErroGlobal(resultado.getMensagemErro());
                                 return;
                             }
                             finalizarLogin();
@@ -302,11 +355,10 @@ public class LoginFragment extends Fragment {
         campoSenha.setEnabled(!emAndamento);
         iconeOlhoSenha.setEnabled(!emAndamento);
 
-        float transparencia = emAndamento ? 0.55f : 1f;
-
-        botaoLogin.setAlpha(transparencia);
-        botaoGoogle.setAlpha(transparencia);
-        botaoFacebook.setAlpha(transparencia);
+        indicadorCarregamento.setVisibility(emAndamento ? View.VISIBLE : View.GONE);
+        botaoLogin.setText(emAndamento ? "" : getString(R.string.login));
+        botaoGoogle.setAlpha(emAndamento ? 0.55f : 1f);
+        botaoFacebook.setAlpha(emAndamento ? 0.55f : 1f);
 
         if (getActivity() instanceof Login) {
 
@@ -320,8 +372,6 @@ public class LoginFragment extends Fragment {
 
             return;
         }
-
-        mostrarMensagem("Login realizado com sucesso");
 
         Intent rota = new Intent(requireContext(), MainActivity.class);
 
@@ -358,14 +408,18 @@ public class LoginFragment extends Fragment {
         campoSenha.setSelection(campoSenha.getText().length());
     }
 
+    private void mostrarErroCampo(MaterialCardView card, TextView message, String text) {
+        FieldFeedback.error(card, message, text, motion);
+    }
+
     private void mostrarMensagem(@NonNull String mensagem) {
+        mostrarErroGlobal(mensagem);
+    }
 
-        if (!isAdded()) {
-
-            return;
+    private void mostrarErroGlobal(@NonNull String mensagem) {
+        if (isAdded()) {
+            FieldFeedback.showErrorSnackbar(requireView(), mensagem);
         }
-
-        Toast.makeText(requireContext(), mensagem, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -411,6 +465,13 @@ public class LoginFragment extends Fragment {
         botaoFacebook = null;
 
         iconeOlhoSenha = null;
+        if (motion != null) motion.cancelAll();
+        containerEmail = null;
+        containerSenha = null;
+        erroEmail = null;
+        erroSenha = null;
+        indicadorCarregamento = null;
+        motion = null;
 
         super.onDestroyView();
     }

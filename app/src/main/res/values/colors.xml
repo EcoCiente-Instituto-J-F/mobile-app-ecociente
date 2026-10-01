@@ -37,4 +37,9 @@
     <!-- Mesmo tom usado na borda e no botão central -->
 
     <color name="verde_claro_botao_home">#CCD9CA</color>
+
+    <!-- Cores do Chatbot Eko -->
+    <color name="verde_mensagem_chat">#E2EEE4</color>
+    <color name="cinza_borda_chat">#D9DEDC</color>
+    <color name="verde_icone_chat">#D9E6D8</color>
 </resources>

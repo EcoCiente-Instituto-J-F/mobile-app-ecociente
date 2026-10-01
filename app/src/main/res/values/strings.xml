@@ -104,4 +104,55 @@
     <string name="chat_opcao_cooperativa">Encontrar cooperativa</string>
     <string name="chat_erro_conexao">Não foi possível se conectar. Tente novamente.</string>
 
+    <!-- Recursos adicionais do Chatbot Eko -->
+
+    <string name="chat_avatar_eko">Avatar do Eko</string>
+
+    <string name="chat_titulo_inicial">Como posso te ajudar?</string>
+
+    <string name="chat_descricao_inicial">Comece uma conversa sobre reciclagem e descarte consciente</string>
+
+    <string name="chat_voltar">Voltar</string>
+
+    <string name="chat_titulo_conversa">Eko</string>
+
+    <string name="chat_hint_mensagem">Digite sua pergunta...</string>
+
+    <string name="chat_enviar">Enviar mensagem</string>
+
+    <string name="chat_avatar_usuario">Avatar do usuário</string>
+
+    <!-- ===================================================== -->
+    <!-- QUIZ - USUÁRIO COMUM                                  -->
+    <!-- ===================================================== -->
+
+    <string name="voltar">Voltar</string>
+
+    <string name="quizzes">Quizzes</string>
+
+    <string name="subtitulo_quizzes">Teste seus conhecimentos sobre sustentabilidade</string>
+
+    <string name="buscar">Buscar quizzes</string>
+
+    <string name="pesquise">pesquise...</string>
+
+    <string name="seis_quizzes_disponiveis">6 quizzes disponíveis</string>
+
+    <string name="quizzes_disponiveis_formatado">%1$d quizzes disponíveis</string>
+
+    <string name="filtros">Filtros</string>
+
+    <string name="icone_quiz">Ícone do quiz</string>
+
+    <string name="quantidade_perguntas">Quantidade de perguntas</string>
+
+    <string name="duracao_quiz">Duração do quiz</string>
+
+    <string name="concluido">Concluído</string>
+
+    <string name="comecar">Começar</string>
+
+    <string name="quiz_em_breve">O quiz será disponibilizado em breve.</string>
+
+    <string name="quiz_restrito_usuario_comum">Esta tela é exclusiva para usuários comuns.</string>
 </resources>

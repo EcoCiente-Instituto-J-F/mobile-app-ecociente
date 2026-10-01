@@ -263,9 +263,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void carregarHome(
-            String nomeCompleto
-    ) {
+    private void carregarHome(String nomeCompleto) {
 
         setContentView(
                 R.layout.activity_home_usuario_comum
@@ -298,25 +296,18 @@ public class MainActivity extends AppCompatActivity {
                         R.id.textoSaudacao
                 );
 
+        textoMensagemMotivacional = findViewById(R.id.textoMensagemMotivacional);
 
-        textoMensagemMotivacional =
-                findViewById(
-                        R.id.textoMensagemMotivacional
-                );
+        textoSaudacao.setText(getString(R.string.home_saudacao, obterPrimeiroNome(nomeCompleto)));
 
+        View navQuiz = findViewById(R.id.navQuiz);
 
-        textoSaudacao.setText(
-                getString(
-                        R.string.home_saudacao,
-                        obterPrimeiroNome(
-                                nomeCompleto
-                        )
-                )
-        );
-
+        if (navQuiz != null) {
+            navQuiz.setOnClickListener(view -> abrirQuizzes());
+        }
 
         /*
-         * Se a Activity já estiver visível,
+         * Se a Activity já estiver visível,a
          * buscamos a primeira mensagem agora.
          */
         if (atividadeVisivel) {
@@ -325,6 +316,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void abrirQuizzes() {
+        Intent rota = new Intent(this, QuizActivity.class);
+
+        rota.putExtra(QuizActivity.EXTRA_ANIMAR_NAVEGACAO, true);
+
+        startActivity(rota);
+
+        overridePendingTransition(0, 0);
+    }
 
     /*
      * ========================================================

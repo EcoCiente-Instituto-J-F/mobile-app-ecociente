@@ -15,12 +15,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.FieldFeedback;
+import com.example.ecociente.ui.Motion;
 import com.example.ecociente.model.ResultadoCadastro;
 import com.example.ecociente.viewmodels.CadastroViewModel;
 import com.google.android.material.button.MaterialButton;
@@ -53,11 +56,22 @@ public class CadastroEtapa1Fragment extends Fragment {
 
     private MaterialCheckBox checkPossuiCodigoCondominio;
 
+    private MaterialCardView containerNome;
+    private MaterialCardView containerDataNascimento;
+    private MaterialCardView containerEmailCadastro;
+    private MaterialCardView containerSenhaCadastro;
+    private MaterialCardView containerConfirmarSenha;
     private MaterialCardView containerCodigoCondominio;
 
     private MaterialButton botaoContinuar;
 
     private ProgressBar indicadorCarregamento;
+    private View[] barrasForcaSenha;
+    private TextView textoForcaSenha;
+    private Motion motion;
+
+    private static final int COR_BORDA_CAMPO = Color.rgb(53, 121, 103);
+    private static final int COR_BORDA_CODIGO_ATIVO = Color.rgb(6, 78, 59);
 
     private CadastroViewModel viewModel;
 
@@ -92,11 +106,28 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         configurarVisibilidadeSenha();
 
+        configurarForcaSenha();
+
+        configurarFeedbackDeCampos();
+
         configurarCodigoCondominio();
 
         configurarContinuar();
 
         recuperarDadosPreenchidos();
+
+        motion.staggerIn(
+                view.findViewById(R.id.tituloCadastro),
+                view.findViewById(R.id.containerEtapas),
+                containerNome,
+                containerDataNascimento,
+                containerEmailCadastro,
+                containerSenhaCadastro,
+                containerConfirmarSenha,
+                view.findViewById(R.id.cardOpcaoCondominio),
+                containerCodigoCondominio,
+                botaoContinuar
+        );
     }
 
     private void inicializarComponentes(View view) {
@@ -125,11 +156,25 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         checkPossuiCodigoCondominio = view.findViewById(R.id.checkPossuiCodigoCondominio);
 
+        containerNome = view.findViewById(R.id.containerNome);
+        containerDataNascimento = view.findViewById(R.id.containerDataNascimento);
+        containerEmailCadastro = view.findViewById(R.id.containerEmailCadastro);
+        containerSenhaCadastro = view.findViewById(R.id.containerSenhaCadastro);
+        containerConfirmarSenha = view.findViewById(R.id.containerConfirmarSenha);
         containerCodigoCondominio = view.findViewById(R.id.containerCodigoCondominio);
 
         botaoContinuar = view.findViewById(R.id.botaoContinuar);
 
         indicadorCarregamento = view.findViewById(R.id.indicadorCarregamentoCadastroEtapa1);
+
+        barrasForcaSenha = new View[] {
+                view.findViewById(R.id.forcaSenha1), view.findViewById(R.id.forcaSenha2),
+                view.findViewById(R.id.forcaSenha3), view.findViewById(R.id.forcaSenha4)};
+        textoForcaSenha = view.findViewById(R.id.textoForcaSenha);
+        textoForcaSenha.setText("");
+        textoForcaSenha.setVisibility(View.GONE);
+
+        motion = new Motion();
     }
 
     private void configurarMascaraData() {
@@ -213,6 +258,140 @@ public class CadastroEtapa1Fragment extends Fragment {
                                         campoConfirmarSenha,
                                         iconeOlhoConfirmarSenha,
                                         confirmarSenhaVisivel));
+    }
+
+    /**
+     * O indicador informa a força da senha sem exibir a regra mínima antes da hora.
+     * A validação de cadastro exige no mínimo 8 caracteres.
+     */
+    private void configurarForcaSenha() {
+
+        campoSenha.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int st, int before, int count) {}
+
+                    @Override
+                    public void afterTextChanged(Editable senha) {
+                        atualizarForcaSenha(senha.toString());
+                    }
+                });
+
+        campoConfirmarSenha.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int st, int before, int count) {}
+
+                    @Override
+                    public void afterTextChanged(Editable confirmacao) {
+                        if (confirmacao.toString().equals(campoSenha.getText().toString())) {
+                            FieldFeedback.clear(containerConfirmarSenha, COR_BORDA_CAMPO);
+                        }
+                    }
+                });
+
+        atualizarForcaSenha(campoSenha.getText().toString());
+    }
+
+    private void atualizarForcaSenha(String senha) {
+
+        int corInativa = Color.rgb(217, 221, 219);
+
+        if (senha == null || senha.isEmpty()) {
+
+            for (View barra : barrasForcaSenha) {
+                barra.setBackgroundColor(corInativa);
+            }
+
+            textoForcaSenha.setText("");
+            textoForcaSenha.setVisibility(View.GONE);
+            return;
+        }
+
+        boolean tamanhoMinimo = senha.length() >= 8;
+        boolean temMaiuscula = senha.matches(".*[A-Z].*");
+        boolean temMinuscula = senha.matches(".*[a-z].*");
+        boolean temNumero = senha.matches(".*\\d.*");
+        boolean temEspecial = senha.matches(".*[^A-Za-z0-9].*");
+
+        /*
+         * A primeira barra representa uma senha digitada.
+         * Depois de atingir os 8 caracteres, os critérios extras aumentam a força.
+         * Assim uma senha forte consegue preencher de verdade as 4 barras.
+         */
+        int nivel = 1;
+
+        if (tamanhoMinimo && temMaiuscula && temMinuscula) {
+            nivel++;
+        }
+
+        if (tamanhoMinimo && temNumero) {
+            nivel++;
+        }
+
+        if (tamanhoMinimo && temEspecial) {
+            nivel++;
+        }
+
+        nivel = Math.min(nivel, barrasForcaSenha.length);
+
+        int cor;
+        String texto;
+
+        if (nivel == 1) {
+            cor = Color.rgb(186, 26, 26);
+            texto = "Senha fraca";
+
+        } else if (nivel == 2) {
+            cor = Color.rgb(190, 120, 0);
+            texto = "Senha média";
+
+        } else if (nivel == 3) {
+            cor = Color.rgb(53, 121, 103);
+            texto = "Senha forte";
+
+        } else {
+            cor = Color.rgb(6, 78, 59);
+            texto = "Senha muito forte";
+        }
+
+        for (int i = 0; i < barrasForcaSenha.length; i++) {
+            View barra = barrasForcaSenha[i];
+            barra.setBackgroundColor(i < nivel ? cor : corInativa);
+            barra.animate()
+                    .alpha(i < nivel ? 1f : 0.65f)
+                    .setDuration(Motion.MICRO_MS)
+                    .start();
+        }
+
+        textoForcaSenha.setVisibility(View.VISIBLE);
+        textoForcaSenha.setText(texto);
+        textoForcaSenha.setTextColor(cor);
+    }
+
+    private void configurarFeedbackDeCampos() {
+        campoNome.addTextChangedListener(limparErroAoDigitar(containerNome, COR_BORDA_CAMPO));
+        campoDataNascimento.addTextChangedListener(limparErroAoDigitar(containerDataNascimento, COR_BORDA_CAMPO));
+        campoEmail.addTextChangedListener(limparErroAoDigitar(containerEmailCadastro, COR_BORDA_CAMPO));
+        campoSenha.addTextChangedListener(limparErroAoDigitar(containerSenhaCadastro, COR_BORDA_CAMPO));
+        campoConfirmarSenha.addTextChangedListener(limparErroAoDigitar(containerConfirmarSenha, COR_BORDA_CAMPO));
+        campoCodigoCondominio.addTextChangedListener(limparErroAoDigitar(containerCodigoCondominio, COR_BORDA_CODIGO_ATIVO));
+    }
+
+    private TextWatcher limparErroAoDigitar(MaterialCardView card, int normalColor) {
+        return new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int st, int c, int a) { }
+            @Override public void onTextChanged(CharSequence s, int st, int before, int count) { }
+            @Override public void afterTextChanged(Editable s) {
+                FieldFeedback.clear(card, normalColor);
+            }
+        };
     }
 
     private boolean alternarVisibilidadeSenha(
@@ -378,6 +557,7 @@ public class CadastroEtapa1Fragment extends Fragment {
     private void configurarContinuar() {
 
         botaoContinuar.setOnClickListener(view -> validarEtapa1());
+        Motion.pressFeedback(botaoContinuar);
     }
 
     private void validarEtapa1() {
@@ -395,58 +575,41 @@ public class CadastroEtapa1Fragment extends Fragment {
         String codigoCondominio = campoCodigoCondominio.getText().toString().trim();
 
         if (nome.length() < 3) {
-
-            mostrarMensagem("Digite seu nome e sobrenome.");
-
-            campoNome.requestFocus();
-
+            mostrarErroCampo(containerNome, campoNome, "Digite seu nome e sobrenome.");
             return;
         }
 
         if (!dataValida(dataNascimento)) {
-
-            mostrarMensagem("Digite uma data de nascimento válida.");
-
-            campoDataNascimento.requestFocus();
-
+            mostrarErroCampo(containerDataNascimento, campoDataNascimento, "Digite uma data de nascimento válida.");
             return;
         }
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-
-            mostrarMensagem("Digite um e-mail válido.");
-
-            campoEmail.requestFocus();
-
+            mostrarErroCampo(containerEmailCadastro, campoEmail, "Digite um e-mail válido.");
             return;
         }
 
-        if (senha.length() < 6) {
+        if (senha.length() < 8) {
+            textoForcaSenha.setVisibility(View.VISIBLE);
+            textoForcaSenha.setText("A senha deve ter no mínimo 8 caracteres.");
+            textoForcaSenha.setTextColor(Color.parseColor("#D64573"));
 
-            mostrarMensagem("A senha deve possuir pelo menos 6 caracteres.");
-
-            campoSenha.requestFocus();
-
+            mostrarErroCampo(
+                    containerSenhaCadastro,
+                    campoSenha,
+                    "A senha deve ter no mínimo 8 caracteres.");
             return;
         }
 
         if (!senha.equals(confirmarSenha)) {
-
-            mostrarMensagem("As senhas não são iguais.");
-
-            campoConfirmarSenha.requestFocus();
-
+            mostrarErroCampo(containerConfirmarSenha, campoConfirmarSenha, "As senhas não são iguais.");
             return;
         }
 
         boolean possuiCodigoCondominio = checkPossuiCodigoCondominio.isChecked();
 
         if (possuiCodigoCondominio && codigoCondominio.isEmpty()) {
-
-            mostrarMensagem("Digite o código do condomínio.");
-
-            campoCodigoCondominio.requestFocus();
-
+            mostrarErroCampo(containerCodigoCondominio, campoCodigoCondominio, "Digite o código do condomínio.");
             return;
         }
 
@@ -524,7 +687,7 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         if (resultado.getAviso() != null) {
 
-            mostrarMensagem(resultado.getAviso());
+            Toast.makeText(requireContext(), resultado.getAviso(), Toast.LENGTH_SHORT).show();
         }
 
         entrarNoEcoCiente();
@@ -654,13 +817,23 @@ public class CadastroEtapa1Fragment extends Fragment {
         requireActivity().finish();
     }
 
+    private void mostrarErroCampo(
+            MaterialCardView card,
+            EditText campo,
+            String mensagem
+    ) {
+        FieldFeedback.error(card, mensagem, motion);
+        FieldFeedback.showErrorSnackbar(requireView(), mensagem);
+        campo.requestFocus();
+    }
+
     private void mostrarMensagem(String mensagem) {
 
         if (!isAdded()) {
             return;
         }
 
-        Toast.makeText(requireContext(), mensagem, Toast.LENGTH_SHORT).show();
+        FieldFeedback.showErrorSnackbar(requireView(), mensagem);
     }
 
     @Override
@@ -697,11 +870,21 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         checkPossuiCodigoCondominio = null;
 
+        containerNome = null;
+        containerDataNascimento = null;
+        containerEmailCadastro = null;
+        containerSenhaCadastro = null;
+        containerConfirmarSenha = null;
         containerCodigoCondominio = null;
 
         botaoContinuar = null;
 
         indicadorCarregamento = null;
+
+        if (motion != null) {
+            motion.cancelAll();
+            motion = null;
+        }
 
         super.onDestroyView();
     }
