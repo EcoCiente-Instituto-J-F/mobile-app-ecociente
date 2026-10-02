@@ -21,16 +21,13 @@ import org.json.JSONObject;
 
 // Fala com a ds-autenticacao-api (Java/Postgres, repositório separado deste
 // app), hoje só com POST /auth/login implementado lá. Chamada em paralelo ao
-// login do Firebase, sem travar o app se essa API estiver fora do ar - ainda
-// não existe conta nenhuma migrada pro Postgres.
+// login do Firebase, sem travar o app se essa API estiver fora do ar. Contas
+// criadas antes do cadastro integrado não existem no Postgres e falham aqui.
 public class AutenticacaoExternaRepository {
 
     private static final String TAG = "AuthExternaEcoCiente";
 
-    // Emulador Android: 10.0.2.2 é o alias pro localhost da máquina que roda
-    // a API (ex.: via docker-compose). Em device físico isso precisa virar o
-    // IP da máquina na rede, ou a URL de onde a API estiver hospedada.
-    private static final String URL_LOGIN = "http://10.0.2.2:9801/auth/login";
+    private static final String URL_LOGIN = "https://ds-autenticacao-api-1.onrender.com/auth/login";
 
     private static final String PREFERENCIAS = "sessao_externa";
     private static final String CHAVE_TOKEN = "token";
@@ -81,8 +78,10 @@ public class AutenticacaoExternaRepository {
             conexao.setRequestProperty("Accept", "application/json");
             conexao.setDoOutput(true);
             conexao.setUseCaches(false);
-            conexao.setConnectTimeout(8_000);
-            conexao.setReadTimeout(8_000);
+            // Render free tier "dorme" a API após inatividade (cold start de
+            // 70s a 2min medido); roda em segundo plano, não trava o login.
+            conexao.setConnectTimeout(150_000);
+            conexao.setReadTimeout(150_000);
 
             JSONObject corpo = new JSONObject();
             corpo.put("email", email);
