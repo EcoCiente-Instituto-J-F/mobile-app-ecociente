@@ -24,7 +24,6 @@
         android:paddingEnd="11dp"
         android:paddingBottom="14dp">
 
-        <!-- Placeholder do ícone. O asset final pode ser trocado depois. -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/fundoIconeQuiz"
             android:layout_width="58dp"

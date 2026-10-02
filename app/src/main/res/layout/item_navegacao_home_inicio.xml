@@ -12,8 +12,6 @@
     android:translationX="5dp">
 
 
-    <!-- Indicador da página ativa -->
-
     <View
         android:layout_width="26dp"
         android:layout_height="4dp"

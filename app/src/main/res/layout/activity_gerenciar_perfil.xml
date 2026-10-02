@@ -40,7 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_semibold"
-                    android:text="Gerenciar perfil"
+                    android:text="@string/gerenciar_perfil"
                     android:textColor="@color/branco"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -109,7 +109,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:fontFamily="@font/nunito_semibold"
-            android:text="Conta"
+            android:text="@string/secao_conta"
             android:textColor="@color/cinza_escuro_textos"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -160,7 +160,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_medium"
-                        android:text="Informações pessoais"
+                        android:text="@string/informacoes_pessoais"
                         android:textColor="@color/preto_texto_home"
                         android:textSize="14sp" />
 
@@ -203,7 +203,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_medium"
-                        android:text="Gerenciar senha"
+                        android:text="@string/gerenciar_senha"
                         android:textColor="@color/preto_texto_home"
                         android:textSize="14sp" />
 
@@ -246,7 +246,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_medium"
-                        android:text="Notificações"
+                        android:text="@string/notificacoes"
                         android:textColor="@color/preto_texto_home"
                         android:textSize="14sp" />
 
@@ -269,7 +269,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:fontFamily="@font/nunito_semibold"
-            android:text="Sessão"
+            android:text="@string/secao_sessao"
             android:textColor="@color/cinza_escuro_textos"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -320,7 +320,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_medium"
-                        android:text="Sair da conta"
+                        android:text="@string/sair_da_conta"
                         android:textColor="@color/preto_texto_home"
                         android:textSize="14sp" />
 
@@ -363,7 +363,7 @@
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_semibold"
-                        android:text="Excluir conta"
+                        android:text="@string/excluir_conta"
                         android:textColor="@color/rosa_ecociente"
                         android:textSize="14sp" />
 

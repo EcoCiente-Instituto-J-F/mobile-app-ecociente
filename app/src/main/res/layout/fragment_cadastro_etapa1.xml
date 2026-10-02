@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/nunito_bold"
-        android:text="Cadastrar-se"
+        android:text="@string/cadastrar_se"
         android:textColor="@color/verde_escuro_principal"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +32,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_semibold"
-            android:text="Passo 1 de 2"
-            android:textColor="#414141"
+            android:text="@string/cadastro_passo_1"
+            android:textColor="@color/cinza_texto_passo"
             android:textSize="11sp" />
 
         <View
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/nunito_bold"
-                android:text="Dados pessoais"
+                android:text="@string/dados_pessoais"
                 android:textColor="@color/verde_escuro_principal"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,13 +85,13 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="7dp"
-                app:cardBackgroundColor="#FAFCFB"
+                app:cardBackgroundColor="@color/branco_fundo_campo"
                 app:cardCornerRadius="11dp"
                 app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tituloDadosPessoais"
-                app:strokeColor="#357967"
+                app:strokeColor="@color/verde_borda_campo"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -105,7 +105,7 @@
                     <ImageView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
-                        android:contentDescription="Ícone usuário"
+                        android:contentDescription="@string/icone_usuario"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_usuario_cadastro" />
 
@@ -118,12 +118,12 @@
                         android:autofillHints="name"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/nunito_medium"
-                        android:hint="Nome e sobrenome"
+                        android:hint="@string/nome_e_sobrenome"
                         android:imeOptions="actionNext"
                         android:inputType="textPersonName|textCapWords"
                         android:padding="0dp"
                         android:textColor="@color/verde_escuro_principal"
-                        android:textColorHint="#8E9592"
+                        android:textColorHint="@color/cinza_texto_suave"
                         android:textSize="15sp" />
 
                 </LinearLayout>
@@ -135,13 +135,13 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
-                app:cardBackgroundColor="#FAFCFB"
+                app:cardBackgroundColor="@color/branco_fundo_campo"
                 app:cardCornerRadius="11dp"
                 app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/containerNome"
-                app:strokeColor="#357967"
+                app:strokeColor="@color/verde_borda_campo"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -158,7 +158,7 @@
                         android:layout_height="17dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
-                        android:contentDescription="Abrir calendário"
+                        android:contentDescription="@string/abrir_calendario"
                         android:focusable="true"
                         android:scaleType="fitCenter"
                         android:src="@drawable/ic_calendario_cadastro" />
@@ -171,13 +171,13 @@
                         android:layout_weight="1"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/nunito_medium"
-                        android:hint="Data de nascimento"
+                        android:hint="@string/data_nascimento"
                         android:imeOptions="actionNext"
                         android:inputType="number"
                         android:maxLength="10"
                         android:padding="0dp"
                         android:textColor="@color/verde_escuro_principal"
-                        android:textColorHint="#8E9592"
+                        android:textColorHint="@color/cinza_texto_suave"
                         android:textSize="15sp" />
 
                 </LinearLayout>
@@ -189,13 +189,13 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
-                app:cardBackgroundColor="#FAFCFB"
+                app:cardBackgroundColor="@color/branco_fundo_campo"
                 app:cardCornerRadius="11dp"
                 app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/containerDataNascimento"
-                app:strokeColor="#357967"
+                app:strokeColor="@color/verde_borda_campo"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -209,7 +209,7 @@
                     <ImageView
                         android:layout_width="17dp"
                         android:layout_height="15dp"
-                        android:contentDescription="Ícone e-mail"
+                        android:contentDescription="@string/icone_email"
                         android:scaleType="fitCenter"
                         android:src="@drawable/icon_email" />
 
@@ -222,12 +222,12 @@
                         android:autofillHints="emailAddress"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/nunito_medium"
-                        android:hint="Email"
+                        android:hint="@string/hint_email"
                         android:imeOptions="actionNext"
                         android:inputType="textEmailAddress"
                         android:padding="0dp"
                         android:textColor="@color/verde_escuro_principal"
-                        android:textColorHint="#8E9592"
+                        android:textColorHint="@color/cinza_texto_suave"
                         android:textSize="15sp" />
 
                 </LinearLayout>
@@ -239,13 +239,13 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
-                app:cardBackgroundColor="#FAFCFB"
+                app:cardBackgroundColor="@color/branco_fundo_campo"
                 app:cardCornerRadius="11dp"
                 app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/containerEmailCadastro"
-                app:strokeColor="#357967"
+                app:strokeColor="@color/verde_borda_campo"
                 app:strokeWidth="1dp">
 
                 <RelativeLayout
@@ -264,7 +264,7 @@
                         <ImageView
                             android:layout_width="15dp"
                             android:layout_height="17dp"
-                            android:contentDescription="Ícone senha"
+                            android:contentDescription="@string/icone_senha"
                             android:scaleType="fitCenter"
                             android:src="@drawable/icon_senha" />
 
@@ -277,12 +277,12 @@
                             android:autofillHints="newPassword"
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/nunito_medium"
-                            android:hint="Senha"
+                            android:hint="@string/senha"
                             android:imeOptions="actionNext"
                             android:inputType="textPassword"
                             android:padding="0dp"
                             android:textColor="@color/verde_escuro_principal"
-                            android:textColorHint="#8E9592"
+                            android:textColorHint="@color/cinza_texto_suave"
                             android:textSize="15sp" />
 
                     </LinearLayout>
@@ -295,7 +295,7 @@
                         android:layout_centerVertical="true"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
-                        android:contentDescription="Mostrar senha"
+                        android:contentDescription="@string/mostrar_senha"
                         android:focusable="true"
                         android:padding="9dp"
                         android:scaleType="centerInside"
@@ -319,10 +319,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="4dp"
                     android:orientation="horizontal">
-                    <View android:id="@+id/forcaSenha1" android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginEnd="3dp" android:layout_weight="1" android:background="#D9DDDB" />
-                    <View android:id="@+id/forcaSenha2" android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginEnd="3dp" android:layout_weight="1" android:background="#D9DDDB" />
-                    <View android:id="@+id/forcaSenha3" android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginEnd="3dp" android:layout_weight="1" android:background="#D9DDDB" />
-                    <View android:id="@+id/forcaSenha4" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="#D9DDDB" />
+                    <View android:id="@+id/forcaSenha1" android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginEnd="3dp" android:layout_weight="1" android:background="@color/cinza_borda_clara_home" />
+                    <View android:id="@+id/forcaSenha2" android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginEnd="3dp" android:layout_weight="1" android:background="@color/cinza_borda_clara_home" />
+                    <View android:id="@+id/forcaSenha3" android:layout_width="0dp" android:layout_height="match_parent" android:layout_marginEnd="3dp" android:layout_weight="1" android:background="@color/cinza_borda_clara_home" />
+                    <View android:id="@+id/forcaSenha4" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:background="@color/cinza_borda_clara_home" />
                 </LinearLayout>
 
                 <TextView
@@ -331,8 +331,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:fontFamily="@font/nunito_medium"
-                    android:text="Use ao menos 6 caracteres para continuar"
-                    android:textColor="#7B8581"
+                    android:text="@string/senha_requisito_minimo"
+                    android:textColor="@color/cinza_texto_auxiliar"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -341,13 +341,13 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="10dp"
-                app:cardBackgroundColor="#FAFCFB"
+                app:cardBackgroundColor="@color/branco_fundo_campo"
                 app:cardCornerRadius="11dp"
                 app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/indicadorForcaSenha"
-                app:strokeColor="#357967"
+                app:strokeColor="@color/verde_borda_campo"
                 app:strokeWidth="1dp">
 
                 <RelativeLayout
@@ -366,7 +366,7 @@
                         <ImageView
                             android:layout_width="15dp"
                             android:layout_height="17dp"
-                            android:contentDescription="Ícone senha"
+                            android:contentDescription="@string/icone_senha"
                             android:scaleType="fitCenter"
                             android:src="@drawable/icon_senha" />
 
@@ -379,12 +379,12 @@
                             android:autofillHints="newPassword"
                             android:background="@android:color/transparent"
                             android:fontFamily="@font/nunito_medium"
-                            android:hint="Confirmar senha"
+                            android:hint="@string/confirmar_senha"
                             android:imeOptions="actionNext"
                             android:inputType="textPassword"
                             android:padding="0dp"
                             android:textColor="@color/verde_escuro_principal"
-                            android:textColorHint="#8E9592"
+                            android:textColorHint="@color/cinza_texto_suave"
                             android:textSize="15sp" />
 
                     </LinearLayout>
@@ -397,7 +397,7 @@
                         android:layout_centerVertical="true"
                         android:background="?attr/selectableItemBackgroundBorderless"
                         android:clickable="true"
-                        android:contentDescription="Mostrar senha"
+                        android:contentDescription="@string/mostrar_senha"
                         android:focusable="true"
                         android:padding="9dp"
                         android:scaleType="centerInside"
@@ -413,7 +413,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/nunito_bold"
-                android:text="Condomínio"
+                android:text="@string/condominio"
                 android:textColor="@color/verde_escuro_principal"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -424,13 +424,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                app:cardBackgroundColor="#F3F8F6"
+                app:cardBackgroundColor="@color/verde_fundo_card_claro"
                 app:cardCornerRadius="11dp"
                 app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tituloCondominio"
-                app:strokeColor="#D7E6E1"
+                app:strokeColor="@color/cinza_borda_card_perfil"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -466,8 +466,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_semibold"
-                            android:text="Possui código de condomínio"
-                            android:textColor="#3E4A46"
+                            android:text="@string/possui_codigo_condominio"
+                            android:textColor="@color/cinza_texto_opcao"
                             android:textSize="10sp" />
 
                         <TextView
@@ -475,8 +475,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="1dp"
                             android:fontFamily="@font/nunito_regular"
-                            android:text="Use o código fornecido pelo seu condomínio."
-                            android:textColor="#7B8581"
+                            android:text="@string/codigo_condominio_descricao"
+                            android:textColor="@color/cinza_texto_auxiliar"
                             android:textSize="8sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -488,13 +488,13 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
-                app:cardBackgroundColor="#E1E3E2"
+                app:cardBackgroundColor="@color/cinza_fundo_desabilitado"
                 app:cardCornerRadius="11dp"
                 app:cardElevation="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cardOpcaoCondominio"
-                app:strokeColor="#B6BAB8"
+                app:strokeColor="@color/cinza_borda_desabilitada"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -509,7 +509,7 @@
                         android:layout_width="15dp"
                         android:layout_height="17dp"
                         android:alpha="0.65"
-                        android:contentDescription="Ícone código do condomínio"
+                        android:contentDescription="@string/icone_codigo_condominio"
                         android:scaleType="fitCenter"
                         android:src="@drawable/icon_senha"/>
 
@@ -522,12 +522,12 @@
                         android:background="@android:color/transparent"
                         android:enabled="false"
                         android:fontFamily="@font/nunito_medium"
-                        android:hint="Código do condomínio"
+                        android:hint="@string/codigo_condominio"
                         android:imeOptions="actionDone"
                         android:inputType="textCapCharacters"
                         android:padding="0dp"
                         android:textColor="@color/verde_escuro_principal"
-                        android:textColorHint="#737775"
+                        android:textColorHint="@color/cinza_hint_desabilitado"
                         android:textSize="15sp"/>
 
                 </LinearLayout>
@@ -550,7 +550,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="Continuar"
+                    android:text="@string/continuar"
                     android:textAllCaps="false"
                     android:textColor="@color/branco"
                     android:textSize="16sp"

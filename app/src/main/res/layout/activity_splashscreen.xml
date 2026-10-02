@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#063E35"
+    android:background="@color/verde_fundo_splash"
     android:keepScreenOn="true"
     tools:context=".views.SplashScreen">
 
@@ -31,7 +31,7 @@
             android:id="@+id/coberturaVideo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#063E35" />
+            android:background="@color/verde_fundo_splash" />
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

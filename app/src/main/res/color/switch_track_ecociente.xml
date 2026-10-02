@@ -6,6 +6,6 @@
         android:state_checked="true"
         android:color="@color/verde_escuro_principal" />
 
-    <item android:color="#D7E6E1" />
+    <item android:color="@color/cinza_borda_card_perfil" />
 
 </selector>

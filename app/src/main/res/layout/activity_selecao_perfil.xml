@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito_bold"
-                android:text="Bem-Vindo"
+                android:text="@string/bem_vindo"
                 android:textColor="@color/verde_escuro_principal"
                 android:textSize="22sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -44,8 +44,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:fontFamily="@font/nunito_regular"
-                android:text="Selecione como deseja acessar seu perfil"
-                android:textColor="#8E9592"
+                android:text="@string/selecao_perfil_descricao"
+                android:textColor="@color/cinza_texto_suave"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -90,7 +90,7 @@
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:layout_gravity="center"
-                            android:contentDescription="Ícone usuário"
+                            android:contentDescription="@string/icone_usuario"
                             android:src="@drawable/ic_perfil_usuario" />
                     </FrameLayout>
 
@@ -105,7 +105,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_semibold"
-                            android:text="Usuário"
+                            android:text="@string/perfil_usuario"
                             android:textColor="@color/verde_escuro_principal"
                             android:textSize="14sp" />
 
@@ -113,8 +113,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
-                            android:text="Acesso individual"
-                            android:textColor="#8E9592"
+                            android:text="@string/perfil_usuario_descricao"
+                            android:textColor="@color/cinza_texto_suave"
                             android:textSize="11sp" />
 
                     </LinearLayout>
@@ -123,7 +123,7 @@
                         android:id="@+id/indicadorOpcaoUsuario"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
-                        android:contentDescription="Usuário selecionado"
+                        android:contentDescription="@string/usuario_selecionado"
                         android:src="@drawable/ic_radio_selecionado" />
 
                 </LinearLayout>
@@ -146,7 +146,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cardOpcaoUsuario"
-                app:strokeColor="#D7E6E1"
+                app:strokeColor="@color/cinza_borda_card_perfil"
                 app:strokeWidth="1dp">
 
                 <LinearLayout
@@ -169,7 +169,7 @@
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:layout_gravity="center"
-                            android:contentDescription="Ícone cooperativa"
+                            android:contentDescription="@string/icone_cooperativa"
                             android:src="@drawable/ic_perfil_cooperativa" />
                     </FrameLayout>
 
@@ -184,7 +184,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_semibold"
-                            android:text="Cooperativa"
+                            android:text="@string/perfil_cooperativa"
                             android:textColor="@color/verde_escuro_principal"
                             android:textSize="14sp" />
 
@@ -192,8 +192,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
-                            android:text="Gestão de coleta seletiva"
-                            android:textColor="#8E9592"
+                            android:text="@string/perfil_cooperativa_descricao"
+                            android:textColor="@color/cinza_texto_suave"
                             android:textSize="11sp" />
 
                     </LinearLayout>
@@ -202,7 +202,7 @@
                         android:id="@+id/indicadorOpcaoCooperativa"
                         android:layout_width="22dp"
                         android:layout_height="22dp"
-                        android:contentDescription="Cooperativa não selecionada"
+                        android:contentDescription="@string/cooperativa_nao_selecionada"
                         android:src="@drawable/ic_radio_nao_selecionado" />
 
                 </LinearLayout>
@@ -223,7 +223,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="Continuar"
+                    android:text="@string/continuar"
                     android:textAllCaps="false"
                     android:textColor="@color/branco"
                     android:textSize="14sp"

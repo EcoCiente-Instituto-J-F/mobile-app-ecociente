@@ -110,7 +110,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/nunito_semibold"
-            android:text="Informações pessoais"
+            android:text="@string/informacoes_pessoais"
             android:textColor="@color/verde_escuro_principal"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
