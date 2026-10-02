@@ -85,11 +85,6 @@ public class QuizPerformanceView extends View {
 
         super.onDraw(canvas);
 
-        /*
-         * Espaços laterais pensados para
-         * manter datas e eixo Y completamente
-         * dentro do card.
-         */
         float esquerda =
                 dp(34);
 
@@ -220,9 +215,6 @@ public class QuizPerformanceView extends View {
                 )
         );
 
-        /*
-         * Grade pontilhada igual à referência.
-         */
         tinta.setPathEffect(
                 new DashPathEffect(
                         new float[]{
@@ -233,9 +225,6 @@ public class QuizPerformanceView extends View {
                 )
         );
 
-        /*
-         * Linhas horizontais.
-         */
         for (
                 int i = 0;
                 i <= 2;
@@ -262,9 +251,6 @@ public class QuizPerformanceView extends View {
             );
         }
 
-        /*
-         * Linhas verticais.
-         */
         for (
                 int i = 0;
                 i < VALORES.length;
@@ -425,13 +411,6 @@ public class QuizPerformanceView extends View {
         caminhoArea.close();
 
 
-        /*
-         * DEGRADÊ:
-         *
-         * verde mais visível perto da linha
-         * e praticamente transparente
-         * na parte inferior.
-         */
         LinearGradient gradiente =
                 new LinearGradient(
 
@@ -477,9 +456,6 @@ public class QuizPerformanceView extends View {
         );
 
 
-        /*
-         * LINHA VERDE
-         */
         tinta.setStyle(
                 Paint.Style.STROKE
         );
@@ -510,9 +486,6 @@ public class QuizPerformanceView extends View {
         );
 
 
-        /*
-         * PONTOS
-         */
         tinta.setStyle(
                 Paint.Style.FILL
         );

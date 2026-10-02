@@ -35,7 +35,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:fontFamily="@font/nunito_medium"
-            android:hint="Senha"
+            android:hint="@string/senha"
             android:inputType="textPassword"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"

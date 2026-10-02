@@ -18,10 +18,6 @@
     tools:context=".views.MainActivity">
 
 
-    <!-- ===================================================== -->
-    <!-- CABEÇALHO                                             -->
-    <!-- ===================================================== -->
-
     <FrameLayout
         android:id="@+id/cabecalhoHome"
 
@@ -35,8 +31,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-        <!-- LOGO -->
 
         <ImageView
             android:id="@+id/imagemLogoHome"
@@ -56,8 +50,6 @@
 
             app:tint="@color/verde_escuro_principal" />
 
-
-        <!-- NOTIFICAÇÃO + PERFIL -->
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -125,10 +117,6 @@
 
 
 
-    <!-- ===================================================== -->
-    <!-- SAUDAÇÃO                                              -->
-    <!-- ===================================================== -->
-
     <TextView
         android:id="@+id/textoSaudacao"
 
@@ -178,10 +166,6 @@
 
 
 
-    <!-- ===================================================== -->
-    <!-- CARD - ANÁLISE DO QUIZ                                -->
-    <!-- ===================================================== -->
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardAnaliseQuiz"
 
@@ -226,8 +210,6 @@
             android:paddingEnd="10dp"
             android:paddingBottom="8dp">
 
-
-            <!-- TÍTULO + MÉDIA -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -322,8 +304,6 @@
             </LinearLayout>
 
 
-            <!-- DESCRIÇÃO -->
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -338,8 +318,6 @@
 
                 android:textSize="10sp" />
 
-
-            <!-- GRÁFICO -->
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -375,10 +353,6 @@
     </com.google.android.material.card.MaterialCardView>
 
 
-
-    <!-- ===================================================== -->
-    <!-- CONTEÚDOS PARA VOCÊ                                   -->
-    <!-- ===================================================== -->
 
     <LinearLayout
         android:id="@+id/cabecalhoConteudos"
@@ -488,10 +462,6 @@
 
 
 
-    <!-- ===================================================== -->
-    <!-- CARDS                                                 -->
-    <!-- ===================================================== -->
-
     <LinearLayout
         android:id="@+id/listaConteudosHome"
 
@@ -564,10 +534,6 @@
 
 
 
-    <!-- ===================================================== -->
-    <!-- BARRA DE NAVEGAÇÃO                                    -->
-    <!-- ===================================================== -->
-
     <FrameLayout
         android:id="@+id/barraNavegacaoHome"
 
@@ -606,8 +572,6 @@
             android:weightSum="5">
 
 
-            <!-- HOME -->
-
             <include
                 android:id="@+id/navHome"
 
@@ -618,8 +582,6 @@
 
                 android:layout_weight="1" />
 
-
-            <!-- GUIA -->
 
             <include
                 android:id="@+id/navGuia"
@@ -632,16 +594,12 @@
                 android:layout_weight="1" />
 
 
-            <!-- ESPAÇO DO ASSISTENTE -->
-
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
 
                 android:layout_weight="1" />
 
-
-            <!-- QUIZ -->
 
             <include
                 android:id="@+id/navQuiz"
@@ -653,8 +611,6 @@
 
                 android:layout_weight="1" />
 
-
-            <!-- PERFIL -->
 
             <include
                 android:id="@+id/navPerfil"
@@ -672,10 +628,6 @@
 
     </FrameLayout>
 
-
-    <!-- ===================================================== -->
-    <!-- ASSISTENTE CENTRAL                                    -->
-    <!-- ===================================================== -->
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/navAssistente"

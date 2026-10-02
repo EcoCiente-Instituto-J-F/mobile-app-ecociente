@@ -102,10 +102,6 @@ public class SelecaoPerfil extends AppCompatActivity {
         Motion.pressFeedback(botaoContinuarPerfil);
     }
 
-    /**
-     * O painel nasce abaixo da tela e sobe suavemente, como um bottom sheet.
-     * Depois os elementos internos entram em uma pequena cascata.
-     */
     private void animarEntrada() {
 
         painelSelecaoPerfil.post(

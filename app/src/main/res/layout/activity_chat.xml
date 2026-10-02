@@ -89,7 +89,7 @@
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="0dp"
-                    app:rippleColor="#28FFFFFF"
+                    app:rippleColor="@color/ripple_branco_chat"
                     app:strokeColor="@color/branco"
                     app:strokeWidth="1dp">
 
@@ -135,7 +135,7 @@
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="0dp"
-                    app:rippleColor="#28FFFFFF"
+                    app:rippleColor="@color/ripple_branco_chat"
                     app:strokeColor="@color/branco"
                     app:strokeWidth="1dp">
 
@@ -181,7 +181,7 @@
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="0dp"
-                    app:rippleColor="#28FFFFFF"
+                    app:rippleColor="@color/ripple_branco_chat"
                     app:strokeColor="@color/branco"
                     app:strokeWidth="1dp">
 
@@ -322,7 +322,7 @@
                 android:paddingEnd="12dp"
                 android:singleLine="true"
                 android:textColor="@color/black"
-                android:textColorHint="#A0A7A4"
+                android:textColorHint="@color/cinza_hint_chat"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/botaoEnviarChat"

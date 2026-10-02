@@ -12,7 +12,6 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Pequena linguagem de movimento compartilhada pelo EcoCiente. */
 public final class Motion {
     public static final long MICRO_MS = 120;
     public static final long STATE_MS = 220;
