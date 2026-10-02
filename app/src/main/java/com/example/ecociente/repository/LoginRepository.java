@@ -9,8 +9,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
-// Camada de dados (Model) do login: só sabe falar com o FirebaseAuth e devolver
-// o resultado como LiveData, sem nenhuma lógica de tela (isso fica no ViewModel).
 public class LoginRepository {
     private static final String TAG = "LoginEcoCiente";
     private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
@@ -70,8 +68,6 @@ public class LoginRepository {
         return resultado;
     }
 
-    // Mesma checagem defensiva que já existia: garante que o Firebase realmente
-    // deixou um usuário autenticado antes de reportar sucesso.
     @NonNull
     private ResultadoLogin confirmarUsuarioLogado() {
         if (autenticacao.getCurrentUser() == null) {

@@ -115,9 +115,6 @@ public class NotificacaoMotivacionalRepository {
                     "application/json"
             );
 
-            /*
-             * Evita cache local da chamada HTTP.
-             */
             conexao.setUseCaches(
                     false
             );
@@ -168,10 +165,6 @@ public class NotificacaoMotivacionalRepository {
                 );
             }
 
-            /*
-             * Salvamos o ID para enviar na próxima
-             * requisição e evitar repetir.
-             */
             Object id =
                     resposta.opt(
                             "id"
@@ -207,11 +200,6 @@ public class NotificacaoMotivacionalRepository {
     private String criarUrlRequisicao()
             throws Exception {
 
-        /*
-         * Primeira execução:
-         *
-         * /api/notificacaoMotivacional
-         */
         if (
                 ultimoIdNotificacao == null
                         ||
@@ -221,11 +209,6 @@ public class NotificacaoMotivacionalRepository {
             return URL_NOTIFICACAO;
         }
 
-        /*
-         * Próximas:
-         *
-         * /api/notificacaoMotivacional?excluirId=3
-         */
         String idCodificado =
                 URLEncoder.encode(
                         ultimoIdNotificacao,

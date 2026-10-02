@@ -12,10 +12,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-/**
- * Camada de dados do chatbot. Mantém a comunicação HTTP fora da Activity para
- * que a tela cuide somente da interface e do estado da conversa.
- */
 public class ChatRepository {
 
     private static final String URL_CHAT_LOCAL = "htvtp://127.0.0.1:8000/api/v1/chat";

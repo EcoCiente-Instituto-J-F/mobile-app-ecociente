@@ -2,7 +2,6 @@ package com.example.ecociente.model;
 
 import androidx.annotation.NonNull;
 
-// Resultado de uma chamada ao backend: ou deu certo, ou veio com uma mensagem de erro.
 public final class ResultadoApi {
     private final boolean sucesso;
     private final String mensagemErro;

@@ -8,7 +8,6 @@ import com.example.ecociente.model.ResultadoApi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Monta as chamadas HTTP pro backend e devolve o resultado como LiveData.
 public class EsqueciSenhaRepository {
 
     @NonNull
