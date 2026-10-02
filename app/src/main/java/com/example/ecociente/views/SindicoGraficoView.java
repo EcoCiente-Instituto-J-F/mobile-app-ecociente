@@ -46,14 +46,14 @@ public final class SindicoGraficoView extends View {
 
         tinta.setStyle(Paint.Style.STROKE);
         tinta.setStrokeWidth(dp(1));
-        tinta.setColor(ContextCompat.getColor(getContext(), R.color.sindico_borda));
+        tinta.setColor(ContextCompat.getColor(getContext(), R.color.cinza_borda_clara_home));
         for (int i = 0; i <= 3; i++) {
             float y = base - altura * i / 3f;
             canvas.drawLine(esquerda, y, direita, y, tinta);
         }
 
         tinta.setStyle(Paint.Style.FILL);
-        tinta.setColor(ContextCompat.getColor(getContext(), R.color.sindico_cinza));
+        tinta.setColor(ContextCompat.getColor(getContext(), R.color.cinza_texto_home));
         tinta.setTextSize(10 * getResources().getDisplayMetrics().scaledDensity);
         for (int i = 0; i <= 3; i++) {
             canvas.drawText(String.valueOf(i * 100), dp(2), base - altura * i / 3f + dp(3), tinta);
@@ -69,7 +69,7 @@ public final class SindicoGraficoView extends View {
             canvas.drawText(data, x - tinta.measureText(data) / 2f, getHeight() - dp(6), tinta);
         }
 
-        tinta.setColor(ContextCompat.getColor(getContext(), R.color.sindico_verde));
+        tinta.setColor(ContextCompat.getColor(getContext(), R.color.verde_escuro_principal));
         tinta.setStyle(Paint.Style.STROKE);
         tinta.setStrokeWidth(dp(2));
         canvas.drawPath(linha, tinta);

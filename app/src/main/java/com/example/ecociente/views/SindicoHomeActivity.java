@@ -53,12 +53,21 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         montarCalendario(dados);
         montarMetricas(dados);
         montarRanking(dados);
+        SindicoBottomBar barra = findViewById(R.id.barraInferiorSindico);
+        barra.selecionar(SindicoBottomBar.Aba.HOME);
+        barra.aoTocarSolicitacao(view -> startActivity(
+                new Intent(this, SindicoCooperativasActivity.class)));
+        barra.aoTocarHistorico(view -> startActivity(
+                new Intent(this, SindicoHistoricoActivity.class)));
+        barra.aoTocarUnidades(view -> startActivity(
+                new Intent(this, SindicoUnidadesActivity.class)));
         findViewById(R.id.botaoAvisosSindico).setOnClickListener(
                 view -> startActivity(new Intent(this, SindicoAvisosActivity.class)));
     }
 
     private void montarCalendario(SindicoDashboard dados) {
         LinearLayout dias = findViewById(R.id.sindicoDiasSemana);
+        dias.removeAllViews();
         String[] nomes = dados.getDiasSemana();
         String[] datas = dados.getDatasSemana();
         boolean[] coletaDias = dados.getColetaSemana();
@@ -72,19 +81,19 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             dias.addView(dia, tamanho);
 
             boolean coleta = coletaDias[i];
-            adicionarTexto(dia, nomes[i], 10, R.color.sindico_verde, true);
-            adicionarTexto(dia, datas[i], 9, R.color.sindico_cinza, false);
+            adicionarTexto(dia, nomes[i], 10, R.color.verde_escuro_principal, true);
+            adicionarTexto(dia, datas[i], 9, R.color.cinza_texto_home, false);
             TextView marcador = adicionarTexto(dia, "", 20,
-                    coleta ? R.color.sindico_verde : R.color.rosa_ecociente, true);
+                    coleta ? R.color.verde_escuro_principal : R.color.rosa_ecociente, true);
             marcador.setBackgroundResource(R.drawable.sindico_circulo);
             marcador.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
                     ContextCompat.getColor(this,
-                            coleta ? R.color.sindico_verde : R.color.rosa_ecociente)));
+                            coleta ? R.color.verde_escuro_principal : R.color.rosa_ecociente)));
             marcador.setWidth(dp(13));
             marcador.setHeight(dp(13));
             marcador.setContentDescription(coleta ? "Coleta" : "Não há coleta");
             adicionarTexto(dia, coleta ? "Coleta" : "Não há coleta", 8,
-                    R.color.sindico_cinza, false);
+                    R.color.cinza_texto_home, false);
         }
     }
 
@@ -112,13 +121,13 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             icone.setImageResource(icones[i]);
             icone.setContentDescription(null);
             card.addView(icone, new LinearLayout.LayoutParams(dp(21), dp(21)));
-            TextView nome = adicionarTexto(card, nomes[i], 9, R.color.sindico_cinza, false);
+            TextView nome = adicionarTexto(card, nomes[i], 9, R.color.cinza_texto_home, false);
             nome.setMaxLines(2);
             nome.setMinHeight(dp(28));
-            adicionarTexto(card, valores[i], 18, R.color.sindico_verde, true);
+            adicionarTexto(card, valores[i], 18, R.color.verde_escuro_principal, true);
             String variacao = (variacoes[i] > 0 ? "+" : "") + variacoes[i] + "%";
             adicionarTexto(card, variacao + "  vs. mês anterior", 8,
-                    variacoes[i] < 0 ? R.color.rosa_ecociente : R.color.sindico_verde, false);
+                    variacoes[i] < 0 ? R.color.rosa_ecociente : R.color.verde_escuro_principal, false);
         }
     }
 
@@ -133,7 +142,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             linha.setMinimumHeight(dp(46));
             ranking.addView(linha, new LinearLayout.LayoutParams(-1, dp(46)));
 
-            adicionarTexto(linha, (i + 1) + "º", 14, R.color.sindico_cinza, true);
+            adicionarTexto(linha, (i + 1) + "º", 14, R.color.cinza_texto_home, true);
             TextView avatar = adicionarTexto(linha, iniciais[i], 10, R.color.branco, true);
             avatar.setGravity(Gravity.CENTER);
             avatar.setBackgroundResource(R.drawable.sindico_avatar_ranking);
@@ -145,7 +154,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             TextView nome = adicionarTexto(linha, blocos[i], 12, R.color.preto_texto_home, true);
             nome.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1));
             adicionarTexto(linha, String.format(Locale.forLanguageTag("pt-BR"), "%,d pts", pontos[i]),
-                    11, R.color.sindico_cinza, true);
+                    11, R.color.cinza_texto_home, true);
         }
     }
 

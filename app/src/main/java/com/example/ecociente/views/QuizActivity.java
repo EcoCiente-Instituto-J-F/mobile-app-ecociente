@@ -202,13 +202,10 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void configurarCabecalho() {
-        findViewById(R.id.botaoVoltarQuiz).setOnClickListener(view -> fecharQuiz());
-
         /*
          * As ações de notificação/perfil serão conectadas depois.
          * Mantemos apenas o feedback de toque do próprio Material agora.
          */
-        Motion.pressFeedback(findViewById(R.id.botaoVoltarQuiz));
         Motion.pressFeedback(findViewById(R.id.botaoNotificacoesQuiz));
     }
 

@@ -30,7 +30,7 @@
                 android:layout_weight="1"
                 android:fontFamily="@font/nunito_bold"
                 android:text="Criar notificação"
-                android:textColor="@color/sindico_verde"
+                android:textColor="@color/verde_escuro_principal"
                 android:textSize="20sp" />
             <ImageView
                 android:id="@+id/botaoFecharCriarAviso"
@@ -48,7 +48,7 @@
             android:layout_marginTop="7dp"
             android:fontFamily="@font/nunito_regular"
             android:text="Rascunho local: ainda não será enviado aos moradores."
-            android:textColor="@color/sindico_cinza"
+            android:textColor="@color/cinza_texto_home"
             android:textSize="11sp" />
 
         <TextView
@@ -57,7 +57,7 @@
             android:layout_marginTop="22dp"
             android:fontFamily="@font/nunito_semibold"
             android:text="Título"
-            android:textColor="@color/sindico_verde"
+            android:textColor="@color/verde_escuro_principal"
             android:textSize="13sp" />
         <EditText
             android:id="@+id/campoTituloAviso"
@@ -72,7 +72,7 @@
             android:paddingEnd="12dp"
             android:singleLine="true"
             android:textColor="@color/preto_texto_home"
-            android:textColorHint="@color/sindico_cinza"
+            android:textColorHint="@color/cinza_texto_home"
             android:textSize="13sp" />
 
         <TextView
@@ -81,7 +81,7 @@
             android:layout_marginTop="19dp"
             android:fontFamily="@font/nunito_semibold"
             android:text="Destinatário"
-            android:textColor="@color/sindico_verde"
+            android:textColor="@color/verde_escuro_principal"
             android:textSize="13sp" />
         <TextView
             android:id="@+id/campoDestinatarioAviso"
@@ -102,7 +102,7 @@
             android:layout_marginTop="19dp"
             android:fontFamily="@font/nunito_semibold"
             android:text="Mensagem"
-            android:textColor="@color/sindico_verde"
+            android:textColor="@color/verde_escuro_principal"
             android:textSize="13sp" />
         <EditText
             android:id="@+id/campoMensagemAviso"
@@ -116,7 +116,7 @@
             android:maxLength="1000"
             android:padding="12dp"
             android:textColor="@color/preto_texto_home"
-            android:textColorHint="@color/sindico_cinza"
+            android:textColorHint="@color/cinza_texto_home"
             android:textSize="13sp" />
 
         <LinearLayout
@@ -132,13 +132,13 @@
                 android:layout_height="48dp"
                 android:text="Cancelar"
                 android:textAllCaps="false"
-                android:textColor="@color/sindico_verde" />
+                android:textColor="@color/verde_escuro_principal" />
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/botaoSalvarAviso"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_marginStart="12dp"
-                android:backgroundTint="@color/sindico_verde"
+                android:backgroundTint="@color/verde_escuro_principal"
                 android:text="@string/sindico_salvar_rascunho"
                 android:textAllCaps="false"
                 android:textColor="@color/branco" />

@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito_semibold"
                 android:text="@string/sindico_avisos"
-                android:textColor="@color/sindico_verde"
+                android:textColor="@color/verde_escuro_principal"
                 android:textSize="20sp" />
             <TextView
                 android:layout_width="match_parent"
@@ -66,10 +66,15 @@
         android:layout_marginStart="18dp"
         android:layout_marginEnd="18dp"
         android:layout_marginBottom="15dp"
-        android:backgroundTint="@color/sindico_verde"
+        android:backgroundTint="@color/verde_escuro_principal"
         android:fontFamily="@font/nunito_semibold"
         android:text="@string/sindico_nova_notificacao"
         android:textAllCaps="false"
         android:textColor="@color/branco"
         android:textSize="14sp" />
+
+    <com.example.ecociente.views.SindicoBottomBar
+        android:id="@+id/barraInferiorSindico"
+        android:layout_width="match_parent"
+        android:layout_height="86dp" />
 </LinearLayout>

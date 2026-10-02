@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
@@ -48,6 +49,15 @@ public final class SindicoAvisosActivity extends AppCompatActivity {
         lista = findViewById(R.id.listaSindicoAvisos);
         viewModel = new ViewModelProvider(this).get(SindicoViewModel.class);
         viewModel.getAvisos().observe(this, this::mostrarAvisos);
+        SindicoBottomBar barra = findViewById(R.id.barraInferiorSindico);
+        barra.selecionar(SindicoBottomBar.Aba.HOME);
+        barra.aoTocarHome(view -> finish());
+        barra.aoTocarSolicitacao(view -> startActivity(
+                new Intent(this, SindicoCooperativasActivity.class)));
+        barra.aoTocarHistorico(view -> startActivity(
+                new Intent(this, SindicoHistoricoActivity.class)));
+        barra.aoTocarUnidades(view -> startActivity(
+                new Intent(this, SindicoUnidadesActivity.class)));
         findViewById(R.id.botaoVoltarAvisos).setOnClickListener(view -> finish());
         findViewById(R.id.botaoNovoAviso).setOnClickListener(view -> abrirFormulario());
         getSupportFragmentManager().setFragmentResultListener("rascunhoSindico", this,
@@ -60,7 +70,7 @@ public final class SindicoAvisosActivity extends AppCompatActivity {
         if (avisos == null || avisos.isEmpty()) {
             TextView vazio = new TextView(this);
             vazio.setText("Nenhum aviso por enquanto. Crie um rascunho para começar.");
-            vazio.setTextColor(getColor(R.color.sindico_cinza));
+            vazio.setTextColor(getColor(R.color.cinza_texto_home));
             vazio.setTextSize(14);
             vazio.setPadding(12, 32, 12, 32);
             lista.addView(vazio);
@@ -92,11 +102,11 @@ public final class SindicoAvisosActivity extends AppCompatActivity {
     private GradientDrawable criarSelo(String categoria) {
         int cor;
         switch (categoria) {
-            case "Orientação": cor = R.color.sindico_azul_claro; break;
-            case "Manutenção": cor = R.color.sindico_laranja_claro; break;
-            case "Campanha": cor = R.color.sindico_lilas_claro; break;
-            case "Aviso geral": cor = R.color.sindico_borda; break;
-            default: cor = R.color.sindico_verde_claro;
+            case "Orientação": cor = R.color.cinza_fundo_imagem_home; break;
+            case "Manutenção": cor = R.color.verde_fundo_card_claro; break;
+            case "Campanha": cor = R.color.verde_mensagem_chat; break;
+            case "Aviso geral": cor = R.color.cinza_borda_clara_home; break;
+            default: cor = R.color.verde_icone_chat;
         }
         GradientDrawable fundo = new GradientDrawable();
         fundo.setColor(getColor(cor));

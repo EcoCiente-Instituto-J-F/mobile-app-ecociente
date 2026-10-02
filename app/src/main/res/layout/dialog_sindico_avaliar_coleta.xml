@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sindico_dialog_avaliacao"
+    android:orientation="vertical"
+    android:paddingStart="18dp"
+    android:paddingTop="18dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="22dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Avaliar Coleta"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="24sp" />
+        <ImageButton
+            android:id="@+id/fecharAvaliacao"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Fechar avaliação"
+            android:padding="12dp"
+            android:src="@drawable/sindico_fechar" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/cooperativaAvaliacao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/nunito_regular"
+        android:textColor="@color/cinza_texto_home"
+        android:textSize="13sp" />
+
+    <LinearLayout
+        android:id="@+id/estrelasAvaliacao"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:orientation="horizontal" />
+
+    <TextView
+        android:id="@+id/notaSelecionada"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/nunito_regular"
+        android:gravity="center"
+        android:text="Escolha de 1 a 5 estrelas"
+        android:textColor="@color/cinza_texto_home"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/salvarAvaliacao"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="14dp"
+        android:backgroundTint="@color/verde_escuro_principal"
+        android:text="Salvar avaliação local"
+        android:textAllCaps="false"
+        android:textColor="@color/branco"
+        android:textSize="14sp"
+        android:visibility="gone" />
+</LinearLayout>

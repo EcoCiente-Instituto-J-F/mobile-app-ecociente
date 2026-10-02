@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="14dp"
+    android:paddingEnd="14dp">
+
+    <ImageView
+        android:id="@+id/iconeToggleNotificacao"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:contentDescription="@null"
+        android:src="@drawable/icon_notificacoes" />
+
+    <TextView
+        android:id="@+id/rotuloToggleNotificacao"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/nunito_medium"
+        android:textColor="@color/verde_escuro_principal"
+        android:textSize="13sp"
+        tools:text="Notificações gerais" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchToggleNotificacao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:thumbTint="@color/branco"
+        app:trackTint="@color/switch_track_ecociente" />
+
+</LinearLayout>

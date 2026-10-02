@@ -28,6 +28,7 @@ import com.example.ecociente.R;
 
 import com.example.ecociente.model.PerfilAcesso;
 
+import com.example.ecociente.repository.FirestoreProvider;
 import com.example.ecociente.repository.NotificacaoMotivacionalRepository;
 
 import com.google.android.material.button.MaterialButton;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             FirebaseAuth.getInstance();
 
     private final FirebaseFirestore bancoFirestore =
-            FirebaseFirestore.getInstance();
+            FirestoreProvider.obterInstancia();
 
     private final NotificacaoMotivacionalRepository repositorioNotificacao =
             new NotificacaoMotivacionalRepository();
@@ -291,6 +292,19 @@ public class MainActivity extends AppCompatActivity {
                 true;
 
 
+        findViewById(R.id.imagemPerfilHome)
+                .setOnClickListener(view -> confirmarSaida());
+
+        View navPerfil = findViewById(R.id.navPerfil);
+
+        if (navPerfil != null) {
+
+            navPerfil.setOnClickListener(
+                    view ->
+                            startActivity(
+                                    new Intent(this, GerenciarPerfilActivity.class)));
+        }
+
         TextView textoSaudacao =
                 findViewById(
                         R.id.textoSaudacao
@@ -306,6 +320,13 @@ public class MainActivity extends AppCompatActivity {
             navQuiz.setOnClickListener(view -> abrirQuizzes());
         }
 
+        View navAssistente = findViewById(R.id.navAssistente);
+
+        if (navAssistente != null) {
+            navAssistente.setOnClickListener(
+                    view -> startActivity(new Intent(this, ChatActivity.class)));
+        }
+
         /*
          * Se a Activity já estiver visível,a
          * buscamos a primeira mensagem agora.
@@ -314,6 +335,19 @@ public class MainActivity extends AppCompatActivity {
 
             buscarMensagemMotivacional();
         }
+    }
+
+    private void confirmarSaida() {
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(R.string.perfil_sair_titulo)
+                .setMessage(R.string.perfil_sair_mensagem)
+                .setPositiveButton(
+                        R.string.perfil_sair_confirmar,
+                        (dialogo, botao) ->
+                                abrirLogin(getString(R.string.sessao_encerrada), true))
+                .setNegativeButton(R.string.perfil_cancelar, null)
+                .show();
     }
 
     private void abrirQuizzes() {

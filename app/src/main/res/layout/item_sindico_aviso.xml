@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_semibold"
             android:maxLines="2"
-            android:textColor="@color/sindico_verde"
+            android:textColor="@color/verde_escuro_principal"
             android:textSize="12sp" />
         <TextView
             android:id="@+id/resumoSindicoAviso"
@@ -56,7 +56,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/nunito_regular"
             android:maxLines="2"
-            android:textColor="@color/sindico_cinza"
+            android:textColor="@color/cinza_texto_home"
             android:textSize="10sp" />
         <TextView
             android:id="@+id/metaSindicoAviso"
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
             android:fontFamily="@font/nunito_regular"
-            android:textColor="@color/sindico_verde"
+            android:textColor="@color/verde_escuro_principal"
             android:textSize="9sp" />
     </LinearLayout>
 
@@ -83,7 +83,7 @@
             android:paddingTop="2dp"
             android:paddingEnd="5dp"
             android:paddingBottom="2dp"
-            android:textColor="@color/sindico_verde"
+            android:textColor="@color/verde_escuro_principal"
             android:textSize="8sp" />
         <ImageView
             android:layout_width="wrap_content"

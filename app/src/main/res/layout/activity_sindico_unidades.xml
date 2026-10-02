@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/raizSindicoUnidades"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/branco"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="16dp">
+        <ImageButton
+            android:id="@+id/voltarSindicoUnidades"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Voltar"
+            android:padding="12dp"
+            android:src="@drawable/sindico_voltar" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Dados do condomínio"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="24dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="4dp"
+                android:paddingBottom="8dp"
+                android:fontFamily="@font/nunito_regular"
+                android:text="Dados de demonstração · alterações temporárias, sem envio"
+                android:textColor="@color/cinza_texto_home"
+                android:textSize="11sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sindico_card"
+                android:orientation="vertical"
+                android:padding="12dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/sindico_building"
+                        android:tint="@color/verde_escuro_principal" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Informações básicas"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="86dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+                        <FrameLayout
+                            android:layout_width="86dp"
+                            android:layout_height="86dp">
+                            <ImageView
+                                android:id="@+id/fotoSindicoUnidades"
+                                android:layout_width="76dp"
+                                android:layout_height="76dp"
+                                android:background="@drawable/sindico_nav_mascote_fundo"
+                                android:clipToOutline="true"
+                                android:contentDescription="Foto ilustrativa do condomínio"
+                                android:padding="17dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/sindico_nav_unidades"
+                                android:tint="@color/verde_escuro_principal" />
+                            <FrameLayout
+                                android:id="@+id/cameraSindicoUnidades"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:layout_gravity="bottom|end"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:clickable="true"
+                                android:contentDescription="Escolher foto do condomínio"
+                                android:focusable="true">
+                                <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center"
+                                    android:background="@drawable/sindico_unidades_camera_badge"
+                                    android:contentDescription="@null"
+                                    android:padding="5dp"
+                                    android:src="@drawable/sindico_unidades_camera" />
+                            </FrameLayout>
+                        </FrameLayout>
+                        <TextView
+                            android:id="@+id/alterarFotoSindicoUnidades"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:fontFamily="@font/nunito_regular"
+                            android:gravity="center"
+                            android:text="Alterar foto"
+                            android:textColor="@color/verde_escuro_principal"
+                            android:textSize="11sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:background="@drawable/sindico_unidades_segmento"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/tipoResidencialSindico"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:fontFamily="@font/nunito_bold"
+                                android:gravity="center"
+                                android:text="Residencial"
+                                android:textSize="10sp" />
+                            <TextView
+                                android:id="@+id/tipoComercialSindico"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:fontFamily="@font/nunito_bold"
+                                android:gravity="center"
+                                android:text="Comercial/Industrial"
+                                android:textSize="9sp" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:labelFor="@id/nomeCondominioSindico"
+                            android:text="Nome do condomínio"
+                            android:textColor="@color/cinza_texto_home"
+                            android:textSize="11sp" />
+                        <EditText
+                            android:id="@+id/nomeCondominioSindico"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:background="@drawable/sindico_campo"
+                            android:inputType="textCapWords"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:singleLine="true"
+                            android:textColor="@color/preto_texto_home"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:labelFor="@id/enderecoCondominioSindico"
+                            android:text="Endereço"
+                            android:textColor="@color/cinza_texto_home"
+                            android:textSize="11sp" />
+                        <EditText
+                            android:id="@+id/enderecoCondominioSindico"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:background="@drawable/sindico_campo"
+                            android:inputType="textPostalAddress"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:singleLine="true"
+                            android:textColor="@color/preto_texto_home"
+                            android:textSize="12sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:labelFor="@id/cidadeCondominioSindico"
+                                    android:text="Cidade"
+                                    android:textColor="@color/cinza_texto_home"
+                                    android:textSize="11sp" />
+                                <EditText
+                                    android:id="@+id/cidadeCondominioSindico"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="46dp"
+                                    android:background="@drawable/sindico_campo"
+                                    android:inputType="textCapWords"
+                                    android:paddingStart="8dp"
+                                    android:paddingEnd="8dp"
+                                    android:singleLine="true"
+                                    android:textColor="@color/preto_texto_home"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="78dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:labelFor="@id/estadoCondominioSindico"
+                                    android:text="Estado"
+                                    android:textColor="@color/cinza_texto_home"
+                                    android:textSize="11sp" />
+                                <EditText
+                                    android:id="@+id/estadoCondominioSindico"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="46dp"
+                                    android:background="@drawable/sindico_campo"
+                                    android:inputType="textCapCharacters"
+                                    android:maxLength="2"
+                                    android:paddingStart="8dp"
+                                    android:paddingEnd="8dp"
+                                    android:singleLine="true"
+                                    android:textColor="@color/preto_texto_home"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:labelFor="@id/cepCondominioSindico"
+                            android:text="CEP"
+                            android:textColor="@color/cinza_texto_home"
+                            android:textSize="11sp" />
+                        <EditText
+                            android:id="@+id/cepCondominioSindico"
+                            android:layout_width="match_parent"
+                            android:layout_height="46dp"
+                            android:background="@drawable/sindico_campo"
+                            android:inputType="phone"
+                            android:maxLength="9"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp"
+                            android:singleLine="true"
+                            android:textColor="@color/preto_texto_home"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/salvarDadosCondominioSindico"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/verde_escuro_principal"
+                    android:text="Salvar dados locais"
+                    android:textAllCaps="false"
+                    android:textColor="@color/branco"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/sindico_card"
+                android:orientation="vertical"
+                android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/sindico_people" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="7dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Blocos e torres"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/contagemBlocosSindico"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textSize="10sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/listaBlocosSindico"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+                <Button
+                    android:id="@+id/adicionarBlocoSindico"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/sindico_unidades_botao_contorno"
+                    android:drawableStart="@drawable/sindico_unidades_adicionar"
+                    android:drawablePadding="7dp"
+                    android:gravity="center"
+                    android:text="Adicionar bloco/torre"
+                    android:textAllCaps="false"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/sindico_card"
+                android:orientation="vertical"
+                android:padding="10dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_localizacao_chat" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="7dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Áreas de descarte"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/contagemAreasSindico"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textSize="10sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/listaAreasSindico"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+                <Button
+                    android:id="@+id/adicionarAreaSindico"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/sindico_unidades_botao_contorno"
+                    android:drawableStart="@drawable/sindico_unidades_adicionar"
+                    android:drawablePadding="7dp"
+                    android:gravity="center"
+                    android:text="Adicionar área de descarte"
+                    android:textAllCaps="false"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <com.example.ecociente.views.SindicoBottomBar
+        android:id="@+id/barraInferiorSindico"
+        android:layout_width="match_parent"
+        android:layout_height="86dp" />
+</LinearLayout>
