@@ -42,4 +42,11 @@
     <color name="verde_mensagem_chat">#E2EEE4</color>
     <color name="cinza_borda_chat">#D9DEDC</color>
     <color name="verde_icone_chat">#D9E6D8</color>
+    <color name="sindico_verde">#005443</color>
+    <color name="sindico_verde_claro">#E4EFE8</color>
+    <color name="sindico_cinza">#6F7773</color>
+    <color name="sindico_borda">#DDE4DF</color>
+    <color name="sindico_azul_claro">#DDEEF9</color>
+    <color name="sindico_laranja_claro">#FFF0CE</color>
+    <color name="sindico_lilas_claro">#EFE2FF</color>
 </resources>

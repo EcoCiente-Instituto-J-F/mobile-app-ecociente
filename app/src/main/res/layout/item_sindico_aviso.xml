@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/cartaoSindicoAviso"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/sindico_card"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:minHeight="91dp"
+    android:orientation="horizontal"
+    android:paddingStart="9dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="9dp"
+    android:paddingBottom="8dp">
+
+    <FrameLayout
+        android:layout_width="39dp"
+        android:layout_height="39dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/sindico_circulo">
+        <View
+            android:id="@+id/pontoNovoSindicoAviso"
+            android:layout_width="7dp"
+            android:layout_height="7dp"
+            android:layout_gravity="top|start"
+            android:background="@drawable/sindico_ponto_novo" />
+        <ImageView
+            android:id="@+id/iconeSindicoAviso"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:src="@drawable/sindico_building" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tituloSindicoAviso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_semibold"
+            android:maxLines="2"
+            android:textColor="@color/sindico_verde"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/resumoSindicoAviso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/nunito_regular"
+            android:maxLines="2"
+            android:textColor="@color/sindico_cinza"
+            android:textSize="10sp" />
+        <TextView
+            android:id="@+id/metaSindicoAviso"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/nunito_regular"
+            android:textColor="@color/sindico_verde"
+            android:textSize="9sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="58dp"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|end"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/categoriaSindicoAviso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sindico_circulo"
+            android:fontFamily="@font/nunito_semibold"
+            android:paddingStart="5dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="2dp"
+            android:textColor="@color/sindico_verde"
+            android:textSize="8sp" />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginTop="10dp"
+            android:contentDescription="@null"
+            android:src="@drawable/sindico_avancar" />
+    </LinearLayout>
+</LinearLayout>

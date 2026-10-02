@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/raizSindicoHome"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/branco"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp">
+
+        <ImageView
+            android:layout_width="140dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:contentDescription="@string/logo_ecociente"
+            android:scaleType="fitCenter"
+            android:src="@drawable/sindico_logo" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:id="@+id/botaoAvisosSindico"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="Abrir avisos"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@drawable/sindico_bell_outline" />
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:contentDescription="Perfil do síndico"
+                android:padding="4dp"
+                android:src="@drawable/ic_perfil_usuario" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="108dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="11dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/sindicoSaudacao"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunito_bold"
+                        android:textColor="@color/rosa_ecociente"
+                        android:textSize="22sp" />
+                    <TextView
+                        android:id="@+id/sindicoCondominio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunito_regular"
+                        android:textColor="@color/cinza_texto_home"
+                        android:textSize="11sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/nunito_regular"
+                        android:text="@string/sindico_dados_demo"
+                        android:textColor="@color/sindico_cinza"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="83dp"
+                    android:layout_height="82dp"
+                    android:contentDescription="Ilustração de reciclagem"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/sindico_reciclagem" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sindico_card"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/sindico_calendario" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Calendário da semana"
+                        android:textColor="@color/sindico_verde"
+                        android:textSize="12sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunito_regular"
+                        android:text="Semana ilustrativa"
+                        android:textColor="@color/sindico_cinza"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/sindicoDiasSemana"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:orientation="horizontal" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/sindico_card"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="21dp"
+                        android:layout_height="21dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/sindico_tendencia" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Dashboard de desempenho"
+                        android:textColor="@color/sindico_verde"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/sindicoMetricas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal" />
+
+                <com.example.ecociente.views.SindicoGraficoView
+                    android:id="@+id/sindicoGrafico"
+                    android:layout_width="match_parent"
+                    android:layout_height="130dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="Evolução ilustrativa dos descartes: 90, 130, 175, 185 e 300" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="7dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="Detalhes do Ranking"
+                android:textColor="@color/sindico_verde"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:id="@+id/sindicoRanking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sindico_card"
+                android:orientation="vertical"
+                android:padding="10dp" />
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp">
+        <LinearLayout
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="1" android:gravity="center"
+            android:orientation="vertical" android:alpha="0.6">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:contentDescription="@null" android:src="@drawable/sindico_requests_icon" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Solicitações" android:textColor="@color/sindico_cinza" android:textSize="10sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="1" android:gravity="center"
+            android:orientation="vertical" android:alpha="0.6">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:contentDescription="@null" android:src="@drawable/sindico_ranking_icon" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Ranking" android:textColor="@color/sindico_cinza" android:textSize="10sp" />
+        </LinearLayout>
+        <ImageView
+            android:layout_width="54dp" android:layout_height="54dp"
+            android:alpha="0.6" android:background="@drawable/sindico_eko_fundo"
+            android:contentDescription="Assistente Eko indisponível nesta área"
+            android:padding="10dp" android:src="@drawable/sindico_eko_icon" />
+        <LinearLayout
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="1" android:gravity="center"
+            android:orientation="vertical" android:alpha="0.6">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:contentDescription="@null" android:src="@drawable/sindico_profile_icon" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:text="Perfil" android:textColor="@color/sindico_cinza" android:textSize="10sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp" android:layout_height="match_parent"
+            android:layout_weight="1" android:gravity="center"
+            android:orientation="vertical">
+            <ImageView android:layout_width="24dp" android:layout_height="24dp"
+                android:contentDescription="@null" android:src="@drawable/sindico_home_icon" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold" android:text="Home"
+                android:textColor="@color/sindico_verde" android:textSize="11sp" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
