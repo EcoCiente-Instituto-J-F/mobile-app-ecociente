@@ -34,6 +34,26 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".views.GerenciarPerfilActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".views.InformacoesPessoaisActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".views.GerenciarSenhaActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".views.NotificacoesActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".views.Login"
             android:exported="false"
             android:screenOrientation="portrait"

@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
  */
 public class ChatRepository {
 
-    private static final String URL_CHAT_LOCAL = "http://127.0.0.1:8000/api/v1/chat";
+    private static final String URL_CHAT_LOCAL = "htvtp://127.0.0.1:8000/api/v1/chat";
     private static final int USUARIO_TESTE_ID = 1;
     private static final String PERFIL_TESTE = "MORADOR_RESIDENCIAL";
     private static final int TIMEOUT_CONEXAO_MS = 10_000;

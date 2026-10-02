@@ -40,6 +40,8 @@ public class Login extends AppCompatActivity {
     private static final String CHAVE_COMPLEMENTO = "complemento";
     private static final String CHAVE_CIDADE = "cidade";
     private static final String CHAVE_ESTADO = "estado";
+    private static final String CHAVE_TELEFONE = "telefone";
+    private static final String CHAVE_CPF = "cpf";
 
     private static final String CHAVE_POSSUI_CODIGO_CONDOMINIO = "possuiCodigoCondominio";
 
@@ -71,6 +73,8 @@ public class Login extends AppCompatActivity {
     private String complemento = "";
     private String cidade = "";
     private String estado = "";
+    private String telefone = "";
+    private String cpf = "";
 
     private boolean possuiCodigoCondominio = false;
     private String codigoCondominio = "";
@@ -501,6 +505,13 @@ public class Login extends AppCompatActivity {
         this.codigoCondominio = codigoCondominio;
     }
 
+    public void salvarDadosContato(String telefone, String cpf) {
+
+        this.telefone = telefone;
+
+        this.cpf = cpf;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -541,6 +552,14 @@ public class Login extends AppCompatActivity {
         return estado;
     }
 
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
     public boolean isPossuiCodigoCondominio() {
         return possuiCodigoCondominio;
     }
@@ -567,11 +586,27 @@ public class Login extends AppCompatActivity {
         dadosUsuario.put("complemento", complemento);
         dadosUsuario.put("cidade", cidade);
         dadosUsuario.put("estado", estado);
+        dadosUsuario.put("telefone", telefone);
+        dadosUsuario.put("cpf", cpf);
         dadosUsuario.put("possuiCodigoCondominio", possuiCodigoCondominio);
         dadosUsuario.put("codigoCondominio", codigoCondominio);
         dadosUsuario.put("tipoPerfil", tipoPerfilSelecionado);
+        dadosUsuario.put("tipoUsuario", calcularTipoUsuario());
 
         return dadosUsuario;
+    }
+
+    // Mesmos valores que a ds-cadastro-api usa pra identificar o tipo de
+    // conta ("comum", "morador", "cooperativa") - a interface do app vai
+    // usar esse campo pra decidir qual home mostrar.
+    @NonNull
+    private String calcularTipoUsuario() {
+
+        if ("cooperativa".equals(tipoPerfilSelecionado)) {
+            return "cooperativa";
+        }
+
+        return possuiCodigoCondominio ? "morador" : "comum";
     }
 
     private void recuperarDadosSalvos(Bundle estadoSalvo) {
@@ -597,6 +632,10 @@ public class Login extends AppCompatActivity {
         cidade = estadoSalvo.getString(CHAVE_CIDADE, "");
 
         estado = estadoSalvo.getString(CHAVE_ESTADO, "");
+
+        telefone = estadoSalvo.getString(CHAVE_TELEFONE, "");
+
+        cpf = estadoSalvo.getString(CHAVE_CPF, "");
 
         possuiCodigoCondominio = estadoSalvo.getBoolean(CHAVE_POSSUI_CODIGO_CONDOMINIO, false);
 
@@ -625,6 +664,10 @@ public class Login extends AppCompatActivity {
         estadoSaida.putString(CHAVE_CIDADE, cidade);
 
         estadoSaida.putString(CHAVE_ESTADO, estado);
+
+        estadoSaida.putString(CHAVE_TELEFONE, telefone);
+
+        estadoSaida.putString(CHAVE_CPF, cpf);
 
         estadoSaida.putBoolean(CHAVE_POSSUI_CODIGO_CONDOMINIO, possuiCodigoCondominio);
 

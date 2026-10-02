@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -37,8 +36,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 public class CadastroEtapa1Fragment extends Fragment {
+
+    // Mesma regra exigida pela API de cadastro: maiúscula, minúscula, número,
+    // caractere especial e pelo menos 8 caracteres.
+    private static final Pattern PADRAO_SENHA_VALIDA =
+            Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^\\sa-zA-Z\\d]).{8,}$");
 
     private EditText campoNome;
     private EditText campoDataNascimento;
@@ -589,15 +594,13 @@ public class CadastroEtapa1Fragment extends Fragment {
             return;
         }
 
-        if (senha.length() < 8) {
-            textoForcaSenha.setVisibility(View.VISIBLE);
-            textoForcaSenha.setText("A senha deve ter no mínimo 8 caracteres.");
-            textoForcaSenha.setTextColor(Color.parseColor("#D64573"));
+        if (!senhaValida(senha)) {
 
             mostrarErroCampo(
                     containerSenhaCadastro,
                     campoSenha,
-                    "A senha deve ter no mínimo 8 caracteres.");
+                    "A senha precisa ter 8+ caracteres, com maiúscula, minúscula, número e"
+                            + " caractere especial.");
             return;
         }
 
@@ -627,6 +630,11 @@ public class CadastroEtapa1Fragment extends Fragment {
 
             telaAutenticacao.abrirCadastroEtapa2();
         }
+    }
+
+    private boolean senhaValida(String senha) {
+
+        return PADRAO_SENHA_VALIDA.matcher(senha).matches();
     }
 
     private boolean dataValida(String data) {
@@ -683,11 +691,6 @@ public class CadastroEtapa1Fragment extends Fragment {
             mostrarMensagem(resultado.getMensagemErro());
 
             return;
-        }
-
-        if (resultado.getAviso() != null) {
-
-            Toast.makeText(requireContext(), resultado.getAviso(), Toast.LENGTH_SHORT).show();
         }
 
         entrarNoEcoCiente();
