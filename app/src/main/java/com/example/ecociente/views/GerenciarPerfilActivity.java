@@ -21,6 +21,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
     private TextView textoNome;
     private TextView textoEmail;
+    private TextView textoIniciaisAvatar;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -42,6 +43,8 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         textoNome = findViewById(R.id.textoNomePerfil);
 
         textoEmail = findViewById(R.id.textoEmailPerfil);
+
+        textoIniciaisAvatar = findViewById(R.id.textoIniciaisAvatarPerfil);
     }
 
     private void configurarCliques() {
@@ -80,9 +83,22 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
     private void preencherCabecalho(FirebaseUser usuario, PerfilUsuario perfil) {
 
-        textoNome.setText(PerfilUsuario.nomeExibicao(perfil, usuario));
+        String nomeExibido = PerfilUsuario.nomeExibicao(perfil, usuario);
+
+        textoNome.setText(nomeExibido);
 
         textoEmail.setText(PerfilUsuario.emailExibicao(perfil, usuario));
+
+        textoIniciaisAvatar.setText(obterInicial(nomeExibido));
+    }
+
+    private String obterInicial(String nome) {
+
+        if (nome == null || nome.trim().isEmpty()) {
+            return "?";
+        }
+
+        return nome.trim().substring(0, 1).toUpperCase();
     }
 
     private void confirmarSaida() {

@@ -51,7 +51,7 @@
                     android:id="@+id/containerAvatarPerfil"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    android:layout_marginTop="18dp"
+                    android:layout_marginTop="22dp"
                     app:cardBackgroundColor="@color/branco"
                     app:cardCornerRadius="36dp"
                     app:cardElevation="0dp"
@@ -59,13 +59,15 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tituloGerenciarPerfil">
 
-                    <ImageView
+                    <TextView
+                        android:id="@+id/textoIniciaisAvatarPerfil"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:contentDescription="@string/foto_perfil"
-                        android:padding="14dp"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_perfil_usuario" />
+                        android:fontFamily="@font/nunito_bold"
+                        android:gravity="center"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textSize="26sp"
+                        tools:text="J" />
 
                 </com.google.android.material.card.MaterialCardView>
 
@@ -73,7 +75,7 @@
                     android:id="@+id/textoNomePerfil"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="14dp"
                     android:fontFamily="@font/nunito_bold"
                     android:textColor="@color/branco"
                     android:textSize="16sp"
@@ -159,8 +161,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_medium"
                         android:text="Informações pessoais"
-                        android:textColor="@color/verde_escuro_principal"
-                        android:textSize="13sp" />
+                        android:textColor="@color/preto_texto_home"
+                        android:textSize="14sp" />
 
                     <ImageView
                         android:layout_width="18dp"
@@ -202,8 +204,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_medium"
                         android:text="Gerenciar senha"
-                        android:textColor="@color/verde_escuro_principal"
-                        android:textSize="13sp" />
+                        android:textColor="@color/preto_texto_home"
+                        android:textSize="14sp" />
 
                     <ImageView
                         android:layout_width="18dp"
@@ -245,8 +247,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_medium"
                         android:text="Notificações"
-                        android:textColor="@color/verde_escuro_principal"
-                        android:textSize="13sp" />
+                        android:textColor="@color/preto_texto_home"
+                        android:textSize="14sp" />
 
                     <ImageView
                         android:layout_width="18dp"
@@ -319,8 +321,8 @@
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_medium"
                         android:text="Sair da conta"
-                        android:textColor="@color/verde_escuro_principal"
-                        android:textSize="13sp" />
+                        android:textColor="@color/preto_texto_home"
+                        android:textSize="14sp" />
 
                     <ImageView
                         android:layout_width="18dp"
@@ -360,10 +362,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:fontFamily="@font/nunito_medium"
+                        android:fontFamily="@font/nunito_semibold"
                         android:text="Excluir conta"
                         android:textColor="@color/rosa_ecociente"
-                        android:textSize="13sp" />
+                        android:textSize="14sp" />
 
                     <ImageView
                         android:layout_width="18dp"

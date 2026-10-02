@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_regular"
             android:textColor="@color/cinza_escuro_textos"
-            android:textSize="10sp"
+            android:textSize="11sp"
             tools:text="Nome" />
 
         <TextView
@@ -43,8 +43,8 @@
             android:ellipsize="end"
             android:fontFamily="@font/nunito_medium"
             android:maxLines="1"
-            android:textColor="@color/verde_escuro_principal"
-            android:textSize="13sp"
+            android:textColor="@color/preto_texto_home"
+            android:textSize="14sp"
             tools:text="Julio Cesar" />
 
     </LinearLayout>

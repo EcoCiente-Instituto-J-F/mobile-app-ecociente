@@ -323,6 +323,13 @@ public class MainActivity extends AppCompatActivity {
             navQuiz.setOnClickListener(view -> abrirQuizzes());
         }
 
+        View navAssistente = findViewById(R.id.navAssistente);
+
+        if (navAssistente != null) {
+            navAssistente.setOnClickListener(
+                    view -> startActivity(new Intent(this, ChatActivity.class)));
+        }
+
         /*
          * Se a Activity já estiver visível,a
          * buscamos a primeira mensagem agora.
