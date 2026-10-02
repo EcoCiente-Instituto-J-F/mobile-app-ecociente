@@ -18,7 +18,7 @@ public class CadastroRepository {
     private static final String TAG = "CadastroEcoCiente";
 
     private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
-    private final FirebaseFirestore bancoFirestore = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore bancoFirestore = FirestoreProvider.obterInstancia();
 
     @NonNull
     public LiveData<ResultadoCadastro> cadastrar(
@@ -87,14 +87,39 @@ public class CadastroRepository {
                             if (!tarefa.isSuccessful()) {
                                 Log.e(TAG, "Erro ao salvar dados do usuário", tarefa.getException());
 
-                                resultado.setValue(
-                                        ResultadoCadastro.sucessoComAviso(
-                                                uid,
-                                                "Conta criada, mas não foi possível salvar seus dados."));
+                                desfazerContaCriada(resultado);
                                 return;
                             }
 
                             resultado.setValue(ResultadoCadastro.sucesso(uid));
+                        });
+    }
+
+    // Se o Firestore falhar depois que a conta já foi criada no Auth, não
+    // deixamos uma conta "pela metade" - apaga a conta e reporta erro, pra
+    // manter Firebase, Firestore e o Postgres da API externa consistentes.
+    private void desfazerContaCriada(@NonNull MutableLiveData<ResultadoCadastro> resultado) {
+
+        FirebaseUser usuario = autenticacao.getCurrentUser();
+
+        String mensagemErro = "Não foi possível concluir seu cadastro. Tente novamente.";
+
+        if (usuario == null) {
+            resultado.setValue(ResultadoCadastro.erro(mensagemErro));
+            return;
+        }
+
+        usuario.delete()
+                .addOnCompleteListener(
+                        tarefaExclusao -> {
+                            if (!tarefaExclusao.isSuccessful()) {
+                                Log.e(
+                                        TAG,
+                                        "Erro ao desfazer conta após falha no Firestore",
+                                        tarefaExclusao.getException());
+                            }
+
+                            resultado.setValue(ResultadoCadastro.erro(mensagemErro));
                         });
     }
 

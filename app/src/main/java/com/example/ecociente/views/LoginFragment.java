@@ -35,6 +35,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.ui.FieldFeedback;
 import com.example.ecociente.ui.Motion;
+import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.viewmodels.LoginViewModel;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -208,7 +209,27 @@ public class LoginFragment extends Fragment {
                                 mostrarErroGlobal(resultado.getMensagemErro());
                                 return;
                             }
+
+                            autenticarNaApiExterna(email, senha);
+
                             finalizarLogin();
+                        });
+    }
+
+    // Best-effort: a ds-autenticacao-api ainda não tem cadastro implementado,
+    // então nenhuma conta existente tem correspondência no Postgres. Roda em
+    // paralelo e nunca bloqueia nem falha o login pelo Firebase.
+    private void autenticarNaApiExterna(String email, String senha) {
+
+        new AutenticacaoExternaRepository()
+                .autenticar(
+                        requireContext(),
+                        email,
+                        senha,
+                        sessao -> {
+                            if (sessao == null) {
+                                Log.w(TAG, "Login na API externa não disponível para " + email);
+                            }
                         });
     }
 

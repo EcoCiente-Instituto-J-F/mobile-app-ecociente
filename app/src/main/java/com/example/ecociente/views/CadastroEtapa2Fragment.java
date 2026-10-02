@@ -12,7 +12,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -35,6 +34,8 @@ public class CadastroEtapa2Fragment extends Fragment {
     private EditText campoCep;
     private EditText campoComplemento;
     private EditText campoCidade;
+    private EditText campoTelefone;
+    private EditText campoCpf;
 
     private AutoCompleteTextView campoEstado;
 
@@ -55,6 +56,8 @@ public class CadastroEtapa2Fragment extends Fragment {
     private CadastroViewModel viewModel;
 
     private boolean alterandoCep = false;
+    private boolean alterandoTelefone = false;
+    private boolean alterandoCpf = false;
 
     @Nullable
     @Override
@@ -80,6 +83,10 @@ public class CadastroEtapa2Fragment extends Fragment {
         configurarBotaoVoltar();
 
         configurarMascaraCep();
+
+        configurarMascaraTelefone();
+
+        configurarMascaraCpf();
 
         configurarListaEstados();
 
@@ -114,6 +121,10 @@ public class CadastroEtapa2Fragment extends Fragment {
         campoCidade = view.findViewById(R.id.campoCidade);
 
         campoEstado = view.findViewById(R.id.campoEstado);
+
+        campoTelefone = view.findViewById(R.id.campoTelefone);
+
+        campoCpf = view.findViewById(R.id.campoCpf);
 
         botaoVoltarEtapa1 = view.findViewById(R.id.botaoVoltarEtapa1);
 
@@ -186,6 +197,119 @@ public class CadastroEtapa2Fragment extends Fragment {
                         campoCep.setSelection(campoCep.getText().length());
 
                         alterandoCep = false;
+                    }
+                });
+    }
+
+    private void configurarMascaraTelefone() {
+
+        campoTelefone.addTextChangedListener(
+                new TextWatcher() {
+
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence texto, int inicio, int quantidade, int depois) {}
+
+                    @Override
+                    public void onTextChanged(
+                            CharSequence texto, int inicio, int antes, int quantidade) {}
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                        if (alterandoTelefone) {
+                            return;
+                        }
+
+                        alterandoTelefone = true;
+
+                        String numeros = editable.toString().replaceAll("\\D", "");
+
+                        if (numeros.length() > 11) {
+
+                            numeros = numeros.substring(0, 11);
+                        }
+
+                        StringBuilder formatado = new StringBuilder();
+
+                        if (numeros.length() > 0) {
+
+                            formatado.append("(").append(numeros, 0, Math.min(2, numeros.length()));
+
+                            if (numeros.length() > 2) {
+
+                                formatado.append(") ");
+
+                                int fimPrimeiraParte = numeros.length() > 7 ? 7 : numeros.length();
+
+                                formatado.append(numeros, 2, fimPrimeiraParte);
+
+                                if (numeros.length() > 7) {
+
+                                    formatado.append("-").append(numeros.substring(7));
+                                }
+                            }
+                        }
+
+                        campoTelefone.setText(formatado.toString());
+
+                        campoTelefone.setSelection(campoTelefone.getText().length());
+
+                        alterandoTelefone = false;
+                    }
+                });
+    }
+
+    private void configurarMascaraCpf() {
+
+        campoCpf.addTextChangedListener(
+                new TextWatcher() {
+
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence texto, int inicio, int quantidade, int depois) {}
+
+                    @Override
+                    public void onTextChanged(
+                            CharSequence texto, int inicio, int antes, int quantidade) {}
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+
+                        if (alterandoCpf) {
+                            return;
+                        }
+
+                        alterandoCpf = true;
+
+                        String numeros = editable.toString().replaceAll("\\D", "");
+
+                        if (numeros.length() > 11) {
+
+                            numeros = numeros.substring(0, 11);
+                        }
+
+                        StringBuilder formatado = new StringBuilder();
+
+                        for (int i = 0; i < numeros.length(); i++) {
+
+                            if (i == 3 || i == 6) {
+
+                                formatado.append(".");
+
+                            } else if (i == 9) {
+
+                                formatado.append("-");
+                            }
+
+                            formatado.append(numeros.charAt(i));
+                        }
+
+                        campoCpf.setText(formatado.toString());
+
+                        campoCpf.setSelection(campoCpf.getText().length());
+
+                        alterandoCpf = false;
                     }
                 });
     }
@@ -266,6 +390,10 @@ public class CadastroEtapa2Fragment extends Fragment {
 
         String estado = campoEstado.getText().toString().trim();
 
+        String telefone = campoTelefone.getText().toString().trim();
+
+        String cpf = campoCpf.getText().toString().trim();
+
         if (endereco.isEmpty()) {
             mostrarErroCampo(containerEndereco, campoEndereco, "Digite seu endereço.");
             return;
@@ -294,9 +422,29 @@ public class CadastroEtapa2Fragment extends Fragment {
             return;
         }
 
+        if (telefone.replaceAll("\\D", "").length() < 10) {
+
+            mostrarMensagem("Digite um telefone válido.");
+
+            campoTelefone.requestFocus();
+
+            return;
+        }
+
+        if (!cpfValido(cpf)) {
+
+            mostrarMensagem("Digite um CPF válido.");
+
+            campoCpf.requestFocus();
+
+            return;
+        }
+
         Login telaAutenticacao = (Login) requireActivity();
 
         telaAutenticacao.salvarDadosEtapa2(endereco, numero, cep, complemento, cidade, estado);
+
+        telaAutenticacao.salvarDadosContato(telefone, cpf);
 
         cadastrarUsuarioFirebase();
     }
@@ -306,6 +454,45 @@ public class CadastroEtapa2Fragment extends Fragment {
         List<String> estados = Arrays.asList(getResources().getStringArray(R.array.estados_brasil));
 
         return estados.contains(estadoInformado);
+    }
+
+    // Confere os dígitos verificadores de verdade (não só a quantidade de
+    // números) - a API de cadastro valida isso e rejeita CPF inválido.
+    private boolean cpfValido(String cpf) {
+
+        String numeros = cpf.replaceAll("\\D", "");
+
+        if (numeros.length() != 11 || numeros.chars().distinct().count() == 1) {
+            return false;
+        }
+
+        int primeiroDigito = calcularDigitoVerificadorCpf(numeros, 9);
+
+        if (primeiroDigito != Character.getNumericValue(numeros.charAt(9))) {
+            return false;
+        }
+
+        int segundoDigito = calcularDigitoVerificadorCpf(numeros, 10);
+
+        return segundoDigito == Character.getNumericValue(numeros.charAt(10));
+    }
+
+    private int calcularDigitoVerificadorCpf(String numeros, int quantidadeDigitos) {
+
+        int soma = 0;
+
+        int multiplicador = quantidadeDigitos + 1;
+
+        for (int i = 0; i < quantidadeDigitos; i++) {
+
+            soma += Character.getNumericValue(numeros.charAt(i)) * multiplicador;
+
+            multiplicador--;
+        }
+
+        int resto = soma % 11;
+
+        return resto < 2 ? 0 : 11 - resto;
     }
 
     private void cadastrarUsuarioFirebase() {
@@ -342,11 +529,6 @@ public class CadastroEtapa2Fragment extends Fragment {
             return;
         }
 
-        if (resultado.getAviso() != null) {
-
-            Toast.makeText(requireContext(), resultado.getAviso(), Toast.LENGTH_SHORT).show();
-        }
-
         entrarNoEcoCiente();
     }
 
@@ -367,6 +549,10 @@ public class CadastroEtapa2Fragment extends Fragment {
         campoCidade.setEnabled(!carregando);
 
         campoEstado.setEnabled(!carregando);
+
+        campoTelefone.setEnabled(!carregando);
+
+        campoCpf.setEnabled(!carregando);
 
         iconeSetaEstado.setEnabled(!carregando);
 
@@ -397,7 +583,9 @@ public class CadastroEtapa2Fragment extends Fragment {
                 || campoCep == null
                 || campoComplemento == null
                 || campoCidade == null
-                || campoEstado == null) {
+                || campoEstado == null
+                || campoTelefone == null
+                || campoCpf == null) {
 
             return;
         }
@@ -410,6 +598,11 @@ public class CadastroEtapa2Fragment extends Fragment {
                         campoComplemento.getText().toString().trim(),
                         campoCidade.getText().toString().trim(),
                         campoEstado.getText().toString().trim());
+
+        ((Login) getActivity())
+                .salvarDadosContato(
+                        campoTelefone.getText().toString().trim(),
+                        campoCpf.getText().toString().trim());
     }
 
     private void recuperarDadosPreenchidos() {
@@ -427,6 +620,10 @@ public class CadastroEtapa2Fragment extends Fragment {
         campoCidade.setText(telaAutenticacao.getCidade());
 
         campoEstado.setText(telaAutenticacao.getEstado(), false);
+
+        campoTelefone.setText(telaAutenticacao.getTelefone());
+
+        campoCpf.setText(telaAutenticacao.getCpf());
     }
 
     private void entrarNoEcoCiente() {
@@ -484,6 +681,10 @@ public class CadastroEtapa2Fragment extends Fragment {
         campoCidade = null;
 
         campoEstado = null;
+
+        campoTelefone = null;
+
+        campoCpf = null;
 
         botaoVoltarEtapa1 = null;
 

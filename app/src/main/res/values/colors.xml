@@ -42,4 +42,7 @@
     <color name="verde_mensagem_chat">#E2EEE4</color>
     <color name="cinza_borda_chat">#D9DEDC</color>
     <color name="verde_icone_chat">#D9E6D8</color>
+
+    <color name="cinza_borda_card_perfil">#D7E6E1</color>
+    <color name="verde_fundo_card_claro">#F3F8F6</color>
 </resources>

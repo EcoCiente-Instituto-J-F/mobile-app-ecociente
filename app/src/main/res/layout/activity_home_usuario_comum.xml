@@ -683,8 +683,8 @@
         android:layout_width="68dp"
         android:layout_height="68dp"
 
-        android:clickable="false"
-        android:focusable="false"
+        android:clickable="true"
+        android:focusable="true"
 
         android:elevation="0dp"
 
