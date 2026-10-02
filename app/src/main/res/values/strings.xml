@@ -79,6 +79,7 @@
     <string name="perfil_sair_titulo">Sair da conta</string>
     <string name="perfil_sair_mensagem">Tem certeza que deseja sair?</string>
     <string name="perfil_sair_confirmar">Sair</string>
+    <string name="sessao_encerrada">Você saiu da conta.</string>
     <string name="perfil_excluir_titulo">Excluir conta</string>
     <string name="perfil_excluir_confirmar">Excluir</string>
     <string name="perfil_excluir_aviso">Essa ação é permanente e não pode ser desfeita. Digite sua senha para confirmar.</string>

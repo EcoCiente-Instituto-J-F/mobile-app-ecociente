@@ -293,10 +293,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         findViewById(R.id.imagemPerfilHome)
-                .setOnClickListener(
-                        view ->
-                                startActivity(
-                                        new Intent(this, GerenciarPerfilActivity.class)));
+                .setOnClickListener(view -> confirmarSaida());
 
         View navPerfil = findViewById(R.id.navPerfil);
 
@@ -338,6 +335,19 @@ public class MainActivity extends AppCompatActivity {
 
             buscarMensagemMotivacional();
         }
+    }
+
+    private void confirmarSaida() {
+
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle(R.string.perfil_sair_titulo)
+                .setMessage(R.string.perfil_sair_mensagem)
+                .setPositiveButton(
+                        R.string.perfil_sair_confirmar,
+                        (dialogo, botao) ->
+                                abrirLogin(getString(R.string.sessao_encerrada), true))
+                .setNegativeButton(R.string.perfil_cancelar, null)
+                .show();
     }
 
     private void abrirQuizzes() {
