@@ -65,6 +65,34 @@
     <string name="funcionalidade_em_breve">Esta funcionalidade será disponibilizada em breve.</string>
     <string name="erro_carregar_perfil">Não foi possível confirmar seu perfil agora.</string>
     <string name="tentar_novamente">Tentar novamente</string>
+    <string name="voltar">Voltar</string>
+
+    <!-- Gerenciar perfil -->
+    <string name="perfil_rotulo_nome">Nome</string>
+    <string name="perfil_rotulo_email">Email</string>
+    <string name="perfil_rotulo_telefone">Telefone</string>
+    <string name="perfil_rotulo_endereco">Endereço</string>
+    <string name="perfil_rotulo_cpf">CPF</string>
+    <string name="perfil_valor_nao_informado">Não informado</string>
+    <string name="perfil_salvar">Salvar</string>
+    <string name="perfil_cancelar">Cancelar</string>
+    <string name="perfil_sair_titulo">Sair da conta</string>
+    <string name="perfil_sair_mensagem">Tem certeza que deseja sair?</string>
+    <string name="perfil_sair_confirmar">Sair</string>
+    <string name="perfil_excluir_titulo">Excluir conta</string>
+    <string name="perfil_excluir_confirmar">Excluir</string>
+    <string name="perfil_excluir_aviso">Essa ação é permanente e não pode ser desfeita. Digite sua senha para confirmar.</string>
+    <string name="perfil_excluir_senha_vazia">Digite sua senha.</string>
+    <string name="perfil_excluir_sucesso">Conta excluída.</string>
+    <string name="perfil_senha_atual_vazia">Digite sua senha atual.</string>
+    <string name="perfil_senha_nova_curta">A nova senha deve possuir pelo menos 6 caracteres.</string>
+    <string name="perfil_senhas_diferentes">As senhas não são iguais.</string>
+    <string name="perfil_senha_sucesso">Senha atualizada com sucesso.</string>
+    <string name="perfil_notificacao_gerais">Notificações gerais</string>
+    <string name="perfil_notificacao_lembretes">Lembretes e avisos</string>
+    <string name="perfil_notificacao_atividades">Novas atividades</string>
+    <string name="perfil_notificacao_sustentaveis">Dicas sustentáveis</string>
+    <string name="perfil_notificacao_erro_salvar">Não foi possível salvar essa preferência.</string>
 
     <string-array name="estados_brasil">
 
@@ -99,34 +127,24 @@
     </string-array>
 
     <!-- Chatbot Eko -->
+    <string name="chat_eko">Eko</string>
+    <string name="chat_titulo_inicial">Como Posso te ajudar?</string>
+    <string name="chat_descricao_inicial">Comece uma conversa sobre reciclagem\ne descarte consciente</string>
     <string name="chat_opcao_material">Materiais</string>
     <string name="chat_opcao_reciclar">Como reciclar?</string>
     <string name="chat_opcao_cooperativa">Encontrar cooperativa</string>
-    <string name="chat_erro_conexao">Não foi possível se conectar. Tente novamente.</string>
-
-    <!-- Recursos adicionais do Chatbot Eko -->
-
-    <string name="chat_avatar_eko">Avatar do Eko</string>
-
-    <string name="chat_titulo_inicial">Como posso te ajudar?</string>
-
-    <string name="chat_descricao_inicial">Comece uma conversa sobre reciclagem e descarte consciente</string>
-
-    <string name="chat_voltar">Voltar</string>
-
     <string name="chat_titulo_conversa">Eko</string>
-
+    <string name="chat_voltar">Voltar</string>
     <string name="chat_hint_mensagem">Digite sua pergunta...</string>
-
     <string name="chat_enviar">Enviar mensagem</string>
-
+    <string name="chat_avatar_eko">Avatar do Eko</string>
     <string name="chat_avatar_usuario">Avatar do usuário</string>
+    <string name="chat_erro_conexao">Não foi possível se conectar. Tente novamente.</string>
+    <string name="chat_erro_resposta">Não foi possível obter uma resposta válida. Tente novamente.</string>
 
     <!-- ===================================================== -->
     <!-- QUIZ - USUÁRIO COMUM                                  -->
     <!-- ===================================================== -->
-
-    <string name="voltar">Voltar</string>
 
     <string name="quizzes">Quizzes</string>
 

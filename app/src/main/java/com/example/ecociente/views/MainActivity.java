@@ -28,6 +28,7 @@ import com.example.ecociente.R;
 
 import com.example.ecociente.model.PerfilAcesso;
 
+import com.example.ecociente.repository.FirestoreProvider;
 import com.example.ecociente.repository.NotificacaoMotivacionalRepository;
 
 import com.google.android.material.button.MaterialButton;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             FirebaseAuth.getInstance();
 
     private final FirebaseFirestore bancoFirestore =
-            FirebaseFirestore.getInstance();
+            FirestoreProvider.obterInstancia();
 
     private final NotificacaoMotivacionalRepository repositorioNotificacao =
             new NotificacaoMotivacionalRepository();
@@ -290,6 +291,22 @@ public class MainActivity extends AppCompatActivity {
         homeCarregada =
                 true;
 
+
+        findViewById(R.id.imagemPerfilHome)
+                .setOnClickListener(
+                        view ->
+                                startActivity(
+                                        new Intent(this, GerenciarPerfilActivity.class)));
+
+        View navPerfil = findViewById(R.id.navPerfil);
+
+        if (navPerfil != null) {
+
+            navPerfil.setOnClickListener(
+                    view ->
+                            startActivity(
+                                    new Intent(this, GerenciarPerfilActivity.class)));
+        }
 
         TextView textoSaudacao =
                 findViewById(

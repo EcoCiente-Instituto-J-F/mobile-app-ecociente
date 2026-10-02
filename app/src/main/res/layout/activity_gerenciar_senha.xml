@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/branco"
+    android:fillViewport="true"
+    android:overScrollMode="never">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="24dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cabecalhoGerenciarSenha"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/verde_escuro_principal"
+            app:cardCornerRadius="22dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="14dp"
+                android:paddingBottom="24dp">
+
+                <ImageView
+                    android:id="@+id/botaoVoltarGerenciarSenha"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="8dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:contentDescription="@string/voltar"
+                    android:focusable="true"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_voltar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@color/branco" />
+
+                <TextView
+                    android:id="@+id/tituloGerenciarSenha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:text="Gerenciar perfil"
+                    android:textColor="@color/branco"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="@id/botaoVoltarGerenciarSenha"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/botaoVoltarGerenciarSenha" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/containerAvatarGerenciarSenha"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="14dp"
+                    app:cardBackgroundColor="@color/branco"
+                    app:cardCornerRadius="32dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/botaoVoltarGerenciarSenha">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/foto_perfil"
+                        android:padding="12dp"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/ic_perfil_usuario" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/painelGerenciarSenha"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="-16dp"
+            android:layout_marginEnd="12dp"
+            app:cardBackgroundColor="@color/branco"
+            app:cardCornerRadius="18dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cabecalhoGerenciarSenha">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Gerenciar senha"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/nunito_regular"
+                    android:text="Altere sua senha para deixar sua conta mais segura"
+                    android:textAlignment="center"
+                    android:textColor="@color/cinza_escuro_textos"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:text="Senha atual"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="6dp"
+                    app:cardBackgroundColor="@color/branco"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/cinza_borda_card_perfil"
+                    app:strokeWidth="1dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="4dp">
+
+                        <ImageView
+                            android:id="@+id/iconeSenhaAtual"
+                            android:layout_width="14dp"
+                            android:layout_height="16dp"
+                            android:layout_centerVertical="true"
+                            android:contentDescription="@null"
+                            android:src="@drawable/icon_senha" />
+
+                        <EditText
+                            android:id="@+id/campoSenhaAtual"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toEndOf="@id/iconeSenhaAtual"
+                            android:layout_toStartOf="@id/iconeOlhoSenhaAtual"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/nunito_medium"
+                            android:hint="••••••"
+                            android:imeOptions="actionNext"
+                            android:inputType="textPassword"
+                            android:paddingStart="8dp"
+                            android:textColor="@color/verde_escuro_principal"
+                            android:textColorHint="@color/cinza_escuro_textos"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:id="@+id/iconeOlhoSenhaAtual"
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:contentDescription="Mostrar senha"
+                            android:focusable="true"
+                            android:padding="9dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/icon_olho_fechado" />
+
+                    </RelativeLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:text="Nova senha"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="6dp"
+                    app:cardBackgroundColor="@color/branco"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/cinza_borda_card_perfil"
+                    app:strokeWidth="1dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="4dp">
+
+                        <ImageView
+                            android:id="@+id/iconeSenhaNova"
+                            android:layout_width="14dp"
+                            android:layout_height="16dp"
+                            android:layout_centerVertical="true"
+                            android:contentDescription="@null"
+                            android:src="@drawable/icon_senha" />
+
+                        <EditText
+                            android:id="@+id/campoSenhaNova"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toEndOf="@id/iconeSenhaNova"
+                            android:layout_toStartOf="@id/iconeOlhoSenhaNova"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/nunito_medium"
+                            android:hint="••••••"
+                            android:imeOptions="actionNext"
+                            android:inputType="textPassword"
+                            android:paddingStart="8dp"
+                            android:textColor="@color/verde_escuro_principal"
+                            android:textColorHint="@color/cinza_escuro_textos"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:id="@+id/iconeOlhoSenhaNova"
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:contentDescription="Mostrar senha"
+                            android:focusable="true"
+                            android:padding="9dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/icon_olho_fechado" />
+
+                    </RelativeLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:text="Confirmar senha"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="6dp"
+                    app:cardBackgroundColor="@color/branco"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/cinza_borda_card_perfil"
+                    app:strokeWidth="1dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="4dp">
+
+                        <ImageView
+                            android:id="@+id/iconeSenhaConfirmar"
+                            android:layout_width="14dp"
+                            android:layout_height="16dp"
+                            android:layout_centerVertical="true"
+                            android:contentDescription="@null"
+                            android:src="@drawable/icon_senha" />
+
+                        <EditText
+                            android:id="@+id/campoSenhaConfirmar"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toEndOf="@id/iconeSenhaConfirmar"
+                            android:layout_toStartOf="@id/iconeOlhoSenhaConfirmar"
+                            android:background="@android:color/transparent"
+                            android:fontFamily="@font/nunito_medium"
+                            android:hint="••••••"
+                            android:imeOptions="actionDone"
+                            android:inputType="textPassword"
+                            android:paddingStart="8dp"
+                            android:textColor="@color/verde_escuro_principal"
+                            android:textColorHint="@color/cinza_escuro_textos"
+                            android:textSize="12sp" />
+
+                        <ImageView
+                            android:id="@+id/iconeOlhoSenhaConfirmar"
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:clickable="true"
+                            android:contentDescription="Mostrar senha"
+                            android:focusable="true"
+                            android:padding="9dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/icon_olho_fechado" />
+
+                    </RelativeLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <FrameLayout
+                    android:id="@+id/containerBotaoSalvarSenha"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="20dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/botaoSalvarSenha"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/nunito_semibold"
+                        android:text="Salvar"
+                        android:textAllCaps="false"
+                        android:textColor="@color/branco"
+                        android:textSize="14sp"
+                        app:backgroundTint="@color/verde_escuro_principal"
+                        app:cornerRadius="10dp"
+                        app:elevation="0dp" />
+
+                    <ProgressBar
+                        android:id="@+id/indicadorCarregamentoSenha"
+                        style="?android:attr/progressBarStyleSmall"
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="@color/branco"
+                        android:visibility="gone" />
+
+                </FrameLayout>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

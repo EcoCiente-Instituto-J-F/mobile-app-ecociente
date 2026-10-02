@@ -314,16 +314,92 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <LinearLayout
+            android:id="@+id/linhaTelefoneCpf"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="12dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/containerEstado">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/containerTelefone"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                app:cardBackgroundColor="@color/branco"
+                app:cardCornerRadius="9dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/verde_escuro_principal"
+                app:strokeWidth="1dp">
+
+                <EditText
+                    android:id="@+id/campoTelefone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/nunito_medium"
+                    android:hint="Telefone"
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:maxLength="15"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textColorHint="@color/cinza_escuro_textos"
+                    android:textSize="10sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="match_parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/containerCpf"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                app:cardBackgroundColor="@color/branco"
+                app:cardCornerRadius="9dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/verde_escuro_principal"
+                app:strokeWidth="1dp">
+
+                <EditText
+                    android:id="@+id/campoCpf"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/nunito_medium"
+                    android:hint="CPF"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="14"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textColorHint="@color/cinza_escuro_textos"
+                    android:textSize="10sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
         <FrameLayout
             android:id="@+id/containerBotaoCadastrar"
             android:layout_width="0dp"
             android:layout_height="46dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="61dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/containerEstado">
+            app:layout_constraintTop_toBottomOf="@id/linhaTelefoneCpf">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/botaoCadastrar"
