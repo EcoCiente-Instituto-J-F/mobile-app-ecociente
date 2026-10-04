@@ -119,10 +119,10 @@ public class CadastroExternoRepository {
             conexao.setRequestProperty("Accept", "application/json");
             conexao.setDoOutput(true);
             conexao.setUseCaches(false);
-            // Render free tier "dorme" a API após inatividade; medido ~72s
-            // para o primeiro request acordar o serviço.
-            conexao.setConnectTimeout(90_000);
-            conexao.setReadTimeout(90_000);
+            // Render free tier "dorme" a API após inatividade; medido de 72s
+            // a 148s para o primeiro request acordar o serviço.
+            conexao.setConnectTimeout(180_000);
+            conexao.setReadTimeout(180_000);
 
             try (OutputStream saida = conexao.getOutputStream()) {
                 saida.write(corpo.toString().getBytes(StandardCharsets.UTF_8));
