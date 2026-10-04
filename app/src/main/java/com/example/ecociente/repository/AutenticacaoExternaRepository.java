@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONObject;
@@ -84,7 +85,7 @@ public class AutenticacaoExternaRepository {
             conexao.setReadTimeout(150_000);
 
             JSONObject corpo = new JSONObject();
-            corpo.put("email", email);
+            corpo.put("email", email.trim().toLowerCase(Locale.ROOT));
             corpo.put("senha", senha);
 
             try (OutputStream saida = conexao.getOutputStream()) {

@@ -108,19 +108,9 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
             return;
         }
 
-        viewModel
-                .verificarCodigo(codigo)
-                .observe(
-                        getViewLifecycleOwner(),
-                        resultado -> {
-                            if (!resultado.isSucesso()) {
-                                mostrarMensagem(resultado.getMensagemErro());
-                                return;
-                            }
+        viewModel.definirCodigo(codigo);
 
-                            Navigation.findNavController(requireView())
-                                    .navigate(R.id.acaoParaNovaSenha);
-                        });
+        Navigation.findNavController(requireView()).navigate(R.id.acaoParaNovaSenha);
     }
 
     private void definirCarregando(boolean carregando) {
