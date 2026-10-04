@@ -10,12 +10,22 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvatarPerfil;
+import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseUser;
+import java.util.regex.Pattern;
 
 public class GerenciarSenhaActivity extends AppCompatActivity {
 
+    // Mesma regra da ds-esqueceusenha-api.
+    private static final Pattern PADRAO_SENHA_VALIDA =
+            Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^A-Za-z0-9])\\S{8,100}$");
+
     private PerfilViewModel viewModel;
+
+    private final Motion motion = new Motion();
 
     private EditText campoSenhaAtual;
     private EditText campoSenhaNova;
@@ -45,7 +55,40 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
 
         configurarVisibilidadeSenha();
 
+        carregarFotoPerfil();
+
         botaoSalvar.setOnClickListener(view -> validarESalvar());
+
+        motion.staggerIn(
+                findViewById(R.id.cabecalhoGerenciarSenha), findViewById(R.id.painelGerenciarSenha));
+    }
+
+    @Override
+    protected void onDestroy() {
+        motion.cancelAll();
+
+        super.onDestroy();
+    }
+
+    private void carregarFotoPerfil() {
+
+        FirebaseUser usuario = viewModel.usuarioAtual();
+
+        if (usuario == null) {
+            return;
+        }
+
+        viewModel
+                .buscarPerfil(usuario.getUid())
+                .observe(
+                        this,
+                        perfil -> {
+                            if (perfil != null) {
+                                AvatarPerfil.exibir(
+                                        findViewById(R.id.imagemAvatarGerenciarSenha),
+                                        perfil.getFotoUrl());
+                            }
+                        });
     }
 
     private void inicializarComponentes() {
@@ -124,7 +167,7 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
             return;
         }
 
-        if (senhaNova.length() < 6) {
+        if (!PADRAO_SENHA_VALIDA.matcher(senhaNova).matches()) {
 
             mostrarMensagem(getString(R.string.perfil_senha_nova_curta));
 
@@ -143,7 +186,7 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
         }
 
         viewModel
-                .alterarSenha(senhaAtual, senhaNova)
+                .alterarSenha(getApplicationContext(), senhaAtual, senhaNova)
                 .observe(
                         this,
                         resultado -> {

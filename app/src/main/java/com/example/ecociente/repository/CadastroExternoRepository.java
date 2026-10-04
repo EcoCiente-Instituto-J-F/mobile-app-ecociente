@@ -78,7 +78,8 @@ public class CadastroExternoRepository {
         }
 
         String nome = String.valueOf(dadosUsuario.getOrDefault("nome", ""));
-        String email = String.valueOf(dadosUsuario.getOrDefault("email", ""));
+        String email =
+                String.valueOf(dadosUsuario.getOrDefault("email", "")).trim().toLowerCase(Locale.ROOT);
         String dataNascimento = converterDataParaIso(String.valueOf(dadosUsuario.getOrDefault("dataNascimento", "")));
         String cpf = String.valueOf(dadosUsuario.getOrDefault("cpf", ""));
 

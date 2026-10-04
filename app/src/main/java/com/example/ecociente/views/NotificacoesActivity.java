@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.model.PreferenciasNotificacao;
 import com.example.ecociente.model.ResultadoApi;
+import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,6 +18,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class NotificacoesActivity extends AppCompatActivity {
 
     private PerfilViewModel viewModel;
+
+    private final Motion motion = new Motion();
 
     private SwitchMaterial switchNotificacoesGerais;
     private SwitchMaterial switchLembretesAvisos;
@@ -38,6 +41,23 @@ public class NotificacoesActivity extends AppCompatActivity {
         findViewById(R.id.botaoVoltarNotificacoes).setOnClickListener(view -> finish());
 
         carregarPreferencias();
+
+        motion.staggerIn(
+                findViewById(R.id.cabecalhoNotificacoes),
+                findViewById(R.id.containerIntroNotificacoes),
+                findViewById(R.id.tituloSecaoApp),
+                findViewById(R.id.containerSecaoApp),
+                findViewById(R.id.tituloSecaoAtividades),
+                findViewById(R.id.containerSecaoAtividades),
+                findViewById(R.id.tituloSecaoSustentabilidade),
+                findViewById(R.id.containerSecaoSustentabilidade));
+    }
+
+    @Override
+    protected void onDestroy() {
+        motion.cancelAll();
+
+        super.onDestroy();
     }
 
     private void inicializarComponentes() {

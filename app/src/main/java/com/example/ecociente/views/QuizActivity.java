@@ -319,20 +319,34 @@ public class QuizActivity extends AppCompatActivity {
         botaoNavHomeQuiz.setOnClickListener(view -> fecharQuiz());
 
         /*
-         * Guia, Assistente e Perfil ainda não possuem rota final nesta etapa.
+         * O Guia ainda não possui rota final nesta etapa.
          * Não mostramos Toasts de "em breve" para não quebrar a sensação
          * profissional da barra.
          */
         botaoNavGuiaQuiz.setOnClickListener(view -> { });
-        botaoNavAssistenteQuiz.setOnClickListener(view -> { });
         botaoNavQuizQuiz.setOnClickListener(view -> { });
-        botaoNavPerfilQuiz.setOnClickListener(view -> { });
+        botaoNavAssistenteQuiz.setOnClickListener(
+                view -> startActivity(new Intent(this, ChatActivity.class)));
+        botaoNavPerfilQuiz.setOnClickListener(view -> abrirPerfil());
 
         Motion.pressFeedback(botaoNavHomeQuiz);
         Motion.pressFeedback(botaoNavGuiaQuiz);
         Motion.pressFeedback(botaoNavAssistenteQuiz);
         Motion.pressFeedback(botaoNavQuizQuiz);
         Motion.pressFeedback(botaoNavPerfilQuiz);
+    }
+
+    private void abrirPerfil() {
+        Intent rota = new Intent(this, GerenciarPerfilActivity.class);
+
+        rota.putExtra(
+                GerenciarPerfilActivity.EXTRA_ORIGEM_NAVEGACAO, GerenciarPerfilActivity.ORIGEM_QUIZ);
+
+        startActivity(rota);
+
+        finish();
+
+        overridePendingTransition(0, 0);
     }
 
     private void animarEntradaDaTela() {
