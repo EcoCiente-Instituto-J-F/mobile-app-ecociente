@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,8 @@ import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvatarPerfil;
+import com.example.ecociente.ui.Motion;
 
 import com.example.ecociente.model.PerfilAcesso;
 
@@ -55,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout atualizacaoHome;
 
+
+    private String fotoUrlPerfil =
+            "";
 
     private boolean homeCarregada =
             false;
@@ -254,6 +260,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+        String fotoUrl =
+                documento.getString(
+                        "fotoUrl"
+                );
+
+        fotoUrlPerfil = fotoUrl == null ? "" : fotoUrl;
+
         carregarHome(
                 nome
         );
@@ -285,17 +298,15 @@ public class MainActivity extends AppCompatActivity {
                 true;
 
 
-        findViewById(R.id.imagemPerfilHome)
-                .setOnClickListener(view -> confirmarSaida());
+        findViewById(R.id.imagemPerfilHome).setOnClickListener(this::mostrarMenuPerfil);
+
+        mostrarFotoHome();
 
         View navPerfil = findViewById(R.id.navPerfil);
 
         if (navPerfil != null) {
 
-            navPerfil.setOnClickListener(
-                    view ->
-                            startActivity(
-                                    new Intent(this, GerenciarPerfilActivity.class)));
+            navPerfil.setOnClickListener(view -> abrirPerfilPelaBarra());
         }
 
         TextView textoSaudacao =
@@ -320,10 +331,53 @@ public class MainActivity extends AppCompatActivity {
                     view -> startActivity(new Intent(this, ChatActivity.class)));
         }
 
+        for (int idItem :
+                new int[] {
+                    R.id.navHome, R.id.navGuia, R.id.navQuiz, R.id.navPerfil, R.id.navAssistente
+                }) {
+            View item = findViewById(idItem);
+
+            if (item != null) {
+                Motion.pressFeedback(item);
+            }
+        }
+
         if (atividadeVisivel) {
 
             buscarMensagemMotivacional();
         }
+    }
+
+    private void abrirPerfilPelaBarra() {
+        Intent rota = new Intent(this, GerenciarPerfilActivity.class);
+
+        rota.putExtra(
+                GerenciarPerfilActivity.EXTRA_ORIGEM_NAVEGACAO, GerenciarPerfilActivity.ORIGEM_HOME);
+
+        startActivity(rota);
+
+        overridePendingTransition(0, 0);
+    }
+
+    private void mostrarMenuPerfil(View ancora) {
+
+        PopupMenu menu = new PopupMenu(this, ancora);
+
+        menu.getMenuInflater().inflate(R.menu.menu_perfil_home, menu.getMenu());
+
+        menu.setOnMenuItemClickListener(
+                item -> {
+                    if (item.getItemId() == R.id.menuGerenciarPerfil) {
+                        startActivity(new Intent(this, GerenciarPerfilActivity.class));
+
+                    } else if (item.getItemId() == R.id.menuSair) {
+                        confirmarSaida();
+                    }
+
+                    return true;
+                });
+
+        menu.show();
     }
 
     private void confirmarSaida() {
@@ -794,7 +848,38 @@ public class MainActivity extends AppCompatActivity {
         if (homeCarregada) {
 
             buscarMensagemMotivacional();
+
+            atualizarFotoHome();
         }
+    }
+
+    private void mostrarFotoHome() {
+
+        AvatarPerfil.exibir(findViewById(R.id.imagemPerfilHome), fotoUrlPerfil);
+    }
+
+    private void atualizarFotoHome() {
+
+        FirebaseUser usuario = autenticacao.getCurrentUser();
+
+        if (usuario == null) {
+            return;
+        }
+
+        bancoFirestore
+                .collection("usuarios")
+                .document(usuario.getUid())
+                .get()
+                .addOnSuccessListener(
+                        documento -> {
+                            String fotoUrl = documento.getString("fotoUrl");
+
+                            if (fotoUrl != null && !fotoUrl.isEmpty() && !fotoUrl.equals(fotoUrlPerfil)) {
+                                fotoUrlPerfil = fotoUrl;
+
+                                mostrarFotoHome();
+                            }
+                        });
     }
 
 

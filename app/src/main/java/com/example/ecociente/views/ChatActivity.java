@@ -35,6 +35,7 @@ public class ChatActivity extends AppCompatActivity {
     private EditText campoMensagemChat;
     private ImageButton botaoEnviarChat;
     private ImageButton botaoVoltarChat;
+    private ImageButton botaoSairChat;
     private LinearLayout containerMensagensChat;
     private NestedScrollView rolagemMensagensChat;
     private ChatViewModel viewModel;
@@ -61,6 +62,7 @@ public class ChatActivity extends AppCompatActivity {
         campoMensagemChat = findViewById(R.id.campoMensagemChat);
         botaoEnviarChat = findViewById(R.id.botaoEnviarChat);
         botaoVoltarChat = findViewById(R.id.botaoVoltarChat);
+        botaoSairChat = findViewById(R.id.botaoSairChat);
         containerMensagensChat = findViewById(R.id.containerMensagensChat);
         rolagemMensagensChat = findViewById(R.id.rolagemMensagensChat);
     }
@@ -92,6 +94,7 @@ public class ChatActivity extends AppCompatActivity {
     private void configurarAcoes() {
         botaoEnviarChat.setOnClickListener(view -> enviarMensagem());
         botaoVoltarChat.setOnClickListener(view -> voltarParaInicioChat());
+        botaoSairChat.setOnClickListener(view -> finish());
 
         campoMensagemChat.setOnEditorActionListener(
                 (view, actionId, evento) -> {
@@ -195,6 +198,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void transicionarParaConversa() {
+        botaoSairChat.setVisibility(View.GONE);
         estadoConversaChat.setVisibility(View.VISIBLE);
         estadoConversaChat.setAlpha(0f);
         estadoConversaChat.setTranslationY(dpParaPx(28));
@@ -222,6 +226,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void exibirEstadoConversaSemAnimacao() {
+        botaoSairChat.setVisibility(View.GONE);
         estadoInicialChat.setVisibility(View.GONE);
         estadoConversaChat.setVisibility(View.VISIBLE);
         estadoConversaChat.setAlpha(1f);
@@ -240,6 +245,7 @@ public class ChatActivity extends AppCompatActivity {
         estadoInicialChat.setVisibility(View.VISIBLE);
         estadoInicialChat.setAlpha(1f);
         estadoInicialChat.setTranslationY(0f);
+        botaoSairChat.setVisibility(View.VISIBLE);
         raizChat.setBackgroundColor(getColor(R.color.verde_escuro_principal));
     }
 

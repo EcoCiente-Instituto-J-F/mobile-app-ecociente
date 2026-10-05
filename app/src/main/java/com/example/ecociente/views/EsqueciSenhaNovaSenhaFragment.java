@@ -14,12 +14,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import com.example.ecociente.R;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
+import java.util.regex.Pattern;
 
 // Passo 3: define a nova senha.
 public class EsqueciSenhaNovaSenhaFragment extends Fragment {
+    // Mesma regra da ds-esqueceusenha-api.
+    private static final Pattern PADRAO_SENHA_VALIDA =
+            Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^A-Za-z0-9])\\S{8,100}$");
+
     private EditText campoSenha;
     private EditText campoConfirmarSenha;
     private MaterialButton botaoContinuar;
@@ -74,14 +80,21 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
             return;
         }
 
-        if (senha.length() < 6) {
-            mostrarMensagem("A senha deve ter no mínimo 6 caracteres");
+        if (!PADRAO_SENHA_VALIDA.matcher(senha).matches()) {
+            mostrarMensagem(
+                    "A senha precisa ter de 8 a 100 caracteres, com maiúscula, minúscula, número e"
+                            + " caractere especial, sem espaços");
             return;
         }
 
         viewModel.redefinirSenha(senha).observe(getViewLifecycleOwner(), resultado -> {
             if (!resultado.isSucesso()) {
                 mostrarMensagem(resultado.getMensagemErro());
+
+                if (resultado.getMensagemErro().startsWith("Código")) {
+                    Navigation.findNavController(requireView()).popBackStack();
+                }
+
                 return;
             }
 

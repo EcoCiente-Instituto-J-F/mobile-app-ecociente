@@ -13,8 +13,18 @@ public class PerfilUsuario {
     private String telefone = "";
     private String endereco = "";
     private String cpf = "";
+    private String fotoUrl = "";
 
     public PerfilUsuario() {}
+
+    @NonNull
+    public String getFotoUrl() {
+        return fotoUrl == null ? "" : fotoUrl;
+    }
+
+    public void setFotoUrl(String fotoUrl) {
+        this.fotoUrl = fotoUrl;
+    }
 
     @NonNull
     public String getNome() {

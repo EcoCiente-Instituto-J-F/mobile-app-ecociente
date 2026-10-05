@@ -63,6 +63,7 @@
                     app:layout_constraintTop_toBottomOf="@id/botaoVoltarInformacoesPessoais">
 
                     <ImageView
+                        android:id="@+id/imagemAvatarInformacoesPessoais"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:contentDescription="@string/foto_perfil"
