@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 
 import com.example.ecociente.R;
+import com.example.ecociente.model.TipoPerfil;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -22,8 +23,6 @@ public class SelecaoPerfil extends AppCompatActivity {
 
     public static final String EXTRA_TIPO_PERFIL = "tipoPerfil";
 
-    private static final String TIPO_USUARIO = "usuario";
-    private static final String TIPO_COOPERATIVA = "cooperativa";
 
     private MaterialCardView painelSelecaoPerfil;
     private MaterialCardView cardOpcaoUsuario;
@@ -36,7 +35,7 @@ public class SelecaoPerfil extends AppCompatActivity {
 
     private Motion motion;
 
-    private String tipoPerfilSelecionado = TIPO_USUARIO;
+    private String tipoPerfilSelecionado = TipoPerfil.USUARIO;
     private boolean fechando = false;
 
     @Override
@@ -93,8 +92,8 @@ public class SelecaoPerfil extends AppCompatActivity {
 
     private void configurarCliques() {
 
-        cardOpcaoUsuario.setOnClickListener(view -> selecionarPerfil(TIPO_USUARIO));
-        cardOpcaoCooperativa.setOnClickListener(view -> selecionarPerfil(TIPO_COOPERATIVA));
+        cardOpcaoUsuario.setOnClickListener(view -> selecionarPerfil(TipoPerfil.USUARIO));
+        cardOpcaoCooperativa.setOnClickListener(view -> selecionarPerfil(TipoPerfil.COOPERATIVA));
         botaoContinuarPerfil.setOnClickListener(view -> continuar());
 
         Motion.pressFeedback(cardOpcaoUsuario);
@@ -138,7 +137,7 @@ public class SelecaoPerfil extends AppCompatActivity {
 
         tipoPerfilSelecionado = tipo;
 
-        boolean usuarioSelecionado = TIPO_USUARIO.equals(tipo);
+        boolean usuarioSelecionado = TipoPerfil.USUARIO.equals(tipo);
 
         atualizarVisualOpcao(
                 cardOpcaoUsuario,

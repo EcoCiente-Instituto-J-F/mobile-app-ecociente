@@ -1,6 +1,5 @@
 package com.example.ecociente.views;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
@@ -16,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.BotaoCarregando;
+import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 import java.util.regex.Pattern;
@@ -104,17 +105,11 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
     }
 
     private void voltarParaLogin() {
-        Intent rota = new Intent(requireContext(), Login.class);
-
-        rota.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-        startActivity(rota);
-        requireActivity().finish();
+        Navegacao.abrirLoginLimpandoPilha(requireActivity());
     }
 
     private void definirCarregando(boolean carregando) {
-        botaoContinuar.setEnabled(!carregando);
-        botaoContinuar.setAlpha(carregando ? 0.55f : 1f);
+        BotaoCarregando.definir(botaoContinuar, carregando, R.string.continuar, R.string.salvando);
     }
 
     private boolean alternarVisibilidade(EditText campo, ImageView icone, boolean visivelAtual) {

@@ -25,6 +25,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import com.example.ecociente.R;
+import com.example.ecociente.model.TipoPerfil;
+import com.example.ecociente.model.TipoUsuario;
 import com.google.android.material.card.MaterialCardView;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +44,9 @@ public class Login extends AppCompatActivity {
     private static final String CHAVE_ESTADO = "estado";
     private static final String CHAVE_TELEFONE = "telefone";
     private static final String CHAVE_CPF = "cpf";
+    private static final String CHAVE_NOME_COOPERATIVA = "nomeCooperativa";
+    private static final String CHAVE_CNPJ = "cnpj";
+    private static final String CHAVE_EMAIL_COOPERATIVA = "emailCooperativa";
 
     private static final String CHAVE_POSSUI_CODIGO_CONDOMINIO = "possuiCodigoCondominio";
 
@@ -75,11 +80,14 @@ public class Login extends AppCompatActivity {
     private String estado = "";
     private String telefone = "";
     private String cpf = "";
+    private String nomeCooperativa = "";
+    private String cnpj = "";
+    private String emailCooperativa = "";
 
     private boolean possuiCodigoCondominio = false;
     private String codigoCondominio = "";
 
-    private String tipoPerfilSelecionado = "usuario";
+    private String tipoPerfilSelecionado = TipoPerfil.USUARIO;
 
     private final ActivityResultLauncher<Intent> lancadorSelecaoPerfil =
             registerForActivityResult(
@@ -95,7 +103,7 @@ public class Login extends AppCompatActivity {
                                         .getData()
                                         .getStringExtra(SelecaoPerfil.EXTRA_TIPO_PERFIL);
 
-                        tipoPerfilSelecionado = tipoPerfil != null ? tipoPerfil : "usuario";
+                        tipoPerfilSelecionado = tipoPerfil != null ? tipoPerfil : TipoPerfil.USUARIO;
 
                         abrirCadastroEtapa1(true);
                     });
@@ -499,6 +507,31 @@ public class Login extends AppCompatActivity {
         this.cpf = cpf;
     }
 
+    public void salvarDadosCooperativa(String nomeCooperativa, String cnpj, String emailCooperativa) {
+
+        this.nomeCooperativa = nomeCooperativa;
+
+        this.cnpj = cnpj;
+
+        this.emailCooperativa = emailCooperativa;
+    }
+
+    public boolean isCooperativa() {
+        return TipoPerfil.COOPERATIVA.equals(tipoPerfilSelecionado);
+    }
+
+    public String getNomeCooperativa() {
+        return nomeCooperativa;
+    }
+
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public String getEmailCooperativa() {
+        return emailCooperativa;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -575,6 +608,13 @@ public class Login extends AppCompatActivity {
         dadosUsuario.put("estado", estado);
         dadosUsuario.put("telefone", telefone);
         dadosUsuario.put("cpf", cpf);
+
+        if (isCooperativa()) {
+            dadosUsuario.put("nomeCooperativa", nomeCooperativa);
+            dadosUsuario.put("cnpj", cnpj);
+            dadosUsuario.put("emailCooperativa", emailCooperativa);
+        }
+
         dadosUsuario.put("possuiCodigoCondominio", possuiCodigoCondominio);
         dadosUsuario.put("codigoCondominio", codigoCondominio);
         dadosUsuario.put("tipoPerfil", tipoPerfilSelecionado);
@@ -589,11 +629,11 @@ public class Login extends AppCompatActivity {
     @NonNull
     private String calcularTipoUsuario() {
 
-        if ("cooperativa".equals(tipoPerfilSelecionado)) {
-            return "cooperativa";
+        if (isCooperativa()) {
+            return TipoUsuario.COOPERATIVA;
         }
 
-        return possuiCodigoCondominio ? "morador" : "comum";
+        return possuiCodigoCondominio ? TipoUsuario.MORADOR : TipoUsuario.COMUM;
     }
 
     private void recuperarDadosSalvos(Bundle estadoSalvo) {
@@ -624,11 +664,17 @@ public class Login extends AppCompatActivity {
 
         cpf = estadoSalvo.getString(CHAVE_CPF, "");
 
+        nomeCooperativa = estadoSalvo.getString(CHAVE_NOME_COOPERATIVA, "");
+
+        cnpj = estadoSalvo.getString(CHAVE_CNPJ, "");
+
+        emailCooperativa = estadoSalvo.getString(CHAVE_EMAIL_COOPERATIVA, "");
+
         possuiCodigoCondominio = estadoSalvo.getBoolean(CHAVE_POSSUI_CODIGO_CONDOMINIO, false);
 
         codigoCondominio = estadoSalvo.getString(CHAVE_CODIGO_CONDOMINIO, "");
 
-        tipoPerfilSelecionado = estadoSalvo.getString(CHAVE_TIPO_PERFIL, "usuario");
+        tipoPerfilSelecionado = estadoSalvo.getString(CHAVE_TIPO_PERFIL, TipoPerfil.USUARIO);
     }
 
     @Override
@@ -655,6 +701,12 @@ public class Login extends AppCompatActivity {
         estadoSaida.putString(CHAVE_TELEFONE, telefone);
 
         estadoSaida.putString(CHAVE_CPF, cpf);
+
+        estadoSaida.putString(CHAVE_NOME_COOPERATIVA, nomeCooperativa);
+
+        estadoSaida.putString(CHAVE_CNPJ, cnpj);
+
+        estadoSaida.putString(CHAVE_EMAIL_COOPERATIVA, emailCooperativa);
 
         estadoSaida.putBoolean(CHAVE_POSSUI_CODIGO_CONDOMINIO, possuiCodigoCondominio);
 

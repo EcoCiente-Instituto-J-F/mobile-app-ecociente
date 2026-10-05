@@ -2,45 +2,28 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-
-    android:layout_width="match_parent"
+    android:layout_width="0dp"
     android:layout_height="match_parent"
-
+    android:layout_weight="1"
+    android:clickable="true"
+    android:focusable="true"
     android:gravity="center"
-
     android:orientation="vertical"
-
-    android:paddingTop="4dp"
-
-    android:translationX="2dp">
-
+    android:paddingTop="4dp">
 
     <ImageView
+        android:id="@+id/iconeItemBarra"
         android:layout_width="20dp"
         android:layout_height="20dp"
-
-        android:contentDescription="@string/guia"
-
-        android:scaleType="centerInside"
-
-        android:src="@drawable/icon_guia_cinza" />
-
+        android:contentDescription="@null"
+        android:scaleType="centerInside" />
 
     <TextView
+        android:id="@+id/textoItemBarra"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginTop="1dp"
-
-        android:fontFamily="@font/nunito_regular"
-
         android:includeFontPadding="false"
-
-        android:text="@string/guia"
-
-        android:textColor="@color/cinza_secundario_home"
-
         android:textSize="8.5sp" />
-
 
 </LinearLayout>

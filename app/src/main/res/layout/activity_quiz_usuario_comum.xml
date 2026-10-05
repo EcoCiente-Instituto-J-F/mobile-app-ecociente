@@ -14,11 +14,12 @@
         android:id="@+id/rolagemQuizzes"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="72dp"
         android:clipToPadding="false"
         android:fillViewport="true"
         android:overScrollMode="ifContentScrolls"
         android:scrollbars="none"
-        app:layout_constraintBottom_toTopOf="@id/barraNavegacaoQuiz"
+        app:layout_constraintBottom_toBottomOf="@id/barraNavegacao"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -232,201 +233,12 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <FrameLayout
-        android:id="@+id/barraNavegacaoQuiz"
+    <com.example.ecociente.ui.BarraNavegacaoView
+        android:id="@+id/barraNavegacao"
         android:layout_width="0dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/fundo_barra_navegacao_home"
-        android:clipChildren="false"
-        android:clipToPadding="false"
-        android:elevation="0dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <View
-            android:id="@+id/indicadorNavegacaoQuiz"
-            android:layout_width="26dp"
-            android:layout_height="4dp"
-            android:layout_gravity="top|start"
-            android:background="@drawable/fundo_indicador_navegacao_ativo"
-            android:translationY="-1dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="5">
-
-            <LinearLayout
-                android:id="@+id/botaoNavHomeQuiz"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="4dp"
-                android:translationX="5dp">
-
-                <ImageView
-                    android:id="@+id/iconeNavHomeQuiz"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:contentDescription="@string/home"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/icon_home_verde" />
-
-                <TextView
-                    android:id="@+id/textoNavHomeQuiz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:fontFamily="@font/nunito_semibold"
-                    android:includeFontPadding="false"
-                    android:text="@string/home"
-                    android:textColor="@color/verde_escuro_principal"
-                    android:textSize="8.5sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/botaoNavGuiaQuiz"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="4dp"
-                android:translationX="2dp">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:contentDescription="@string/guia"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/icon_guia_cinza" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:fontFamily="@font/nunito_regular"
-                    android:includeFontPadding="false"
-                    android:text="@string/guia"
-                    android:textColor="@color/cinza_secundario_home"
-                    android:textSize="8.5sp" />
-
-            </LinearLayout>
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <LinearLayout
-                android:id="@+id/botaoNavQuizQuiz"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="4dp"
-                android:translationX="-2dp">
-
-                <ImageView
-                    android:id="@+id/iconeNavQuizQuiz"
-                    android:layout_width="21dp"
-                    android:layout_height="21dp"
-                    android:contentDescription="@string/quiz"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/icon_quiz_cinza" />
-
-                <TextView
-                    android:id="@+id/textoNavQuizQuiz"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunito_regular"
-                    android:includeFontPadding="false"
-                    android:text="@string/quiz"
-                    android:textColor="@color/cinza_secundario_home"
-                    android:textSize="8.5sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/botaoNavPerfilQuiz"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="4dp"
-                android:translationX="-5dp">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:contentDescription="@string/perfil"
-                    android:scaleType="centerInside"
-                    android:src="@drawable/icon_perfil_cinza" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:fontFamily="@font/nunito_regular"
-                    android:includeFontPadding="false"
-                    android:text="@string/perfil"
-                    android:textColor="@color/cinza_secundario_home"
-                    android:textSize="8.5sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </FrameLayout>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/botaoNavAssistenteQuiz"
-        android:layout_width="68dp"
-        android:layout_height="68dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:elevation="0dp"
-        android:stateListAnimator="@null"
-        android:translationY="-17dp"
-        app:cardBackgroundColor="@color/verde_claro_ecociente"
-        app:cardCornerRadius="34dp"
-        app:cardElevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/barraNavegacaoQuiz"
-        app:strokeWidth="0dp">
-
-        <ImageView
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_gravity="center"
-            android:contentDescription="@string/assistente"
-            android:scaleType="centerInside"
-            android:src="@drawable/icon_chatbot_verde"
-            android:tintMode="src_in"
-            app:tint="@color/verde_escuro_principal" />
-
-    </com.google.android.material.card.MaterialCardView>
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
