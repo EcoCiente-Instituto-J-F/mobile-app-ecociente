@@ -1,40 +1,43 @@
 package com.example.ecociente.repository;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.model.ResultadoApi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Monta as chamadas HTTP pro backend e devolve o resultado como LiveData.
 public class EsqueciSenhaRepository {
 
     @NonNull
     public LiveData<ResultadoApi> enviarCodigo(@NonNull String email) {
-        return chamar("enviarCodigoRecuperacao", corpo(email, null, null));
+        try {
+            return chamar("esqueceu", new JSONObject().put("email", email));
+        } catch (JSONException erro) {
+            return erroInesperado();
+        }
     }
 
-    @NonNull
-    public LiveData<ResultadoApi> verificarCodigo(@NonNull String email, @NonNull String codigo) {
-        return chamar("verificarCodigoRecuperacao", corpo(email, codigo, null));
-    }
-
+    // A API não tem passo separado de verificação: o código só é conferido aqui, junto com a nova senha.
     @NonNull
     public LiveData<ResultadoApi> redefinirSenha(
             @NonNull String email, @NonNull String codigo, @NonNull String novaSenha) {
-        return chamar("redefinirSenhaComCodigo", corpo(email, codigo, novaSenha));
+        try {
+            return chamar(
+                    "redefinir",
+                    new JSONObject()
+                            .put("email", email)
+                            .put("token", codigo)
+                            .put("novaSenha", novaSenha)
+                            .put("confirmacaoSenha", novaSenha));
+        } catch (JSONException erro) {
+            return erroInesperado();
+        }
     }
 
     @NonNull
-    private LiveData<ResultadoApi> chamar(String endpoint, @Nullable JSONObject corpo) {
+    private LiveData<ResultadoApi> chamar(@NonNull String endpoint, @NonNull JSONObject corpo) {
         MutableLiveData<ResultadoApi> resultado = new MutableLiveData<>();
-
-        if (corpo == null) {
-            resultado.setValue(ResultadoApi.erro("Erro inesperado. Tente novamente"));
-            return resultado;
-        }
 
         ApiEsqueciSenha.chamar(
                 endpoint,
@@ -48,23 +51,12 @@ public class EsqueciSenhaRepository {
         return resultado;
     }
 
-    @Nullable
-    private JSONObject corpo(String email, @Nullable String codigo, @Nullable String novaSenha) {
-        try {
-            JSONObject corpo = new JSONObject();
-            corpo.put("email", email);
+    @NonNull
+    private LiveData<ResultadoApi> erroInesperado() {
+        MutableLiveData<ResultadoApi> resultado = new MutableLiveData<>();
 
-            if (codigo != null) {
-                corpo.put("codigo", codigo);
-            }
+        resultado.setValue(ResultadoApi.erro("Erro inesperado. Tente novamente"));
 
-            if (novaSenha != null) {
-                corpo.put("novaSenha", novaSenha);
-            }
-
-            return corpo;
-        } catch (JSONException erro) {
-            return null;
-        }
+        return resultado;
     }
 }

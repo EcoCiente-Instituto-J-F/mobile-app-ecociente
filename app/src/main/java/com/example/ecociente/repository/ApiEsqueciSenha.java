@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,13 +14,14 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-// Cliente HTTP do backend na Vercel (não é Firebase, por isso HTTP puro).
+// Cliente HTTP da ds-esqueceusenha-api (Spring/Postgres, repositório separado deste app).
 final class ApiEsqueciSenha {
     private static final String TAG = "EsqueciSenhaApi";
-    private static final String URL_BASE = "https://mobile-app-ecociente.vercel.app/api/";
+    private static final String URL_BASE = "https://ds-esqueceusenha-api-1.onrender.com/senhas/";
+    private static final String MENSAGEM_PADRAO = "Não foi possível conectar ao servidor";
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
@@ -30,21 +32,30 @@ final class ApiEsqueciSenha {
     private ApiEsqueciSenha() {}
 
     static void chamar(@NonNull String endpoint, @NonNull JSONObject corpo, @NonNull Retorno retorno) {
-        Log.d(TAG, "-> " + endpoint + " " + corpo);
+        chamar(endpoint, corpo, null, retorno);
+    }
+
+    static void chamar(
+            @NonNull String endpoint,
+            @NonNull JSONObject corpo,
+            @Nullable String token,
+            @NonNull Retorno retorno) {
+        Log.d(TAG, "-> " + endpoint);
 
         EXECUTOR.execute(() -> {
             boolean sucesso = false;
-            String mensagemErro = "Não foi possível conectar ao servidor";
+            String mensagemErro = MENSAGEM_PADRAO;
 
             try {
-                JSONObject resposta = enviar(endpoint, corpo);
-                sucesso = resposta.optBoolean("sucesso", false);
+                String erro = enviar(endpoint, corpo, token);
 
-                if (!sucesso) {
-                    mensagemErro = resposta.optString("erro", mensagemErro);
+                sucesso = erro == null;
+
+                if (erro != null) {
+                    mensagemErro = erro;
                 }
 
-                Log.d(TAG, "<- " + endpoint + " " + resposta);
+                Log.d(TAG, "<- " + endpoint + (sucesso ? " ok" : " " + mensagemErro));
             } catch (Exception erro) {
                 Log.e(TAG, "<- " + endpoint + " falhou", erro);
             }
@@ -56,39 +67,78 @@ final class ApiEsqueciSenha {
         });
     }
 
-    private static JSONObject enviar(String endpoint, JSONObject corpo) throws IOException, JSONException {
+    // Devolve null quando deu certo, ou a mensagem de erro que a API mandou.
+    @Nullable
+    private static String enviar(String endpoint, JSONObject corpo, @Nullable String token)
+            throws IOException {
         HttpURLConnection conexao = (HttpURLConnection) new URL(URL_BASE + endpoint).openConnection();
 
         try {
             conexao.setRequestMethod("POST");
             conexao.setRequestProperty("Content-Type", "application/json");
+            conexao.setRequestProperty("Accept", "application/json");
+
+            if (token != null) {
+                conexao.setRequestProperty("Authorization", "Bearer " + token);
+            }
+
             conexao.setDoOutput(true);
-            conexao.setConnectTimeout(15000);
-            conexao.setReadTimeout(15000);
+            // O Render dorme a API após inatividade; o primeiro pedido chegou a levar 138s.
+            conexao.setConnectTimeout(180_000);
+            conexao.setReadTimeout(180_000);
 
             try (OutputStream saida = conexao.getOutputStream()) {
                 saida.write(corpo.toString().getBytes(StandardCharsets.UTF_8));
             }
 
             int codigoResposta = conexao.getResponseCode();
-            boolean deuCerto = codigoResposta >= 200 && codigoResposta < 300;
-            InputStream fluxo = deuCerto ? conexao.getInputStream() : conexao.getErrorStream();
 
-            return new JSONObject(lerFluxo(fluxo));
+            if (codigoResposta >= 200 && codigoResposta < 300) {
+                return null;
+            }
+
+            return extrairMensagemErro(lerFluxo(conexao.getErrorStream()));
         } finally {
             conexao.disconnect();
         }
     }
 
-    private static String lerFluxo(InputStream fluxo) throws IOException {
-        ByteArrayOutputStream saida = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int lidos;
+    // A API devolve { "status", "codigoError", "details": [{ "field", "message" }] }.
+    @NonNull
+    private static String extrairMensagemErro(@NonNull String corpoErro) {
+        try {
+            JSONArray detalhes = new JSONObject(corpoErro).optJSONArray("details");
 
-        while ((lidos = fluxo.read(buffer)) != -1) {
-            saida.write(buffer, 0, lidos);
+            if (detalhes != null && detalhes.length() > 0) {
+                String mensagem = detalhes.getJSONObject(0).optString("message", "");
+
+                if (!mensagem.isEmpty()) {
+                    return mensagem;
+                }
+            }
+        } catch (Exception erro) {
+            Log.w(TAG, "Resposta de erro fora do formato esperado", erro);
         }
 
-        return saida.toString(StandardCharsets.UTF_8.name());
+        return MENSAGEM_PADRAO;
+    }
+
+    @NonNull
+    private static String lerFluxo(@Nullable InputStream fluxo) throws IOException {
+        if (fluxo == null) {
+            return "";
+        }
+
+        try (InputStream entrada = fluxo;
+                ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
+            byte[] buffer = new byte[1024];
+            int lidos;
+
+            while ((lidos = entrada.read(buffer)) != -1) {
+                saida.write(buffer, 0, lidos);
+            }
+
+            return saida.toString(StandardCharsets.UTF_8.name());
+        }
     }
 }

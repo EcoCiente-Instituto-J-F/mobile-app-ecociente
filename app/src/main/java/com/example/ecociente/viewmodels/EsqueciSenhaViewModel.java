@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.repository.EsqueciSenhaRepository;
+import java.util.Locale;
 
 // Compartilhado pelos 3 Fragments (escopo na Activity), guarda email/código
 // entre os passos e expõe o resultado de cada chamada como LiveData.
@@ -23,14 +24,12 @@ public class EsqueciSenhaViewModel extends ViewModel {
 
     @NonNull
     public LiveData<ResultadoApi> enviarCodigo(@NonNull String email) {
-        this.email = email;
-        return executar(repositorio.enviarCodigo(email));
+        this.email = email.trim().toLowerCase(Locale.ROOT);
+        return executar(repositorio.enviarCodigo(this.email));
     }
 
-    @NonNull
-    public LiveData<ResultadoApi> verificarCodigo(@NonNull String codigo) {
+    public void definirCodigo(@NonNull String codigo) {
         this.codigo = codigo;
-        return executar(repositorio.verificarCodigo(email, codigo));
     }
 
     @NonNull

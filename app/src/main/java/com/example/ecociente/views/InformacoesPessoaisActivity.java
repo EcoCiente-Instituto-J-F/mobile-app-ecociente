@@ -13,12 +13,16 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.repository.PerfilRepository;
+import com.example.ecociente.ui.AvatarPerfil;
+import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.firebase.auth.FirebaseUser;
 
 public class InformacoesPessoaisActivity extends AppCompatActivity {
 
     private PerfilViewModel viewModel;
+
+    private final Motion motion = new Motion();
 
     private String uid;
 
@@ -44,6 +48,18 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
         findViewById(R.id.botaoVoltarInformacoesPessoais).setOnClickListener(view -> finish());
 
         carregarPerfil();
+
+        motion.staggerIn(
+                findViewById(R.id.cabecalhoInformacoesPessoais),
+                findViewById(R.id.tituloInformacoesPessoais),
+                findViewById(R.id.containerCamposPessoais));
+    }
+
+    @Override
+    protected void onDestroy() {
+        motion.cancelAll();
+
+        super.onDestroy();
     }
 
     private void inicializarComponentes() {
@@ -136,6 +152,11 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
         definirValor(linhaEndereco, perfil != null ? perfil.getEndereco() : "");
 
         definirValor(linhaCpf, perfil != null ? perfil.getCpf() : "");
+
+        if (perfil != null) {
+            AvatarPerfil.exibir(
+                    findViewById(R.id.imagemAvatarInformacoesPessoais), perfil.getFotoUrl());
+        }
     }
 
     private void definirValor(View linha, String valor) {

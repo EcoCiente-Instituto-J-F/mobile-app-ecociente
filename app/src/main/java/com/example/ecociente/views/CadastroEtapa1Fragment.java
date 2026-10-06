@@ -265,10 +265,6 @@ public class CadastroEtapa1Fragment extends Fragment {
                                         confirmarSenhaVisivel));
     }
 
-    /**
-     * O indicador informa a força da senha sem exibir a regra mínima antes da hora.
-     * A validação de cadastro exige no mínimo 8 caracteres.
-     */
     private void configurarForcaSenha() {
 
         campoSenha.addTextChangedListener(
@@ -428,13 +424,6 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         long hojeUtc = MaterialDatePicker.todayInUtcMilliseconds();
 
-        /*
-         * Por padrão o calendário já abre
-         * aproximadamente 18 anos atrás.
-         *
-         * Para data de nascimento isso fica
-         * bem mais agradável do que abrir em hoje.
-         */
         Calendar calendarioInicial = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 
         calendarioInicial.add(Calendar.YEAR, -18);
@@ -447,9 +436,6 @@ public class CadastroEtapa1Fragment extends Fragment {
             selecaoInicial = calendarioInicial.getTimeInMillis();
         }
 
-        /*
-         * Não permite selecionar uma data futura.
-         */
         CalendarConstraints restricoes =
                 new CalendarConstraints.Builder().setEnd(hojeUtc).setOpenAt(selecaoInicial).build();
 
@@ -536,9 +522,6 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         if (possuiCodigo) {
 
-            /*
-             * Agora só existe uma etapa.
-             */
             containerEtapas.setVisibility(View.GONE);
 
             containerCodigoCondominio.setCardBackgroundColor(Color.parseColor("#FAFCFB"));

@@ -9,12 +9,6 @@ import android.widget.TextView;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 
-/**
- * Centraliza o feedback visual de erro do EcoCiente.
- *
- * Rosa oficial: #D64573
- * Fundo de erro: #66D64573 (40% de opacidade em ARGB)
- */
 public final class FieldFeedback {
 
     private static final int ERROR = Color.parseColor("#D64573");
@@ -50,10 +44,6 @@ public final class FieldFeedback {
                 .start();
     }
 
-    /**
-     * Versão usada quando a mensagem será exibida em Snackbar,
-     * mas o campo ainda precisa receber borda + glow + shake.
-     */
     public static void error(
             MaterialCardView card,
             String accessibilityText,
@@ -93,9 +83,6 @@ public final class FieldFeedback {
         limparEstadoCard(card, normalColor);
     }
 
-    /**
-     * Snackbar de erro com a identidade rosa do EcoCiente.
-     */
     public static void showErrorSnackbar(
             View anchor,
             String text

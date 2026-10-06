@@ -104,11 +104,6 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
 
-        /*
-         * Permitimos que o app use toda a tela.
-         * Os espaços das barras do Android e do teclado
-         * são tratados manualmente logo abaixo.
-         */
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
 
         setContentView(R.layout.activity_login);
@@ -170,10 +165,6 @@ public class Login extends AppCompatActivity {
 
                     Insets teclado = insets.getInsets(WindowInsetsCompat.Type.ime());
 
-                    /*
-                     * Impede logo/conteúdo de ficar
-                     * atrás da barra superior.
-                     */
                     view.setPadding(0, barraStatus.top, 0, 0);
 
                     /*
@@ -219,10 +210,6 @@ public class Login extends AppCompatActivity {
                         return;
                     }
 
-                    /*
-                     * Primeiro ajuste enquanto
-                     * o teclado está surgindo.
-                     */
                     focoNovo.postDelayed(() -> trazerCampoParaAreaVisivel(focoNovo), 260);
 
                     /*

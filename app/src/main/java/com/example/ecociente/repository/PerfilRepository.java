@@ -1,5 +1,6 @@
 package com.example.ecociente.repository;
 
+import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.PreferenciasNotificacao;
 import com.example.ecociente.model.ResultadoApi;
+import com.example.ecociente.model.SessaoExterna;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,9 +26,12 @@ public class PerfilRepository {
     public static final String CAMPO_TELEFONE = "telefone";
     public static final String CAMPO_ENDERECO = "endereco";
     public static final String CAMPO_CPF = "cpf";
+    public static final String CAMPO_FOTO_URL = "fotoUrl";
 
     private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
     private final FirebaseFirestore bancoFirestore = FirestoreProvider.obterInstancia();
+    private final AutenticacaoExternaRepository autenticacaoExterna = new AutenticacaoExternaRepository();
+    private final AlterarSenhaExternaRepository senhaExterna = new AlterarSenhaExternaRepository();
 
     @Nullable
     public FirebaseUser usuarioAtual() {
@@ -123,9 +128,12 @@ public class PerfilRepository {
         return resultado;
     }
 
+    // A senha precisa mudar no Firebase e no Postgres. O token do login expira em minutos,
+    // então pegamos um novo com a senha atual; contas sem registro no Postgres (ou com a API
+    // fora do ar) trocam só no Firebase.
     @NonNull
     public LiveData<ResultadoApi> alterarSenha(
-            @NonNull String senhaAtual, @NonNull String novaSenha) {
+            @NonNull Context contexto, @NonNull String senhaAtual, @NonNull String novaSenha) {
         MutableLiveData<ResultadoApi> resultado = new MutableLiveData<>();
 
         FirebaseUser usuario = autenticacao.getCurrentUser();
@@ -135,6 +143,22 @@ public class PerfilRepository {
             return resultado;
         }
 
+        autenticacaoExterna.autenticar(
+                contexto,
+                usuario.getEmail(),
+                senhaAtual,
+                sessao -> alterarSenhaNoFirebase(usuario, senhaAtual, novaSenha, sessao, resultado));
+
+        return resultado;
+    }
+
+    private void alterarSenhaNoFirebase(
+            @NonNull FirebaseUser usuario,
+            @NonNull String senhaAtual,
+            @NonNull String novaSenha,
+            @Nullable SessaoExterna sessao,
+            @NonNull MutableLiveData<ResultadoApi> resultado) {
+
         AuthCredential credencial = EmailAuthProvider.getCredential(usuario.getEmail(), senhaAtual);
 
         usuario.reauthenticate(credencial)
@@ -142,7 +166,13 @@ public class PerfilRepository {
                         ignorado ->
                                 usuario.updatePassword(novaSenha)
                                         .addOnSuccessListener(
-                                                ignorado2 -> resultado.setValue(ResultadoApi.sucesso()))
+                                                ignorado2 ->
+                                                        sincronizarSenhaNoPostgres(
+                                                                usuario,
+                                                                senhaAtual,
+                                                                novaSenha,
+                                                                sessao,
+                                                                resultado))
                                         .addOnFailureListener(
                                                 erro -> {
                                                     Log.e(TAG, "Erro ao atualizar senha", erro);
@@ -161,8 +191,42 @@ public class PerfilRepository {
 
                             resultado.setValue(ResultadoApi.erro("Não foi possível confirmar sua senha atual."));
                         });
+    }
 
-        return resultado;
+    // Se o Postgres recusar depois do Firebase já ter mudado, volta o Firebase para a senha
+    // antiga: assim os dois lugares nunca ficam com senhas diferentes.
+    private void sincronizarSenhaNoPostgres(
+            @NonNull FirebaseUser usuario,
+            @NonNull String senhaAtual,
+            @NonNull String novaSenha,
+            @Nullable SessaoExterna sessao,
+            @NonNull MutableLiveData<ResultadoApi> resultado) {
+
+        if (sessao == null) {
+            resultado.setValue(ResultadoApi.sucesso());
+            return;
+        }
+
+        senhaExterna.alterar(
+                sessao.getToken(),
+                senhaAtual,
+                novaSenha,
+                respostaExterna -> {
+                    if (respostaExterna.isSucesso()) {
+                        resultado.setValue(respostaExterna);
+                        return;
+                    }
+
+                    usuario.updatePassword(senhaAtual)
+                            .addOnCompleteListener(
+                                    tarefa -> {
+                                        if (!tarefa.isSuccessful()) {
+                                            Log.e(TAG, "Não foi possível desfazer a senha no Firebase", tarefa.getException());
+                                        }
+
+                                        resultado.setValue(respostaExterna);
+                                    });
+                });
     }
 
     @NonNull

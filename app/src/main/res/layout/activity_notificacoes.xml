@@ -99,7 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunito_semibold"
-                        android:text="Gerencie suas preferências"
+                        android:text="@string/notificacoes_titulo"
                         android:textColor="@color/verde_escuro_principal"
                         android:textSize="12sp" />
 
@@ -107,7 +107,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunito_regular"
-                        android:text="Escolha sobre o que deseja ser notificado"
+                        android:text="@string/notificacoes_descricao"
                         android:textColor="@color/cinza_escuro_textos"
                         android:textSize="10sp" />
 
@@ -124,7 +124,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/nunito_semibold"
-            android:text="Notificações do app"
+            android:text="@string/notificacoes_do_app"
             android:textColor="@color/cinza_escuro_textos"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -172,7 +172,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/nunito_semibold"
-            android:text="Atividades e eventos"
+            android:text="@string/notificacoes_atividades_eventos"
             android:textColor="@color/cinza_escuro_textos"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -207,7 +207,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/nunito_semibold"
-            android:text="Sustentabilidade"
+            android:text="@string/notificacoes_sustentabilidade"
             android:textColor="@color/cinza_escuro_textos"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"

@@ -89,7 +89,7 @@
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="0dp"
-                    app:rippleColor="#28FFFFFF"
+                    app:rippleColor="@color/ripple_branco_chat"
                     app:strokeColor="@color/branco"
                     app:strokeWidth="1dp">
 
@@ -135,7 +135,7 @@
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="0dp"
-                    app:rippleColor="#28FFFFFF"
+                    app:rippleColor="@color/ripple_branco_chat"
                     app:strokeColor="@color/branco"
                     app:strokeWidth="1dp">
 
@@ -181,7 +181,7 @@
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="10dp"
                     app:cardElevation="0dp"
-                    app:rippleColor="#28FFFFFF"
+                    app:rippleColor="@color/ripple_branco_chat"
                     app:strokeColor="@color/branco"
                     app:strokeWidth="1dp">
 
@@ -219,6 +219,20 @@
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <ImageButton
+        android:id="@+id/botaoSairChat"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_gravity="top|start"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/chat_voltar"
+        android:padding="13dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_voltar"
+        app:tint="@color/branco" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/estadoConversaChat"
@@ -322,7 +336,7 @@
                 android:paddingEnd="12dp"
                 android:singleLine="true"
                 android:textColor="@color/black"
-                android:textColorHint="#A0A7A4"
+                android:textColorHint="@color/cinza_hint_chat"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/botaoEnviarChat"

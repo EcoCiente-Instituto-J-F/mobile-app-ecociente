@@ -216,9 +216,8 @@ public class LoginFragment extends Fragment {
                         });
     }
 
-    // Best-effort: a ds-autenticacao-api ainda não tem cadastro implementado,
-    // então nenhuma conta existente tem correspondência no Postgres. Roda em
-    // paralelo e nunca bloqueia nem falha o login pelo Firebase.
+    // Best-effort: roda em paralelo e nunca bloqueia nem falha o login pelo
+    // Firebase. Contas antigas, sem registro no Postgres, só geram um aviso.
     private void autenticarNaApiExterna(String email, String senha) {
 
         new AutenticacaoExternaRepository()

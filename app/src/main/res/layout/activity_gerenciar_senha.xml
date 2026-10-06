@@ -55,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_semibold"
-                    android:text="Gerenciar perfil"
+                    android:text="@string/gerenciar_perfil"
                     android:textColor="@color/branco"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="@id/botaoVoltarGerenciarSenha"
@@ -76,6 +76,7 @@
                     app:layout_constraintTop_toBottomOf="@id/botaoVoltarGerenciarSenha">
 
                     <ImageView
+                        android:id="@+id/imagemAvatarGerenciarSenha"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:contentDescription="@string/foto_perfil"
@@ -114,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="Gerenciar senha"
+                    android:text="@string/gerenciar_senha"
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="18sp" />
 
@@ -124,7 +125,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="2dp"
                     android:fontFamily="@font/nunito_regular"
-                    android:text="Altere sua senha para deixar sua conta mais segura"
+                    android:text="@string/gerenciar_senha_descricao"
                     android:textAlignment="center"
                     android:textColor="@color/cinza_escuro_textos"
                     android:textSize="11sp" />
@@ -134,7 +135,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="18dp"
                     android:fontFamily="@font/nunito_semibold"
-                    android:text="Senha atual"
+                    android:text="@string/senha_atual"
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="12sp" />
 
@@ -154,29 +155,37 @@
                         android:paddingStart="12dp"
                         android:paddingEnd="4dp">
 
-                        <ImageView
-                            android:id="@+id/iconeSenhaAtual"
-                            android:layout_width="14dp"
-                            android:layout_height="16dp"
-                            android:layout_centerVertical="true"
-                            android:contentDescription="@null"
-                            android:src="@drawable/icon_senha" />
-
-                        <EditText
-                            android:id="@+id/campoSenhaAtual"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_toEndOf="@id/iconeSenhaAtual"
                             android:layout_toStartOf="@id/iconeOlhoSenhaAtual"
-                            android:background="@android:color/transparent"
-                            android:fontFamily="@font/nunito_medium"
-                            android:hint="••••••"
-                            android:imeOptions="actionNext"
-                            android:inputType="textPassword"
-                            android:paddingStart="8dp"
-                            android:textColor="@color/verde_escuro_principal"
-                            android:textColorHint="@color/cinza_escuro_textos"
-                            android:textSize="12sp" />
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/iconeSenhaAtual"
+                                android:layout_width="14dp"
+                                android:layout_height="16dp"
+                                android:contentDescription="@null"
+                                android:src="@drawable/icon_senha" />
+
+                            <EditText
+                                android:id="@+id/campoSenhaAtual"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="1"
+                                android:padding="0dp"
+                                android:background="@android:color/transparent"
+                                android:fontFamily="@font/nunito_medium"
+                                android:hint="••••••"
+                                android:imeOptions="actionNext"
+                                android:inputType="textPassword"
+                                android:textColor="@color/verde_escuro_principal"
+                                android:textColorHint="@color/cinza_escuro_textos"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
 
                         <ImageView
                             android:id="@+id/iconeOlhoSenhaAtual"
@@ -186,7 +195,7 @@
                             android:layout_centerVertical="true"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
-                            android:contentDescription="Mostrar senha"
+                            android:contentDescription="@string/mostrar_senha"
                             android:focusable="true"
                             android:padding="9dp"
                             android:scaleType="centerInside"
@@ -201,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:fontFamily="@font/nunito_semibold"
-                    android:text="Nova senha"
+                    android:text="@string/nova_senha"
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="12sp" />
 
@@ -221,29 +230,37 @@
                         android:paddingStart="12dp"
                         android:paddingEnd="4dp">
 
-                        <ImageView
-                            android:id="@+id/iconeSenhaNova"
-                            android:layout_width="14dp"
-                            android:layout_height="16dp"
-                            android:layout_centerVertical="true"
-                            android:contentDescription="@null"
-                            android:src="@drawable/icon_senha" />
-
-                        <EditText
-                            android:id="@+id/campoSenhaNova"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_toEndOf="@id/iconeSenhaNova"
                             android:layout_toStartOf="@id/iconeOlhoSenhaNova"
-                            android:background="@android:color/transparent"
-                            android:fontFamily="@font/nunito_medium"
-                            android:hint="••••••"
-                            android:imeOptions="actionNext"
-                            android:inputType="textPassword"
-                            android:paddingStart="8dp"
-                            android:textColor="@color/verde_escuro_principal"
-                            android:textColorHint="@color/cinza_escuro_textos"
-                            android:textSize="12sp" />
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/iconeSenhaNova"
+                                android:layout_width="14dp"
+                                android:layout_height="16dp"
+                                android:contentDescription="@null"
+                                android:src="@drawable/icon_senha" />
+
+                            <EditText
+                                android:id="@+id/campoSenhaNova"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="1"
+                                android:padding="0dp"
+                                android:background="@android:color/transparent"
+                                android:fontFamily="@font/nunito_medium"
+                                android:hint="••••••"
+                                android:imeOptions="actionNext"
+                                android:inputType="textPassword"
+                                android:textColor="@color/verde_escuro_principal"
+                                android:textColorHint="@color/cinza_escuro_textos"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
 
                         <ImageView
                             android:id="@+id/iconeOlhoSenhaNova"
@@ -253,7 +270,7 @@
                             android:layout_centerVertical="true"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
-                            android:contentDescription="Mostrar senha"
+                            android:contentDescription="@string/mostrar_senha"
                             android:focusable="true"
                             android:padding="9dp"
                             android:scaleType="centerInside"
@@ -268,7 +285,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
                     android:fontFamily="@font/nunito_semibold"
-                    android:text="Confirmar senha"
+                    android:text="@string/confirmar_senha"
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="12sp" />
 
@@ -288,29 +305,37 @@
                         android:paddingStart="12dp"
                         android:paddingEnd="4dp">
 
-                        <ImageView
-                            android:id="@+id/iconeSenhaConfirmar"
-                            android:layout_width="14dp"
-                            android:layout_height="16dp"
-                            android:layout_centerVertical="true"
-                            android:contentDescription="@null"
-                            android:src="@drawable/icon_senha" />
-
-                        <EditText
-                            android:id="@+id/campoSenhaConfirmar"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_toEndOf="@id/iconeSenhaConfirmar"
                             android:layout_toStartOf="@id/iconeOlhoSenhaConfirmar"
-                            android:background="@android:color/transparent"
-                            android:fontFamily="@font/nunito_medium"
-                            android:hint="••••••"
-                            android:imeOptions="actionDone"
-                            android:inputType="textPassword"
-                            android:paddingStart="8dp"
-                            android:textColor="@color/verde_escuro_principal"
-                            android:textColorHint="@color/cinza_escuro_textos"
-                            android:textSize="12sp" />
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/iconeSenhaConfirmar"
+                                android:layout_width="14dp"
+                                android:layout_height="16dp"
+                                android:contentDescription="@null"
+                                android:src="@drawable/icon_senha" />
+
+                            <EditText
+                                android:id="@+id/campoSenhaConfirmar"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="1"
+                                android:padding="0dp"
+                                android:background="@android:color/transparent"
+                                android:fontFamily="@font/nunito_medium"
+                                android:hint="••••••"
+                                android:imeOptions="actionDone"
+                                android:inputType="textPassword"
+                                android:textColor="@color/verde_escuro_principal"
+                                android:textColorHint="@color/cinza_escuro_textos"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
 
                         <ImageView
                             android:id="@+id/iconeOlhoSenhaConfirmar"
@@ -320,7 +345,7 @@
                             android:layout_centerVertical="true"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:clickable="true"
-                            android:contentDescription="Mostrar senha"
+                            android:contentDescription="@string/mostrar_senha"
                             android:focusable="true"
                             android:padding="9dp"
                             android:scaleType="centerInside"
@@ -341,7 +366,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:fontFamily="@font/nunito_semibold"
-                        android:text="Salvar"
+                        android:text="@string/salvar"
                         android:textAllCaps="false"
                         android:textColor="@color/branco"
                         android:textSize="14sp"

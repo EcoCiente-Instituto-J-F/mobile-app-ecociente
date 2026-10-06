@@ -29,10 +29,6 @@
             android:orientation="vertical"
             android:paddingBottom="22dp">
 
-            <!-- ===================================================== -->
-            <!-- CABEÇALHO: MESMAS MARGENS/POSIÇÃO DA HOME            -->
-            <!-- ===================================================== -->
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cabecalhoQuiz"
                 android:layout_width="match_parent"
@@ -82,7 +78,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/textoTituloQuizTela" />
 
-                <!-- Mesmo conjunto sino + perfil utilizado na Home (64dp, translationY 4dp) -->
                 <LinearLayout
                     android:id="@+id/acoesCabecalhoQuiz"
                     android:layout_width="wrap_content"
@@ -128,10 +123,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- ===================================================== -->
-            <!-- PESQUISA                                              -->
-            <!-- ===================================================== -->
-
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardPesquisaQuiz"
                 android:layout_width="match_parent"
@@ -153,7 +144,6 @@
                     android:paddingStart="15dp"
                     android:paddingEnd="15dp">
 
-                    <!-- Placeholder: você pode substituir pela imagem final depois -->
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
@@ -182,10 +172,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- ===================================================== -->
-            <!-- QUANTIDADE / FILTRO                                   -->
-            <!-- ===================================================== -->
-
             <LinearLayout
                 android:id="@+id/linhaResumoQuiz"
                 android:layout_width="match_parent"
@@ -206,7 +192,6 @@
                     android:textColor="#4D000000"
                     android:textSize="15sp" />
 
-                <!-- Placeholder: troque pelo asset final quando quiser -->
                 <ImageView
                     android:id="@+id/botaoFiltrosQuiz"
                     android:layout_width="40dp"
@@ -218,10 +203,6 @@
                     app:tint="@color/cinza_secundario_home" />
 
             </LinearLayout>
-
-            <!-- ===================================================== -->
-            <!-- LISTA DE QUIZZES                                      -->
-            <!-- ===================================================== -->
 
             <LinearLayout
                 android:id="@+id/listaQuizzes"
@@ -235,10 +216,6 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
-
-    <!-- ===================================================== -->
-    <!-- BARRA DE NAVEGAÇÃO: MESMA GEOMETRIA DA HOME           -->
-    <!-- ===================================================== -->
 
     <FrameLayout
         android:id="@+id/barraNavegacaoQuiz"
@@ -272,7 +249,6 @@
             android:orientation="horizontal"
             android:weightSum="5">
 
-            <!-- HOME -->
             <LinearLayout
                 android:id="@+id/botaoNavHomeQuiz"
                 android:layout_width="0dp"
@@ -306,7 +282,6 @@
 
             </LinearLayout>
 
-            <!-- GUIA -->
             <LinearLayout
                 android:id="@+id/botaoNavGuiaQuiz"
                 android:layout_width="0dp"
@@ -338,13 +313,11 @@
 
             </LinearLayout>
 
-            <!-- ESPAÇO DO ASSISTENTE -->
             <Space
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
 
-            <!-- QUIZ -->
             <LinearLayout
                 android:id="@+id/botaoNavQuizQuiz"
                 android:layout_width="0dp"
@@ -377,7 +350,6 @@
 
             </LinearLayout>
 
-            <!-- PERFIL -->
             <LinearLayout
                 android:id="@+id/botaoNavPerfilQuiz"
                 android:layout_width="0dp"
@@ -413,7 +385,6 @@
 
     </FrameLayout>
 
-    <!-- MESMO ASSISTENTE CENTRAL DA HOME -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/botaoNavAssistenteQuiz"
         android:layout_width="68dp"
