@@ -36,6 +36,7 @@ import java.util.List;
 /** Tela demonstrativa da aba Unidades; não consulta nem grava em banco. */
 public final class SindicoUnidadesActivity extends AppCompatActivity {
     private static final String ESTADO_TIPO = "tipoResidencialSelecionado";
+    private SindicoUnidadesViewModel viewModel;
 
     private final ActivityResultLauncher<String> escolherFoto = registerForActivityResult(
             new ActivityResultContracts.GetContent(), uri -> {
@@ -48,7 +49,6 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 }
             });
 
-    private SindicoUnidadesViewModel viewModel;
     private boolean residencial;
     private EditText nome;
     private EditText endereco;
