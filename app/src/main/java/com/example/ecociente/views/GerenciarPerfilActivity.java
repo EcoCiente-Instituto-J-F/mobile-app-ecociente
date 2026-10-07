@@ -34,9 +34,6 @@ import java.io.File;
 
 public class GerenciarPerfilActivity extends AppCompatActivity {
 
-    public static final String EXTRA_ORIGEM_NAVEGACAO = "origemNavegacaoPerfil";
-    public static final String ORIGEM_HOME = "home";
-    public static final String ORIGEM_QUIZ = "quiz";
     public static final String EXTRA_COOPERATIVA = "perfilCooperativa";
 
     private PerfilViewModel viewModel;
@@ -205,26 +202,20 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
         barra.configurar(cooperativa ? ItensBarra.cooperativa() : ItensBarra.usuario());
 
-        String origem = getIntent().getStringExtra(EXTRA_ORIGEM_NAVEGACAO);
+        Navegacao.marcarNaBarra(this, barra, indiceNoPerfil());
+    }
 
-        int indiceOrigem = -1;
-
-        if (ORIGEM_HOME.equals(origem)) {
-            indiceOrigem = ItensBarra.HOME;
-        } else if (ORIGEM_QUIZ.equals(origem)) {
-            indiceOrigem = ItensBarra.TERCEIRO;
-        }
-
-        barra.selecionar(cooperativa ? ItensBarra.NENHUM : ItensBarra.QUARTO, indiceOrigem);
+    private int indiceNoPerfil() {
+        return cooperativa || homeDoCondominio ? ItensBarra.NENHUM : ItensBarra.QUARTO;
     }
 
     private void aoClicarItemDaBarra(int indice) {
 
-        if (indice == ItensBarra.HOME) {
-            abrirHome();
+        if (cooperativa) {
+            Navegacao.irParaItemDaCooperativa(this, indice, ItensBarra.NENHUM);
 
-        } else if (cooperativa) {
-            abrirSolicitacoes(indice == ItensBarra.QUARTO);
+        } else if (indice == ItensBarra.HOME) {
+            abrirHome();
 
         } else if (indice == ItensBarra.TERCEIRO) {
             abrirQuiz();
@@ -242,37 +233,18 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
             destino = CondominioHomeActivity.class;
         }
 
-        Intent rota = new Intent(this, destino);
-
-        rota.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        startActivity(rota);
-
-        overridePendingTransition(0, 0);
-    }
-
-    private void abrirSolicitacoes(boolean historico) {
-
-        startActivity(
-                new Intent(this, SolicitacoesActivity.class)
-                        .putExtra(SolicitacoesActivity.EXTRA_HISTORICO, historico));
-
-        overridePendingTransition(0, 0);
+        Navegacao.abrirHomePelaBarra(this, destino, indiceNoPerfil());
     }
 
     private void abrirQuiz() {
 
-        Intent rota = new Intent(this, QuizActivity.class);
-
-        rota.putExtra(QuizActivity.EXTRA_ANIMAR_NAVEGACAO, false);
-
-        rota.putExtra(QuizActivity.EXTRA_MORADOR, homeDoCondominio);
-
-        startActivity(rota);
+        Navegacao.abrirPelaBarra(
+                this,
+                new Intent(this, QuizActivity.class)
+                        .putExtra(QuizActivity.EXTRA_MORADOR, homeDoCondominio),
+                indiceNoPerfil());
 
         finish();
-
-        overridePendingTransition(0, 0);
     }
 
     private void mostrarOpcoesFoto() {

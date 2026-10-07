@@ -407,6 +407,8 @@ public class CadastroEtapa2Fragment extends Fragment {
             return;
         }
 
+        ((Login) requireActivity()).autenticarNaApiExterna();
+
         entrarNoEcoCiente();
     }
 

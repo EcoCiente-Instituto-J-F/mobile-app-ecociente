@@ -82,6 +82,15 @@ public class CondominioHomeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        setIntent(intent);
+
+        Navegacao.marcarNaBarra(this, findViewById(R.id.barraNavegacao), ItensBarra.HOME);
+    }
+
+    @Override
     protected void onDestroy() {
         motion.cancelAll();
 
@@ -116,7 +125,7 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
         barra.configurar(ItensBarra.morador());
 
-        barra.selecionar(ItensBarra.HOME);
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.HOME);
 
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
@@ -168,15 +177,10 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
     private void abrirQuizzes() {
 
-        Intent rota = new Intent(this, QuizActivity.class);
-
-        rota.putExtra(QuizActivity.EXTRA_ANIMAR_NAVEGACAO, true);
-
-        rota.putExtra(QuizActivity.EXTRA_MORADOR, true);
-
-        startActivity(rota);
-
-        overridePendingTransition(0, 0);
+        Navegacao.abrirPelaBarra(
+                this,
+                new Intent(this, QuizActivity.class).putExtra(QuizActivity.EXTRA_MORADOR, true),
+                ItensBarra.HOME);
     }
 
     private void confirmarSaida() {

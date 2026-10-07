@@ -51,6 +51,7 @@
     <color name="cinza_texto_auxiliar">#7B8581</color>
     <color name="cinza_texto_opcao">#3E4A46</color>
     <color name="cinza_texto_passo">#414141</color>
+    <color name="cinza_icone">#7F7F7F</color>
     <color name="preto_30">#4D000000</color>
     <color name="cinza_texto_suave">#8E9592</color>
     <color name="ripple_branco_chat">#28FFFFFF</color>

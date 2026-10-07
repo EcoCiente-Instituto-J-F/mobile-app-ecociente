@@ -115,11 +115,11 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
     private boolean alternarVisibilidade(EditText campo, ImageView icone, boolean visivelAtual) {
         if (visivelAtual) {
             campo.setTransformationMethod(PasswordTransformationMethod.getInstance());
-            icone.setImageResource(R.drawable.icon_olho_fechado);
+            icone.setImageResource(R.drawable.ic_olho_fechado);
             icone.setContentDescription("Mostrar senha");
         } else {
             campo.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-            icone.setImageResource(R.drawable.icon_olho_aberto);
+            icone.setImageResource(R.drawable.ic_olho_aberto);
             icone.setContentDescription("Ocultar senha");
         }
 

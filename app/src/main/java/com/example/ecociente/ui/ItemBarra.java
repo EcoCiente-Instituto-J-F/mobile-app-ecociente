@@ -8,10 +8,6 @@ public final class ItemBarra {
     @DrawableRes final int iconeAtivo;
     @DrawableRes final int iconeInativo;
 
-    public ItemBarra(@StringRes int rotulo, @DrawableRes int icone) {
-        this(rotulo, icone, icone);
-    }
-
     public ItemBarra(
             @StringRes int rotulo, @DrawableRes int iconeAtivo, @DrawableRes int iconeInativo) {
         this.rotulo = rotulo;

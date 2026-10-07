@@ -143,6 +143,15 @@ public class CooperativaHomeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        setIntent(intent);
+
+        Navegacao.marcarNaBarra(this, findViewById(R.id.barraNavegacao), ItensBarra.HOME);
+    }
+
+    @Override
     protected void onDestroy() {
         motion.cancelAll();
 
@@ -188,22 +197,12 @@ public class CooperativaHomeActivity extends AppCompatActivity {
 
         barra.configurar(ItensBarra.cooperativa());
 
-        barra.selecionar(ItensBarra.HOME);
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.HOME);
 
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
         barra.setOnItemClickListener(
-                indice -> {
-                    if (indice == ItensBarra.SEGUNDO || indice == ItensBarra.QUARTO) {
-                        startActivity(
-                                new Intent(this, SolicitacoesActivity.class)
-                                        .putExtra(
-                                                SolicitacoesActivity.EXTRA_HISTORICO,
-                                                indice == ItensBarra.QUARTO));
-
-                        overridePendingTransition(0, 0);
-                    }
-                });
+                indice -> Navegacao.irParaItemDaCooperativa(this, indice, ItensBarra.HOME));
     }
 
     private void abrirGerenciarPerfil() {

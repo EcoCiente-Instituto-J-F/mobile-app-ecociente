@@ -68,6 +68,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+
+        setIntent(intent);
+
+        if (homeCarregada) {
+            Navegacao.marcarNaBarra(this, findViewById(R.id.barraNavegacao), ItensBarra.HOME);
+        }
+    }
+
     private void tentarNovamente() {
 
         findViewById(R.id.estadoErroHome).setVisibility(View.GONE);
@@ -175,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
 
         barra.configurar(ItensBarra.usuario());
 
-        barra.selecionar(ItensBarra.HOME);
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.HOME);
 
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
@@ -241,25 +252,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void abrirQuizzes() {
 
-        Intent rota = new Intent(this, QuizActivity.class);
-
-        rota.putExtra(QuizActivity.EXTRA_ANIMAR_NAVEGACAO, true);
-
-        startActivity(rota);
-
-        overridePendingTransition(0, 0);
+        Navegacao.abrirPelaBarra(this, new Intent(this, QuizActivity.class), ItensBarra.HOME);
     }
 
     private void abrirPerfilPelaBarra() {
 
-        Intent rota = new Intent(this, GerenciarPerfilActivity.class);
-
-        rota.putExtra(
-                GerenciarPerfilActivity.EXTRA_ORIGEM_NAVEGACAO, GerenciarPerfilActivity.ORIGEM_HOME);
-
-        startActivity(rota);
-
-        overridePendingTransition(0, 0);
+        Navegacao.abrirPelaBarra(this, new Intent(this, GerenciarPerfilActivity.class), ItensBarra.HOME);
     }
 
     private void abrirHomeCooperativa() {

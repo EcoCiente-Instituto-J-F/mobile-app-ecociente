@@ -29,7 +29,7 @@ public final class ItensBarra {
             usuario()[HOME],
             usuario()[SEGUNDO],
             usuario()[TERCEIRO],
-            new ItemBarra(R.string.feed, R.drawable.ic_nav_feed)
+            par(R.string.feed, R.drawable.ic_nav_feed_verde, R.drawable.ic_nav_feed_cinza)
         };
     }
 
@@ -37,9 +37,9 @@ public final class ItensBarra {
     public static ItemBarra[] sindico() {
         return new ItemBarra[] {
             home(),
-            new ItemBarra(R.string.solicitacao, R.drawable.ic_nav_coletas),
-            new ItemBarra(R.string.historico, R.drawable.ic_nav_historico),
-            new ItemBarra(R.string.unidades, R.drawable.ic_nav_unidades)
+            par(R.string.solicitacao, R.drawable.ic_nav_coletas_verde, R.drawable.ic_nav_coletas_cinza),
+            par(R.string.historico, R.drawable.ic_nav_historico_verde, R.drawable.ic_nav_historico_cinza),
+            par(R.string.unidades, R.drawable.ic_nav_unidades_verde, R.drawable.ic_nav_unidades_cinza)
         };
     }
 
@@ -47,10 +47,14 @@ public final class ItensBarra {
     public static ItemBarra[] cooperativa() {
         return new ItemBarra[] {
             home(),
-            new ItemBarra(R.string.coletas, R.drawable.ic_nav_coletas),
-            new ItemBarra(R.string.mensagens, R.drawable.ic_nav_mensagens),
-            new ItemBarra(R.string.historico, R.drawable.ic_nav_historico)
+            par(R.string.coletas, R.drawable.ic_nav_coletas_verde, R.drawable.ic_nav_coletas_cinza),
+            par(R.string.mensagens, R.drawable.ic_nav_mensagens_verde, R.drawable.ic_nav_mensagens_cinza),
+            par(R.string.historico, R.drawable.ic_nav_historico_verde, R.drawable.ic_nav_historico_cinza)
         };
+    }
+
+    private static ItemBarra par(int rotulo, int ativo, int inativo) {
+        return new ItemBarra(rotulo, ativo, inativo);
     }
 
     private static ItemBarra home() {

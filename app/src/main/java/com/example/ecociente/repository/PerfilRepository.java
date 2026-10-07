@@ -11,6 +11,7 @@ import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.ResultadoPerfil;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,6 +38,9 @@ public class PerfilRepository {
 
     public void encerrarSessao() {
         autenticacao.signOut();
+
+        AutenticacaoExternaRepository.encerrarSessao(
+                FirebaseApp.getInstance().getApplicationContext());
     }
 
     @NonNull

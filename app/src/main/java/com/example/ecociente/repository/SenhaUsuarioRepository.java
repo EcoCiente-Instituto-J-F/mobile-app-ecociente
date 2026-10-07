@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.SessaoExterna;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
@@ -96,6 +97,8 @@ public class SenhaUsuarioRepository {
             @NonNull MutableLiveData<ResultadoApi> resultado) {
 
         if (sessao == null) {
+            guardarNovaSenha(usuario, novaSenha);
+
             resultado.setValue(ResultadoApi.sucesso());
             return;
         }
@@ -106,6 +109,8 @@ public class SenhaUsuarioRepository {
                 novaSenha,
                 respostaExterna -> {
                     if (respostaExterna.isSucesso()) {
+                        guardarNovaSenha(usuario, novaSenha);
+
                         resultado.setValue(respostaExterna);
                         return;
                     }
@@ -120,5 +125,11 @@ public class SenhaUsuarioRepository {
                                         resultado.setValue(respostaExterna);
                                     });
                 });
+    }
+
+    private void guardarNovaSenha(@NonNull FirebaseUser usuario, @NonNull String novaSenha) {
+
+        AutenticacaoExternaRepository.atualizarSenhaSalva(
+                FirebaseApp.getInstance().getApplicationContext(), usuario.getEmail(), novaSenha);
     }
 }

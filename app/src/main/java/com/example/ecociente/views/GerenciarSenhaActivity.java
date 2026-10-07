@@ -140,13 +140,13 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
 
             campo.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-            icone.setImageResource(R.drawable.icon_olho_fechado);
+            icone.setImageResource(R.drawable.ic_olho_fechado);
 
         } else {
 
             campo.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
 
-            icone.setImageResource(R.drawable.icon_olho_aberto);
+            icone.setImageResource(R.drawable.ic_olho_aberto);
         }
 
         campo.setSelection(campo.getText().length());

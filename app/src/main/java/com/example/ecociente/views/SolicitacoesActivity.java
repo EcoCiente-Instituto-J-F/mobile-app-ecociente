@@ -242,41 +242,15 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
         barra.configurar(ItensBarra.cooperativa());
 
-        barra.selecionar(historico ? ItensBarra.QUARTO : ItensBarra.SEGUNDO);
+        Navegacao.marcarNaBarra(this, barra, indiceAtual());
 
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
         barra.setOnItemClickListener(
-                indice -> {
-                    if (indice == ItensBarra.HOME) {
-                        abrirHome();
-
-                    } else if (indice == ItensBarra.SEGUNDO || indice == ItensBarra.QUARTO) {
-                        trocarModo(indice == ItensBarra.QUARTO);
-                    }
-                });
+                indice -> Navegacao.irParaItemDaCooperativa(this, indice, indiceAtual()));
     }
 
-    private void trocarModo(boolean paraHistorico) {
-
-        if (paraHistorico == historico) {
-            return;
-        }
-
-        startActivity(
-                new Intent(this, SolicitacoesActivity.class).putExtra(EXTRA_HISTORICO, paraHistorico));
-
-        overridePendingTransition(0, 0);
-
-        finish();
-    }
-
-    private void abrirHome() {
-
-        startActivity(
-                new Intent(this, CooperativaHomeActivity.class)
-                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
-
-        overridePendingTransition(0, 0);
+    private int indiceAtual() {
+        return historico ? ItensBarra.QUARTO : ItensBarra.SEGUNDO;
     }
 }

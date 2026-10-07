@@ -369,7 +369,7 @@ public class CadastroEtapa1Fragment extends Fragment {
 
             campo.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-            icone.setImageResource(R.drawable.icon_olho_fechado);
+            icone.setImageResource(R.drawable.ic_olho_fechado);
 
             icone.setContentDescription("Mostrar senha");
 
@@ -377,7 +377,7 @@ public class CadastroEtapa1Fragment extends Fragment {
 
             campo.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
 
-            icone.setImageResource(R.drawable.icon_olho_aberto);
+            icone.setImageResource(R.drawable.ic_olho_aberto);
 
             icone.setContentDescription("Ocultar senha");
         }
@@ -643,6 +643,8 @@ public class CadastroEtapa1Fragment extends Fragment {
 
             return;
         }
+
+        ((Login) requireActivity()).autenticarNaApiExterna();
 
         entrarNoEcoCiente();
     }

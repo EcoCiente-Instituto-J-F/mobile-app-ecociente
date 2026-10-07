@@ -69,7 +69,7 @@
                     android:layout_height="16dp"
                     android:contentDescription="@string/icone_senha"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/icon_senha" />
+                    android:src="@drawable/ic_senha" />
 
                 <EditText
                     android:id="@+id/campoSenha"
@@ -102,7 +102,7 @@
                 android:focusable="true"
                 android:padding="9dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/icon_olho_fechado" />
+                android:src="@drawable/ic_olho_fechado" />
 
         </RelativeLayout>
 
@@ -140,7 +140,7 @@
                     android:layout_height="16dp"
                     android:contentDescription="@string/icone_confirmar_senha"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/icon_senha" />
+                    android:src="@drawable/ic_senha" />
 
                 <EditText
                     android:id="@+id/campoConfirmarSenha"
@@ -173,7 +173,7 @@
                 android:focusable="true"
                 android:padding="9dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/icon_olho_fechado" />
+                android:src="@drawable/ic_olho_fechado" />
 
         </RelativeLayout>
 

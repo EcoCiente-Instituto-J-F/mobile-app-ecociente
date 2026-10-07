@@ -47,6 +47,8 @@ public class CalendarioExternoRepository {
     private static final int TAMANHO_PAGINA_MES = 100;
     private static final int TIMEOUT_MS = 180_000;
 
+    private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
+
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
@@ -67,19 +69,14 @@ public class CalendarioExternoRepository {
             @NonNull StatusAgendamento status,
             @NonNull RetornoStatus retorno) {
 
-        String token = AutenticacaoExternaRepository.obterTokenSalvo(contexto);
-
-        if (token == null) {
-            retorno.aoConcluir(ResultadoApi.erro(MENSAGEM_SESSAO));
-            return;
-        }
+        Context contextoApp = contexto.getApplicationContext();
 
         EXECUTOR.execute(
                 () -> {
                     ResultadoApi resultado;
 
                     try {
-                        resultado = enviarStatus(token, id, status);
+                        resultado = alterarComRenovacao(contextoApp, id, status);
 
                     } catch (Exception erro) {
                         Log.e(TAG, "Falha ao alterar o status do agendamento", erro);
@@ -94,8 +91,35 @@ public class CalendarioExternoRepository {
     }
 
     @NonNull
-    private ResultadoApi enviarStatus(String token, int id, StatusAgendamento status)
+    private ResultadoApi alterarComRenovacao(Context contexto, int id, StatusAgendamento status)
             throws Exception {
+
+        String token = autenticacao.tokenParaUso(contexto);
+
+        if (token == null) {
+            return ResultadoApi.erro(MENSAGEM_SESSAO);
+        }
+
+        int codigo = enviarStatus(token, id, status);
+
+        if (codigo == HttpURLConnection.HTTP_UNAUTHORIZED || codigo == HttpURLConnection.HTTP_FORBIDDEN) {
+            String novoToken = autenticacao.renovarToken(contexto);
+
+            if (novoToken != null) {
+                codigo = enviarStatus(novoToken, id, status);
+            }
+        }
+
+        if (codigo >= 200 && codigo < 300) {
+            return ResultadoApi.sucesso();
+        }
+
+        Log.w(TAG, "Resposta HTTP " + codigo);
+
+        return ResultadoApi.erro(mensagemDoCodigo(codigo));
+    }
+
+    private int enviarStatus(String token, int id, StatusAgendamento status) throws Exception {
 
         HttpURLConnection conexao =
                 (HttpURLConnection) new URL(URL_AGENDAMENTOS + "/" + id + "/status").openConnection();
@@ -117,19 +141,28 @@ public class CalendarioExternoRepository {
                                 .getBytes(StandardCharsets.UTF_8));
             }
 
-            int codigo = conexao.getResponseCode();
-
-            if (codigo >= 200 && codigo < 300) {
-                return ResultadoApi.sucesso();
-            }
-
-            Log.w(TAG, "Resposta HTTP " + codigo);
-
-            return ResultadoApi.erro(mensagemDoCodigo(codigo));
+            return conexao.getResponseCode();
 
         } finally {
             conexao.disconnect();
         }
+    }
+
+    // O Spring responde 403 sem corpo quando o JWT é inválido ou expirou (o 401 do filtro cai
+    // no /error, que exige autenticação). Já o 403 de perfil não autorizado traz um corpo JSON.
+    private boolean tokenRejeitado(int codigo, @NonNull HttpURLConnection conexao) throws IOException {
+
+        if (codigo == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            return true;
+        }
+
+        if (codigo != HttpURLConnection.HTTP_FORBIDDEN) {
+            return false;
+        }
+
+        InputStream corpo = conexao.getErrorStream();
+
+        return corpo == null || corpo.read() == -1;
     }
 
     @NonNull
@@ -193,19 +226,14 @@ public class CalendarioExternoRepository {
     private void executar(
             @NonNull Context contexto, @NonNull String endereco, @NonNull Retorno retorno) {
 
-        String token = AutenticacaoExternaRepository.obterTokenSalvo(contexto);
-
-        if (token == null) {
-            retorno.aoConcluir(ResultadoSolicitacoes.sessaoExpirada());
-            return;
-        }
+        Context contextoApp = contexto.getApplicationContext();
 
         EXECUTOR.execute(
                 () -> {
                     ResultadoSolicitacoes resultado;
 
                     try {
-                        resultado = buscar(token, endereco);
+                        resultado = buscarComRenovacao(contextoApp, endereco);
 
                     } catch (Exception erro) {
                         Log.e(TAG, "Falha ao consultar agendamentos", erro);
@@ -217,6 +245,29 @@ public class CalendarioExternoRepository {
 
                     PRINCIPAL.post(() -> retorno.aoConcluir(resultadoFinal));
                 });
+    }
+
+    @NonNull
+    private ResultadoSolicitacoes buscarComRenovacao(Context contexto, String endereco)
+            throws Exception {
+
+        String token = autenticacao.tokenParaUso(contexto);
+
+        if (token == null) {
+            return ResultadoSolicitacoes.sessaoExpirada();
+        }
+
+        ResultadoSolicitacoes resultado = buscar(token, endereco);
+
+        if (resultado.getTipo() == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
+            String novoToken = autenticacao.renovarToken(contexto);
+
+            if (novoToken != null) {
+                resultado = buscar(novoToken, endereco);
+            }
+        }
+
+        return resultado;
     }
 
     @NonNull
@@ -233,7 +284,9 @@ public class CalendarioExternoRepository {
 
             int codigo = conexao.getResponseCode();
 
-            if (codigo == HttpURLConnection.HTTP_UNAUTHORIZED) {
+            if (tokenRejeitado(codigo, conexao)) {
+                Log.w(TAG, "Token rejeitado pela API (HTTP " + codigo + ")");
+
                 return ResultadoSolicitacoes.sessaoExpirada();
             }
 

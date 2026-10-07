@@ -27,6 +27,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".views.MensagensActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".views.SolicitacoesActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

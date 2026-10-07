@@ -79,7 +79,7 @@
                                     android:layout_width="14dp"
                                     android:layout_height="14dp"
                                     android:importantForAccessibility="no"
-                                    android:src="@drawable/ic_calendario_cadastro" />
+                                    android:src="@drawable/ic_calendario" />
 
                                 <TextView
                                     android:id="@+id/textoDataProximaColeta"
@@ -106,7 +106,7 @@
                                     android:layout_width="14dp"
                                     android:layout_height="14dp"
                                     android:importantForAccessibility="no"
-                                    android:src="@drawable/icon_relogio" />
+                                    android:src="@drawable/ic_relogio" />
 
                                 <TextView
                                     android:id="@+id/textoHorarioProximaColeta"

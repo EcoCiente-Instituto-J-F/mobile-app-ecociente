@@ -319,4 +319,11 @@
         <item>Sáb</item>
         <item>Dom</item>
     </string-array>
+
+    <!-- Mensagens -->
+    <string name="titulo_chat">Chat</string>
+    <string name="aba_todos">Todos</string>
+    <string name="aba_nao_lidos">Não lidos</string>
+    <string name="aba_arquivadas">Arquivadas</string>
+    <string name="sem_conversas">Nenhuma conversa aqui.</string>
 </resources>

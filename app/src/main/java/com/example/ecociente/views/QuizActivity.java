@@ -1,7 +1,6 @@
 package com.example.ecociente.views;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,15 +13,13 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.ui.BarraNavegacaoView;
+import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.ItensBarra;
+import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -34,7 +31,6 @@ import java.util.Locale;
 
 public class QuizActivity extends AppCompatActivity {
 
-    public static final String EXTRA_ANIMAR_NAVEGACAO = "animarNavegacaoQuiz";
     public static final String EXTRA_MORADOR = "quizMorador";
 
     private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
@@ -122,25 +118,12 @@ public class QuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
 
-        /*
-         * A Home já trabalha em edge-to-edge e aplica os Insets manualmente.
-         * O Quiz replica exatamente a mesma estratégia para que cabeçalho e
-         * barra inferior ocupem a mesma posição física em qualquer aparelho.
-         */
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        JanelaEdgeToEdge.aplicar(this);
 
         setContentView(R.layout.activity_quiz_usuario_comum);
 
-        configurarInsetsDaTela();
+        InsetsSistema.aplicarComoPadding(findViewById(R.id.raizQuizUsuarioComum));
 
-
-        /*
-         * A tela só é acessada a partir da área autenticada do aplicativo.
-         * Não fazemos uma segunda consulta ao Firestore apenas para desenhar
-         * uma tela estática; isso evita atraso e flicker na abertura.
-         */
         if (autenticacao.getCurrentUser() == null) {
             finish();
             return;
@@ -174,10 +157,6 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void configurarCabecalho() {
-        /*
-         * As ações de notificação/perfil serão conectadas depois.
-         * Mantemos apenas o feedback de toque do próprio Material agora.
-         */
         Motion.pressFeedback(findViewById(R.id.botaoNotificacoesQuiz));
     }
 
@@ -291,15 +270,13 @@ public class QuizActivity extends AppCompatActivity {
 
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
-        /*
-         * O Guia ainda não possui rota final nesta etapa.
-         * Não mostramos Toasts de "em breve" para não quebrar a sensação
-         * profissional da barra.
-         */
         barra.setOnItemClickListener(
                 indice -> {
                     if (indice == ItensBarra.HOME) {
-                        fecharQuiz();
+                        Navegacao.abrirHomePelaBarra(
+                                this,
+                                morador ? CondominioHomeActivity.class : MainActivity.class,
+                                ItensBarra.TERCEIRO);
 
                     } else if (indice == ItensBarra.QUARTO && !morador) {
                         abrirPerfil();
@@ -308,16 +285,11 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void abrirPerfil() {
-        Intent rota = new Intent(this, GerenciarPerfilActivity.class);
 
-        rota.putExtra(
-                GerenciarPerfilActivity.EXTRA_ORIGEM_NAVEGACAO, GerenciarPerfilActivity.ORIGEM_QUIZ);
-
-        startActivity(rota);
+        Navegacao.abrirPelaBarra(
+                this, new Intent(this, GerenciarPerfilActivity.class), ItensBarra.TERCEIRO);
 
         finish();
-
-        overridePendingTransition(0, 0);
     }
 
     private void animarEntradaDaTela() {
@@ -327,60 +299,12 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void mostrarBarra() {
-        boolean animar = getIntent().getBooleanExtra(EXTRA_ANIMAR_NAVEGACAO, true);
-
-        barra.selecionar(ItensBarra.TERCEIRO, animar ? ItensBarra.HOME : -1);
-    }
-
-    private void configurarInsetsDaTela() {
-        View raiz = findViewById(R.id.raizQuizUsuarioComum);
-
-        if (raiz == null) {
-            return;
-        }
-
-        final int paddingEsquerdoOriginal = raiz.getPaddingLeft();
-        final int paddingTopoOriginal = raiz.getPaddingTop();
-        final int paddingDireitoOriginal = raiz.getPaddingRight();
-        final int paddingInferiorOriginal = raiz.getPaddingBottom();
-
-        ViewCompat.setOnApplyWindowInsetsListener(
-                raiz,
-                (view, insets) -> {
-                    Insets sistema = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
-
-                    view.setPadding(
-                            paddingEsquerdoOriginal + sistema.left,
-                            paddingTopoOriginal + sistema.top,
-                            paddingDireitoOriginal + sistema.right,
-                            paddingInferiorOriginal + sistema.bottom
-                    );
-
-                    return insets;
-                }
-        );
-
-        WindowInsetsControllerCompat controlador =
-                WindowCompat.getInsetsController(getWindow(), raiz);
-
-        if (controlador != null) {
-            controlador.setAppearanceLightStatusBars(true);
-            controlador.setAppearanceLightNavigationBars(true);
-        }
-
-        ViewCompat.requestApplyInsets(raiz);
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.TERCEIRO);
     }
 
     private void fecharQuiz() {
         finish();
 
-        /*
-         * A animação visual acontece nos próprios componentes.
-         * Removemos o fade de Activity que causava o "apagão" branco.
-         */
         overridePendingTransition(0, 0);
     }
 

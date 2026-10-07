@@ -98,7 +98,7 @@
                     android:layout_height="16dp"
                     android:contentDescription="@string/nome_cooperativa"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_perfil_usuario" />
+                    android:src="@drawable/ic_cooperativa" />
 
                 <EditText
                     android:id="@+id/campoNomeCooperativa"
@@ -150,7 +150,7 @@
                     android:layout_height="16dp"
                     android:contentDescription="@string/icone_email"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/icon_email" />
+                    android:src="@drawable/ic_email" />
 
                 <EditText
                     android:id="@+id/campoEmailCooperativa"
@@ -201,7 +201,7 @@
                     android:layout_height="16dp"
                     android:contentDescription="@string/localizacao"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_localizacao_cadastro" />
+                    android:src="@drawable/ic_localizacao" />
 
                 <EditText
                     android:id="@+id/campoEndereco"

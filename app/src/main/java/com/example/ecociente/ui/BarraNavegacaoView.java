@@ -149,28 +149,34 @@ public class BarraNavegacaoView extends FrameLayout {
 
     private void aplicarEstado(int indiceAtivo) {
 
+        int anterior = selecionado;
+
         selecionado = indiceAtivo;
 
         for (int i = 0; i < descricao.length; i++) {
 
             boolean ativo = i == indiceAtivo;
 
-            int cor =
-                    ContextCompat.getColor(
-                            getContext(),
-                            ativo ? R.color.verde_escuro_principal : R.color.cinza_secundario_home);
-
             icones[i].setImageResource(ativo ? descricao[i].iconeAtivo : descricao[i].iconeInativo);
 
-            if (descricao[i].iconeAtivo == descricao[i].iconeInativo) {
-                icones[i].setColorFilter(cor);
-            } else {
-                icones[i].clearColorFilter();
-            }
-
-            textos[i].setTextColor(cor);
+            textos[i].setTextColor(
+                    ContextCompat.getColor(
+                            getContext(),
+                            ativo ? R.color.verde_escuro_principal : R.color.cinza_icone));
 
             textos[i].setTypeface(ativo ? fonteAtiva : fonteInativa);
+
+            if (anterior != ItensBarra.NENHUM && (i == anterior) != ativo) {
+                suavizar(icones[i]);
+                suavizar(textos[i]);
+            }
         }
+    }
+
+    private void suavizar(View view) {
+
+        view.setAlpha(0.35f);
+
+        view.animate().alpha(1f).setDuration(Motion.ENTER_MS).start();
     }
 }

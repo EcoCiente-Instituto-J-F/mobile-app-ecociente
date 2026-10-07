@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import com.example.ecociente.R;
+import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.model.TipoPerfil;
 import com.example.ecociente.model.TipoUsuario;
 import com.google.android.material.card.MaterialCardView;
@@ -538,6 +539,11 @@ public class Login extends AppCompatActivity {
 
     public String getDataNascimento() {
         return dataNascimento;
+    }
+
+    public void autenticarNaApiExterna() {
+
+        new AutenticacaoExternaRepository().autenticar(this, getEmail(), getSenha(), sessao -> {});
     }
 
     public String getEmail() {
