@@ -21,7 +21,7 @@
         android:minHeight="122dp"
         android:paddingStart="14dp"
         android:paddingTop="14dp"
-        android:paddingEnd="11dp"
+        android:paddingEnd="14dp"
         android:paddingBottom="14dp">
 
         <com.google.android.material.card.MaterialCardView
@@ -31,6 +31,8 @@
             app:cardBackgroundColor="@color/verde_selo_home"
             app:cardCornerRadius="29dp"
             app:cardElevation="0dp"
+            app:strokeColor="@android:color/transparent"
+            app:strokeWidth="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -46,36 +48,23 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:id="@+id/setaQuiz"
-            android:layout_width="18dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:includeFontPadding="false"
-            android:text="›"
-            android:textColor="@color/verde_escuro_principal"
-            android:textSize="28sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <LinearLayout
             android:id="@+id/areaAcaoQuiz"
-            android:layout_width="96dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="6dp"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/setaQuiz"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:id="@+id/boxResultadoQuiz"
-                android:layout_width="94dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/fundo_selo_conteudo_home"
                 android:gravity="center"
+                android:minWidth="94dp"
                 android:minHeight="48dp"
                 android:orientation="vertical"
                 android:paddingStart="6dp"
@@ -107,13 +96,16 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/botaoComecarQuiz"
-                android:layout_width="94dp"
+                android:layout_width="wrap_content"
                 android:layout_height="38dp"
                 android:fontFamily="@font/nunito_bold"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
+                android:maxLines="1"
                 android:minHeight="0dp"
-                android:minWidth="0dp"
+                android:minWidth="94dp"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
                 android:text="@string/comecar"
                 android:textAllCaps="false"
                 android:textColor="@color/branco"

@@ -33,65 +33,51 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cabecalhoQuiz"
                 android:layout_width="match_parent"
-                android:layout_height="72dp"
+                android:layout_height="wrap_content"
+                android:minHeight="64dp"
                 android:layout_marginStart="18dp"
                 android:layout_marginEnd="18dp">
 
-                <ImageView
-                    android:id="@+id/botaoVoltarQuiz"
-                    android:layout_width="38dp"
-                    android:layout_height="48dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:clickable="true"
-                    android:contentDescription="@string/voltar"
-                    android:focusable="true"
-                    android:paddingStart="3dp"
-                    android:paddingTop="11dp"
-                    android:paddingEnd="11dp"
-                    android:paddingBottom="11dp"
-                    android:src="@drawable/ic_voltar"
-                    android:translationY="4dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/verde_escuro_principal" />
+                <!--
+                    Linha central do grupo sino + foto: metade dos 64dp do header da Home
+                    (32dp) + translationY de 4dp aplicado ao grupo = 36dp.
+                -->
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/linhaCentroCabecalhoQuiz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_end="38dp" />
 
-                <LinearLayout
-                    android:id="@+id/blocoTitulosQuiz"
+                <TextView
+                    android:id="@+id/textoTituloQuizTela"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/quizzes"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="28sp"
+                    app:layout_constraintBottom_toBottomOf="@id/linhaCentroCabecalhoQuiz"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/linhaCentroCabecalhoQuiz" />
+
+                <TextView
+                    android:id="@+id/textoSubtituloQuizTela"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="1dp"
                     android:layout_marginEnd="8dp"
-                    android:orientation="vertical"
-                    android:translationY="4dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/nunito_regular"
+                    android:includeFontPadding="false"
+                    android:maxLines="2"
+                    android:text="@string/subtitulo_quizzes"
+                    android:textColor="@color/cinza_texto_home"
+                    android:textSize="12.5sp"
                     app:layout_constraintEnd_toStartOf="@id/acoesCabecalhoQuiz"
-                    app:layout_constraintStart_toEndOf="@id/botaoVoltarQuiz"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:id="@+id/textoTituloQuizTela"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/nunito_regular"
-                        android:includeFontPadding="false"
-                        android:text="@string/quizzes"
-                        android:textColor="@color/verde_escuro_principal"
-                        android:textSize="28sp" />
-
-                    <TextView
-                        android:id="@+id/textoSubtituloQuizTela"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="1dp"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/nunito_regular"
-                        android:includeFontPadding="false"
-                        android:maxLines="2"
-                        android:text="@string/subtitulo_quizzes"
-                        android:textColor="@color/cinza_texto_home"
-                        android:textSize="12.5sp" />
-                </LinearLayout>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textoTituloQuizTela" />
 
                 <LinearLayout
                     android:id="@+id/acoesCabecalhoQuiz"
@@ -100,7 +86,6 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:translationY="4dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -205,7 +190,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/nunito_regular"
                     android:text="@string/seis_quizzes_disponiveis"
-                    android:textColor="@color/cinza_texto_home"
+                    android:textColor="#4D000000"
                     android:textSize="15sp" />
 
                 <ImageView
