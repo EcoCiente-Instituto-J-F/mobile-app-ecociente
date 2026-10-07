@@ -408,7 +408,7 @@ public class LoginFragment extends Fragment {
 
             campoSenha.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-            iconeOlhoSenha.setImageResource(R.drawable.icon_olho_fechado);
+            iconeOlhoSenha.setImageResource(R.drawable.ic_olho_fechado);
 
             iconeOlhoSenha.setContentDescription("Mostrar senha");
 
@@ -418,7 +418,7 @@ public class LoginFragment extends Fragment {
 
             campoSenha.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
 
-            iconeOlhoSenha.setImageResource(R.drawable.icon_olho_aberto);
+            iconeOlhoSenha.setImageResource(R.drawable.ic_olho_aberto);
 
             iconeOlhoSenha.setContentDescription("Ocultar senha");
 

@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.model.ResultadoApi;
+import com.example.ecociente.model.TipoUsuario;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,43 +70,83 @@ public class CadastroExternoRepository {
     private ResultadoApi enviarCadastro(
             @NonNull Map<String, Object> dadosUsuario, @NonNull String senha) throws Exception {
 
-        String tipoUsuario = String.valueOf(dadosUsuario.getOrDefault("tipoUsuario", "comum"));
+        switch (texto(dadosUsuario, "tipoUsuario", TipoUsuario.COMUM)) {
+            case TipoUsuario.COOPERATIVA:
+                return enviar(URL_BASE + "/cooperativa", corpoCooperativa(dadosUsuario, senha));
 
-        // Cooperativa precisa de CNPJ, que o cadastro do app ainda não
-        // coleta - segue só pelo Firebase até esse campo existir.
-        if ("cooperativa".equals(tipoUsuario)) {
-            return ResultadoApi.sucesso();
+            case TipoUsuario.MORADOR:
+                return enviar(URL_BASE + "/morador", corpoMorador(dadosUsuario, senha));
+
+            default:
+                return enviar(URL_BASE + "/comum", corpoComum(dadosUsuario, senha));
         }
+    }
 
-        String nome = String.valueOf(dadosUsuario.getOrDefault("nome", ""));
-        String email =
-                String.valueOf(dadosUsuario.getOrDefault("email", "")).trim().toLowerCase(Locale.ROOT);
-        String dataNascimento = converterDataParaIso(String.valueOf(dadosUsuario.getOrDefault("dataNascimento", "")));
-        String cpf = String.valueOf(dadosUsuario.getOrDefault("cpf", ""));
+    @NonNull
+    private JSONObject corpoBasePessoa(
+            @NonNull Map<String, Object> dados, @NonNull String senha) throws Exception {
 
-        JSONObject corpo = new JSONObject();
-        corpo.put("nomeUsuario", nome);
-        corpo.put("email", email);
-        corpo.put("senha", senha);
-        corpo.put("dataNascimento", dataNascimento);
-        corpo.put("cpf", cpf);
+        return new JSONObject()
+                .put("nomeUsuario", texto(dados, "nome"))
+                .put("email", email(dados, "email"))
+                .put("senha", senha)
+                .put("dataNascimento", converterDataParaIso(texto(dados, "dataNascimento")))
+                .put("cpf", texto(dados, "cpf"));
+    }
 
-        String endpoint;
+    @NonNull
+    private JSONObject corpoComum(
+            @NonNull Map<String, Object> dados, @NonNull String senha) throws Exception {
 
-        if ("morador".equals(tipoUsuario)) {
-            endpoint = URL_BASE + "/morador";
+        return corpoBasePessoa(dados, senha)
+                .put("cep", texto(dados, "cep"))
+                .put("numero", texto(dados, "numero"))
+                .put("complemento", texto(dados, "complemento"));
+    }
 
-            corpo.put("codigoCondominio", dadosUsuario.getOrDefault("codigoCondominio", ""));
+    @NonNull
+    private JSONObject corpoMorador(
+            @NonNull Map<String, Object> dados, @NonNull String senha) throws Exception {
 
-        } else {
-            endpoint = URL_BASE + "/comum";
+        return corpoBasePessoa(dados, senha).put("codigoCondominio", texto(dados, "codigoCondominio"));
+    }
 
-            corpo.put("cep", dadosUsuario.getOrDefault("cep", ""));
-            corpo.put("numero", dadosUsuario.getOrDefault("numero", ""));
-            corpo.put("complemento", dadosUsuario.getOrDefault("complemento", ""));
-        }
+    @NonNull
+    private JSONObject corpoCooperativa(
+            @NonNull Map<String, Object> dados, @NonNull String senha) throws Exception {
 
-        return enviar(endpoint, corpo);
+        return new JSONObject()
+                .put("nomeResponsavel", texto(dados, "nome"))
+                .put("email", email(dados, "email"))
+                .put("senha", senha)
+                .put("nomeCooperativa", texto(dados, "nomeCooperativa"))
+                .put("cnpj", apenasDigitos(texto(dados, "cnpj")))
+                .put("emailCooperativa", email(dados, "emailCooperativa"))
+                .put("telefone", apenasDigitos(texto(dados, "telefone")))
+                .put("cep", texto(dados, "cep"))
+                .put("numero", texto(dados, "numero"))
+                .put("complemento", texto(dados, "complemento"));
+    }
+
+    @NonNull
+    private String texto(@NonNull Map<String, Object> dados, @NonNull String chave) {
+        return texto(dados, chave, "");
+    }
+
+    @NonNull
+    private String texto(
+            @NonNull Map<String, Object> dados, @NonNull String chave, @NonNull String padrao) {
+        return String.valueOf(dados.getOrDefault(chave, padrao));
+    }
+
+    @NonNull
+    private String email(@NonNull Map<String, Object> dados, @NonNull String chave) {
+        return texto(dados, chave).trim().toLowerCase(Locale.ROOT);
+    }
+
+    @NonNull
+    private String apenasDigitos(@NonNull String valor) {
+        return valor.replaceAll("\\D", "");
     }
 
     @NonNull

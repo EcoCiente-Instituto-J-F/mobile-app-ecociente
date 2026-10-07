@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.BotaoCarregando;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 
@@ -68,8 +69,7 @@ public class EsqueciSenhaEmailFragment extends Fragment {
     }
 
     private void definirCarregando(boolean carregando) {
-        botaoEnviarCodigo.setEnabled(!carregando);
-        botaoEnviarCodigo.setAlpha(carregando ? 0.55f : 1f);
+        BotaoCarregando.definir(botaoEnviarCodigo, carregando, R.string.enviar_codigo, R.string.enviando);
     }
 
     private void mostrarMensagem(@NonNull String mensagem) {

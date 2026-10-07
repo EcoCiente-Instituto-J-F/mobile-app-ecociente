@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.model.ResultadoCadastro;
+import com.example.ecociente.model.TipoDocumento;
+import com.example.ecociente.ui.Dimensoes;
 import com.example.ecociente.ui.FieldFeedback;
+import com.example.ecociente.ui.MascaraTexto;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.CadastroViewModel;
 import com.google.android.material.button.MaterialButton;
@@ -29,6 +34,9 @@ import java.util.List;
 
 public class CadastroEtapa2Fragment extends Fragment {
 
+    private static final String MASCARA_CEP = "#####-###";
+    private static final String MASCARA_TELEFONE = "(##) #####-####";
+
     private EditText campoEndereco;
     private EditText campoNumero;
     private EditText campoCep;
@@ -36,6 +44,8 @@ public class CadastroEtapa2Fragment extends Fragment {
     private EditText campoCidade;
     private EditText campoTelefone;
     private EditText campoCpf;
+    private EditText campoNomeCooperativa;
+    private EditText campoEmailCooperativa;
 
     private AutoCompleteTextView campoEstado;
 
@@ -49,15 +59,13 @@ public class CadastroEtapa2Fragment extends Fragment {
     private MaterialCardView containerCep;
     private MaterialCardView containerCidade;
     private MaterialCardView containerEstado;
+    private MaterialCardView containerNomeCooperativa;
+    private MaterialCardView containerEmailCooperativa;
 
     private ProgressBar indicadorCarregamento;
     private Motion motion;
 
     private CadastroViewModel viewModel;
-
-    private boolean alterandoCep = false;
-    private boolean alterandoTelefone = false;
-    private boolean alterandoCpf = false;
 
     @Nullable
     @Override
@@ -76,17 +84,15 @@ public class CadastroEtapa2Fragment extends Fragment {
 
         inicializarComponentes(view);
 
+        configurarModoCooperativa();
+
         viewModel = new ViewModelProvider(requireActivity()).get(CadastroViewModel.class);
 
         viewModel.getCarregando().observe(getViewLifecycleOwner(), this::definirCarregando);
 
         configurarBotaoVoltar();
 
-        configurarMascaraCep();
-
-        configurarMascaraTelefone();
-
-        configurarMascaraCpf();
+        configurarMascaras();
 
         configurarListaEstados();
 
@@ -126,6 +132,10 @@ public class CadastroEtapa2Fragment extends Fragment {
 
         campoCpf = view.findViewById(R.id.campoCpf);
 
+        campoNomeCooperativa = view.findViewById(R.id.campoNomeCooperativa);
+
+        campoEmailCooperativa = view.findViewById(R.id.campoEmailCooperativa);
+
         botaoVoltarEtapa1 = view.findViewById(R.id.botaoVoltarEtapa1);
 
         iconeSetaEstado = view.findViewById(R.id.iconeSetaEstado);
@@ -137,6 +147,8 @@ public class CadastroEtapa2Fragment extends Fragment {
         containerCep = view.findViewById(R.id.containerCep);
         containerCidade = view.findViewById(R.id.containerCidade);
         containerEstado = view.findViewById(R.id.containerEstado);
+        containerNomeCooperativa = view.findViewById(R.id.containerNomeCooperativa);
+        containerEmailCooperativa = view.findViewById(R.id.containerEmailCooperativa);
 
         indicadorCarregamento = view.findViewById(R.id.indicadorCarregamentoCadastro);
         motion = new Motion();
@@ -152,166 +164,43 @@ public class CadastroEtapa2Fragment extends Fragment {
                 });
     }
 
-    private void configurarMascaraCep() {
+    private void configurarMascaras() {
 
-        campoCep.addTextChangedListener(
-                new TextWatcher() {
+        campoCep.addTextChangedListener(new MascaraTexto(campoCep, MASCARA_CEP));
 
-                    @Override
-                    public void beforeTextChanged(
-                            CharSequence texto, int inicio, int quantidade, int depois) {}
+        campoTelefone.addTextChangedListener(new MascaraTexto(campoTelefone, MASCARA_TELEFONE));
 
-                    @Override
-                    public void onTextChanged(
-                            CharSequence texto, int inicio, int antes, int quantidade) {}
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-
-                        if (alterandoCep) {
-                            return;
-                        }
-
-                        alterandoCep = true;
-
-                        String numeros = editable.toString().replaceAll("\\D", "");
-
-                        if (numeros.length() > 8) {
-
-                            numeros = numeros.substring(0, 8);
-                        }
-
-                        String formatado;
-
-                        if (numeros.length() > 5) {
-
-                            formatado = numeros.substring(0, 5) + "-" + numeros.substring(5);
-
-                        } else {
-
-                            formatado = numeros;
-                        }
-
-                        campoCep.setText(formatado);
-
-                        campoCep.setSelection(campoCep.getText().length());
-
-                        alterandoCep = false;
-                    }
-                });
+        campoCpf.addTextChangedListener(new MascaraTexto(campoCpf, tipoDocumento().getMascara()));
     }
 
-    private void configurarMascaraTelefone() {
+    private TipoDocumento tipoDocumento() {
 
-        campoTelefone.addTextChangedListener(
-                new TextWatcher() {
-
-                    @Override
-                    public void beforeTextChanged(
-                            CharSequence texto, int inicio, int quantidade, int depois) {}
-
-                    @Override
-                    public void onTextChanged(
-                            CharSequence texto, int inicio, int antes, int quantidade) {}
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-
-                        if (alterandoTelefone) {
-                            return;
-                        }
-
-                        alterandoTelefone = true;
-
-                        String numeros = editable.toString().replaceAll("\\D", "");
-
-                        if (numeros.length() > 11) {
-
-                            numeros = numeros.substring(0, 11);
-                        }
-
-                        StringBuilder formatado = new StringBuilder();
-
-                        if (numeros.length() > 0) {
-
-                            formatado.append("(").append(numeros, 0, Math.min(2, numeros.length()));
-
-                            if (numeros.length() > 2) {
-
-                                formatado.append(") ");
-
-                                int fimPrimeiraParte = numeros.length() > 7 ? 7 : numeros.length();
-
-                                formatado.append(numeros, 2, fimPrimeiraParte);
-
-                                if (numeros.length() > 7) {
-
-                                    formatado.append("-").append(numeros.substring(7));
-                                }
-                            }
-                        }
-
-                        campoTelefone.setText(formatado.toString());
-
-                        campoTelefone.setSelection(campoTelefone.getText().length());
-
-                        alterandoTelefone = false;
-                    }
-                });
+        return cadastroDeCooperativa() ? TipoDocumento.CNPJ : TipoDocumento.CPF;
     }
 
-    private void configurarMascaraCpf() {
+    private boolean cadastroDeCooperativa() {
 
-        campoCpf.addTextChangedListener(
-                new TextWatcher() {
+        return ((Login) requireActivity()).isCooperativa();
+    }
 
-                    @Override
-                    public void beforeTextChanged(
-                            CharSequence texto, int inicio, int quantidade, int depois) {}
+    private void configurarModoCooperativa() {
 
-                    @Override
-                    public void onTextChanged(
-                            CharSequence texto, int inicio, int antes, int quantidade) {}
+        if (!cadastroDeCooperativa()) {
+            return;
+        }
 
-                    @Override
-                    public void afterTextChanged(Editable editable) {
+        containerNomeCooperativa.setVisibility(View.VISIBLE);
 
-                        if (alterandoCpf) {
-                            return;
-                        }
+        containerEmailCooperativa.setVisibility(View.VISIBLE);
 
-                        alterandoCpf = true;
+        campoCpf.setHint(R.string.cnpj);
 
-                        String numeros = editable.toString().replaceAll("\\D", "");
+        ConstraintLayout.LayoutParams parametros =
+                (ConstraintLayout.LayoutParams) containerEndereco.getLayoutParams();
 
-                        if (numeros.length() > 11) {
+        parametros.topMargin = Dimensoes.dpParaPx(requireContext(), 14);
 
-                            numeros = numeros.substring(0, 11);
-                        }
-
-                        StringBuilder formatado = new StringBuilder();
-
-                        for (int i = 0; i < numeros.length(); i++) {
-
-                            if (i == 3 || i == 6) {
-
-                                formatado.append(".");
-
-                            } else if (i == 9) {
-
-                                formatado.append("-");
-                            }
-
-                            formatado.append(numeros.charAt(i));
-                        }
-
-                        campoCpf.setText(formatado.toString());
-
-                        campoCpf.setSelection(campoCpf.getText().length());
-
-                        alterandoCpf = false;
-                    }
-                });
+        containerEndereco.setLayoutParams(parametros);
     }
 
     private void configurarListaEstados() {
@@ -332,7 +221,7 @@ public class CadastroEtapa2Fragment extends Fragment {
         campoEstado.setDropDownBackgroundDrawable(
                 ContextCompat.getDrawable(requireContext(), R.drawable.fundo_dropdown_estados));
 
-        campoEstado.setDropDownVerticalOffset(dpParaPx(6));
+        campoEstado.setDropDownVerticalOffset(Dimensoes.dpParaPx(requireContext(), 6));
 
         campoEstado.setOnClickListener(view -> campoEstado.showDropDown());
 
@@ -344,11 +233,6 @@ public class CadastroEtapa2Fragment extends Fragment {
                 });
     }
 
-    private int dpParaPx(int dp) {
-
-        return Math.round(dp * getResources().getDisplayMetrics().density);
-    }
-
     private void configurarFeedbackDeCampos() {
         int verde = ContextCompat.getColor(requireContext(), R.color.verde_escuro_principal);
 
@@ -357,6 +241,8 @@ public class CadastroEtapa2Fragment extends Fragment {
         campoCep.addTextChangedListener(limparErroAoDigitar(containerCep, verde));
         campoCidade.addTextChangedListener(limparErroAoDigitar(containerCidade, verde));
         campoEstado.addTextChangedListener(limparErroAoDigitar(containerEstado, verde));
+        campoNomeCooperativa.addTextChangedListener(limparErroAoDigitar(containerNomeCooperativa, verde));
+        campoEmailCooperativa.addTextChangedListener(limparErroAoDigitar(containerEmailCooperativa, verde));
     }
 
     private TextWatcher limparErroAoDigitar(MaterialCardView card, int normalColor) {
@@ -394,6 +280,27 @@ public class CadastroEtapa2Fragment extends Fragment {
 
         String cpf = campoCpf.getText().toString().trim();
 
+        String nomeCooperativa = campoNomeCooperativa.getText().toString().trim();
+
+        String emailCooperativa = campoEmailCooperativa.getText().toString().trim();
+
+        if (cadastroDeCooperativa()) {
+
+            if (nomeCooperativa.isEmpty()) {
+                mostrarErroCampo(
+                        containerNomeCooperativa, campoNomeCooperativa, "Digite o nome da cooperativa.");
+                return;
+            }
+
+            if (!Patterns.EMAIL_ADDRESS.matcher(emailCooperativa).matches()) {
+                mostrarErroCampo(
+                        containerEmailCooperativa,
+                        campoEmailCooperativa,
+                        "Digite um e-mail válido para a cooperativa.");
+                return;
+            }
+        }
+
         if (endereco.isEmpty()) {
             mostrarErroCampo(containerEndereco, campoEndereco, "Digite seu endereço.");
             return;
@@ -422,7 +329,7 @@ public class CadastroEtapa2Fragment extends Fragment {
             return;
         }
 
-        if (telefone.replaceAll("\\D", "").length() < 10) {
+        if (TipoDocumento.apenasDigitos(telefone).length() < 10) {
 
             mostrarMensagem("Digite um telefone válido.");
 
@@ -431,9 +338,9 @@ public class CadastroEtapa2Fragment extends Fragment {
             return;
         }
 
-        if (!cpfValido(cpf)) {
+        if (!tipoDocumento().valido(cpf)) {
 
-            mostrarMensagem("Digite um CPF válido.");
+            mostrarMensagem(cadastroDeCooperativa() ? "Digite um CNPJ válido." : "Digite um CPF válido.");
 
             campoCpf.requestFocus();
 
@@ -444,7 +351,17 @@ public class CadastroEtapa2Fragment extends Fragment {
 
         telaAutenticacao.salvarDadosEtapa2(endereco, numero, cep, complemento, cidade, estado);
 
-        telaAutenticacao.salvarDadosContato(telefone, cpf);
+        if (cadastroDeCooperativa()) {
+
+            telaAutenticacao.salvarDadosContato(telefone, "");
+
+            telaAutenticacao.salvarDadosCooperativa(
+                    nomeCooperativa, TipoDocumento.apenasDigitos(cpf), emailCooperativa);
+
+        } else {
+
+            telaAutenticacao.salvarDadosContato(telefone, cpf);
+        }
 
         cadastrarUsuarioFirebase();
     }
@@ -454,45 +371,6 @@ public class CadastroEtapa2Fragment extends Fragment {
         List<String> estados = Arrays.asList(getResources().getStringArray(R.array.estados_brasil));
 
         return estados.contains(estadoInformado);
-    }
-
-    // Confere os dígitos verificadores de verdade (não só a quantidade de
-    // números) - a API de cadastro valida isso e rejeita CPF inválido.
-    private boolean cpfValido(String cpf) {
-
-        String numeros = cpf.replaceAll("\\D", "");
-
-        if (numeros.length() != 11 || numeros.chars().distinct().count() == 1) {
-            return false;
-        }
-
-        int primeiroDigito = calcularDigitoVerificadorCpf(numeros, 9);
-
-        if (primeiroDigito != Character.getNumericValue(numeros.charAt(9))) {
-            return false;
-        }
-
-        int segundoDigito = calcularDigitoVerificadorCpf(numeros, 10);
-
-        return segundoDigito == Character.getNumericValue(numeros.charAt(10));
-    }
-
-    private int calcularDigitoVerificadorCpf(String numeros, int quantidadeDigitos) {
-
-        int soma = 0;
-
-        int multiplicador = quantidadeDigitos + 1;
-
-        for (int i = 0; i < quantidadeDigitos; i++) {
-
-            soma += Character.getNumericValue(numeros.charAt(i)) * multiplicador;
-
-            multiplicador--;
-        }
-
-        int resto = soma % 11;
-
-        return resto < 2 ? 0 : 11 - resto;
     }
 
     private void cadastrarUsuarioFirebase() {
@@ -528,6 +406,8 @@ public class CadastroEtapa2Fragment extends Fragment {
 
             return;
         }
+
+        ((Login) requireActivity()).autenticarNaApiExterna();
 
         entrarNoEcoCiente();
     }
@@ -585,7 +465,9 @@ public class CadastroEtapa2Fragment extends Fragment {
                 || campoCidade == null
                 || campoEstado == null
                 || campoTelefone == null
-                || campoCpf == null) {
+                || campoCpf == null
+                || campoNomeCooperativa == null
+                || campoEmailCooperativa == null) {
 
             return;
         }
@@ -599,10 +481,22 @@ public class CadastroEtapa2Fragment extends Fragment {
                         campoCidade.getText().toString().trim(),
                         campoEstado.getText().toString().trim());
 
-        ((Login) getActivity())
-                .salvarDadosContato(
-                        campoTelefone.getText().toString().trim(),
-                        campoCpf.getText().toString().trim());
+        Login telaAutenticacao = (Login) getActivity();
+
+        if (telaAutenticacao.isCooperativa()) {
+
+            telaAutenticacao.salvarDadosContato(campoTelefone.getText().toString().trim(), "");
+
+            telaAutenticacao.salvarDadosCooperativa(
+                    campoNomeCooperativa.getText().toString().trim(),
+                    TipoDocumento.apenasDigitos(campoCpf.getText().toString()),
+                    campoEmailCooperativa.getText().toString().trim());
+
+            return;
+        }
+
+        telaAutenticacao.salvarDadosContato(
+                campoTelefone.getText().toString().trim(), campoCpf.getText().toString().trim());
     }
 
     private void recuperarDadosPreenchidos() {
@@ -622,6 +516,17 @@ public class CadastroEtapa2Fragment extends Fragment {
         campoEstado.setText(telaAutenticacao.getEstado(), false);
 
         campoTelefone.setText(telaAutenticacao.getTelefone());
+
+        if (telaAutenticacao.isCooperativa()) {
+
+            campoCpf.setText(telaAutenticacao.getCnpj());
+
+            campoNomeCooperativa.setText(telaAutenticacao.getNomeCooperativa());
+
+            campoEmailCooperativa.setText(telaAutenticacao.getEmailCooperativa());
+
+            return;
+        }
 
         campoCpf.setText(telaAutenticacao.getCpf());
     }
@@ -685,6 +590,10 @@ public class CadastroEtapa2Fragment extends Fragment {
         campoTelefone = null;
 
         campoCpf = null;
+
+        campoNomeCooperativa = null;
+
+        campoEmailCooperativa = null;
 
         botaoVoltarEtapa1 = null;
 

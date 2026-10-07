@@ -64,7 +64,7 @@
                 android:layout_height="16dp"
                 android:contentDescription="@string/icone_email"
                 android:scaleType="fitCenter"
-                android:src="@drawable/icon_email" />
+                android:src="@drawable/ic_email" />
 
             <EditText
                 android:id="@+id/campoEmail"

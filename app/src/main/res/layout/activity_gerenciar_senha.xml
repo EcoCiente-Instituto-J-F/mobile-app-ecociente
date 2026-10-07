@@ -167,7 +167,7 @@
                                 android:layout_width="14dp"
                                 android:layout_height="16dp"
                                 android:contentDescription="@null"
-                                android:src="@drawable/icon_senha" />
+                                android:src="@drawable/ic_senha" />
 
                             <EditText
                                 android:id="@+id/campoSenhaAtual"
@@ -199,7 +199,7 @@
                             android:focusable="true"
                             android:padding="9dp"
                             android:scaleType="centerInside"
-                            android:src="@drawable/icon_olho_fechado" />
+                            android:src="@drawable/ic_olho_fechado" />
 
                     </RelativeLayout>
 
@@ -242,7 +242,7 @@
                                 android:layout_width="14dp"
                                 android:layout_height="16dp"
                                 android:contentDescription="@null"
-                                android:src="@drawable/icon_senha" />
+                                android:src="@drawable/ic_senha" />
 
                             <EditText
                                 android:id="@+id/campoSenhaNova"
@@ -274,7 +274,7 @@
                             android:focusable="true"
                             android:padding="9dp"
                             android:scaleType="centerInside"
-                            android:src="@drawable/icon_olho_fechado" />
+                            android:src="@drawable/ic_olho_fechado" />
 
                     </RelativeLayout>
 
@@ -317,7 +317,7 @@
                                 android:layout_width="14dp"
                                 android:layout_height="16dp"
                                 android:contentDescription="@null"
-                                android:src="@drawable/icon_senha" />
+                                android:src="@drawable/ic_senha" />
 
                             <EditText
                                 android:id="@+id/campoSenhaConfirmar"
@@ -349,7 +349,7 @@
                             android:focusable="true"
                             android:padding="9dp"
                             android:scaleType="centerInside"
-                            android:src="@drawable/icon_olho_fechado" />
+                            android:src="@drawable/ic_olho_fechado" />
 
                     </RelativeLayout>
 

@@ -180,7 +180,7 @@
                 android:layout_height="14dp"
                 android:layout_marginStart="11dp"
                 android:contentDescription="@string/duracao_quiz"
-                android:src="@drawable/icon_relogio"
+                android:src="@drawable/ic_relogio"
                 app:tint="@color/cinza_secundario_home" />
 
             <TextView
