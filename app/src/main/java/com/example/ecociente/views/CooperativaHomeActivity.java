@@ -70,13 +70,6 @@ public class CooperativaHomeActivity extends AppCompatActivity {
                 findViewById(R.id.cardCalendarioColetas));
 
         configurarCalendario();
-
-        findViewById(R.id.botaoVerHistorico)
-                .setOnClickListener(
-                        view ->
-                                startActivity(
-                                        new Intent(this, SolicitacoesActivity.class)
-                                                .putExtra(SolicitacoesActivity.EXTRA_HISTORICO, true)));
     }
 
     private void configurarCalendario() {
@@ -201,31 +194,16 @@ public class CooperativaHomeActivity extends AppCompatActivity {
 
         barra.setOnItemClickListener(
                 indice -> {
-                    if (indice == ItensBarra.GUIA_OU_SOLICITACOES) {
-                        abrirSolicitacoes();
+                    if (indice == ItensBarra.SEGUNDO || indice == ItensBarra.QUARTO) {
+                        startActivity(
+                                new Intent(this, SolicitacoesActivity.class)
+                                        .putExtra(
+                                                SolicitacoesActivity.EXTRA_HISTORICO,
+                                                indice == ItensBarra.QUARTO));
 
-                    } else if (indice == ItensBarra.PERFIL) {
-                        abrirPerfilPelaBarra();
+                        overridePendingTransition(0, 0);
                     }
                 });
-    }
-
-    private void abrirSolicitacoes() {
-
-        startActivity(new Intent(this, SolicitacoesActivity.class));
-
-        overridePendingTransition(0, 0);
-    }
-
-    private void abrirPerfilPelaBarra() {
-
-        startActivity(
-                intentPerfil()
-                        .putExtra(
-                                GerenciarPerfilActivity.EXTRA_ORIGEM_NAVEGACAO,
-                                GerenciarPerfilActivity.ORIGEM_HOME));
-
-        overridePendingTransition(0, 0);
     }
 
     private void abrirGerenciarPerfil() {

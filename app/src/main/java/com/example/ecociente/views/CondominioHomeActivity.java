@@ -114,7 +114,7 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
         BarraNavegacaoView barra = findViewById(R.id.barraNavegacao);
 
-        barra.configurar(ItensBarra.usuario());
+        barra.configurar(ItensBarra.morador());
 
         barra.selecionar(ItensBarra.HOME);
 
@@ -122,11 +122,8 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
         barra.setOnItemClickListener(
                 indice -> {
-                    if (indice == ItensBarra.QUIZ_OU_CONDOMINIOS) {
+                    if (indice == ItensBarra.TERCEIRO) {
                         abrirQuizzes();
-
-                    } else if (indice == ItensBarra.PERFIL) {
-                        abrirPerfilPelaBarra();
                     }
                 });
     }
@@ -175,17 +172,7 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
         rota.putExtra(QuizActivity.EXTRA_ANIMAR_NAVEGACAO, true);
 
-        startActivity(rota);
-
-        overridePendingTransition(0, 0);
-    }
-
-    private void abrirPerfilPelaBarra() {
-
-        Intent rota = new Intent(this, GerenciarPerfilActivity.class);
-
-        rota.putExtra(
-                GerenciarPerfilActivity.EXTRA_ORIGEM_NAVEGACAO, GerenciarPerfilActivity.ORIGEM_HOME);
+        rota.putExtra(QuizActivity.EXTRA_MORADOR, true);
 
         startActivity(rota);
 

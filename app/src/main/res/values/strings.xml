@@ -75,7 +75,11 @@
     <string name="home_cadastro_incompleto">Complete seu cadastro antes de acessar a home.</string>
     <string name="home_sem_acesso">Não foi possível identificar o seu perfil de acesso.</string>
     <string name="solicitacoes">Solicitações</string>
-    <string name="condominios">Condomínios</string>
+    <string name="solicitacao">Solicitação</string>
+    <string name="coletas">Coletas</string>
+    <string name="mensagens">Mensagens</string>
+    <string name="unidades">Unidades</string>
+    <string name="feed">Feed</string>
     <string name="nome_responsavel">Nome do responsável</string>
     <string name="dados_responsavel">Dados do responsável</string>
     <string name="nome_cooperativa">Nome da cooperativa</string>
@@ -285,7 +289,6 @@
 
     <!-- Calendário da cooperativa -->
     <string name="historico">Histórico</string>
-    <string name="ver_historico">Ver histórico de coletas ›</string>
     <string name="proxima_coleta">Próxima coleta</string>
     <string name="calendario_de_coletas">Calendário de coletas</string>
     <string name="acompanhe_suas_coletas">Acompanhe suas coletas</string>

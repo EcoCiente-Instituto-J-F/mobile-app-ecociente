@@ -181,10 +181,10 @@ public class MainActivity extends AppCompatActivity {
 
         barra.setOnItemClickListener(
                 indice -> {
-                    if (indice == ItensBarra.QUIZ_OU_CONDOMINIOS) {
+                    if (indice == ItensBarra.TERCEIRO) {
                         abrirQuizzes();
 
-                    } else if (indice == ItensBarra.PERFIL) {
+                    } else if (indice == ItensBarra.QUARTO) {
                         abrirPerfilPelaBarra();
                     }
                 });

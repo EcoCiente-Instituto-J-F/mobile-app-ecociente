@@ -242,7 +242,7 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
         barra.configurar(ItensBarra.cooperativa());
 
-        barra.selecionar(historico ? ItensBarra.HOME : ItensBarra.GUIA_OU_SOLICITACOES);
+        barra.selecionar(historico ? ItensBarra.QUARTO : ItensBarra.SEGUNDO);
 
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
@@ -251,18 +251,20 @@ public class SolicitacoesActivity extends AppCompatActivity {
                     if (indice == ItensBarra.HOME) {
                         abrirHome();
 
-                    } else if (indice == ItensBarra.GUIA_OU_SOLICITACOES && historico) {
-                        abrirSolicitacoes();
-
-                    } else if (indice == ItensBarra.PERFIL) {
-                        abrirPerfil();
+                    } else if (indice == ItensBarra.SEGUNDO || indice == ItensBarra.QUARTO) {
+                        trocarModo(indice == ItensBarra.QUARTO);
                     }
                 });
     }
 
-    private void abrirSolicitacoes() {
+    private void trocarModo(boolean paraHistorico) {
 
-        startActivity(new Intent(this, SolicitacoesActivity.class));
+        if (paraHistorico == historico) {
+            return;
+        }
+
+        startActivity(
+                new Intent(this, SolicitacoesActivity.class).putExtra(EXTRA_HISTORICO, paraHistorico));
 
         overridePendingTransition(0, 0);
 
@@ -274,15 +276,6 @@ public class SolicitacoesActivity extends AppCompatActivity {
         startActivity(
                 new Intent(this, CooperativaHomeActivity.class)
                         .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
-
-        overridePendingTransition(0, 0);
-    }
-
-    private void abrirPerfil() {
-
-        startActivity(
-                new Intent(this, GerenciarPerfilActivity.class)
-                        .putExtra(GerenciarPerfilActivity.EXTRA_COOPERATIVA, true));
 
         overridePendingTransition(0, 0);
     }

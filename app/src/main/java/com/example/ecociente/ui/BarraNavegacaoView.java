@@ -84,12 +84,18 @@ public class BarraNavegacaoView extends FrameLayout {
 
         aplicarEstado(indice);
 
+        indicador.setVisibility(indice == ItensBarra.NENHUM ? INVISIBLE : VISIBLE);
+
+        if (indice == ItensBarra.NENHUM) {
+            return;
+        }
+
         IndicadorNavegacao.posicionarSobre(indicador, itens[indice]);
     }
 
     public void selecionar(int indice, int indiceOrigem) {
 
-        if (indiceOrigem < 0 || indiceOrigem == indice) {
+        if (indiceOrigem < 0 || indice < 0 || indiceOrigem == indice) {
             selecionar(indice);
             return;
         }
@@ -149,12 +155,20 @@ public class BarraNavegacaoView extends FrameLayout {
 
             boolean ativo = i == indiceAtivo;
 
-            icones[i].setImageResource(ativo ? descricao[i].iconeAtivo : descricao[i].iconeInativo);
-
-            textos[i].setTextColor(
+            int cor =
                     ContextCompat.getColor(
                             getContext(),
-                            ativo ? R.color.verde_escuro_principal : R.color.cinza_secundario_home));
+                            ativo ? R.color.verde_escuro_principal : R.color.cinza_secundario_home);
+
+            icones[i].setImageResource(ativo ? descricao[i].iconeAtivo : descricao[i].iconeInativo);
+
+            if (descricao[i].iconeAtivo == descricao[i].iconeInativo) {
+                icones[i].setColorFilter(cor);
+            } else {
+                icones[i].clearColorFilter();
+            }
+
+            textos[i].setTextColor(cor);
 
             textos[i].setTypeface(ativo ? fonteAtiva : fonteInativa);
         }

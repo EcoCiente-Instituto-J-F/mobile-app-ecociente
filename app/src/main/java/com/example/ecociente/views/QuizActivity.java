@@ -35,6 +35,7 @@ import java.util.Locale;
 public class QuizActivity extends AppCompatActivity {
 
     public static final String EXTRA_ANIMAR_NAVEGACAO = "animarNavegacaoQuiz";
+    public static final String EXTRA_MORADOR = "quizMorador";
 
     private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
     private final List<CardQuizView> cardsQuizzes = new ArrayList<>();
@@ -287,7 +288,9 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void configurarNavegacao() {
-        barra.configurar(ItensBarra.usuario());
+        boolean morador = getIntent().getBooleanExtra(EXTRA_MORADOR, false);
+
+        barra.configurar(morador ? ItensBarra.morador() : ItensBarra.usuario());
 
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
@@ -301,7 +304,7 @@ public class QuizActivity extends AppCompatActivity {
                     if (indice == ItensBarra.HOME) {
                         fecharQuiz();
 
-                    } else if (indice == ItensBarra.PERFIL) {
+                    } else if (indice == ItensBarra.QUARTO && !morador) {
                         abrirPerfil();
                     }
                 });
@@ -329,7 +332,7 @@ public class QuizActivity extends AppCompatActivity {
     private void mostrarBarra() {
         boolean animar = getIntent().getBooleanExtra(EXTRA_ANIMAR_NAVEGACAO, true);
 
-        barra.selecionar(ItensBarra.QUIZ_OU_CONDOMINIOS, animar ? ItensBarra.HOME : -1);
+        barra.selecionar(ItensBarra.TERCEIRO, animar ? ItensBarra.HOME : -1);
     }
 
     private void configurarInsetsDaTela() {

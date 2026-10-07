@@ -24,6 +24,7 @@ import com.example.ecociente.model.PerfilAcesso;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
+import com.example.ecociente.ui.ItemBarra;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.ui.Navegacao;
@@ -160,13 +161,16 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         if (!cooperativa && perfil != null && PerfilAcesso.ehCooperativa(perfil.getTipoPerfil())) {
             cooperativa = true;
 
-            ((BarraNavegacaoView) findViewById(R.id.barraNavegacao))
-                    .configurar(ItensBarra.cooperativa());
+            trocarBarra(ItensBarra.cooperativa());
         }
 
         homeDoCondominio =
                 perfil != null
                         && PerfilAcesso.destinoDaHome(perfil) == PerfilAcesso.DestinoHome.CONDOMINIO;
+
+        if (homeDoCondominio) {
+            trocarBarra(ItensBarra.morador());
+        }
 
         if (perfil != null && !perfil.getFotoUrl().isEmpty()) {
             mostrarFoto(perfil.getFotoUrl());
@@ -186,6 +190,15 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizPerfil));
     }
 
+    private void trocarBarra(ItemBarra[] itens) {
+
+        BarraNavegacaoView barra = findViewById(R.id.barraNavegacao);
+
+        barra.configurar(itens);
+
+        barra.selecionar(ItensBarra.NENHUM);
+    }
+
     private void mostrarBarra() {
 
         BarraNavegacaoView barra = findViewById(R.id.barraNavegacao);
@@ -199,10 +212,10 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         if (ORIGEM_HOME.equals(origem)) {
             indiceOrigem = ItensBarra.HOME;
         } else if (ORIGEM_QUIZ.equals(origem)) {
-            indiceOrigem = ItensBarra.QUIZ_OU_CONDOMINIOS;
+            indiceOrigem = ItensBarra.TERCEIRO;
         }
 
-        barra.selecionar(ItensBarra.PERFIL, indiceOrigem);
+        barra.selecionar(cooperativa ? ItensBarra.NENHUM : ItensBarra.QUARTO, indiceOrigem);
     }
 
     private void aoClicarItemDaBarra(int indice) {
@@ -210,10 +223,10 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         if (indice == ItensBarra.HOME) {
             abrirHome();
 
-        } else if (indice == ItensBarra.GUIA_OU_SOLICITACOES && cooperativa) {
-            abrirSolicitacoes();
+        } else if (cooperativa) {
+            abrirSolicitacoes(indice == ItensBarra.QUARTO);
 
-        } else if (indice == ItensBarra.QUIZ_OU_CONDOMINIOS && !cooperativa) {
+        } else if (indice == ItensBarra.TERCEIRO) {
             abrirQuiz();
         }
     }
@@ -238,9 +251,11 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
     }
 
-    private void abrirSolicitacoes() {
+    private void abrirSolicitacoes(boolean historico) {
 
-        startActivity(new Intent(this, SolicitacoesActivity.class));
+        startActivity(
+                new Intent(this, SolicitacoesActivity.class)
+                        .putExtra(SolicitacoesActivity.EXTRA_HISTORICO, historico));
 
         overridePendingTransition(0, 0);
     }
@@ -250,6 +265,8 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         Intent rota = new Intent(this, QuizActivity.class);
 
         rota.putExtra(QuizActivity.EXTRA_ANIMAR_NAVEGACAO, false);
+
+        rota.putExtra(QuizActivity.EXTRA_MORADOR, homeDoCondominio);
 
         startActivity(rota);
 
