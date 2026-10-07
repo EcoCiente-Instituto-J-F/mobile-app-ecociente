@@ -38,10 +38,6 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginEnd="18dp">
 
-                <!--
-                    Linha central do grupo sino + foto: metade dos 64dp do header da Home
-                    (32dp) + translationY de 4dp aplicado ao grupo = 36dp.
-                -->
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/linhaCentroCabecalhoQuiz"
                     android:layout_width="wrap_content"
@@ -190,7 +186,7 @@
                     android:layout_weight="1"
                     android:fontFamily="@font/nunito_regular"
                     android:text="@string/seis_quizzes_disponiveis"
-                    android:textColor="#4D000000"
+                    android:textColor="@color/preto_30"
                     android:textSize="15sp" />
 
                 <ImageView
