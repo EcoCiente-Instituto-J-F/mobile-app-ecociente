@@ -252,6 +252,12 @@
     <string name="status_recusado">Recusadas</string>
     <string name="status_cancelado">Canceladas</string>
     <string name="status_realizado">Realizadas</string>
+    <string name="etiqueta_pendente">Pendente</string>
+    <string name="etiqueta_aceito">Aceito</string>
+    <string name="etiqueta_recusado">Recusado</string>
+    <string name="etiqueta_cancelado">Cancelado</string>
+    <string name="etiqueta_concluida">Concluída</string>
+    <string name="buscar_unidade">Buscar unidade…</string>
     <string name="solicitacao_condominio">Condomínio %1$d</string>
     <string name="solicitacao_data_horario">%1$s às %2$s</string>
     <string name="solicitacao_recorrente">Coleta recorrente</string>

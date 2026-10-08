@@ -2,7 +2,10 @@ package com.example.ecociente.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import android.app.Activity;
@@ -29,6 +32,7 @@ import com.example.ecociente.viewmodels.SolicitacoesViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SolicitacoesActivity extends AppCompatActivity {
@@ -55,6 +59,7 @@ public class SolicitacoesActivity extends AppCompatActivity {
     private SwipeRefreshLayout atualizacao;
     private View indicador;
     private TextView textoEstado;
+    private EditText campoBusca;
     private MaterialButton botaoEstado;
 
     @Override
@@ -78,6 +83,7 @@ public class SolicitacoesActivity extends AppCompatActivity {
         atualizacao = findViewById(R.id.atualizacaoSolicitacoes);
         indicador = findViewById(R.id.indicadorSolicitacoes);
         textoEstado = findViewById(R.id.textoEstadoSolicitacoes);
+        campoBusca = findViewById(R.id.campoBuscaSolicitacao);
         botaoEstado = findViewById(R.id.botaoAcaoEstadoSolicitacoes);
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizSolicitacoes));
@@ -85,6 +91,8 @@ public class SolicitacoesActivity extends AppCompatActivity {
         configurarFiltros();
 
         configurarLista();
+
+        configurarBuscaENovaColeta();
 
         configurarNavegacao();
 
@@ -170,9 +178,52 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
     private void exibirItens(@NonNull List<Solicitacao> itens) {
 
-        adaptador.submitList(itens);
+        String busca = campoBusca.getText().toString().trim().toLowerCase();
+
+        if (busca.isEmpty()) {
+            adaptador.submitList(itens);
+
+        } else {
+            List<Solicitacao> filtrados = new ArrayList<>();
+
+            for (Solicitacao solicitacao : itens) {
+                String nome =
+                        getString(R.string.solicitacao_condominio, solicitacao.getCondominioId());
+
+                if (nome.toLowerCase().contains(busca)) {
+                    filtrados.add(solicitacao);
+                }
+            }
+
+            adaptador.submitList(filtrados);
+        }
 
         atualizarEstado();
+    }
+
+    private void configurarBuscaENovaColeta() {
+
+        campoBusca.addTextChangedListener(
+                new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                    @Override
+                    public void afterTextChanged(Editable texto) {
+                        List<Solicitacao> itens = viewModel.getItens().getValue();
+
+                        if (itens != null) {
+                            exibirItens(itens);
+                        }
+                    }
+                });
+
+        findViewById(R.id.botaoNovaColetaSolicitacoes)
+                .setOnClickListener(
+                        view -> detalhe.launch(NovaColetaActivity.criarIntent(this, null)));
     }
 
     private void atualizarEstado() {

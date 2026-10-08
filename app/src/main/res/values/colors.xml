@@ -72,4 +72,10 @@
     <color name="chip_geral_texto">#555555</color>
     <color name="chip_seguranca_fundo">#FADBD8</color>
     <color name="chip_seguranca_texto">#B03A2E</color>
+    <color name="etiqueta_pendente_fundo">#FFF0C9</color>
+    <color name="etiqueta_pendente_texto">#B7791F</color>
+    <color name="etiqueta_aceito_fundo">#E2EEE4</color>
+    <color name="etiqueta_aceito_texto">#064E3B</color>
+    <color name="etiqueta_recusado_fundo">#FADBD8</color>
+    <color name="etiqueta_recusado_texto">#B03A2E</color>
 </resources>

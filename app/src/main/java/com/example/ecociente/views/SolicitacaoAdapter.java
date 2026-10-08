@@ -6,11 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecociente.R;
 import com.example.ecociente.model.Solicitacao;
+import com.example.ecociente.model.StatusAgendamento;
 import com.example.ecociente.ui.FormatoDataApi;
 
 public class SolicitacaoAdapter
@@ -60,7 +63,13 @@ public class SolicitacaoAdapter
         holder.condominio.setText(
                 contexto.getString(R.string.solicitacao_condominio, solicitacao.getCondominioId()));
 
-        holder.status.setText(solicitacao.getStatus().getRotulo());
+        StatusAgendamento status = solicitacao.getStatus();
+
+        holder.status.setText(status.getEtiqueta());
+        holder.status.setTextColor(ContextCompat.getColor(contexto, status.getTextoEtiqueta()));
+
+        ViewCompat.setBackgroundTintList(
+                holder.status, ContextCompat.getColorStateList(contexto, status.getFundoEtiqueta()));
 
         holder.data.setText(
                 contexto.getString(
