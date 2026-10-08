@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.ui.FieldFeedback;
+import com.example.ecociente.ui.MascaraTexto;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.model.ResultadoCadastro;
 import com.example.ecociente.viewmodels.CadastroViewModel;
@@ -75,12 +76,13 @@ public class CadastroEtapa1Fragment extends Fragment {
     private TextView textoForcaSenha;
     private Motion motion;
 
+    private static final String MASCARA_DATA = "##/##/####";
+
     private static final int COR_BORDA_CAMPO = Color.rgb(53, 121, 103);
     private static final int COR_BORDA_CODIGO_ATIVO = Color.rgb(6, 78, 59);
 
     private CadastroViewModel viewModel;
 
-    private boolean alterandoData = false;
     private boolean senhaVisivel = false;
     private boolean confirmarSenhaVisivel = false;
 
@@ -101,11 +103,13 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         inicializarComponentes(view);
 
+        configurarModoCooperativa(view);
+
         viewModel = new ViewModelProvider(requireActivity()).get(CadastroViewModel.class);
 
         viewModel.getCarregando().observe(getViewLifecycleOwner(), this::definirCarregando);
 
-        configurarMascaraData();
+        campoDataNascimento.addTextChangedListener(new MascaraTexto(campoDataNascimento, MASCARA_DATA));
 
         configurarCalendario();
 
@@ -182,65 +186,28 @@ public class CadastroEtapa1Fragment extends Fragment {
         motion = new Motion();
     }
 
-    private void configurarMascaraData() {
+    private boolean cadastroDeCooperativa() {
 
-        campoDataNascimento.addTextChangedListener(
-                new TextWatcher() {
+        return ((Login) requireActivity()).isCooperativa();
+    }
 
-                    @Override
-                    public void beforeTextChanged(
-                            CharSequence texto, int inicio, int quantidade, int depois) {}
+    private void configurarModoCooperativa(View view) {
 
-                    @Override
-                    public void onTextChanged(
-                            CharSequence texto, int inicio, int antes, int quantidade) {}
+        if (!cadastroDeCooperativa()) {
+            return;
+        }
 
-                    @Override
-                    public void afterTextChanged(Editable editable) {
+        containerDataNascimento.setVisibility(View.GONE);
 
-                        if (alterandoData) {
-                            return;
-                        }
+        view.findViewById(R.id.tituloCondominio).setVisibility(View.GONE);
 
-                        alterandoData = true;
+        view.findViewById(R.id.cardOpcaoCondominio).setVisibility(View.GONE);
 
-                        String numeros = editable.toString().replaceAll("\\D", "");
+        containerCodigoCondominio.setVisibility(View.GONE);
 
-                        if (numeros.length() > 8) {
+        campoNome.setHint(R.string.nome_responsavel);
 
-                            numeros = numeros.substring(0, 8);
-                        }
-
-                        StringBuilder formatado = new StringBuilder();
-
-                        if (numeros.length() <= 2) {
-
-                            formatado.append(numeros);
-
-                        } else {
-
-                            formatado.append(numeros, 0, 2).append("/");
-
-                            if (numeros.length() <= 4) {
-
-                                formatado.append(numeros.substring(2));
-
-                            } else {
-
-                                formatado
-                                        .append(numeros, 2, 4)
-                                        .append("/")
-                                        .append(numeros.substring(4));
-                            }
-                        }
-
-                        campoDataNascimento.setText(formatado.toString());
-
-                        campoDataNascimento.setSelection(campoDataNascimento.getText().length());
-
-                        alterandoData = false;
-                    }
-                });
+        ((TextView) view.findViewById(R.id.tituloDadosPessoais)).setText(R.string.dados_responsavel);
     }
 
     private void configurarCalendario() {
@@ -402,7 +369,7 @@ public class CadastroEtapa1Fragment extends Fragment {
 
             campo.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-            icone.setImageResource(R.drawable.icon_olho_fechado);
+            icone.setImageResource(R.drawable.ic_olho_fechado);
 
             icone.setContentDescription("Mostrar senha");
 
@@ -410,7 +377,7 @@ public class CadastroEtapa1Fragment extends Fragment {
 
             campo.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
 
-            icone.setImageResource(R.drawable.icon_olho_aberto);
+            icone.setImageResource(R.drawable.ic_olho_aberto);
 
             icone.setContentDescription("Ocultar senha");
         }
@@ -567,7 +534,7 @@ public class CadastroEtapa1Fragment extends Fragment {
             return;
         }
 
-        if (!dataValida(dataNascimento)) {
+        if (!cadastroDeCooperativa() && !dataValida(dataNascimento)) {
             mostrarErroCampo(containerDataNascimento, campoDataNascimento, "Digite uma data de nascimento válida.");
             return;
         }
@@ -592,7 +559,8 @@ public class CadastroEtapa1Fragment extends Fragment {
             return;
         }
 
-        boolean possuiCodigoCondominio = checkPossuiCodigoCondominio.isChecked();
+        boolean possuiCodigoCondominio =
+                !cadastroDeCooperativa() && checkPossuiCodigoCondominio.isChecked();
 
         if (possuiCodigoCondominio && codigoCondominio.isEmpty()) {
             mostrarErroCampo(containerCodigoCondominio, campoCodigoCondominio, "Digite o código do condomínio.");
@@ -675,6 +643,8 @@ public class CadastroEtapa1Fragment extends Fragment {
 
             return;
         }
+
+        ((Login) requireActivity()).autenticarNaApiExterna();
 
         entrarNoEcoCiente();
     }

@@ -11,20 +11,12 @@
         EcoCiente
     </string>
 
-    <string name="erro_reproduzir_video">
-        Não foi possível reproduzir a animação da logo.
-    </string>
-
     <string name="login">
         Login
     </string>
 
     <string name="cadastrar_se">
         Cadastrar-se
-    </string>
-
-    <string name="email">
-        E-mail
     </string>
 
     <string name="senha">
@@ -69,7 +61,6 @@
     <string name="quatro_minutos_leitura">4 min de leitura</string>
     <string name="tres_minutos_leitura">3 min de leitura</string>
     <string name="cinco_minutos_leitura">5 min de leitura</string>
-    <string name="funcionalidade_em_breve">Esta funcionalidade será disponibilizada em breve.</string>
     <string name="erro_carregar_perfil">Não foi possível confirmar seu perfil agora.</string>
     <string name="tentar_novamente">Tentar novamente</string>
     <string name="voltar">Voltar</string>
@@ -87,6 +78,20 @@
     <string name="perfil_sair_mensagem">Tem certeza que deseja sair?</string>
     <string name="perfil_sair_confirmar">Sair</string>
     <string name="sessao_encerrada">Você saiu da conta.</string>
+    <string name="home_sem_login">Entre na sua conta para continuar.</string>
+    <string name="home_cadastro_incompleto">Complete seu cadastro antes de acessar a home.</string>
+    <string name="home_sem_acesso">Não foi possível identificar o seu perfil de acesso.</string>
+    <string name="solicitacoes">Solicitações</string>
+    <string name="solicitacao">Solicitação</string>
+    <string name="coletas">Coletas</string>
+    <string name="mensagens">Mensagens</string>
+    <string name="unidades">Unidades</string>
+    <string name="feed">Feed</string>
+    <string name="nome_responsavel">Nome do responsável</string>
+    <string name="dados_responsavel">Dados do responsável</string>
+    <string name="nome_cooperativa">Nome da cooperativa</string>
+    <string name="email_cooperativa">E-mail da cooperativa</string>
+    <string name="cnpj">CNPJ</string>
     <string name="perfil_foto_alterar">Alterar foto de perfil</string>
     <string name="perfil_foto_tirar">Tirar foto</string>
     <string name="perfil_foto_galeria">Escolher da galeria</string>
@@ -140,7 +145,6 @@
     </string-array>
 
     <!-- Chatbot Eko -->
-    <string name="chat_eko">Eko</string>
     <string name="chat_titulo_inicial">Como Posso te ajudar?</string>
     <string name="chat_descricao_inicial">Comece uma conversa sobre reciclagem\ne descarte consciente</string>
     <string name="chat_opcao_material">Materiais</string>
@@ -153,7 +157,6 @@
     <string name="chat_avatar_eko">Avatar do Eko</string>
     <string name="chat_avatar_usuario">Avatar do usuário</string>
     <string name="chat_erro_conexao">Não foi possível se conectar. Tente novamente.</string>
-    <string name="chat_erro_resposta">Não foi possível obter uma resposta válida. Tente novamente.</string>
 
     <!-- ===================================================== -->
     <!-- QUIZ - USUÁRIO COMUM                                  -->
@@ -182,10 +185,6 @@
     <string name="concluido">Concluído</string>
 
     <string name="comecar">Começar</string>
-
-    <string name="quiz_em_breve">O quiz será disponibilizado em breve.</string>
-
-    <string name="quiz_restrito_usuario_comum">Esta tela é exclusiva para usuários comuns.</string>
 
     <string name="abrir_calendario">Abrir calendário</string>
     <string name="abrir_lista_estados">Abrir lista de estados</string>
@@ -253,4 +252,85 @@
     <string name="telefone">Telefone</string>
     <string name="usuario_selecionado">Usuário selecionado</string>
     <string name="verificar">Verificar</string>
+
+    <!-- Solicitações -->
+    <string name="status_agendado">Pendentes</string>
+    <string name="status_confirmado">Confirmadas</string>
+    <string name="status_recusado">Recusadas</string>
+    <string name="status_cancelado">Canceladas</string>
+    <string name="status_realizado">Realizadas</string>
+    <string name="solicitacao_condominio">Condomínio %1$d</string>
+    <string name="solicitacao_data_horario">%1$s às %2$s</string>
+    <string name="solicitacao_recorrente">Coleta recorrente</string>
+    <string name="solicitacao_rotulo_status">Situação</string>
+    <string name="solicitacao_rotulo_data">Data</string>
+    <string name="solicitacao_rotulo_horario">Horário</string>
+    <string name="solicitacao_rotulo_recorrencia">Recorrência</string>
+    <string name="solicitacao_recorrencia_sim">Coleta recorrente</string>
+    <string name="solicitacao_recorrencia_nao">Coleta única</string>
+    <string name="solicitacoes_vazio">Nenhuma solicitação nesta situação.</string>
+    <string name="solicitacoes_erro">Não foi possível carregar as solicitações agora.</string>
+    <string name="solicitacoes_sessao_expirada">Sua sessão expirou. Entre novamente para ver as solicitações.</string>
+    <string name="entrar_novamente">Entrar novamente</string>
+    <string name="aceitar">Aceitar</string>
+    <string name="aceitar_titulo">Aceitar solicitação</string>
+    <string name="aceitar_mensagem">Confirmar a coleta em %1$s, às %2$s?</string>
+    <string name="recusar_titulo">Recusar solicitação</string>
+    <string name="recusar_mensagem">Tem certeza que deseja recusar esta solicitação?</string>
+    <string name="solicitacao_aceita">Solicitação aceita.</string>
+    <string name="solicitacao_recusada">Solicitação recusada.</string>
+    <string name="recusar">Recusar</string>
+
+    <!-- Home do condomínio -->
+    <string name="home_condominio_lema">Juntos por um condomínio mais sustentável!</string>
+    <string name="calendario_da_semana">Calendário da semana</string>
+    <string name="ver_calendario_completo">Ver calendário completo ›</string>
+    <string name="coleta">Coleta</string>
+    <string name="nao_ha_coleta">Não há coleta</string>
+    <string name="semana_erro">Não foi possível carregar a semana. Toque para tentar de novo.</string>
+    <string name="calendario_e_lembretes">Calendário e lembretes</string>
+    <string name="calendario_subtitulo">Acompanhe as datas de coleta do seu condomínio</string>
+    <string name="coletas_agendadas">Coletas agendadas</string>
+    <string name="nenhuma_coleta_no_mes">Nenhuma coleta agendada neste mês.</string>
+    <string name="coleta_agendada_linha">%1$s · %2$s</string>
+
+    <!-- Calendário da cooperativa -->
+    <string name="historico">Histórico</string>
+    <string name="proxima_coleta">Próxima coleta</string>
+    <string name="calendario_de_coletas">Calendário de coletas</string>
+    <string name="acompanhe_suas_coletas">Acompanhe suas coletas</string>
+    <string name="dia_de_coleta">Dia de coleta</string>
+    <string name="mes_anterior">Mês anterior</string>
+    <string name="proximo_mes">Próximo mês</string>
+    <string name="carregando">Carregando…</string>
+    <string name="proxima_coleta_hoje">Hoje</string>
+    <string name="proxima_coleta_rotulo_faltam">Faltam</string>
+    <string name="proxima_coleta_rotulo_coleta">Coleta</string>
+    <string name="proxima_coleta_dias">%1$d dias</string>
+    <string name="tipo_coleta_reciclaveis">Recicláveis</string>
+    <string name="enviando">Enviando…</string>
+    <string name="verificando">Verificando…</string>
+    <string name="salvando">Salvando…</string>
+    <string name="proxima_coleta_amanha">Amanhã</string>
+    <string name="proxima_coleta_horario">Das %1$s às %2$s</string>
+    <string name="proxima_coleta_horario_inicio">A partir das %1$s</string>
+    <string name="proxima_coleta_nenhuma">Nenhuma coleta agendada.</string>
+    <string name="proxima_coleta_erro">Não foi possível carregar. Toque para tentar de novo.</string>
+    <string name="proxima_coleta_sessao">Sessão expirada. Toque para entrar novamente.</string>
+    <string-array name="dias_semana_abreviados">
+        <item>Seg</item>
+        <item>Ter</item>
+        <item>Qua</item>
+        <item>Qui</item>
+        <item>Sex</item>
+        <item>Sáb</item>
+        <item>Dom</item>
+    </string-array>
+
+    <!-- Mensagens -->
+    <string name="titulo_chat">Chat</string>
+    <string name="aba_todos">Todos</string>
+    <string name="aba_nao_lidos">Não lidos</string>
+    <string name="aba_arquivadas">Arquivadas</string>
+    <string name="sem_conversas">Nenhuma conversa aqui.</string>
 </resources>

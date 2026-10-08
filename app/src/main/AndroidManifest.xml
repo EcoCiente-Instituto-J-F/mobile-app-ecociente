@@ -80,6 +80,36 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".views.CooperativaHomeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".views.MensagensActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".views.SolicitacoesActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".views.SolicitacaoDetalheActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".views.CondominioHomeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".views.CalendarioColetasActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".views.QuizActivity"
             android:exported="false"
             android:screenOrientation="portrait"

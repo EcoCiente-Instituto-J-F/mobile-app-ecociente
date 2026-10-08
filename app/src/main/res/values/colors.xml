@@ -20,23 +20,17 @@
 
     <color name="cinza_secundario_home">#898989</color>
 
-    <color name="cinza_icone_navegacao">#555555</color>
-
     <color name="cinza_borda_home">#9DA39F</color>
 
     <color name="cinza_borda_clara_home">#D9DDDB</color>
 
 <color name="cinza_fundo_imagem_home">#F4F6F5</color>
 
-
     <!-- #DAE6D6 com 80% de opacidade -->
 
     <color name="verde_selo_home">#CCDAE6D6</color>
 
-
     <!-- Mesmo tom usado na borda e no botão central -->
-
-    <color name="verde_claro_botao_home">#CCD9CA</color>
 
     <!-- Cores do Chatbot Eko -->
     <color name="verde_mensagem_chat">#E2EEE4</color>
@@ -59,6 +53,8 @@
     <color name="cinza_texto_auxiliar">#7B8581</color>
     <color name="cinza_texto_opcao">#3E4A46</color>
     <color name="cinza_texto_passo">#414141</color>
+    <color name="cinza_icone">#7F7F7F</color>
+    <color name="preto_30">#4D000000</color>
     <color name="cinza_texto_suave">#8E9592</color>
     <color name="ripple_branco_chat">#28FFFFFF</color>
     <color name="verde_borda_campo">#357967</color>

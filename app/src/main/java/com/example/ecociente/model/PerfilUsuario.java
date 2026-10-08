@@ -14,8 +14,37 @@ public class PerfilUsuario {
     private String endereco = "";
     private String cpf = "";
     private String fotoUrl = "";
+    private String tipoPerfil = "";
+    private String nomeCooperativa = "";
+    private boolean possuiCodigoCondominio;
 
     public PerfilUsuario() {}
+
+    @NonNull
+    public String getTipoPerfil() {
+        return tipoPerfil == null ? "" : tipoPerfil;
+    }
+
+    public void setTipoPerfil(String tipoPerfil) {
+        this.tipoPerfil = tipoPerfil;
+    }
+
+    public boolean isPossuiCodigoCondominio() {
+        return possuiCodigoCondominio;
+    }
+
+    public void setPossuiCodigoCondominio(boolean possuiCodigoCondominio) {
+        this.possuiCodigoCondominio = possuiCodigoCondominio;
+    }
+
+    @NonNull
+    public String getNomeCooperativa() {
+        return nomeCooperativa == null ? "" : nomeCooperativa;
+    }
+
+    public void setNomeCooperativa(String nomeCooperativa) {
+        this.nomeCooperativa = nomeCooperativa;
+    }
 
     @NonNull
     public String getFotoUrl() {

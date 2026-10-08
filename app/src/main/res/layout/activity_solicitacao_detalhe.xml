@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/raizSolicitacaoDetalhe"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/branco"
+    tools:context=".views.SolicitacaoDetalheActivity">
+
+    <ImageView
+        android:id="@+id/botaoVoltarDetalhe"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="14dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/voltar"
+        android:padding="10dp"
+        android:src="@drawable/ic_voltar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tituloDetalheSolicitacao"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="26dp"
+        android:fontFamily="@font/nunito_bold"
+        android:textColor="@color/rosa_ecociente"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/botaoVoltarDetalhe"
+        tools:text="Condomínio 12" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="18dp"
+        app:cardBackgroundColor="@color/branco"
+        app:cardCornerRadius="14dp"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tituloDetalheSolicitacao"
+        app:strokeColor="@color/cinza_borda_card_perfil"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                style="@style/RotuloDetalheSolicitacao"
+                android:text="@string/solicitacao_rotulo_status" />
+
+            <TextView
+                android:id="@+id/valorStatusDetalhe"
+                style="@style/ValorDetalheSolicitacao" />
+
+            <TextView
+                style="@style/RotuloDetalheSolicitacao"
+                android:text="@string/solicitacao_rotulo_data" />
+
+            <TextView
+                android:id="@+id/valorDataDetalhe"
+                style="@style/ValorDetalheSolicitacao" />
+
+            <TextView
+                style="@style/RotuloDetalheSolicitacao"
+                android:text="@string/solicitacao_rotulo_horario" />
+
+            <TextView
+                android:id="@+id/valorHorarioDetalhe"
+                style="@style/ValorDetalheSolicitacao" />
+
+            <TextView
+                style="@style/RotuloDetalheSolicitacao"
+                android:text="@string/solicitacao_rotulo_recorrencia" />
+
+            <TextView
+                android:id="@+id/valorRecorrenciaDetalhe"
+                style="@style/ValorDetalheSolicitacao"
+                android:layout_marginBottom="0dp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:id="@+id/acoesDetalhe"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="24dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botaoRecusar"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:text="@string/recusar"
+                android:textColor="@color/verde_escuro_principal" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botaoAceitar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:text="@string/aceitar"
+                app:backgroundTint="@color/verde_escuro_principal" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

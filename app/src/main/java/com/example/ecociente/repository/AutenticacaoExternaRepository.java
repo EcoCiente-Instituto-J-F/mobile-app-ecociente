@@ -33,6 +33,8 @@ public class AutenticacaoExternaRepository {
     private static final String PREFERENCIAS = "sessao_externa";
     private static final String CHAVE_TOKEN = "token";
 
+    private static final Object TRAVA = new Object();
+
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
@@ -58,6 +60,8 @@ public class AutenticacaoExternaRepository {
 
                         persistirToken(contextoApp, sessao.getToken());
 
+                        CredenciaisSeguras.salvar(contextoApp, email, senha);
+
                     } catch (Exception erro) {
                         Log.w(TAG, "Não foi possível autenticar na API externa", erro);
                     }
@@ -66,6 +70,57 @@ public class AutenticacaoExternaRepository {
 
                     PRINCIPAL.post(() -> retorno.aoConcluir(sessaoFinal));
                 });
+    }
+
+    @Nullable
+    public String tokenParaUso(@NonNull Context contexto) {
+
+        String salvo = obterTokenSalvo(contexto);
+
+        return salvo != null ? salvo : renovarToken(contexto);
+    }
+
+    @Nullable
+    public String renovarToken(@NonNull Context contexto) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        synchronized (TRAVA) {
+            String[] credenciais = CredenciaisSeguras.ler(contextoApp);
+
+            if (credenciais == null || credenciais.length < 2) {
+                return null;
+            }
+
+            try {
+                SessaoExterna sessao = login(credenciais[0], credenciais[1]);
+
+                persistirToken(contextoApp, sessao.getToken());
+
+                return sessao.getToken();
+
+            } catch (Exception erro) {
+                Log.w(TAG, "Não foi possível renovar o token", erro);
+
+                return null;
+            }
+        }
+    }
+
+    public static void atualizarSenhaSalva(
+            @NonNull Context contexto, @NonNull String email, @NonNull String novaSenha) {
+        CredenciaisSeguras.salvar(contexto, email, novaSenha);
+    }
+
+    public static void encerrarSessao(@NonNull Context contexto) {
+
+        CredenciaisSeguras.limpar(contexto);
+
+        contexto.getApplicationContext()
+                .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
+                .edit()
+                .remove(CHAVE_TOKEN)
+                .apply();
     }
 
     @NonNull

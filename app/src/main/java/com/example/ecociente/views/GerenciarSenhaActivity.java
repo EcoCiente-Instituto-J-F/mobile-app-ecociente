@@ -13,6 +13,7 @@ import com.example.ecociente.R;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
+import com.example.ecociente.viewmodels.SenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseUser;
 import java.util.regex.Pattern;
@@ -24,6 +25,7 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
             Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^A-Za-z0-9])\\S{8,100}$");
 
     private PerfilViewModel viewModel;
+    private SenhaViewModel senhaViewModel;
 
     private final Motion motion = new Motion();
 
@@ -47,9 +49,11 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
 
+        senhaViewModel = new ViewModelProvider(this).get(SenhaViewModel.class);
+
         inicializarComponentes();
 
-        viewModel.getCarregando().observe(this, this::definirCarregando);
+        senhaViewModel.getCarregando().observe(this, this::definirCarregando);
 
         findViewById(R.id.botaoVoltarGerenciarSenha).setOnClickListener(view -> finish());
 
@@ -136,13 +140,13 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
 
             campo.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-            icone.setImageResource(R.drawable.icon_olho_fechado);
+            icone.setImageResource(R.drawable.ic_olho_fechado);
 
         } else {
 
             campo.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
 
-            icone.setImageResource(R.drawable.icon_olho_aberto);
+            icone.setImageResource(R.drawable.ic_olho_aberto);
         }
 
         campo.setSelection(campo.getText().length());
@@ -185,7 +189,7 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
             return;
         }
 
-        viewModel
+        senhaViewModel
                 .alterarSenha(getApplicationContext(), senhaAtual, senhaNova)
                 .observe(
                         this,

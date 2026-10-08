@@ -17,28 +17,31 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.example.ecociente.R;
+import com.example.ecociente.model.PerfilAcesso;
 import com.example.ecociente.model.PerfilUsuario;
+import com.example.ecociente.ui.BarraNavegacaoView;
+import com.example.ecociente.ui.InsetsSistema;
+import com.example.ecociente.ui.ItemBarra;
+import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Motion;
+import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.firebase.auth.FirebaseUser;
 import java.io.File;
 
 public class GerenciarPerfilActivity extends AppCompatActivity {
 
-    public static final String EXTRA_ORIGEM_NAVEGACAO = "origemNavegacaoPerfil";
-    public static final String ORIGEM_HOME = "home";
-    public static final String ORIGEM_QUIZ = "quiz";
+    public static final String EXTRA_COOPERATIVA = "perfilCooperativa";
 
     private PerfilViewModel viewModel;
 
     private final Motion motion = new Motion();
+
+    private boolean cooperativa;
+    private boolean homeDoCondominio;
 
     private TextView textoNome;
     private TextView textoEmail;
@@ -71,6 +74,8 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         inicializarComponentes();
 
         configurarCliques();
+
+        cooperativa = getIntent().getBooleanExtra(EXTRA_COOPERATIVA, false);
 
         configurarNavegacao();
 
@@ -150,6 +155,20 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
         textoIniciaisAvatar.setText(obterInicial(nomeExibido));
 
+        if (!cooperativa && perfil != null && PerfilAcesso.ehCooperativa(perfil.getTipoPerfil())) {
+            cooperativa = true;
+
+            trocarBarra(ItensBarra.cooperativa());
+        }
+
+        homeDoCondominio =
+                perfil != null
+                        && PerfilAcesso.destinoDaHome(perfil) == PerfilAcesso.DestinoHome.CONDOMINIO;
+
+        if (homeDoCondominio) {
+            trocarBarra(ItensBarra.morador());
+        }
+
         if (perfil != null && !perfil.getFotoUrl().isEmpty()) {
             mostrarFoto(perfil.getFotoUrl());
         }
@@ -157,88 +176,75 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
     private void configurarNavegacao() {
 
-        View botaoHome = findViewById(R.id.botaoNavHomePerfil);
-        View botaoGuia = findViewById(R.id.botaoNavGuiaPerfil);
-        View botaoQuiz = findViewById(R.id.botaoNavQuizPerfil);
-        View botaoPerfil = findViewById(R.id.botaoNavPerfilPerfil);
-        View botaoAssistente = findViewById(R.id.botaoNavAssistentePerfil);
-        View indicador = findViewById(R.id.indicadorNavegacaoPerfil);
+        BarraNavegacaoView barra = findViewById(R.id.barraNavegacao);
 
-        botaoHome.setOnClickListener(view -> abrirHome());
-        botaoQuiz.setOnClickListener(view -> abrirQuiz());
-        botaoAssistente.setOnClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
+        barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
-        Motion.pressFeedback(botaoHome);
-        Motion.pressFeedback(botaoGuia);
-        Motion.pressFeedback(botaoQuiz);
-        Motion.pressFeedback(botaoPerfil);
-        Motion.pressFeedback(botaoAssistente);
+        barra.setOnItemClickListener(this::aoClicarItemDaBarra);
 
-        indicador.post(
-                () -> {
-                    float destino =
-                            botaoPerfil.getX()
-                                    + (botaoPerfil.getWidth() / 2f)
-                                    - (indicador.getWidth() / 2f);
+        mostrarBarra();
 
-                    String origem = getIntent().getStringExtra(EXTRA_ORIGEM_NAVEGACAO);
+        InsetsSistema.aplicarComoPadding(findViewById(R.id.raizPerfil));
+    }
 
-                    if (origem == null) {
-                        indicador.setTranslationX(destino);
-                        return;
-                    }
+    private void trocarBarra(ItemBarra[] itens) {
 
-                    View botaoOrigem = ORIGEM_QUIZ.equals(origem) ? botaoQuiz : botaoHome;
+        BarraNavegacaoView barra = findViewById(R.id.barraNavegacao);
 
-                    indicador.setTranslationX(
-                            botaoOrigem.getX()
-                                    + (botaoOrigem.getWidth() / 2f)
-                                    - (indicador.getWidth() / 2f));
+        barra.configurar(itens);
 
-                    indicador
-                            .animate()
-                            .translationX(destino)
-                            .setDuration(Motion.ENTER_MS)
-                            .setInterpolator(new FastOutSlowInInterpolator())
-                            .start();
-                });
+        barra.selecionar(ItensBarra.NENHUM);
+    }
 
-        ViewCompat.setOnApplyWindowInsetsListener(
-                findViewById(R.id.raizPerfil),
-                (raiz, insets) -> {
-                    Insets sistema =
-                            insets.getInsets(
-                                    WindowInsetsCompat.Type.systemBars()
-                                            | WindowInsetsCompat.Type.displayCutout());
+    private void mostrarBarra() {
 
-                    raiz.setPadding(sistema.left, sistema.top, sistema.right, sistema.bottom);
+        BarraNavegacaoView barra = findViewById(R.id.barraNavegacao);
 
-                    return insets;
-                });
+        barra.configurar(cooperativa ? ItensBarra.cooperativa() : ItensBarra.usuario());
+
+        Navegacao.marcarNaBarra(this, barra, indiceNoPerfil());
+    }
+
+    private int indiceNoPerfil() {
+        return cooperativa || homeDoCondominio ? ItensBarra.NENHUM : ItensBarra.QUARTO;
+    }
+
+    private void aoClicarItemDaBarra(int indice) {
+
+        if (cooperativa) {
+            Navegacao.irParaItemDaCooperativa(this, indice, ItensBarra.NENHUM);
+
+        } else if (indice == ItensBarra.HOME) {
+            abrirHome();
+
+        } else if (indice == ItensBarra.TERCEIRO) {
+            abrirQuiz();
+        }
     }
 
     private void abrirHome() {
 
-        Intent rota = new Intent(this, MainActivity.class);
+        Class<?> destino = MainActivity.class;
 
-        rota.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        if (cooperativa) {
+            destino = CooperativaHomeActivity.class;
 
-        startActivity(rota);
+        } else if (homeDoCondominio) {
+            destino = CondominioHomeActivity.class;
+        }
 
-        overridePendingTransition(0, 0);
+        Navegacao.abrirHomePelaBarra(this, destino, indiceNoPerfil());
     }
 
     private void abrirQuiz() {
 
-        Intent rota = new Intent(this, QuizActivity.class);
-
-        rota.putExtra(QuizActivity.EXTRA_ANIMAR_NAVEGACAO, false);
-
-        startActivity(rota);
+        Navegacao.abrirPelaBarra(
+                this,
+                new Intent(this, QuizActivity.class)
+                        .putExtra(QuizActivity.EXTRA_MORADOR, homeDoCondominio),
+                indiceNoPerfil());
 
         finish();
-
-        overridePendingTransition(0, 0);
     }
 
     private void mostrarOpcoesFoto() {
@@ -409,12 +415,6 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
     private void voltarParaLogin() {
 
-        Intent rota = new Intent(this, Login.class);
-
-        rota.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-        startActivity(rota);
-
-        finish();
+        Navegacao.abrirLoginLimpandoPilha(this);
     }
 }
