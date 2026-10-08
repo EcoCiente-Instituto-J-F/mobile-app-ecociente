@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/raizSindicoDashboard"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/branco"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <ImageButton
+            android:id="@+id/voltarSindicoDashboard"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Voltar à home"
+            android:padding="13dp"
+            android:src="@drawable/sindico_voltar" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Dashboard"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="22sp" />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+        <ImageView
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginEnd="20dp"
+            android:contentDescription="@null"
+            android:padding="5dp"
+            android:src="@drawable/icon_grafico" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/nunito_regular"
+                android:text="Visão ilustrativa do desempenho do condomínio"
+                android:textColor="@color/cinza_texto_home"
+                android:textSize="13sp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:clipToPadding="false"
+                android:fillViewport="false"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <LinearLayout
+                        android:layout_width="160dp"
+                        android:layout_height="110dp"
+                        android:background="@drawable/sindico_card"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunito_bold"
+                            android:text="80"
+                            android:textColor="@color/verde_escuro_principal"
+                            android:textSize="26sp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunito_regular"
+                            android:text="Total de aulas concluídas"
+                            android:textColor="@color/cinza_texto_home"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="160dp"
+                        android:layout_height="110dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/sindico_card"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunito_bold"
+                            android:text="1.200"
+                            android:textColor="@color/verde_escuro_principal"
+                            android:textSize="26sp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunito_regular"
+                            android:text="Moradores utilizando o app"
+                            android:textColor="@color/cinza_texto_home"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="160dp"
+                        android:layout_height="110dp"
+                        android:layout_marginStart="10dp"
+                        android:background="@drawable/sindico_card"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunito_bold"
+                            android:text="300 pts"
+                            android:textColor="@color/verde_escuro_principal"
+                            android:textSize="26sp" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunito_regular"
+                            android:text="Média de pontos por pessoa"
+                            android:textColor="@color/cinza_texto_home"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/sindico_card"
+                android:orientation="vertical"
+                android:padding="14dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Quizzes com maiores notas"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="17sp" />
+                <com.example.ecociente.views.SindicoDashboardGraficoView
+                    android:id="@+id/graficoQuizzesSindico"
+                    android:layout_width="match_parent"
+                    android:layout_height="210dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="Notas ilustrativas: Compostagem 14, Vidro 18, Sustentabilidade 14 e Papel 26" />
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:clipToPadding="false"
+                android:contentDescription="Deslize para ver materiais reciclados e análise por cooperativa"
+                android:fillViewport="false"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:scrollbars="none">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/sindico_card"
+                android:orientation="vertical"
+                android:padding="14dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Materiais reciclados"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="17sp" />
+                <com.example.ecociente.views.SindicoDashboardRoscaView
+                    android:layout_width="match_parent"
+                    android:layout_height="170dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="Papel 25%, plástico 50%, vidro 8%, metal 12% e orgânico 5%" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_regular"
+                    android:gravity="center"
+                    android:text="Papel 25%  ·  Plástico 50%  ·  Vidro 8%\nMetal 12%  ·  Orgânico 5%"
+                    android:textColor="@color/cinza_texto_home"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/sindico_card"
+                android:orientation="vertical"
+                android:padding="14dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Análise por cooperativa"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="17sp" />
+                <com.example.ecociente.views.SindicoDashboardGraficoView
+                    android:id="@+id/graficoCooperativasSindico"
+                    android:layout_width="match_parent"
+                    android:layout_height="205dp"
+                    android:layout_marginTop="10dp"
+                    android:contentDescription="Coletas ilustrativas: Coop Estrela 3, Coop Lua 9, Coop Sol 12 e Coop Verde 15" />
+            </LinearLayout>
+                </LinearLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+    </ScrollView>
+
+    <com.example.ecociente.views.SindicoBottomBar
+        android:id="@+id/barraInferiorSindico"
+        android:layout_width="match_parent"
+        android:layout_height="86dp" />
+</LinearLayout>

@@ -144,7 +144,7 @@
                         android:orientation="vertical">
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="48dp"
+                            android:layout_height="40dp"
                             android:background="@drawable/sindico_unidades_segmento"
                             android:orientation="horizontal">
                             <TextView
@@ -157,7 +157,7 @@
                                 android:fontFamily="@font/nunito_bold"
                                 android:gravity="center"
                                 android:text="Residencial"
-                                android:textSize="10sp" />
+                                android:textSize="11sp" />
                             <TextView
                                 android:id="@+id/tipoComercialSindico"
                                 android:layout_width="0dp"
@@ -168,7 +168,7 @@
                                 android:fontFamily="@font/nunito_bold"
                                 android:gravity="center"
                                 android:text="Comercial/Industrial"
-                                android:textSize="9sp" />
+                                android:textSize="10sp" />
                         </LinearLayout>
 
                         <TextView
@@ -184,8 +184,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
                             android:background="@drawable/sindico_campo"
+                            android:drawableStart="@drawable/sindico_building_campo"
+                            android:drawablePadding="6dp"
                             android:inputType="textCapWords"
-                            android:paddingStart="10dp"
+                            android:paddingStart="8dp"
                             android:paddingEnd="10dp"
                             android:singleLine="true"
                             android:textColor="@color/preto_texto_home"
@@ -204,8 +206,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
                             android:background="@drawable/sindico_campo"
+                            android:drawableStart="@drawable/ic_localizacao_chat"
+                            android:drawablePadding="6dp"
                             android:inputType="textPostalAddress"
-                            android:paddingStart="10dp"
+                            android:paddingStart="8dp"
                             android:paddingEnd="10dp"
                             android:singleLine="true"
                             android:textColor="@color/preto_texto_home"
@@ -233,6 +237,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="46dp"
                                     android:background="@drawable/sindico_campo"
+                                    android:drawableStart="@drawable/sindico_building_campo"
+                                    android:drawablePadding="4dp"
                                     android:inputType="textCapWords"
                                     android:paddingStart="8dp"
                                     android:paddingEnd="8dp"
@@ -257,6 +263,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="46dp"
                                     android:background="@drawable/sindico_campo"
+                                    android:drawableStart="@drawable/sindico_unidades_estado"
+                                    android:drawablePadding="3dp"
                                     android:inputType="textCapCharacters"
                                     android:maxLength="2"
                                     android:paddingStart="8dp"
@@ -280,6 +288,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
                             android:background="@drawable/sindico_campo"
+                            android:drawableStart="@drawable/ic_localizacao_chat"
+                            android:drawablePadding="6dp"
                             android:inputType="phone"
                             android:maxLength="9"
                             android:paddingStart="10dp"
@@ -340,19 +350,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
-                <Button
+                <LinearLayout
                     android:id="@+id/adicionarBlocoSindico"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="7dp"
                     android:background="@drawable/sindico_unidades_botao_contorno"
-                    android:drawableStart="@drawable/sindico_unidades_adicionar"
-                    android:drawablePadding="7dp"
+                    android:clickable="true"
+                    android:contentDescription="Adicionar bloco ou torre"
+                    android:focusable="true"
                     android:gravity="center"
-                    android:text="Adicionar bloco/torre"
-                    android:textAllCaps="false"
-                    android:textColor="@color/verde_escuro_principal"
-                    android:textSize="12sp" />
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/sindico_unidades_adicionar" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="7dp"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Adicionar bloco/torre"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textSize="12sp" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -393,19 +415,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
-                <Button
+                <LinearLayout
                     android:id="@+id/adicionarAreaSindico"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="7dp"
                     android:background="@drawable/sindico_unidades_botao_contorno"
-                    android:drawableStart="@drawable/sindico_unidades_adicionar"
-                    android:drawablePadding="7dp"
+                    android:clickable="true"
+                    android:contentDescription="Adicionar área de descarte"
+                    android:focusable="true"
                     android:gravity="center"
-                    android:text="Adicionar área de descarte"
-                    android:textAllCaps="false"
-                    android:textColor="@color/verde_escuro_principal"
-                    android:textSize="12sp" />
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/sindico_unidades_adicionar" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="7dp"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="Adicionar área de descarte"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textSize="12sp" />
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

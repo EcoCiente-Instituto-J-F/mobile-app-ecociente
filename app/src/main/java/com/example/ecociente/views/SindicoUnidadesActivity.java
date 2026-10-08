@@ -104,8 +104,11 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 view -> escolherFoto.launch("image/*"));
         findViewById(R.id.salvarDadosCondominioSindico).setOnClickListener(
                 view -> salvarDados(raiz));
-        findViewById(R.id.adicionarBlocoSindico).setOnClickListener(
-                view -> abrirFormulario(true, null));
+        findViewById(R.id.adicionarBlocoSindico).setOnClickListener(view -> {
+            List<SindicoItemUnidade> blocos = viewModel.getBlocos();
+            if (blocos.isEmpty()) abrirFormulario(true, null);
+            else abrirBloco(blocos.get(0));
+        });
         findViewById(R.id.adicionarAreaSindico).setOnClickListener(
                 view -> abrirFormulario(false, null));
         findViewById(R.id.voltarSindicoUnidades).setOnClickListener(view -> finish());
@@ -231,6 +234,12 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
             ((TextView) linha.findViewById(R.id.nomeItemUnidades)).setText(item.getNome());
             ((TextView) linha.findViewById(R.id.detalheItemUnidades))
                     .setText(item.getDetalhe());
+            if (bloco) {
+                linha.setClickable(true);
+                linha.setFocusable(true);
+                linha.setContentDescription("Abrir unidades do " + item.getNome());
+                linha.setOnClickListener(view -> abrirBloco(item));
+            }
             ImageButton editar = linha.findViewById(R.id.editarItemUnidades);
             editar.setContentDescription("Editar " + item.getNome());
             editar.setOnClickListener(view -> abrirFormulario(bloco, item));
@@ -339,6 +348,12 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         finish();
+    }
+
+    private void abrirBloco(SindicoItemUnidade bloco) {
+        Intent intent = new Intent(this, SindicoBlocoActivity.class);
+        intent.putExtra(SindicoBlocoActivity.EXTRA_BLOCO_ID, bloco.getId());
+        startActivity(intent);
     }
 
     private int dp(int valor) {

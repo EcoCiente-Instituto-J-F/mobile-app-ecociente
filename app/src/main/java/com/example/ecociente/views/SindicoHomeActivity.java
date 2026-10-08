@@ -53,6 +53,12 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         montarCalendario(dados);
         montarMetricas(dados);
         montarRanking(dados);
+        findViewById(R.id.sindicoDashboardResumo).setOnClickListener(view -> startActivity(
+                new Intent(this, SindicoDashboardActivity.class)));
+        View.OnClickListener abrirRanking = view -> startActivity(
+                new Intent(this, SindicoRankingActivity.class));
+        findViewById(R.id.sindicoRankingTitulo).setOnClickListener(abrirRanking);
+        findViewById(R.id.sindicoRanking).setOnClickListener(abrirRanking);
         SindicoBottomBar barra = findViewById(R.id.barraInferiorSindico);
         barra.selecionar(SindicoBottomBar.Aba.HOME);
         barra.aoTocarSolicitacao(view -> startActivity(

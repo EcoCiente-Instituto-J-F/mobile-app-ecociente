@@ -14,11 +14,16 @@ public final class SindicoColetaRepository {
     private static final SindicoColetaRepository INSTANCIA = new SindicoColetaRepository();
 
     private final List<SindicoCooperativa> cooperativas = Collections.unmodifiableList(Arrays.asList(
-            new SindicoCooperativa(1, "Cooperativa Recicla Mais", "2,3 km", "4,7 (124 avaliações)"),
-            new SindicoCooperativa(2, "Cooperativa VerdeMais", "3,1 km", "4,8 (96 avaliações)"),
-            new SindicoCooperativa(3, "Cooperativa Nova Vida", "4,2 km", "4,6 (82 avaliações)"),
-            new SindicoCooperativa(4, "Cooperativa EcoAção", "5,0 km", "4,9 (71 avaliações)"),
-            new SindicoCooperativa(5, "Cooperativa Reciclar Juntos", "6,4 km", "4,5 (58 avaliações)")));
+            new SindicoCooperativa(1, "Cooperativa Recicla Mais", "2,3 km", "4,7 (124 avaliações)",
+                    "Rua das Hortênsias, 123 - Jardim das Flores", "São Paulo", "SP", "01234-567"),
+            new SindicoCooperativa(2, "Cooperativa VerdeMais", "3,1 km", "4,8 (96 avaliações)",
+                    "Rua das Palmeiras, 245", "São Paulo", "SP", "01234-568"),
+            new SindicoCooperativa(3, "Cooperativa Nova Vida", "4,2 km", "4,6 (82 avaliações)",
+                    "Avenida dos Ipês, 80", "São Paulo", "SP", "01234-569"),
+            new SindicoCooperativa(4, "Cooperativa EcoAção", "5,0 km", "4,9 (71 avaliações)",
+                    "Rua do Bosque, 410", "São Paulo", "SP", "01234-570"),
+            new SindicoCooperativa(5, "Cooperativa Reciclar Juntos", "6,4 km", "4,5 (58 avaliações)",
+                    "Avenida Verde, 56", "São Paulo", "SP", "01234-571")));
     private final List<SindicoHistoricoColeta> historico = Collections.unmodifiableList(Arrays.asList(
             new SindicoHistoricoColeta(101, "Cooperativa Recicla Mais", "27/09/2026", "4,7 (124 avaliações)"),
             new SindicoHistoricoColeta(102, "Cooperativa VerdeMais", "23/09/2026", "4,8 (96 avaliações)"),

@@ -27,6 +27,10 @@
             android:id="@+id/nomeCooperativa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="44dp"
+            android:gravity="center_vertical"
             android:fontFamily="@font/nunito_bold"
             android:textColor="@color/verde_escuro_principal"
             android:textSize="13sp" />

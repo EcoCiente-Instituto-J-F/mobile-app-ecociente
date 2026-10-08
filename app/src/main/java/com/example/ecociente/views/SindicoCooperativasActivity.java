@@ -85,7 +85,15 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
             if (!normalizar(cooperativa.getNome()).contains(termo)) continue;
             encontrados++;
             View item = inflater.inflate(R.layout.item_sindico_cooperativa, lista, false);
-            ((TextView) item.findViewById(R.id.nomeCooperativa)).setText(cooperativa.getNome());
+            TextView nome = item.findViewById(R.id.nomeCooperativa);
+            nome.setText(cooperativa.getNome());
+            nome.setContentDescription("Ver informações de " + cooperativa.getNome());
+            nome.setOnClickListener(view -> {
+                Intent informacoes = new Intent(this, SindicoInformacoesCooperativaActivity.class);
+                informacoes.putExtra(SindicoInformacoesCooperativaActivity.EXTRA_COOPERATIVA_ID,
+                        cooperativa.getId());
+                startActivity(informacoes);
+            });
             ((TextView) item.findViewById(R.id.distanciaCooperativa))
                     .setText("⌖ " + cooperativa.getDistancia());
             ((TextView) item.findViewById(R.id.avaliacaoCooperativa))
