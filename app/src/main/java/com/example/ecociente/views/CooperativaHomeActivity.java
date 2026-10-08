@@ -9,9 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.model.Aviso;
 import com.example.ecociente.model.Coletas;
 import com.example.ecociente.model.PerfilUsuario;
-import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.ui.AvatarPerfil;
@@ -72,27 +72,14 @@ public class CooperativaHomeActivity extends AppCompatActivity {
 
         configurarCalendario();
 
-        configurarAtalhos();
-    }
-
-    private void configurarAtalhos() {
-
-        findViewById(R.id.atalhoAvisos)
+        findViewById(R.id.botaoAvisosCooperativa)
                 .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, true)));
 
-        findViewById(R.id.atalhoNovaColeta)
-                .setOnClickListener(view -> startActivity(NovaColetaActivity.criarIntent(this, null)));
+        findViewById(R.id.cardAvisosCooperativa)
+                .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, true)));
 
-        findViewById(R.id.atalhoCondominios).setOnClickListener(view -> abrirLista(TipoLista.CONDOMINIOS));
-
-        findViewById(R.id.atalhoAvaliacoes).setOnClickListener(view -> abrirLista(TipoLista.AVALIACOES));
-
-        findViewById(R.id.atalhoNotificacoes)
-                .setOnClickListener(view -> startActivity(new Intent(this, NotificacoesActivity.class)));
-    }
-
-    private void abrirLista(TipoLista tipo) {
-        startActivity(TelaListaActivity.criarIntent(this, tipo, false));
+        findViewById(R.id.cardChatbotCooperativa)
+                .setOnClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
     }
 
     private void configurarCalendario() {
@@ -159,6 +146,14 @@ public class CooperativaHomeActivity extends AppCompatActivity {
         super.onStart();
 
         carregarPerfil();
+
+        Aviso recente = Aviso.exemplos().get(0);
+
+        ((TextView) findViewById(R.id.textoAvisoDestaqueCooperativa)).setText(recente.titulo);
+        ((TextView) findViewById(R.id.textoAvisoOrigemCooperativa)).setText(recente.remetente);
+
+        findViewById(R.id.pontoAvisosCooperativa)
+                .setVisibility(Aviso.quantidadeNaoLidos() > 0 ? View.VISIBLE : View.GONE);
 
         if (calendarioViewModel != null && calendarioViewModel.jaCarregou()) {
             calendarioViewModel.carregar();

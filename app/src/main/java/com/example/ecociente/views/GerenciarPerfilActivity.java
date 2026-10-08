@@ -22,6 +22,7 @@ import com.bumptech.glide.Glide;
 import com.example.ecociente.R;
 import com.example.ecociente.model.PerfilAcesso;
 import com.example.ecociente.model.PerfilUsuario;
+import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.ItemBarra;
@@ -79,6 +80,8 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
         configurarNavegacao();
 
+        mostrarLinhasDaCooperativa();
+
         carregarPerfil();
 
         motion.staggerIn(
@@ -127,6 +130,14 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
                 .setOnClickListener(
                         view -> startActivity(new Intent(this, NotificacoesActivity.class)));
 
+        findViewById(R.id.linhaCondominiosAtendidos)
+                .setOnClickListener(
+                        view -> startActivity(TelaListaActivity.criarIntent(this, TipoLista.CONDOMINIOS, false)));
+
+        findViewById(R.id.linhaAvaliacoesRecebidas)
+                .setOnClickListener(
+                        view -> startActivity(TelaListaActivity.criarIntent(this, TipoLista.AVALIACOES, false)));
+
         findViewById(R.id.linhaSairConta).setOnClickListener(view -> confirmarSaida());
 
         findViewById(R.id.linhaExcluirConta).setOnClickListener(view -> pedirSenhaParaExcluir());
@@ -161,6 +172,8 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
             trocarBarra(ItensBarra.cooperativa());
         }
 
+        mostrarLinhasDaCooperativa();
+
         homeDoCondominio =
                 perfil != null
                         && PerfilAcesso.destinoDaHome(perfil) == PerfilAcesso.DestinoHome.CONDOMINIO;
@@ -185,6 +198,11 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         mostrarBarra();
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizPerfil));
+    }
+
+    private void mostrarLinhasDaCooperativa() {
+
+        findViewById(R.id.blocoLinhasCooperativa).setVisibility(cooperativa ? View.VISIBLE : View.GONE);
     }
 
     private void trocarBarra(ItemBarra[] itens) {

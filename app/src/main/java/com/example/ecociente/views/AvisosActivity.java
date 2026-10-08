@@ -5,19 +5,29 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import com.example.ecociente.R;
 import com.example.ecociente.model.Aviso;
 import com.example.ecociente.model.CategoriaAviso;
+import com.example.ecociente.model.ItemLista;
+import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.ui.FormatoDataApi;
 import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AvisosActivity extends AppCompatActivity {
 
@@ -49,7 +59,7 @@ public class AvisosActivity extends AppCompatActivity {
 
         if (getIntent().getBooleanExtra(EXTRA_PODE_ENVIAR, false)) {
             botaoNovo.setVisibility(View.VISIBLE);
-            botaoNovo.setOnClickListener(view -> startActivity(new Intent(this, NovoAvisoActivity.class)));
+            botaoNovo.setOnClickListener(view -> mostrarNovoAviso());
         }
     }
 
@@ -87,6 +97,47 @@ public class AvisosActivity extends AppCompatActivity {
 
             lista.addView(card);
         }
+    }
+
+    private void mostrarNovoAviso() {
+
+        View conteudo = LayoutInflater.from(this).inflate(R.layout.dialog_novo_aviso, null);
+
+        AutoCompleteTextView destino = conteudo.findViewById(R.id.campoDestinoAviso);
+        EditText titulo = conteudo.findViewById(R.id.campoTituloAviso);
+        EditText mensagem = conteudo.findViewById(R.id.campoMensagemAviso);
+
+        List<String> destinos = new ArrayList<>();
+
+        destinos.add(getString(R.string.todos_os_condominios));
+
+        for (ItemLista condominio : TipoLista.CONDOMINIOS.itens()) {
+            destinos.add(condominio.titulo);
+        }
+
+        destino.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, destinos));
+
+        AlertDialog dialogo = new MaterialAlertDialogBuilder(this).setView(conteudo).create();
+
+        conteudo.findViewById(R.id.botaoFecharNovoAviso).setOnClickListener(view -> dialogo.dismiss());
+        conteudo.findViewById(R.id.botaoCancelarNovoAviso).setOnClickListener(view -> dialogo.dismiss());
+
+        conteudo.findViewById(R.id.botaoEnviarNovoAviso)
+                .setOnClickListener(
+                        view -> {
+                            if (destino.getText().length() == 0
+                                    || titulo.getText().toString().trim().isEmpty()
+                                    || mensagem.getText().toString().trim().isEmpty()) {
+                                Toast.makeText(this, R.string.preencha_todos_os_campos, Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            Toast.makeText(this, R.string.aviso_enviado_exemplo, Toast.LENGTH_SHORT).show();
+
+                            dialogo.dismiss();
+                        });
+
+        dialogo.show();
     }
 
     public static void aplicarChip(@NonNull TextView chip, @NonNull CategoriaAviso categoria) {

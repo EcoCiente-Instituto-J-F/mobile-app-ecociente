@@ -333,7 +333,6 @@
     <string name="condominios_atendidos">Condomínios atendidos</string>
     <string name="avaliacoes_recebidas">Avaliações recebidas</string>
     <string name="ranking_do_morador">Ranking do morador</string>
-    <string name="gerenciar_notificacoes">Gerenciar notificações</string>
     <string name="nova_coleta">Nova coleta</string>
     <string name="editar_coleta">Editar coleta</string>
     <string name="editar">Editar</string>
@@ -371,4 +370,8 @@
     <string name="categoria_campanha">Campanha</string>
     <string name="categoria_aviso_geral">Aviso geral</string>
     <string name="categoria_seguranca">Segurança</string>
+    <string name="chatbot_card_titulo">Venha testar nosso chatbot</string>
+    <string name="chatbot_card_texto">Teste nosso chatbot e tire dúvidas sobre seus agendamentos e funcionalidades do app.</string>
+    <string name="avisos_do_condominio">Avisos do condomínio</string>
+    <string name="avisos_card_subtitulo">Informações do seu condomínio</string>
 </resources>

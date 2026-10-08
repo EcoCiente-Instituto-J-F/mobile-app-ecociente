@@ -78,6 +78,19 @@ public final class Aviso {
         return exemplos;
     }
 
+    public static int quantidadeNaoLidos() {
+
+        int quantidade = 0;
+
+        for (Aviso aviso : exemplos()) {
+            if (!aviso.isLida()) {
+                quantidade++;
+            }
+        }
+
+        return quantidade;
+    }
+
     @Nullable
     public static Aviso porId(int id) {
 
