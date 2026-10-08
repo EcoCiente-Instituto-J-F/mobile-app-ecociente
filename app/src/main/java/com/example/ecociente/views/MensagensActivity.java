@@ -79,11 +79,11 @@ public class MensagensActivity extends AppCompatActivity {
                 continue;
             }
 
-            View item = inflador.inflate(R.layout.item_conversa, lista, false);
+            View item = inflador.inflate(R.layout.item_linha_lista, lista, false);
 
-            ((TextView) item.findViewById(R.id.textoNomeConversa)).setText(conversa.nome);
-            ((TextView) item.findViewById(R.id.textoUltimaMensagem)).setText(conversa.ultimaMensagem);
-            ((TextView) item.findViewById(R.id.textoHoraConversa)).setText(conversa.hora);
+            ((TextView) item.findViewById(R.id.textoTituloLinha)).setText(conversa.nome);
+            ((TextView) item.findViewById(R.id.textoSubtituloLinha)).setText(conversa.ultimaMensagem);
+            ((TextView) item.findViewById(R.id.textoDestaqueLinha)).setText(conversa.hora);
 
             item.findViewById(R.id.pontoNaoLida)
                     .setVisibility(conversa.naoLida ? View.VISIBLE : View.INVISIBLE);

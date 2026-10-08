@@ -214,37 +214,9 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         if (cooperativa) {
             Navegacao.irParaItemDaCooperativa(this, indice, ItensBarra.NENHUM);
 
-        } else if (indice == ItensBarra.HOME) {
-            abrirHome();
-
-        } else if (indice == ItensBarra.TERCEIRO) {
-            abrirQuiz();
+        } else {
+            Navegacao.irParaItemDoUsuario(this, indice, indiceNoPerfil(), homeDoCondominio);
         }
-    }
-
-    private void abrirHome() {
-
-        Class<?> destino = MainActivity.class;
-
-        if (cooperativa) {
-            destino = CooperativaHomeActivity.class;
-
-        } else if (homeDoCondominio) {
-            destino = CondominioHomeActivity.class;
-        }
-
-        Navegacao.abrirHomePelaBarra(this, destino, indiceNoPerfil());
-    }
-
-    private void abrirQuiz() {
-
-        Navegacao.abrirPelaBarra(
-                this,
-                new Intent(this, QuizActivity.class)
-                        .putExtra(QuizActivity.EXTRA_MORADOR, homeDoCondominio),
-                indiceNoPerfil());
-
-        finish();
     }
 
     private void mostrarOpcoesFoto() {

@@ -22,6 +22,8 @@ final class ApiEsqueciSenha {
     private static final String TAG = "EsqueciSenhaApi";
     private static final String URL_BASE = "https://ds-esqueceusenha-api-1.onrender.com/senhas/";
     private static final String MENSAGEM_PADRAO = "Não foi possível conectar ao servidor";
+    private static final String MENSAGEM_INDISPONIVEL =
+            "O servidor está indisponível no momento. Tente novamente em instantes.";
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
@@ -120,7 +122,7 @@ final class ApiEsqueciSenha {
             Log.w(TAG, "Resposta de erro fora do formato esperado", erro);
         }
 
-        return MENSAGEM_PADRAO;
+        return MENSAGEM_INDISPONIVEL;
     }
 
     @NonNull

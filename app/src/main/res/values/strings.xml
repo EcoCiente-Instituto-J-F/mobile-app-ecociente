@@ -264,6 +264,8 @@
     <string name="solicitacoes_vazio">Nenhuma solicitação nesta situação.</string>
     <string name="solicitacoes_erro">Não foi possível carregar as solicitações agora.</string>
     <string name="solicitacoes_sessao_expirada">Sua sessão expirou. Entre novamente para ver as solicitações.</string>
+    <string name="solicitacoes_sem_acesso">Seu perfil não tem acesso às solicitações.</string>
+    <string name="proxima_coleta_sem_acesso">Seu perfil não tem acesso ao calendário.</string>
     <string name="entrar_novamente">Entrar novamente</string>
     <string name="aceitar">Aceitar</string>
     <string name="aceitar_titulo">Aceitar solicitação</string>
@@ -326,4 +328,47 @@
     <string name="aba_nao_lidos">Não lidos</string>
     <string name="aba_arquivadas">Arquivadas</string>
     <string name="sem_conversas">Nenhuma conversa aqui.</string>
+
+    <!-- Telas complementares -->
+    <string name="condominios_atendidos">Condomínios atendidos</string>
+    <string name="avaliacoes_recebidas">Avaliações recebidas</string>
+    <string name="ranking_do_morador">Ranking do morador</string>
+    <string name="gerenciar_notificacoes">Gerenciar notificações</string>
+    <string name="nova_coleta">Nova coleta</string>
+    <string name="editar_coleta">Editar coleta</string>
+    <string name="editar">Editar</string>
+    <string name="data">Data</string>
+    <string name="horario_inicio">Início</string>
+    <string name="horario_fim">Fim</string>
+    <string name="coleta_recorrente">Coleta recorrente</string>
+    <string name="preencha_todos_os_campos">Preencha todos os campos.</string>
+    <string name="fim_antes_do_inicio">O horário final precisa ser depois do inicial.</string>
+    <string name="coleta_salva_exemplo">Coleta salva (exemplo).</string>
+    <string name="ranking_resumo">1º Rafael · 2º Ana Paula · 3º Marina</string>
+    <string name="lembrete_de_coleta">Lembrete de coleta</string>
+    <string name="canal_lembretes_coleta">Lembretes de coleta</string>
+    <string name="lembrete_amanha">Coleta amanhã, %1$s, às %2$s.</string>
+    <string name="lembrete_hoje">Coleta hoje, %1$s, às %2$s.</string>
+    <string name="lembrete_coleta_proxima">Essa coleta já está muito próxima para agendar um lembrete.</string>
+    <string name="lembrete_sem_permissao">Permita as notificações para receber os lembretes.</string>
+
+    <!-- Avisos -->
+    <string name="avisos">Avisos</string>
+    <string name="avisos_subtitulo">Faça seu descarte sustentável e ajude o meio ambiente!</string>
+    <string name="sem_avisos">Nenhum aviso por aqui.</string>
+    <string name="nova_notificacao">Nova notificação</string>
+    <string name="categoria">Categoria</string>
+    <string name="destinatarios">Destinatários</string>
+    <string name="titulo_aviso">Título</string>
+    <string name="mensagem">Mensagem</string>
+    <string name="enviar">Enviar</string>
+    <string name="aviso_enviado_exemplo">Aviso enviado (exemplo).</string>
+    <string name="aviso_origem">%1$s · %2$s</string>
+    <string name="todos_os_condominios">Todos os meus condomínios</string>
+    <string name="categoria_coleta">Coleta</string>
+    <string name="categoria_orientacao">Orientação</string>
+    <string name="categoria_manutencao">Manutenção</string>
+    <string name="categoria_campanha">Campanha</string>
+    <string name="categoria_aviso_geral">Aviso geral</string>
+    <string name="categoria_seguranca">Segurança</string>
 </resources>

@@ -158,6 +158,9 @@ public class QuizActivity extends AppCompatActivity {
 
     private void configurarCabecalho() {
         Motion.pressFeedback(findViewById(R.id.botaoNotificacoesQuiz));
+
+        findViewById(R.id.botaoNotificacoesQuiz)
+                .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, false)));
     }
 
     private void preencherListaQuizzes() {
@@ -271,25 +274,7 @@ public class QuizActivity extends AppCompatActivity {
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
         barra.setOnItemClickListener(
-                indice -> {
-                    if (indice == ItensBarra.HOME) {
-                        Navegacao.abrirHomePelaBarra(
-                                this,
-                                morador ? CondominioHomeActivity.class : MainActivity.class,
-                                ItensBarra.TERCEIRO);
-
-                    } else if (indice == ItensBarra.QUARTO && !morador) {
-                        abrirPerfil();
-                    }
-                });
-    }
-
-    private void abrirPerfil() {
-
-        Navegacao.abrirPelaBarra(
-                this, new Intent(this, GerenciarPerfilActivity.class), ItensBarra.TERCEIRO);
-
-        finish();
+                indice -> Navegacao.irParaItemDoUsuario(this, indice, ItensBarra.TERCEIRO, morador));
     }
 
     private void animarEntradaDaTela() {

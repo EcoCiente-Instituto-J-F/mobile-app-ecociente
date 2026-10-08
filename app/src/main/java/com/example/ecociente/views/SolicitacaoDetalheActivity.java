@@ -62,6 +62,9 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
         preencher();
 
+        findViewById(R.id.botaoEditarColeta)
+                .setOnClickListener(view -> startActivity(NovaColetaActivity.criarIntent(this, solicitacao)));
+
         configurarAcoes();
     }
 

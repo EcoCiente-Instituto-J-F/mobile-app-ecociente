@@ -59,4 +59,17 @@
     <color name="verde_botao_enviar_chat">#0A6750</color>
     <color name="verde_fundo_icone_opcao">#E7F1EC</color>
     <color name="verde_fundo_splash">#063E35</color>
+
+    <color name="chip_coleta_fundo">#E2EEE4</color>
+    <color name="chip_coleta_texto">#064E3B</color>
+    <color name="chip_orientacao_fundo">#DCEAF7</color>
+    <color name="chip_orientacao_texto">#2F6FA8</color>
+    <color name="chip_manutencao_fundo">#FFF0C9</color>
+    <color name="chip_manutencao_texto">#B7791F</color>
+    <color name="chip_campanha_fundo">#EADCF8</color>
+    <color name="chip_campanha_texto">#7A3FB5</color>
+    <color name="chip_geral_fundo">#E3E3E3</color>
+    <color name="chip_geral_texto">#555555</color>
+    <color name="chip_seguranca_fundo">#FADBD8</color>
+    <color name="chip_seguranca_texto">#B03A2E</color>
 </resources>

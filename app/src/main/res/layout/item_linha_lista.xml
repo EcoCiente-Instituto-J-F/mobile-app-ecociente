@@ -17,6 +17,7 @@
         android:background="@drawable/fundo_avatar_conversa">
 
         <ImageView
+            android:id="@+id/iconeLinha"
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_gravity="center"
@@ -44,7 +45,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textoNomeConversa"
+                    android:id="@+id/textoTituloLinha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -54,7 +55,7 @@
                     android:textSize="14sp" />
 
                 <TextView
-                    android:id="@+id/textoUltimaMensagem"
+                    android:id="@+id/textoSubtituloLinha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
@@ -73,7 +74,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textoHoraConversa"
+                    android:id="@+id/textoDestaqueLinha"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_regular"

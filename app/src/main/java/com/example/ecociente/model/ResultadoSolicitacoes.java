@@ -9,6 +9,7 @@ public final class ResultadoSolicitacoes {
     public enum Tipo {
         SUCESSO,
         SESSAO_EXPIRADA,
+        SEM_ACESSO,
         ERRO
     }
 
@@ -31,6 +32,11 @@ public final class ResultadoSolicitacoes {
     @NonNull
     public static ResultadoSolicitacoes sessaoExpirada() {
         return new ResultadoSolicitacoes(Tipo.SESSAO_EXPIRADA, Collections.emptyList(), true);
+    }
+
+    @NonNull
+    public static ResultadoSolicitacoes semAcesso() {
+        return new ResultadoSolicitacoes(Tipo.SEM_ACESSO, Collections.emptyList(), true);
     }
 
     @NonNull

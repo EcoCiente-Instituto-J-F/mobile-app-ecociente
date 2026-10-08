@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public final class FormatoDataApi {
 
@@ -48,6 +49,40 @@ public final class FormatoDataApi {
                 ? calendario.get(Calendar.HOUR_OF_DAY) + "h"
                 : String.format(
                         PORTUGUES, "%dh%02d", calendario.get(Calendar.HOUR_OF_DAY), minutos);
+    }
+
+    @NonNull
+    public static String relativa(@Nullable String iso, long agoraMs) {
+
+        Calendar data = calendario(iso);
+
+        if (data == null) {
+            return "";
+        }
+
+        long minutos = TimeUnit.MILLISECONDS.toMinutes(agoraMs - data.getTimeInMillis());
+
+        if (minutos < 1) {
+            return "Agora";
+        }
+
+        if (minutos < 60) {
+            return "Há " + minutos + " min";
+        }
+
+        long horas = minutos / 60;
+
+        if (horas < 24) {
+            return "Há " + horas + " h";
+        }
+
+        long dias = horas / 24;
+
+        if (dias == 1) {
+            return "Ontem";
+        }
+
+        return dias < 7 ? "Há " + dias + " dias" : formatar(iso, "d 'de' MMM");
     }
 
     @Nullable

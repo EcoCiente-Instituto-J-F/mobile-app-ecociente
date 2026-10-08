@@ -197,6 +197,9 @@ public class SolicitacoesActivity extends AppCompatActivity {
         if (situacao == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
             mostrarEstado(R.string.solicitacoes_sessao_expirada, R.string.entrar_novamente, view -> sair());
 
+        } else if (situacao == ResultadoSolicitacoes.Tipo.SEM_ACESSO) {
+            mostrarEstado(R.string.solicitacoes_sem_acesso, 0, null);
+
         } else if (situacao == ResultadoSolicitacoes.Tipo.ERRO) {
             mostrarEstado(R.string.solicitacoes_erro, R.string.tentar_novamente, view -> viewModel.recarregar());
 
