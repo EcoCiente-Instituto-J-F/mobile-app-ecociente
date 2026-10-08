@@ -187,8 +187,7 @@ public class SolicitacoesActivity extends AppCompatActivity {
             List<Solicitacao> filtrados = new ArrayList<>();
 
             for (Solicitacao solicitacao : itens) {
-                String nome =
-                        getString(R.string.solicitacao_condominio, solicitacao.getCondominioId());
+                String nome = SolicitacaoAdapter.nomeExibido(this, solicitacao);
 
                 if (nome.toLowerCase().contains(busca)) {
                     filtrados.add(solicitacao);

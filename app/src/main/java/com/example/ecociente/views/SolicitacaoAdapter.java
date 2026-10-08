@@ -60,8 +60,7 @@ public class SolicitacaoAdapter
 
         Context contexto = holder.itemView.getContext();
 
-        holder.condominio.setText(
-                contexto.getString(R.string.solicitacao_condominio, solicitacao.getCondominioId()));
+        holder.condominio.setText(nomeExibido(contexto, solicitacao));
 
         StatusAgendamento status = solicitacao.getStatus();
 
@@ -80,6 +79,16 @@ public class SolicitacaoAdapter
         holder.recorrencia.setVisibility(solicitacao.possuiRecorrencia() ? View.VISIBLE : View.GONE);
 
         holder.itemView.setOnClickListener(view -> ouvinte.aoClicar(solicitacao));
+    }
+
+    @NonNull
+    static String nomeExibido(@NonNull Context contexto, @NonNull Solicitacao solicitacao) {
+
+        String nome = solicitacao.getNomeCondominio();
+
+        return nome != null
+                ? nome
+                : contexto.getString(R.string.solicitacao_condominio, solicitacao.getCondominioId());
     }
 
     static final class SolicitacaoHolder extends RecyclerView.ViewHolder {
