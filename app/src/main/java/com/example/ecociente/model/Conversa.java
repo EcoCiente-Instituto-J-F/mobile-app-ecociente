@@ -9,27 +9,44 @@ public final class Conversa {
     public final String nome;
     public final String ultimaMensagem;
     public final String hora;
-    public final boolean naoLida;
+    public final int naoLidas;
     public final boolean arquivada;
 
-    private Conversa(String nome, String ultimaMensagem, String hora, boolean naoLida, boolean arquivada) {
+    private Conversa(String nome, String ultimaMensagem, String hora, int naoLidas, boolean arquivada) {
         this.nome = nome;
         this.ultimaMensagem = ultimaMensagem;
         this.hora = hora;
-        this.naoLida = naoLida;
+        this.naoLidas = naoLidas;
         this.arquivada = arquivada;
+    }
+
+    public boolean temNaoLidas() {
+
+        return naoLidas > 0;
+    }
+
+    @NonNull
+    public String iniciais() {
+
+        String[] palavras = nome.split(" ");
+
+        String primeira = palavras[0].substring(0, 1);
+
+        String ultima = palavras.length > 1 ? palavras[palavras.length - 1].substring(0, 1) : "";
+
+        return (primeira + ultima).toUpperCase();
     }
 
     @NonNull
     public static List<Conversa> exemplos() {
         return Arrays.asList(
-                new Conversa("Condomínio Raio de Luz", "Quando vão passar?", "08:30", true, false),
-                new Conversa("Residencial Jardim das Flores", "Podem confirmar a coleta de amanhã?", "08:05", true, false),
-                new Conversa("Condomínio Vila Verde", "Obrigado pela coleta de hoje!", "Ontem", false, false),
-                new Conversa("Edifício Solar", "Temos 12 sacos de recicláveis para amanhã.", "Ontem", false, false),
-                new Conversa("Residencial Aurora", "Vocês aceitam vidro também?", "Seg", true, false),
-                new Conversa("Condomínio Parque das Árvores", "Podemos mudar o horário para 10h?", "Seg", false, false),
-                new Conversa("Condomínio Bela Vista", "Combinado, até quinta.", "05/10", false, true),
-                new Conversa("Residencial Primavera", "Muito obrigada pelo atendimento.", "02/10", false, true));
+                new Conversa("Condomínio Raio de Luz", "Quando vão passar?", "08:30", 2, false),
+                new Conversa("Residencial Jardim das Flores", "Podem confirmar a coleta de amanhã?", "08:05", 1, false),
+                new Conversa("Condomínio Vila Verde", "Obrigado pela coleta de hoje!", "Ontem", 0, false),
+                new Conversa("Edifício Solar", "Temos 12 sacos de recicláveis para amanhã.", "Ontem", 0, false),
+                new Conversa("Residencial Aurora", "Vocês aceitam vidro também?", "Seg", 3, false),
+                new Conversa("Condomínio Parque das Árvores", "Podemos mudar o horário para 10h?", "Seg", 0, false),
+                new Conversa("Condomínio Bela Vista", "Combinado, até quinta.", "05/10", 0, true),
+                new Conversa("Residencial Primavera", "Muito obrigada pelo atendimento.", "02/10", 0, true));
     }
 }

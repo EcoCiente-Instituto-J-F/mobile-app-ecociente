@@ -328,6 +328,7 @@
     <string name="aba_nao_lidos">Não lidos</string>
     <string name="aba_arquivadas">Arquivadas</string>
     <string name="sem_conversas">Nenhuma conversa aqui.</string>
+    <string name="buscar_conversa">Buscar condomínio</string>
 
     <!-- Telas complementares -->
     <string name="condominios_atendidos">Condomínios atendidos</string>
