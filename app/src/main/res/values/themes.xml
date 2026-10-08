@@ -25,6 +25,18 @@
     </style>
 
     <style
+        name="Theme.EcoCiente.QuizIntro"
+        parent="Theme.EcoCiente">
+
+        <item name="android:windowBackground">@color/verde_escuro_principal</item>
+        <item name="android:statusBarColor">@color/verde_escuro_principal</item>
+        <item name="android:navigationBarColor">@color/verde_escuro_principal</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+        <item name="android:colorAccent">@color/branco</item>
+    </style>
+
+    <style
         name="Theme.EcoCiente.Dialogo"
         parent="Theme.Material3.DayNight.Dialog">
 

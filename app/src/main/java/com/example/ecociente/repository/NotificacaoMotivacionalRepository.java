@@ -22,7 +22,7 @@ import java.util.concurrent.Executors;
 
 import org.json.JSONObject;
 
-public class git statusNotificacaoMotivacionalRepository {
+public class NotificacaoMotivacionalRepository {
 
     private static final String TAG =
             "NotificacaoHome";

@@ -180,6 +180,41 @@
 
     <string name="quiz_restrito_usuario_comum">Esta tela é exclusiva para usuários comuns.</string>
 
+    <string name="inicio_quiz_voltar">Voltar para quizzes</string>
+    <string name="inicio_quiz_ilustracao">Ilustração de sustentabilidade e reciclagem</string>
+    <string name="inicio_quiz_titulo_padrao">Sustentabilidade</string>
+    <string name="inicio_quiz_descricao">“Teste seus conhecimentos e descubra como fazer a diferença ”</string>
+    <string name="inicio_quiz_perguntas_padrao">10 - Perguntas</string>
+    <string name="inicio_quiz_perguntas_formatado">%1$d - Perguntas</string>
+    <string name="inicio_quiz_pontos">0 / 100 - Pontos</string>
+    <string name="inicio_quiz_botao">Iniciar quiz</string>
+
+    <!-- Quiz - perguntas -->
+    <string name="quiz_perguntas_voltar">Voltar</string>
+    <string name="quiz_planeta_ilustracao">Ilustração do planeta</string>
+    <string name="quiz_proximo">Próximo</string>
+    <string name="quiz_finalizar">Finalizar</string>
+    <string name="quiz_dialogo_finalizar_titulo">Finalizar quiz?</string>
+    <string name="quiz_dialogo_finalizar_mensagem">Você respondeu às 10 perguntas. Deseja finalizar e ver o seu resultado?</string>
+    <string name="quiz_dialogo_revisar">Revisar</string>
+
+    <!-- Quiz - resultado -->
+    <string name="quiz_resultado_voltar">Voltar</string>
+    <string name="quiz_sua_pontuacao">Sua pontuação</string>
+    <string name="quiz_resultado_mensagem_perfeita">Perfeito! Você dominou o assunto!</string>
+    <string name="quiz_resultado_mensagem_boa">Você já domina grande parte do assunto!</string>
+    <string name="quiz_resultado_mensagem_media">Muito bem! Você está no caminho certo!</string>
+    <string name="quiz_resultado_mensagem_praticar">Continue praticando — cada resposta ensina algo novo!</string>
+    <string name="quiz_repetir">Repetir quiz</string>
+    <string name="quiz_resultado_finalizar_titulo">Finalizar Quiz</string>
+    <string name="quiz_resultado_finalizar_mensagem">Deseja encerrar este quiz e voltar para a lista de quizzes?</string>
+    <string name="quiz_sem_resposta">Sem resposta</string>
+    <string name="quiz_sua_resposta">Sua resposta: %1$s</string>
+    <string name="quiz_resposta_correta">Resposta correta: %1$s</string>
+    <string name="quiz_questao_numero">Questão %1$d</string>
+    <string name="quiz_dialogo_fechar">Fechar</string>
+    <string name="cancelar">Cancelar</string>
+
     <string name="abrir_calendario">Abrir calendário</string>
     <string name="abrir_lista_estados">Abrir lista de estados</string>
     <string name="bem_vindo">Bem-Vindo</string>
@@ -246,4 +281,12 @@
     <string name="telefone">Telefone</string>
     <string name="usuario_selecionado">Usuário selecionado</string>
     <string name="verificar">Verificar</string>
+
+    <string name="quiz_revisao_voltar">Voltar para o resultado</string>
+    <string name="quiz_revisao_subtitulo">Revisão</string>
+    <string name="quiz_revisao_numero_formatado">Questão %1$02d</string>
+    <string name="quiz_revisao_sua_resposta">Sua resposta:</string>
+    <string name="quiz_revisao_resposta_correta">Resposta correta:</string>
+    <string name="quiz_revisao_explicacao">Explicação:</string>
+
 </resources>
