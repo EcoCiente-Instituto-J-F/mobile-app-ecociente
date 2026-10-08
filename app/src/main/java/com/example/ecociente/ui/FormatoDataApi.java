@@ -22,6 +22,16 @@ public final class FormatoDataApi {
     }
 
     @NonNull
+    public static String dataCompacta(@Nullable String iso) {
+        return formatar(iso, "d 'de' MMM 'de' yyyy");
+    }
+
+    @NonNull
+    public static String dataLonga(@Nullable String iso) {
+        return formatar(iso, "d 'de' MMMM 'de' yyyy");
+    }
+
+    @NonNull
     public static String hora(@Nullable String iso) {
         return formatar(iso, "HH:mm");
     }

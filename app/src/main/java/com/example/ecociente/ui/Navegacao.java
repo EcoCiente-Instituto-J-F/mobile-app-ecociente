@@ -52,7 +52,7 @@ public final class Navegacao {
                 indice == ItensBarra.TERCEIRO
                         ? new Intent(de, MensagensActivity.class)
                         : new Intent(de, SolicitacoesActivity.class)
-                                .putExtra(SolicitacoesActivity.EXTRA_HISTORICO, indice == ItensBarra.QUARTO);
+                                .putExtra(SolicitacoesActivity.EXTRA_INDICE_BARRA, indice);
 
         abrirPelaBarra(de, rota, indiceAtual);
 

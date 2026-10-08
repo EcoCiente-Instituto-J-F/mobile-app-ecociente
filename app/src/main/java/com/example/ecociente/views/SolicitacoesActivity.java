@@ -37,7 +37,7 @@ import java.util.List;
 
 public class SolicitacoesActivity extends AppCompatActivity {
 
-    public static final String EXTRA_HISTORICO = "historico";
+    public static final String EXTRA_INDICE_BARRA = "indiceBarra";
 
     private static final int FALTAM_PARA_CARREGAR_MAIS = 3;
 
@@ -54,8 +54,6 @@ public class SolicitacoesActivity extends AppCompatActivity {
                         }
                     });
 
-    private boolean historico;
-
     private SwipeRefreshLayout atualizacao;
     private View indicador;
     private TextView textoEstado;
@@ -71,14 +69,6 @@ public class SolicitacoesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_solicitacoes);
 
         viewModel = new ViewModelProvider(this).get(SolicitacoesViewModel.class);
-
-        historico = getIntent().getBooleanExtra(EXTRA_HISTORICO, false);
-
-        if (historico) {
-            viewModel.definirFiltroInicial(StatusAgendamento.REALIZADO);
-
-            ((TextView) findViewById(R.id.tituloSolicitacoes)).setText(R.string.historico);
-        }
 
         atualizacao = findViewById(R.id.atualizacaoSolicitacoes);
         indicador = findViewById(R.id.indicadorSolicitacoes);
@@ -304,6 +294,6 @@ public class SolicitacoesActivity extends AppCompatActivity {
     }
 
     private int indiceAtual() {
-        return historico ? ItensBarra.QUARTO : ItensBarra.SEGUNDO;
+        return getIntent().getIntExtra(EXTRA_INDICE_BARRA, ItensBarra.SEGUNDO);
     }
 }

@@ -113,6 +113,8 @@ public class MensagensActivity extends AppCompatActivity {
             contador.setText(String.valueOf(conversa.naoLidas));
             contador.setVisibility(conversa.temNaoLidas() ? View.VISIBLE : View.INVISIBLE);
 
+            item.setOnClickListener(view -> startActivity(ConversaActivity.criarIntent(this, conversa)));
+
             lista.addView(item);
         }
 
