@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/sindico_card"
+    android:fillViewport="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:contentDescription="@null"
+                android:src="@drawable/sindico_bell_pink" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="11dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/nunito_bold"
+                android:text="Criar notificação"
+                android:textColor="@color/verde_escuro_principal"
+                android:textSize="20sp" />
+            <ImageView
+                android:id="@+id/botaoFecharCriarAviso"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Fechar criação de notificação"
+                android:padding="11dp"
+                android:src="@drawable/sindico_fechar" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:fontFamily="@font/nunito_regular"
+            android:text="Rascunho local: ainda não será enviado aos moradores."
+            android:textColor="@color/cinza_texto_home"
+            android:textSize="11sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:fontFamily="@font/nunito_semibold"
+            android:text="Título"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="13sp" />
+        <EditText
+            android:id="@+id/campoTituloAviso"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/sindico_campo"
+            android:hint="Digite seu título"
+            android:inputType="textCapSentences"
+            android:maxLength="100"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:singleLine="true"
+            android:textColor="@color/preto_texto_home"
+            android:textColorHint="@color/cinza_texto_home"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:fontFamily="@font/nunito_semibold"
+            android:text="Destinatário"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/campoDestinatarioAviso"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/sindico_campo"
+            android:gravity="center_vertical"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:text="Todos os moradores"
+            android:textColor="@color/preto_texto_home"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:fontFamily="@font/nunito_semibold"
+            android:text="Mensagem"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="13sp" />
+        <EditText
+            android:id="@+id/campoMensagemAviso"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/sindico_campo"
+            android:gravity="top|start"
+            android:hint="Escreva sua mensagem..."
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="1000"
+            android:padding="12dp"
+            android:textColor="@color/preto_texto_home"
+            android:textColorHint="@color/cinza_texto_home"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botaoCancelarAviso"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Cancelar"
+                android:textAllCaps="false"
+                android:textColor="@color/verde_escuro_principal" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botaoSalvarAviso"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginStart="12dp"
+                android:backgroundTint="@color/verde_escuro_principal"
+                android:text="@string/sindico_salvar_rascunho"
+                android:textAllCaps="false"
+                android:textColor="@color/branco" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/raizSindicoCooperativas"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/branco"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:paddingStart="12dp"
+        android:paddingEnd="16dp">
+        <ImageButton
+            android:id="@+id/voltarCooperativas"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Voltar à home do síndico"
+            android:padding="12dp"
+            android:src="@drawable/sindico_voltar" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Cooperativas próximas"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="21sp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="24dp">
+
+            <ImageView
+                android:layout_width="104dp"
+                android:layout_height="56dp"
+                android:layout_gravity="end"
+                android:contentDescription="Caminhão de reciclagem"
+                android:scaleType="centerCrop"
+                android:src="@drawable/sindico_caminhao_coleta" />
+
+            <EditText
+                android:id="@+id/buscaCooperativas"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:background="@drawable/sindico_campo"
+                android:drawableStart="@drawable/buscar_icon"
+                android:drawablePadding="8dp"
+                android:hint="Buscar cooperativa..."
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:singleLine="true"
+                android:textColor="@color/preto_texto_home"
+                android:textColorHint="@color/cinza_secundario_home"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginBottom="12dp"
+                android:fontFamily="@font/nunito_regular"
+                android:text="Dados ilustrativos · sem consulta ao banco ou envio à cooperativa"
+                android:textColor="@color/cinza_texto_home"
+                android:textSize="11sp" />
+
+            <LinearLayout
+                android:id="@+id/listaCooperativas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </LinearLayout>
+    </ScrollView>
+
+    <com.example.ecociente.views.SindicoBottomBar
+        android:id="@+id/barraInferiorSindico"
+        android:layout_width="match_parent"
+        android:layout_height="86dp" />
+</LinearLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="92dp"
+    android:background="@drawable/sindico_card"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="10dp"
+    android:paddingBottom="10dp">
+    <ImageView
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:background="@drawable/sindico_nav_mascote_fundo"
+        android:contentDescription="@null"
+        android:padding="10dp"
+        android:src="@drawable/ic_folha_sustentabilidade" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/nomeCooperativa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:minHeight="44dp"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/nunito_bold"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="13sp" />
+        <TextView
+            android:id="@+id/distanciaCooperativa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_regular"
+            android:textColor="@color/cinza_secundario_home"
+            android:textSize="11sp" />
+        <TextView
+            android:id="@+id/avaliacaoCooperativa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_regular"
+            android:textColor="@color/cinza_texto_home"
+            android:textSize="11sp" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/acaoCooperativa"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="5dp"
+        android:backgroundTint="@color/verde_escuro_principal"
+        android:minWidth="86dp"
+        android:text="Solicitar coleta"
+        android:textAllCaps="false"
+        android:textColor="@color/branco"
+        android:textSize="10sp" />
+</LinearLayout>

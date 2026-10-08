@@ -1,4 +1,11 @@
 <resources>
+    <string name="sindico_dados_demo">Dados de demonstração</string>
+    <string name="sindico_saudacao_demo">Olá, Júlio!</string>
+    <string name="sindico_condominio_demo">Condomínio Residencial Jardim das Flores</string>
+    <string name="sindico_avisos">Avisos</string>
+    <string name="sindico_nova_notificacao">Nova notificação</string>
+    <string name="sindico_salvar_rascunho">Salvar rascunho</string>
+    <string name="sindico_rascunho_salvo">Rascunho salvo nesta sessão. O envio aos moradores estará disponível após a integração com a API.</string>
 
     <string name="app_name">
         EcoCiente
