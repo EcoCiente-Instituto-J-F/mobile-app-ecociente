@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cartaoProximaColeta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="26dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/branco"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/verde_escuro_principal"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="10dp"
+                        android:paddingTop="14dp"
+                        android:paddingEnd="12dp"
+                        android:paddingBottom="14dp">
+
+                        <ImageView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_gravity="bottom"
+                            android:importantForAccessibility="no"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/ilustracao_coleta_reciclavel" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/nunito_semibold"
+                                android:text="@string/proxima_coleta"
+                                android:textColor="@color/verde_escuro_principal"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/textoTipoColeta"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:background="@drawable/fundo_chip_tipo_coleta"
+                                android:fontFamily="@font/nunito_bold"
+                                android:paddingStart="14dp"
+                                android:paddingTop="5dp"
+                                android:paddingEnd="14dp"
+                                android:paddingBottom="5dp"
+                                android:text="@string/tipo_coleta_reciclaveis"
+                                android:textColor="@color/verde_escuro_principal"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:layout_width="14dp"
+                                    android:layout_height="14dp"
+                                    android:importantForAccessibility="no"
+                                    android:src="@drawable/ic_calendario" />
+
+                                <TextView
+                                    android:id="@+id/textoDataProximaColeta"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="6dp"
+                                    android:fontFamily="@font/nunito_regular"
+                                    android:text="@string/carregando"
+                                    android:textColor="@color/cinza_texto_home"
+                                    android:textSize="12sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/linhaHorarioProximaColeta"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:visibility="gone">
+
+                                <ImageView
+                                    android:layout_width="14dp"
+                                    android:layout_height="14dp"
+                                    android:importantForAccessibility="no"
+                                    android:src="@drawable/ic_relogio" />
+
+                                <TextView
+                                    android:id="@+id/textoHorarioProximaColeta"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="6dp"
+                                    android:fontFamily="@font/nunito_regular"
+                                    android:textColor="@color/cinza_texto_home"
+                                    android:textSize="12sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/caixaFaltamDias"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/fundo_caixa_faltam_dias"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingStart="10dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="12dp"
+                            android:paddingBottom="8dp"
+                            android:visibility="gone">
+
+                            <ImageView
+                                android:layout_width="22dp"
+                                android:layout_height="22dp"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_relogio_verde" />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textoRotuloFaltam"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nunito_regular"
+                                    android:textColor="@color/verde_escuro_principal"
+                                    android:textSize="10sp" />
+
+                                <TextView
+                                    android:id="@+id/textoValorFaltam"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nunito_bold"
+                                    android:textColor="@color/verde_escuro_principal"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <ImageView
+                    android:layout_width="60dp"
+                    android:layout_height="52dp"
+                    android:layout_gravity="top|end"
+                    android:layout_marginEnd="14dp"
+                    android:importantForAccessibility="no"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ilustracao_calendario_coleta"
+                    android:translationZ="2dp" />
+
+</merge>

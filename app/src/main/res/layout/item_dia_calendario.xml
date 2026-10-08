@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textoDiaCalendario"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:fontFamily="@font/nunito_regular"
+        android:gravity="center"
+        android:textColor="@color/cinza_texto_home"
+        android:textSize="12sp" />
+
+    <View
+        android:id="@+id/marcaColetaCalendario"
+        android:layout_width="14dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/fundo_marca_coleta"
+        android:visibility="invisible" />
+
+</LinearLayout>

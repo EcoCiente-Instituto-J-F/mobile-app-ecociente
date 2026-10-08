@@ -6,8 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.PreferenciasNotificacao;
 import com.example.ecociente.model.ResultadoApi;
@@ -16,15 +14,9 @@ import com.example.ecociente.repository.FotoPerfilRepository;
 import com.example.ecociente.repository.PerfilRepository;
 import com.google.firebase.auth.FirebaseUser;
 
-public class PerfilViewModel extends ViewModel {
+public class PerfilViewModel extends ViewModelComCarregamento {
     private final PerfilRepository repositorio = new PerfilRepository();
     private final FotoPerfilRepository fotoRepositorio = new FotoPerfilRepository();
-    private final MutableLiveData<Boolean> carregando = new MutableLiveData<>(false);
-
-    @NonNull
-    public LiveData<Boolean> getCarregando() {
-        return carregando;
-    }
 
     @Nullable
     public FirebaseUser usuarioAtual() {
@@ -58,12 +50,6 @@ public class PerfilViewModel extends ViewModel {
     }
 
     @NonNull
-    public LiveData<ResultadoApi> alterarSenha(
-            @NonNull Context contexto, @NonNull String senhaAtual, @NonNull String novaSenha) {
-        return executar(repositorio.alterarSenha(contexto, senhaAtual, novaSenha));
-    }
-
-    @NonNull
     public LiveData<ResultadoApi> excluirConta(@NonNull String senhaAtual) {
         return executar(repositorio.excluirConta(senhaAtual));
     }
@@ -71,7 +57,7 @@ public class PerfilViewModel extends ViewModel {
     @NonNull
     public LiveData<ResultadoUploadFoto> atualizarFotoPerfil(
             @NonNull Context contexto, @NonNull String uid, @NonNull Uri imagem) {
-        carregando.setValue(true);
+        definirCarregando(true);
 
         MediatorLiveData<ResultadoUploadFoto> resultado = new MediatorLiveData<>();
 
@@ -83,7 +69,7 @@ public class PerfilViewModel extends ViewModel {
                     resultado.removeSource(envio);
 
                     if (!respostaEnvio.isSucesso()) {
-                        carregando.setValue(false);
+                        definirCarregando(false);
                         resultado.setValue(respostaEnvio);
                         return;
                     }
@@ -95,7 +81,7 @@ public class PerfilViewModel extends ViewModel {
                     resultado.addSource(
                             gravacao,
                             respostaGravacao -> {
-                                carregando.setValue(false);
+                                definirCarregando(false);
 
                                 resultado.setValue(
                                         respostaGravacao.isSucesso()
@@ -103,21 +89,6 @@ public class PerfilViewModel extends ViewModel {
                                                 : ResultadoUploadFoto.erro(
                                                         respostaGravacao.getMensagemErro()));
                             });
-                });
-
-        return resultado;
-    }
-
-    @NonNull
-    private <T> LiveData<T> executar(@NonNull LiveData<T> chamada) {
-        carregando.setValue(true);
-
-        MediatorLiveData<T> resultado = new MediatorLiveData<>();
-        resultado.addSource(
-                chamada,
-                valor -> {
-                    carregando.setValue(false);
-                    resultado.setValue(valor);
                 });
 
         return resultado;

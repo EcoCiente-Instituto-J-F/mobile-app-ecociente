@@ -1,901 +1,304 @@
 package com.example.ecociente.views;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
-
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
-
+import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.example.ecociente.R;
+import com.example.ecociente.model.EstadoHome;
 import com.example.ecociente.ui.AvatarPerfil;
-import com.example.ecociente.ui.Motion;
-
-import com.example.ecociente.model.PerfilAcesso;
-
-import com.example.ecociente.repository.FirestoreProvider;
-import com.example.ecociente.repository.NotificacaoMotivacionalRepository;
-
-import com.google.android.material.button.MaterialButton;
-
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.ecociente.ui.BarraNavegacaoView;
+import com.example.ecociente.ui.Dimensoes;
+import com.example.ecociente.ui.InsetsSistema;
+import com.example.ecociente.ui.ItensBarra;
+import com.example.ecociente.ui.JanelaEdgeToEdge;
+import com.example.ecociente.ui.MenuPerfil;
+import com.example.ecociente.ui.Navegacao;
+import com.example.ecociente.viewmodels.HomeViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final FirebaseAuth autenticacao =
-            FirebaseAuth.getInstance();
+    private static final long FADE_SAIDA_MS = 130L;
+    private static final long FADE_ENTRADA_MS = 170L;
 
-    private final FirebaseFirestore bancoFirestore =
-            FirestoreProvider.obterInstancia();
-
-    private final NotificacaoMotivacionalRepository repositorioNotificacao =
-            new NotificacaoMotivacionalRepository();
-
-
-    private TextView textoMensagemMotivacional;
+    private HomeViewModel viewModel;
 
     private SwipeRefreshLayout atualizacaoHome;
+    private TextView textoMensagemMotivacional;
 
-
-    private String fotoUrlPerfil =
-            "";
-
-    private boolean homeCarregada =
-            false;
-
-    private boolean atividadeVisivel =
-            false;
-
+    private boolean homeCarregada;
 
     @Override
-    protected void onCreate(
-            Bundle estadoSalvo
-    ) {
+    protected void onCreate(Bundle estadoSalvo) {
+        super.onCreate(estadoSalvo);
 
-        super.onCreate(
-                estadoSalvo
-        );
+        JanelaEdgeToEdge.aplicar(this);
 
+        setContentView(R.layout.activity_main);
 
-        WindowCompat.setDecorFitsSystemWindows(
-                getWindow(),
-                false
-        );
+        viewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
+        findViewById(R.id.botaoTentarNovamente).setOnClickListener(view -> tentarNovamente());
 
-        getWindow().setStatusBarColor(
-                Color.TRANSPARENT
-        );
+        viewModel.getEstado().observe(this, this::renderizar);
 
-
-        getWindow().setNavigationBarColor(
-                Color.TRANSPARENT
-        );
-
-
-        if (
-                Build.VERSION.SDK_INT
-                        >=
-                        Build.VERSION_CODES.Q
-        ) {
-
-            getWindow()
-                    .setNavigationBarContrastEnforced(
-                            false
-                    );
-        }
-
-
-        setContentView(
-                R.layout.activity_main
-        );
-
-
-        configurarEstadoInicial();
-
-        validarPerfilECarregarHome();
-    }
-
-
-    private void configurarEstadoInicial() {
-
-        MaterialButton botaoTentarNovamente =
-                findViewById(
-                        R.id.botaoTentarNovamente
-                );
-
-
-        botaoTentarNovamente
-                .setOnClickListener(
-                        view -> {
-
-                            findViewById(
-                                    R.id.estadoErroHome
-                            ).setVisibility(
-                                    View.GONE
-                            );
-
-
-                            findViewById(
-                                    R.id.indicadorCarregamentoHome
-                            ).setVisibility(
-                                    View.VISIBLE
-                            );
-
-
-                            validarPerfilECarregarHome();
-                        }
-                );
-    }
-
-
-    private void validarPerfilECarregarHome() {
-
-        FirebaseUser usuario =
-                autenticacao.getCurrentUser();
-
-
-        if (usuario == null) {
-
-            abrirLogin(
-                    "Entre na sua conta para continuar.",
-                    false
-            );
-
-            return;
-        }
-
-
-        bancoFirestore
-                .collection(
-                        "usuarios"
-                )
-                .document(
-                        usuario.getUid()
-                )
-                .get()
-                .addOnSuccessListener(
-                        documento ->
-
-                                validarDocumentoPerfil(
-                                        usuario,
-                                        documento
-                                )
-                )
-                .addOnFailureListener(
-                        erro ->
-
-                                mostrarErroCarregamento()
-                );
-    }
-
-
-    private void validarDocumentoPerfil(
-            @NonNull FirebaseUser usuario,
-            @NonNull DocumentSnapshot documento
-    ) {
-
-        if (!documento.exists()) {
-
-            abrirLogin(
-                    "Complete seu cadastro antes de acessar a home.",
-                    true
-            );
-
-            return;
-        }
-
-
-        String tipoPerfil =
-                documento.getString(
-                        "tipoPerfil"
-                );
-
-
-        Boolean possuiCodigoCondominio =
-                documento.getBoolean(
-                        "possuiCodigoCondominio"
-                );
-
-
-        String endereco =
-                documento.getString(
-                        "endereco"
-                );
-
-
-        if (
-                !PerfilAcesso.ehUsuarioComum(
-                        tipoPerfil,
-                        possuiCodigoCondominio,
-                        endereco
-                )
-        ) {
-
-            abrirLogin(
-                    "Esta home é exclusiva para usuários sem vínculo com condomínio.",
-                    true
-            );
-
-            return;
-        }
-
-
-        String nome =
-                documento.getString(
-                        "nome"
-                );
-
-
-        if (
-                nome == null
-                        ||
-                        nome.trim().isEmpty()
-        ) {
-
-            nome =
-                    usuario.getDisplayName();
-        }
-
-
-        String fotoUrl =
-                documento.getString(
-                        "fotoUrl"
-                );
-
-        fotoUrlPerfil = fotoUrl == null ? "" : fotoUrl;
-
-        carregarHome(
-                nome
-        );
-    }
-
-
-    private void carregarHome(String nomeCompleto) {
-
-        setContentView(
-                R.layout.activity_home_usuario_comum
-        );
-
-
-        /*
-         * Envolvemos a Home atual em um
-         * SwipeRefreshLayout em tempo de execução.
-         *
-         * Assim NÃO precisamos alterar o seu XML
-         * atual e não estragamos os ajustes visuais
-         * da Home/barra de navegação.
-         */
-        configurarPullToRefresh();
-
-
-        configurarInsetsDaHome();
-
-
-        homeCarregada =
-                true;
-
-
-        findViewById(R.id.imagemPerfilHome).setOnClickListener(this::mostrarMenuPerfil);
-
-        mostrarFotoHome();
-
-        View navPerfil = findViewById(R.id.navPerfil);
-
-        if (navPerfil != null) {
-
-            navPerfil.setOnClickListener(view -> abrirPerfilPelaBarra());
-        }
-
-        TextView textoSaudacao =
-                findViewById(
-                        R.id.textoSaudacao
-                );
-
-        textoMensagemMotivacional = findViewById(R.id.textoMensagemMotivacional);
-
-        textoSaudacao.setText(getString(R.string.home_saudacao, obterPrimeiroNome(nomeCompleto)));
-
-        View navQuiz = findViewById(R.id.navQuiz);
-
-        if (navQuiz != null) {
-            navQuiz.setOnClickListener(view -> abrirQuizzes());
-        }
-
-        View navAssistente = findViewById(R.id.navAssistente);
-
-        if (navAssistente != null) {
-            navAssistente.setOnClickListener(
-                    view -> startActivity(new Intent(this, ChatActivity.class)));
-        }
-
-        for (int idItem :
-                new int[] {
-                    R.id.navHome, R.id.navGuia, R.id.navQuiz, R.id.navPerfil, R.id.navAssistente
-                }) {
-            View item = findViewById(idItem);
-
-            if (item != null) {
-                Motion.pressFeedback(item);
-            }
-        }
-
-        if (atividadeVisivel) {
-
-            buscarMensagemMotivacional();
+        if (viewModel.getEstado().getValue() == null) {
+            viewModel.carregar();
         }
     }
-
-    private void abrirPerfilPelaBarra() {
-        Intent rota = new Intent(this, GerenciarPerfilActivity.class);
-
-        rota.putExtra(
-                GerenciarPerfilActivity.EXTRA_ORIGEM_NAVEGACAO, GerenciarPerfilActivity.ORIGEM_HOME);
-
-        startActivity(rota);
-
-        overridePendingTransition(0, 0);
-    }
-
-    private void mostrarMenuPerfil(View ancora) {
-
-        PopupMenu menu = new PopupMenu(this, ancora);
-
-        menu.getMenuInflater().inflate(R.menu.menu_perfil_home, menu.getMenu());
-
-        menu.setOnMenuItemClickListener(
-                item -> {
-                    if (item.getItemId() == R.id.menuGerenciarPerfil) {
-                        startActivity(new Intent(this, GerenciarPerfilActivity.class));
-
-                    } else if (item.getItemId() == R.id.menuSair) {
-                        confirmarSaida();
-                    }
-
-                    return true;
-                });
-
-        menu.show();
-    }
-
-    private void confirmarSaida() {
-
-        new androidx.appcompat.app.AlertDialog.Builder(this)
-                .setTitle(R.string.perfil_sair_titulo)
-                .setMessage(R.string.perfil_sair_mensagem)
-                .setPositiveButton(
-                        R.string.perfil_sair_confirmar,
-                        (dialogo, botao) ->
-                                abrirLogin(getString(R.string.sessao_encerrada), true))
-                .setNegativeButton(R.string.perfil_cancelar, null)
-                .show();
-    }
-
-    private void abrirQuizzes() {
-        Intent rota = new Intent(this, QuizActivity.class);
-
-        rota.putExtra(QuizActivity.EXTRA_ANIMAR_NAVEGACAO, true);
-
-        startActivity(rota);
-
-        overridePendingTransition(0, 0);
-    }
-
-    private void configurarPullToRefresh() {
-
-        View raizHome =
-                findViewById(
-                        R.id.raizHomeUsuarioComum
-                );
-
-
-        if (raizHome == null) {
-            return;
-        }
-
-
-        ViewParent paiAtual =
-                raizHome.getParent();
-
-
-        if (!(paiAtual instanceof ViewGroup)) {
-            return;
-        }
-
-
-        ViewGroup grupoPai =
-                (ViewGroup) paiAtual;
-
-
-        int posicao =
-                grupoPai.indexOfChild(
-                        raizHome
-                );
-
-
-        ViewGroup.LayoutParams parametrosOriginais =
-                raizHome.getLayoutParams();
-
-
-        grupoPai.removeView(
-                raizHome
-        );
-
-
-        atualizacaoHome =
-                new SwipeRefreshLayout(
-                        this
-                );
-
-
-        atualizacaoHome.setLayoutParams(
-                parametrosOriginais
-        );
-
-
-        atualizacaoHome.setBackgroundColor(
-                ContextCompat.getColor(
-                        this,
-                        R.color.branco
-                )
-        );
-
-
-        atualizacaoHome.setColorSchemeColors(
-                ContextCompat.getColor(
-                        this,
-                        R.color.verde_escuro_principal
-                )
-        );
-
-
-        atualizacaoHome
-                .setProgressBackgroundColorSchemeColor(
-                        ContextCompat.getColor(
-                                this,
-                                R.color.branco
-                        )
-                );
-
-
-        atualizacaoHome.setDistanceToTriggerSync(
-                dpParaPx(
-                        76
-                )
-        );
-
-
-        atualizacaoHome.setOnRefreshListener(
-                this::buscarMensagemMotivacional
-        );
-
-
-        atualizacaoHome.addView(
-                raizHome,
-
-                new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                )
-        );
-
-
-        grupoPai.addView(
-                atualizacaoHome,
-                posicao
-        );
-    }
-
-
-    private void configurarInsetsDaHome() {
-
-        View raizHome =
-                findViewById(
-                        R.id.raizHomeUsuarioComum
-                );
-
-
-        if (raizHome == null) {
-            return;
-        }
-
-
-        final int paddingEsquerdoOriginal =
-                raizHome.getPaddingLeft();
-
-
-        final int paddingTopoOriginal =
-                raizHome.getPaddingTop();
-
-
-        final int paddingDireitoOriginal =
-                raizHome.getPaddingRight();
-
-
-        final int paddingInferiorOriginal =
-                raizHome.getPaddingBottom();
-
-
-        ViewCompat.setOnApplyWindowInsetsListener(
-                raizHome,
-
-                (view, insets) -> {
-
-                    Insets sistema =
-                            insets.getInsets(
-                                    WindowInsetsCompat.Type.systemBars()
-                                            |
-                                            WindowInsetsCompat.Type.displayCutout()
-                            );
-
-
-                    view.setPadding(
-                            paddingEsquerdoOriginal
-                                    +
-                                    sistema.left,
-
-                            paddingTopoOriginal
-                                    +
-                                    sistema.top,
-
-                            paddingDireitoOriginal
-                                    +
-                                    sistema.right,
-
-                            paddingInferiorOriginal
-                                    +
-                                    sistema.bottom
-                    );
-
-
-                    if (atualizacaoHome != null) {
-
-                        atualizacaoHome
-                                .setProgressViewOffset(
-                                        false,
-
-                                        sistema.top
-                                                +
-                                                dpParaPx(4),
-
-                                        sistema.top
-                                                +
-                                                dpParaPx(48)
-                                );
-                    }
-
-
-                    return insets;
-                }
-        );
-
-
-        WindowInsetsControllerCompat controlador =
-                WindowCompat.getInsetsController(
-                        getWindow(),
-                        raizHome
-                );
-
-
-        if (controlador != null) {
-
-            controlador
-                    .setAppearanceLightStatusBars(
-                            true
-                    );
-
-
-            controlador
-                    .setAppearanceLightNavigationBars(
-                            true
-                    );
-        }
-
-
-        ViewCompat.requestApplyInsets(
-                raizHome
-        );
-    }
-
-
-    private void buscarMensagemMotivacional() {
-
-        if (!homeCarregada) {
-
-            finalizarAtualizacaoManual();
-
-            return;
-        }
-
-
-        repositorioNotificacao.buscar(
-                mensagem -> {
-
-                    /*
-                     * O callback sempre termina
-                     * o indicador de refresh,
-                     * com sucesso ou erro.
-                     */
-                    finalizarAtualizacaoManual();
-
-
-                    if (
-                            mensagem == null
-                                    ||
-                                    textoMensagemMotivacional == null
-                                    ||
-                                    isFinishing()
-                    ) {
-
-                        return;
-                    }
-
-
-                    String mensagemAtual =
-                            textoMensagemMotivacional
-                                    .getText()
-                                    .toString();
-
-
-                    /*
-                     * Se por algum motivo só existir
-                     * uma mensagem no banco, evitamos
-                     * uma animação inútil.
-                     */
-                    if (
-                            mensagem.equals(
-                                    mensagemAtual
-                            )
-                    ) {
-
-                        return;
-                    }
-
-
-                    textoMensagemMotivacional
-                            .animate()
-                            .cancel();
-
-
-                    textoMensagemMotivacional
-                            .animate()
-                            .alpha(0f)
-                            .setDuration(130L)
-                            .withEndAction(
-                                    () -> {
-
-                                        if (
-                                                textoMensagemMotivacional
-                                                        ==
-                                                        null
-                                        ) {
-
-                                            return;
-                                        }
-
-
-                                        textoMensagemMotivacional
-                                                .setText(
-                                                        mensagem
-                                                );
-
-
-                                        textoMensagemMotivacional
-                                                .animate()
-                                                .alpha(1f)
-                                                .setDuration(170L)
-                                                .start();
-                                    }
-                            )
-                            .start();
-                }
-        );
-    }
-
-
-    private void finalizarAtualizacaoManual() {
-
-        if (
-                atualizacaoHome != null
-                        &&
-                        atualizacaoHome.isRefreshing()
-        ) {
-
-            atualizacaoHome.setRefreshing(
-                    false
-            );
-        }
-    }
-
-
-    private void mostrarErroCarregamento() {
-
-        findViewById(
-                R.id.indicadorCarregamentoHome
-        ).setVisibility(
-                View.GONE
-        );
-
-
-        findViewById(
-                R.id.estadoErroHome
-        ).setVisibility(
-                View.VISIBLE
-        );
-    }
-
-
-    private void abrirLogin(
-            String mensagem,
-            boolean encerrarSessao
-    ) {
-
-        if (encerrarSessao) {
-
-            autenticacao.signOut();
-        }
-
-
-        Toast.makeText(
-                this,
-                mensagem,
-                Toast.LENGTH_LONG
-        ).show();
-
-
-        Intent rota =
-                new Intent(
-                        this,
-                        Login.class
-                );
-
-
-        rota.addFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK
-                        |
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK
-        );
-
-
-        startActivity(
-                rota
-        );
-
-
-        finish();
-    }
-
-
-    @NonNull
-    private String obterPrimeiroNome(
-            String nomeCompleto
-    ) {
-
-        if (
-                nomeCompleto == null
-                        ||
-                        nomeCompleto
-                                .trim()
-                                .isEmpty()
-        ) {
-
-            return getString(
-                    R.string.home_usuario_padrao
-            );
-        }
-
-
-        return nomeCompleto
-                .trim()
-                .split("\\s+")[0];
-    }
-
-
-    private int dpParaPx(
-            int dp
-    ) {
-
-        return Math.round(
-                dp
-                        *
-                        getResources()
-                                .getDisplayMetrics()
-                                .density
-        );
-    }
-
-
 
     @Override
     protected void onStart() {
+        boolean jaCarregada = homeCarregada;
 
         super.onStart();
 
+        if (jaCarregada) {
+            viewModel.atualizarMensagem();
 
-        atividadeVisivel =
-                true;
+            viewModel.recarregarFoto();
+        }
+    }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
 
-        /*
-         * Se a Home já estava carregada,
-         * significa que o usuário saiu
-         * e voltou para ela.
-         *
-         * Buscamos outra mensagem.
-         */
+        setIntent(intent);
+
         if (homeCarregada) {
-
-            buscarMensagemMotivacional();
-
-            atualizarFotoHome();
+            Navegacao.marcarNaBarra(this, findViewById(R.id.barraNavegacao), ItensBarra.HOME);
         }
     }
 
-    private void mostrarFotoHome() {
+    private void tentarNovamente() {
 
-        AvatarPerfil.exibir(findViewById(R.id.imagemPerfilHome), fotoUrlPerfil);
+        findViewById(R.id.estadoErroHome).setVisibility(View.GONE);
+
+        findViewById(R.id.indicadorCarregamentoHome).setVisibility(View.VISIBLE);
+
+        viewModel.carregar();
     }
 
-    private void atualizarFotoHome() {
+    private void renderizar(@NonNull EstadoHome estado) {
 
-        FirebaseUser usuario = autenticacao.getCurrentUser();
+        switch (estado.getTipo()) {
+            case ERRO_REDE:
+                findViewById(R.id.indicadorCarregamentoHome).setVisibility(View.GONE);
+                findViewById(R.id.estadoErroHome).setVisibility(View.VISIBLE);
+                break;
 
-        if (usuario == null) {
-            return;
+            case SEM_LOGIN:
+                abrirLogin(R.string.home_sem_login, false);
+                break;
+
+            case CADASTRO_INCOMPLETO:
+                abrirLogin(R.string.home_cadastro_incompleto, true);
+                break;
+
+            case SEM_ACESSO:
+                abrirLogin(R.string.home_sem_acesso, true);
+                break;
+
+            case COOPERATIVA:
+                abrirHomeCooperativa();
+                break;
+
+            case CONDOMINIO:
+                abrirHomeCondominio();
+                break;
+
+            case PRONTA:
+                carregarHome(estado.getNome());
+                break;
+
+            default:
+                break;
         }
+    }
 
-        bancoFirestore
-                .collection("usuarios")
-                .document(usuario.getUid())
-                .get()
-                .addOnSuccessListener(
-                        documento -> {
-                            String fotoUrl = documento.getString("fotoUrl");
+    private void carregarHome(@NonNull String nomeCompleto) {
 
-                            if (fotoUrl != null && !fotoUrl.isEmpty() && !fotoUrl.equals(fotoUrlPerfil)) {
-                                fotoUrlPerfil = fotoUrl;
+        setContentView(R.layout.activity_home_usuario_comum);
 
-                                mostrarFotoHome();
+        homeCarregada = true;
+
+        atualizacaoHome = findViewById(R.id.atualizacaoHome);
+        textoMensagemMotivacional = findViewById(R.id.textoMensagemMotivacional);
+
+        configurarAtualizacao();
+
+        InsetsSistema.aplicarComoPadding(
+                findViewById(R.id.raizHomeUsuarioComum), this::ajustarIndicadorDeAtualizacao);
+
+        ((TextView) findViewById(R.id.textoSaudacao))
+                .setText(getString(R.string.home_saudacao, primeiroNome(nomeCompleto)));
+
+        findViewById(R.id.imagemPerfilHome)
+                .setOnClickListener(
+                        ancora ->
+                                MenuPerfil.mostrar(
+                                        this,
+                                        ancora,
+                                        () -> startActivity(new Intent(this, GerenciarPerfilActivity.class)),
+                                        this::confirmarSaida));
+
+        configurarBarra();
+
+        observarFoto();
+
+        observarMensagem();
+
+        viewModel.atualizarMensagem();
+    }
+
+    private void configurarAtualizacao() {
+
+        atualizacaoHome.setColorSchemeColors(ContextCompat.getColor(this, R.color.verde_escuro_principal));
+
+        atualizacaoHome.setProgressBackgroundColorSchemeColor(
+                ContextCompat.getColor(this, R.color.branco));
+
+        atualizacaoHome.setDistanceToTriggerSync(Dimensoes.dpParaPx(this, 76));
+
+        atualizacaoHome.setOnRefreshListener(viewModel::atualizarMensagem);
+    }
+
+    private void ajustarIndicadorDeAtualizacao(Insets sistema) {
+
+        atualizacaoHome.setProgressViewOffset(
+                false,
+                sistema.top + Dimensoes.dpParaPx(this, 4),
+                sistema.top + Dimensoes.dpParaPx(this, 48));
+    }
+
+    private void configurarBarra() {
+
+        BarraNavegacaoView barra = findViewById(R.id.barraNavegacao);
+
+        barra.configurar(ItensBarra.usuario());
+
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.HOME);
+
+        barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
+
+        barra.setOnItemClickListener(
+                indice -> {
+                    if (indice == ItensBarra.TERCEIRO) {
+                        abrirQuizzes();
+
+                    } else if (indice == ItensBarra.QUARTO) {
+                        abrirPerfilPelaBarra();
+                    }
+                });
+    }
+
+    private void observarFoto() {
+
+        viewModel
+                .getFotoUrl()
+                .observe(
+                        this,
+                        url -> AvatarPerfil.exibir(findViewById(R.id.imagemPerfilHome), url));
+    }
+
+    private void observarMensagem() {
+
+        viewModel.getMensagem().observe(this, this::exibirMensagemComFade);
+
+        viewModel
+                .getAtualizandoMensagem()
+                .observe(
+                        this,
+                        atualizando -> {
+                            if (!atualizando) {
+                                atualizacaoHome.setRefreshing(false);
                             }
                         });
     }
 
+    private void exibirMensagemComFade(@NonNull String mensagem) {
 
-    @Override
-    protected void onStop() {
-        atividadeVisivel = false;
+        if (mensagem.equals(textoMensagemMotivacional.getText().toString())) {
+            return;
+        }
 
-        super.onStop();
+        textoMensagemMotivacional.animate().cancel();
+
+        textoMensagemMotivacional
+                .animate()
+                .alpha(0f)
+                .setDuration(FADE_SAIDA_MS)
+                .withEndAction(
+                        () -> {
+                            textoMensagemMotivacional.setText(mensagem);
+
+                            textoMensagemMotivacional
+                                    .animate()
+                                    .alpha(1f)
+                                    .setDuration(FADE_ENTRADA_MS)
+                                    .start();
+                        })
+                .start();
     }
 
+    private void abrirQuizzes() {
 
-    @Override
-    protected void onDestroy() {
-        textoMensagemMotivacional = null;
-        atualizacaoHome = null;
+        Navegacao.abrirPelaBarra(this, new Intent(this, QuizActivity.class), ItensBarra.HOME);
+    }
 
-        super.onDestroy();
+    private void abrirPerfilPelaBarra() {
+
+        Navegacao.abrirPelaBarra(this, new Intent(this, GerenciarPerfilActivity.class), ItensBarra.HOME);
+    }
+
+    private void abrirHomeCooperativa() {
+
+        startActivity(new Intent(this, CooperativaHomeActivity.class));
+
+        overridePendingTransition(0, 0);
+
+        finish();
+    }
+
+    private void abrirHomeCondominio() {
+
+        startActivity(new Intent(this, CondominioHomeActivity.class));
+
+        overridePendingTransition(0, 0);
+
+        finish();
+    }
+
+    private void confirmarSaida() {
+
+        MenuPerfil.confirmarSaida(this, () -> abrirLogin(R.string.sessao_encerrada, true));
+    }
+
+    private void abrirLogin(@StringRes int mensagem, boolean encerrarSessao) {
+
+        if (encerrarSessao) {
+            viewModel.encerrarSessao();
+        }
+
+        Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show();
+
+        Navegacao.abrirLoginLimpandoPilha(this);
+    }
+
+    @NonNull
+    private String primeiroNome(@NonNull String nomeCompleto) {
+
+        String nome = nomeCompleto.trim();
+
+        return nome.isEmpty() ? getString(R.string.home_usuario_padrao) : nome.split("\\s+")[0];
     }
 }

@@ -80,7 +80,7 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
         configurarLinha(linhaNome, R.drawable.ic_perfil_usuario, R.string.perfil_rotulo_nome);
 
-        configurarLinha(linhaEmail, R.drawable.icon_email, R.string.perfil_rotulo_email);
+        configurarLinha(linhaEmail, R.drawable.ic_email, R.string.perfil_rotulo_email);
 
         configurarLinha(linhaTelefone, R.drawable.ic_telefone_perfil, R.string.perfil_rotulo_telefone);
 

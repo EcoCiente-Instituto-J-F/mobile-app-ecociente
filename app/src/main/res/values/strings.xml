@@ -289,4 +289,86 @@
     <string name="quiz_revisao_resposta_correta">Resposta correta:</string>
     <string name="quiz_revisao_explicacao">Explicação:</string>
 
+    <!-- Solicitações -->
+    <string name="status_agendado">Pendentes</string>
+    <string name="status_confirmado">Confirmadas</string>
+    <string name="status_recusado">Recusadas</string>
+    <string name="status_cancelado">Canceladas</string>
+    <string name="status_realizado">Realizadas</string>
+    <string name="solicitacao_condominio">Condomínio %1$d</string>
+    <string name="solicitacao_data_horario">%1$s às %2$s</string>
+    <string name="solicitacao_recorrente">Coleta recorrente</string>
+    <string name="solicitacao_rotulo_status">Situação</string>
+    <string name="solicitacao_rotulo_data">Data</string>
+    <string name="solicitacao_rotulo_horario">Horário</string>
+    <string name="solicitacao_rotulo_recorrencia">Recorrência</string>
+    <string name="solicitacao_recorrencia_sim">Coleta recorrente</string>
+    <string name="solicitacao_recorrencia_nao">Coleta única</string>
+    <string name="solicitacoes_vazio">Nenhuma solicitação nesta situação.</string>
+    <string name="solicitacoes_erro">Não foi possível carregar as solicitações agora.</string>
+    <string name="solicitacoes_sessao_expirada">Sua sessão expirou. Entre novamente para ver as solicitações.</string>
+    <string name="entrar_novamente">Entrar novamente</string>
+    <string name="aceitar">Aceitar</string>
+    <string name="aceitar_titulo">Aceitar solicitação</string>
+    <string name="aceitar_mensagem">Confirmar a coleta em %1$s, às %2$s?</string>
+    <string name="recusar_titulo">Recusar solicitação</string>
+    <string name="recusar_mensagem">Tem certeza que deseja recusar esta solicitação?</string>
+    <string name="solicitacao_aceita">Solicitação aceita.</string>
+    <string name="solicitacao_recusada">Solicitação recusada.</string>
+    <string name="recusar">Recusar</string>
+
+    <!-- Home do condomínio -->
+    <string name="home_condominio_lema">Juntos por um condomínio mais sustentável!</string>
+    <string name="calendario_da_semana">Calendário da semana</string>
+    <string name="ver_calendario_completo">Ver calendário completo ›</string>
+    <string name="coleta">Coleta</string>
+    <string name="nao_ha_coleta">Não há coleta</string>
+    <string name="semana_erro">Não foi possível carregar a semana. Toque para tentar de novo.</string>
+    <string name="calendario_e_lembretes">Calendário e lembretes</string>
+    <string name="calendario_subtitulo">Acompanhe as datas de coleta do seu condomínio</string>
+    <string name="coletas_agendadas">Coletas agendadas</string>
+    <string name="nenhuma_coleta_no_mes">Nenhuma coleta agendada neste mês.</string>
+    <string name="coleta_agendada_linha">%1$s · %2$s</string>
+
+    <!-- Calendário da cooperativa -->
+    <string name="historico">Histórico</string>
+    <string name="proxima_coleta">Próxima coleta</string>
+    <string name="calendario_de_coletas">Calendário de coletas</string>
+    <string name="acompanhe_suas_coletas">Acompanhe suas coletas</string>
+    <string name="dia_de_coleta">Dia de coleta</string>
+    <string name="mes_anterior">Mês anterior</string>
+    <string name="proximo_mes">Próximo mês</string>
+    <string name="carregando">Carregando…</string>
+    <string name="proxima_coleta_hoje">Hoje</string>
+    <string name="proxima_coleta_rotulo_faltam">Faltam</string>
+    <string name="proxima_coleta_rotulo_coleta">Coleta</string>
+    <string name="proxima_coleta_dias">%1$d dias</string>
+    <string name="tipo_coleta_reciclaveis">Recicláveis</string>
+    <string name="enviando">Enviando…</string>
+    <string name="verificando">Verificando…</string>
+    <string name="salvando">Salvando…</string>
+    <string name="proxima_coleta_amanha">Amanhã</string>
+    <string name="proxima_coleta_horario">Das %1$s às %2$s</string>
+    <string name="proxima_coleta_horario_inicio">A partir das %1$s</string>
+    <string name="proxima_coleta_nenhuma">Nenhuma coleta agendada.</string>
+    <string name="proxima_coleta_erro">Não foi possível carregar. Toque para tentar de novo.</string>
+    <string name="proxima_coleta_sessao">Sessão expirada. Toque para entrar novamente.</string>
+
+    <string-array name="dias_semana_abreviados">
+        <item>Seg</item>
+        <item>Ter</item>
+        <item>Qua</item>
+        <item>Qui</item>
+        <item>Sex</item>
+        <item>Sáb</item>
+        <item>Dom</item>
+    </string-array>
+
+    <!-- Mensagens -->
+    <string name="titulo_chat">Chat</string>
+    <string name="aba_todos">Todos</string>
+    <string name="aba_nao_lidos">Não lidos</string>
+    <string name="aba_arquivadas">Arquivadas</string>
+    <string name="sem_conversas">Nenhuma conversa aqui.</string>
+
 </resources>

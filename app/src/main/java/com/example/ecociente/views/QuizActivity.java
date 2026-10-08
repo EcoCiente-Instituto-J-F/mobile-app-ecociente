@@ -1,31 +1,25 @@
 package com.example.ecociente.views;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.Navegacao;
+import com.example.ecociente.ui.BarraNavegacaoView;
+import com.example.ecociente.ui.InsetsSistema;
+import com.example.ecociente.ui.ItensBarra;
+import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -37,7 +31,7 @@ import java.util.Locale;
 
 public class QuizActivity extends AppCompatActivity {
 
-    public static final String EXTRA_ANIMAR_NAVEGACAO = "animarNavegacaoQuiz";
+    public static final String EXTRA_MORADOR = "quizMorador";
 
     private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
     private final List<CardQuizView> cardsQuizzes = new ArrayList<>();
@@ -45,20 +39,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private TextView textoQuantidadeQuizzes;
 
-    private View indicadorNavegacao;
-    private LinearLayout botaoNavHomeQuiz;
-    private LinearLayout botaoNavGuiaQuiz;
-    private MaterialCardView botaoNavAssistenteQuiz;
-    private LinearLayout botaoNavQuizQuiz;
-    private LinearLayout botaoNavPerfilQuiz;
-
-    private ImageView iconeNavHomeQuiz;
-    private ImageView iconeNavQuizQuiz;
-    private TextView textoNavHomeQuiz;
-    private TextView textoNavQuizQuiz;
-
-    private Typeface fonteRegular;
-    private Typeface fonteSemiBold;
+    private BarraNavegacaoView barra;
 
     private static final QuizItem[] QUIZZES = {
             new QuizItem(
@@ -137,27 +118,12 @@ public class QuizActivity extends AppCompatActivity {
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
 
-        /*
-         * A Home já trabalha em edge-to-edge e aplica os Insets manualmente.
-         * O Quiz replica exatamente a mesma estratégia para que cabeçalho e
-         * barra inferior ocupem a mesma posição física em qualquer aparelho.
-         */
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        JanelaEdgeToEdge.aplicar(this);
 
         setContentView(R.layout.activity_quiz_usuario_comum);
 
-        configurarInsetsDaTela();
+        InsetsSistema.aplicarComoPadding(findViewById(R.id.raizQuizUsuarioComum));
 
-        fonteRegular = ResourcesCompat.getFont(this, R.font.nunito_regular);
-        fonteSemiBold = ResourcesCompat.getFont(this, R.font.nunito_semibold);
-
-        /*
-         * A tela só é acessada a partir da área autenticada do aplicativo.
-         * Não fazemos uma segunda consulta ao Firestore apenas para desenhar
-         * uma tela estática; isso evita atraso e flicker na abertura.
-         */
         if (autenticacao.getCurrentUser() == null) {
             finish();
             return;
@@ -179,18 +145,7 @@ public class QuizActivity extends AppCompatActivity {
     private void montarTela() {
         textoQuantidadeQuizzes = findViewById(R.id.textoQuantidadeQuizzes);
 
-        indicadorNavegacao = findViewById(R.id.indicadorNavegacaoQuiz);
-
-        botaoNavHomeQuiz = findViewById(R.id.botaoNavHomeQuiz);
-        botaoNavGuiaQuiz = findViewById(R.id.botaoNavGuiaQuiz);
-        botaoNavAssistenteQuiz = findViewById(R.id.botaoNavAssistenteQuiz);
-        botaoNavQuizQuiz = findViewById(R.id.botaoNavQuizQuiz);
-        botaoNavPerfilQuiz = findViewById(R.id.botaoNavPerfilQuiz);
-
-        iconeNavHomeQuiz = findViewById(R.id.iconeNavHomeQuiz);
-        iconeNavQuizQuiz = findViewById(R.id.iconeNavQuizQuiz);
-        textoNavHomeQuiz = findViewById(R.id.textoNavHomeQuiz);
-        textoNavQuizQuiz = findViewById(R.id.textoNavQuizQuiz);
+        barra = findViewById(R.id.barraNavegacao);
 
         configurarCabecalho();
         preencherListaQuizzes();
@@ -198,14 +153,10 @@ public class QuizActivity extends AppCompatActivity {
         configurarNavegacao();
         atualizarQuantidadeQuizzes(QUIZZES.length);
         animarEntradaDaTela();
-        animarBarraNavegacao();
+        mostrarBarra();
     }
 
     private void configurarCabecalho() {
-        /*
-         * As ações de notificação/perfil serão conectadas depois.
-         * Mantemos apenas o feedback de toque do próprio Material agora.
-         */
         Motion.pressFeedback(findViewById(R.id.botaoNotificacoesQuiz));
     }
 
@@ -326,37 +277,32 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void configurarNavegacao() {
-        botaoNavHomeQuiz.setOnClickListener(view -> fecharQuiz());
+        boolean morador = getIntent().getBooleanExtra(EXTRA_MORADOR, false);
 
-        /*
-         * O Guia ainda não possui rota final nesta etapa.
-         * Não mostramos Toasts de "em breve" para não quebrar a sensação
-         * profissional da barra.
-         */
-        botaoNavGuiaQuiz.setOnClickListener(view -> { });
-        botaoNavQuizQuiz.setOnClickListener(view -> { });
-        botaoNavAssistenteQuiz.setOnClickListener(
-                view -> startActivity(new Intent(this, ChatActivity.class)));
-        botaoNavPerfilQuiz.setOnClickListener(view -> abrirPerfil());
+        barra.configurar(morador ? ItensBarra.morador() : ItensBarra.usuario());
 
-        Motion.pressFeedback(botaoNavHomeQuiz);
-        Motion.pressFeedback(botaoNavGuiaQuiz);
-        Motion.pressFeedback(botaoNavAssistenteQuiz);
-        Motion.pressFeedback(botaoNavQuizQuiz);
-        Motion.pressFeedback(botaoNavPerfilQuiz);
+        barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
+
+        barra.setOnItemClickListener(
+                indice -> {
+                    if (indice == ItensBarra.HOME) {
+                        Navegacao.abrirHomePelaBarra(
+                                this,
+                                morador ? CondominioHomeActivity.class : MainActivity.class,
+                                ItensBarra.TERCEIRO);
+
+                    } else if (indice == ItensBarra.QUARTO && !morador) {
+                        abrirPerfil();
+                    }
+                });
     }
 
     private void abrirPerfil() {
-        Intent rota = new Intent(this, GerenciarPerfilActivity.class);
 
-        rota.putExtra(
-                GerenciarPerfilActivity.EXTRA_ORIGEM_NAVEGACAO, GerenciarPerfilActivity.ORIGEM_QUIZ);
-
-        startActivity(rota);
+        Navegacao.abrirPelaBarra(
+                this, new Intent(this, GerenciarPerfilActivity.class), ItensBarra.TERCEIRO);
 
         finish();
-
-        overridePendingTransition(0, 0);
     }
 
     private void animarEntradaDaTela() {
@@ -365,118 +311,13 @@ public class QuizActivity extends AppCompatActivity {
         motion.fadeUp(findViewById(R.id.linhaResumoQuiz), 95L);
     }
 
-    private void animarBarraNavegacao() {
-        boolean animar = getIntent().getBooleanExtra(EXTRA_ANIMAR_NAVEGACAO, true);
-
-        indicadorNavegacao.post(() -> {
-            float posicaoHome = calcularPosicaoIndicador(botaoNavHomeQuiz);
-            float posicaoQuiz = calcularPosicaoIndicador(botaoNavQuizQuiz);
-
-            if (!animar) {
-                aplicarEstadoNavegacao(false);
-                indicadorNavegacao.setTranslationX(posicaoQuiz);
-                return;
-            }
-
-            aplicarEstadoNavegacao(true);
-            indicadorNavegacao.setTranslationX(posicaoHome);
-
-            indicadorNavegacao.animate()
-                    .translationX(posicaoQuiz)
-                    .setDuration(320L)
-                    .setInterpolator(new AccelerateDecelerateInterpolator())
-                    .withStartAction(() ->
-                            indicadorNavegacao.postDelayed(
-                                    () -> aplicarEstadoNavegacao(false),
-                                    120L
-                            )
-                    )
-                    .start();
-        });
-    }
-
-    private float calcularPosicaoIndicador(@NonNull View itemNavegacao) {
-        return itemNavegacao.getX()
-                + (itemNavegacao.getWidth() / 2f)
-                - (indicadorNavegacao.getWidth() / 2f);
-    }
-
-    private void aplicarEstadoNavegacao(boolean homeAtiva) {
-        int corAtiva = ContextCompat.getColor(this, R.color.verde_escuro_principal);
-        int corInativa = ContextCompat.getColor(this, R.color.cinza_secundario_home);
-
-        iconeNavHomeQuiz.setImageResource(
-                homeAtiva ? R.drawable.icon_home_verde : R.drawable.icon_home_cinza
-        );
-        textoNavHomeQuiz.setTextColor(homeAtiva ? corAtiva : corInativa);
-        textoNavHomeQuiz.setTypeface(homeAtiva ? fonteSemiBold : fonteRegular);
-
-        iconeNavQuizQuiz.setImageResource(
-                homeAtiva ? R.drawable.icon_quiz_cinza : R.drawable.icon_quiz_verde
-        );
-        textoNavQuizQuiz.setTextColor(homeAtiva ? corInativa : corAtiva);
-        textoNavQuizQuiz.setTypeface(homeAtiva ? fonteRegular : fonteSemiBold);
-
-        if (!homeAtiva) {
-            iconeNavQuizQuiz.setScaleX(0.94f);
-            iconeNavQuizQuiz.setScaleY(0.94f);
-            iconeNavQuizQuiz.animate()
-                    .scaleX(1f)
-                    .scaleY(1f)
-                    .setDuration(Motion.STATE_MS)
-                    .start();
-        }
-    }
-
-    private void configurarInsetsDaTela() {
-        View raiz = findViewById(R.id.raizQuizUsuarioComum);
-
-        if (raiz == null) {
-            return;
-        }
-
-        final int paddingEsquerdoOriginal = raiz.getPaddingLeft();
-        final int paddingTopoOriginal = raiz.getPaddingTop();
-        final int paddingDireitoOriginal = raiz.getPaddingRight();
-        final int paddingInferiorOriginal = raiz.getPaddingBottom();
-
-        ViewCompat.setOnApplyWindowInsetsListener(
-                raiz,
-                (view, insets) -> {
-                    Insets sistema = insets.getInsets(
-                            WindowInsetsCompat.Type.systemBars()
-                                    | WindowInsetsCompat.Type.displayCutout()
-                    );
-
-                    view.setPadding(
-                            paddingEsquerdoOriginal + sistema.left,
-                            paddingTopoOriginal + sistema.top,
-                            paddingDireitoOriginal + sistema.right,
-                            paddingInferiorOriginal + sistema.bottom
-                    );
-
-                    return insets;
-                }
-        );
-
-        WindowInsetsControllerCompat controlador =
-                WindowCompat.getInsetsController(getWindow(), raiz);
-
-        if (controlador != null) {
-            controlador.setAppearanceLightStatusBars(true);
-            controlador.setAppearanceLightNavigationBars(true);
-        }
-
-        ViewCompat.requestApplyInsets(raiz);
+    private void mostrarBarra() {
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.TERCEIRO);
     }
 
     private void fecharQuiz() {
         finish();
 
-        /*
-         * A animação visual acontece nos próprios componentes.
-         * Removemos o fade de Activity que causava o "apagão" branco.
-         */
         overridePendingTransition(0, 0);
     }
 

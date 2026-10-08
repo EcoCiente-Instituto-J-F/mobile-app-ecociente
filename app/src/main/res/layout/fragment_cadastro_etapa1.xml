@@ -107,7 +107,7 @@
                         android:layout_height="16dp"
                         android:contentDescription="@string/icone_usuario"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_usuario_cadastro" />
+                        android:src="@drawable/ic_usuario" />
 
                     <EditText
                         android:id="@+id/campoNome"
@@ -161,7 +161,7 @@
                         android:contentDescription="@string/abrir_calendario"
                         android:focusable="true"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_calendario_cadastro" />
+                        android:src="@drawable/ic_calendario" />
 
                     <EditText
                         android:id="@+id/campoDataNascimento"
@@ -211,7 +211,7 @@
                         android:layout_height="15dp"
                         android:contentDescription="@string/icone_email"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/icon_email" />
+                        android:src="@drawable/ic_email" />
 
                     <EditText
                         android:id="@+id/campoEmailCadastro"
@@ -266,7 +266,7 @@
                             android:layout_height="17dp"
                             android:contentDescription="@string/icone_senha"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/icon_senha" />
+                            android:src="@drawable/ic_senha" />
 
                         <EditText
                             android:id="@+id/campoSenhaCadastro"
@@ -299,7 +299,7 @@
                         android:focusable="true"
                         android:padding="9dp"
                         android:scaleType="centerInside"
-                        android:src="@drawable/icon_olho_fechado" />
+                        android:src="@drawable/ic_olho_fechado" />
 
                 </RelativeLayout>
 
@@ -368,7 +368,7 @@
                             android:layout_height="17dp"
                             android:contentDescription="@string/icone_senha"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/icon_senha" />
+                            android:src="@drawable/ic_senha" />
 
                         <EditText
                             android:id="@+id/campoConfirmarSenha"
@@ -401,7 +401,7 @@
                         android:focusable="true"
                         android:padding="9dp"
                         android:scaleType="centerInside"
-                        android:src="@drawable/icon_olho_fechado" />
+                        android:src="@drawable/ic_olho_fechado" />
 
                 </RelativeLayout>
 
@@ -511,7 +511,7 @@
                         android:alpha="0.65"
                         android:contentDescription="@string/icone_codigo_condominio"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/icon_senha"/>
+                        android:src="@drawable/ic_senha"/>
 
                     <EditText
                         android:id="@+id/campoCodigoCondominio"
