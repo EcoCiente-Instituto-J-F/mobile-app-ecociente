@@ -206,8 +206,21 @@ public class QuizActivity extends AppCompatActivity {
             botaoComecarQuiz.setVisibility(View.VISIBLE);
         }
 
+        card.setOnClickListener(view -> abrirInicioQuiz(quiz));
+        botaoComecarQuiz.setOnClickListener(view -> abrirInicioQuiz(quiz));
+
         Motion.pressFeedback(card);
         Motion.pressFeedback(botaoComecarQuiz);
+    }
+
+    private void abrirInicioQuiz(@NonNull QuizItem quiz) {
+        Intent rota = new Intent(this, InicioQuizActivity.class);
+
+        rota.putExtra(InicioQuizActivity.EXTRA_CATEGORIA, quiz.categoria);
+        rota.putExtra(InicioQuizActivity.EXTRA_PERGUNTAS, quiz.perguntas);
+
+        startActivity(rota);
+        overridePendingTransition(0, 0);
     }
 
     private void configurarBusca() {

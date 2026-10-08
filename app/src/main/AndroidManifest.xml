@@ -116,6 +116,30 @@
             android:theme="@style/Theme.EcoCiente.Quiz" />
 
         <activity
+            android:name=".views.InicioQuizActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.EcoCiente.QuizIntro" />
+
+        <activity
+            android:name=".views.QuizPerguntasActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.EcoCiente.Quiz" />
+
+        <activity
+            android:name=".views.QuizResultadoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.EcoCiente.Quiz" />
+
+        <activity
+            android:name=".views.QuizRevisaoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.EcoCiente.Quiz" />
+
+        <activity
             android:name=".views.ChatActivity"
             android:exported="false"
             android:screenOrientation="portrait"

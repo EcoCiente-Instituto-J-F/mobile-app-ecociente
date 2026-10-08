@@ -11,12 +11,20 @@
         EcoCiente
     </string>
 
+    <string name="erro_reproduzir_video">
+        Não foi possível reproduzir a animação da logo.
+    </string>
+
     <string name="login">
         Login
     </string>
 
     <string name="cadastrar_se">
         Cadastrar-se
+    </string>
+
+    <string name="email">
+        E-mail
     </string>
 
     <string name="senha">
@@ -61,6 +69,7 @@
     <string name="quatro_minutos_leitura">4 min de leitura</string>
     <string name="tres_minutos_leitura">3 min de leitura</string>
     <string name="cinco_minutos_leitura">5 min de leitura</string>
+    <string name="funcionalidade_em_breve">Esta funcionalidade será disponibilizada em breve.</string>
     <string name="erro_carregar_perfil">Não foi possível confirmar seu perfil agora.</string>
     <string name="tentar_novamente">Tentar novamente</string>
     <string name="voltar">Voltar</string>
@@ -78,20 +87,6 @@
     <string name="perfil_sair_mensagem">Tem certeza que deseja sair?</string>
     <string name="perfil_sair_confirmar">Sair</string>
     <string name="sessao_encerrada">Você saiu da conta.</string>
-    <string name="home_sem_login">Entre na sua conta para continuar.</string>
-    <string name="home_cadastro_incompleto">Complete seu cadastro antes de acessar a home.</string>
-    <string name="home_sem_acesso">Não foi possível identificar o seu perfil de acesso.</string>
-    <string name="solicitacoes">Solicitações</string>
-    <string name="solicitacao">Solicitação</string>
-    <string name="coletas">Coletas</string>
-    <string name="mensagens">Mensagens</string>
-    <string name="unidades">Unidades</string>
-    <string name="feed">Feed</string>
-    <string name="nome_responsavel">Nome do responsável</string>
-    <string name="dados_responsavel">Dados do responsável</string>
-    <string name="nome_cooperativa">Nome da cooperativa</string>
-    <string name="email_cooperativa">E-mail da cooperativa</string>
-    <string name="cnpj">CNPJ</string>
     <string name="perfil_foto_alterar">Alterar foto de perfil</string>
     <string name="perfil_foto_tirar">Tirar foto</string>
     <string name="perfil_foto_galeria">Escolher da galeria</string>
@@ -145,6 +140,7 @@
     </string-array>
 
     <!-- Chatbot Eko -->
+    <string name="chat_eko">Eko</string>
     <string name="chat_titulo_inicial">Como Posso te ajudar?</string>
     <string name="chat_descricao_inicial">Comece uma conversa sobre reciclagem\ne descarte consciente</string>
     <string name="chat_opcao_material">Materiais</string>
@@ -157,6 +153,7 @@
     <string name="chat_avatar_eko">Avatar do Eko</string>
     <string name="chat_avatar_usuario">Avatar do usuário</string>
     <string name="chat_erro_conexao">Não foi possível se conectar. Tente novamente.</string>
+    <string name="chat_erro_resposta">Não foi possível obter uma resposta válida. Tente novamente.</string>
 
     <!-- ===================================================== -->
     <!-- QUIZ - USUÁRIO COMUM                                  -->
@@ -185,6 +182,45 @@
     <string name="concluido">Concluído</string>
 
     <string name="comecar">Começar</string>
+
+    <string name="quiz_em_breve">O quiz será disponibilizado em breve.</string>
+
+    <string name="quiz_restrito_usuario_comum">Esta tela é exclusiva para usuários comuns.</string>
+
+    <string name="inicio_quiz_voltar">Voltar para quizzes</string>
+    <string name="inicio_quiz_ilustracao">Ilustração de sustentabilidade e reciclagem</string>
+    <string name="inicio_quiz_titulo_padrao">Sustentabilidade</string>
+    <string name="inicio_quiz_descricao">“Teste seus conhecimentos e descubra como fazer a diferença ”</string>
+    <string name="inicio_quiz_perguntas_padrao">10 - Perguntas</string>
+    <string name="inicio_quiz_perguntas_formatado">%1$d - Perguntas</string>
+    <string name="inicio_quiz_pontos">0 / 100 - Pontos</string>
+    <string name="inicio_quiz_botao">Iniciar quiz</string>
+
+    <!-- Quiz - perguntas -->
+    <string name="quiz_perguntas_voltar">Voltar</string>
+    <string name="quiz_planeta_ilustracao">Ilustração do planeta</string>
+    <string name="quiz_proximo">Próximo</string>
+    <string name="quiz_finalizar">Finalizar</string>
+    <string name="quiz_dialogo_finalizar_titulo">Finalizar quiz?</string>
+    <string name="quiz_dialogo_finalizar_mensagem">Você respondeu às 10 perguntas. Deseja finalizar e ver o seu resultado?</string>
+    <string name="quiz_dialogo_revisar">Revisar</string>
+
+    <!-- Quiz - resultado -->
+    <string name="quiz_resultado_voltar">Voltar</string>
+    <string name="quiz_sua_pontuacao">Sua pontuação</string>
+    <string name="quiz_resultado_mensagem_perfeita">Perfeito! Você dominou o assunto!</string>
+    <string name="quiz_resultado_mensagem_boa">Você já domina grande parte do assunto!</string>
+    <string name="quiz_resultado_mensagem_media">Muito bem! Você está no caminho certo!</string>
+    <string name="quiz_resultado_mensagem_praticar">Continue praticando — cada resposta ensina algo novo!</string>
+    <string name="quiz_repetir">Repetir quiz</string>
+    <string name="quiz_resultado_finalizar_titulo">Finalizar Quiz</string>
+    <string name="quiz_resultado_finalizar_mensagem">Deseja encerrar este quiz e voltar para a lista de quizzes?</string>
+    <string name="quiz_sem_resposta">Sem resposta</string>
+    <string name="quiz_sua_resposta">Sua resposta: %1$s</string>
+    <string name="quiz_resposta_correta">Resposta correta: %1$s</string>
+    <string name="quiz_questao_numero">Questão %1$d</string>
+    <string name="quiz_dialogo_fechar">Fechar</string>
+    <string name="cancelar">Cancelar</string>
 
     <string name="abrir_calendario">Abrir calendário</string>
     <string name="abrir_lista_estados">Abrir lista de estados</string>
@@ -253,6 +289,13 @@
     <string name="usuario_selecionado">Usuário selecionado</string>
     <string name="verificar">Verificar</string>
 
+    <string name="quiz_revisao_voltar">Voltar para o resultado</string>
+    <string name="quiz_revisao_subtitulo">Revisão</string>
+    <string name="quiz_revisao_numero_formatado">Questão %1$02d</string>
+    <string name="quiz_revisao_sua_resposta">Sua resposta:</string>
+    <string name="quiz_revisao_resposta_correta">Resposta correta:</string>
+    <string name="quiz_revisao_explicacao">Explicação:</string>
+
     <!-- Solicitações -->
     <string name="status_agendado">Pendentes</string>
     <string name="status_confirmado">Confirmadas</string>
@@ -317,6 +360,7 @@
     <string name="proxima_coleta_nenhuma">Nenhuma coleta agendada.</string>
     <string name="proxima_coleta_erro">Não foi possível carregar. Toque para tentar de novo.</string>
     <string name="proxima_coleta_sessao">Sessão expirada. Toque para entrar novamente.</string>
+
     <string-array name="dias_semana_abreviados">
         <item>Seg</item>
         <item>Ter</item>
@@ -333,4 +377,5 @@
     <string name="aba_nao_lidos">Não lidos</string>
     <string name="aba_arquivadas">Arquivadas</string>
     <string name="sem_conversas">Nenhuma conversa aqui.</string>
+
 </resources>
