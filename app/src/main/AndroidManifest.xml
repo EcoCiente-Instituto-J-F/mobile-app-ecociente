@@ -52,10 +52,6 @@
             android:exported="false" />
 
         <activity
-            android:name=".views.NovaColetaActivity"
-            android:exported="false" />
-
-        <activity
             android:name=".views.SolicitacoesActivity"
             android:exported="false" />
 

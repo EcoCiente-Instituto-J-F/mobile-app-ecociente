@@ -1,23 +1,19 @@
 package com.example.ecociente.views;
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
 import com.example.ecociente.model.ItemLista;
-import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.TipoLista;
-import com.example.ecociente.ui.FormatoDataApi;
-import com.example.ecociente.ui.InsetsSistema;
-import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -27,50 +23,56 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class NovaColetaActivity extends AppCompatActivity {
+public final class NovaColetaDialogo {
 
-    private static final String EXTRA_SOLICITACAO = "solicitacaoEditada";
+    private final AppCompatActivity tela;
+    private final Runnable aoSalvar;
 
     private AutoCompleteTextView campoCondominio;
+    private EditText campoEndereco;
     private EditText campoData;
     private EditText campoInicio;
     private EditText campoFim;
     private MaterialSwitch campoRecorrencia;
+    private AlertDialog dialogo;
 
-    @NonNull
-    public static Intent criarIntent(@NonNull Context contexto, @Nullable Solicitacao solicitacao) {
-
-        return new Intent(contexto, NovaColetaActivity.class).putExtra(EXTRA_SOLICITACAO, solicitacao);
+    private NovaColetaDialogo(@NonNull AppCompatActivity tela, @NonNull Runnable aoSalvar) {
+        this.tela = tela;
+        this.aoSalvar = aoSalvar;
     }
 
-    @Override
-    protected void onCreate(Bundle estadoSalvo) {
-        super.onCreate(estadoSalvo);
+    public static void mostrar(@NonNull AppCompatActivity tela, @NonNull Runnable aoSalvar) {
+        new NovaColetaDialogo(tela, aoSalvar).abrir();
+    }
 
-        JanelaEdgeToEdge.aplicar(this);
+    private void abrir() {
 
-        setContentView(R.layout.activity_nova_coleta);
+        View conteudo = LayoutInflater.from(tela).inflate(R.layout.dialog_nova_coleta, null);
 
-        InsetsSistema.aplicarComoPadding(findViewById(R.id.raizNovaColeta));
-
-        findViewById(R.id.botaoVoltarNovaColeta).setOnClickListener(view -> finish());
-
-        campoCondominio = findViewById(R.id.campoCondominioColeta);
-        campoData = findViewById(R.id.campoDataColeta);
-        campoInicio = findViewById(R.id.campoInicioColeta);
-        campoFim = findViewById(R.id.campoFimColeta);
-        campoRecorrencia = findViewById(R.id.campoRecorrenciaColeta);
+        campoCondominio = conteudo.findViewById(R.id.campoCondominioColeta);
+        campoEndereco = conteudo.findViewById(R.id.campoEnderecoColeta);
+        campoData = conteudo.findViewById(R.id.campoDataColeta);
+        campoInicio = conteudo.findViewById(R.id.campoInicioColeta);
+        campoFim = conteudo.findViewById(R.id.campoFimColeta);
+        campoRecorrencia = conteudo.findViewById(R.id.campoRecorrenciaColeta);
 
         campoCondominio.setAdapter(
-                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, nomesDosCondominios()));
+                new ArrayAdapter<>(tela, android.R.layout.simple_list_item_1, nomesDosCondominios()));
+
+        campoCondominio.setOnItemClickListener(
+                (pai, view, posicao, id) -> campoEndereco.setText(enderecoDoCondominio(posicao)));
 
         campoData.setOnClickListener(view -> escolherData());
         campoInicio.setOnClickListener(view -> escolherHora(campoInicio));
         campoFim.setOnClickListener(view -> escolherHora(campoFim));
 
-        findViewById(R.id.botaoSalvarColeta).setOnClickListener(view -> salvar());
+        dialogo = new MaterialAlertDialogBuilder(tela).setView(conteudo).create();
 
-        preencherEdicao((Solicitacao) getIntent().getSerializableExtra(EXTRA_SOLICITACAO));
+        conteudo.findViewById(R.id.botaoFecharNovaColeta).setOnClickListener(view -> dialogo.dismiss());
+        conteudo.findViewById(R.id.botaoCancelarColeta).setOnClickListener(view -> dialogo.dismiss());
+        conteudo.findViewById(R.id.botaoSalvarColeta).setOnClickListener(view -> salvar());
+
+        dialogo.show();
     }
 
     @NonNull
@@ -87,19 +89,14 @@ public class NovaColetaActivity extends AppCompatActivity {
         return nomes;
     }
 
-    private void preencherEdicao(@Nullable Solicitacao solicitacao) {
+    @NonNull
+    private String enderecoDoCondominio(int posicao) {
 
-        if (solicitacao == null) {
-            return;
-        }
+        String subtitulo = TipoLista.CONDOMINIOS.itens().get(posicao).subtitulo;
 
-        ((android.widget.TextView) findViewById(R.id.tituloNovaColeta)).setText(R.string.editar_coleta);
+        int separador = subtitulo.indexOf(" · ");
 
-        campoCondominio.setText(getString(R.string.solicitacao_condominio, solicitacao.getCondominioId()), false);
-        campoData.setText(FormatoDataApi.data(solicitacao.getDataInicio()));
-        campoInicio.setText(FormatoDataApi.hora(solicitacao.getDataInicio()));
-        campoFim.setText(FormatoDataApi.hora(solicitacao.getDataFim()));
-        campoRecorrencia.setChecked(solicitacao.possuiRecorrencia());
+        return separador < 0 ? subtitulo : subtitulo.substring(0, separador);
     }
 
     private void escolherData() {
@@ -119,7 +116,7 @@ public class NovaColetaActivity extends AppCompatActivity {
                     campoData.setText(formato.format(new Date(selecao)));
                 });
 
-        seletor.show(getSupportFragmentManager(), "data_coleta");
+        seletor.show(tela.getSupportFragmentManager(), "data_coleta");
     }
 
     private void escolherHora(@NonNull EditText campo) {
@@ -132,7 +129,7 @@ public class NovaColetaActivity extends AppCompatActivity {
                         campo.setText(
                                 String.format(Locale.getDefault(), "%02d:%02d", seletor.getHour(), seletor.getMinute())));
 
-        seletor.show(getSupportFragmentManager(), "hora_coleta");
+        seletor.show(tela.getSupportFragmentManager(), "hora_coleta");
     }
 
     private void salvar() {
@@ -144,17 +141,19 @@ public class NovaColetaActivity extends AppCompatActivity {
                 || campoData.getText().length() == 0
                 || inicio.isEmpty()
                 || fim.isEmpty()) {
-            Toast.makeText(this, R.string.preencha_todos_os_campos, Toast.LENGTH_SHORT).show();
+            Toast.makeText(tela, R.string.preencha_todos_os_campos, Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (fim.compareTo(inicio) <= 0) {
-            Toast.makeText(this, R.string.fim_antes_do_inicio, Toast.LENGTH_SHORT).show();
+            Toast.makeText(tela, R.string.fim_antes_do_inicio, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        Toast.makeText(this, R.string.coleta_salva_exemplo, Toast.LENGTH_SHORT).show();
+        Toast.makeText(tela, R.string.coleta_salva_exemplo, Toast.LENGTH_SHORT).show();
 
-        finish();
+        dialogo.dismiss();
+
+        aoSalvar.run();
     }
 }
