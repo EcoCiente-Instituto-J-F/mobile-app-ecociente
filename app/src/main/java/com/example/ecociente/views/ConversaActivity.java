@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import com.example.ecociente.ui.Iniciais;
 
 public class ConversaActivity extends AppCompatActivity {
 
@@ -154,7 +155,7 @@ public class ConversaActivity extends AppCompatActivity {
 
         LayoutInflater inflador = LayoutInflater.from(this);
 
-        String iniciais = iniciaisDe(nome);
+        String iniciais = Iniciais.de(nome);
 
         for (MensagemConversa mensagem : mensagens) {
 
@@ -178,17 +179,5 @@ public class ConversaActivity extends AppCompatActivity {
         }
 
         rolagem.post(() -> rolagem.fullScroll(View.FOCUS_DOWN));
-    }
-
-    @NonNull
-    private static String iniciaisDe(@NonNull String nome) {
-
-        String[] palavras = nome.split(" ");
-
-        String primeira = palavras[0].substring(0, 1);
-
-        String ultima = palavras.length > 1 ? palavras[palavras.length - 1].substring(0, 1) : "";
-
-        return (primeira + ultima).toUpperCase();
     }
 }

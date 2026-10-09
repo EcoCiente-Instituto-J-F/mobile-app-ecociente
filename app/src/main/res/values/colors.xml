@@ -7,6 +7,8 @@
     <color name="verde_claro_ecociente">#CCD9CA</color>
 
     <color name="rosa_ecociente">#D64573</color>
+    <color name="erro_fundo">#66D64573</color>
+    <color name="erro_texto">#70213E</color>
 
     <color name="branco">#FFFFFF</color>
 

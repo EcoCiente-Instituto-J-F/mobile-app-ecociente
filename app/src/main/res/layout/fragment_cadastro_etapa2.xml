@@ -101,6 +101,7 @@
                     android:src="@drawable/ic_cooperativa" />
 
                 <EditText
+                    android:importantForAutofill="no"
                     android:id="@+id/campoNomeCooperativa"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -153,6 +154,7 @@
                     android:src="@drawable/ic_email" />
 
                 <EditText
+                    android:autofillHints="emailAddress"
                     android:id="@+id/campoEmailCooperativa"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -204,6 +206,7 @@
                     android:src="@drawable/ic_localizacao" />
 
                 <EditText
+                    android:importantForAutofill="no"
                     android:id="@+id/campoEndereco"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -247,6 +250,7 @@
                 app:strokeWidth="1dp">
 
                 <EditText
+                    android:importantForAutofill="no"
                     android:id="@+id/campoNumero"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -279,6 +283,7 @@
                 app:strokeWidth="1dp">
 
                 <EditText
+                    android:importantForAutofill="no"
                     android:id="@+id/campoCep"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -315,6 +320,7 @@
             app:strokeWidth="1dp">
 
             <EditText
+                android:importantForAutofill="no"
                 android:id="@+id/campoComplemento"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -348,6 +354,7 @@
             app:strokeWidth="1dp">
 
             <EditText
+                android:importantForAutofill="no"
                 android:id="@+id/campoCidade"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -442,6 +449,7 @@
                 app:strokeWidth="1dp">
 
                 <EditText
+                    android:autofillHints="phoneNumber"
                     android:id="@+id/campoTelefone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -475,6 +483,7 @@
                 app:strokeWidth="1dp">
 
                 <EditText
+                    android:importantForAutofill="no"
                     android:id="@+id/campoCpf"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

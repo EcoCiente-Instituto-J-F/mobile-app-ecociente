@@ -13,6 +13,7 @@ import com.example.ecociente.views.MensagensActivity;
 import com.example.ecociente.views.QuizActivity;
 import com.example.ecociente.views.SolicitacoesActivity;
 import com.example.ecociente.views.TelaListaActivity;
+import androidx.annotation.StringRes;
 
 public final class Navegacao {
 
@@ -103,8 +104,12 @@ public final class Navegacao {
     }
 
     public static void abrirLoginLimpandoPilha(@NonNull Activity origem) {
+        abrirLoginLimpandoPilha(origem, 0);
+    }
 
-        Intent rota = new Intent(origem, Login.class);
+    public static void abrirLoginLimpandoPilha(@NonNull Activity origem, @StringRes int aviso) {
+
+        Intent rota = new Intent(origem, Login.class).putExtra(Login.EXTRA_AVISO, aviso);
 
         rota.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 

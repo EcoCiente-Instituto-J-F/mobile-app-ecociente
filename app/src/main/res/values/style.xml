@@ -46,6 +46,38 @@
         <item name="strokeWidth">1dp</item>
     </style>
 
+    <style name="CampoBusca">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_marginStart">18dp</item>
+        <item name="android:layout_marginTop">14dp</item>
+        <item name="android:layout_marginEnd">18dp</item>
+        <item name="android:background">@drawable/fundo_campo_busca</item>
+        <item name="android:drawableStart">@drawable/ic_busca</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:fontFamily">@font/nunito_regular</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:inputType">text</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingStart">14dp</item>
+        <item name="android:paddingEnd">14dp</item>
+        <item name="android:textColor">@color/verde_escuro_principal</item>
+        <item name="android:textColorHint">@color/cinza_texto_auxiliar</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="CampoFormulario" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+        <item name="boxStrokeColor">@color/verde_borda_campo</item>
+        <item name="hintTextColor">@color/verde_escuro_principal</item>
+    </style>
+
     <style name="AbaMensagens">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>

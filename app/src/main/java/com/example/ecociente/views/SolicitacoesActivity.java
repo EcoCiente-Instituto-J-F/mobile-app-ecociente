@@ -2,8 +2,6 @@ package com.example.ecociente.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -34,6 +32,8 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
 import java.util.List;
+import com.example.ecociente.ui.AoDigitar;
+import java.util.Locale;
 
 public class SolicitacoesActivity extends AppCompatActivity {
 
@@ -168,7 +168,7 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
     private void exibirItens(@NonNull List<Solicitacao> itens) {
 
-        String busca = campoBusca.getText().toString().trim().toLowerCase();
+        String busca = campoBusca.getText().toString().trim().toLowerCase(Locale.ROOT);
 
         if (busca.isEmpty()) {
             adaptador.submitList(itens);
@@ -179,7 +179,7 @@ public class SolicitacoesActivity extends AppCompatActivity {
             for (Solicitacao solicitacao : itens) {
                 String nome = SolicitacaoAdapter.nomeExibido(this, solicitacao);
 
-                if (nome.toLowerCase().contains(busca)) {
+                if (nome.toLowerCase(Locale.ROOT).contains(busca)) {
                     filtrados.add(solicitacao);
                 }
             }
@@ -192,27 +192,18 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
     private void configurarBuscaENovaColeta() {
 
-        campoBusca.addTextChangedListener(
-                new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        AoDigitar.em(
+                campoBusca,
+                () -> {
+                    List<Solicitacao> itens = viewModel.getItens().getValue();
 
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-                    @Override
-                    public void afterTextChanged(Editable texto) {
-                        List<Solicitacao> itens = viewModel.getItens().getValue();
-
-                        if (itens != null) {
-                            exibirItens(itens);
-                        }
+                    if (itens != null) {
+                        exibirItens(itens);
                     }
                 });
 
         findViewById(R.id.botaoNovaColetaSolicitacoes)
-                .setOnClickListener(
-                        view -> detalhe.launch(NovaColetaActivity.criarIntent(this, null)));
+                .setOnClickListener(view -> NovaColetaDialogo.mostrar(this, viewModel::recarregar));
     }
 
     private void atualizarEstado() {

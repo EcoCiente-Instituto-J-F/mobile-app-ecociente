@@ -2,8 +2,6 @@ package com.example.ecociente.views;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -18,6 +16,9 @@ import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Navegacao;
+import com.example.ecociente.ui.AoDigitar;
+import com.example.ecociente.ui.Iniciais;
+import java.util.Locale;
 
 public class MensagensActivity extends AppCompatActivity {
 
@@ -50,19 +51,7 @@ public class MensagensActivity extends AppCompatActivity {
             findViewById(IDS_ABAS[i]).setOnClickListener(view -> selecionarAba(aba));
         }
 
-        campoBusca.addTextChangedListener(
-                new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-                    @Override
-                    public void afterTextChanged(Editable texto) {
-                        exibirConversas(abaAtual);
-                    }
-                });
+        AoDigitar.em(campoBusca, () -> exibirConversas(abaAtual));
 
         selecionarAba(0);
 
@@ -103,7 +92,7 @@ public class MensagensActivity extends AppCompatActivity {
 
             View item = inflador.inflate(R.layout.item_conversa, lista, false);
 
-            ((TextView) item.findViewById(R.id.textoIniciaisConversa)).setText(conversa.iniciais());
+            ((TextView) item.findViewById(R.id.textoIniciaisConversa)).setText(Iniciais.de(conversa.nome));
             ((TextView) item.findViewById(R.id.textoNomeConversa)).setText(conversa.nome);
             ((TextView) item.findViewById(R.id.textoPreviaConversa)).setText(conversa.ultimaMensagem);
             ((TextView) item.findViewById(R.id.textoHoraConversa)).setText(conversa.hora);
@@ -123,9 +112,9 @@ public class MensagensActivity extends AppCompatActivity {
 
     private boolean pertence(Conversa conversa, int aba) {
 
-        String busca = campoBusca.getText().toString().trim().toLowerCase();
+        String busca = campoBusca.getText().toString().trim().toLowerCase(Locale.ROOT);
 
-        if (!busca.isEmpty() && !conversa.nome.toLowerCase().contains(busca)) {
+        if (!busca.isEmpty() && !conversa.nome.toLowerCase(Locale.ROOT).contains(busca)) {
             return false;
         }
 

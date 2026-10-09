@@ -14,7 +14,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
@@ -32,6 +31,8 @@ import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.firebase.auth.FirebaseUser;
 import java.io.File;
+import com.example.ecociente.ui.DialogoEco;
+import androidx.annotation.StringRes;
 
 public class GerenciarPerfilActivity extends AppCompatActivity {
 
@@ -158,7 +159,12 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
     private void preencherCabecalho(FirebaseUser usuario, PerfilUsuario perfil) {
 
-        String nomeExibido = PerfilUsuario.nomeExibicao(perfil, usuario);
+        boolean perfilDeCooperativa = perfil != null && PerfilAcesso.ehCooperativa(perfil.getTipoPerfil());
+
+        String nomeExibido =
+                perfilDeCooperativa && !perfil.getNomeCooperativa().isEmpty()
+                        ? perfil.getNomeCooperativa()
+                        : PerfilUsuario.nomeExibicao(perfil, usuario);
 
         textoNome.setText(nomeExibido);
 
@@ -166,7 +172,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
         textoIniciaisAvatar.setText(obterInicial(nomeExibido));
 
-        if (!cooperativa && perfil != null && PerfilAcesso.ehCooperativa(perfil.getTipoPerfil())) {
+        if (!cooperativa && perfilDeCooperativa) {
             cooperativa = true;
 
             trocarBarra(ItensBarra.cooperativa());
@@ -239,21 +245,12 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
     private void mostrarOpcoesFoto() {
 
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.perfil_foto_alterar)
-                .setItems(
-                        new CharSequence[] {
-                            getString(R.string.perfil_foto_tirar),
-                            getString(R.string.perfil_foto_galeria)
-                        },
-                        (dialogo, opcao) -> {
-                            if (opcao == 0) {
-                                abrirCamera();
-                            } else {
-                                abrirGaleria();
-                            }
-                        })
-                .show();
+        new DialogoEco.Builder(this)
+                .titulo(R.string.perfil_foto_alterar)
+                .botao(R.string.perfil_foto_tirar, DialogoEco.Estilo.PREENCHIDO, this::abrirCamera)
+                .botao(R.string.perfil_foto_galeria, DialogoEco.Estilo.CONTORNO, this::abrirGaleria)
+                .botao(R.string.perfil_cancelar, DialogoEco.Estilo.CONTORNO, null)
+                .mostrar();
     }
 
     private void abrirGaleria() {
@@ -335,23 +332,24 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
             return "?";
         }
 
-        return nome.trim().substring(0, 1).toUpperCase();
+        return nome.trim().substring(0, 1).toUpperCase(java.util.Locale.ROOT);
     }
 
     private void confirmarSaida() {
 
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.perfil_sair_titulo)
-                .setMessage(R.string.perfil_sair_mensagem)
-                .setPositiveButton(
+        new DialogoEco.Builder(this)
+                .titulo(R.string.perfil_sair_titulo)
+                .mensagem(R.string.perfil_sair_mensagem)
+                .botao(
                         R.string.perfil_sair_confirmar,
-                        (dialogo, botao) -> {
+                        DialogoEco.Estilo.PERIGO,
+                        () -> {
                             viewModel.encerrarSessao();
 
-                            voltarParaLogin();
+                            voltarParaLogin(0);
                         })
-                .setNegativeButton(R.string.perfil_cancelar, null)
-                .show();
+                .botao(R.string.perfil_cancelar, DialogoEco.Estilo.PREENCHIDO, null)
+                .mostrar();
     }
 
     private void pedirSenhaParaExcluir() {
@@ -360,12 +358,14 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
         EditText campoSenha = corpo.findViewById(R.id.campoConfirmarSenhaExclusao);
 
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.perfil_excluir_titulo)
-                .setView(corpo)
-                .setPositiveButton(
+        new DialogoEco.Builder(this)
+                .titulo(R.string.perfil_excluir_titulo)
+                .conteudo(corpo)
+                .botao(R.string.perfil_cancelar, DialogoEco.Estilo.PREENCHIDO, null)
+                .botao(
                         R.string.perfil_excluir_confirmar,
-                        (dialogo, botao) -> {
+                        DialogoEco.Estilo.PERIGO,
+                        () -> {
                             String senha = campoSenha.getText().toString();
 
                             if (senha.isEmpty()) {
@@ -376,8 +376,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
                             excluirConta(senha);
                         })
-                .setNegativeButton(R.string.perfil_cancelar, null)
-                .show();
+                .mostrar();
     }
 
     private void excluirConta(String senha) {
@@ -397,14 +396,12 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
                                 return;
                             }
 
-                            Toast.makeText(this, R.string.perfil_excluir_sucesso, Toast.LENGTH_LONG).show();
-
-                            voltarParaLogin();
+                            voltarParaLogin(R.string.conta_excluida_aviso);
                         });
     }
 
-    private void voltarParaLogin() {
+    private void voltarParaLogin(@StringRes int aviso) {
 
-        Navegacao.abrirLoginLimpandoPilha(this);
+        Navegacao.abrirLoginLimpandoPilha(this, aviso);
     }
 }

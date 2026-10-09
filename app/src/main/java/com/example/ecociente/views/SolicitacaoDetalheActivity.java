@@ -27,7 +27,8 @@ import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.viewmodels.ResponderSolicitacaoViewModel;
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import java.util.Locale;
+import com.example.ecociente.ui.DialogoEco;
 
 public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
@@ -295,7 +296,7 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
         chip.setText(material);
 
-        String chave = material.toLowerCase();
+        String chave = material.toLowerCase(Locale.ROOT);
 
         int fundo = R.color.chip_geral_fundo;
         int texto = R.color.chip_geral_texto;
@@ -368,12 +369,17 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
             @StringRes int rotuloConfirmar,
             @NonNull StatusAgendamento resposta) {
 
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(titulo)
-                .setMessage(mensagem)
-                .setNegativeButton(R.string.perfil_cancelar, null)
-                .setPositiveButton(rotuloConfirmar, (dialogo, botao) -> responder(resposta))
-                .show();
+        new DialogoEco.Builder(this)
+                .titulo(titulo)
+                .mensagem(mensagem)
+                .botao(
+                        rotuloConfirmar,
+                        resposta == StatusAgendamento.RECUSADO
+                                ? DialogoEco.Estilo.PERIGO
+                                : DialogoEco.Estilo.PREENCHIDO,
+                        () -> responder(resposta))
+                .botao(R.string.perfil_cancelar, DialogoEco.Estilo.CONTORNO, null)
+                .mostrar();
     }
 
     private void responder(@NonNull StatusAgendamento resposta) {

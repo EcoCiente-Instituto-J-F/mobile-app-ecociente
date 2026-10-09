@@ -13,7 +13,7 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
     app:cardBackgroundColor="@color/branco"
-    app:cardCornerRadius="14dp"
+    app:cardCornerRadius="@dimen/raio_card"
     app:cardElevation="0dp"
     app:strokeColor="@color/cinza_borda_card_perfil"
     app:strokeWidth="1dp">

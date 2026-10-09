@@ -164,6 +164,7 @@
                         android:src="@drawable/ic_calendario" />
 
                     <EditText
+                        android:importantForAutofill="no"
                         android:id="@+id/campoDataNascimento"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -514,6 +515,7 @@
                         android:src="@drawable/ic_senha"/>
 
                     <EditText
+                        android:importantForAutofill="no"
                         android:id="@+id/campoCodigoCondominio"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"

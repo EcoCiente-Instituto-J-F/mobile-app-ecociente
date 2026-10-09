@@ -64,6 +64,13 @@
     <string name="perfil_rotulo_telefone">Telefone</string>
     <string name="perfil_rotulo_endereco">Endereço</string>
     <string name="perfil_rotulo_cpf">CPF</string>
+    <string name="informacoes_basicas">Informações básicas</string>
+    <string name="rotulo_numero">Número</string>
+    <string name="rotulo_complemento">Complemento</string>
+    <string name="rotulo_cidade">Cidade</string>
+    <string name="rotulo_estado">Estado</string>
+    <string name="rotulo_cep">CEP</string>
+    <string name="perfil_rotulo_email_cooperativa">E-mail da cooperativa</string>
     <string name="perfil_valor_nao_informado">Não informado</string>
     <string name="perfil_salvar">Salvar</string>
     <string name="perfil_cancelar">Cancelar</string>
@@ -94,7 +101,6 @@
     <string name="perfil_excluir_confirmar">Excluir</string>
     <string name="perfil_excluir_aviso">Essa ação é permanente e não pode ser desfeita. Digite sua senha para confirmar.</string>
     <string name="perfil_excluir_senha_vazia">Digite sua senha.</string>
-    <string name="perfil_excluir_sucesso">Conta excluída.</string>
     <string name="perfil_senha_atual_vazia">Digite sua senha atual.</string>
     <string name="perfil_senha_nova_curta">A nova senha precisa ter de 8 a 100 caracteres, com maiúscula, minúscula, número e caractere especial, sem espaços.</string>
     <string name="perfil_senhas_diferentes">As senhas não são iguais.</string>
@@ -145,7 +151,7 @@
     <string name="chat_opcao_cooperativa">Encontrar cooperativa</string>
     <string name="chat_titulo_conversa">Eko</string>
     <string name="chat_voltar">Voltar</string>
-    <string name="chat_hint_mensagem">Digite sua pergunta...</string>
+    <string name="chat_hint_mensagem">Digite sua pergunta…</string>
     <string name="chat_enviar">Enviar mensagem</string>
     <string name="chat_avatar_eko">Avatar do Eko</string>
     <string name="chat_avatar_usuario">Avatar do usuário</string>
@@ -161,7 +167,7 @@
 
     <string name="buscar">Buscar quizzes</string>
 
-    <string name="pesquise">pesquise...</string>
+    <string name="pesquise">pesquise…</string>
 
     <string name="seis_quizzes_disponiveis">6 quizzes disponíveis</string>
 
@@ -192,6 +198,19 @@
     <string name="condominio">Condomínio</string>
     <string name="confirmar_senha">Confirmar senha</string>
     <string name="continuar">Continuar</string>
+    <string name="salvar_alteracoes_titulo">Salvar as alterações?</string>
+    <string name="salvar_alteracoes_mensagem">Confirme se deseja salvar as alterações realizadas.</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="conta_excluida_aviso">Sua conta foi excluída</string>
+    <string name="mascara_senha">••••••</string>
+    <string name="progresso_exemplo">75%</string>
+    <string name="simbolo_avancar">›</string>
+    <string name="simbolo_voltar">‹</string>
+    <string name="valor_do_campo">Valor do campo</string>
+    <string name="digito_codigo_1">Primeiro dígito do código</string>
+    <string name="digito_codigo_2">Segundo dígito do código</string>
+    <string name="digito_codigo_3">Terceiro dígito do código</string>
+    <string name="digito_codigo_4">Quarto dígito do código</string>
     <string name="continuar_com_facebook">Continuar com Facebook</string>
     <string name="continuar_com_google">Continuar com Google</string>
     <string name="cooperativa_nao_selecionada">Cooperativa não selecionada</string>
@@ -284,10 +303,6 @@
     <string name="solicitacao_condominio">Condomínio %1$d</string>
     <string name="solicitacao_data_horario">%1$s às %2$s</string>
     <string name="solicitacao_recorrente">Coleta recorrente</string>
-    <string name="solicitacao_rotulo_status">Situação</string>
-    <string name="solicitacao_rotulo_data">Data</string>
-    <string name="solicitacao_rotulo_horario">Horário</string>
-    <string name="solicitacao_rotulo_recorrencia">Recorrência</string>
     <string name="solicitacao_recorrencia_sim">Coleta recorrente</string>
     <string name="solicitacao_recorrencia_nao">Coleta única</string>
     <string name="solicitacoes_vazio">Nenhuma solicitação nesta situação.</string>
@@ -364,8 +379,7 @@
     <string name="avaliacoes_recebidas">Avaliações recebidas</string>
     <string name="ranking_do_morador">Ranking do morador</string>
     <string name="nova_coleta">Nova coleta</string>
-    <string name="editar_coleta">Editar coleta</string>
-    <string name="editar">Editar</string>
+    <string name="solicitacao_de_coleta">Solicitação de coleta</string>
     <string name="data">Data</string>
     <string name="horario_inicio">Início</string>
     <string name="horario_fim">Fim</string>
@@ -386,11 +400,9 @@
     <string name="avisos_subtitulo">Faça seu descarte sustentável e ajude o meio ambiente!</string>
     <string name="sem_avisos">Nenhum aviso por aqui.</string>
     <string name="nova_notificacao">Nova notificação</string>
-    <string name="categoria">Categoria</string>
     <string name="destinatarios">Destinatários</string>
     <string name="titulo_aviso">Título</string>
     <string name="mensagem">Mensagem</string>
-    <string name="enviar">Enviar</string>
     <string name="aviso_enviado_exemplo">Aviso enviado (exemplo).</string>
     <string name="aviso_origem">%1$s · %2$s</string>
     <string name="todos_os_condominios">Todos os meus condomínios</string>

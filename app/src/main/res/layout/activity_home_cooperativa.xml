@@ -123,7 +123,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="@dimen/espaco_barra_navegacao"
         android:clipToPadding="false"
         android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="@id/barraNavegacao"
@@ -215,7 +215,7 @@
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
                         app:cardBackgroundColor="@color/verde_fundo_icone_opcao"
-                        app:cardCornerRadius="14dp"
+                        app:cardCornerRadius="@dimen/raio_card"
                         app:cardElevation="0dp"
                         app:strokeWidth="0dp">
 
@@ -312,7 +312,7 @@
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
                         app:cardBackgroundColor="@color/verde_fundo_icone_opcao"
-                        app:cardCornerRadius="14dp"
+                        app:cardCornerRadius="@dimen/raio_card"
                         app:cardElevation="0dp"
                         app:strokeWidth="0dp">
 
