@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
+        android:name=".EcoCienteApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -20,18 +21,15 @@
 
         <activity
             android:name=".views.MainActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.CooperativaHomeActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.MensagensActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <receiver
             android:name=".repository.LembretesColeta$Receptor"
@@ -39,110 +37,90 @@
 
         <activity
             android:name=".views.AvisosActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.AvisoDetalheActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.TelaListaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.DetalheItemActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.NovaColetaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.SolicitacoesActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.ConversaActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".views.SolicitacaoDetalheActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.CondominioHomeActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.CalendarioColetasActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.QuizActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.EcoCiente.Quiz" />
 
         <activity
             android:name=".views.ChatActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".views.GerenciarPerfilActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.InformacoesPessoaisActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.GerenciarSenhaActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.NotificacoesActivity"
-            android:exported="false"
-            android:screenOrientation="portrait" />
+            android:exported="false" />
 
         <activity
             android:name=".views.Login"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".views.EsqueciSenha"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.EcoCiente.Dialogo"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".views.SelecaoPerfil"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.EcoCiente.Dialogo" />
 
         <activity
             android:name=".views.SplashScreen"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
 
             <intent-filter>
 

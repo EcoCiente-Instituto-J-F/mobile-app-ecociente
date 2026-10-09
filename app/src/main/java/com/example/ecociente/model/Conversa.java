@@ -26,18 +26,6 @@ public final class Conversa {
     }
 
     @NonNull
-    public String iniciais() {
-
-        String[] palavras = nome.split(" ");
-
-        String primeira = palavras[0].substring(0, 1);
-
-        String ultima = palavras.length > 1 ? palavras[palavras.length - 1].substring(0, 1) : "";
-
-        return (primeira + ultima).toUpperCase();
-    }
-
-    @NonNull
     public static List<Conversa> exemplos() {
         return Arrays.asList(
                 new Conversa("Condomínio Raio de Luz", "Quando vão passar?", "08:30", 2, false),
