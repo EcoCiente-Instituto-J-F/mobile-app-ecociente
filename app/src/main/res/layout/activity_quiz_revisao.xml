@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/raizQuizRevisao"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/branco"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp">
+
+    <!-- CABEÇALHO FIXO -->
+    <TextView
+        android:id="@+id/textoNumeroQuestaoRevisao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:fontFamily="@font/nunito_bold"
+        android:includeFontPadding="false"
+        android:text="Questão 01"
+        android:textColor="@color/verde_escuro_principal"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/botaoVoltarRevisaoQuiz"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/quiz_revisao_voltar"
+        android:elevation="8dp"
+        android:padding="10dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_voltar"
+        app:layout_constraintBottom_toBottomOf="@id/textoNumeroQuestaoRevisao"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textoNumeroQuestaoRevisao"
+        app:tint="@color/verde_escuro_principal" />
+
+    <TextView
+        android:id="@+id/textoSubtituloRevisao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/nunito_regular"
+        android:includeFontPadding="false"
+        android:text="@string/quiz_revisao_subtitulo"
+        android:textColor="#565656"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textoNumeroQuestaoRevisao" />
+
+    <!-- As bolinhas permanecem paradas; apenas a cor ativa muda. -->
+    <LinearLayout
+        android:id="@+id/indicadoresRevisao"
+        android:layout_width="wrap_content"
+        android:layout_height="14dp"
+        android:layout_marginTop="6dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textoSubtituloRevisao" />
+
+    <!-- AREA QUE RECEBE O SWIPE -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/painelRevisaoSwipe"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toTopOf="@id/botaoRepetirQuizRevisao"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/indicadoresRevisao">
+
+        <TextView
+            android:id="@+id/textoPerguntaRevisao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="18dp"
+            android:fontFamily="@font/nunito_semibold"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="1dp"
+            android:maxLines="5"
+            android:textAlignment="center"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardRespostasRevisao"
+            android:layout_width="0dp"
+            android:layout_height="216dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="4dp"
+            app:cardBackgroundColor="@color/branco"
+            app:cardCornerRadius="30dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textoPerguntaRevisao"
+            app:strokeColor="@color/verde_escuro_principal"
+            app:strokeWidth="1.2dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="22dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="22dp"
+                android:paddingBottom="16dp">
+
+                <TextView
+                    android:id="@+id/rotuloSuaRespostaRevisao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/quiz_revisao_sua_resposta"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="15.5sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardRespostaErradaRevisao"
+                    android:layout_width="0dp"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="7dp"
+                    app:cardBackgroundColor="#F3BED0"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rotuloSuaRespostaRevisao"
+                    app:strokeColor="#E984A7"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <!-- O X e uma imagem PNG; o circulo nao possui stroke. -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            app:cardBackgroundColor="@color/rosa_ecociente"
+                            app:cardCornerRadius="16dp"
+                            app:cardElevation="0dp"
+                            app:strokeColor="@android:color/transparent"
+                            app:strokeWidth="0dp">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center"
+                                android:contentDescription="@null"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/quiz_x"
+                                app:tint="@color/branco" />
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <TextView
+                            android:id="@+id/textoRespostaUsuarioRevisao"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunito_semibold"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:text="Nitrogênio"
+                            android:textColor="@color/branco"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/rotuloRespostaCorretaRevisao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="11dp"
+                    android:fontFamily="@font/nunito_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/quiz_revisao_resposta_correta"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="15.5sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cardRespostaErradaRevisao" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardRespostaCorretaRevisao"
+                    android:layout_width="0dp"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="7dp"
+                    app:cardBackgroundColor="@color/verde_escuro_principal"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/rotuloRespostaCorretaRevisao"
+                    app:strokeWidth="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="18dp"
+                        android:paddingEnd="16dp">
+
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:contentDescription="@null"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/quiz_check"
+                            app:tint="@color/branco" />
+
+                        <TextView
+                            android:id="@+id/textoRespostaCorretaRevisao"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="14dp"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunito_semibold"
+                            android:includeFontPadding="false"
+                            android:maxLines="1"
+                            android:text="Oxigênio"
+                            android:textColor="@color/branco"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:id="@+id/cabecalhoExplicacaoRevisao"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="@id/cardRespostasRevisao"
+            app:layout_constraintTop_toBottomOf="@id/cardRespostasRevisao">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                app:cardBackgroundColor="#E4F0E6"
+                app:cardCornerRadius="17dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
+
+                <!-- icon_quiz_verde.png ja e uma imagem PNG do projeto. -->
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/icon_quiz_verde" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="9dp"
+                android:fontFamily="@font/nunito_bold"
+                android:includeFontPadding="false"
+                android:text="@string/quiz_revisao_explicacao"
+                android:textColor="@color/verde_escuro_principal"
+                android:textSize="19sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textoExplicacaoRevisao"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/nunito_regular"
+            android:gravity="center_horizontal|top"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="1.5dp"
+            android:maxLines="6"
+            android:textAlignment="center"
+            android:textColor="#5A5A5A"
+            android:textSize="14.2sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cabecalhoExplicacaoRevisao" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botaoRepetirQuizRevisao"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="38dp"
+        android:layout_marginEnd="38dp"
+        android:layout_marginBottom="16dp"
+        android:elevation="4dp"
+        android:fontFamily="@font/nunito_semibold"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="@string/quiz_repetir"
+        android:textAllCaps="false"
+        android:textColor="@color/branco"
+        android:textSize="19sp"
+        app:backgroundTint="@color/verde_escuro_principal"
+        app:cornerRadius="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

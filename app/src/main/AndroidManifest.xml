@@ -23,6 +23,64 @@
             android:name=".views.MainActivity"
             android:exported="false" />
 
+        <!-- Fluxo separado até existir identificação/autorização do perfil síndico. -->
+        <activity
+            android:name=".views.SindicoHomeActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".views.SindicoAvisosActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".views.SindicoCooperativasActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".views.SindicoSolicitacaoColetaActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.EcoCiente.Dialogo"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".views.SindicoInformacoesCooperativaActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.EcoCiente.Dialogo" />
+
+        <activity
+            android:name=".views.SindicoHistoricoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".views.SindicoUnidadesActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".views.SindicoBlocoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".views.SindicoRankingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".views.SindicoDashboardActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
         <activity
             android:name=".views.CooperativaHomeActivity"
             android:exported="false" />
@@ -75,6 +133,30 @@
         <activity
             android:name=".views.QuizActivity"
             android:exported="false"
+            android:theme="@style/Theme.EcoCiente.Quiz" />
+
+        <activity
+            android:name=".views.InicioQuizActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.EcoCiente.QuizIntro" />
+
+        <activity
+            android:name=".views.QuizPerguntasActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.EcoCiente.Quiz" />
+
+        <activity
+            android:name=".views.QuizResultadoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.EcoCiente.Quiz" />
+
+        <activity
+            android:name=".views.QuizRevisaoActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.EcoCiente.Quiz" />
 
         <activity

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/raizSindicoHistorico"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/branco"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:paddingStart="8dp"
+        android:paddingEnd="12dp">
+        <ImageButton
+            android:id="@+id/voltarHistorico"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Voltar"
+            android:padding="12dp"
+            android:src="@drawable/sindico_voltar" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/nunito_bold"
+            android:text="Histórico de coletas"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="20sp" />
+        <ImageButton
+            android:id="@+id/filtrarHistorico"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Filtrar histórico"
+            android:padding="12dp"
+            android:src="@drawable/sindico_filtro" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="21dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="21dp"
+        android:paddingBottom="12dp"
+        android:fontFamily="@font/nunito_regular"
+        android:text="Exemplos locais · avaliações não enviadas"
+        android:textColor="@color/cinza_texto_home"
+        android:textSize="11sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+        <LinearLayout
+            android:id="@+id/listaSindicoHistorico"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="20dp" />
+    </ScrollView>
+
+    <com.example.ecociente.views.SindicoBottomBar
+        android:id="@+id/barraInferiorSindico"
+        android:layout_width="match_parent"
+        android:layout_height="86dp" />
+</LinearLayout>

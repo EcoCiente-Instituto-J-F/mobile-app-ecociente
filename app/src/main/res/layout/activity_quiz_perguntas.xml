@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/raizQuizPerguntas"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/branco"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <!-- Cabeçalho fixo -->
+    <FrameLayout
+        android:id="@+id/cabecalhoQuizPerguntas"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginEnd="22dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/botaoVoltarPerguntas"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_gravity="start|center_vertical"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/quiz_perguntas_voltar"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_voltar"
+            app:tint="@color/verde_escuro_principal" />
+
+        <TextView
+            android:id="@+id/textoContadorPergunta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/nunito_regular"
+            android:includeFontPadding="false"
+            android:text="01/10"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="27sp" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/containerProgressoQuiz"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_marginTop="2dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cabecalhoQuizPerguntas" />
+
+    <!--
+        Não há ScrollView na tela. O card ocupa somente o espaço disponível acima
+        da barra de navegação do aparelho, respeitando os insets aplicados pela Activity.
+    -->
+    <FrameLayout
+        android:id="@+id/areaPerguntaQuiz"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="12dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/containerProgressoQuiz">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardPerguntaQuiz"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="44dp"
+            android:background="@drawable/fundo_card_pergunta_quiz"
+            android:elevation="3dp"
+            android:paddingStart="26dp"
+            android:paddingTop="34dp"
+            android:paddingEnd="26dp"
+            android:paddingBottom="20dp">
+
+            <LinearLayout
+                android:id="@+id/conteudoQuestao"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textoCategoriaPergunta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_regular"
+                    android:includeFontPadding="false"
+                    android:text="@string/inicio_quiz_titulo_padrao"
+                    android:textColor="#5A5A5A"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/textoEnunciadoPergunta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="18dp"
+                    android:fontFamily="@font/nunito_semibold"
+                    android:gravity="center"
+                    android:includeFontPadding="false"
+                    android:lineSpacingExtra="1dp"
+                    android:maxLines="4"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/containerOpcoesQuiz"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/conteudoQuestao">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardOpcao1"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/branco"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/verde_escuro_principal"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <FrameLayout
+                            android:id="@+id/caixaCheckOpcao1"
+                            android:layout_width="27dp"
+                            android:layout_height="27dp"
+                            android:background="@drawable/fundo_checkbox_quiz">
+
+                            <ImageView
+                                android:id="@+id/iconeCheckOpcao1"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_gravity="center"
+                                android:contentDescription="@null"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/quiz_check"
+                                app:tint="@color/verde_escuro_principal"
+                                android:visibility="invisible" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/textoOpcao1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="18dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/nunito_regular"
+                            android:includeFontPadding="false"
+                            android:maxLines="2"
+                            android:textColor="@color/black"
+                            android:textSize="17sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardOpcao2"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:layout_marginTop="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/branco"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/verde_escuro_principal"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <FrameLayout
+                            android:id="@+id/caixaCheckOpcao2"
+                            android:layout_width="27dp"
+                            android:layout_height="27dp"
+                            android:background="@drawable/fundo_checkbox_quiz">
+
+                            <ImageView
+                                android:id="@+id/iconeCheckOpcao2"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_gravity="center"
+                                android:contentDescription="@null"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/quiz_check"
+                                app:tint="@color/verde_escuro_principal"
+                                android:visibility="invisible" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/textoOpcao2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="18dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/nunito_regular"
+                            android:includeFontPadding="false"
+                            android:maxLines="2"
+                            android:textColor="@color/black"
+                            android:textSize="17sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardOpcao3"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:layout_marginTop="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/branco"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/verde_escuro_principal"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <FrameLayout
+                            android:id="@+id/caixaCheckOpcao3"
+                            android:layout_width="27dp"
+                            android:layout_height="27dp"
+                            android:background="@drawable/fundo_checkbox_quiz">
+
+                            <ImageView
+                                android:id="@+id/iconeCheckOpcao3"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_gravity="center"
+                                android:contentDescription="@null"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/quiz_check"
+                                app:tint="@color/verde_escuro_principal"
+                                android:visibility="invisible" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/textoOpcao3"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="18dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/nunito_regular"
+                            android:includeFontPadding="false"
+                            android:maxLines="2"
+                            android:textColor="@color/black"
+                            android:textSize="17sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardOpcao4"
+                    android:layout_width="match_parent"
+                    android:layout_height="58dp"
+                    android:layout_marginTop="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardBackgroundColor="@color/branco"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="@color/verde_escuro_principal"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <FrameLayout
+                            android:id="@+id/caixaCheckOpcao4"
+                            android:layout_width="27dp"
+                            android:layout_height="27dp"
+                            android:background="@drawable/fundo_checkbox_quiz">
+
+                            <ImageView
+                                android:id="@+id/iconeCheckOpcao4"
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_gravity="center"
+                                android:contentDescription="@null"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/quiz_check"
+                                app:tint="@color/verde_escuro_principal"
+                                android:visibility="invisible" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/textoOpcao4"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="18dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/nunito_regular"
+                            android:includeFontPadding="false"
+                            android:maxLines="2"
+                            android:textColor="@color/black"
+                            android:textSize="17sp" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botaoProximaPergunta"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/nunito_regular"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/quiz_proximo"
+                android:textAllCaps="false"
+                android:textColor="@color/branco"
+                android:textSize="19sp"
+                app:backgroundTint="@color/verde_escuro_principal"
+                app:cornerRadius="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/containerOpcoesQuiz" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--
+            PNG em primeiro plano, acima do card. Substitua quiz_planeta_pergunta.png
+            pela arte definitiva sem alterar o layout.
+        -->
+        <ImageView
+            android:id="@+id/ilustracaoPlanetaQuiz"
+            android:layout_width="148dp"
+            android:layout_height="126dp"
+            android:layout_gravity="start|top"
+            android:contentDescription="@string/quiz_planeta_ilustracao"
+            android:elevation="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/quiz_planeta_pergunta"
+            android:translationX="-4dp"
+            android:translationY="0dp" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -41,6 +41,8 @@
 
     <color name="cinza_borda_card_perfil">#D7E6E1</color>
     <color name="verde_fundo_card_claro">#F3F8F6</color>
+    <color name="amarelo_avaliacao">#FFC331</color>
+    <color name="amarelo_botao_avaliar">#FFE15A</color>
 
     <color name="azul_facebook">#1877F2</color>
     <color name="branco_fundo_campo">#FAFCFB</color>

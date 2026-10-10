@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/raizInicioQuiz"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/verde_escuro_principal"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <!-- Cabeçalho fixo. Logo centralizada e seta alinhada ao centro vertical da logo. -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cabecalhoInicioQuiz"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/logoInicioQuiz"
+            android:layout_width="184dp"
+            android:layout_height="48dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/logo_ecociente"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo_ecociente"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/botaoVoltarInicioQuiz"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/inicio_quiz_voltar"
+            android:padding="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_voltar"
+            android:translationY="1dp"
+            app:layout_constraintBottom_toBottomOf="@id/logoInicioQuiz"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/logoInicioQuiz"
+            app:tint="@color/branco" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--
+        Sem ScrollView: a tela inteira fica fixa.
+        O bloco foi compactado e elevado para caber acima da navigation bar do Android.
+    -->
+    <ImageView
+        android:id="@+id/imagemIlustracaoInicioQuiz"
+        android:layout_width="228dp"
+        android:layout_height="230dp"
+        android:layout_marginTop="18dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/inicio_quiz_ilustracao"
+        android:scaleType="fitCenter"
+        android:src="@drawable/quiz_sustentabilidade_inicio"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cabecalhoInicioQuiz" />
+
+    <LinearLayout
+        android:id="@+id/blocoInformacoesInicioQuiz"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="28dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imagemIlustracaoInicioQuiz">
+
+        <TextView
+            android:id="@+id/textoTituloInicioQuiz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_regular"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:maxLines="2"
+            android:text="@string/inicio_quiz_titulo_padrao"
+            android:textAlignment="center"
+            android:textColor="@color/branco"
+            android:textSize="34sp" />
+
+        <TextView
+            android:id="@+id/textoDescricaoInicioQuiz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:fontFamily="@font/nunito_regular"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="2dp"
+            android:maxLines="3"
+            android:text="@string/inicio_quiz_descricao"
+            android:textAlignment="center"
+            android:textColor="@color/branco"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/textoPerguntasInicioQuiz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:fontFamily="@font/nunito_regular"
+            android:includeFontPadding="false"
+            android:text="@string/inicio_quiz_perguntas_padrao"
+            android:textColor="@color/branco"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/textoPontosInicioQuiz"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/nunito_regular"
+            android:includeFontPadding="false"
+            android:text="@string/inicio_quiz_pontos"
+            android:textColor="@color/branco"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botaoIniciarQuiz"
+        android:layout_width="0dp"
+        android:layout_height="62dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="18dp"
+        android:elevation="4dp"
+        android:fontFamily="@font/nunito_semibold"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:minHeight="0dp"
+        android:text="@string/inicio_quiz_botao"
+        android:textAllCaps="false"
+        android:textColor="@color/verde_escuro_principal"
+        android:textSize="20sp"
+        app:backgroundTint="@color/branco"
+        app:cornerRadius="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="#D7D7D7"
+        app:strokeWidth="1dp" />
+
+    <!-- Mantém um respiro entre as informações e o botão sem criar rolagem. -->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barreiraInformacoesInicioQuiz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="blocoInformacoesInicioQuiz" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
