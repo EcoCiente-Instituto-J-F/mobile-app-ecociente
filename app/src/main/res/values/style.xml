@@ -78,6 +78,25 @@
         <item name="hintTextColor">@color/verde_escuro_principal</item>
     </style>
 
+    <style name="BotaoVoltar">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginStart">14dp</item>
+        <item name="android:layout_marginTop">14dp</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:contentDescription">@string/voltar</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:src">@drawable/ic_voltar</item>
+    </style>
+
+    <style name="CartaoComBorda" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">@color/branco</item>
+        <item name="cardCornerRadius">@dimen/raio_card</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">@color/cinza_borda_card_perfil</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
     <style name="AbaMensagens">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>

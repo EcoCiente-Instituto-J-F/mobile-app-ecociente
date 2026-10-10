@@ -203,7 +203,8 @@
                     android:layout_height="16dp"
                     android:contentDescription="@string/localizacao"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_localizacao" />
+                    android:src="@drawable/ic_endereco_perfil"
+                    app:tint="@color/cinza_icone" />
 
                 <EditText
                     android:importantForAutofill="no"

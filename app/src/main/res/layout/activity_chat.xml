@@ -48,7 +48,7 @@
                     android:layout_gravity="center"
                     android:contentDescription="@string/chat_avatar_eko"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/eko_avatar" />
+                    android:src="@drawable/mascote_eko" />
             </FrameLayout>
 
             <TextView
