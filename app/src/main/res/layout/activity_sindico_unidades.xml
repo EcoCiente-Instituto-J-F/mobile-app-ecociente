@@ -18,14 +18,14 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Voltar"
+            android:contentDescription="@string/voltar"
             android:padding="12dp"
             android:src="@drawable/sindico_voltar" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_bold"
-            android:text="Dados do condomínio"
+            android:text="@string/sindico_dados_do_condominio"
             android:textColor="@color/verde_escuro_principal"
             android:textSize="20sp" />
     </LinearLayout>
@@ -49,7 +49,7 @@
                 android:paddingStart="4dp"
                 android:paddingBottom="8dp"
                 android:fontFamily="@font/nunito_regular"
-                android:text="Dados de demonstração · alterações temporárias, sem envio"
+                android:text="@string/sindico_dados_de_demonstracao_alteracoes_t"
                 android:textColor="@color/cinza_texto_home"
                 android:textSize="11sp" />
 
@@ -75,7 +75,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
                         android:fontFamily="@font/nunito_bold"
-                        android:text="Informações básicas"
+                        android:text="@string/informacoes_basicas"
                         android:textColor="@color/verde_escuro_principal"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -99,7 +99,7 @@
                                 android:layout_height="76dp"
                                 android:background="@drawable/sindico_nav_mascote_fundo"
                                 android:clipToOutline="true"
-                                android:contentDescription="Foto ilustrativa do condomínio"
+                                android:contentDescription="@string/sindico_foto_ilustrativa_do_condominio"
                                 android:padding="17dp"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/sindico_nav_unidades"
@@ -111,7 +111,7 @@
                                 android:layout_gravity="bottom|end"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
-                                android:contentDescription="Escolher foto do condomínio"
+                                android:contentDescription="@string/sindico_escolher_foto_do_condominio"
                                 android:focusable="true">
                                 <ImageView
                                     android:layout_width="30dp"
@@ -131,7 +131,7 @@
                             android:focusable="true"
                             android:fontFamily="@font/nunito_regular"
                             android:gravity="center"
-                            android:text="Alterar foto"
+                            android:text="@string/sindico_alterar_foto"
                             android:textColor="@color/verde_escuro_principal"
                             android:textSize="11sp" />
                     </LinearLayout>
@@ -156,7 +156,7 @@
                                 android:focusable="true"
                                 android:fontFamily="@font/nunito_bold"
                                 android:gravity="center"
-                                android:text="Residencial"
+                                android:text="@string/sindico_residencial"
                                 android:textSize="11sp" />
                             <TextView
                                 android:id="@+id/tipoComercialSindico"
@@ -167,7 +167,7 @@
                                 android:focusable="true"
                                 android:fontFamily="@font/nunito_bold"
                                 android:gravity="center"
-                                android:text="Comercial/Industrial"
+                                android:text="@string/sindico_comercial_industrial"
                                 android:textSize="10sp" />
                         </LinearLayout>
 
@@ -176,7 +176,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:labelFor="@id/nomeCondominioSindico"
-                            android:text="Nome do condomínio"
+                            android:text="@string/sindico_nome_do_condominio"
                             android:textColor="@color/cinza_texto_home"
                             android:textSize="11sp" />
                         <EditText
@@ -198,7 +198,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:labelFor="@id/enderecoCondominioSindico"
-                            android:text="Endereço"
+                            android:text="@string/perfil_rotulo_endereco"
                             android:textColor="@color/cinza_texto_home"
                             android:textSize="11sp" />
                         <EditText
@@ -229,7 +229,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:labelFor="@id/cidadeCondominioSindico"
-                                    android:text="Cidade"
+                                    android:text="@string/rotulo_cidade"
                                     android:textColor="@color/cinza_texto_home"
                                     android:textSize="11sp" />
                                 <EditText
@@ -255,7 +255,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:labelFor="@id/estadoCondominioSindico"
-                                    android:text="Estado"
+                                    android:text="@string/rotulo_estado"
                                     android:textColor="@color/cinza_texto_home"
                                     android:textSize="11sp" />
                                 <EditText
@@ -280,7 +280,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:labelFor="@id/cepCondominioSindico"
-                            android:text="CEP"
+                            android:text="@string/rotulo_cep"
                             android:textColor="@color/cinza_texto_home"
                             android:textSize="11sp" />
                         <EditText
@@ -306,7 +306,7 @@
                     android:layout_height="48dp"
                     android:layout_marginTop="16dp"
                     android:backgroundTint="@color/verde_escuro_principal"
-                    android:text="Salvar dados locais"
+                    android:text="@string/sindico_salvar_dados_locais"
                     android:textAllCaps="false"
                     android:textColor="@color/branco"
                     android:textSize="13sp" />
@@ -335,7 +335,7 @@
                         android:layout_marginStart="7dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_bold"
-                        android:text="Blocos e torres"
+                        android:text="@string/sindico_blocos_e_torres"
                         android:textColor="@color/verde_escuro_principal"
                         android:textSize="16sp" />
                     <TextView
@@ -357,7 +357,7 @@
                     android:layout_marginTop="7dp"
                     android:background="@drawable/sindico_unidades_botao_contorno"
                     android:clickable="true"
-                    android:contentDescription="Adicionar bloco ou torre"
+                    android:contentDescription="@string/sindico_adicionar_bloco_ou_torre"
                     android:focusable="true"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -371,7 +371,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="7dp"
                         android:fontFamily="@font/nunito_bold"
-                        android:text="Adicionar bloco/torre"
+                        android:text="@string/sindico_adicionar_bloco_torre"
                         android:textColor="@color/verde_escuro_principal"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -400,7 +400,7 @@
                         android:layout_marginStart="7dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_bold"
-                        android:text="Áreas de descarte"
+                        android:text="@string/sindico_areas_de_descarte"
                         android:textColor="@color/verde_escuro_principal"
                         android:textSize="16sp" />
                     <TextView
@@ -422,7 +422,7 @@
                     android:layout_marginTop="7dp"
                     android:background="@drawable/sindico_unidades_botao_contorno"
                     android:clickable="true"
-                    android:contentDescription="Adicionar área de descarte"
+                    android:contentDescription="@string/sindico_adicionar_area_de_descarte"
                     android:focusable="true"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -436,7 +436,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="7dp"
                         android:fontFamily="@font/nunito_bold"
-                        android:text="Adicionar área de descarte"
+                        android:text="@string/sindico_adicionar_area_de_descarte"
                         android:textColor="@color/verde_escuro_principal"
                         android:textSize="12sp" />
                 </LinearLayout>

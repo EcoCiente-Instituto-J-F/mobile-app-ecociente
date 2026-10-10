@@ -23,7 +23,6 @@ import com.example.ecociente.viewmodels.SindicoViewModel;
 
 import java.util.Locale;
 
-/** Entrada isolada para a área do síndico até existir uma autorização desse perfil. */
 public final class SindicoHomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle estadoSalvo) {

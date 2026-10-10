@@ -33,7 +33,7 @@
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:contentDescription="Abrir avisos"
+                android:contentDescription="@string/sindico_abrir_avisos"
                 android:focusable="true">
                 <ImageView
                     android:layout_width="20dp"
@@ -46,7 +46,7 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:contentDescription="Perfil do síndico"
+                android:contentDescription="@string/sindico_perfil_do_sindico"
                 android:padding="4dp"
                 android:src="@drawable/ic_perfil_usuario" />
         </LinearLayout>
@@ -107,7 +107,7 @@
                 <ImageView
                     android:layout_width="83dp"
                     android:layout_height="82dp"
-                    android:contentDescription="Ilustração de reciclagem"
+                    android:contentDescription="@string/sindico_ilustracao_de_reciclagem"
                     android:scaleType="fitCenter"
                     android:src="@drawable/sindico_reciclagem" />
             </LinearLayout>
@@ -135,14 +135,14 @@
                         android:layout_marginStart="5dp"
                         android:layout_weight="1"
                         android:fontFamily="@font/nunito_bold"
-                        android:text="Calendário da semana"
+                        android:text="@string/calendario_da_semana"
                         android:textColor="@color/verde_escuro_principal"
                         android:textSize="12sp" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunito_regular"
-                        android:text="Semana ilustrativa"
+                        android:text="@string/sindico_semana_ilustrativa"
                         android:textColor="@color/cinza_texto_home"
                         android:textSize="10sp" />
                 </LinearLayout>
@@ -162,7 +162,7 @@
                         android:gravity="center"
                         android:orientation="vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_bold" android:text="Seg"
+                            android:fontFamily="@font/nunito_bold" android:text="@string/sindico_seg"
                             android:textColor="@color/verde_escuro_principal" android:textSize="10sp" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular" android:text="12/05"
@@ -171,7 +171,7 @@
                             android:background="@drawable/sindico_circulo"
                             android:backgroundTint="@color/rosa_ecociente" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="Não há coleta"
+                            android:fontFamily="@font/nunito_regular" android:text="@string/nao_ha_coleta"
                             android:textColor="@color/cinza_texto_home" android:textSize="8sp" />
                     </LinearLayout>
 
@@ -184,7 +184,7 @@
                         android:gravity="center"
                         android:orientation="vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_bold" android:text="Ter"
+                            android:fontFamily="@font/nunito_bold" android:text="@string/sindico_ter"
                             android:textColor="@color/verde_escuro_principal" android:textSize="10sp" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular" android:text="13/05"
@@ -193,7 +193,7 @@
                             android:background="@drawable/sindico_circulo"
                             android:backgroundTint="@color/verde_escuro_principal" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="Coleta"
+                            android:fontFamily="@font/nunito_regular" android:text="@string/coleta"
                             android:textColor="@color/cinza_texto_home" android:textSize="8sp" />
                     </LinearLayout>
 
@@ -206,7 +206,7 @@
                         android:gravity="center"
                         android:orientation="vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_bold" android:text="Qua"
+                            android:fontFamily="@font/nunito_bold" android:text="@string/sindico_qua"
                             android:textColor="@color/verde_escuro_principal" android:textSize="10sp" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular" android:text="14/05"
@@ -215,7 +215,7 @@
                             android:background="@drawable/sindico_circulo"
                             android:backgroundTint="@color/rosa_ecociente" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="Não há coleta"
+                            android:fontFamily="@font/nunito_regular" android:text="@string/nao_ha_coleta"
                             android:textColor="@color/cinza_texto_home" android:textSize="8sp" />
                     </LinearLayout>
 
@@ -228,7 +228,7 @@
                         android:gravity="center"
                         android:orientation="vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_bold" android:text="Qui"
+                            android:fontFamily="@font/nunito_bold" android:text="@string/sindico_qui"
                             android:textColor="@color/verde_escuro_principal" android:textSize="10sp" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular" android:text="15/05"
@@ -237,7 +237,7 @@
                             android:background="@drawable/sindico_circulo"
                             android:backgroundTint="@color/rosa_ecociente" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="Não há coleta"
+                            android:fontFamily="@font/nunito_regular" android:text="@string/nao_ha_coleta"
                             android:textColor="@color/cinza_texto_home" android:textSize="8sp" />
                     </LinearLayout>
 
@@ -250,7 +250,7 @@
                         android:gravity="center"
                         android:orientation="vertical">
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_bold" android:text="Sex"
+                            android:fontFamily="@font/nunito_bold" android:text="@string/sindico_sex"
                             android:textColor="@color/verde_escuro_principal" android:textSize="10sp" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular" android:text="16/05"
@@ -259,7 +259,7 @@
                             android:background="@drawable/sindico_circulo"
                             android:backgroundTint="@color/rosa_ecociente" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="Não há coleta"
+                            android:fontFamily="@font/nunito_regular" android:text="@string/nao_ha_coleta"
                             android:textColor="@color/cinza_texto_home" android:textSize="8sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -272,7 +272,7 @@
                 android:layout_marginTop="18dp"
                 android:background="@drawable/sindico_card"
                 android:clickable="true"
-                android:contentDescription="Abrir dashboard de desempenho completo"
+                android:contentDescription="@string/sindico_abrir_dashboard_de_desempenho_comp"
                 android:focusable="true"
                 android:orientation="vertical"
                 android:padding="12dp">
@@ -292,7 +292,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
                         android:fontFamily="@font/nunito_bold"
-                        android:text="Dashboard de desempenho"
+                        android:text="@string/sindico_dashboard_de_desempenho"
                         android:textColor="@color/verde_escuro_principal"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -309,7 +309,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="130dp"
                     android:layout_marginTop="8dp"
-                    android:contentDescription="Evolução ilustrativa dos descartes: 90, 130, 175, 185 e 300" />
+                    android:contentDescription="@string/sindico_evolucao_ilustrativa_dos_descartes" />
             </LinearLayout>
 
             <TextView
@@ -320,10 +320,10 @@
                 android:layout_marginTop="18dp"
                 android:layout_marginBottom="7dp"
                 android:clickable="true"
-                android:contentDescription="Abrir ranking completo"
+                android:contentDescription="@string/sindico_abrir_ranking_completo"
                 android:focusable="true"
                 android:fontFamily="@font/nunito_bold"
-                android:text="Detalhes do Ranking"
+                android:text="@string/sindico_detalhes_do_ranking"
                 android:textColor="@color/verde_escuro_principal"
                 android:textSize="16sp" />
 
@@ -333,7 +333,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/sindico_card"
                 android:clickable="true"
-                android:contentDescription="Abrir ranking completo"
+                android:contentDescription="@string/sindico_abrir_ranking_completo"
                 android:focusable="true"
                 android:orientation="vertical"
                 android:padding="10dp" />

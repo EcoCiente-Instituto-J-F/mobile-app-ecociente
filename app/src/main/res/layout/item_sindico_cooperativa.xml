@@ -56,7 +56,7 @@
         android:layout_marginStart="5dp"
         android:backgroundTint="@color/verde_escuro_principal"
         android:minWidth="86dp"
-        android:text="Solicitar coleta"
+        android:text="@string/sindico_solicitar_coleta"
         android:textAllCaps="false"
         android:textColor="@color/branco"
         android:textSize="10sp" />

@@ -18,7 +18,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Voltar à home do síndico"
+            android:contentDescription="@string/sindico_voltar_a_home_do_sindico"
             android:padding="12dp"
             android:src="@drawable/sindico_voltar" />
         <LinearLayout
@@ -37,7 +37,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito_regular"
-                android:text="Faça seu descarte sustentável e ajude o meio ambiente!"
+                android:text="@string/avisos_subtitulo"
                 android:textColor="@color/cinza_texto_home"
                 android:textSize="10sp" />
         </LinearLayout>

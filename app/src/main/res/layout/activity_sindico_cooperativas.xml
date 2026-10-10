@@ -17,7 +17,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Voltar à home do síndico"
+            android:contentDescription="@string/sindico_voltar_a_home_do_sindico"
             android:padding="12dp"
             android:src="@drawable/sindico_voltar" />
         <TextView
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/nunito_bold"
-            android:text="Cooperativas próximas"
+            android:text="@string/sindico_cooperativas_proximas"
             android:textColor="@color/verde_escuro_principal"
             android:textSize="21sp" />
     </LinearLayout>
@@ -47,7 +47,7 @@
                 android:layout_width="104dp"
                 android:layout_height="56dp"
                 android:layout_gravity="end"
-                android:contentDescription="Caminhão de reciclagem"
+                android:contentDescription="@string/sindico_caminhao_de_reciclagem"
                 android:scaleType="centerCrop"
                 android:src="@drawable/sindico_caminhao_coleta" />
 
@@ -58,7 +58,7 @@
                 android:background="@drawable/sindico_campo"
                 android:drawableStart="@drawable/buscar_icon"
                 android:drawablePadding="8dp"
-                android:hint="Buscar cooperativa..."
+                android:hint="@string/sindico_buscar_cooperativa"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:paddingStart="14dp"
@@ -74,7 +74,7 @@
                 android:layout_marginTop="14dp"
                 android:layout_marginBottom="12dp"
                 android:fontFamily="@font/nunito_regular"
-                android:text="Dados ilustrativos · sem consulta ao banco ou envio à cooperativa"
+                android:text="@string/sindico_dados_ilustrativos_sem_consulta_ao"
                 android:textColor="@color/cinza_texto_home"
                 android:textSize="11sp" />
 

@@ -11,6 +11,7 @@ public final class EstadoHome {
         CADASTRO_INCOMPLETO,
         SEM_ACESSO,
         COOPERATIVA,
+        SINDICO,
         CONDOMINIO,
         PRONTA
     }

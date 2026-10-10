@@ -112,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
                 abrirHomeCooperativa();
                 break;
 
+            case SINDICO:
+                abrirHomeSindico();
+                break;
+
             case CONDOMINIO:
                 abrirHomeCondominio();
                 break;
@@ -249,6 +253,15 @@ public class MainActivity extends AppCompatActivity {
     private void abrirHomeCooperativa() {
 
         startActivity(new Intent(this, CooperativaHomeActivity.class));
+
+        overridePendingTransition(0, 0);
+
+        finish();
+    }
+
+    private void abrirHomeSindico() {
+
+        startActivity(new Intent(this, SindicoHomeActivity.class));
 
         overridePendingTransition(0, 0);
 

@@ -121,6 +121,9 @@ public class HomeViewModel extends ViewModel {
             case COOPERATIVA:
                 return EstadoHome.de(EstadoHome.Tipo.COOPERATIVA);
 
+            case SINDICO:
+                return EstadoHome.de(EstadoHome.Tipo.SINDICO);
+
             case CONDOMINIO:
                 return EstadoHome.de(EstadoHome.Tipo.CONDOMINIO);
 

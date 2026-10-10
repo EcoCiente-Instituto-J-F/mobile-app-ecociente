@@ -18,7 +18,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Fechar formulário"
+            android:contentDescription="@string/sindico_fechar_formulario"
             android:padding="13dp"
             android:src="@drawable/sindico_voltar" />
 
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:fontFamily="@font/nunito_bold"
-                android:text="Adicionar unidade"
+                android:text="@string/sindico_adicionar_unidade"
                 android:textColor="@color/verde_escuro_principal"
                 android:textSize="23sp" />
         </LinearLayout>
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="34dp"
             android:labelFor="@id/numeroFormularioUnidade"
-            android:text="Número do apartamento"
+            android:text="@string/sindico_numero_do_apartamento"
             android:textColor="@color/cinza_texto_home"
             android:textSize="14sp" />
         <EditText
@@ -59,7 +59,7 @@
             android:background="@drawable/sindico_campo"
             android:drawableStart="@drawable/sindico_building_campo"
             android:drawablePadding="8dp"
-            android:hint="Apto 120"
+            android:hint="@string/sindico_apto_120"
             android:inputType="textCapWords"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:labelFor="@id/moradorFormularioUnidade"
-            android:text="Nome do morador"
+            android:text="@string/sindico_nome_do_morador"
             android:textColor="@color/cinza_texto_home"
             android:textSize="14sp" />
         <EditText
@@ -82,7 +82,7 @@
             android:background="@drawable/sindico_campo"
             android:drawableStart="@drawable/ic_perfil_usuario"
             android:drawablePadding="8dp"
-            android:hint="Maria Clara"
+            android:hint="@string/sindico_maria_clara"
             android:inputType="textPersonName"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
@@ -95,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:labelFor="@id/telefoneFormularioUnidade"
-            android:text="Telefone do morador"
+            android:text="@string/sindico_telefone_do_morador"
             android:textColor="@color/cinza_texto_home"
             android:textSize="14sp" />
         <EditText
@@ -105,7 +105,7 @@
             android:background="@drawable/sindico_campo"
             android:drawableStart="@drawable/ic_telefone_perfil"
             android:drawablePadding="8dp"
-            android:hint="(11) 95376-2717"
+            android:hint="@string/sindico_11_95376_2717"
             android:inputType="phone"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
@@ -122,11 +122,11 @@
             android:layout_marginEnd="28dp"
             android:background="@drawable/sindico_status_concluida"
             android:clickable="true"
-            android:contentDescription="Enviar unidade"
+            android:contentDescription="@string/sindico_enviar_unidade"
             android:focusable="true"
             android:fontFamily="@font/nunito_bold"
             android:gravity="center"
-            android:text="Enviar"
+            android:text="@string/sindico_enviar"
             android:textColor="@color/branco"
             android:textSize="18sp" />
     </LinearLayout>

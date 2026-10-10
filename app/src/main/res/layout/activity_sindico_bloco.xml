@@ -13,7 +13,7 @@
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Voltar aos blocos"
+        android:contentDescription="@string/sindico_voltar_aos_blocos"
         android:padding="13dp"
         android:src="@drawable/sindico_voltar" />
 
@@ -38,7 +38,7 @@
         android:background="@drawable/sindico_campo"
         android:drawableStart="@drawable/buscar_icon"
         android:drawablePadding="8dp"
-        android:hint="Buscar unidade..."
+        android:hint="@string/sindico_buscar_unidade"
         android:inputType="text"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
@@ -72,7 +72,7 @@
         android:layout_marginBottom="18dp"
         android:background="@drawable/sindico_status_concluida"
         android:clickable="true"
-        android:contentDescription="Adicionar unidade"
+        android:contentDescription="@string/sindico_adicionar_unidade"
         android:focusable="true"
         android:gravity="center"
         android:orientation="horizontal">
@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/nunito_bold"
-            android:text="Adicionar unidade"
+            android:text="@string/sindico_adicionar_unidade"
             android:textColor="@color/branco"
             android:textSize="14sp" />
     </LinearLayout>

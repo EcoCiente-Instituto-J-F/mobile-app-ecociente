@@ -64,7 +64,7 @@
         android:layout_width="40dp"
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Editar unidade"
+        android:contentDescription="@string/sindico_editar_unidade"
         android:padding="12dp"
         android:src="@drawable/sindico_unidades_editar" />
     <ImageButton
@@ -72,7 +72,7 @@
         android:layout_width="40dp"
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Excluir unidade"
+        android:contentDescription="@string/sindico_excluir_unidade"
         android:padding="12dp"
         android:src="@drawable/ic_excluir" />
 </LinearLayout>

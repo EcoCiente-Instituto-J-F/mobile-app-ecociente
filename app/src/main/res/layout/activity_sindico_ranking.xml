@@ -16,7 +16,7 @@
             android:layout_gravity="top|start"
             android:layout_marginStart="4dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Voltar à home"
+            android:contentDescription="@string/sindico_voltar_a_home"
             android:padding="13dp"
             android:src="@drawable/sindico_voltar" />
         <TextView
@@ -26,7 +26,7 @@
             android:layout_marginStart="40dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/nunito_bold"
-            android:text="Ranking"
+            android:text="@string/sindico_ranking"
             android:textColor="@color/verde_escuro_principal"
             android:textSize="21sp" />
         <ImageView
@@ -55,7 +55,7 @@
             android:layout_weight="1"
             android:background="@drawable/sindico_ranking_modo_ativo"
             android:clickable="true"
-            android:contentDescription="Ranking por bloco ou torre, selecionado"
+            android:contentDescription="@string/sindico_ranking_por_bloco_ou_torre_selecio"
             android:drawableStart="@drawable/sindico_ranking_icone_modo"
             android:drawablePadding="4dp"
             android:focusable="true"
@@ -63,7 +63,7 @@
             android:gravity="center"
             android:paddingStart="8dp"
             android:paddingEnd="4dp"
-            android:text="Por bloco/torre"
+            android:text="@string/sindico_por_bloco_torre"
             android:textColor="@color/verde_escuro_principal"
             android:textSize="11sp" />
         <TextView
@@ -72,7 +72,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="true"
-            android:contentDescription="Ver ranking por apartamento"
+            android:contentDescription="@string/sindico_ver_ranking_por_apartamento"
             android:drawableStart="@drawable/sindico_ranking_icone_modo"
             android:drawablePadding="4dp"
             android:focusable="true"
@@ -80,7 +80,7 @@
             android:gravity="center"
             android:paddingStart="8dp"
             android:paddingEnd="4dp"
-            android:text="Por apartamento"
+            android:text="@string/sindico_por_apartamento"
             android:textColor="@color/verde_escuro_principal"
             android:textSize="11sp" />
     </LinearLayout>
@@ -131,7 +131,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="2º"
+                            android:text="@string/sindico_2o"
                             android:textColor="@color/preto_texto_home"
                             android:textSize="18sp" />
                         <TextView
@@ -169,7 +169,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="1º"
+                            android:text="@string/sindico_1o"
                             android:textColor="@color/branco"
                             android:textSize="19sp" />
                         <TextView
@@ -209,7 +209,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="3º"
+                            android:text="@string/sindico_3o"
                             android:textColor="@color/preto_texto_home"
                             android:textSize="18sp" />
                         <TextView
