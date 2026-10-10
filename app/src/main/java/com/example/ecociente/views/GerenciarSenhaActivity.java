@@ -17,6 +17,7 @@ import com.example.ecociente.viewmodels.SenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseUser;
 import java.util.regex.Pattern;
+import com.example.ecociente.ui.DialogoEco;
 
 public class GerenciarSenhaActivity extends AppCompatActivity {
 
@@ -188,6 +189,19 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
 
             return;
         }
+
+        new DialogoEco.Builder(this)
+                .titulo(R.string.salvar_alteracoes_titulo)
+                .mensagem(R.string.salvar_alteracoes_mensagem)
+                .botao(
+                        R.string.confirmar,
+                        DialogoEco.Estilo.PREENCHIDO,
+                        () -> alterarSenha(senhaAtual, senhaNova))
+                .botao(R.string.perfil_cancelar, DialogoEco.Estilo.CONTORNO, null)
+                .mostrar();
+    }
+
+    private void alterarSenha(String senhaAtual, String senhaNova) {
 
         senhaViewModel
                 .alterarSenha(getApplicationContext(), senhaAtual, senhaNova)

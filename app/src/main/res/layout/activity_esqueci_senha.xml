@@ -22,7 +22,7 @@
         app:layout_constraintWidth_max="420dp"
         app:layout_constraintWidth_percent="0.9">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/hostEsqueciSenha"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"

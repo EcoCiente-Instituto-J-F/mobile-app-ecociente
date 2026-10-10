@@ -286,7 +286,7 @@
 
                             android:fontFamily="@font/nunito_extrabold"
 
-                            android:text="75%"
+                            android:text="@string/progresso_exemplo"
 
                             android:textColor="@color/verde_escuro_principal"
 
@@ -301,7 +301,7 @@
 
                         android:fontFamily="@font/nunito_bold"
 
-                        android:text="›"
+                        android:text="@string/simbolo_avancar"
 
                         android:textColor="@color/verde_escuro_principal"
 
@@ -454,7 +454,7 @@
 
                     android:includeFontPadding="false"
 
-                    android:text="›"
+                    android:text="@string/simbolo_avancar"
 
                     android:textColor="@color/verde_escuro_principal"
 

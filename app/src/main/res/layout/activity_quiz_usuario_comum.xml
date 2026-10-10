@@ -14,7 +14,7 @@
         android:id="@+id/rolagemQuizzes"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="@dimen/espaco_barra_navegacao"
         android:clipToPadding="false"
         android:fillViewport="true"
         android:overScrollMode="ifContentScrolls"
@@ -149,6 +149,7 @@
                         android:src="@drawable/buscar_icon" />
 
                     <EditText
+                        android:importantForAutofill="no"
                         android:id="@+id/campoPesquisaQuiz"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"

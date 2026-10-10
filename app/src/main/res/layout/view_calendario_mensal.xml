@@ -16,7 +16,7 @@
             android:contentDescription="@string/mes_anterior"
             android:fontFamily="@font/nunito_bold"
             android:gravity="center"
-            android:text="‹"
+            android:text="@string/simbolo_voltar"
             android:textColor="@color/verde_escuro_principal"
             android:textSize="24sp" />
 
@@ -40,7 +40,7 @@
             android:contentDescription="@string/proximo_mes"
             android:fontFamily="@font/nunito_bold"
             android:gravity="center"
-            android:text="›"
+            android:text="@string/simbolo_avancar"
             android:textColor="@color/verde_escuro_principal"
             android:textSize="24sp" />
 

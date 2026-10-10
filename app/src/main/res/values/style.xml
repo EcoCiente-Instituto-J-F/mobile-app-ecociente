@@ -35,6 +35,68 @@
         <item name="android:textSize">15sp</item>
     </style>
 
+    <style name="CartaoDetalheSolicitacao" parent="Widget.Material3.CardView.Outlined">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="cardBackgroundColor">@color/branco</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">@color/cinza_borda_card_perfil</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <style name="CampoBusca">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">44dp</item>
+        <item name="android:layout_marginStart">18dp</item>
+        <item name="android:layout_marginTop">14dp</item>
+        <item name="android:layout_marginEnd">18dp</item>
+        <item name="android:background">@drawable/fundo_campo_busca</item>
+        <item name="android:drawableStart">@drawable/ic_busca</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:fontFamily">@font/nunito_regular</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:inputType">text</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingStart">14dp</item>
+        <item name="android:paddingEnd">14dp</item>
+        <item name="android:textColor">@color/verde_escuro_principal</item>
+        <item name="android:textColorHint">@color/cinza_texto_auxiliar</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="CampoFormulario" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+        <item name="boxStrokeColor">@color/verde_borda_campo</item>
+        <item name="hintTextColor">@color/verde_escuro_principal</item>
+    </style>
+
+    <style name="BotaoVoltar">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginStart">14dp</item>
+        <item name="android:layout_marginTop">14dp</item>
+        <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+        <item name="android:contentDescription">@string/voltar</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:src">@drawable/ic_voltar</item>
+    </style>
+
+    <style name="CartaoComBorda" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">@color/branco</item>
+        <item name="cardCornerRadius">@dimen/raio_card</item>
+        <item name="cardElevation">0dp</item>
+        <item name="strokeColor">@color/cinza_borda_card_perfil</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
     <style name="AbaMensagens">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -47,5 +109,18 @@
         <item name="android:paddingBottom">7dp</item>
         <item name="android:textColor">@color/verde_escuro_principal</item>
         <item name="android:textSize">13sp</item>
+    </style>
+
+
+    <style name="ChipCategoriaAviso">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/fundo_chip_aviso</item>
+        <item name="android:fontFamily">@font/nunito_bold</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:textSize">10sp</item>
     </style>
 </resources>

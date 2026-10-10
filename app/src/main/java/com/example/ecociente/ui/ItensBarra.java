@@ -49,7 +49,7 @@ public final class ItensBarra {
             home(),
             par(R.string.coletas, R.drawable.ic_nav_coletas_verde, R.drawable.ic_nav_coletas_cinza),
             par(R.string.mensagens, R.drawable.ic_nav_mensagens_verde, R.drawable.ic_nav_mensagens_cinza),
-            par(R.string.historico, R.drawable.ic_nav_historico_verde, R.drawable.ic_nav_historico_cinza)
+            par(R.string.solicitacoes, R.drawable.ic_nav_historico_verde, R.drawable.ic_nav_historico_cinza)
         };
     }
 

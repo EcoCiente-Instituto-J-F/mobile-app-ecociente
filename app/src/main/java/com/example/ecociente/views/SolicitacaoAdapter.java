@@ -6,11 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.ecociente.R;
 import com.example.ecociente.model.Solicitacao;
+import com.example.ecociente.model.StatusAgendamento;
 import com.example.ecociente.ui.FormatoDataApi;
 
 public class SolicitacaoAdapter
@@ -57,10 +60,15 @@ public class SolicitacaoAdapter
 
         Context contexto = holder.itemView.getContext();
 
-        holder.condominio.setText(
-                contexto.getString(R.string.solicitacao_condominio, solicitacao.getCondominioId()));
+        holder.condominio.setText(nomeExibido(contexto, solicitacao));
 
-        holder.status.setText(solicitacao.getStatus().getRotulo());
+        StatusAgendamento status = solicitacao.getStatus();
+
+        holder.status.setText(status.getEtiqueta());
+        holder.status.setTextColor(ContextCompat.getColor(contexto, status.getTextoEtiqueta()));
+
+        ViewCompat.setBackgroundTintList(
+                holder.status, ContextCompat.getColorStateList(contexto, status.getFundoEtiqueta()));
 
         holder.data.setText(
                 contexto.getString(
@@ -71,6 +79,16 @@ public class SolicitacaoAdapter
         holder.recorrencia.setVisibility(solicitacao.possuiRecorrencia() ? View.VISIBLE : View.GONE);
 
         holder.itemView.setOnClickListener(view -> ouvinte.aoClicar(solicitacao));
+    }
+
+    @NonNull
+    static String nomeExibido(@NonNull Context contexto, @NonNull Solicitacao solicitacao) {
+
+        String nome = solicitacao.getNomeCondominio();
+
+        return nome != null
+                ? nome
+                : contexto.getString(R.string.solicitacao_condominio, solicitacao.getCondominioId());
     }
 
     static final class SolicitacaoHolder extends RecyclerView.ViewHolder {

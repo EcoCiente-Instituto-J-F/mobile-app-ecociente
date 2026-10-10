@@ -6,10 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingStart="24dp"
-    android:paddingTop="8dp"
-    android:paddingEnd="24dp"
-    android:paddingBottom="8dp">
+    android:paddingTop="4dp">
 
     <TextView
         android:layout_width="match_parent"
@@ -30,6 +27,7 @@
         app:strokeWidth="1dp">
 
         <EditText
+            android:autofillHints="password"
             android:id="@+id/campoConfirmarSenhaExclusao"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/solicitacao_de_coleta"
+                android:textColor="@color/verde_escuro_principal"
+                android:textSize="20sp" />
+
+            <ImageView
+                android:id="@+id/botaoFecharNovaColeta"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/fechar"
+                android:padding="6dp"
+                android:src="@drawable/ic_fechar"
+                app:tint="@color/verde_escuro_principal" />
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/condominio"
+            app:boxStrokeColor="@color/verde_borda_campo"
+            app:hintTextColor="@color/verde_escuro_principal">
+
+            <AutoCompleteTextView
+                android:id="@+id/campoCondominioColeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/condominio"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/CampoFormulario"
+            android:hint="@string/endereco">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/campoEnderecoColeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/CampoFormulario"
+            android:hint="@string/data">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/campoDataColeta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/CampoFormulario"
+                android:layout_width="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:hint="@string/horario_inicio">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/campoInicioColeta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/CampoFormulario"
+                android:layout_width="0dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:hint="@string/horario_fim">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/campoFimColeta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/campoRecorrenciaColeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/nunito_regular"
+            android:text="@string/coleta_recorrente" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botaoCancelarColeta"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/perfil_cancelar"
+                android:textAllCaps="false"
+                android:textColor="@color/rosa_ecociente"
+                app:backgroundTint="@color/rosa_fundo_recusar"
+                app:cornerRadius="10dp"
+                app:strokeColor="@color/rosa_ecociente" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botaoSalvarColeta"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/perfil_salvar"
+                android:textAllCaps="false"
+                app:backgroundTint="@color/verde_escuro_principal"
+                app:cornerRadius="10dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

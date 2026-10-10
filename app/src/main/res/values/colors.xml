@@ -7,6 +7,8 @@
     <color name="verde_claro_ecociente">#CCD9CA</color>
 
     <color name="rosa_ecociente">#D64573</color>
+    <color name="erro_fundo">#66D64573</color>
+    <color name="erro_texto">#70213E</color>
 
     <color name="branco">#FFFFFF</color>
 
@@ -61,4 +63,28 @@
     <color name="verde_botao_enviar_chat">#0A6750</color>
     <color name="verde_fundo_icone_opcao">#E7F1EC</color>
     <color name="verde_fundo_splash">#063E35</color>
+
+    <color name="chip_coleta_fundo">#E2EEE4</color>
+    <color name="chip_coleta_texto">#064E3B</color>
+    <color name="chip_orientacao_fundo">#DCEAF7</color>
+    <color name="chip_orientacao_texto">#2F6FA8</color>
+    <color name="chip_manutencao_fundo">#FFF0C9</color>
+    <color name="chip_manutencao_texto">#B7791F</color>
+    <color name="chip_campanha_fundo">#EADCF8</color>
+    <color name="chip_campanha_texto">#7A3FB5</color>
+    <color name="chip_geral_fundo">#E3E3E3</color>
+    <color name="chip_geral_texto">#555555</color>
+    <color name="chip_seguranca_fundo">#FADBD8</color>
+    <color name="chip_seguranca_texto">#B03A2E</color>
+    <color name="etiqueta_pendente_fundo">#FFF0C9</color>
+    <color name="etiqueta_pendente_texto">#B7791F</color>
+    <color name="etiqueta_aceito_fundo">#E2EEE4</color>
+    <color name="etiqueta_aceito_texto">#064E3B</color>
+    <color name="etiqueta_recusado_fundo">#FADBD8</color>
+    <color name="etiqueta_recusado_texto">#B03A2E</color>
+    <color name="rosa_fundo_recusar">#FBE0E9</color>
+    <color name="material_papelao_fundo">#EFE3D3</color>
+    <color name="material_papelao_texto">#7A5C3A</color>
+    <color name="material_vidro_fundo">#DDEFE3</color>
+    <color name="material_vidro_texto">#2E7D4F</color>
 </resources>

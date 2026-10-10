@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <string name="criar_notificacao">Criar notificação</string>
+    <string name="digite_seu_titulo">Digite seu título</string>
+    <string name="selecione_destinatarios">Selecione os destinatários</string>
+    <string name="escreva_sua_mensagem">Escreva sua mensagem…</string>
+    <string name="enviar_notificacao">Enviar notificação</string>
+    <string name="fechar">Fechar</string>
+</resources>

@@ -14,7 +14,7 @@
 
     <TextView
         android:id="@+id/tituloSolicitacoes"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
         android:layout_marginTop="22dp"
@@ -22,8 +22,44 @@
         android:text="@string/solicitacoes"
         android:textColor="@color/rosa_ecociente"
         android:textSize="22sp"
+        app:layout_constraintEnd_toStartOf="@id/botaoNovaColetaSolicitacoes"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botaoNovaColetaSolicitacoes"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:layout_marginEnd="18dp"
+        android:fontFamily="@font/nunito_semibold"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:minWidth="0dp"
+        android:paddingStart="12dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="14dp"
+        android:paddingBottom="0dp"
+        android:text="@string/nova_coleta"
+        android:textAllCaps="false"
+        android:textSize="12sp"
+        app:backgroundTint="@color/verde_escuro_principal"
+        app:cornerRadius="16dp"
+        app:icon="@drawable/ic_adicionar"
+        app:iconPadding="4dp"
+        app:iconSize="16dp"
+        app:iconTint="@color/branco"
+        app:layout_constraintBottom_toBottomOf="@id/tituloSolicitacoes"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tituloSolicitacoes" />
+
+    <EditText
+        android:id="@+id/campoBuscaSolicitacao"
+        style="@style/CampoBusca"
+        android:importantForAutofill="no"
+        android:hint="@string/buscar_unidade"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tituloSolicitacoes" />
 
     <HorizontalScrollView
         android:id="@+id/rolagemFiltros"
@@ -33,7 +69,7 @@
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tituloSolicitacoes">
+        app:layout_constraintTop_toBottomOf="@id/campoBuscaSolicitacao">
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/filtrosSolicitacoes"
@@ -53,7 +89,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="@dimen/espaco_barra_navegacao"
         app:layout_constraintBottom_toBottomOf="@id/barraNavegacao"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
