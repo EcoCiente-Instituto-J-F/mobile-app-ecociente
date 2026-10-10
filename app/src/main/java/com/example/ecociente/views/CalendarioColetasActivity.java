@@ -1,10 +1,17 @@
 package com.example.ecociente.views;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
@@ -17,12 +24,23 @@ import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.ui.ProximaColetaView;
+import com.example.ecociente.repository.LembretesColeta;
 import com.example.ecociente.viewmodels.CalendarioViewModel;
 import com.example.ecociente.viewmodels.PerfilViewModel;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import java.util.Collections;
 import java.util.List;
 
 public class CalendarioColetasActivity extends AppCompatActivity {
+
+    private final ActivityResultLauncher<String> pedirPermissao =
+            registerForActivityResult(
+                    new ActivityResultContracts.RequestPermission(),
+                    permitido -> {
+                        if (!permitido) {
+                            Toast.makeText(this, R.string.lembrete_sem_permissao, Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
     private CalendarioViewModel viewModel;
 
@@ -125,8 +143,47 @@ public class CalendarioColetasActivity extends AppCompatActivity {
                                     FormatoDataApi.dataExtensa(coleta.getDataInicio()),
                                     horario));
 
+            configurarLembrete(item.findViewById(R.id.switchLembrete), coleta);
+
             listaColetas.addView(item);
         }
+    }
+
+    private void configurarLembrete(MaterialSwitch interruptor, Solicitacao coleta) {
+
+        interruptor.setChecked(LembretesColeta.ativado(this, coleta.getId()));
+
+        interruptor.setOnCheckedChangeListener(
+                (botao, marcado) -> {
+                    if (!botao.isPressed()) {
+                        return;
+                    }
+
+                    if (!marcado) {
+                        LembretesColeta.desativar(this, coleta.getId());
+                        return;
+                    }
+
+                    if (!notificacoesPermitidas()) {
+                        botao.setChecked(false);
+
+                        pedirPermissao.launch(Manifest.permission.POST_NOTIFICATIONS);
+                        return;
+                    }
+
+                    if (!LembretesColeta.ativar(this, coleta)) {
+                        botao.setChecked(false);
+
+                        Toast.makeText(this, R.string.lembrete_coleta_proxima, Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private boolean notificacoesPermitidas() {
+
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                        == PackageManager.PERMISSION_GRANTED;
     }
 
     private void sair() {

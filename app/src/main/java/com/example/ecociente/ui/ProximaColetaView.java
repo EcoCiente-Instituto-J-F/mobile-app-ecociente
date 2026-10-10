@@ -61,6 +61,11 @@ public class ProximaColetaView extends FrameLayout {
             return;
         }
 
+        if (resultado.getTipo() == ResultadoSolicitacoes.Tipo.SEM_ACESSO) {
+            data.setText(R.string.proxima_coleta_sem_acesso);
+            return;
+        }
+
         if (resultado.getTipo() == ResultadoSolicitacoes.Tipo.ERRO) {
             data.setText(R.string.proxima_coleta_erro);
             cartao.setOnClickListener(view -> aoTentarNovamente.run());

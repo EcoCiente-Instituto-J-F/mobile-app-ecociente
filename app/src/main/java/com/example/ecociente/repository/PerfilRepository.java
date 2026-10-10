@@ -26,6 +26,13 @@ public class PerfilRepository {
     public static final String CAMPO_TELEFONE = "telefone";
     public static final String CAMPO_ENDERECO = "endereco";
     public static final String CAMPO_CPF = "cpf";
+    public static final String CAMPO_NUMERO = "numero";
+    public static final String CAMPO_COMPLEMENTO = "complemento";
+    public static final String CAMPO_CIDADE = "cidade";
+    public static final String CAMPO_ESTADO = "estado";
+    public static final String CAMPO_CEP = "cep";
+    public static final String CAMPO_NOME_COOPERATIVA = "nomeCooperativa";
+    public static final String CAMPO_EMAIL_COOPERATIVA = "emailCooperativa";
     public static final String CAMPO_FOTO_URL = "fotoUrl";
 
     private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();

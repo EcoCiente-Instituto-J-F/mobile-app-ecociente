@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.model.PerfilUsuario;
+import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.BarraNavegacaoView;
@@ -107,6 +108,13 @@ public class CondominioHomeActivity extends AppCompatActivity {
                                 () -> startActivity(new Intent(this, GerenciarPerfilActivity.class)),
                                 this::confirmarSaida));
 
+        findViewById(R.id.botaoNotificacoesCondominio)
+                .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, false)));
+
+        findViewById(R.id.cardRanking)
+                .setOnClickListener(
+                        view -> startActivity(TelaListaActivity.criarIntent(this, TipoLista.RANKING, true)));
+
         findViewById(R.id.botaoVerCalendarioCompleto)
                 .setOnClickListener(view -> startActivity(new Intent(this, CalendarioColetasActivity.class)));
 
@@ -130,11 +138,7 @@ public class CondominioHomeActivity extends AppCompatActivity {
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
         barra.setOnItemClickListener(
-                indice -> {
-                    if (indice == ItensBarra.TERCEIRO) {
-                        abrirQuizzes();
-                    }
-                });
+                indice -> Navegacao.irParaItemDoUsuario(this, indice, ItensBarra.HOME, true));
     }
 
     private void carregarPerfil() {
@@ -173,14 +177,6 @@ public class CondominioHomeActivity extends AppCompatActivity {
         semana.exibir(sucesso ? resultado.getItens() : null);
 
         textoErroSemana.setVisibility(sucesso ? View.GONE : View.VISIBLE);
-    }
-
-    private void abrirQuizzes() {
-
-        Navegacao.abrirPelaBarra(
-                this,
-                new Intent(this, QuizActivity.class).putExtra(QuizActivity.EXTRA_MORADOR, true),
-                ItensBarra.HOME);
     }
 
     private void confirmarSaida() {

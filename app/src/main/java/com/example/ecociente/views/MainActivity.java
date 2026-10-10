@@ -153,6 +153,9 @@ public class MainActivity extends AppCompatActivity {
 
         configurarBarra();
 
+        findViewById(R.id.botaoNotificacoes)
+                .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, false)));
+
         observarFoto();
 
         observarMensagem();
@@ -191,14 +194,7 @@ public class MainActivity extends AppCompatActivity {
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
         barra.setOnItemClickListener(
-                indice -> {
-                    if (indice == ItensBarra.TERCEIRO) {
-                        abrirQuizzes();
-
-                    } else if (indice == ItensBarra.QUARTO) {
-                        abrirPerfilPelaBarra();
-                    }
-                });
+                indice -> Navegacao.irParaItemDoUsuario(this, indice, ItensBarra.HOME, false));
     }
 
     private void observarFoto() {
@@ -248,16 +244,6 @@ public class MainActivity extends AppCompatActivity {
                                     .start();
                         })
                 .start();
-    }
-
-    private void abrirQuizzes() {
-
-        Navegacao.abrirPelaBarra(this, new Intent(this, QuizActivity.class), ItensBarra.HOME);
-    }
-
-    private void abrirPerfilPelaBarra() {
-
-        Navegacao.abrirPelaBarra(this, new Intent(this, GerenciarPerfilActivity.class), ItensBarra.HOME);
     }
 
     private void abrirHomeCooperativa() {

@@ -14,6 +14,8 @@ import java.util.List;
 
 public class SolicitacoesViewModel extends AndroidViewModel {
 
+    private static final boolean USAR_EXEMPLOS = true;
+
     private final CalendarioExternoRepository repositorio = new CalendarioExternoRepository();
 
     private final MutableLiveData<List<Solicitacao>> itens =
@@ -88,9 +90,31 @@ public class SolicitacoesViewModel extends AndroidViewModel {
         }
     }
 
+    private void exibirExemplos() {
+
+        List<Solicitacao> filtradas = new ArrayList<>();
+
+        for (Solicitacao solicitacao : Solicitacao.exemplos()) {
+            if (solicitacao.getStatus() == filtro) {
+                filtradas.add(solicitacao);
+            }
+        }
+
+        itens.setValue(filtradas);
+
+        ultimaPagina = true;
+
+        situacao.setValue(ResultadoSolicitacoes.Tipo.SUCESSO);
+    }
+
     private void carregarPagina() {
 
         if (Boolean.TRUE.equals(carregando.getValue())) {
+            return;
+        }
+
+        if (USAR_EXEMPLOS) {
+            exibirExemplos();
             return;
         }
 

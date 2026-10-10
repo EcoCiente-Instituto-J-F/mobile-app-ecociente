@@ -264,6 +264,10 @@ public class CalendarioExternoRepository {
 
             if (novoToken != null) {
                 resultado = buscar(novoToken, endereco);
+
+                if (resultado.getTipo() == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
+                    resultado = ResultadoSolicitacoes.semAcesso();
+                }
             }
         }
 

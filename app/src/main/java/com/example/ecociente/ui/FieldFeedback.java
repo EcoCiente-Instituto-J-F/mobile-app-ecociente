@@ -1,21 +1,24 @@
 package com.example.ecociente.ui;
 
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.ColorRes;
+import androidx.core.content.ContextCompat;
+
+import com.example.ecociente.R;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.snackbar.Snackbar;
 
 public final class FieldFeedback {
 
-    private static final int ERROR = Color.parseColor("#D64573");
-    private static final int ERROR_BACKGROUND = Color.parseColor("#66D64573");
-    private static final int ERROR_TEXT = Color.parseColor("#70213E");
-
     private FieldFeedback() {
+    }
+
+    private static int cor(View view, @ColorRes int cor) {
+        return ContextCompat.getColor(view.getContext(), cor);
     }
 
     public static void error(
@@ -31,7 +34,7 @@ public final class FieldFeedback {
         }
 
         message.setText(text);
-        message.setTextColor(ERROR_TEXT);
+        message.setTextColor(cor(message, R.color.erro_texto));
         message.setBackground(criarFundoErro(message));
         message.setPadding(dp(message, 10), dp(message, 6), dp(message, 10), dp(message, 6));
         message.setVisibility(View.VISIBLE);
@@ -95,13 +98,13 @@ public final class FieldFeedback {
         View snackbarView = snackbar.getView();
 
         GradientDrawable fundo = new GradientDrawable();
-        fundo.setColor(ERROR_BACKGROUND);
+        fundo.setColor(cor(snackbarView, R.color.erro_fundo));
         fundo.setCornerRadius(dp(snackbarView, 14));
-        fundo.setStroke(dp(snackbarView, 1), ERROR);
+        fundo.setStroke(dp(snackbarView, 1), cor(snackbarView, R.color.rosa_ecociente));
 
         snackbarView.setBackground(fundo);
         snackbarView.setElevation(dp(snackbarView, 6));
-        snackbar.setTextColor(ERROR_TEXT);
+        snackbar.setTextColor(cor(snackbarView, R.color.erro_texto));
 
         snackbar.show();
     }
@@ -115,13 +118,15 @@ public final class FieldFeedback {
             return;
         }
 
-        card.setStrokeColor(ERROR);
+        int erro = cor(card, R.color.rosa_ecociente);
+
+        card.setStrokeColor(erro);
         card.setStrokeWidth(dp(card, 2));
         card.setCardElevation(dp(card, 4));
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            card.setOutlineAmbientShadowColor(ERROR);
-            card.setOutlineSpotShadowColor(ERROR);
+            card.setOutlineAmbientShadowColor(erro);
+            card.setOutlineSpotShadowColor(erro);
         }
 
         card.setContentDescription(accessibilityText);
@@ -147,9 +152,9 @@ public final class FieldFeedback {
 
     private static GradientDrawable criarFundoErro(View view) {
         GradientDrawable fundo = new GradientDrawable();
-        fundo.setColor(ERROR_BACKGROUND);
+        fundo.setColor(cor(view, R.color.erro_fundo));
         fundo.setCornerRadius(dp(view, 9));
-        fundo.setStroke(dp(view, 1), ERROR);
+        fundo.setStroke(dp(view, 1), cor(view, R.color.rosa_ecociente));
         return fundo;
     }
 

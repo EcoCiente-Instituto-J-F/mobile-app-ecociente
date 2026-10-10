@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,9 @@ import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Navegacao;
+import com.example.ecociente.ui.AoDigitar;
+import com.example.ecociente.ui.Iniciais;
+import java.util.Locale;
 
 public class MensagensActivity extends AppCompatActivity {
 
@@ -22,6 +26,8 @@ public class MensagensActivity extends AppCompatActivity {
 
     private LinearLayout lista;
     private View textoSemConversas;
+    private EditText campoBusca;
+    private int abaAtual;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -33,6 +39,7 @@ public class MensagensActivity extends AppCompatActivity {
 
         lista = findViewById(R.id.listaConversas);
         textoSemConversas = findViewById(R.id.textoSemConversas);
+        campoBusca = findViewById(R.id.campoBuscaConversa);
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizMensagens));
 
@@ -44,12 +51,16 @@ public class MensagensActivity extends AppCompatActivity {
             findViewById(IDS_ABAS[i]).setOnClickListener(view -> selecionarAba(aba));
         }
 
+        AoDigitar.em(campoBusca, () -> exibirConversas(abaAtual));
+
         selecionarAba(0);
 
         configurarNavegacao();
     }
 
     private void selecionarAba(int aba) {
+
+        abaAtual = aba;
 
         for (int i = 0; i < IDS_ABAS.length; i++) {
 
@@ -81,12 +92,17 @@ public class MensagensActivity extends AppCompatActivity {
 
             View item = inflador.inflate(R.layout.item_conversa, lista, false);
 
+            ((TextView) item.findViewById(R.id.textoIniciaisConversa)).setText(Iniciais.de(conversa.nome));
             ((TextView) item.findViewById(R.id.textoNomeConversa)).setText(conversa.nome);
-            ((TextView) item.findViewById(R.id.textoUltimaMensagem)).setText(conversa.ultimaMensagem);
+            ((TextView) item.findViewById(R.id.textoPreviaConversa)).setText(conversa.ultimaMensagem);
             ((TextView) item.findViewById(R.id.textoHoraConversa)).setText(conversa.hora);
 
-            item.findViewById(R.id.pontoNaoLida)
-                    .setVisibility(conversa.naoLida ? View.VISIBLE : View.INVISIBLE);
+            TextView contador = item.findViewById(R.id.textoNaoLidasConversa);
+
+            contador.setText(String.valueOf(conversa.naoLidas));
+            contador.setVisibility(conversa.temNaoLidas() ? View.VISIBLE : View.INVISIBLE);
+
+            item.setOnClickListener(view -> startActivity(ConversaActivity.criarIntent(this, conversa)));
 
             lista.addView(item);
         }
@@ -96,11 +112,17 @@ public class MensagensActivity extends AppCompatActivity {
 
     private boolean pertence(Conversa conversa, int aba) {
 
+        String busca = campoBusca.getText().toString().trim().toLowerCase(Locale.ROOT);
+
+        if (!busca.isEmpty() && !conversa.nome.toLowerCase(Locale.ROOT).contains(busca)) {
+            return false;
+        }
+
         if (aba == 2) {
             return conversa.arquivada;
         }
 
-        return !conversa.arquivada && (aba == 0 || conversa.naoLida);
+        return !conversa.arquivada && (aba == 0 || conversa.temNaoLidas());
     }
 
     private void configurarNavegacao() {
