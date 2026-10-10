@@ -54,7 +54,7 @@ public final class SindicoBottomBar extends FrameLayout {
             abas[i].setSelected(selecionada);
             indicadores[i].setVisibility(selecionada ? VISIBLE : INVISIBLE);
             int cor = ContextCompat.getColor(getContext(), selecionada
-                    ? R.color.verde_escuro_principal : R.color.cinza_icone_navegacao);
+                    ? R.color.verde_escuro_principal : R.color.cinza_icone);
             icones[i].setColorFilter(cor);
             textos[i].setTextColor(cor);
             textos[i].setTypeface(ResourcesCompat.getFont(getContext(), selecionada
