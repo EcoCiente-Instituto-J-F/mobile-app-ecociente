@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.ecociente.model.SindicoCooperativa;
 import com.example.ecociente.model.SindicoHistoricoColeta;
+import com.example.ecociente.model.SindicoSolicitacao;
 import com.example.ecociente.repository.SindicoColetaRepository;
 
 import java.util.List;
@@ -14,6 +15,11 @@ public final class SindicoColetaViewModel extends ViewModel {
     public List<SindicoCooperativa> getCooperativas() { return repositorio.getCooperativas(); }
     public SindicoCooperativa buscar(int id) { return repositorio.buscar(id); }
     public List<SindicoHistoricoColeta> getHistorico() { return repositorio.getHistorico(); }
+    public List<SindicoSolicitacao> getSolicitacoes() { return repositorio.getSolicitacoes(); }
+    public SindicoSolicitacao criarSolicitacao(int cooperativaId, String inicio, boolean recorrente) {
+        return repositorio.criarSolicitacao(cooperativaId, inicio, recorrente);
+    }
+    public void cancelarSolicitacao(int id) { repositorio.cancelarSolicitacao(id); }
     public int getAvaliacao(int coletaId) { return repositorio.getAvaliacao(coletaId); }
     public void avaliar(int coletaId, int nota) { repositorio.avaliar(coletaId, nota); }
 }

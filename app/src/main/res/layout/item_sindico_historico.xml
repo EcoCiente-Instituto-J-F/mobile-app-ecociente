@@ -44,6 +44,7 @@
             android:textColor="@color/cinza_texto_home"
             android:textSize="10sp" />
         <LinearLayout
+            android:id="@+id/linhaAvaliacaoHistorico"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -73,6 +74,7 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
         <TextView
+            android:id="@+id/etiquetaHistorico"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:background="@drawable/sindico_status_concluida"

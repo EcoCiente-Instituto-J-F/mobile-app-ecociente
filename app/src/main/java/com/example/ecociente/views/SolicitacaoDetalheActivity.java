@@ -29,10 +29,12 @@ import com.example.ecociente.viewmodels.ResponderSolicitacaoViewModel;
 import com.google.android.material.button.MaterialButton;
 import java.util.Locale;
 import com.example.ecociente.ui.DialogoEco;
+import com.example.ecociente.viewmodels.SindicoColetaViewModel;
 
 public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
     private static final String EXTRA_SOLICITACAO = "solicitacao";
+    private static final String EXTRA_COOPERATIVA = "cooperativaDoSindico";
 
     private static final int ETAPA_PENDENTE = 0;
     private static final int ETAPA_ATUAL = 1;
@@ -42,6 +44,8 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
     private Solicitacao solicitacao;
 
+    private String cooperativaDoSindico;
+
     private MaterialButton botaoAceitar;
     private MaterialButton botaoRecusar;
 
@@ -50,6 +54,13 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
         return new Intent(contexto, SolicitacaoDetalheActivity.class)
                 .putExtra(EXTRA_SOLICITACAO, solicitacao);
+    }
+
+    @NonNull
+    public static Intent criarIntentSindico(
+            @NonNull Context contexto, @NonNull Solicitacao solicitacao, @NonNull String cooperativa) {
+
+        return criarIntent(contexto, solicitacao).putExtra(EXTRA_COOPERATIVA, cooperativa);
     }
 
     @Override
@@ -64,6 +75,8 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+        cooperativaDoSindico = getIntent().getStringExtra(EXTRA_COOPERATIVA);
 
         setContentView(R.layout.activity_solicitacao_detalhe);
 
@@ -82,7 +95,13 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
         DetalheSolicitacao detalhe = solicitacao.getDetalhe();
 
-        String nome = SolicitacaoAdapter.nomeExibido(this, solicitacao);
+        boolean sindico = cooperativaDoSindico != null;
+
+        String nome = sindico ? cooperativaDoSindico : SolicitacaoAdapter.nomeExibido(this, solicitacao);
+
+        if (sindico) {
+            ((TextView) findViewById(R.id.tituloContraparteDetalhe)).setText(R.string.cooperativa_escolhida);
+        }
 
         TextView chipCategoria = findViewById(R.id.chipCategoriaDetalhe);
 
@@ -139,15 +158,25 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
                 ETAPA_CONCLUIDA,
                 R.string.linha_recebida_titulo,
                 dataRecebida,
-                getString(R.string.linha_recebida_texto, nome),
+                getString(
+                        cooperativaDoSindico != null
+                                ? R.string.linha_recebida_texto_sindico
+                                : R.string.linha_recebida_texto,
+                        nome),
                 false);
 
         int respostaTexto;
         int respostaEtapa = ETAPA_CONCLUIDA;
 
         if (status == StatusAgendamento.AGENDADO) {
-            respostaTexto = R.string.linha_resposta_aguardando;
+            respostaTexto =
+                    cooperativaDoSindico != null
+                            ? R.string.linha_resposta_aguardando_sindico
+                            : R.string.linha_resposta_aguardando;
             respostaEtapa = ETAPA_ATUAL;
+
+        } else if (status == StatusAgendamento.CANCELADO) {
+            respostaTexto = R.string.linha_resposta_cancelada;
 
         } else if (status == StatusAgendamento.RECUSADO) {
             respostaTexto = R.string.linha_resposta_recusada;
@@ -333,6 +362,12 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
         View acoes = findViewById(R.id.acoesDetalhe);
 
+        if (cooperativaDoSindico != null) {
+            acoes.setVisibility(View.GONE);
+            configurarCancelamento();
+            return;
+        }
+
         if (solicitacao.getStatus() != StatusAgendamento.AGENDADO) {
             acoes.setVisibility(View.GONE);
             return;
@@ -361,6 +396,54 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
                                 StatusAgendamento.RECUSADO));
 
         viewModel.getCarregando().observe(this, this::definirCarregando);
+    }
+
+    private void configurarCancelamento() {
+
+        StatusAgendamento status = solicitacao.getStatus();
+
+        if (status != StatusAgendamento.AGENDADO && status != StatusAgendamento.CONFIRMADO) {
+            return;
+        }
+
+        if (status == StatusAgendamento.CONFIRMADO) {
+
+            findViewById(R.id.caixaRespostaCooperativa).setVisibility(View.VISIBLE);
+
+            ((TextView) findViewById(R.id.textoColetaConfirmada))
+                    .setText(
+                            getString(
+                                    R.string.coleta_confirmada_em,
+                                    FormatoDataApi.dataLonga(solicitacao.getDataInicio()),
+                                    FormatoDataApi.hora(solicitacao.getDataInicio())));
+        }
+
+        View cancelar = findViewById(R.id.botaoCancelarSolicitacao);
+
+        cancelar.setVisibility(View.VISIBLE);
+
+        cancelar.setOnClickListener(
+                view ->
+                        new DialogoEco.Builder(this)
+                                .titulo(R.string.cancelar_solicitacao)
+                                .mensagem(R.string.cancelar_solicitacao_mensagem)
+                                .botao(
+                                        R.string.cancelar_solicitacao,
+                                        DialogoEco.Estilo.PERIGO,
+                                        () -> {
+                                            new ViewModelProvider(this)
+                                                    .get(SindicoColetaViewModel.class)
+                                                    .cancelarSolicitacao(solicitacao.getId());
+
+                                            Toast.makeText(this, R.string.solicitacao_cancelada, Toast.LENGTH_SHORT)
+                                                    .show();
+
+                                            setResult(RESULT_OK);
+
+                                            finish();
+                                        })
+                                .botao(R.string.perfil_cancelar, DialogoEco.Estilo.PREENCHIDO, null)
+                                .mostrar());
     }
 
     private void confirmar(

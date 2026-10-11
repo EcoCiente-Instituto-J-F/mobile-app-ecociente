@@ -1,7 +1,6 @@
 package com.example.ecociente.views;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -27,6 +25,10 @@ import com.example.ecociente.viewmodels.SindicoUnidadesViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
+import com.example.ecociente.ui.JanelaEdgeToEdge;
+import com.example.ecociente.ui.BarraNavegacaoView;
+import com.example.ecociente.ui.ItensBarra;
+import com.example.ecociente.ui.Navegacao;
 
 /** Lista demonstrativa das unidades de um bloco, sem acesso a banco de dados. */
 public final class SindicoBlocoActivity extends AppCompatActivity {
@@ -40,9 +42,7 @@ public final class SindicoBlocoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_bloco);
 
         View raiz = findViewById(R.id.raizSindicoBloco);
@@ -86,12 +86,13 @@ public final class SindicoBlocoActivity extends AppCompatActivity {
                             Snackbar.LENGTH_LONG).show();
                 });
 
-        SindicoBottomBar barra = findViewById(R.id.barraInferiorSindico);
-        barra.selecionar(SindicoBottomBar.Aba.UNIDADES);
-        barra.aoTocarUnidades(view -> navegar(SindicoUnidadesActivity.class));
-        barra.aoTocarHome(view -> navegar(SindicoHomeActivity.class));
-        barra.aoTocarSolicitacao(view -> navegar(SindicoCooperativasActivity.class));
-        barra.aoTocarHistorico(view -> navegar(SindicoHistoricoActivity.class));
+        BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
+        barra.configurar(ItensBarra.sindico());
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.QUARTO);
+        barra.setOnAssistenteClickListener(
+                view -> startActivity(new Intent(this, ChatActivity.class)));
+        barra.setOnItemClickListener(
+                indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM));
         mostrarApartamentos();
     }
 

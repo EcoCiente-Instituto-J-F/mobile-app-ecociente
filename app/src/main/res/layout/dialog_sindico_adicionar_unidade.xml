@@ -20,7 +20,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/sindico_fechar_formulario"
             android:padding="13dp"
-            android:src="@drawable/sindico_voltar" />
+            android:src="@drawable/ic_voltar" />
 
         <LinearLayout
             android:layout_width="match_parent"

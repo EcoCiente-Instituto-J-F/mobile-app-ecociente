@@ -16,8 +16,9 @@ import com.example.ecociente.viewmodels.SindicoColetaViewModel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import android.widget.Toast;
+import com.example.ecociente.model.SindicoSolicitacao;
 
-/** Prévia de solicitação em formato de pop-up; não envia dados à cooperativa. */
 public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
     public static final String EXTRA_COOPERATIVA_ID = "cooperativa_id";
     private static final String ESTADO_DATA = "data_escolhida";
@@ -69,6 +70,23 @@ public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
             atualizarRecorrencia();
         });
         findViewById(R.id.voltarSolicitacao).setOnClickListener(view -> finish());
+        findViewById(R.id.enviarSolicitacao).setOnClickListener(view -> enviar(viewModel, cooperativa));
+    }
+
+    private void enviar(SindicoColetaViewModel viewModel, SindicoCooperativa cooperativa) {
+        Calendar momento = (Calendar) dataEscolhida.clone();
+        momento.set(Calendar.HOUR_OF_DAY, horaEscolhida);
+        momento.set(Calendar.MINUTE, minutoEscolhido);
+        momento.set(Calendar.SECOND, 0);
+        if (momento.getTimeInMillis() <= System.currentTimeMillis()) {
+            Toast.makeText(this, R.string.sindico_horario_passado, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String inicio = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).format(momento.getTime());
+        SindicoSolicitacao criada = viewModel.criarSolicitacao(cooperativa.getId(), inicio, recorrente);
+        startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
+                this, criada.paraSolicitacao(getString(R.string.sindico_condominio_demo)), cooperativa.getNome()));
+        finish();
     }
 
     private void escolherData() {

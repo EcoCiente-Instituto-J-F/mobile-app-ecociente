@@ -19,7 +19,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/voltar"
             android:padding="12dp"
-            android:src="@drawable/sindico_voltar" />
+            android:src="@drawable/ic_voltar" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -65,8 +65,8 @@
             android:paddingBottom="20dp" />
     </ScrollView>
 
-    <com.example.ecociente.views.SindicoBottomBar
+    <com.example.ecociente.ui.BarraNavegacaoView
         android:id="@+id/barraInferiorSindico"
         android:layout_width="match_parent"
-        android:layout_height="86dp" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

@@ -2,7 +2,6 @@ package com.example.ecociente.views;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
@@ -19,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -31,6 +29,10 @@ import com.example.ecociente.viewmodels.SindicoUnidadesViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import com.example.ecociente.ui.JanelaEdgeToEdge;
+import com.example.ecociente.ui.BarraNavegacaoView;
+import com.example.ecociente.ui.ItensBarra;
+import com.example.ecociente.ui.Navegacao;
 
 /** Tela demonstrativa da aba Unidades; não consulta nem grava em banco. */
 public final class SindicoUnidadesActivity extends AppCompatActivity {
@@ -58,9 +60,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_unidades);
 
         View raiz = findViewById(R.id.raizSindicoUnidades);
@@ -112,12 +112,13 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 view -> abrirFormulario(false, null));
         findViewById(R.id.voltarSindicoUnidades).setOnClickListener(view -> finish());
 
-        SindicoBottomBar barra = findViewById(R.id.barraInferiorSindico);
-        barra.selecionar(SindicoBottomBar.Aba.UNIDADES);
-        barra.aoTocarUnidades(null);
-        barra.aoTocarHome(view -> navegar(SindicoHomeActivity.class));
-        barra.aoTocarSolicitacao(view -> navegar(SindicoCooperativasActivity.class));
-        barra.aoTocarHistorico(view -> navegar(SindicoHistoricoActivity.class));
+        BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
+        barra.configurar(ItensBarra.sindico());
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.QUARTO);
+        barra.setOnAssistenteClickListener(
+                view -> startActivity(new Intent(this, ChatActivity.class)));
+        barra.setOnItemClickListener(
+                indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.QUARTO));
     }
 
     private void preencherDados() {

@@ -44,6 +44,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
     private boolean cooperativa;
     private boolean homeDoCondominio;
+    private boolean sindico;
 
     private TextView textoNome;
     private TextView textoEmail;
@@ -180,6 +181,12 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
         mostrarLinhasDaCooperativa();
 
+        if (!sindico && perfil != null && PerfilAcesso.ehSindico(perfil.getTipoPerfil())) {
+            sindico = true;
+
+            trocarBarra(ItensBarra.sindico());
+        }
+
         homeDoCondominio =
                 perfil != null
                         && PerfilAcesso.destinoDaHome(perfil) == PerfilAcesso.DestinoHome.CONDOMINIO;
@@ -235,7 +242,10 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
     private void aoClicarItemDaBarra(int indice) {
 
-        if (cooperativa) {
+        if (sindico) {
+            Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM);
+
+        } else if (cooperativa) {
             Navegacao.irParaItemDaCooperativa(this, indice, ItensBarra.NENHUM);
 
         } else {

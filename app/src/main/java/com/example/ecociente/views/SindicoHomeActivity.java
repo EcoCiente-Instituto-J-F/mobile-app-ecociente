@@ -1,7 +1,6 @@
 package com.example.ecociente.views;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -10,10 +9,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -22,24 +17,24 @@ import com.example.ecociente.model.SindicoDashboard;
 import com.example.ecociente.viewmodels.SindicoViewModel;
 
 import java.util.Locale;
+import com.example.ecociente.ui.JanelaEdgeToEdge;
+import com.example.ecociente.ui.InsetsSistema;
+import com.example.ecociente.ui.MenuPerfil;
+import com.example.ecociente.ui.Navegacao;
+import com.example.ecociente.viewmodels.PerfilViewModel;
+import com.example.ecociente.ui.BarraNavegacaoView;
+import com.example.ecociente.ui.ItensBarra;
+import com.example.ecociente.model.SindicoAviso;
 
 public final class SindicoHomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_home);
 
         View raiz = findViewById(R.id.raizSindicoHome);
-        ViewCompat.setOnApplyWindowInsetsListener(raiz, (view, insets) -> {
-            Insets barras = insets.getInsets(WindowInsetsCompat.Type.systemBars()
-                    | WindowInsetsCompat.Type.displayCutout());
-            view.setPadding(barras.left, barras.top, barras.right, barras.bottom);
-            return insets;
-        });
-        ViewCompat.requestApplyInsets(raiz);
+        InsetsSistema.aplicarComoPadding(raiz);
 
         SindicoViewModel viewModel = new ViewModelProvider(this).get(SindicoViewModel.class);
         SindicoDashboard dados = viewModel.getDashboard();
@@ -58,16 +53,43 @@ public final class SindicoHomeActivity extends AppCompatActivity {
                 new Intent(this, SindicoRankingActivity.class));
         findViewById(R.id.sindicoRankingTitulo).setOnClickListener(abrirRanking);
         findViewById(R.id.sindicoRanking).setOnClickListener(abrirRanking);
-        SindicoBottomBar barra = findViewById(R.id.barraInferiorSindico);
-        barra.selecionar(SindicoBottomBar.Aba.HOME);
-        barra.aoTocarSolicitacao(view -> startActivity(
-                new Intent(this, SindicoCooperativasActivity.class)));
-        barra.aoTocarHistorico(view -> startActivity(
-                new Intent(this, SindicoHistoricoActivity.class)));
-        barra.aoTocarUnidades(view -> startActivity(
-                new Intent(this, SindicoUnidadesActivity.class)));
+        BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
+        barra.configurar(ItensBarra.sindico());
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.HOME);
+        barra.setOnAssistenteClickListener(
+                view -> startActivity(new Intent(this, ChatActivity.class)));
+        barra.setOnItemClickListener(
+                indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.HOME));
         findViewById(R.id.botaoAvisosSindico).setOnClickListener(
-                view -> startActivity(new Intent(this, SindicoAvisosActivity.class)));
+                view -> startActivity(CentralNotificacoesActivity.criarIntent(
+                        this, CentralNotificacoesActivity.Destino.SINDICO)));
+        findViewById(R.id.botaoMensagensSindico).setOnClickListener(
+                view -> startActivity(MensagensActivity.criarIntentSindico(this)));
+        findViewById(R.id.linkCalendarioCompleto).setOnClickListener(
+                view -> startActivity(new Intent(this, CalendarioColetasActivity.class)));
+        View pontoAvisos = findViewById(R.id.pontoAvisosSindico);
+        viewModel.getAvisos().observe(this, avisos -> {
+            boolean haNovos = false;
+            if (avisos != null) {
+                for (SindicoAviso aviso : avisos) {
+                    haNovos = haNovos || aviso.isNovo();
+                }
+            }
+            pontoAvisos.setVisibility(haNovos ? View.VISIBLE : View.GONE);
+        });
+        findViewById(R.id.botaoPerfilSindico).setOnClickListener(
+                ancora -> MenuPerfil.mostrar(
+                        this,
+                        ancora,
+                        () -> startActivity(new Intent(this, GerenciarPerfilActivity.class)),
+                        this::confirmarSaida));
+    }
+
+    private void confirmarSaida() {
+        MenuPerfil.confirmarSaida(this, () -> {
+            new ViewModelProvider(this).get(PerfilViewModel.class).encerrarSessao();
+            Navegacao.abrirLoginLimpandoPilha(this);
+        });
     }
 
     private void montarCalendario(SindicoDashboard dados) {

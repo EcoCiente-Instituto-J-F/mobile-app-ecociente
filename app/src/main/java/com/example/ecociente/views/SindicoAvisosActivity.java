@@ -1,7 +1,6 @@
 package com.example.ecociente.views;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,10 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
@@ -24,6 +19,12 @@ import com.example.ecociente.viewmodels.SindicoViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import com.example.ecociente.ui.JanelaEdgeToEdge;
+import com.example.ecociente.ui.InsetsSistema;
+import com.example.ecociente.ui.AbasCentral;
+import com.example.ecociente.ui.BarraNavegacaoView;
+import com.example.ecociente.ui.ItensBarra;
+import com.example.ecociente.ui.Navegacao;
 
 public final class SindicoAvisosActivity extends AppCompatActivity {
     private SindicoViewModel viewModel;
@@ -32,33 +33,33 @@ public final class SindicoAvisosActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_avisos);
 
         View raiz = findViewById(R.id.raizSindicoAvisos);
-        ViewCompat.setOnApplyWindowInsetsListener(raiz, (view, insets) -> {
-            Insets barras = insets.getInsets(WindowInsetsCompat.Type.systemBars()
-                    | WindowInsetsCompat.Type.displayCutout());
-            view.setPadding(barras.left, barras.top, barras.right, barras.bottom);
-            return insets;
-        });
-        ViewCompat.requestApplyInsets(raiz);
+        InsetsSistema.aplicarComoPadding(raiz);
 
         lista = findViewById(R.id.listaSindicoAvisos);
         viewModel = new ViewModelProvider(this).get(SindicoViewModel.class);
         viewModel.getAvisos().observe(this, this::mostrarAvisos);
-        SindicoBottomBar barra = findViewById(R.id.barraInferiorSindico);
-        barra.selecionar(SindicoBottomBar.Aba.HOME);
-        barra.aoTocarHome(view -> finish());
-        barra.aoTocarSolicitacao(view -> startActivity(
-                new Intent(this, SindicoCooperativasActivity.class)));
-        barra.aoTocarHistorico(view -> startActivity(
-                new Intent(this, SindicoHistoricoActivity.class)));
-        barra.aoTocarUnidades(view -> startActivity(
-                new Intent(this, SindicoUnidadesActivity.class)));
+        BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
+        barra.configurar(ItensBarra.sindico());
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.HOME);
+        barra.setOnAssistenteClickListener(
+                view -> startActivity(new Intent(this, ChatActivity.class)));
+        barra.setOnItemClickListener(
+                indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM));
         findViewById(R.id.botaoVoltarAvisos).setOnClickListener(view -> finish());
+        AbasCentral.configurar(
+                findViewById(R.id.abasCentral),
+                false,
+                () -> {
+                    startActivity(CentralNotificacoesActivity.criarIntent(
+                            this, CentralNotificacoesActivity.Destino.SINDICO));
+                    overridePendingTransition(0, 0);
+                    finish();
+                },
+                () -> {});
         findViewById(R.id.botaoNovoAviso).setOnClickListener(view -> abrirFormulario());
         getSupportFragmentManager().setFragmentResultListener("rascunhoSindico", this,
                 (chave, resultado) -> Snackbar.make(raiz,

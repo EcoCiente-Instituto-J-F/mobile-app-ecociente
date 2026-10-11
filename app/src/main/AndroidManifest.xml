@@ -119,6 +119,10 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".views.CentralNotificacoesActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".views.SolicitacaoDetalheActivity"
             android:exported="false" />
 

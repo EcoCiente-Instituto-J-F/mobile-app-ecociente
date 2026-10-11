@@ -8,10 +8,8 @@
     <string name="sindico_cooperativas_proximas">Cooperativas próximas</string>
     <string name="sindico_caminhao_de_reciclagem">Caminhão de reciclagem</string>
     <string name="sindico_buscar_cooperativa">Buscar cooperativa…</string>
-    <string name="sindico_dados_ilustrativos_sem_consulta_ao">Dados ilustrativos · sem consulta ao banco ou envio à cooperativa</string>
     <string name="sindico_voltar_a_home">Voltar à home</string>
     <string name="sindico_dashboard">Dashboard</string>
-    <string name="sindico_visao_ilustrativa_do_desempenho_do">Visão ilustrativa do desempenho do condomínio</string>
     <string name="sindico_total_de_aulas_concluidas">Total de aulas concluídas</string>
     <string name="sindico_moradores_utilizando_o_app">Moradores utilizando o app</string>
     <string name="sindico_300_pts">300 pts</string>
@@ -30,7 +28,6 @@
     <string name="sindico_abrir_avisos">Abrir avisos</string>
     <string name="sindico_perfil_do_sindico">Perfil do síndico</string>
     <string name="sindico_ilustracao_de_reciclagem">Ilustração de reciclagem</string>
-    <string name="sindico_semana_ilustrativa">Semana ilustrativa</string>
     <string name="sindico_seg">Seg</string>
     <string name="sindico_ter">Ter</string>
     <string name="sindico_qua">Qua</string>
@@ -78,7 +75,6 @@
     <string name="sindico_salvar_avaliacao_local">Salvar avaliação local</string>
     <string name="sindico_criar_notificacao">Criar notificação</string>
     <string name="sindico_fechar_criacao_de_notificacao">Fechar criação de notificação</string>
-    <string name="sindico_rascunho_local_ainda_nao_sera_envi">Rascunho local: ainda não será enviado aos moradores.</string>
     <string name="sindico_digite_seu_titulo">Digite seu título</string>
     <string name="sindico_destinatario">Destinatário</string>
     <string name="sindico_todos_os_moradores">Todos os moradores</string>
@@ -99,11 +95,6 @@
     <string name="sindico_excluir_unidade">Excluir unidade</string>
     <string name="sindico_solicitar_coleta">Solicitar coleta</string>
     <string name="sindico_avaliar">Avaliar</string>
-    <string name="sindico_home_do_sindico">Home do síndico</string>
-    <string name="sindico_abrir_solicitacoes_de_coleta">Abrir solicitações de coleta</string>
-    <string name="sindico_abrir_historico_de_coletas">Abrir histórico de coletas</string>
-    <string name="sindico_abrir_dados_do_condominio">Abrir dados do condomínio</string>
-    <string name="sindico_eko_indisponivel_nesta_demonstraca">Eko indisponível nesta demonstração</string>
     <string name="sindico_informe_o_numero_da_unidade">Informe o número da unidade</string>
     <string name="sindico_esta_unidade_ja_esta_cadastrada_ne">Esta unidade já está cadastrada neste bloco</string>
     <string name="sindico_informe_o_morador_ou_remova_o_tele">Informe o morador ou remova o telefone</string>
@@ -127,13 +118,6 @@
     <string name="sindico_excluir_titulo">Excluir %1$s?</string>
     <string name="sindico_a_exclusao_afeta_apenas_os_dados_l">A exclusão afeta apenas os dados locais desta demonstração.</string>
     <string name="sindico_unidade_removida_desta_demonstraca">Unidade removida desta demonstração.</string>
-    <string name="sindico_aba_selecionada">%1$s, aba selecionada</string>
-    <string name="sindico_aba_abrir">%1$s, abrir aba</string>
-    <string name="sindico_aba_indisponivel">%1$s, indisponível nesta demonstração</string>
-    <string name="sindico_home_do_sindico_aba_selecionada">Home do síndico, aba selecionada</string>
-    <string name="sindico_solicitacao_aba_selecionada">Solicitação, aba selecionada</string>
-    <string name="sindico_historico_aba_selecionada">Histórico, aba selecionada</string>
-    <string name="sindico_unidades_aba_selecionada">Unidades, aba selecionada</string>
     <string name="sindico_ver_informacoes">Ver informações de %1$s</string>
     <string name="sindico_distancia">⌖ %1$s</string>
     <string name="sindico_avaliacao_cooperativa">★ %1$s</string>
@@ -191,4 +175,20 @@
         <item quantity="one">%d estrela selecionada</item>
         <item quantity="other">%d estrelas selecionadas</item>
     </plurals>
+    <string name="sindico_enviar_solicitacao">Enviar solicitação</string>
+    <string name="sindico_horario_passado">Escolha uma data e um horário futuros.</string>
+    <string name="cooperativa_escolhida">Cooperativa escolhida</string>
+    <string name="cancelar_solicitacao">Cancelar solicitação</string>
+    <string name="cancelar_solicitacao_mensagem">A cooperativa será avisada de que você cancelou esta coleta.</string>
+    <string name="solicitacao_cancelada">Solicitação cancelada.</string>
+    <string name="linha_recebida_texto_sindico">Solicitação enviada à %1$s.</string>
+    <string name="linha_resposta_aguardando_sindico">Aguardando a resposta da cooperativa.</string>
+    <string name="linha_resposta_cancelada">Solicitação cancelada.</string>
+    <string name="sindico_solicitacao_andamento">%1$s · %2$s</string>
+    <string name="notificacoes_e_avisos">Notificações e avisos</string>
+    <string name="sindico_ver_calendario_completo">Ver calendário completo ›</string>
+    <string name="sindico_solicitacao_enviada">Solicitação enviada</string>
+    <string name="resposta_da_cooperativa">Resposta da cooperativa</string>
+    <string name="resposta_da_cooperativa_texto">Podemos realizar a coleta na data combinada. Por favor, deixe o material separado por tipo.</string>
+    <string name="coleta_confirmada_em">Coleta confirmada: %1$s • %2$s</string>
 </resources>

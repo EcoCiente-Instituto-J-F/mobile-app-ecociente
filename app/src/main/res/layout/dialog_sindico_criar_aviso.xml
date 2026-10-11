@@ -39,17 +39,8 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/sindico_fechar_criacao_de_notificacao"
                 android:padding="11dp"
-                android:src="@drawable/sindico_fechar" />
+                android:src="@drawable/ic_fechar" />
         </LinearLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="7dp"
-            android:fontFamily="@font/nunito_regular"
-            android:text="@string/sindico_rascunho_local_ainda_nao_sera_envi"
-            android:textColor="@color/cinza_texto_home"
-            android:textSize="11sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -139,7 +130,7 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="12dp"
                 android:backgroundTint="@color/verde_escuro_principal"
-                android:text="@string/sindico_salvar_rascunho"
+                android:text="@string/enviar_notificacao"
                 android:textAllCaps="false"
                 android:textColor="@color/branco" />
         </LinearLayout>

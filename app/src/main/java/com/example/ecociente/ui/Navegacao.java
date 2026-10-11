@@ -14,6 +14,10 @@ import com.example.ecociente.views.QuizActivity;
 import com.example.ecociente.views.SolicitacoesActivity;
 import com.example.ecociente.views.TelaListaActivity;
 import androidx.annotation.StringRes;
+import com.example.ecociente.views.SindicoCooperativasActivity;
+import com.example.ecociente.views.SindicoHistoricoActivity;
+import com.example.ecociente.views.SindicoHomeActivity;
+import com.example.ecociente.views.SindicoUnidadesActivity;
 
 public final class Navegacao {
 
@@ -54,6 +58,40 @@ public final class Navegacao {
                         ? new Intent(de, MensagensActivity.class)
                         : new Intent(de, SolicitacoesActivity.class)
                                 .putExtra(SolicitacoesActivity.EXTRA_INDICE_BARRA, indice);
+
+        abrirPelaBarra(de, rota, indiceAtual);
+
+        if (indiceAtual != ItensBarra.HOME) {
+            de.finish();
+        }
+    }
+
+    public static void irParaItemDoSindico(@NonNull Activity de, int indice, int indiceAtual) {
+
+        if (indice == indiceAtual) {
+            return;
+        }
+
+        if (indice == ItensBarra.HOME) {
+            abrirHomePelaBarra(de, SindicoHomeActivity.class, indiceAtual);
+            return;
+        }
+
+        Class<?> destino;
+
+        if (indice == ItensBarra.SEGUNDO) {
+            destino = SindicoCooperativasActivity.class;
+
+        } else if (indice == ItensBarra.TERCEIRO) {
+            destino = SindicoHistoricoActivity.class;
+
+        } else {
+            destino = SindicoUnidadesActivity.class;
+        }
+
+        Intent rota =
+                new Intent(de, destino)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         abrirPelaBarra(de, rota, indiceAtual);
 

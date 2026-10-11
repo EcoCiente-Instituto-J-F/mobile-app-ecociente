@@ -1,10 +1,8 @@
 <resources>
-    <string name="sindico_dados_demo">Dados de demonstração</string>
     <string name="sindico_saudacao_demo">Olá, Júlio!</string>
     <string name="sindico_condominio_demo">Condomínio Residencial Jardim das Flores</string>
     <string name="sindico_avisos">Avisos</string>
     <string name="sindico_nova_notificacao">Nova notificação</string>
-    <string name="sindico_salvar_rascunho">Salvar rascunho</string>
     <string name="sindico_rascunho_salvo">Rascunho salvo nesta sessão. O envio aos moradores estará disponível após a integração com a API.</string>
 
     <string name="app_name">
@@ -429,7 +427,6 @@
     <string name="condominios_atendidos">Condomínios atendidos</string>
     <string name="avaliacoes_recebidas">Avaliações recebidas</string>
     <string name="ranking_do_morador">Ranking do morador</string>
-    <string name="nova_coleta">Nova coleta</string>
     <string name="solicitacao_de_coleta">Solicitação de coleta</string>
     <string name="data">Data</string>
     <string name="horario_inicio">Início</string>

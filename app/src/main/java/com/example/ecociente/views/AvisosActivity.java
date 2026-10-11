@@ -28,6 +28,7 @@ import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.List;
+import com.example.ecociente.ui.AbasCentral;
 
 public class AvisosActivity extends AppCompatActivity {
 
@@ -54,6 +55,25 @@ public class AvisosActivity extends AppCompatActivity {
         lista = findViewById(R.id.listaAvisos);
 
         findViewById(R.id.botaoVoltarAvisos).setOnClickListener(view -> finish());
+
+        boolean podeEnviar = getIntent().getBooleanExtra(EXTRA_PODE_ENVIAR, false);
+
+        CentralNotificacoesActivity.Destino destino =
+                podeEnviar
+                        ? CentralNotificacoesActivity.Destino.COOPERATIVA
+                        : CentralNotificacoesActivity.Destino.CONDOMINIO;
+
+        AbasCentral.configurar(
+                findViewById(R.id.abasCentral),
+                false,
+                () -> {
+                    startActivity(CentralNotificacoesActivity.criarIntent(this, destino));
+
+                    overridePendingTransition(0, 0);
+
+                    finish();
+                },
+                () -> {});
 
         View botaoNovo = findViewById(R.id.botaoNovoAviso);
 

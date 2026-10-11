@@ -15,7 +15,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/sindico_voltar_aos_blocos"
         android:padding="13dp"
-        android:src="@drawable/sindico_voltar" />
+        android:src="@drawable/ic_voltar" />
 
     <TextView
         android:id="@+id/tituloSindicoBloco"
@@ -92,8 +92,8 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <com.example.ecociente.views.SindicoBottomBar
+    <com.example.ecociente.ui.BarraNavegacaoView
         android:id="@+id/barraInferiorSindico"
         android:layout_width="match_parent"
-        android:layout_height="86dp" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

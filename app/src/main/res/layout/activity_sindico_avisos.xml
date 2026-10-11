@@ -20,7 +20,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/sindico_voltar_a_home_do_sindico"
             android:padding="12dp"
-            android:src="@drawable/sindico_voltar" />
+            android:src="@drawable/ic_voltar" />
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -42,6 +42,10 @@
                 android:textSize="10sp" />
         </LinearLayout>
     </LinearLayout>
+
+    <include
+        android:id="@+id/abasCentral"
+        layout="@layout/view_abas_central" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -73,8 +77,8 @@
         android:textColor="@color/branco"
         android:textSize="14sp" />
 
-    <com.example.ecociente.views.SindicoBottomBar
+    <com.example.ecociente.ui.BarraNavegacaoView
         android:id="@+id/barraInferiorSindico"
         android:layout_width="match_parent"
-        android:layout_height="86dp" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

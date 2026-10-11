@@ -28,6 +28,22 @@
             android:orientation="horizontal">
 
             <FrameLayout
+                android:id="@+id/botaoMensagensSindico"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="@string/mensagens"
+                android:focusable="true">
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@null"
+                    android:src="@drawable/ic_chat_bolha" />
+            </FrameLayout>
+
+            <FrameLayout
                 android:id="@+id/botaoAvisosSindico"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -41,11 +57,22 @@
                     android:layout_gravity="center"
                     android:contentDescription="@null"
                     android:src="@drawable/sindico_bell_outline" />
+                <View
+                    android:id="@+id/pontoAvisosSindico"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="top|end"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/sindico_ponto_novo"
+                    android:visibility="gone" />
             </FrameLayout>
 
             <ImageView
+                android:id="@+id/botaoPerfilSindico"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/sindico_perfil_do_sindico"
                 android:padding="4dp"
                 android:src="@drawable/ic_perfil_usuario" />
@@ -94,14 +121,6 @@
                         android:text="@string/sindico_condominio_demo"
                         android:textColor="@color/cinza_texto_home"
                         android:textSize="11sp" />
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:fontFamily="@font/nunito_regular"
-                        android:text="@string/sindico_dados_demo"
-                        android:textColor="@color/cinza_texto_home"
-                        android:textSize="10sp" />
                 </LinearLayout>
 
                 <ImageView
@@ -139,11 +158,14 @@
                         android:textColor="@color/verde_escuro_principal"
                         android:textSize="12sp" />
                     <TextView
+                        android:id="@+id/linkCalendarioCompleto"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/nunito_regular"
-                        android:text="@string/sindico_semana_ilustrativa"
-                        android:textColor="@color/cinza_texto_home"
+                        android:background="?attr/selectableItemBackground"
+                        android:fontFamily="@font/nunito_semibold"
+                        android:padding="4dp"
+                        android:text="@string/sindico_ver_calendario_completo"
+                        android:textColor="@color/verde_escuro_principal"
                         android:textSize="10sp" />
                 </LinearLayout>
 
@@ -340,8 +362,8 @@
         </LinearLayout>
     </ScrollView>
 
-    <com.example.ecociente.views.SindicoBottomBar
+    <com.example.ecociente.ui.BarraNavegacaoView
         android:id="@+id/barraInferiorSindico"
         android:layout_width="match_parent"
-        android:layout_height="86dp" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

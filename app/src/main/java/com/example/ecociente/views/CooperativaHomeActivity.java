@@ -73,7 +73,11 @@ public class CooperativaHomeActivity extends AppCompatActivity {
         configurarCalendario();
 
         findViewById(R.id.botaoAvisosCooperativa)
-                .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, true)));
+                .setOnClickListener(
+                        view ->
+                                startActivity(
+                                        CentralNotificacoesActivity.criarIntent(
+                                                this, CentralNotificacoesActivity.Destino.COOPERATIVA)));
 
         findViewById(R.id.cardAvisosCooperativa)
                 .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, true)));

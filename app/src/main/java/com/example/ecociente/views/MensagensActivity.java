@@ -19,19 +19,33 @@ import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.ui.AoDigitar;
 import com.example.ecociente.ui.Iniciais;
 import java.util.Locale;
+import android.content.Context;
+import androidx.annotation.NonNull;
 
 public class MensagensActivity extends AppCompatActivity {
 
     private static final int[] IDS_ABAS = {R.id.abaTodos, R.id.abaNaoLidos, R.id.abaArquivadas};
+
+    private static final String EXTRA_SINDICO = "mensagensDoSindico";
+
+    private boolean sindico;
 
     private LinearLayout lista;
     private View textoSemConversas;
     private EditText campoBusca;
     private int abaAtual;
 
+    @NonNull
+    public static Intent criarIntentSindico(@NonNull Context contexto) {
+
+        return new Intent(contexto, MensagensActivity.class).putExtra(EXTRA_SINDICO, true);
+    }
+
     @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
+
+        sindico = getIntent().getBooleanExtra(EXTRA_SINDICO, false);
 
         JanelaEdgeToEdge.aplicar(this);
 
@@ -84,7 +98,7 @@ public class MensagensActivity extends AppCompatActivity {
 
         LayoutInflater inflador = LayoutInflater.from(this);
 
-        for (Conversa conversa : Conversa.exemplos()) {
+        for (Conversa conversa : sindico ? Conversa.exemplosDoSindico() : Conversa.exemplos()) {
 
             if (!pertence(conversa, aba)) {
                 continue;
@@ -129,13 +143,20 @@ public class MensagensActivity extends AppCompatActivity {
 
         BarraNavegacaoView barra = findViewById(R.id.barraNavegacao);
 
-        barra.configurar(ItensBarra.cooperativa());
+        barra.configurar(sindico ? ItensBarra.sindico() : ItensBarra.cooperativa());
 
-        Navegacao.marcarNaBarra(this, barra, ItensBarra.TERCEIRO);
+        Navegacao.marcarNaBarra(this, barra, sindico ? ItensBarra.NENHUM : ItensBarra.TERCEIRO);
 
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
         barra.setOnItemClickListener(
-                indice -> Navegacao.irParaItemDaCooperativa(this, indice, ItensBarra.TERCEIRO));
+                indice -> {
+                    if (sindico) {
+                        Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM);
+
+                    } else {
+                        Navegacao.irParaItemDaCooperativa(this, indice, ItensBarra.TERCEIRO);
+                    }
+                });
     }
 }

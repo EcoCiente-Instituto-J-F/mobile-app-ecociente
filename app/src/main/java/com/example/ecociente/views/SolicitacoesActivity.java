@@ -82,7 +82,7 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
         configurarLista();
 
-        configurarBuscaENovaColeta();
+        configurarBusca();
 
         configurarNavegacao();
 
@@ -190,7 +190,7 @@ public class SolicitacoesActivity extends AppCompatActivity {
         atualizarEstado();
     }
 
-    private void configurarBuscaENovaColeta() {
+    private void configurarBusca() {
 
         AoDigitar.em(
                 campoBusca,
@@ -202,8 +202,6 @@ public class SolicitacoesActivity extends AppCompatActivity {
                     }
                 });
 
-        findViewById(R.id.botaoNovaColetaSolicitacoes)
-                .setOnClickListener(view -> NovaColetaDialogo.mostrar(this, viewModel::recarregar));
     }
 
     private void atualizarEstado() {
