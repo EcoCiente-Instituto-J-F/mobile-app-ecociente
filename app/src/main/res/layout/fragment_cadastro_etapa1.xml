@@ -469,7 +469,7 @@
                             android:fontFamily="@font/nunito_semibold"
                             android:text="@string/possui_codigo_condominio"
                             android:textColor="@color/cinza_texto_opcao"
-                            android:textSize="10sp" />
+                            android:textSize="11sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -478,7 +478,7 @@
                             android:fontFamily="@font/nunito_regular"
                             android:text="@string/codigo_condominio_descricao"
                             android:textColor="@color/cinza_texto_auxiliar"
-                            android:textSize="8sp" />
+                            android:textSize="11sp" />
                     </LinearLayout>
                 </LinearLayout>
 

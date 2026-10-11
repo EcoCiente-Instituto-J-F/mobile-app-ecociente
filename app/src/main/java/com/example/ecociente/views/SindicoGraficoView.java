@@ -54,7 +54,7 @@ public final class SindicoGraficoView extends View {
 
         tinta.setStyle(Paint.Style.FILL);
         tinta.setColor(ContextCompat.getColor(getContext(), R.color.cinza_texto_home));
-        tinta.setTextSize(10 * getResources().getDisplayMetrics().scaledDensity);
+        tinta.setTextSize(11 * getResources().getDisplayMetrics().scaledDensity);
         for (int i = 0; i <= 3; i++) {
             canvas.drawText(String.valueOf(i * 100), dp(2), base - altura * i / 3f + dp(3), tinta);
         }

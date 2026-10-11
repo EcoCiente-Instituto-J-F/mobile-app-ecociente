@@ -76,7 +76,7 @@
 
                 android:textColor="@color/verde_escuro_principal"
 
-                android:textSize="8sp" />
+                android:textSize="11sp" />
 
         </FrameLayout>
 
@@ -100,7 +100,7 @@
 
             android:textColor="@color/preto_texto_home"
 
-            android:textSize="10sp" />
+            android:textSize="11sp" />
 
 
         <LinearLayout
@@ -138,7 +138,7 @@
 
                 android:textColor="@color/cinza_secundario_home"
 
-                android:textSize="8sp" />
+                android:textSize="11sp" />
 
         </LinearLayout>
 

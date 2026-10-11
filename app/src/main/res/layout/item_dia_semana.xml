@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/nunito_regular"
         android:textColor="@color/cinza_texto_auxiliar"
-        android:textSize="9sp" />
+        android:textSize="11sp" />
 
     <FrameLayout
         android:layout_width="28dp"
@@ -53,6 +53,6 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/nunito_regular"
         android:textColor="@color/cinza_texto_home"
-        android:textSize="9sp" />
+        android:textSize="11sp" />
 
 </LinearLayout>

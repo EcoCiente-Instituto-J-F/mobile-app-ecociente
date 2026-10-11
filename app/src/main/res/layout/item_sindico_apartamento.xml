@@ -47,7 +47,7 @@
                 android:paddingEnd="6dp"
                 android:paddingBottom="2dp"
                 android:textColor="@color/verde_escuro_principal"
-                android:textSize="9sp" />
+                android:textSize="11sp" />
         </LinearLayout>
         <TextView
             android:id="@+id/moradorApartamentoSindico"
@@ -56,7 +56,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/cinza_texto_home"
-            android:textSize="10sp" />
+            android:textSize="11sp" />
     </LinearLayout>
 
     <ImageButton

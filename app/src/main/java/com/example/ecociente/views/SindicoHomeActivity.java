@@ -148,7 +148,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             card.setOrientation(LinearLayout.VERTICAL);
             card.setPadding(dp(7), dp(8), dp(7), dp(6));
             card.setBackgroundResource(R.drawable.sindico_card);
-            LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(0, dp(100), 1);
+            LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(0, dp(116), 1);
             if (i > 0) parametros.leftMargin = dp(5);
             painel.addView(card, parametros);
 
@@ -156,12 +156,12 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             icone.setImageResource(icones[i]);
             icone.setContentDescription(null);
             card.addView(icone, new LinearLayout.LayoutParams(dp(21), dp(21)));
-            TextView nome = adicionarTexto(card, nomes[i], 9, R.color.cinza_texto_home, false);
+            TextView nome = adicionarTexto(card, nomes[i], 11, R.color.cinza_texto_home, false);
             nome.setMaxLines(2);
             nome.setMinHeight(dp(28));
             adicionarTexto(card, valores[i], 18, R.color.verde_escuro_principal, true);
             String variacao = (variacoes[i] > 0 ? "+" : "") + variacoes[i] + "%";
-            adicionarTexto(card, getString(R.string.sindico_variacao_mes, variacao), 8,
+            adicionarTexto(card, getString(R.string.sindico_variacao_mes, variacao), 11,
                     variacoes[i] < 0 ? R.color.rosa_ecociente : R.color.verde_escuro_principal, false);
         }
     }
@@ -178,7 +178,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             ranking.addView(linha, new LinearLayout.LayoutParams(-1, dp(46)));
 
             adicionarTexto(linha, (i + 1) + "º", 14, R.color.cinza_texto_home, true);
-            TextView avatar = adicionarTexto(linha, iniciais[i], 10, R.color.branco, true);
+            TextView avatar = adicionarTexto(linha, iniciais[i], 11, R.color.branco, true);
             avatar.setGravity(Gravity.CENTER);
             avatar.setBackgroundResource(R.drawable.sindico_avatar_ranking);
             LinearLayout.LayoutParams avatarParams = new LinearLayout.LayoutParams(dp(27), dp(27));

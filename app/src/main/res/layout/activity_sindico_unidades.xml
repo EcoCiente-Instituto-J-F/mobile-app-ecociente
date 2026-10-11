@@ -168,7 +168,7 @@
                                 android:fontFamily="@font/nunito_bold"
                                 android:gravity="center"
                                 android:text="@string/sindico_comercial_industrial"
-                                android:textSize="10sp" />
+                                android:textSize="11sp" />
                         </LinearLayout>
 
                         <TextView
@@ -343,7 +343,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/verde_escuro_principal"
-                        android:textSize="10sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/listaBlocosSindico"
@@ -408,7 +408,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/verde_escuro_principal"
-                        android:textSize="10sp" />
+                        android:textSize="11sp" />
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/listaAreasSindico"

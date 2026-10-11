@@ -42,7 +42,7 @@
             android:layout_marginTop="2dp"
             android:fontFamily="@font/nunito_regular"
             android:textColor="@color/cinza_texto_home"
-            android:textSize="10sp" />
+            android:textSize="11sp" />
         <LinearLayout
             android:id="@+id/linhaAvaliacaoHistorico"
             android:layout_width="match_parent"
@@ -63,7 +63,7 @@
                 android:layout_marginStart="3dp"
                 android:fontFamily="@font/nunito_regular"
                 android:textColor="@color/cinza_texto_home"
-                android:textSize="9sp" />
+                android:textSize="11sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -82,7 +82,7 @@
             android:gravity="center"
             android:text="@string/etiqueta_concluida"
             android:textColor="@color/branco"
-            android:textSize="9sp" />
+            android:textSize="11sp" />
         <FrameLayout
             android:id="@+id/acaoAvaliarHistorico"
             android:layout_width="match_parent"
@@ -101,7 +101,7 @@
                 android:gravity="center"
                 android:text="@string/sindico_avaliar"
                 android:textColor="@color/preto_texto_home"
-                android:textSize="10sp" />
+                android:textSize="11sp" />
         </FrameLayout>
     </LinearLayout>
 </LinearLayout>

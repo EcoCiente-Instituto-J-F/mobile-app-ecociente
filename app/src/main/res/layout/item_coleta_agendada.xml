@@ -50,7 +50,7 @@
             android:paddingBottom="3dp"
             android:text="@string/tipo_coleta_reciclaveis"
             android:textColor="@color/verde_escuro_principal"
-            android:textSize="10sp" />
+            android:textSize="11sp" />
 
     </LinearLayout>
 

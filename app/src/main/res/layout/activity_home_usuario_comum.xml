@@ -277,7 +277,7 @@
 
                             android:textColor="@color/verde_escuro_principal"
 
-                            android:textSize="8sp" />
+                            android:textSize="11sp" />
 
 
                         <TextView
@@ -322,7 +322,7 @@
 
                     android:textColor="@color/cinza_texto_home"
 
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
 
                 <com.google.android.material.card.MaterialCardView

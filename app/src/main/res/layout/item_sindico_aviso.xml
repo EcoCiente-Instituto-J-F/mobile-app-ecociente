@@ -57,7 +57,7 @@
             android:fontFamily="@font/nunito_regular"
             android:maxLines="2"
             android:textColor="@color/cinza_texto_home"
-            android:textSize="10sp" />
+            android:textSize="11sp" />
         <TextView
             android:id="@+id/metaSindicoAviso"
             android:layout_width="match_parent"
@@ -65,7 +65,7 @@
             android:layout_marginTop="2dp"
             android:fontFamily="@font/nunito_regular"
             android:textColor="@color/verde_escuro_principal"
-            android:textSize="9sp" />
+            android:textSize="11sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -84,7 +84,7 @@
             android:paddingEnd="5dp"
             android:paddingBottom="2dp"
             android:textColor="@color/verde_escuro_principal"
-            android:textSize="8sp" />
+            android:textSize="11sp" />
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="24dp"
