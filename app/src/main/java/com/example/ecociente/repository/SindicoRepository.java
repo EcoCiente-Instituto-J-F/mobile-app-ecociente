@@ -20,9 +20,6 @@ public final class SindicoRepository {
             -12, 18, 6,
             new int[]{90, 130, 175, 185, 300},
             new String[]{"01/mai", "08/mai", "15/mai", "22/mai", "29/mai"},
-            new String[]{"Seg", "Ter", "Qua", "Qui", "Sex"},
-            new String[]{"12/05", "13/05", "14/05", "15/05", "16/05"},
-            new boolean[]{false, true, false, false, false},
             new String[]{"Bloco B", "Bloco E", "Bloco C", "Bloco A", "Bloco D"},
             new String[]{"BC", "BE", "CC", "BA", "BD"},
             new int[]{1380, 1310, 1275, 1190, 1115});

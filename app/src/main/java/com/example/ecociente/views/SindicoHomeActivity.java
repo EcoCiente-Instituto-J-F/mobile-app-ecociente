@@ -13,6 +13,9 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
+import com.example.ecociente.viewmodels.CalendarioViewModel;
+import com.example.ecociente.ui.SemanaColetasView;
+import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.SindicoDashboard;
 import com.example.ecociente.viewmodels.SindicoViewModel;
 
@@ -25,8 +28,23 @@ import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.model.SindicoAviso;
+import android.widget.ImageView;
+import com.example.ecociente.model.PerfilUsuario;
+import com.example.ecociente.ui.AvatarPerfil;
+import com.google.firebase.auth.FirebaseUser;
 
 public final class SindicoHomeActivity extends AppCompatActivity {
+    private CalendarioViewModel calendarioViewModel;
+    private SemanaColetasView semana;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (calendarioViewModel != null && calendarioViewModel.getColetasDaSemana().getValue() != null) {
+            calendarioViewModel.carregarSemana();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
@@ -38,13 +56,35 @@ public final class SindicoHomeActivity extends AppCompatActivity {
 
         SindicoViewModel viewModel = new ViewModelProvider(this).get(SindicoViewModel.class);
         SindicoDashboard dados = viewModel.getDashboard();
-        ((TextView) findViewById(R.id.sindicoSaudacao)).setText(
-                getString(R.string.home_saudacao, dados.getNome()));
+        TextView saudacao = findViewById(R.id.sindicoSaudacao);
+        ImageView imagemPerfil = findViewById(R.id.imagemPerfilSindico);
+        saudacao.setText(getString(R.string.home_saudacao, dados.getNome()));
+        PerfilViewModel perfilViewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
+        FirebaseUser usuario = perfilViewModel.usuarioAtual();
+        if (usuario != null) {
+            perfilViewModel.buscarPerfil(usuario.getUid()).observe(this, perfil -> {
+                String nome = PerfilUsuario.nomeExibicao(perfil, usuario).trim();
+                if (!nome.isEmpty()) {
+                    saudacao.setText(getString(R.string.home_saudacao, nome.split("\\s+")[0]));
+                }
+                if (perfil != null) {
+                    AvatarPerfil.exibir(imagemPerfil, perfil.getFotoUrl());
+                }
+            });
+        }
         ((TextView) findViewById(R.id.sindicoCondominio)).setText(dados.getCondominio());
         ((SindicoGraficoView) findViewById(R.id.sindicoGrafico))
                 .setDados(dados.getEvolucao(), dados.getDatasEvolucao());
 
-        montarCalendario(dados);
+        semana = findViewById(R.id.semanaColetas);
+        View textoErroSemana = findViewById(R.id.textoErroSemana);
+        calendarioViewModel = new ViewModelProvider(this).get(CalendarioViewModel.class);
+        calendarioViewModel.getColetasDaSemana().observe(this, resultado -> {
+            boolean sucesso = resultado.getTipo() == ResultadoSolicitacoes.Tipo.SUCESSO;
+            semana.exibir(sucesso ? resultado.getItens() : null);
+            textoErroSemana.setVisibility(sucesso ? View.GONE : View.VISIBLE);
+        });
+        calendarioViewModel.carregarSemana();
         montarMetricas(dados);
         montarRanking(dados);
         findViewById(R.id.sindicoDashboardResumo).setOnClickListener(view -> startActivity(
@@ -90,38 +130,6 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             new ViewModelProvider(this).get(PerfilViewModel.class).encerrarSessao();
             Navegacao.abrirLoginLimpandoPilha(this);
         });
-    }
-
-    private void montarCalendario(SindicoDashboard dados) {
-        LinearLayout dias = findViewById(R.id.sindicoDiasSemana);
-        dias.removeAllViews();
-        String[] nomes = dados.getDiasSemana();
-        String[] datas = dados.getDatasSemana();
-        boolean[] coletaDias = dados.getColetaSemana();
-        for (int i = 0; i < nomes.length; i++) {
-            LinearLayout dia = new LinearLayout(this);
-            dia.setOrientation(LinearLayout.VERTICAL);
-            dia.setGravity(Gravity.CENTER);
-            dia.setBackgroundResource(R.drawable.sindico_card);
-            LinearLayout.LayoutParams tamanho = new LinearLayout.LayoutParams(0, dp(65), 1);
-            if (i > 0) tamanho.leftMargin = dp(5);
-            dias.addView(dia, tamanho);
-
-            boolean coleta = coletaDias[i];
-            adicionarTexto(dia, nomes[i], 10, R.color.verde_escuro_principal, true);
-            adicionarTexto(dia, datas[i], 9, R.color.cinza_texto_home, false);
-            TextView marcador = adicionarTexto(dia, "", 20,
-                    coleta ? R.color.verde_escuro_principal : R.color.rosa_ecociente, true);
-            marcador.setBackgroundResource(R.drawable.sindico_circulo);
-            marcador.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
-                    ContextCompat.getColor(this,
-                            coleta ? R.color.verde_escuro_principal : R.color.rosa_ecociente)));
-            marcador.setWidth(dp(13));
-            marcador.setHeight(dp(13));
-            marcador.setContentDescription(getString(coleta ? R.string.coleta : R.string.nao_ha_coleta));
-            adicionarTexto(dia, getString(coleta ? R.string.coleta : R.string.nao_ha_coleta), 8,
-                    R.color.cinza_texto_home, false);
-        }
     }
 
     private void montarMetricas(SindicoDashboard dados) {

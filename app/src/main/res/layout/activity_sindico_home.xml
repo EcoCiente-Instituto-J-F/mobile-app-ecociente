@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/raizSindicoHome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -18,7 +19,7 @@
             android:layout_gravity="center"
             android:contentDescription="@string/logo_ecociente"
             android:scaleType="fitCenter"
-            android:src="@drawable/sindico_logo" />
+            android:src="@drawable/logo_ecociente" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -56,7 +57,7 @@
                     android:layout_height="22dp"
                     android:layout_gravity="center"
                     android:contentDescription="@null"
-                    android:src="@drawable/sindico_bell_outline" />
+                    android:src="@drawable/icon_notificacoes" />
                 <View
                     android:id="@+id/pontoAvisosSindico"
                     android:layout_width="8dp"
@@ -68,14 +69,28 @@
                     android:visibility="gone" />
             </FrameLayout>
 
-            <ImageView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/botaoPerfilSindico"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="8dp"
+                android:clickable="true"
                 android:contentDescription="@string/sindico_perfil_do_sindico"
-                android:padding="4dp"
-                android:src="@drawable/ic_perfil_usuario" />
+                android:focusable="true"
+                app:cardBackgroundColor="@color/cinza_fundo_imagem_home"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:id="@+id/imagemPerfilSindico"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/foto_perfil"
+                    android:padding="5dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_perfil_usuario" />
+
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </FrameLayout>
 
@@ -169,122 +184,23 @@
                         android:textSize="10sp" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/sindicoDiasSemana"
+                <com.example.ecociente.ui.SemanaColetasView
+                    android:id="@+id/semanaColetas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="8dp" />
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="65dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/sindico_card"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_bold" android:text="@string/sindico_seg"
-                            android:textColor="@color/verde_escuro_principal" android:textSize="10sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="12/05"
-                            android:textColor="@color/cinza_texto_home" android:textSize="9sp" />
-                        <View android:layout_width="13dp" android:layout_height="13dp"
-                            android:background="@drawable/sindico_circulo"
-                            android:backgroundTint="@color/rosa_ecociente" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="@string/nao_ha_coleta"
-                            android:textColor="@color/cinza_texto_home" android:textSize="8sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="65dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/sindico_card"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_bold" android:text="@string/sindico_ter"
-                            android:textColor="@color/verde_escuro_principal" android:textSize="10sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="13/05"
-                            android:textColor="@color/cinza_texto_home" android:textSize="9sp" />
-                        <View android:layout_width="13dp" android:layout_height="13dp"
-                            android:background="@drawable/sindico_circulo"
-                            android:backgroundTint="@color/verde_escuro_principal" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="@string/coleta"
-                            android:textColor="@color/cinza_texto_home" android:textSize="8sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="65dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/sindico_card"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_bold" android:text="@string/sindico_qua"
-                            android:textColor="@color/verde_escuro_principal" android:textSize="10sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="14/05"
-                            android:textColor="@color/cinza_texto_home" android:textSize="9sp" />
-                        <View android:layout_width="13dp" android:layout_height="13dp"
-                            android:background="@drawable/sindico_circulo"
-                            android:backgroundTint="@color/rosa_ecociente" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="@string/nao_ha_coleta"
-                            android:textColor="@color/cinza_texto_home" android:textSize="8sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="65dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/sindico_card"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_bold" android:text="@string/sindico_qui"
-                            android:textColor="@color/verde_escuro_principal" android:textSize="10sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="15/05"
-                            android:textColor="@color/cinza_texto_home" android:textSize="9sp" />
-                        <View android:layout_width="13dp" android:layout_height="13dp"
-                            android:background="@drawable/sindico_circulo"
-                            android:backgroundTint="@color/rosa_ecociente" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="@string/nao_ha_coleta"
-                            android:textColor="@color/cinza_texto_home" android:textSize="8sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="65dp"
-                        android:layout_marginStart="5dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/sindico_card"
-                        android:gravity="center"
-                        android:orientation="vertical">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_bold" android:text="@string/sindico_sex"
-                            android:textColor="@color/verde_escuro_principal" android:textSize="10sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="16/05"
-                            android:textColor="@color/cinza_texto_home" android:textSize="9sp" />
-                        <View android:layout_width="13dp" android:layout_height="13dp"
-                            android:background="@drawable/sindico_circulo"
-                            android:backgroundTint="@color/rosa_ecociente" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular" android:text="@string/nao_ha_coleta"
-                            android:textColor="@color/cinza_texto_home" android:textSize="8sp" />
-                    </LinearLayout>
-                </LinearLayout>
+                <TextView
+                    android:id="@+id/textoErroSemana"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/nunito_regular"
+                    android:gravity="center"
+                    android:text="@string/semana_erro"
+                    android:textColor="@color/cinza_texto_auxiliar"
+                    android:textSize="11sp"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <LinearLayout

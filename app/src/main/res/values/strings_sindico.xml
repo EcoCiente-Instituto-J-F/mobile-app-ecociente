@@ -28,11 +28,6 @@
     <string name="sindico_abrir_avisos">Abrir avisos</string>
     <string name="sindico_perfil_do_sindico">Perfil do síndico</string>
     <string name="sindico_ilustracao_de_reciclagem">Ilustração de reciclagem</string>
-    <string name="sindico_seg">Seg</string>
-    <string name="sindico_ter">Ter</string>
-    <string name="sindico_qua">Qua</string>
-    <string name="sindico_qui">Qui</string>
-    <string name="sindico_sex">Sex</string>
     <string name="sindico_abrir_dashboard_de_desempenho_comp">Abrir dashboard de desempenho completo</string>
     <string name="sindico_dashboard_de_desempenho">Dashboard de desempenho</string>
     <string name="sindico_evolucao_ilustrativa_dos_descartes">Evolução ilustrativa dos descartes: 90, 130, 175, 185 e 300</string>
