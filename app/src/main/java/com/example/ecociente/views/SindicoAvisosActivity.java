@@ -18,9 +18,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.model.SindicoAviso;
 import com.example.ecociente.viewmodels.SindicoViewModel;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
@@ -69,7 +69,7 @@ public final class SindicoAvisosActivity extends AppCompatActivity {
         lista.removeAllViews();
         if (avisos == null || avisos.isEmpty()) {
             TextView vazio = new TextView(this);
-            vazio.setText("Nenhum aviso por enquanto. Crie um rascunho para começar.");
+            vazio.setText(R.string.sindico_nenhum_aviso_por_enquanto_crie_um);
             vazio.setTextColor(getColor(R.color.cinza_texto_home));
             vazio.setTextSize(14);
             vazio.setPadding(12, 32, 12, 32);
@@ -83,7 +83,7 @@ public final class SindicoAvisosActivity extends AppCompatActivity {
             ((TextView) cartao.findViewById(R.id.tituloSindicoAviso)).setText(aviso.getTitulo());
             ((TextView) cartao.findViewById(R.id.resumoSindicoAviso)).setText(aviso.getMensagem());
             ((TextView) cartao.findViewById(R.id.metaSindicoAviso)).setText(
-                    aviso.getAutor() + "  ·  " + aviso.getMomento());
+                    getString(R.string.sindico_aviso_autor_momento, aviso.getAutor(), aviso.getMomento()));
             cartao.findViewById(R.id.pontoNovoSindicoAviso).setVisibility(
                     aviso.isNovo() ? View.VISIBLE : View.GONE);
             TextView categoria = cartao.findViewById(R.id.categoriaSindicoAviso);
@@ -92,8 +92,7 @@ public final class SindicoAvisosActivity extends AppCompatActivity {
             ((ImageView) cartao.findViewById(R.id.iconeSindicoAviso)).setImageResource(
                     "Orientação".equals(aviso.getCategoria()) || "Campanha".equals(aviso.getCategoria())
                             ? R.drawable.sindico_recycle : R.drawable.sindico_building);
-            cartao.setContentDescription(aviso.getTitulo() + ". " + aviso.getCategoria()
-                    + ". Toque para ler o aviso completo.");
+            cartao.setContentDescription(getString(R.string.sindico_aviso_descricao, aviso.getTitulo(), aviso.getCategoria()));
             cartao.setOnClickListener(view -> abrirAviso(aviso));
             lista.addView(cartao);
         }
@@ -115,14 +114,14 @@ public final class SindicoAvisosActivity extends AppCompatActivity {
     }
 
     private void abrirAviso(SindicoAviso aviso) {
-        String detalhe = aviso.getMensagem() + "\n\nDestinatário: " + aviso.getDestinatario()
-                + "\nAutor: " + aviso.getAutor() + " · " + aviso.getMomento();
-        if (aviso.isRascunho()) detalhe += "\n\nRascunho local, ainda não enviado.";
-        new MaterialAlertDialogBuilder(this)
-                .setTitle(aviso.getTitulo())
-                .setMessage(detalhe)
-                .setPositiveButton("Fechar", null)
-                .show();
+        String detalhe = getString(R.string.sindico_aviso_detalhe, aviso.getMensagem(), aviso.getDestinatario(),
+                aviso.getAutor(), aviso.getMomento());
+        if (aviso.isRascunho()) detalhe += "\n\n" + getString(R.string.sindico_rascunho_local_ainda_nao_enviado);
+        new DialogoEco.Builder(this)
+                .titulo(aviso.getTitulo())
+                .mensagem(detalhe)
+                .botao(R.string.fechar, DialogoEco.Estilo.PREENCHIDO, null)
+                .mostrar();
     }
 
     private void abrirFormulario() {

@@ -62,7 +62,7 @@ public final class SindicoAdicionarUnidadeDialogFragment extends DialogFragment 
                 morador.setText(apartamento.getMorador());
                 telefone.setText(apartamento.getTelefone());
                 ((TextView) conteudo.findViewById(R.id.tituloFormularioUnidade))
-                        .setText("Editar unidade");
+                        .setText(R.string.sindico_editar_unidade);
             }
         }
         conteudo.findViewById(R.id.voltarFormularioUnidade).setOnClickListener(view -> dismiss());
@@ -71,17 +71,17 @@ public final class SindicoAdicionarUnidadeDialogFragment extends DialogFragment 
             String valorMorador = morador.getText().toString().trim();
             String valorTelefone = telefone.getText().toString().trim();
             if (valorNumero.isEmpty()) {
-                numero.setError("Informe o número da unidade");
+                numero.setError(getString(R.string.sindico_informe_o_numero_da_unidade));
                 numero.requestFocus();
                 return;
             }
             if (viewModel.existeNumero(blocoId, apartamentoId, valorNumero)) {
-                numero.setError("Esta unidade já está cadastrada neste bloco");
+                numero.setError(getString(R.string.sindico_esta_unidade_ja_esta_cadastrada_ne));
                 numero.requestFocus();
                 return;
             }
             if (!valorTelefone.isEmpty() && valorMorador.isEmpty()) {
-                morador.setError("Informe o morador ou remova o telefone");
+                morador.setError(getString(R.string.sindico_informe_o_morador_ou_remova_o_tele));
                 morador.requestFocus();
                 return;
             }

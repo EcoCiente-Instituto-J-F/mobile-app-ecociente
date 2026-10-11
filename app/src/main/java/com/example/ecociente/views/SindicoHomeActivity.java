@@ -96,16 +96,16 @@ public final class SindicoHomeActivity extends AppCompatActivity {
                             coleta ? R.color.verde_escuro_principal : R.color.rosa_ecociente)));
             marcador.setWidth(dp(13));
             marcador.setHeight(dp(13));
-            marcador.setContentDescription(coleta ? "Coleta" : "Não há coleta");
-            adicionarTexto(dia, coleta ? "Coleta" : "Não há coleta", 8,
+            marcador.setContentDescription(getString(coleta ? R.string.coleta : R.string.nao_ha_coleta));
+            adicionarTexto(dia, getString(coleta ? R.string.coleta : R.string.nao_ha_coleta), 8,
                     R.color.cinza_texto_home, false);
         }
     }
 
     private void montarMetricas(SindicoDashboard dados) {
         LinearLayout painel = findViewById(R.id.sindicoMetricas);
-        String[] nomes = {"Participação dos moradores", "Descartes registrados no mês",
-                "Taxa de adesão à coleta seletiva"};
+        String[] nomes = {getString(R.string.sindico_participacao_dos_moradores), getString(R.string.sindico_descartes_registrados_no_mes),
+                getString(R.string.sindico_taxa_de_adesao_a_coleta_seletiva)};
         String[] valores = {dados.getParticipacao() + "%", String.valueOf(dados.getDescartes()),
                 dados.getAdesao() + "%"};
         int[] variacoes = {dados.getVariacaoParticipacao(), dados.getVariacaoDescartes(),
@@ -131,7 +131,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             nome.setMinHeight(dp(28));
             adicionarTexto(card, valores[i], 18, R.color.verde_escuro_principal, true);
             String variacao = (variacoes[i] > 0 ? "+" : "") + variacoes[i] + "%";
-            adicionarTexto(card, variacao + "  vs. mês anterior", 8,
+            adicionarTexto(card, getString(R.string.sindico_variacao_mes, variacao), 8,
                     variacoes[i] < 0 ? R.color.rosa_ecociente : R.color.verde_escuro_principal, false);
         }
     }

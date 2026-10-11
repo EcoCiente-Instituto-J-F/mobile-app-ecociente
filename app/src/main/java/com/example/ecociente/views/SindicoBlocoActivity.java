@@ -20,10 +20,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.model.SindicoApartamento;
 import com.example.ecociente.model.SindicoItemUnidade;
 import com.example.ecociente.viewmodels.SindicoUnidadesViewModel;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Locale;
@@ -82,7 +82,7 @@ public final class SindicoBlocoActivity extends AppCompatActivity {
                 SindicoAdicionarUnidadeDialogFragment.RESULTADO_UNIDADE, this,
                 (chave, resultado) -> {
                     mostrarApartamentos();
-                    Snackbar.make(raiz, "Unidade salva somente nesta demonstração.",
+                    Snackbar.make(raiz, R.string.sindico_unidade_salva_somente_nesta_demons,
                             Snackbar.LENGTH_LONG).show();
                 });
 
@@ -110,20 +110,21 @@ public final class SindicoBlocoActivity extends AppCompatActivity {
             ((TextView) linha.findViewById(R.id.numeroApartamentoSindico))
                     .setText(apartamento.getNumero());
             ((TextView) linha.findViewById(R.id.moradorApartamentoSindico))
-                    .setText(apartamento.isVinculado() ? "Morador: " + apartamento.getMorador()
-                            : "Sem responsável vinculado");
+                    .setText(apartamento.isVinculado()
+                            ? getString(R.string.sindico_morador_nome, apartamento.getMorador())
+                            : getString(R.string.sindico_sem_responsavel_vinculado));
             TextView status = linha.findViewById(R.id.statusApartamentoSindico);
-            status.setText(apartamento.isVinculado() ? "Vinculado" : "Sem vínculo");
+            status.setText(apartamento.isVinculado() ? R.string.sindico_vinculado : R.string.sindico_sem_vinculo);
             status.setBackgroundResource(apartamento.isVinculado()
                     ? R.drawable.sindico_unidade_vinculada
                     : R.drawable.sindico_unidade_sem_vinculo);
             status.setTextColor(getColor(apartamento.isVinculado()
                     ? R.color.verde_escuro_principal : R.color.cinza_texto_home));
             ImageButton editar = linha.findViewById(R.id.editarApartamentoSindico);
-            editar.setContentDescription("Editar " + apartamento.getNumero());
+            editar.setContentDescription(getString(R.string.sindico_editar_item, apartamento.getNumero()));
             editar.setOnClickListener(view -> abrirFormulario(apartamento.getId()));
             ImageButton excluir = linha.findViewById(R.id.excluirApartamentoSindico);
-            excluir.setContentDescription("Excluir " + apartamento.getNumero());
+            excluir.setContentDescription(getString(R.string.sindico_excluir_item, apartamento.getNumero()));
             excluir.setOnClickListener(view -> confirmarExclusao(apartamento));
             LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(-1, dp(64));
             parametros.bottomMargin = dp(10);
@@ -131,8 +132,7 @@ public final class SindicoBlocoActivity extends AppCompatActivity {
         }
         if (encontrados == 0) {
             TextView vazio = new TextView(this);
-            vazio.setText(filtro.isEmpty() ? "Nenhuma unidade cadastrada neste bloco."
-                    : "Nenhuma unidade corresponde à busca.");
+            vazio.setText(filtro.isEmpty() ? R.string.sindico_nenhuma_unidade_cadastrada_neste_b : R.string.sindico_nenhuma_unidade_corresponde_a_busc);
             vazio.setTextColor(getColor(R.color.cinza_texto_home));
             vazio.setTextSize(14);
             vazio.setPadding(dp(8), dp(24), dp(8), dp(24));
@@ -148,18 +148,18 @@ public final class SindicoBlocoActivity extends AppCompatActivity {
     }
 
     private void confirmarExclusao(SindicoApartamento apartamento) {
-        new MaterialAlertDialogBuilder(this)
-                .setTitle("Excluir " + apartamento.getNumero() + "?")
-                .setMessage("A exclusão afeta apenas os dados locais desta demonstração.")
-                .setNegativeButton("Cancelar", null)
-                .setPositiveButton("Excluir", (dialogo, botao) -> {
+        new DialogoEco.Builder(this)
+                .titulo(getString(R.string.sindico_excluir_titulo, apartamento.getNumero()))
+                .mensagem(R.string.sindico_a_exclusao_afeta_apenas_os_dados_l)
+                .botao(R.string.perfil_cancelar, DialogoEco.Estilo.PREENCHIDO, null)
+                .botao(R.string.perfil_excluir_confirmar, DialogoEco.Estilo.PERIGO, () -> {
                     viewModel.excluirApartamento(apartamento.getId());
                     mostrarApartamentos();
                     Snackbar.make(findViewById(R.id.raizSindicoBloco),
-                            "Unidade removida desta demonstração.",
+                            R.string.sindico_unidade_removida_desta_demonstraca,
                             Snackbar.LENGTH_LONG).show();
                 })
-                .show();
+                .mostrar();
     }
 
     private void navegar(Class<?> destino) {

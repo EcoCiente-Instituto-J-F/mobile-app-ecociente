@@ -27,8 +27,8 @@ public final class SindicoGraficoView extends View {
                 && novosValores.length == novasDatas.length && novosValores.length > 1) {
             valores = novosValores.clone();
             datas = novasDatas.clone();
-            setContentDescription("Evolução dos descartes: " + valores[0] + " em " + datas[0]
-                    + " até " + valores[valores.length - 1] + " em " + datas[datas.length - 1]);
+            setContentDescription(getContext().getString(R.string.sindico_grafico_descricao, valores[0], datas[0],
+                    valores[valores.length - 1], datas[datas.length - 1]));
             invalidate();
         }
     }

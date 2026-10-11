@@ -41,12 +41,12 @@ public final class SindicoCriarAvisoDialogFragment extends DialogFragment {
             String tituloTexto = titulo.getText().toString().trim();
             String mensagemTexto = mensagem.getText().toString().trim();
             if (tituloTexto.isEmpty()) {
-                titulo.setError("Informe um título.");
+                titulo.setError(getString(R.string.sindico_informe_um_titulo));
                 titulo.requestFocus();
                 return;
             }
             if (mensagemTexto.isEmpty()) {
-                mensagem.setError("Escreva a mensagem do aviso.");
+                mensagem.setError(getString(R.string.sindico_escreva_a_mensagem_do_aviso));
                 mensagem.requestFocus();
                 return;
             }

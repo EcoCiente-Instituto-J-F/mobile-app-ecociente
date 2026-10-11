@@ -59,9 +59,9 @@ public final class SindicoBottomBar extends FrameLayout {
             textos[i].setTextColor(cor);
             textos[i].setTypeface(ResourcesCompat.getFont(getContext(), selecionada
                     ? R.font.nunito_bold : R.font.nunito_regular));
-            abas[i].setContentDescription(textos[i].getText() + (selecionada
-                    ? ", aba selecionada" : i <= Aba.UNIDADES.ordinal()
-                    ? ", abrir aba" : ", indisponível nesta demonstração"));
+            abas[i].setContentDescription(getContext().getString(selecionada
+                    ? R.string.sindico_aba_selecionada : i <= Aba.UNIDADES.ordinal()
+                    ? R.string.sindico_aba_abrir : R.string.sindico_aba_indisponivel, textos[i].getText()));
         }
     }
 
@@ -69,31 +69,31 @@ public final class SindicoBottomBar extends FrameLayout {
         View home = abas[Aba.HOME.ordinal()];
         home.setOnClickListener(acao);
         home.setFocusable(acao != null);
-        home.setContentDescription(acao == null ? "Home do síndico, aba selecionada"
-                : "Voltar à home do síndico");
+        home.setContentDescription(getContext().getString(acao == null
+                ? R.string.sindico_home_do_sindico_aba_selecionada : R.string.sindico_voltar_a_home_do_sindico));
     }
 
     public void aoTocarSolicitacao(@Nullable View.OnClickListener acao) {
         View solicitacao = abas[Aba.SOLICITACAO.ordinal()];
         solicitacao.setOnClickListener(acao);
         solicitacao.setFocusable(acao != null);
-        solicitacao.setContentDescription(acao == null
-                ? "Solicitação, aba selecionada" : "Abrir solicitações de coleta");
+        solicitacao.setContentDescription(getContext().getString(acao == null
+                ? R.string.sindico_solicitacao_aba_selecionada : R.string.sindico_abrir_solicitacoes_de_coleta));
     }
 
     public void aoTocarHistorico(@Nullable View.OnClickListener acao) {
         View historico = abas[Aba.HISTORICO.ordinal()];
         historico.setOnClickListener(acao);
         historico.setFocusable(acao != null);
-        historico.setContentDescription(acao == null
-                ? "Histórico, aba selecionada" : "Abrir histórico de coletas");
+        historico.setContentDescription(getContext().getString(acao == null
+                ? R.string.sindico_historico_aba_selecionada : R.string.sindico_abrir_historico_de_coletas));
     }
 
     public void aoTocarUnidades(@Nullable View.OnClickListener acao) {
         View unidades = abas[Aba.UNIDADES.ordinal()];
         unidades.setOnClickListener(acao);
         unidades.setFocusable(acao != null);
-        unidades.setContentDescription(acao == null
-                ? "Unidades, aba selecionada" : "Abrir dados do condomínio");
+        unidades.setContentDescription(getContext().getString(acao == null
+                ? R.string.sindico_unidades_aba_selecionada : R.string.sindico_abrir_dados_do_condominio));
     }
 }

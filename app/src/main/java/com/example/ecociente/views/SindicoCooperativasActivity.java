@@ -87,7 +87,7 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
             View item = inflater.inflate(R.layout.item_sindico_cooperativa, lista, false);
             TextView nome = item.findViewById(R.id.nomeCooperativa);
             nome.setText(cooperativa.getNome());
-            nome.setContentDescription("Ver informações de " + cooperativa.getNome());
+            nome.setContentDescription(getString(R.string.sindico_ver_informacoes, cooperativa.getNome()));
             nome.setOnClickListener(view -> {
                 Intent informacoes = new Intent(this, SindicoInformacoesCooperativaActivity.class);
                 informacoes.putExtra(SindicoInformacoesCooperativaActivity.EXTRA_COOPERATIVA_ID,
@@ -95,9 +95,9 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
                 startActivity(informacoes);
             });
             ((TextView) item.findViewById(R.id.distanciaCooperativa))
-                    .setText("⌖ " + cooperativa.getDistancia());
+                    .setText(getString(R.string.sindico_distancia, cooperativa.getDistancia()));
             ((TextView) item.findViewById(R.id.avaliacaoCooperativa))
-                    .setText("★ " + cooperativa.getAvaliacao());
+                    .setText(getString(R.string.sindico_avaliacao_cooperativa, cooperativa.getAvaliacao()));
             Button acao = item.findViewById(R.id.acaoCooperativa);
             acao.setOnClickListener(view -> {
                 Intent formulario = new Intent(this, SindicoSolicitacaoColetaActivity.class);
@@ -111,7 +111,7 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
         }
         if (encontrados == 0) {
             TextView vazio = new TextView(this);
-            vazio.setText("Nenhuma cooperativa de exemplo encontrada.");
+            vazio.setText(R.string.sindico_nenhuma_cooperativa_de_exemplo_enc);
             vazio.setTextColor(getColor(R.color.cinza_texto_home));
             vazio.setTextSize(14);
             vazio.setPadding(8, 28, 8, 28);

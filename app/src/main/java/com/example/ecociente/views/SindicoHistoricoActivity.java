@@ -17,9 +17,9 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.model.SindicoHistoricoColeta;
 import com.example.ecociente.viewmodels.SindicoColetaViewModel;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 /** Histórico ilustrativo: avaliações ficam só na memória desta execução. */
@@ -63,7 +63,7 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
                 SindicoAvaliarColetaDialogFragment.RESULTADO_AVALIACAO, this,
                 (chave, resultado) -> {
                     mostrarHistorico();
-                    Snackbar.make(raiz, "Avaliação salva somente nesta demonstração.",
+                    Snackbar.make(raiz, R.string.sindico_avaliacao_salva_somente_nesta_demo,
                             Snackbar.LENGTH_LONG).show();
                 });
         mostrarHistorico();
@@ -86,12 +86,12 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
             FrameLayout acao = cartao.findViewById(R.id.acaoAvaliarHistorico);
             TextView textoAcao = cartao.findViewById(R.id.textoAcaoAvaliarHistorico);
             if (nota > 0) {
-                textoAcao.setText(nota + "/5 estrelas");
+                textoAcao.setText(getString(R.string.sindico_nota_texto, nota));
                 textoAcao.setBackgroundResource(R.drawable.sindico_status_concluida);
                 textoAcao.setTextColor(getColor(R.color.branco));
-                acao.setContentDescription("Avaliação local: " + nota + " de 5 estrelas. Toque para alterar.");
+                acao.setContentDescription(getString(R.string.sindico_avaliacao_local, nota));
             } else {
-                acao.setContentDescription("Avaliar coleta de " + coleta.getCooperativa());
+                acao.setContentDescription(getString(R.string.sindico_avaliar_coleta_de, coleta.getCooperativa()));
             }
             acao.setOnClickListener(view -> abrirAvaliacao(coleta));
             LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(-1, -2);
@@ -100,8 +100,7 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
         }
         if (encontrados == 0) {
             TextView vazio = new TextView(this);
-            vazio.setText(filtro == 1 ? "Todas as coletas de exemplo já foram avaliadas."
-                    : "Nenhuma coleta avaliada neste filtro.");
+            vazio.setText(filtro == 1 ? R.string.sindico_todas_as_coletas_de_exemplo_ja_for : R.string.sindico_nenhuma_coleta_avaliada_neste_filt);
             vazio.setTextColor(getColor(R.color.cinza_texto_home));
             vazio.setTextSize(14);
             vazio.setPadding(dp(8), dp(28), dp(8), dp(28));
@@ -110,16 +109,21 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
     }
 
     private void abrirFiltro() {
-        String[] opcoes = {"Todas", "Para avaliar", "Avaliadas"};
-        new MaterialAlertDialogBuilder(this)
-                .setTitle("Filtrar histórico")
-                .setSingleChoiceItems(opcoes, filtro, (dialogo, indice) -> {
-                    filtro = indice;
-                    mostrarHistorico();
-                    dialogo.dismiss();
-                })
-                .setNegativeButton("Cancelar", null)
-                .show();
+        new DialogoEco.Builder(this)
+                .titulo(R.string.sindico_filtrar_historico)
+                .botao(R.string.sindico_todas, filtro == 0 ? DialogoEco.Estilo.PREENCHIDO : DialogoEco.Estilo.CONTORNO,
+                        () -> aplicarFiltro(0))
+                .botao(R.string.sindico_para_avaliar, filtro == 1 ? DialogoEco.Estilo.PREENCHIDO : DialogoEco.Estilo.CONTORNO,
+                        () -> aplicarFiltro(1))
+                .botao(R.string.sindico_avaliadas, filtro == 2 ? DialogoEco.Estilo.PREENCHIDO : DialogoEco.Estilo.CONTORNO,
+                        () -> aplicarFiltro(2))
+                .botao(R.string.perfil_cancelar, DialogoEco.Estilo.CONTORNO, null)
+                .mostrar();
+    }
+
+    private void aplicarFiltro(int novoFiltro) {
+        filtro = novoFiltro;
+        mostrarHistorico();
     }
 
     private void abrirAvaliacao(SindicoHistoricoColeta coleta) {
