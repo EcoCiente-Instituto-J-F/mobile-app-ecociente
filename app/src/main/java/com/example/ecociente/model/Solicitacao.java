@@ -51,6 +51,12 @@ public final class Solicitacao implements Serializable {
         this.possuiRecorrencia = possuiRecorrencia;
     }
 
+    @NonNull
+    public Solicitacao comStatus(@NonNull StatusAgendamento novoStatus) {
+        return new Solicitacao(
+                id, condominioId, cooperativaId, dataInicio, dataFim, novoStatus, possuiRecorrencia, nomeCondominio, detalhe);
+    }
+
     @Nullable
     public DetalheSolicitacao getDetalhe() {
         return detalhe;
