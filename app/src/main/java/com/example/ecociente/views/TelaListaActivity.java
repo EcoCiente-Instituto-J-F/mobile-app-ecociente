@@ -107,11 +107,6 @@ public class TelaListaActivity extends AppCompatActivity {
                 atual = ItensBarra.QUARTO;
                 break;
 
-            case UNIDADES:
-                itens = ItensBarra.sindico();
-                atual = ItensBarra.QUARTO;
-                break;
-
             case RANKING:
                 itens = ItensBarra.morador();
                 break;
@@ -134,7 +129,7 @@ public class TelaListaActivity extends AppCompatActivity {
                     if (tipo == TipoLista.CONDOMINIOS || tipo == TipoLista.AVALIACOES) {
                         Navegacao.irParaItemDaCooperativa(this, indice, indiceAtual);
 
-                    } else if (tipo != TipoLista.UNIDADES) {
+                    } else {
                         Navegacao.irParaItemDoUsuario(this, indice, indiceAtual, morador);
                     }
                 });

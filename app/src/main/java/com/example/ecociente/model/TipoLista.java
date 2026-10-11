@@ -10,7 +10,6 @@ import java.util.List;
 public enum TipoLista {
     GUIA(R.string.guia, R.drawable.icon_guia_verde),
     FEED(R.string.feed, R.drawable.ic_nav_feed_verde),
-    UNIDADES(R.string.unidades, R.drawable.ic_nav_unidades_verde),
     CONDOMINIOS(R.string.condominios_atendidos, R.drawable.ic_perfil_cooperativa),
     AVALIACOES(R.string.avaliacoes_recebidas, R.drawable.ic_estrela),
     RANKING(R.string.ranking_do_morador, R.drawable.ic_trofeu);
@@ -43,15 +42,6 @@ public enum TipoLista {
                         new ItemLista("Meta de reciclagem do mês atingida", "O condomínio reciclou 320 kg em setembro", "Seg"),
                         new ItemLista("Lembrete: separe o óleo de cozinha", "Entregue em garrafas PET fechadas", "05/10"),
                         new ItemLista("Reunião de moradores sobre coleta", "Quinta-feira, 19h, no salão de festas", "02/10"));
-
-            case UNIDADES:
-                return Arrays.asList(
-                        new ItemLista("Bloco A · Apto 101", "Ana Paula Souza", "Ativo"),
-                        new ItemLista("Bloco A · Apto 102", "Carlos Eduardo Lima", "Ativo"),
-                        new ItemLista("Bloco A · Apto 201", "Marina Alves", "Pendente"),
-                        new ItemLista("Bloco B · Apto 101", "Rafael Mendes", "Ativo"),
-                        new ItemLista("Bloco B · Apto 302", "Juliana Costa", "Ativo"),
-                        new ItemLista("Bloco B · Apto 402", "Pedro Henrique Dias", "Pendente"));
 
             case CONDOMINIOS:
                 return Arrays.asList(
