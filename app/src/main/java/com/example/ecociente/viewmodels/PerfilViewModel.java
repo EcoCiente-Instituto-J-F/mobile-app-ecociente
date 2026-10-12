@@ -10,6 +10,8 @@ import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.PreferenciasNotificacao;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.ResultadoUploadFoto;
+import com.example.ecociente.repository.AtualizacaoExternaRepository;
+import com.example.ecociente.repository.ConsultaCepRepository;
 import com.example.ecociente.repository.FotoPerfilRepository;
 import com.example.ecociente.repository.PerfilRepository;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,6 +19,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class PerfilViewModel extends ViewModelComCarregamento {
     private final PerfilRepository repositorio = new PerfilRepository();
     private final FotoPerfilRepository fotoRepositorio = new FotoPerfilRepository();
+    private final AtualizacaoExternaRepository atualizacaoExterna = new AtualizacaoExternaRepository();
+    private final ConsultaCepRepository consultaCep = new ConsultaCepRepository();
 
     @Nullable
     public FirebaseUser usuarioAtual() {
@@ -36,6 +40,19 @@ public class PerfilViewModel extends ViewModelComCarregamento {
     public LiveData<ResultadoApi> atualizarCampo(
             @NonNull String uid, @NonNull String campo, @NonNull Object valor) {
         return executar(repositorio.atualizarCampo(uid, campo, valor));
+    }
+
+    public void sincronizarCampoComApi(
+            @NonNull Context contexto,
+            @NonNull String campo,
+            @NonNull String valor,
+            @Nullable PerfilUsuario perfil) {
+        atualizacaoExterna.sincronizarCampo(contexto, campo, valor, perfil);
+    }
+
+    public void buscarLocalidadePorCep(
+            @NonNull String cep, @NonNull ConsultaCepRepository.Retorno retorno) {
+        consultaCep.buscar(cep, retorno);
     }
 
     @NonNull
