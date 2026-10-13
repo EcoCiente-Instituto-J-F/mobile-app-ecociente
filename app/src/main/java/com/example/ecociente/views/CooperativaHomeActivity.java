@@ -80,7 +80,7 @@ public class CooperativaHomeActivity extends AppCompatActivity {
                                                 this, CentralNotificacoesActivity.Destino.COOPERATIVA)));
 
         findViewById(R.id.cardAvisosCooperativa)
-                .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, true)));
+                .setOnClickListener(view -> startActivity(CentralNotificacoesActivity.criarIntent(this, CentralNotificacoesActivity.Destino.COOPERATIVA)));
 
         findViewById(R.id.cardChatbotCooperativa)
                 .setOnClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));

@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         configurarBarra();
 
         findViewById(R.id.botaoNotificacoes)
-                .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, false)));
+                .setOnClickListener(view -> startActivity(CentralNotificacoesActivity.criarIntent(this, CentralNotificacoesActivity.Destino.CONDOMINIO)));
 
         observarFoto();
 

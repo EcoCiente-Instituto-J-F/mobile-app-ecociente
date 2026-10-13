@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/raizCentralNotificacoes"
     android:layout_width="match_parent"
@@ -31,10 +32,6 @@
 
     </LinearLayout>
 
-    <include
-        android:id="@+id/abasCentral"
-        layout="@layout/view_abas_central" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -49,5 +46,31 @@
             android:paddingBottom="24dp" />
 
     </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botaoNovaNotificacaoCentral"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="22dp"
+        android:fontFamily="@font/nunito_semibold"
+        android:text="@string/nova_notificacao"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:backgroundTint="@color/verde_escuro_principal"
+        app:cornerRadius="28dp"
+        app:icon="@drawable/ic_adicionar"
+        app:iconGravity="textStart"
+        app:iconPadding="10dp"
+        app:iconTint="@color/branco" />
+
+    <com.example.ecociente.ui.BarraNavegacaoView
+        android:id="@+id/barraInferiorCentral"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
 </LinearLayout>

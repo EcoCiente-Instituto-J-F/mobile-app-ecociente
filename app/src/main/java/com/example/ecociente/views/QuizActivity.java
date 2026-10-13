@@ -160,7 +160,7 @@ public class QuizActivity extends AppCompatActivity {
         Motion.pressFeedback(findViewById(R.id.botaoNotificacoesQuiz));
 
         findViewById(R.id.botaoNotificacoesQuiz)
-                .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, false)));
+                .setOnClickListener(view -> startActivity(CentralNotificacoesActivity.criarIntent(this, CentralNotificacoesActivity.Destino.CONDOMINIO)));
     }
 
     private void preencherListaQuizzes() {

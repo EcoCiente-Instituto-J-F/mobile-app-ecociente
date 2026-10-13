@@ -96,9 +96,6 @@
     <string name="sindico_nota_selecionada">%1$s, nota selecionada</string>
     <string name="sindico_informe_um_titulo">Informe um título.</string>
     <string name="sindico_escreva_a_mensagem_do_aviso">Escreva a mensagem do aviso.</string>
-    <string name="sindico_nenhum_aviso_por_enquanto_crie_um">Nenhum aviso por enquanto. Crie um rascunho para começar.</string>
-    <string name="sindico_aviso_autor_momento">%1$s  ·  %2$s</string>
-    <string name="sindico_aviso_descricao">%1$s. %2$s. Toque para ler o aviso completo.</string>
     <string name="sindico_aviso_detalhe">%1$s\n\nDestinatário: %2$s\nAutor: %3$s · %4$s</string>
     <string name="sindico_rascunho_local_ainda_nao_enviado">Rascunho local, ainda não enviado.</string>
     <string name="sindico_unidade_salva_somente_nesta_demons">Unidade salva somente nesta demonstração.</string>

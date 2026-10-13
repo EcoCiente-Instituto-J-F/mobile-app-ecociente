@@ -1,8 +1,6 @@
 <resources>
     <string name="sindico_saudacao_demo">Olá, Júlio!</string>
     <string name="sindico_condominio_demo">Condomínio Residencial Jardim das Flores</string>
-    <string name="sindico_avisos">Avisos</string>
-    <string name="sindico_nova_notificacao">Nova notificação</string>
     <string name="sindico_rascunho_salvo">Rascunho salvo nesta sessão. O envio aos moradores estará disponível após a integração com a API.</string>
 
     <string name="app_name">
@@ -445,8 +443,9 @@
 
     <!-- Avisos -->
     <string name="avisos">Avisos</string>
-    <string name="avisos_subtitulo">Faça seu descarte sustentável e ajude o meio ambiente!</string>
-    <string name="sem_avisos">Nenhum aviso por aqui.</string>
+    <string name="grupo_hoje">Hoje</string>
+    <string name="grupo_ontem">Ontem</string>
+    <string name="grupo_anteriores">Anteriores</string>
     <string name="nova_notificacao">Nova notificação</string>
     <string name="destinatarios">Destinatários</string>
     <string name="titulo_aviso">Título</string>
