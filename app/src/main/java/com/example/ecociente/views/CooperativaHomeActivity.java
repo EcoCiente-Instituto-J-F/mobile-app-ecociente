@@ -151,10 +151,18 @@ public class CooperativaHomeActivity extends AppCompatActivity {
 
         carregarPerfil();
 
-        Aviso recente = Aviso.exemplos().get(0);
+        TextView avisoDestaque = findViewById(R.id.textoAvisoDestaqueCooperativa);
+        TextView avisoOrigem = findViewById(R.id.textoAvisoOrigemCooperativa);
 
-        ((TextView) findViewById(R.id.textoAvisoDestaqueCooperativa)).setText(recente.titulo);
-        ((TextView) findViewById(R.id.textoAvisoOrigemCooperativa)).setText(recente.remetente);
+        if (Aviso.lista().isEmpty()) {
+            avisoDestaque.setText(R.string.sem_avisos);
+            avisoOrigem.setText("");
+        } else {
+            Aviso recente = Aviso.lista().get(0);
+
+            avisoDestaque.setText(recente.titulo);
+            avisoOrigem.setText(recente.remetente);
+        }
 
         findViewById(R.id.pontoAvisosCooperativa)
                 .setVisibility(Aviso.quantidadeNaoLidos() > 0 ? View.VISIBLE : View.GONE);

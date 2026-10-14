@@ -444,6 +444,8 @@
     <!-- Avisos -->
     <string name="avisos">Avisos</string>
     <string name="grupo_hoje">Hoje</string>
+    <string name="central_sem_itens">Nenhuma notificação ou aviso por enquanto.</string>
+    <string name="sem_avisos">Nenhum aviso por aqui.</string>
     <string name="grupo_ontem">Ontem</string>
     <string name="grupo_anteriores">Anteriores</string>
     <string name="nova_notificacao">Nova notificação</string>

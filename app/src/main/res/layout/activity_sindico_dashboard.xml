@@ -73,7 +73,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="80"
+                            android:text="@string/valor_indisponivel"
                             android:textColor="@color/verde_escuro_principal"
                             android:textSize="26sp" />
                         <TextView
@@ -95,7 +95,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="1.200"
+                            android:text="@string/valor_indisponivel"
                             android:textColor="@color/verde_escuro_principal"
                             android:textSize="26sp" />
                         <TextView
@@ -117,7 +117,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_bold"
-                            android:text="@string/sindico_300_pts"
+                            android:text="@string/valor_indisponivel"
                             android:textColor="@color/verde_escuro_principal"
                             android:textSize="26sp" />
                         <TextView
@@ -187,13 +187,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="170dp"
                     android:layout_marginTop="8dp"
-                    android:contentDescription="@string/sindico_papel_25_plastico_50_vidro_8_metal" />
+                    android:contentDescription="@string/sindico_materiais_reciclados" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_regular"
                     android:gravity="center"
-                    android:text="@string/sindico_papel_25_plastico_50_vidro_8_nmeta"
+                    android:text="@string/valor_indisponivel"
                     android:textColor="@color/cinza_texto_home"
                     android:textSize="12sp" />
             </LinearLayout>

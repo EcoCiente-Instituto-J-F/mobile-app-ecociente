@@ -12,14 +12,11 @@
     <string name="sindico_dashboard">Dashboard</string>
     <string name="sindico_total_de_aulas_concluidas">Total de aulas concluídas</string>
     <string name="sindico_moradores_utilizando_o_app">Moradores utilizando o app</string>
-    <string name="sindico_300_pts">300 pts</string>
     <string name="sindico_media_de_pontos_por_pessoa">Média de pontos por pessoa</string>
     <string name="sindico_quizzes_com_maiores_notas">Quizzes com maiores notas</string>
     <string name="sindico_notas_ilustrativas_compostagem_14">Notas ilustrativas: Compostagem 14, Vidro 18, Sustentabilidade 14 e Papel 26</string>
     <string name="sindico_deslize_para_ver_materiais_recicla">Deslize para ver materiais reciclados e análise por cooperativa</string>
     <string name="sindico_materiais_reciclados">Materiais reciclados</string>
-    <string name="sindico_papel_25_plastico_50_vidro_8_metal">Papel 25%, plástico 50%, vidro 8%, metal 12% e orgânico 5%</string>
-    <string name="sindico_papel_25_plastico_50_vidro_8_nmeta">Papel 25%  ·  Plástico 50%  ·  Vidro 8%\nMetal 12%  ·  Orgânico 5%</string>
     <string name="sindico_analise_por_cooperativa">Análise por cooperativa</string>
     <string name="sindico_coletas_ilustrativas_coop_estrela">Coletas ilustrativas: Coop Estrela 3, Coop Lua 9, Coop Sol 12 e Coop Verde 15</string>
     <string name="sindico_historico_de_coletas">Histórico de coletas</string>
@@ -183,4 +180,5 @@
     <string name="resposta_da_cooperativa">Resposta da cooperativa</string>
     <string name="resposta_da_cooperativa_texto">Podemos realizar a coleta na data combinada. Por favor, deixe o material separado por tipo.</string>
     <string name="coleta_confirmada_em">Coleta confirmada: %1$s • %2$s</string>
+    <string name="valor_indisponivel">—</string>
 </resources>

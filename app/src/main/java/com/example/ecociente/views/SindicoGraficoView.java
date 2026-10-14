@@ -12,11 +12,11 @@ import androidx.core.content.ContextCompat;
 
 import com.example.ecociente.R;
 
-/** Gráfico de demonstração; os pontos vêm do modelo para futura troca da fonte de dados. */
+/** Evolução do descarte; os pontos vêm do modelo (API de dashboard). */
 public final class SindicoGraficoView extends View {
     private final Paint tinta = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private int[] valores = {90, 130, 175, 185, 300};
-    private String[] datas = {"01/mai", "08/mai", "15/mai", "22/mai", "29/mai"};
+    private int[] valores = new int[0];
+    private String[] datas = new String[0];
 
     public SindicoGraficoView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);

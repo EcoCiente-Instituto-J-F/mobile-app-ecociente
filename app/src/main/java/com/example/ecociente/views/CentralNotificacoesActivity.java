@@ -158,7 +158,7 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
         grupos.put(ontem, new ArrayList<>());
         grupos.put(anteriores, new ArrayList<>());
 
-        for (Notificacao notificacao : Notificacao.exemplos()) {
+        for (Notificacao notificacao : Notificacao.lista()) {
             List<View> grupo = grupos.get(notificacao.grupo);
 
             if (grupo != null) {
@@ -176,7 +176,7 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
                 grupos.get("Agora".equals(aviso.getMomento()) ? hoje : anteriores).add(cartao);
             }
         } else {
-            for (Aviso aviso : Aviso.exemplos()) {
+            for (Aviso aviso : Aviso.lista()) {
                 View cartao = CartoesCentral.aviso(inflador, lista, aviso);
 
                 cartao.setOnClickListener(
@@ -186,17 +186,32 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
             }
         }
 
+        boolean vazia = true;
+
         for (Map.Entry<String, List<View>> grupo : grupos.entrySet()) {
 
             if (grupo.getValue().isEmpty()) {
                 continue;
             }
 
+            vazia = false;
+
             lista.addView(rotuloDoGrupo(grupo.getKey()));
 
             for (View cartao : grupo.getValue()) {
                 lista.addView(cartao);
             }
+        }
+
+        if (vazia) {
+            TextView aviso = new TextView(this);
+
+            aviso.setText(R.string.central_sem_itens);
+            aviso.setTextColor(getColor(R.color.cinza_texto_auxiliar));
+            aviso.setTextSize(14);
+            aviso.setGravity(android.view.Gravity.CENTER);
+            aviso.setPadding(dp(22), dp(48), dp(22), dp(0));
+            lista.addView(aviso);
         }
     }
 

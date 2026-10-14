@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.StatusAgendamento;
 import com.example.ecociente.repository.CalendarioExternoRepository;
-import com.example.ecociente.repository.SolicitacoesExemplosRepository;
 
 public class ResponderSolicitacaoViewModel extends ViewModelComCarregamento {
 
@@ -18,14 +17,6 @@ public class ResponderSolicitacaoViewModel extends ViewModelComCarregamento {
             @NonNull Context contexto, int id, @NonNull StatusAgendamento resposta) {
 
         MutableLiveData<ResultadoApi> resultado = new MutableLiveData<>();
-
-        if (SolicitacoesViewModel.USAR_EXEMPLOS) {
-            SolicitacoesExemplosRepository.getInstance().alterarStatus(id, resposta);
-
-            resultado.setValue(ResultadoApi.sucesso());
-
-            return executar(resultado);
-        }
 
         repositorio.alterarStatus(contexto, id, resposta, resultado::setValue);
 

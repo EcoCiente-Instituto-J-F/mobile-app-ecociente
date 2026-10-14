@@ -98,7 +98,7 @@ public class MensagensActivity extends AppCompatActivity {
 
         LayoutInflater inflador = LayoutInflater.from(this);
 
-        for (Conversa conversa : sindico ? Conversa.exemplosDoSindico() : Conversa.exemplos()) {
+        for (Conversa conversa : Conversa.lista()) {
 
             if (!pertence(conversa, aba)) {
                 continue;

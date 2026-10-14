@@ -21,7 +21,7 @@ public final class SindicoDashboard {
                             String[] datasEvolucao,
                             String[] blocosRanking, String[] iniciaisRanking,
                             int[] pontosRanking) {
-        if (evolucao.length != datasEvolucao.length || evolucao.length < 2
+        if (evolucao.length != datasEvolucao.length
                 || blocosRanking.length != iniciaisRanking.length
                 || blocosRanking.length != pontosRanking.length) {
             throw new IllegalArgumentException("Dados de dashboard inconsistentes");

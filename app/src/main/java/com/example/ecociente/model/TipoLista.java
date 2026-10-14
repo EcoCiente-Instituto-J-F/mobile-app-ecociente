@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import com.example.ecociente.R;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public enum TipoLista {
@@ -44,45 +45,16 @@ public enum TipoLista {
                         new ItemLista("Reunião de moradores sobre coleta", "Quinta-feira, 19h, no salão de festas", "02/10"));
 
             case CONDOMINIOS:
-                return Arrays.asList(
-                        condominio("Condomínio Raio de Luz", "Rua das Flores, 120", "84 unidades", "Segunda e quinta"),
-                        condominio("Residencial Jardim das Flores", "Av. Brasil, 560", "120 unidades", "Terça e sexta"),
-                        condominio("Condomínio Vila Verde", "Rua das Palmeiras, 33", "56 unidades", "Quarta"),
-                        condominio("Edifício Solar", "Rua do Sol, 410", "72 unidades", "Segunda"),
-                        condominio("Residencial Aurora", "Rua da Aurora, 88", "40 unidades", "Quinta"));
+                // API: GET /api/v1/cooperativas/me/condominios
+                return Collections.emptyList();
 
             case AVALIACOES:
-                return Arrays.asList(
-                        new ItemLista("Condomínio Raio de Luz", "“Equipe pontual e muito educada.”", "5,0"),
-                        new ItemLista("Residencial Jardim das Flores", "“A coleta atrasou um pouco, mas avisaram.”", "4,0"),
-                        new ItemLista("Condomínio Vila Verde", "“Ótimo atendimento, recomendo.”", "5,0"),
-                        new ItemLista("Edifício Solar", "“Poderiam passar mais cedo.”", "3,5"),
-                        new ItemLista("Residencial Aurora", "“Tudo certo, sem reclamações.”", "4,5"));
+                // API: GET /api/v1/cooperativas/me/avaliacoes
+                return Collections.emptyList();
 
             default:
-                return Arrays.asList(
-                        new ItemLista("1º  Rafael Mendes", "Bloco B · Apto 402", "1.980 pts"),
-                        new ItemLista("2º  Ana Paula Souza", "Bloco A · Apto 101", "1.840 pts"),
-                        new ItemLista("3º  Marina Alves", "Bloco A · Apto 201", "1.720 pts"),
-                        new ItemLista("4º  Carlos Eduardo Lima", "Bloco A · Apto 102", "1.560 pts"),
-                        new ItemLista("5º  Juliana Costa", "Bloco B · Apto 302", "1.410 pts"),
-                        new ItemLista("6º  Pedro Henrique Dias", "Bloco B · Apto 101", "1.250 pts"));
+                // API: GET /api/v1/rankings/moradores?condominioId= (ds-pontuacao-api)
+                return Collections.emptyList();
         }
-    }
-
-    @NonNull
-    private static ItemLista condominio(
-            String nome, String endereco, String unidades, String diasDeColeta) {
-
-        return new ItemLista(
-                nome,
-                endereco + " · " + unidades,
-                diasDeColeta,
-                new String[][] {
-                    {"Endereço", endereco},
-                    {"Unidades", unidades},
-                    {"Dias de coleta", diasDeColeta},
-                    {"Atendido desde", "Março de 2026"}
-                });
     }
 }

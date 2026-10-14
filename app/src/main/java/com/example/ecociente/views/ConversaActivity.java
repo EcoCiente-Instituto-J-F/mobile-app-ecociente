@@ -92,10 +92,6 @@ public class ConversaActivity extends AppCompatActivity {
                     return true;
                 });
 
-        mensagens.addAll(
-                MensagemConversa.exemplos(
-                        getIntent().getStringExtra(EXTRA_PREVIA), getIntent().getStringExtra(EXTRA_HORA)));
-
         exibirMensagens();
     }
 

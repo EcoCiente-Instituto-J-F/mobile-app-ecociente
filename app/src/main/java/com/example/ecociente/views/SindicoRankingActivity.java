@@ -71,12 +71,18 @@ public final class SindicoRankingActivity extends AppCompatActivity {
 
         List<SindicoPosicaoRanking> posicoes = SindicoRankingRepository.getInstance()
                 .getRanking(porApartamento);
-        preencherPodio(posicoes.get(0), R.id.avatarPrimeiroRanking,
-                R.id.pontosPrimeiroRanking);
-        preencherPodio(posicoes.get(1), R.id.avatarSegundoRanking,
-                R.id.pontosSegundoRanking);
-        preencherPodio(posicoes.get(2), R.id.avatarTerceiroRanking,
-                R.id.pontosTerceiroRanking);
+        int[] avatares = {R.id.avatarPrimeiroRanking, R.id.avatarSegundoRanking,
+                R.id.avatarTerceiroRanking};
+        int[] pontos = {R.id.pontosPrimeiroRanking, R.id.pontosSegundoRanking,
+                R.id.pontosTerceiroRanking};
+        for (int i = 0; i < avatares.length; i++) {
+            if (i < posicoes.size()) {
+                preencherPodio(posicoes.get(i), avatares[i], pontos[i]);
+            } else {
+                ((TextView) findViewById(pontos[i])).setText("");
+                findViewById(avatares[i]).setContentDescription(null);
+            }
+        }
 
         LinearLayout lista = findViewById(R.id.listaSindicoRankingCompleta);
         lista.removeAllViews();
