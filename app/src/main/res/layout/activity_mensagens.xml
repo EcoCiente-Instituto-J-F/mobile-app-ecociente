@@ -12,6 +12,14 @@
     android:clipToPadding="false"
     tools:context=".views.MensagensActivity">
 
+    <ImageView
+        android:id="@+id/botaoVoltarMensagens"
+        style="@style/BotaoVoltar"
+        android:contentDescription="@string/voltar"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tituloMensagens"
         android:layout_width="wrap_content"
@@ -23,7 +31,7 @@
         android:textColor="@color/rosa_ecociente"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/botaoVoltarMensagens" />
 
     <EditText
         android:id="@+id/campoBuscaConversa"

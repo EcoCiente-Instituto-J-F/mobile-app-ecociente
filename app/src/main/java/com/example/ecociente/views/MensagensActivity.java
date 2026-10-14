@@ -51,6 +51,20 @@ public class MensagensActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_mensagens);
 
+        if (sindico) {
+            findViewById(R.id.botaoVoltarMensagens).setVisibility(android.view.View.VISIBLE);
+            findViewById(R.id.botaoVoltarMensagens).setOnClickListener(view -> finish());
+
+            android.widget.TextView titulo = findViewById(R.id.tituloMensagens);
+            titulo.setTextColor(getColor(R.color.verde_escuro_principal));
+            titulo.setTextSize(24);
+
+            android.view.ViewGroup.MarginLayoutParams margem =
+                    (android.view.ViewGroup.MarginLayoutParams) titulo.getLayoutParams();
+            margem.topMargin = Math.round(4 * getResources().getDisplayMetrics().density);
+            titulo.setLayoutParams(margem);
+        }
+
         lista = findViewById(R.id.listaConversas);
         textoSemConversas = findViewById(R.id.textoSemConversas);
         campoBusca = findViewById(R.id.campoBuscaConversa);
