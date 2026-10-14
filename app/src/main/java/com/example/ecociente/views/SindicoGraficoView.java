@@ -2,8 +2,11 @@ package com.example.ecociente.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
+import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -47,10 +50,12 @@ public final class SindicoGraficoView extends View {
         tinta.setStyle(Paint.Style.STROKE);
         tinta.setStrokeWidth(dp(1));
         tinta.setColor(ContextCompat.getColor(getContext(), R.color.cinza_borda_clara_home));
+        tinta.setPathEffect(new DashPathEffect(new float[] {dp(4), dp(4)}, 0));
         for (int i = 0; i <= 3; i++) {
             float y = base - altura * i / 3f;
             canvas.drawLine(esquerda, y, direita, y, tinta);
         }
+        tinta.setPathEffect(null);
 
         tinta.setStyle(Paint.Style.FILL);
         tinta.setColor(ContextCompat.getColor(getContext(), R.color.cinza_texto_home));
@@ -69,15 +74,35 @@ public final class SindicoGraficoView extends View {
             canvas.drawText(data, x - tinta.measureText(data) / 2f, getHeight() - dp(6), tinta);
         }
 
-        tinta.setColor(ContextCompat.getColor(getContext(), R.color.verde_escuro_principal));
+        if (valores.length < 2) return;
+
+        // área sob a linha, em rosa que some para baixo
+        Path area = new Path(linha);
+        area.lineTo(direita, base);
+        area.lineTo(esquerda, base);
+        area.close();
+        int rosa = ContextCompat.getColor(getContext(), R.color.rosa_ecociente);
+        tinta.setStyle(Paint.Style.FILL);
+        tinta.setShader(new LinearGradient(0, topo, 0, base,
+                (rosa & 0x00FFFFFF) | 0x66000000, (rosa & 0x00FFFFFF) | 0x08000000,
+                Shader.TileMode.CLAMP));
+        canvas.drawPath(area, tinta);
+        tinta.setShader(null);
+
+        int verde = ContextCompat.getColor(getContext(), R.color.verde_escuro_principal);
+        tinta.setColor(verde);
         tinta.setStyle(Paint.Style.STROKE);
         tinta.setStrokeWidth(dp(2));
         canvas.drawPath(linha, tinta);
-        tinta.setStyle(Paint.Style.FILL);
         for (int i = 0; i < valores.length; i++) {
             float x = esquerda + largura * i / (valores.length - 1);
             float y = base - altura * Math.min(300, Math.max(0, valores[i])) / 300f;
-            canvas.drawCircle(x, y, dp(3), tinta);
+            tinta.setStyle(Paint.Style.FILL);
+            tinta.setColor(ContextCompat.getColor(getContext(), R.color.branco));
+            canvas.drawCircle(x, y, dp(4), tinta);
+            tinta.setStyle(Paint.Style.STROKE);
+            tinta.setColor(verde);
+            canvas.drawCircle(x, y, dp(4), tinta);
         }
     }
 

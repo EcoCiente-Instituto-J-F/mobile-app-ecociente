@@ -146,23 +146,42 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         for (int i = 0; i < nomes.length; i++) {
             LinearLayout card = new LinearLayout(this);
             card.setOrientation(LinearLayout.VERTICAL);
-            card.setPadding(dp(7), dp(8), dp(7), dp(6));
+            card.setPadding(dp(8), dp(10), dp(8), dp(8));
             card.setBackgroundResource(R.drawable.sindico_card);
-            LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(0, dp(116), 1);
-            if (i > 0) parametros.leftMargin = dp(5);
+            LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(0, -2, 1);
+            if (i > 0) parametros.leftMargin = dp(6);
             painel.addView(card, parametros);
 
+            // ícone dentro de um círculo verde-claro, como no design
+            android.widget.FrameLayout circulo = new android.widget.FrameLayout(this);
+            circulo.setBackgroundResource(R.drawable.sindico_icone_circulo);
+            card.addView(circulo, new LinearLayout.LayoutParams(dp(30), dp(30)));
             android.widget.ImageView icone = new android.widget.ImageView(this);
             icone.setImageResource(icones[i]);
             icone.setContentDescription(null);
-            card.addView(icone, new LinearLayout.LayoutParams(dp(21), dp(21)));
+            android.widget.FrameLayout.LayoutParams dentro =
+                    new android.widget.FrameLayout.LayoutParams(dp(18), dp(18), Gravity.CENTER);
+            circulo.addView(icone, dentro);
+
             TextView nome = adicionarTexto(card, nomes[i], 11, R.color.cinza_texto_home, false);
             nome.setMaxLines(2);
-            nome.setMinHeight(dp(28));
-            adicionarTexto(card, valores[i], 18, R.color.verde_escuro_principal, true);
-            String variacao = (variacoes[i] > 0 ? "+" : "") + variacoes[i] + "%";
-            adicionarTexto(card, getString(R.string.sindico_variacao_mes, variacao), 11,
-                    variacoes[i] < 0 ? R.color.rosa_ecociente : R.color.verde_escuro_principal, false);
+            nome.setMinLines(2);
+            ((LinearLayout.LayoutParams) nome.getLayoutParams()).topMargin = dp(8);
+            nome.setLayoutParams(nome.getLayoutParams());
+
+            adicionarTexto(card, valores[i], 22, R.color.verde_escuro_principal, true);
+
+            LinearLayout linha = new LinearLayout(this);
+            linha.setGravity(Gravity.CENTER_VERTICAL);
+            card.addView(linha, new LinearLayout.LayoutParams(-1, -2));
+
+            boolean queda = variacoes[i] < 0;
+            int cor = queda ? R.color.rosa_ecociente : R.color.verde_escuro_principal;
+            TextView variacao = adicionarTexto(linha,
+                    (queda ? "↓ " : "↑ ") + Math.abs(variacoes[i]) + "%", 12, cor, true);
+            variacao.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1));
+            adicionarTexto(linha, getString(R.string.sindico_vs_mes_anterior), 8,
+                    R.color.cinza_texto_auxiliar, false);
         }
     }
 
@@ -174,22 +193,22 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         for (int i = 0; i < blocos.length; i++) {
             LinearLayout linha = new LinearLayout(this);
             linha.setGravity(Gravity.CENTER_VERTICAL);
-            linha.setMinimumHeight(dp(46));
-            ranking.addView(linha, new LinearLayout.LayoutParams(-1, dp(46)));
+            linha.setMinimumHeight(dp(52));
+            ranking.addView(linha, new LinearLayout.LayoutParams(-1, dp(52)));
 
-            adicionarTexto(linha, (i + 1) + "º", 14, R.color.cinza_texto_home, true);
-            TextView avatar = adicionarTexto(linha, iniciais[i], 11, R.color.branco, true);
+            adicionarTexto(linha, (i + 1) + "º", 16, R.color.cinza_texto_home, true);
+            TextView avatar = adicionarTexto(linha, iniciais[i], 12, R.color.branco, true);
             avatar.setGravity(Gravity.CENTER);
             avatar.setBackgroundResource(R.drawable.sindico_avatar_ranking);
-            LinearLayout.LayoutParams avatarParams = new LinearLayout.LayoutParams(dp(27), dp(27));
-            avatarParams.leftMargin = dp(10);
-            avatarParams.rightMargin = dp(10);
+            LinearLayout.LayoutParams avatarParams = new LinearLayout.LayoutParams(dp(32), dp(32));
+            avatarParams.leftMargin = dp(12);
+            avatarParams.rightMargin = dp(12);
             avatar.setLayoutParams(avatarParams);
 
-            TextView nome = adicionarTexto(linha, blocos[i], 12, R.color.preto_texto_home, true);
+            TextView nome = adicionarTexto(linha, blocos[i], 14, R.color.preto_texto_home, true);
             nome.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1));
             adicionarTexto(linha, String.format(Locale.forLanguageTag("pt-BR"), "%,d pts", pontos[i]),
-                    11, R.color.cinza_texto_home, true);
+                    13, R.color.cinza_texto_home, true);
         }
     }
 
