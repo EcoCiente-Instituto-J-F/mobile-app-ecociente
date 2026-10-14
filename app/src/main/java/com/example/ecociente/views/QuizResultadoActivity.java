@@ -77,6 +77,12 @@ public class QuizResultadoActivity extends AppCompatActivity {
         branco = ContextCompat.getColor(this, R.color.branco);
 
         perguntas = QuizConteudo.obterPerguntas();
+
+        if (perguntas.isEmpty()) {
+            finish();
+            return;
+        }
+
         categoria = getIntent().getStringExtra(EXTRA_CATEGORIA);
         if (categoria == null || categoria.trim().isEmpty()) {
             categoria = getString(R.string.inicio_quiz_titulo_padrao);
@@ -118,22 +124,35 @@ public class QuizResultadoActivity extends AppCompatActivity {
     private int calcularPontuacao() {
         int acertos = 0;
         for (int i = 0; i < perguntas.size(); i++) {
-            if (respostas[i] == perguntas.get(i).getIndiceCorreto()) {
+            if (acertou(i)) {
                 acertos++;
             }
         }
         return acertos;
     }
 
+    private boolean acertou(int indice) {
+        int correta = perguntas.get(indice).getIndiceCorreto();
+
+        return correta >= 0 && respostas[indice] == correta;
+    }
+
     private void preencherResultado() {
+        listaResultados.removeAllViews();
+
+        // A API ainda não manda o gabarito: sem ele só dá para confirmar o envio das respostas.
+        if (!QuizConteudo.temGabarito()) {
+            textoPontuacao.setText(R.string.quiz_resultado_sem_nota);
+            textoMensagem.setText(R.string.quiz_resultado_sem_gabarito);
+            return;
+        }
+
         textoPontuacao.setText(String.format(Locale.getDefault(), "%02d/%02d", 0, perguntas.size()));
         textoMensagem.setText(mensagemParaPontuacao());
 
-        listaResultados.removeAllViews();
-
         for (int i = 0; i < perguntas.size(); i++) {
             QuizConteudo.Pergunta pergunta = perguntas.get(i);
-            boolean acertou = respostas[i] == pergunta.getIndiceCorreto();
+            boolean acertou = acertou(i);
             View item = criarItemResultado(i, pergunta, acertou);
             listaResultados.addView(item);
             motion.fadeUp(item, 180L + (i * 34L));
@@ -316,6 +335,10 @@ public class QuizResultadoActivity extends AppCompatActivity {
         motion.fadeUp(findViewById(R.id.cardResumoResultado), 130L);
         motion.fadeUp(findViewById(R.id.botaoFinalizarResultadoQuiz), 190L);
         motion.fadeUp(findViewById(R.id.botaoRepetirResultadoQuiz), 235L);
+
+        if (!QuizConteudo.temGabarito()) {
+            return;
+        }
 
         ValueAnimator contador = ValueAnimator.ofInt(0, pontuacao);
         contador.setDuration(850L);

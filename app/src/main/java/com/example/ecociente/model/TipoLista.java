@@ -28,13 +28,8 @@ public enum TipoLista {
 
         switch (this) {
             case GUIA:
-                return Arrays.asList(
-                        new ItemLista("Como separar o lixo reciclável", "Guia básico da coleta seletiva", "5 min"),
-                        new ItemLista("Compostagem caseira", "Transforme restos de comida em adubo", "7 min"),
-                        new ItemLista("Descarte correto de eletrônicos", "Onde levar pilhas, baterias e celulares", "4 min"),
-                        new ItemLista("Reduzindo o uso de plástico", "Pequenas trocas que fazem diferença", "6 min"),
-                        new ItemLista("O que não vai na coleta seletiva", "Evite contaminar o material reciclável", "3 min"),
-                        new ItemLista("Lavar embalagens sem desperdiçar água", "Dicas para economizar na limpeza", "4 min"));
+                // Carregado da ds-mobile-api em TelaListaActivity (aulas dos cursos).
+                return Collections.emptyList();
 
             case FEED:
                 return Arrays.asList(

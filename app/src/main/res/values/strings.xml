@@ -477,6 +477,14 @@
     <string name="nome_cooperativa">Nome da cooperativa</string>
     <string name="nome_responsavel">Nome do responsável</string>
     <string name="solicitacao">Solicitação</string>
-    <string name="solicitacoes">Solicitações</string>
     <string name="unidades">Unidades</string>
+    <string name="quizzes_carregando">Carregando quizzes…</string>
+    <string name="quizzes_erro">Não foi possível carregar os quizzes. Entre com e-mail e senha e tente de novo.</string>
+    <string name="quiz_n_perguntas">%1$d perguntas</string>
+    <string name="quiz_pontos_recompensa">+%1$d pts</string>
+    <string name="quiz_resultado_sem_nota">--/--</string>
+    <string name="quiz_resultado_sem_gabarito">Respostas registradas. A correção aparece quando o gabarito estiver disponível.</string>
+    <string name="guia_carregando">Carregando o guia…</string>
+    <string name="guia_erro">Não foi possível carregar o guia. Entre com e-mail e senha e tente de novo.</string>
+    <string name="guia_vazio">Nenhum conteúdo por enquanto.</string>
 </resources>

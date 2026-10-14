@@ -159,10 +159,11 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_calendario" />
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ilustracao_calendario" />
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"

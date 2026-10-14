@@ -15,6 +15,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ecociente.R;
+import com.example.ecociente.model.QuizConteudo;
+import com.example.ecociente.model.QuizResumo;
+import com.example.ecociente.repository.EducacaoRepository;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
@@ -41,78 +44,9 @@ public class QuizActivity extends AppCompatActivity {
 
     private BarraNavegacaoView barra;
 
-    private static final QuizItem[] QUIZZES = {
-            new QuizItem(
-                    "Tipos de plástico e reciclagem",
-                    "Plástico",
-                    "10 perguntas",
-                    "6 min",
-                    "80% de acerto"
-            ),
-            new QuizItem(
-                    "Impacto do lixo no meio ambiente",
-                    "Sustentabilidade",
-                    "8 perguntas",
-                    "4 min",
-                    "75% de acerto"
-            ),
-            new QuizItem(
-                    "Descarte correto de eletrônicos",
-                    "Eletrônicos",
-                    "10 perguntas",
-                    "6 min",
-                    null
-            ),
-            new QuizItem(
-                    "Como fazer compostagem em casa",
-                    "Compostagem",
-                    "7 perguntas",
-                    "4 min",
-                    "90% de acerto"
-            ),
-            new QuizItem(
-                    "Descarte de papel e papelão",
-                    "Papel",
-                    "9 perguntas",
-                    "5 min",
-                    null
-            ),
-            new QuizItem(
-                    "Pegada de carbono no dia a dia",
-                    "Sustentabilidade",
-                    "10 perguntas",
-                    "6 min",
-                    null
-            ),
-            new QuizItem(
-                    "Economia de água em casa",
-                    "Água",
-                    "8 perguntas",
-                    "5 min",
-                    null
-            ),
-            new QuizItem(
-                    "Coleta seletiva sem erros",
-                    "Reciclagem",
-                    "12 perguntas",
-                    "7 min",
-                    "85% de acerto"
-            ),
-            new QuizItem(
-                    "Consumo consciente no cotidiano",
-                    "Consumo",
-                    "9 perguntas",
-                    "5 min",
-                    null
-            ),
-            new QuizItem(
-                    "Reciclagem de vidro e metal",
-                    "Materiais",
-                    "11 perguntas",
-                    "6 min",
-                    null
-            )
-    };
+    private final List<QuizItem> quizzes = new ArrayList<>();
+
+    private final EducacaoRepository repositorio = new EducacaoRepository();
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -148,12 +82,46 @@ public class QuizActivity extends AppCompatActivity {
         barra = findViewById(R.id.barraNavegacao);
 
         configurarCabecalho();
-        preencherListaQuizzes();
         configurarBusca();
         configurarNavegacao();
-        atualizarQuantidadeQuizzes(QUIZZES.length);
         animarEntradaDaTela();
         mostrarBarra();
+        carregarQuizzes();
+    }
+
+    private void carregarQuizzes() {
+        textoQuantidadeQuizzes.setText(R.string.quizzes_carregando);
+
+        repositorio.listarQuizzes(
+                this,
+                (sucesso, itens) -> {
+                    if (isFinishing() || isDestroyed()) {
+                        return;
+                    }
+
+                    if (!sucesso) {
+                        textoQuantidadeQuizzes.setText(R.string.quizzes_erro);
+                        return;
+                    }
+
+                    quizzes.clear();
+
+                    for (QuizResumo quiz : itens) {
+                        quizzes.add(
+                                new QuizItem(
+                                        quiz.getTitulo(),
+                                        quiz.getCategoria(),
+                                        getString(R.string.quiz_n_perguntas, quiz.getPerguntas().size()),
+                                        quiz.getPontos() > 0
+                                                ? getString(R.string.quiz_pontos_recompensa, quiz.getPontos())
+                                                : "",
+                                        null,
+                                        quiz.getPerguntas()));
+                    }
+
+                    preencherListaQuizzes();
+                    atualizarQuantidadeQuizzes(quizzes.size());
+                });
     }
 
     private void configurarCabecalho() {
@@ -172,7 +140,7 @@ public class QuizActivity extends AppCompatActivity {
 
         int indice = 0;
 
-        for (QuizItem quiz : QUIZZES) {
+        for (QuizItem quiz : quizzes) {
             MaterialCardView card = (MaterialCardView)
                     inflater.inflate(R.layout.item_quiz_usuario_comum, listaQuizzes, false);
 
@@ -217,6 +185,8 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void abrirInicioQuiz(@NonNull QuizItem quiz) {
+        QuizConteudo.definir(quiz.listaPerguntas);
+
         Intent rota = new Intent(this, InicioQuizActivity.class);
 
         rota.putExtra(InicioQuizActivity.EXTRA_CATEGORIA, quiz.categoria);
@@ -328,8 +298,16 @@ public class QuizActivity extends AppCompatActivity {
         private final String perguntas;
         private final String duracao;
         private final String resultado;
+        private final List<QuizConteudo.Pergunta> listaPerguntas;
 
-        private QuizItem(String titulo, String categoria, String perguntas, String duracao, String resultado) {
+        private QuizItem(
+                String titulo,
+                String categoria,
+                String perguntas,
+                String duracao,
+                String resultado,
+                List<QuizConteudo.Pergunta> listaPerguntas) {
+            this.listaPerguntas = listaPerguntas;
             this.titulo = titulo;
             this.categoria = categoria;
             this.perguntas = perguntas;

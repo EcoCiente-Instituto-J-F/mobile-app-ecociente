@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,6 +36,12 @@ public class AutenticacaoExternaRepository {
 
     private static final Object TRAVA = new Object();
 
+    // Quem precisa do JWT espera o login em andamento terminar: no primeiro acesso da sessão a Home
+    // pede a agenda antes de a API responder (cold start do Render leva de 70 a 150 s).
+    private static final Object ESPERA = new Object();
+    private static final long ESPERA_MAXIMA_MS = 180_000;
+    private static int loginsEmAndamento = 0;
+
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
@@ -51,6 +58,10 @@ public class AutenticacaoExternaRepository {
 
         Context contextoApp = contexto.getApplicationContext();
 
+        synchronized (ESPERA) {
+            loginsEmAndamento++;
+        }
+
         EXECUTOR.execute(
                 () -> {
                     SessaoExterna sessao = null;
@@ -66,18 +77,48 @@ public class AutenticacaoExternaRepository {
                         Log.w(TAG, "Não foi possível autenticar na API externa", erro);
                     }
 
+                    synchronized (ESPERA) {
+                        loginsEmAndamento--;
+                        ESPERA.notifyAll();
+                    }
+
                     SessaoExterna sessaoFinal = sessao;
 
                     PRINCIPAL.post(() -> retorno.aoConcluir(sessaoFinal));
                 });
     }
 
+    // Só chamar fora da thread principal: pode esperar o login terminar.
     @Nullable
     public String tokenParaUso(@NonNull Context contexto) {
+
+        aguardarLoginEmAndamento();
 
         String salvo = obterTokenSalvo(contexto);
 
         return salvo != null ? salvo : renovarToken(contexto);
+    }
+
+    private void aguardarLoginEmAndamento() {
+
+        long limite = SystemClock.elapsedRealtime() + ESPERA_MAXIMA_MS;
+
+        synchronized (ESPERA) {
+            while (loginsEmAndamento > 0) {
+                long restante = limite - SystemClock.elapsedRealtime();
+
+                if (restante <= 0) {
+                    return;
+                }
+
+                try {
+                    ESPERA.wait(restante);
+                } catch (InterruptedException erro) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+        }
     }
 
     @Nullable

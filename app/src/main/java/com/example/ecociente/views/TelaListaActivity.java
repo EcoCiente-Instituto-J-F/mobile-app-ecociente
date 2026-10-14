@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
 import com.example.ecociente.model.ItemLista;
+import com.example.ecociente.repository.EducacaoRepository;
 import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
@@ -68,9 +69,62 @@ public class TelaListaActivity extends AppCompatActivity {
 
         LinearLayout lista = findViewById(R.id.listaItens);
 
+        if (tipo == TipoLista.GUIA) {
+            carregarGuia(lista);
+            return;
+        }
+
+        exibirItens(lista, tipo.itens());
+    }
+
+    private void carregarGuia(LinearLayout lista) {
+
+        TextView estado = textoDeEstado(lista, R.string.guia_carregando);
+
+        new EducacaoRepository()
+                .listarGuia(
+                        this,
+                        (sucesso, itens) -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            if (!sucesso) {
+                                estado.setText(R.string.guia_erro);
+                                return;
+                            }
+
+                            lista.removeAllViews();
+
+                            if (itens.isEmpty()) {
+                                textoDeEstado(lista, R.string.guia_vazio);
+                                return;
+                            }
+
+                            exibirItens(lista, itens);
+                        });
+    }
+
+    private TextView textoDeEstado(LinearLayout lista, int mensagem) {
+
+        TextView texto = new TextView(this);
+
+        texto.setText(mensagem);
+        texto.setTextColor(getColor(R.color.cinza_texto_auxiliar));
+        texto.setTextSize(14);
+        texto.setGravity(android.view.Gravity.CENTER);
+        texto.setPadding(48, 96, 48, 0);
+
+        lista.addView(texto);
+
+        return texto;
+    }
+
+    private void exibirItens(LinearLayout lista, java.util.List<ItemLista> itens) {
+
         LayoutInflater inflador = LayoutInflater.from(this);
 
-        for (ItemLista item : tipo.itens()) {
+        for (ItemLista item : itens) {
 
             View linha = inflador.inflate(R.layout.item_linha_lista, lista, false);
 
