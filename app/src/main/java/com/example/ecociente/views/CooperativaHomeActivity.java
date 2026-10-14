@@ -70,6 +70,14 @@ public class CooperativaHomeActivity extends AppCompatActivity {
                 findViewById(R.id.cardProximaColeta),
                 findViewById(R.id.cardCalendarioColetas));
 
+        // A raiz não recorta os filhos (por causa da barra); sem isto o conteúdo rolado
+        // desenha por cima do cabeçalho.
+        findViewById(R.id.rolagemHomeCooperativa)
+                .addOnLayoutChangeListener(
+                        (rolagem, esquerda, topo, direita, base, e, t, d, b) ->
+                                rolagem.setClipBounds(
+                                        new android.graphics.Rect(0, 0, direita - esquerda, base - topo)));
+
         configurarCalendario();
 
         findViewById(R.id.botaoAvisosCooperativa)

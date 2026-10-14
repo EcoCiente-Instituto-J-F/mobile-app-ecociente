@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/nunito_bold"
         android:textColor="@color/cinza_texto_home"
-        android:textSize="12sp" />
+        android:textSize="13sp" />
 
     <TextView
         android:id="@+id/textoDataDiaSemana"
@@ -52,9 +52,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/nunito_regular"
+        android:autoSizeMaxTextSize="10sp"
+        android:autoSizeMinTextSize="8sp"
+        android:autoSizeTextType="uniform"
         android:gravity="center"
         android:maxLines="1"
         android:textColor="@color/cinza_texto_home"
-        android:textSize="11sp" />
+        android:textSize="10sp" />
 
 </LinearLayout>

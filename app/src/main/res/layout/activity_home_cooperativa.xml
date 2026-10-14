@@ -90,46 +90,17 @@
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/textoSaudacaoCooperativa"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/nunito_bold"
-        android:textColor="@color/rosa_ecociente"
-        android:textSize="22sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cabecalhoHomeCooperativa"
-        tools:text="Olá, Julio!" />
-
-    <TextView
-        android:id="@+id/textoNomeCooperativa"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="26dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="26dp"
-        android:fontFamily="@font/nunito_regular"
-        android:textColor="@color/cinza_texto_home"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textoSaudacaoCooperativa"
-        tools:text="Cooperativa Recicla Mais" />
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/rolagemHomeCooperativa"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="@dimen/espaco_barra_navegacao"
         android:clipToPadding="false"
         android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="@id/barraNavegacao"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textoNomeCooperativa">
+        app:layout_constraintTop_toBottomOf="@id/cabecalhoHomeCooperativa">
 
         <LinearLayout
             android:id="@+id/conteudoHomeCooperativa"
@@ -139,6 +110,30 @@
             android:paddingStart="18dp"
             android:paddingEnd="18dp"
             android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/textoSaudacaoCooperativa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/nunito_bold"
+                android:textColor="@color/rosa_ecociente"
+                android:textSize="22sp"
+                tools:text="Olá, Julio!" />
+
+            <TextView
+                android:id="@+id/textoNomeCooperativa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="@font/nunito_regular"
+                android:textColor="@color/cinza_texto_home"
+                android:textSize="12sp"
+                tools:text="Cooperativa Recicla Mais" />
 
             <com.example.ecociente.ui.ProximaColetaView
                 android:id="@+id/cardProximaColeta"

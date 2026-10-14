@@ -371,7 +371,7 @@
     <string name="calendario_da_semana">Calendário da semana</string>
     <string name="ver_calendario_completo">Ver calendário completo ›</string>
     <string name="coleta">Coleta</string>
-    <string name="nao_ha_coleta">Sem coleta</string>
+    <string name="nao_ha_coleta">Não há coleta</string>
     <string name="semana_erro">Não foi possível carregar a semana. Toque para tentar de novo.</string>
     <string name="calendario_e_lembretes">Calendário e lembretes</string>
     <string name="calendario_subtitulo">Acompanhe as datas de coleta do seu condomínio</string>

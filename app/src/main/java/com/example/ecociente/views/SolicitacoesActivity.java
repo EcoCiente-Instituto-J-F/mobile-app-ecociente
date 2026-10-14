@@ -270,6 +270,9 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
     private void configurarNavegacao() {
 
+        ((android.widget.TextView) findViewById(R.id.tituloSolicitacoes))
+                .setText(indiceAtual() == ItensBarra.SEGUNDO ? R.string.coletas : R.string.historico);
+
         BarraNavegacaoView barra = findViewById(R.id.barraNavegacao);
 
         barra.configurar(ItensBarra.cooperativa());
