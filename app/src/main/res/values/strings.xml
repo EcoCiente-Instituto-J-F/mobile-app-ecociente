@@ -487,4 +487,5 @@
     <string name="guia_carregando">Carregando o guia…</string>
     <string name="guia_erro">Não foi possível carregar o guia. Entre com e-mail e senha e tente de novo.</string>
     <string name="guia_vazio">Nenhum conteúdo por enquanto.</string>
+    <string name="lista_vazia">Nada por aqui ainda.</string>
 </resources>

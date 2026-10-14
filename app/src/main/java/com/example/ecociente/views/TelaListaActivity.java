@@ -88,7 +88,14 @@ public class TelaListaActivity extends AppCompatActivity {
             return;
         }
 
-        exibirItens(lista, tipo.itens());
+        java.util.List<ItemLista> itens = tipo.itens();
+
+        if (itens.isEmpty()) {
+            textoDeEstado(lista, R.string.lista_vazia);
+            return;
+        }
+
+        exibirItens(lista, itens);
     }
 
     private void carregarGuia(LinearLayout lista) {

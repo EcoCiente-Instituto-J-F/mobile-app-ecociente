@@ -18,7 +18,8 @@
 
         <ImageView
             android:id="@+id/botaoVoltarCentral"
-            style="@style/BotaoVoltar" />
+            style="@style/BotaoVoltar"
+        android:contentDescription="@string/voltar" />
 
         <TextView
             android:layout_width="wrap_content"

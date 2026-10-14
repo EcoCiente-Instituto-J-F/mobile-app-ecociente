@@ -15,6 +15,7 @@
     <ImageView
         android:id="@+id/botaoVoltarTelaLista"
         style="@style/BotaoVoltar"
+        android:contentDescription="@string/voltar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
