@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.ecociente.R;
 import com.example.ecociente.model.EstadoHome;
+import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.Dimensoes;
@@ -117,11 +118,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case CONDOMINIO:
-                abrirHomeCondominio();
-                break;
-
             case PRONTA:
-                carregarHome(estado.getNome());
+                if (abrirHomePeloPerfilDaApi()) {
+                    break;
+                }
+
+                if (estado.getTipo() == EstadoHome.Tipo.CONDOMINIO) {
+                    abrirHomeCondominio();
+                } else {
+                    carregarHome(estado.getNome());
+                }
                 break;
 
             default:
@@ -257,6 +263,25 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(0, 0);
 
         finish();
+    }
+
+    // O Firestore pode estar com tipoPerfil de morador para quem já existe no Postgres como síndico
+    // ou cooperativa; o perfil que a API confirmou no login vale mais.
+    private boolean abrirHomePeloPerfilDaApi() {
+
+        String perfil = AutenticacaoExternaRepository.perfilSalvo(this);
+
+        if ("SINDICO".equals(perfil)) {
+            abrirHomeSindico();
+            return true;
+        }
+
+        if ("COOPERATIVA".equals(perfil)) {
+            abrirHomeCooperativa();
+            return true;
+        }
+
+        return false;
     }
 
     private void abrirHomeSindico() {

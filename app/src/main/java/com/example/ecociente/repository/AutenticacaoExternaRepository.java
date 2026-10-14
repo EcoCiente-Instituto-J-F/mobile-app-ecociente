@@ -33,6 +33,7 @@ public class AutenticacaoExternaRepository {
 
     private static final String PREFERENCIAS = "sessao_externa";
     private static final String CHAVE_TOKEN = "token";
+    private static final String CHAVE_PERFIL = "perfil";
 
     private static final Object TRAVA = new Object();
 
@@ -70,6 +71,7 @@ public class AutenticacaoExternaRepository {
                         sessao = login(email, senha);
 
                         persistirToken(contextoApp, sessao.getToken());
+                        persistirPerfil(contextoApp, sessao.getPerfil());
 
                         CredenciaisSeguras.salvar(contextoApp, email, senha);
 
@@ -137,6 +139,7 @@ public class AutenticacaoExternaRepository {
                 SessaoExterna sessao = login(credenciais[0], credenciais[1]);
 
                 persistirToken(contextoApp, sessao.getToken());
+                persistirPerfil(contextoApp, sessao.getPerfil());
 
                 return sessao.getToken();
 
@@ -161,6 +164,25 @@ public class AutenticacaoExternaRepository {
                 .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
                 .edit()
                 .remove(CHAVE_TOKEN)
+                .remove(CHAVE_PERFIL)
+                .apply();
+    }
+
+    // Perfil que a API devolveu no último login (SINDICO, COOPERATIVA...): é o dado do Postgres,
+    // usado para escolher a home quando o Firestore está com outro tipoPerfil.
+    @Nullable
+    public static String perfilSalvo(@NonNull Context contexto) {
+
+        return contexto.getApplicationContext()
+                .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
+                .getString(CHAVE_PERFIL, null);
+    }
+
+    private void persistirPerfil(@NonNull Context contextoApp, @NonNull String perfil) {
+
+        contextoApp.getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
+                .edit()
+                .putString(CHAVE_PERFIL, perfil)
                 .apply();
     }
 
