@@ -57,8 +57,6 @@ public class MensagensActivity extends AppCompatActivity {
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizMensagens));
 
-        findViewById(R.id.botaoVoltarMensagens).setOnClickListener(view -> finish());
-
         for (int i = 0; i < IDS_ABAS.length; i++) {
             int aba = i;
 
