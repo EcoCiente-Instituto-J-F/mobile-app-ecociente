@@ -26,8 +26,8 @@
         android:layout_marginTop="4dp"
         android:fontFamily="@font/nunito_bold"
         android:text="@string/titulo_chat"
-        android:textColor="@color/verde_escuro_principal"
-        android:textSize="24sp"
+        android:textColor="@color/rosa_ecociente"
+        android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/botaoVoltarMensagens" />
 

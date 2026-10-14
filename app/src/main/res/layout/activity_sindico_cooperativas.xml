@@ -26,8 +26,8 @@
             android:layout_weight="1"
             android:fontFamily="@font/nunito_bold"
             android:text="@string/sindico_cooperativas_proximas"
-            android:textColor="@color/verde_escuro_principal"
-            android:textSize="21sp" />
+            android:textColor="@color/rosa_ecociente"
+            android:textSize="22sp" />
     </LinearLayout>
 
     <ScrollView
