@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -59,6 +60,19 @@ public class TelaListaActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tituloTelaLista)).setText(tipo.titulo);
 
         findViewById(R.id.botaoVoltarTelaLista).setOnClickListener(view -> finish());
+
+        // Guia e Feed são abas da barra inferior: sem seta, com o título na altura das outras abas.
+        if (tipo == TipoLista.GUIA || tipo == TipoLista.FEED) {
+            findViewById(R.id.botaoVoltarTelaLista).setVisibility(View.GONE);
+
+            TextView titulo = findViewById(R.id.tituloTelaLista);
+
+            ViewGroup.MarginLayoutParams parametros = (ViewGroup.MarginLayoutParams) titulo.getLayoutParams();
+
+            parametros.topMargin = Math.round(22 * getResources().getDisplayMetrics().density);
+
+            titulo.setLayoutParams(parametros);
+        }
 
         preencherLista();
 

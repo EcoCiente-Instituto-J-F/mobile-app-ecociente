@@ -11,3 +11,4 @@ public class EcoCienteApp extends Application {
         registerActivityLifecycleCallbacks(new OrientacaoPorTamanho());
     }
 }
+

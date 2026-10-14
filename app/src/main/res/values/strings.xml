@@ -371,7 +371,7 @@
     <string name="calendario_da_semana">Calendário da semana</string>
     <string name="ver_calendario_completo">Ver calendário completo ›</string>
     <string name="coleta">Coleta</string>
-    <string name="nao_ha_coleta">Não há coleta</string>
+    <string name="nao_ha_coleta">Sem coleta</string>
     <string name="semana_erro">Não foi possível carregar a semana. Toque para tentar de novo.</string>
     <string name="calendario_e_lembretes">Calendário e lembretes</string>
     <string name="calendario_subtitulo">Acompanhe as datas de coleta do seu condomínio</string>
@@ -433,7 +433,7 @@
     <string name="preencha_todos_os_campos">Preencha todos os campos.</string>
     <string name="fim_antes_do_inicio">O horário final precisa ser depois do inicial.</string>
     <string name="coleta_salva_exemplo">Coleta salva (exemplo).</string>
-    <string name="ranking_resumo">1º Rafael · 2º Ana Paula · 3º Marina</string>
+    <string name="ranking_resumo">Veja sua posição e a do seu condomínio</string>
     <string name="lembrete_de_coleta">Lembrete de coleta</string>
     <string name="canal_lembretes_coleta">Lembretes de coleta</string>
     <string name="lembrete_amanha">Coleta amanhã, %1$s, às %2$s.</string>

@@ -28,8 +28,8 @@
     <FrameLayout
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="6dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="8dp">
 
         <ImageView
             android:id="@+id/iconeColetaDiaSemana"
@@ -52,6 +52,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/nunito_regular"
+        android:gravity="center"
+        android:maxLines="1"
         android:textColor="@color/cinza_texto_home"
         android:textSize="11sp" />
 
