@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="132dp"
+    android:paddingStart="8dp"
+    android:paddingTop="8dp"
+    android:paddingEnd="4dp"
+    android:paddingBottom="4dp">
+
+    <ImageView
+        android:id="@+id/imagemEkoNotificacao"
+        android:layout_width="82dp"
+        android:layout_height="82dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="Eko"
+        android:scaleType="centerInside"
+        android:src="@drawable/eko_notificacao" />
+
+    <LinearLayout
+        android:id="@+id/blocoTextoNotificacao"
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:layout_toStartOf="@id/imagemEkoNotificacao"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingEnd="10dp">
+
+        <TextView
+            android:id="@+id/tituloNotificacao"
+            style="@style/TextAppearance.Compat.Notification.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/notificacao_destaque"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/mensagemNotificacao"
+            style="@style/TextAppearance.Compat.Notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:maxLines="3"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/acaoNotificacao"
+        style="@style/TextAppearance.Compat.Notification.Title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@id/imagemEkoNotificacao"
+        android:gravity="center"
+        android:paddingEnd="2dp"
+        android:text="Fazer quiz"
+        android:textColor="@color/notificacao_destaque"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>
