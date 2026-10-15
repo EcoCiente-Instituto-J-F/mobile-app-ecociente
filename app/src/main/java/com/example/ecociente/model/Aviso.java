@@ -52,12 +52,27 @@ public final class Aviso {
         lida = true;
     }
 
-    // API: GET /api/v1/avisos (ds-notificacoes-api, sem endpoints ainda)
     @NonNull
     public static synchronized List<Aviso> lista() {
 
         if (exemplos == null) {
             exemplos = new ArrayList<>();
+
+            exemplos.add(new Aviso(1, "Mudança no horário da coleta de recicláveis",
+                    "A partir da próxima semana, a coleta de recicláveis no condomínio será realizada às terças e quintas-feiras, às 9h. Pedimos que os materiais sejam colocados na área de coleta até as 8h30.",
+                    CategoriaAviso.COLETA, false, "Síndico/Gestão", 48, false));
+            exemplos.add(new Aviso(2, "Dicas de separação de resíduos eletrônicos",
+                    "A cooperativa parceira compartilha algumas dicas importantes para o descarte correto de eletrônicos: retire as pilhas e baterias, não quebre os aparelhos e leve-os ao ponto de coleta indicado.",
+                    CategoriaAviso.ORIENTACAO, true, "Cooperativa VerdeMais", 72, true));
+            exemplos.add(new Aviso(3, "Manutenção na área de coleta",
+                    "Informamos que, na próxima segunda-feira, a área de coleta passará por manutenção. Pedimos que os resíduos sejam mantidos nos apartamentos até a liberação do local.",
+                    CategoriaAviso.MANUTENCAO, false, "Síndico/Gestão", 24 * 5, false));
+            exemplos.add(new Aviso(4, "Campanha de reciclagem de garrafas PET",
+                    "A cooperativa inicia uma nova campanha de reciclagem de garrafas PET. Separe e entregue as garrafas limpas e secas na portaria e ganhe pontos no ranking do condomínio.",
+                    CategoriaAviso.CAMPANHA, true, "Cooperativa VerdeMais", 24 * 7, true));
+            exemplos.add(new Aviso(5, "Reunião do conselho do condomínio",
+                    "Informamos que a reunião do conselho será realizada no dia 12 de maio, às 19h, no salão de festas. A presença de todos é muito importante.",
+                    CategoriaAviso.AVISO_GERAL, false, "Síndico/Gestão", 24 * 9, true));
         }
 
         return exemplos;

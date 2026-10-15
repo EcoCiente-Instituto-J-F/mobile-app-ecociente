@@ -13,10 +13,10 @@ import androidx.core.content.ContextCompat;
 
 import com.example.ecociente.R;
 
-/** Distribuição de materiais; sem dados até a API de dashboard. */
+/** Distribuição ilustrativa de materiais, sem dependência de serviços externos. */
 public final class SindicoDashboardRoscaView extends View {
     private final Paint tinta = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private static final int[] PERCENTUAIS = {};
+    private static final int[] PERCENTUAIS = {25, 50, 8, 12, 5};
     private static final int[] CORES = {R.color.verde_escuro_principal,
             R.color.rosa_ecociente, R.color.verde_claro_ecociente,
             R.color.amarelo_avaliacao, R.color.amarelo_botao_avaliar};
@@ -46,6 +46,7 @@ public final class SindicoDashboardRoscaView extends View {
         tinta.setTextAlign(Paint.Align.CENTER);
         tinta.setFakeBoldText(true);
         tinta.setTextSize(sp(18));
+        canvas.drawText("100%", cx, cy + dp(6), tinta);
         tinta.setFakeBoldText(false);
     }
 

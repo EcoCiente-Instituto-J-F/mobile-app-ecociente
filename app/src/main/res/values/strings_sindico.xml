@@ -183,4 +183,6 @@
     <string name="valor_indisponivel">—</string>
     <string name="sindico_vs_mes_anterior">(vs. mês anterior)</string>
     <string name="sindico_foto_condominio_salva">Foto do condomínio salva.</string>
+    <string name="sindico_300_pts">300 pts</string>
+    <string name="sindico_papel_25_plastico_50_vidro_8_nmeta">Papel 25%  ·  Plástico 50%  ·  Vidro 8%\nMetal 12%  ·  Orgânico 5%</string>
 </resources>

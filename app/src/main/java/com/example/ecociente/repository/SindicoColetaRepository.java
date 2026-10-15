@@ -16,16 +16,35 @@ import java.util.Map;
 public final class SindicoColetaRepository {
     private static final SindicoColetaRepository INSTANCIA = new SindicoColetaRepository();
 
-    // API: GET /api/v1/cooperativas?condominioId= (cooperativas atendendo a regiao)
-    private final List<SindicoCooperativa> cooperativas = new ArrayList<>();
-    // API: GET /api/v1/sindico/coletas?status=REALIZADO
-    private final List<SindicoHistoricoColeta> historico = new ArrayList<>();
+    private final List<SindicoCooperativa> cooperativas = Collections.unmodifiableList(Arrays.asList(
+            new SindicoCooperativa(1, "Cooperativa Recicla Mais", "2,3 km", "4,7 (124 avaliações)",
+                    "Rua das Hortênsias, 123 - Jardim das Flores", "São Paulo", "SP", "01234-567"),
+            new SindicoCooperativa(2, "Cooperativa VerdeMais", "3,1 km", "4,8 (96 avaliações)",
+                    "Rua das Palmeiras, 245", "São Paulo", "SP", "01234-568"),
+            new SindicoCooperativa(3, "Cooperativa Nova Vida", "4,2 km", "4,6 (82 avaliações)",
+                    "Avenida dos Ipês, 80", "São Paulo", "SP", "01234-569"),
+            new SindicoCooperativa(4, "Cooperativa EcoAção", "5,0 km", "4,9 (71 avaliações)",
+                    "Rua do Bosque, 410", "São Paulo", "SP", "01234-570"),
+            new SindicoCooperativa(5, "Cooperativa Reciclar Juntos", "6,4 km", "4,5 (58 avaliações)",
+                    "Avenida Verde, 56", "São Paulo", "SP", "01234-571")));
+    private final List<SindicoHistoricoColeta> historico = Collections.unmodifiableList(Arrays.asList(
+            new SindicoHistoricoColeta(101, "Cooperativa Recicla Mais", "27/09/2026", "4,7 (124 avaliações)"),
+            new SindicoHistoricoColeta(102, "Cooperativa VerdeMais", "23/09/2026", "4,8 (96 avaliações)"),
+            new SindicoHistoricoColeta(103, "Cooperativa Nova Vida", "18/09/2026", "4,6 (82 avaliações)"),
+            new SindicoHistoricoColeta(104, "Cooperativa Recicla Mais", "12/09/2026", "4,7 (124 avaliações)"),
+            new SindicoHistoricoColeta(105, "Cooperativa EcoAção", "06/09/2026", "4,9 (71 avaliações)"),
+            new SindicoHistoricoColeta(106, "Cooperativa VerdeMais", "31/08/2026", "4,8 (96 avaliações)"),
+            new SindicoHistoricoColeta(107, "Cooperativa Reciclar Juntos", "25/08/2026", "4,5 (58 avaliações)"),
+            new SindicoHistoricoColeta(108, "Cooperativa Nova Vida", "19/08/2026", "4,6 (82 avaliações)")));
     private final Map<Integer, Integer> avaliacoes = new HashMap<>();
     private final List<SindicoSolicitacao> solicitacoes = new ArrayList<>();
     private int proximaSolicitacao = 201;
 
-    // API: solicitacoes via ds-calendario-api (POST/GET/PATCH /solicitacoes)
-    private SindicoColetaRepository() { }
+    private SindicoColetaRepository() {
+        avaliacoes.put(108, 4);
+        solicitacoes.add(new SindicoSolicitacao(
+                200, 2, "Cooperativa VerdeMais", "2026-10-16T09:00:00", false, StatusAgendamento.AGENDADO));
+    }
 
     public static SindicoColetaRepository getInstance() { return INSTANCIA; }
     public List<SindicoCooperativa> getCooperativas() { return cooperativas; }
