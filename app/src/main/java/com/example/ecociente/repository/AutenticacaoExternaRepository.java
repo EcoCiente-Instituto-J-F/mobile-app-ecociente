@@ -111,6 +111,22 @@ public class AutenticacaoExternaRepository {
         }
     }
 
+    // Sessão antiga do Firebase (app aberto sem passar pelo login): ainda não há perfil da API
+    // guardado. Se há credenciais guardadas, refaz o login em segundo plano para obtê-lo.
+    public static void garantirPerfil(@NonNull Context contexto, @NonNull Runnable aoConcluir) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        EXECUTOR_ESPERA.execute(
+                () -> {
+                    if (perfilSalvo(contextoApp) == null) {
+                        new AutenticacaoExternaRepository().renovarToken(contextoApp);
+                    }
+
+                    PRINCIPAL.post(aoConcluir);
+                });
+    }
+
     // Espera, fora da thread principal, o login terminar (ou o limite) e avisa na principal.
     public static void aguardarLogin(long limiteMs, @NonNull Runnable aoConcluir) {
 

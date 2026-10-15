@@ -2,6 +2,7 @@ package com.example.ecociente.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
 
     private boolean esperouLoginDaApi;
 
+    private boolean tentouObterPerfil;
+
+    private static final String TAG_ROTA = "RotaHome";
+
     private void renderizar(@NonNull EstadoHome estado) {
 
         switch (estado.getTipo()) {
@@ -139,9 +144,27 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
 
+                if (!tentouObterPerfil && AutenticacaoExternaRepository.perfilSalvo(this) == null) {
+                    tentouObterPerfil = true;
+
+                    findViewById(R.id.indicadorCarregamentoHome).setVisibility(View.VISIBLE);
+
+                    AutenticacaoExternaRepository.garantirPerfil(
+                            this,
+                            () -> {
+                                if (!isFinishing() && !isDestroyed()) {
+                                    renderizar(estado);
+                                }
+                            });
+                    break;
+                }
+
                 if (abrirHomePeloPerfilDaApi()) {
                     break;
                 }
+
+                Log.i(TAG_ROTA, "home do morador/usuário; perfil da API="
+                        + AutenticacaoExternaRepository.perfilSalvo(this));
 
                 if (estado.getTipo() == EstadoHome.Tipo.CONDOMINIO) {
                     abrirHomeCondominio();
@@ -292,16 +315,32 @@ public class MainActivity extends AppCompatActivity {
         String perfil = AutenticacaoExternaRepository.perfilSalvo(this);
 
         if ("SINDICO".equals(perfil)) {
+            Log.i(TAG_ROTA, "perfil da API=SINDICO -> home do síndico");
+            corrigirTipoPerfilNoFirestore("sindico");
             abrirHomeSindico();
             return true;
         }
 
         if ("COOPERATIVA".equals(perfil)) {
+            Log.i(TAG_ROTA, "perfil da API=COOPERATIVA -> home da cooperativa");
+            corrigirTipoPerfilNoFirestore("cooperativa");
             abrirHomeCooperativa();
             return true;
         }
 
         return false;
+    }
+
+    // Deixa o documento do usuário igual ao que a API confirmou, para as outras telas.
+    private void corrigirTipoPerfilNoFirestore(String tipoPerfil) {
+
+        com.google.firebase.auth.FirebaseUser usuario =
+                com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
+
+        if (usuario != null) {
+            new com.example.ecociente.repository.PerfilRepository()
+                    .atualizarCampo(usuario.getUid(), "tipoPerfil", tipoPerfil);
+        }
     }
 
     private void abrirHomeSindico() {
