@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -68,6 +69,13 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_solicitacoes);
 
+        Motion.entrar(
+                this,
+                R.id.tituloSolicitacoes,
+                R.id.campoBuscaSolicitacao,
+                R.id.rolagemFiltros,
+                R.id.listaSolicitacoes);
+
         viewModel = new ViewModelProvider(this).get(SolicitacoesViewModel.class);
 
         atualizacao = findViewById(R.id.atualizacaoSolicitacoes);
@@ -82,7 +90,7 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
         configurarLista();
 
-        configurarBuscaENovaColeta();
+        configurarBusca();
 
         configurarNavegacao();
 
@@ -190,7 +198,7 @@ public class SolicitacoesActivity extends AppCompatActivity {
         atualizarEstado();
     }
 
-    private void configurarBuscaENovaColeta() {
+    private void configurarBusca() {
 
         AoDigitar.em(
                 campoBusca,
@@ -202,8 +210,6 @@ public class SolicitacoesActivity extends AppCompatActivity {
                     }
                 });
 
-        findViewById(R.id.botaoNovaColetaSolicitacoes)
-                .setOnClickListener(view -> NovaColetaDialogo.mostrar(this, viewModel::recarregar));
     }
 
     private void atualizarEstado() {
@@ -271,6 +277,9 @@ public class SolicitacoesActivity extends AppCompatActivity {
     }
 
     private void configurarNavegacao() {
+
+        ((android.widget.TextView) findViewById(R.id.tituloSolicitacoes))
+                .setText(indiceAtual() == ItensBarra.SEGUNDO ? R.string.coletas : R.string.historico);
 
         BarraNavegacaoView barra = findViewById(R.id.barraNavegacao);
 

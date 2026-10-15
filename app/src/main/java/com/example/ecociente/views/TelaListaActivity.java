@@ -1,10 +1,12 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
 import com.example.ecociente.model.ItemLista;
+import com.example.ecociente.repository.EducacaoRepository;
 import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
@@ -53,11 +56,29 @@ public class TelaListaActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_tela_lista);
 
+        Motion.entrar(
+                this,
+                R.id.tituloTelaLista,
+                R.id.listaItens);
+
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizTelaLista));
 
         ((TextView) findViewById(R.id.tituloTelaLista)).setText(tipo.titulo);
 
         findViewById(R.id.botaoVoltarTelaLista).setOnClickListener(view -> finish());
+
+        // Guia e Feed são abas da barra inferior: sem seta, com o título na altura das outras abas.
+        if (tipo == TipoLista.GUIA || tipo == TipoLista.FEED) {
+            findViewById(R.id.botaoVoltarTelaLista).setVisibility(View.GONE);
+
+            TextView titulo = findViewById(R.id.tituloTelaLista);
+
+            ViewGroup.MarginLayoutParams parametros = (ViewGroup.MarginLayoutParams) titulo.getLayoutParams();
+
+            parametros.topMargin = Math.round(22 * getResources().getDisplayMetrics().density);
+
+            titulo.setLayoutParams(parametros);
+        }
 
         preencherLista();
 
@@ -68,9 +89,69 @@ public class TelaListaActivity extends AppCompatActivity {
 
         LinearLayout lista = findViewById(R.id.listaItens);
 
+        if (tipo == TipoLista.GUIA) {
+            carregarGuia(lista);
+            return;
+        }
+
+        java.util.List<ItemLista> itens = tipo.itens();
+
+        if (itens.isEmpty()) {
+            textoDeEstado(lista, R.string.lista_vazia);
+            return;
+        }
+
+        exibirItens(lista, itens);
+    }
+
+    private void carregarGuia(LinearLayout lista) {
+
+        TextView estado = textoDeEstado(lista, R.string.guia_carregando);
+
+        new EducacaoRepository()
+                .listarGuia(
+                        this,
+                        (sucesso, itens) -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            if (!sucesso) {
+                                estado.setText(R.string.guia_erro);
+                                return;
+                            }
+
+                            lista.removeAllViews();
+
+                            if (itens.isEmpty()) {
+                                textoDeEstado(lista, R.string.guia_vazio);
+                                return;
+                            }
+
+                            exibirItens(lista, itens);
+                        });
+    }
+
+    private TextView textoDeEstado(LinearLayout lista, int mensagem) {
+
+        TextView texto = new TextView(this);
+
+        texto.setText(mensagem);
+        texto.setTextColor(getColor(R.color.cinza_texto_auxiliar));
+        texto.setTextSize(14);
+        texto.setGravity(android.view.Gravity.CENTER);
+        texto.setPadding(48, 96, 48, 0);
+
+        lista.addView(texto);
+
+        return texto;
+    }
+
+    private void exibirItens(LinearLayout lista, java.util.List<ItemLista> itens) {
+
         LayoutInflater inflador = LayoutInflater.from(this);
 
-        for (ItemLista item : tipo.itens()) {
+        for (ItemLista item : itens) {
 
             View linha = inflador.inflate(R.layout.item_linha_lista, lista, false);
 
@@ -107,11 +188,6 @@ public class TelaListaActivity extends AppCompatActivity {
                 atual = ItensBarra.QUARTO;
                 break;
 
-            case UNIDADES:
-                itens = ItensBarra.sindico();
-                atual = ItensBarra.QUARTO;
-                break;
-
             case RANKING:
                 itens = ItensBarra.morador();
                 break;
@@ -134,7 +210,7 @@ public class TelaListaActivity extends AppCompatActivity {
                     if (tipo == TipoLista.CONDOMINIOS || tipo == TipoLista.AVALIACOES) {
                         Navegacao.irParaItemDaCooperativa(this, indice, indiceAtual);
 
-                    } else if (tipo != TipoLista.UNIDADES) {
+                    } else {
                         Navegacao.irParaItemDoUsuario(this, indice, indiceAtual, morador);
                     }
                 });

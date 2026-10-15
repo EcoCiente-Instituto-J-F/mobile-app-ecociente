@@ -109,7 +109,11 @@ public class CondominioHomeActivity extends AppCompatActivity {
                                 this::confirmarSaida));
 
         findViewById(R.id.botaoNotificacoesCondominio)
-                .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, false)));
+                .setOnClickListener(
+                        view ->
+                                startActivity(
+                                        CentralNotificacoesActivity.criarIntent(
+                                                this, CentralNotificacoesActivity.Destino.CONDOMINIO)));
 
         findViewById(R.id.cardRanking)
                 .setOnClickListener(

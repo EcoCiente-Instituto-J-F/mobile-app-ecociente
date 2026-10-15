@@ -21,7 +21,7 @@
         android:fontFamily="@font/nunito_bold"
         android:gravity="center"
         android:textColor="@color/branco"
-        android:textSize="10sp" />
+        android:textSize="11sp" />
     <TextView
         android:id="@+id/nomeItemRanking"
         android:layout_width="0dp"

@@ -9,12 +9,13 @@ import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
 import com.example.ecociente.repository.CalendarioExternoRepository;
+import com.example.ecociente.repository.SolicitacoesExemplosRepository;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SolicitacoesViewModel extends AndroidViewModel {
 
-    private static final boolean USAR_EXEMPLOS = true;
+    public static final boolean USAR_EXEMPLOS = true;
 
     private final CalendarioExternoRepository repositorio = new CalendarioExternoRepository();
 
@@ -92,15 +93,7 @@ public class SolicitacoesViewModel extends AndroidViewModel {
 
     private void exibirExemplos() {
 
-        List<Solicitacao> filtradas = new ArrayList<>();
-
-        for (Solicitacao solicitacao : Solicitacao.exemplos()) {
-            if (solicitacao.getStatus() == filtro) {
-                filtradas.add(solicitacao);
-            }
-        }
-
-        itens.setValue(filtradas);
+        itens.setValue(SolicitacoesExemplosRepository.getInstance().listar(filtro));
 
         ultimaPagina = true;
 

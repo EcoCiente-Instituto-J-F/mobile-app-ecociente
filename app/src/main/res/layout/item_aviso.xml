@@ -101,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_semibold"
                     android:textColor="@color/verde_escuro_principal"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
                 <View
                     android:layout_width="1dp"
@@ -123,7 +123,7 @@
                     android:layout_marginStart="4dp"
                     android:fontFamily="@font/nunito_regular"
                     android:textColor="@color/cinza_texto_auxiliar"
-                    android:textSize="10sp" />
+                    android:textSize="11sp" />
 
             </LinearLayout>
 

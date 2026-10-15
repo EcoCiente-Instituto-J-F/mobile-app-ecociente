@@ -109,7 +109,7 @@
                         android:fontFamily="@font/nunito_regular"
                         android:text="@string/notificacoes_descricao"
                         android:textColor="@color/cinza_escuro_textos"
-                        android:textSize="10sp" />
+                        android:textSize="11sp" />
 
                 </LinearLayout>
 

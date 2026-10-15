@@ -13,6 +13,7 @@
     <ImageView
         android:id="@+id/botaoVoltarAvisoDetalhe"
         style="@style/BotaoVoltar"
+        android:contentDescription="@string/voltar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

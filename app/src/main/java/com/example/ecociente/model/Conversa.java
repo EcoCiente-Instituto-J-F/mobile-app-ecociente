@@ -26,7 +26,17 @@ public final class Conversa {
     }
 
     @NonNull
-    public static List<Conversa> exemplos() {
+    public static List<Conversa> listaDoSindico() {
+        return Arrays.asList(
+                new Conversa("Cooperativa Recicla Mais", "Quinta às 9h, tudo certo?", "08:30", 1, false),
+                new Conversa("Cooperativa VerdeMais", "Recebemos a sua solicitação.", "08:05", 2, false),
+                new Conversa("Cooperativa Nova Vida", "Obrigada pelo retorno!", "Ontem", 0, false),
+                new Conversa("Cooperativa EcoAção", "Podemos passar mais cedo?", "Seg", 0, false),
+                new Conversa("Cooperativa Reciclar Juntos", "Coleta concluída com sucesso.", "05/10", 0, true));
+    }
+
+    @NonNull
+    public static List<Conversa> lista() {
         return Arrays.asList(
                 new Conversa("Condomínio Raio de Luz", "Quando vão passar?", "08:30", 2, false),
                 new Conversa("Residencial Jardim das Flores", "Podem confirmar a coleta de amanhã?", "08:05", 1, false),

@@ -43,7 +43,7 @@ public class AvisoDetalheActivity extends AppCompatActivity {
 
         findViewById(R.id.botaoVoltarAvisoDetalhe).setOnClickListener(view -> finish());
 
-        AvisosActivity.aplicarChip(findViewById(R.id.chipAvisoDetalhe), aviso.categoria);
+        CartoesCentral.aplicarChip(findViewById(R.id.chipAvisoDetalhe), aviso.categoria);
 
         ((TextView) findViewById(R.id.tituloAvisoDetalhe)).setText(aviso.titulo);
 

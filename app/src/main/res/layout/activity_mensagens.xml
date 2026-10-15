@@ -12,24 +12,18 @@
     android:clipToPadding="false"
     tools:context=".views.MensagensActivity">
 
-    <ImageView
-        android:id="@+id/botaoVoltarMensagens"
-        style="@style/BotaoVoltar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/tituloMensagens"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="26dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="22dp"
         android:fontFamily="@font/nunito_bold"
         android:text="@string/titulo_chat"
-        android:textColor="@color/verde_escuro_principal"
-        android:textSize="24sp"
+        android:textColor="@color/rosa_ecociente"
+        android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/botaoVoltarMensagens" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/campoBuscaConversa"

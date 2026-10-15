@@ -30,12 +30,6 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".views.SindicoAvisosActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
             android:name=".views.SindicoCooperativasActivity"
             android:exported="false"
             android:screenOrientation="portrait"
@@ -94,15 +88,15 @@
             android:exported="false" />
 
         <activity
-            android:name=".views.AvisosActivity"
-            android:exported="false" />
-
-        <activity
             android:name=".views.AvisoDetalheActivity"
             android:exported="false" />
 
         <activity
             android:name=".views.TelaListaActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".views.FeedActivity"
             android:exported="false" />
 
         <activity
@@ -117,6 +111,10 @@
             android:name=".views.ConversaActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".views.CentralNotificacoesActivity"
+            android:exported="false" />
 
         <activity
             android:name=".views.SolicitacaoDetalheActivity"

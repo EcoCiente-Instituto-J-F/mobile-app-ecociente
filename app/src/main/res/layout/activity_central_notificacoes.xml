@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/raizCentralNotificacoes"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/branco"
+    android:orientation="vertical"
+    tools:context=".views.CentralNotificacoesActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/botaoVoltarCentral"
+            style="@style/BotaoVoltar"
+        android:contentDescription="@string/voltar" />
+
+        <TextView
+            android:id="@+id/tituloCentralNotificacoes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="14dp"
+            android:fontFamily="@font/nunito_bold"
+            android:text="@string/notificacoes_e_avisos"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:id="@+id/listaCentralNotificacoes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp" />
+
+    </ScrollView>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/botaoNovaNotificacaoCentral"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="22dp"
+        android:fontFamily="@font/nunito_semibold"
+        android:text="@string/nova_notificacao"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:backgroundTint="@color/verde_escuro_principal"
+        app:cornerRadius="28dp"
+        app:icon="@drawable/ic_adicionar"
+        app:iconGravity="textStart"
+        app:iconPadding="10dp"
+        app:iconTint="@color/branco" />
+
+    <com.example.ecociente.ui.BarraNavegacaoView
+        android:id="@+id/barraInferiorCentral"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+</LinearLayout>

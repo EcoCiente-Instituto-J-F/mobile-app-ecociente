@@ -10,10 +10,15 @@ import com.example.ecociente.views.GerenciarPerfilActivity;
 import com.example.ecociente.views.Login;
 import com.example.ecociente.views.MainActivity;
 import com.example.ecociente.views.MensagensActivity;
+import com.example.ecociente.views.FeedActivity;
 import com.example.ecociente.views.QuizActivity;
 import com.example.ecociente.views.SolicitacoesActivity;
 import com.example.ecociente.views.TelaListaActivity;
 import androidx.annotation.StringRes;
+import com.example.ecociente.views.SindicoCooperativasActivity;
+import com.example.ecociente.views.SindicoHistoricoActivity;
+import com.example.ecociente.views.SindicoHomeActivity;
+import com.example.ecociente.views.SindicoUnidadesActivity;
 
 public final class Navegacao {
 
@@ -62,6 +67,40 @@ public final class Navegacao {
         }
     }
 
+    public static void irParaItemDoSindico(@NonNull Activity de, int indice, int indiceAtual) {
+
+        if (indice == indiceAtual) {
+            return;
+        }
+
+        if (indice == ItensBarra.HOME) {
+            abrirHomePelaBarra(de, SindicoHomeActivity.class, indiceAtual);
+            return;
+        }
+
+        Class<?> destino;
+
+        if (indice == ItensBarra.SEGUNDO) {
+            destino = SindicoCooperativasActivity.class;
+
+        } else if (indice == ItensBarra.TERCEIRO) {
+            destino = SindicoHistoricoActivity.class;
+
+        } else {
+            destino = SindicoUnidadesActivity.class;
+        }
+
+        Intent rota =
+                new Intent(de, destino)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        abrirPelaBarra(de, rota, indiceAtual);
+
+        if (indiceAtual != ItensBarra.HOME) {
+            de.finish();
+        }
+    }
+
     public static void irParaItemDoUsuario(
             @NonNull Activity de, int indice, int indiceAtual, boolean morador) {
 
@@ -86,7 +125,7 @@ public final class Navegacao {
         } else {
             rota =
                     morador
-                            ? TelaListaActivity.criarIntent(de, TipoLista.FEED, true)
+                            ? new Intent(de, FeedActivity.class)
                             : new Intent(de, GerenciarPerfilActivity.class);
         }
 

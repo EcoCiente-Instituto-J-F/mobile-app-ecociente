@@ -70,13 +70,25 @@ public class CooperativaHomeActivity extends AppCompatActivity {
                 findViewById(R.id.cardProximaColeta),
                 findViewById(R.id.cardCalendarioColetas));
 
+        // A raiz não recorta os filhos (por causa da barra); sem isto o conteúdo rolado
+        // desenha por cima do cabeçalho.
+        findViewById(R.id.rolagemHomeCooperativa)
+                .addOnLayoutChangeListener(
+                        (rolagem, esquerda, topo, direita, base, e, t, d, b) ->
+                                rolagem.setClipBounds(
+                                        new android.graphics.Rect(0, 0, direita - esquerda, base - topo)));
+
         configurarCalendario();
 
         findViewById(R.id.botaoAvisosCooperativa)
-                .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, true)));
+                .setOnClickListener(
+                        view ->
+                                startActivity(
+                                        CentralNotificacoesActivity.criarIntent(
+                                                this, CentralNotificacoesActivity.Destino.COOPERATIVA)));
 
         findViewById(R.id.cardAvisosCooperativa)
-                .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, true)));
+                .setOnClickListener(view -> startActivity(CentralNotificacoesActivity.criarIntent(this, CentralNotificacoesActivity.Destino.COOPERATIVA)));
 
         findViewById(R.id.cardChatbotCooperativa)
                 .setOnClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
@@ -147,10 +159,18 @@ public class CooperativaHomeActivity extends AppCompatActivity {
 
         carregarPerfil();
 
-        Aviso recente = Aviso.exemplos().get(0);
+        TextView avisoDestaque = findViewById(R.id.textoAvisoDestaqueCooperativa);
+        TextView avisoOrigem = findViewById(R.id.textoAvisoOrigemCooperativa);
 
-        ((TextView) findViewById(R.id.textoAvisoDestaqueCooperativa)).setText(recente.titulo);
-        ((TextView) findViewById(R.id.textoAvisoOrigemCooperativa)).setText(recente.remetente);
+        if (Aviso.lista().isEmpty()) {
+            avisoDestaque.setText(R.string.sem_avisos);
+            avisoOrigem.setText("");
+        } else {
+            Aviso recente = Aviso.lista().get(0);
+
+            avisoDestaque.setText(recente.titulo);
+            avisoOrigem.setText(recente.remetente);
+        }
 
         findViewById(R.id.pontoAvisosCooperativa)
                 .setVisibility(Aviso.quantidadeNaoLidos() > 0 ? View.VISIBLE : View.GONE);

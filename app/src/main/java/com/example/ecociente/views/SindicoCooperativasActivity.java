@@ -1,7 +1,7 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,10 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
@@ -25,6 +21,13 @@ import com.example.ecociente.viewmodels.SindicoColetaViewModel;
 
 import java.text.Normalizer;
 import java.util.Locale;
+import com.example.ecociente.ui.JanelaEdgeToEdge;
+import com.example.ecociente.ui.InsetsSistema;
+import com.example.ecociente.ui.BarraNavegacaoView;
+import com.example.ecociente.ui.ItensBarra;
+import com.example.ecociente.ui.Navegacao;
+import com.example.ecociente.model.SindicoSolicitacao;
+import com.example.ecociente.model.StatusAgendamento;
 
 /** Lista local de demonstração, sem busca remota ou solicitação real. */
 public final class SindicoCooperativasActivity extends AppCompatActivity {
@@ -35,19 +38,17 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_cooperativas);
 
+        Motion.entrar(
+                this,
+                R.id.tituloSindicoCooperativas,
+                R.id.buscaCooperativas,
+                R.id.listaCooperativas);
+
         View raiz = findViewById(R.id.raizSindicoCooperativas);
-        ViewCompat.setOnApplyWindowInsetsListener(raiz, (view, insets) -> {
-            Insets barras = insets.getInsets(WindowInsetsCompat.Type.systemBars()
-                    | WindowInsetsCompat.Type.displayCutout());
-            view.setPadding(barras.left, barras.top, barras.right, barras.bottom);
-            return insets;
-        });
-        ViewCompat.requestApplyInsets(raiz);
+        InsetsSistema.aplicarComoPadding(raiz);
 
         viewModel = new ViewModelProvider(this).get(SindicoColetaViewModel.class);
         lista = findViewById(R.id.listaCooperativas);
@@ -59,15 +60,13 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
             }
             @Override public void afterTextChanged(Editable s) { }
         });
-        findViewById(R.id.voltarCooperativas).setOnClickListener(view -> finish());
-        SindicoBottomBar barra = findViewById(R.id.barraInferiorSindico);
-        barra.selecionar(SindicoBottomBar.Aba.SOLICITACAO);
-        barra.aoTocarHome(view -> voltarHome());
-        barra.aoTocarSolicitacao(null);
-        barra.aoTocarHistorico(view -> startActivity(
-                new Intent(this, SindicoHistoricoActivity.class)));
-        barra.aoTocarUnidades(view -> startActivity(
-                new Intent(this, SindicoUnidadesActivity.class)));
+        BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
+        barra.configurar(ItensBarra.sindico());
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.SEGUNDO);
+        barra.setOnAssistenteClickListener(
+                view -> startActivity(new Intent(this, ChatActivity.class)));
+        barra.setOnItemClickListener(
+                indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.SEGUNDO));
     }
 
     @Override
@@ -87,7 +86,7 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
             View item = inflater.inflate(R.layout.item_sindico_cooperativa, lista, false);
             TextView nome = item.findViewById(R.id.nomeCooperativa);
             nome.setText(cooperativa.getNome());
-            nome.setContentDescription("Ver informações de " + cooperativa.getNome());
+            nome.setContentDescription(getString(R.string.sindico_ver_informacoes, cooperativa.getNome()));
             nome.setOnClickListener(view -> {
                 Intent informacoes = new Intent(this, SindicoInformacoesCooperativaActivity.class);
                 informacoes.putExtra(SindicoInformacoesCooperativaActivity.EXTRA_COOPERATIVA_ID,
@@ -95,23 +94,32 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
                 startActivity(informacoes);
             });
             ((TextView) item.findViewById(R.id.distanciaCooperativa))
-                    .setText("⌖ " + cooperativa.getDistancia());
+                    .setText(getString(R.string.sindico_distancia, cooperativa.getDistancia()));
             ((TextView) item.findViewById(R.id.avaliacaoCooperativa))
-                    .setText("★ " + cooperativa.getAvaliacao());
+                    .setText(getString(R.string.sindico_avaliacao_cooperativa, cooperativa.getAvaliacao()));
             Button acao = item.findViewById(R.id.acaoCooperativa);
+            SindicoSolicitacao pendente = solicitacaoEmAndamento(cooperativa.getId());
+            if (pendente != null) {
+                acao.setText(R.string.sindico_solicitacao_enviada);
+                acao.setTextColor(getColor(R.color.etiqueta_pendente_texto));
+                acao.setBackgroundTintList(getColorStateList(R.color.etiqueta_pendente_fundo));
+                acao.setOnClickListener(view -> startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
+                        this, pendente.paraSolicitacao(getString(R.string.sindico_condominio_demo)),
+                        pendente.getCooperativa())));
+                lista.addView(item, margemDoCartao());
+                continue;
+            }
             acao.setOnClickListener(view -> {
                 Intent formulario = new Intent(this, SindicoSolicitacaoColetaActivity.class);
                 formulario.putExtra(SindicoSolicitacaoColetaActivity.EXTRA_COOPERATIVA_ID,
                         cooperativa.getId());
                 startActivity(formulario);
             });
-            LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(-1, -2);
-            parametros.bottomMargin = Math.round(12 * getResources().getDisplayMetrics().density);
-            lista.addView(item, parametros);
+            lista.addView(item, margemDoCartao());
         }
         if (encontrados == 0) {
             TextView vazio = new TextView(this);
-            vazio.setText("Nenhuma cooperativa de exemplo encontrada.");
+            vazio.setText(R.string.sindico_nenhuma_cooperativa_de_exemplo_enc);
             vazio.setTextColor(getColor(R.color.cinza_texto_home));
             vazio.setTextSize(14);
             vazio.setPadding(8, 28, 8, 28);
@@ -122,6 +130,21 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
     private String normalizar(String valor) {
         return Normalizer.normalize(valor, Normalizer.Form.NFD)
                 .replaceAll("\\p{M}", "").toLowerCase(Locale.ROOT).trim();
+    }
+
+    private LinearLayout.LayoutParams margemDoCartao() {
+        LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(-1, -2);
+        parametros.bottomMargin = Math.round(12 * getResources().getDisplayMetrics().density);
+        return parametros;
+    }
+
+    private SindicoSolicitacao solicitacaoEmAndamento(int cooperativaId) {
+        for (SindicoSolicitacao solicitacao : viewModel.getSolicitacoes()) {
+            boolean ativa = solicitacao.getStatus() == StatusAgendamento.AGENDADO
+                    || solicitacao.getStatus() == StatusAgendamento.CONFIRMADO;
+            if (ativa && solicitacao.getCooperativaId() == cooperativaId) return solicitacao;
+        }
+        return null;
     }
 
     private void voltarHome() {

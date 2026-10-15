@@ -53,7 +53,7 @@ public final class Aviso {
     }
 
     @NonNull
-    public static synchronized List<Aviso> exemplos() {
+    public static synchronized List<Aviso> lista() {
 
         if (exemplos == null) {
             exemplos = new ArrayList<>();
@@ -82,7 +82,7 @@ public final class Aviso {
 
         int quantidade = 0;
 
-        for (Aviso aviso : exemplos()) {
+        for (Aviso aviso : lista()) {
             if (!aviso.isLida()) {
                 quantidade++;
             }
@@ -94,7 +94,7 @@ public final class Aviso {
     @Nullable
     public static Aviso porId(int id) {
 
-        for (Aviso aviso : exemplos()) {
+        for (Aviso aviso : lista()) {
             if (aviso.id == id) {
                 return aviso;
             }

@@ -54,6 +54,11 @@ public class InicioQuizActivity extends AppCompatActivity {
             return;
         }
 
+        if (QuizConteudo.obterPerguntas().isEmpty()) {
+            finish();
+            return;
+        }
+
         configurarConteudo();
         configurarAcoes();
         animarEntrada();

@@ -1,7 +1,7 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.ecociente.R;
 import com.example.ecociente.model.SindicoPosicaoRanking;
@@ -20,6 +16,11 @@ import com.example.ecociente.repository.SindicoRankingRepository;
 
 import java.util.List;
 import java.util.Locale;
+import com.example.ecociente.ui.JanelaEdgeToEdge;
+import com.example.ecociente.ui.InsetsSistema;
+import com.example.ecociente.ui.BarraNavegacaoView;
+import com.example.ecociente.ui.ItensBarra;
+import com.example.ecociente.ui.Navegacao;
 
 /** Ranking ilustrativo em dois modos; nenhum dado é lido de banco ou API. */
 public final class SindicoRankingActivity extends AppCompatActivity {
@@ -29,19 +30,20 @@ public final class SindicoRankingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_ranking);
 
+        Motion.entrar(
+                this,
+                R.id.tituloSindicoRanking,
+                R.id.rankingPorBloco,
+                R.id.avatarPrimeiroRanking,
+                R.id.avatarSegundoRanking,
+                R.id.avatarTerceiroRanking,
+                R.id.listaSindicoRankingCompleta);
+
         View raiz = findViewById(R.id.raizSindicoRanking);
-        ViewCompat.setOnApplyWindowInsetsListener(raiz, (view, insets) -> {
-            Insets barras = insets.getInsets(WindowInsetsCompat.Type.systemBars()
-                    | WindowInsetsCompat.Type.displayCutout());
-            view.setPadding(barras.left, barras.top, barras.right, barras.bottom);
-            return insets;
-        });
-        ViewCompat.requestApplyInsets(raiz);
+        InsetsSistema.aplicarComoPadding(raiz);
 
         porApartamento = estadoSalvo != null && estadoSalvo.getBoolean(ESTADO_APARTAMENTOS);
         findViewById(R.id.voltarSindicoRanking).setOnClickListener(view -> finish());
@@ -49,12 +51,13 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         findViewById(R.id.rankingPorApartamento).setOnClickListener(
                 view -> selecionarModo(true));
 
-        SindicoBottomBar barra = findViewById(R.id.barraInferiorSindico);
-        barra.selecionar(SindicoBottomBar.Aba.HOME);
-        barra.aoTocarHome(view -> navegar(SindicoHomeActivity.class));
-        barra.aoTocarSolicitacao(view -> navegar(SindicoCooperativasActivity.class));
-        barra.aoTocarHistorico(view -> navegar(SindicoHistoricoActivity.class));
-        barra.aoTocarUnidades(view -> navegar(SindicoUnidadesActivity.class));
+        BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
+        barra.configurar(ItensBarra.sindico());
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.HOME);
+        barra.setOnAssistenteClickListener(
+                view -> startActivity(new Intent(this, ChatActivity.class)));
+        barra.setOnItemClickListener(
+                indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM));
         atualizarRanking();
     }
 
@@ -78,12 +81,18 @@ public final class SindicoRankingActivity extends AppCompatActivity {
 
         List<SindicoPosicaoRanking> posicoes = SindicoRankingRepository.getInstance()
                 .getRanking(porApartamento);
-        preencherPodio(posicoes.get(0), R.id.avatarPrimeiroRanking,
-                R.id.pontosPrimeiroRanking);
-        preencherPodio(posicoes.get(1), R.id.avatarSegundoRanking,
-                R.id.pontosSegundoRanking);
-        preencherPodio(posicoes.get(2), R.id.avatarTerceiroRanking,
-                R.id.pontosTerceiroRanking);
+        int[] avatares = {R.id.avatarPrimeiroRanking, R.id.avatarSegundoRanking,
+                R.id.avatarTerceiroRanking};
+        int[] pontos = {R.id.pontosPrimeiroRanking, R.id.pontosSegundoRanking,
+                R.id.pontosTerceiroRanking};
+        for (int i = 0; i < avatares.length; i++) {
+            if (i < posicoes.size()) {
+                preencherPodio(posicoes.get(i), avatares[i], pontos[i]);
+            } else {
+                ((TextView) findViewById(pontos[i])).setText("");
+                findViewById(avatares[i]).setContentDescription(null);
+            }
+        }
 
         LinearLayout lista = findViewById(R.id.listaSindicoRankingCompleta);
         lista.removeAllViews();

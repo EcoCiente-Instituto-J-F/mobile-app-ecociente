@@ -81,14 +81,14 @@ public class ProximaColetaView extends FrameLayout {
 
         tipo.setVisibility(VISIBLE);
 
-        data.setText(FormatoDataApi.dataExtensa(coleta.getDataInicio()));
+        data.setText(FormatoDataApi.dataExtensaSemAnoCorrente(coleta.getDataInicio()));
 
         String inicio = FormatoDataApi.horaCurta(coleta.getDataInicio());
         String fim = FormatoDataApi.horaCurta(coleta.getDataFim());
 
         if (!inicio.isEmpty()) {
             horario.setText(
-                    fim.isEmpty()
+                    fim.isEmpty() || fim.equals(inicio)
                             ? getContext().getString(R.string.proxima_coleta_horario_inicio, inicio)
                             : getContext().getString(R.string.proxima_coleta_horario, inicio, fim));
             linhaHorario.setVisibility(VISIBLE);

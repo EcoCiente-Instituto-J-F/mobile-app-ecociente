@@ -30,6 +30,8 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
     private boolean cooperativa;
 
+    private PerfilUsuario perfilAtual;
+
     private TextView textoNomeCabecalho;
     private TextView textoEmailCabecalho;
 
@@ -160,6 +162,8 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
     private void preencherCampos(FirebaseUser usuario, PerfilUsuario perfil) {
 
+        perfilAtual = perfil;
+
         cooperativa = perfil != null && PerfilAcesso.ehCooperativa(perfil.getTipoPerfil());
 
         String emailLogin = PerfilUsuario.emailExibicao(perfil, usuario);
@@ -185,7 +189,7 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
         definirValor(linhaEndereco, perfil != null ? perfil.getEndereco() : "");
 
-        if (cooperativa) {
+        if (perfil != null && (cooperativa || usuarioComum(perfil))) {
             montarInformacoesBasicas(perfil);
         }
 
@@ -226,19 +230,24 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
         linhas.removeAllViews();
 
-        adicionarLinhaBasica(linhas, PerfilRepository.CAMPO_NUMERO, R.string.rotulo_numero, perfil.getNumero(), true);
+        adicionarLinhaBasica(linhas, PerfilRepository.CAMPO_NUMERO, R.string.rotulo_numero, perfil.getNumero(), true, true);
         adicionarLinhaBasica(
-                linhas, PerfilRepository.CAMPO_COMPLEMENTO, R.string.rotulo_complemento, perfil.getComplemento(), true);
-        adicionarLinhaBasica(linhas, PerfilRepository.CAMPO_CIDADE, R.string.rotulo_cidade, perfil.getCidade(), true);
-        adicionarLinhaBasica(linhas, PerfilRepository.CAMPO_ESTADO, R.string.rotulo_estado, perfil.getEstado(), true);
-        adicionarLinhaBasica(linhas, PerfilRepository.CAMPO_CEP, R.string.rotulo_cep, perfil.getCep(), false);
+                linhas, PerfilRepository.CAMPO_COMPLEMENTO, R.string.rotulo_complemento, perfil.getComplemento(), true, true);
+        adicionarLinhaBasica(linhas, PerfilRepository.CAMPO_CIDADE, R.string.rotulo_cidade, perfil.getCidade(), true, false);
+        adicionarLinhaBasica(linhas, PerfilRepository.CAMPO_ESTADO, R.string.rotulo_estado, perfil.getEstado(), true, false);
+        adicionarLinhaBasica(linhas, PerfilRepository.CAMPO_CEP, R.string.rotulo_cep, perfil.getCep(), false, true);
 
         findViewById(R.id.tituloInformacoesBasicas).setVisibility(View.VISIBLE);
         findViewById(R.id.containerInformacoesBasicas).setVisibility(View.VISIBLE);
     }
 
     private void adicionarLinhaBasica(
-            LinearLayout linhas, String campo, int rotulo, String valor, boolean comDivisor) {
+            LinearLayout linhas,
+            String campo,
+            int rotulo,
+            String valor,
+            boolean comDivisor,
+            boolean editavel) {
 
         LayoutInflater inflador = LayoutInflater.from(this);
 
@@ -248,7 +257,12 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
         definirValor(linha, valor);
 
-        linha.setOnClickListener(view -> abrirEdicao(campo, rotulo, linha));
+        // Cidade e estado vêm do CEP na ds-cadastro-api; editar à mão só criaria divergência.
+        if (editavel) {
+            linha.setOnClickListener(view -> abrirEdicao(campo, rotulo, linha));
+        } else {
+            linha.setClickable(false);
+        }
 
         linhas.addView(linha);
 
@@ -336,10 +350,70 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
                             // inteiro do Firestore de novo.
                             definirValor(linha, novoValor);
 
+                            aplicarNoPerfilAtual(campo, novoValor);
+
+                            if (campo.equals(PerfilRepository.CAMPO_CEP)) {
+                                atualizarCidadeEstadoPeloCep(novoValor);
+                            }
+
+                            viewModel.sincronizarCampoComApi(
+                                    getApplicationContext(), campo, novoValor, perfilAtual);
+
                             if (campo.equals(PerfilRepository.CAMPO_NOME)
                                     || campo.equals(PerfilRepository.CAMPO_NOME_COOPERATIVA)) {
                                 textoNomeCabecalho.setText(novoValor);
                             }
                         });
+    }
+
+    private void aplicarNoPerfilAtual(String campo, String valor) {
+
+        if (perfilAtual == null) {
+            return;
+        }
+
+        switch (campo) {
+            case PerfilRepository.CAMPO_CEP:
+                perfilAtual.setCep(valor);
+                break;
+
+            case PerfilRepository.CAMPO_NUMERO:
+                perfilAtual.setNumero(valor);
+                break;
+
+            case PerfilRepository.CAMPO_COMPLEMENTO:
+                perfilAtual.setComplemento(valor);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private boolean usuarioComum(PerfilUsuario perfil) {
+        return PerfilAcesso.ehUsuarioComum(
+                perfil.getTipoPerfil(), perfil.isPossuiCodigoCondominio(), perfil.getEndereco());
+    }
+
+    // A API recalcula cidade e estado pelo CEP; o perfil do app acompanha para não ficar com a antiga.
+    private void atualizarCidadeEstadoPeloCep(String cep) {
+
+        viewModel.buscarLocalidadePorCep(
+                cep,
+                localidade -> {
+                    if (localidade == null || perfilAtual == null || uid == null) {
+                        return;
+                    }
+
+                    perfilAtual.setCidade(localidade.getCidade());
+                    perfilAtual.setEstado(localidade.getEstado());
+
+                    viewModel.atualizarCampo(
+                            uid, PerfilRepository.CAMPO_CIDADE, localidade.getCidade());
+                    viewModel.atualizarCampo(
+                            uid, PerfilRepository.CAMPO_ESTADO, localidade.getEstado());
+
+                    montarInformacoesBasicas(perfilAtual);
+                });
     }
 }

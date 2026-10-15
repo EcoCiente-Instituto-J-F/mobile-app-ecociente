@@ -7,15 +7,12 @@
     android:background="@color/branco"
     android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/voltarSindicoBloco"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Voltar aos blocos"
-        android:padding="13dp"
-        android:src="@drawable/sindico_voltar" />
+    <ImageView
+            android:id="@+id/voltarSindicoBloco"
+            style="@style/BotaoVoltar"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="0dp"
+            android:contentDescription="@string/sindico_voltar_aos_blocos" />
 
     <TextView
         android:id="@+id/tituloSindicoBloco"
@@ -30,21 +27,13 @@
 
     <EditText
         android:id="@+id/buscaSindicoBloco"
+        style="@style/CampoBusca"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/sindico_campo"
-        android:drawableStart="@drawable/buscar_icon"
-        android:drawablePadding="8dp"
-        android:hint="Buscar unidade..."
-        android:inputType="text"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:singleLine="true"
-        android:textColor="@color/preto_texto_home"
-        android:textSize="13sp" />
+        android:hint="@string/sindico_buscar_unidade"
+        android:importantForAutofill="no" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -72,7 +61,7 @@
         android:layout_marginBottom="18dp"
         android:background="@drawable/sindico_status_concluida"
         android:clickable="true"
-        android:contentDescription="Adicionar unidade"
+        android:contentDescription="@string/sindico_adicionar_unidade"
         android:focusable="true"
         android:gravity="center"
         android:orientation="horizontal">
@@ -87,13 +76,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/nunito_bold"
-            android:text="Adicionar unidade"
+            android:text="@string/sindico_adicionar_unidade"
             android:textColor="@color/branco"
             android:textSize="14sp" />
     </LinearLayout>
 
-    <com.example.ecociente.views.SindicoBottomBar
+    <com.example.ecociente.ui.BarraNavegacaoView
         android:id="@+id/barraInferiorSindico"
         android:layout_width="match_parent"
-        android:layout_height="86dp" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.example.ecociente.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.ecociente.R;
 import com.example.ecociente.model.EstadoHome;
+import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.Dimensoes;
@@ -88,6 +90,14 @@ public class MainActivity extends AppCompatActivity {
         viewModel.carregar();
     }
 
+    private static final long ESPERA_PERFIL_MS = 25_000;
+
+    private boolean esperouLoginDaApi;
+
+    private boolean tentouObterPerfil;
+
+    private static final String TAG_ROTA = "RotaHome";
+
     private void renderizar(@NonNull EstadoHome estado) {
 
         switch (estado.getTipo()) {
@@ -112,12 +122,55 @@ public class MainActivity extends AppCompatActivity {
                 abrirHomeCooperativa();
                 break;
 
-            case CONDOMINIO:
-                abrirHomeCondominio();
+            case SINDICO:
+                abrirHomeSindico();
                 break;
 
+            case CONDOMINIO:
             case PRONTA:
-                carregarHome(estado.getNome());
+                // Primeiro acesso da sessão: o perfil da API ainda pode estar a caminho.
+                if (!esperouLoginDaApi && AutenticacaoExternaRepository.loginEmAndamento()) {
+                    esperouLoginDaApi = true;
+
+                    findViewById(R.id.indicadorCarregamentoHome).setVisibility(View.VISIBLE);
+
+                    AutenticacaoExternaRepository.aguardarLogin(
+                            ESPERA_PERFIL_MS,
+                            () -> {
+                                if (!isFinishing() && !isDestroyed()) {
+                                    renderizar(estado);
+                                }
+                            });
+                    break;
+                }
+
+                if (!tentouObterPerfil && AutenticacaoExternaRepository.perfilSalvo(this) == null) {
+                    tentouObterPerfil = true;
+
+                    findViewById(R.id.indicadorCarregamentoHome).setVisibility(View.VISIBLE);
+
+                    AutenticacaoExternaRepository.garantirPerfil(
+                            this,
+                            () -> {
+                                if (!isFinishing() && !isDestroyed()) {
+                                    renderizar(estado);
+                                }
+                            });
+                    break;
+                }
+
+                if (abrirHomePeloPerfilDaApi()) {
+                    break;
+                }
+
+                Log.i(TAG_ROTA, "home do morador/usuário; perfil da API="
+                        + AutenticacaoExternaRepository.perfilSalvo(this));
+
+                if (estado.getTipo() == EstadoHome.Tipo.CONDOMINIO) {
+                    abrirHomeCondominio();
+                } else {
+                    carregarHome(estado.getNome());
+                }
                 break;
 
             default:
@@ -154,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
         configurarBarra();
 
         findViewById(R.id.botaoNotificacoes)
-                .setOnClickListener(view -> startActivity(AvisosActivity.criarIntent(this, false)));
+                .setOnClickListener(view -> startActivity(CentralNotificacoesActivity.criarIntent(this, CentralNotificacoesActivity.Destino.CONDOMINIO)));
 
         observarFoto();
 
@@ -249,6 +302,50 @@ public class MainActivity extends AppCompatActivity {
     private void abrirHomeCooperativa() {
 
         startActivity(new Intent(this, CooperativaHomeActivity.class));
+
+        overridePendingTransition(0, 0);
+
+        finish();
+    }
+
+    // O Firestore pode estar com tipoPerfil de morador para quem já existe no Postgres como síndico
+    // ou cooperativa; o perfil que a API confirmou no login vale mais.
+    private boolean abrirHomePeloPerfilDaApi() {
+
+        String perfil = AutenticacaoExternaRepository.perfilSalvo(this);
+
+        if ("SINDICO".equals(perfil)) {
+            Log.i(TAG_ROTA, "perfil da API=SINDICO -> home do síndico");
+            corrigirTipoPerfilNoFirestore("sindico");
+            abrirHomeSindico();
+            return true;
+        }
+
+        if ("COOPERATIVA".equals(perfil)) {
+            Log.i(TAG_ROTA, "perfil da API=COOPERATIVA -> home da cooperativa");
+            corrigirTipoPerfilNoFirestore("cooperativa");
+            abrirHomeCooperativa();
+            return true;
+        }
+
+        return false;
+    }
+
+    // Deixa o documento do usuário igual ao que a API confirmou, para as outras telas.
+    private void corrigirTipoPerfilNoFirestore(String tipoPerfil) {
+
+        com.google.firebase.auth.FirebaseUser usuario =
+                com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
+
+        if (usuario != null) {
+            new com.example.ecociente.repository.PerfilRepository()
+                    .atualizarCampo(usuario.getUid(), "tipoPerfil", tipoPerfil);
+        }
+    }
+
+    private void abrirHomeSindico() {
+
+        startActivity(new Intent(this, SindicoHomeActivity.class));
 
         overridePendingTransition(0, 0);
 

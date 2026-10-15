@@ -15,6 +15,7 @@ import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import java.util.function.BooleanSupplier;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import com.example.ecociente.R;
@@ -76,6 +77,12 @@ public final class DialogoEco {
         }
 
         @NonNull
+        public Builder titulo(@NonNull CharSequence titulo) {
+            ((TextView) raiz.findViewById(R.id.tituloDialogoEco)).setText(titulo);
+            return this;
+        }
+
+        @NonNull
         public Builder conteudo(@NonNull View conteudo) {
             FrameLayout area = raiz.findViewById(R.id.conteudoDialogoEco);
             area.addView(conteudo);
@@ -86,13 +93,7 @@ public final class DialogoEco {
         @NonNull
         public Builder botao(@StringRes int rotulo, @NonNull Estilo estilo, @Nullable Runnable acao) {
 
-            MaterialButton botao =
-                    (MaterialButton) LayoutInflater.from(contexto).inflate(R.layout.botao_dialogo, botoes, false);
-
-            botao.setText(rotulo);
-            botao.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(contexto, estilo.fundo)));
-            botao.setTextColor(ContextCompat.getColor(contexto, estilo.texto));
-            botao.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(contexto, estilo.borda)));
+            MaterialButton botao = criarBotao(rotulo, estilo);
 
             botao.setOnClickListener(
                     view -> {
@@ -106,6 +107,38 @@ public final class DialogoEco {
             botoes.addView(botao);
 
             return this;
+        }
+
+        @NonNull
+        public Builder botaoValidado(
+                @StringRes int rotulo, @NonNull Estilo estilo, @NonNull BooleanSupplier acao) {
+
+            MaterialButton botao = criarBotao(rotulo, estilo);
+
+            botao.setOnClickListener(
+                    view -> {
+                        if (acao.getAsBoolean()) {
+                            dialogo.dismiss();
+                        }
+                    });
+
+            botoes.addView(botao);
+
+            return this;
+        }
+
+        @NonNull
+        private MaterialButton criarBotao(@StringRes int rotulo, @NonNull Estilo estilo) {
+
+            MaterialButton botao =
+                    (MaterialButton) LayoutInflater.from(contexto).inflate(R.layout.botao_dialogo, botoes, false);
+
+            botao.setText(rotulo);
+            botao.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(contexto, estilo.fundo)));
+            botao.setTextColor(ContextCompat.getColor(contexto, estilo.texto));
+            botao.setStrokeColor(ColorStateList.valueOf(ContextCompat.getColor(contexto, estilo.borda)));
+
+            return botao;
         }
 
         public void mostrar() {

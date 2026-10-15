@@ -25,9 +25,10 @@
                 android:layout_height="44dp"
                 android:layout_marginStart="-10dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Fechar informações da cooperativa"
+                android:contentDescription="@string/sindico_fechar_informacoes_da_cooperativa"
                 android:padding="12dp"
-                android:src="@drawable/sindico_voltar" />
+                android:src="@drawable/ic_voltar"
+        android:scaleType="centerInside" />
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
@@ -39,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/nunito_bold"
-                android:text="Informações básicas"
+                android:text="@string/informacoes_basicas"
                 android:textColor="@color/verde_escuro_principal"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -55,7 +56,7 @@
                 android:layout_width="92dp"
                 android:layout_height="92dp"
                 android:background="@drawable/sindico_foto_circular"
-                android:contentDescription="Caixas de papelão para reciclagem, imagem ilustrativa"
+                android:contentDescription="@string/sindico_caixas_de_papelao_para_reciclagem"
                 android:scaleType="centerCrop"
                 android:src="@drawable/sindico_cooperativa_caixas" />
             <LinearLayout
@@ -68,7 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_regular"
-                    android:text="Nome da cooperativa"
+                    android:text="@string/nome_cooperativa"
                     android:textColor="@color/cinza_texto_home"
                     android:textSize="13sp" />
                 <LinearLayout
@@ -105,7 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             android:fontFamily="@font/nunito_regular"
-            android:text="Endereço"
+            android:text="@string/perfil_rotulo_endereco"
             android:textColor="@color/cinza_texto_home"
             android:textSize="13sp" />
         <LinearLayout
@@ -149,7 +150,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_regular"
-                    android:text="Cidade"
+                    android:text="@string/rotulo_cidade"
                     android:textColor="@color/cinza_texto_home"
                     android:textSize="13sp" />
                 <LinearLayout
@@ -189,7 +190,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_regular"
-                    android:text="Estado"
+                    android:text="@string/rotulo_estado"
                     android:textColor="@color/cinza_texto_home"
                     android:textSize="13sp" />
                 <LinearLayout
@@ -224,7 +225,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             android:fontFamily="@font/nunito_regular"
-            android:text="CEP"
+            android:text="@string/rotulo_cep"
             android:textColor="@color/cinza_texto_home"
             android:textSize="13sp" />
         <LinearLayout
@@ -258,7 +259,7 @@
             android:layout_marginTop="12dp"
             android:fontFamily="@font/nunito_regular"
             android:gravity="end"
-            android:text="Dados ilustrativos"
+            android:text="@string/sindico_dados_ilustrativos"
             android:textColor="@color/cinza_texto_home"
             android:textSize="11sp" />
     </LinearLayout>

@@ -1,10 +1,6 @@
 <resources>
-    <string name="sindico_dados_demo">Dados de demonstração</string>
     <string name="sindico_saudacao_demo">Olá, Júlio!</string>
     <string name="sindico_condominio_demo">Condomínio Residencial Jardim das Flores</string>
-    <string name="sindico_avisos">Avisos</string>
-    <string name="sindico_nova_notificacao">Nova notificação</string>
-    <string name="sindico_salvar_rascunho">Salvar rascunho</string>
     <string name="sindico_rascunho_salvo">Rascunho salvo nesta sessão. O envio aos moradores estará disponível após a integração com a API.</string>
 
     <string name="app_name">
@@ -429,7 +425,6 @@
     <string name="condominios_atendidos">Condomínios atendidos</string>
     <string name="avaliacoes_recebidas">Avaliações recebidas</string>
     <string name="ranking_do_morador">Ranking do morador</string>
-    <string name="nova_coleta">Nova coleta</string>
     <string name="solicitacao_de_coleta">Solicitação de coleta</string>
     <string name="data">Data</string>
     <string name="horario_inicio">Início</string>
@@ -438,7 +433,7 @@
     <string name="preencha_todos_os_campos">Preencha todos os campos.</string>
     <string name="fim_antes_do_inicio">O horário final precisa ser depois do inicial.</string>
     <string name="coleta_salva_exemplo">Coleta salva (exemplo).</string>
-    <string name="ranking_resumo">1º Rafael · 2º Ana Paula · 3º Marina</string>
+    <string name="ranking_resumo">Veja sua posição e a do seu condomínio</string>
     <string name="lembrete_de_coleta">Lembrete de coleta</string>
     <string name="canal_lembretes_coleta">Lembretes de coleta</string>
     <string name="lembrete_amanha">Coleta amanhã, %1$s, às %2$s.</string>
@@ -448,8 +443,11 @@
 
     <!-- Avisos -->
     <string name="avisos">Avisos</string>
-    <string name="avisos_subtitulo">Faça seu descarte sustentável e ajude o meio ambiente!</string>
+    <string name="grupo_hoje">Hoje</string>
+    <string name="central_sem_itens">Nenhuma notificação ou aviso por enquanto.</string>
     <string name="sem_avisos">Nenhum aviso por aqui.</string>
+    <string name="grupo_ontem">Ontem</string>
+    <string name="grupo_anteriores">Anteriores</string>
     <string name="nova_notificacao">Nova notificação</string>
     <string name="destinatarios">Destinatários</string>
     <string name="titulo_aviso">Título</string>
@@ -479,6 +477,18 @@
     <string name="nome_cooperativa">Nome da cooperativa</string>
     <string name="nome_responsavel">Nome do responsável</string>
     <string name="solicitacao">Solicitação</string>
-    <string name="solicitacoes">Solicitações</string>
     <string name="unidades">Unidades</string>
+    <string name="quizzes_carregando">Carregando quizzes…</string>
+    <string name="quizzes_erro">Não foi possível carregar os quizzes. Entre com e-mail e senha e tente de novo.</string>
+    <string name="quiz_n_perguntas">%1$d perguntas</string>
+    <string name="quiz_pontos_recompensa">+%1$d pts</string>
+    <string name="quiz_resultado_sem_nota">--/--</string>
+    <string name="quiz_resultado_sem_gabarito">Respostas registradas. A correção aparece quando o gabarito estiver disponível.</string>
+    <string name="guia_carregando">Carregando o guia…</string>
+    <string name="guia_erro">Não foi possível carregar o guia. Entre com e-mail e senha e tente de novo.</string>
+    <string name="guia_vazio">Nenhum conteúdo por enquanto.</string>
+    <string name="lista_vazia">Nada por aqui ainda.</string>
+    <string name="feed_subtitulo">Fotos de descarte do seu condomínio</string>
+    <string name="feed_vazio">Ainda não há fotos por aqui. Quando os moradores registrarem descartes, elas aparecem neste feed.</string>
+    <string name="feed_foto_descarte">Foto de descarte</string>
 </resources>

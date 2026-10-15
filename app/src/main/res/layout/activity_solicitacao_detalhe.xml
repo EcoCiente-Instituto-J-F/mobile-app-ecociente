@@ -13,6 +13,7 @@
     <ImageView
         android:id="@+id/botaoVoltarDetalhe"
         style="@style/BotaoVoltar"
+        android:contentDescription="@string/voltar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -140,6 +141,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:fontFamily="@font/nunito_bold"
+                            android:id="@+id/tituloContraparteDetalhe"
                             android:text="@string/condominio_solicitante"
                             android:textColor="@color/verde_escuro_principal"
                             android:textSize="17sp" />
@@ -273,6 +275,58 @@
                         android:layout_height="1dp"
                         android:layout_marginBottom="14dp"
                         android:background="@color/cinza_borda_clara_home" />
+
+                    <LinearLayout
+                        android:id="@+id/caixaRespostaCooperativa"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="14dp"
+                        android:background="@drawable/fundo_resposta_cooperativa"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunito_bold"
+                            android:text="@string/resposta_da_cooperativa"
+                            android:textColor="@color/verde_escuro_principal"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/nunito_regular"
+                            android:text="@string/resposta_da_cooperativa_texto"
+                            android:textColor="@color/cinza_texto_home"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/textoColetaConfirmada"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/nunito_semibold"
+                            android:textColor="@color/verde_escuro_principal"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/botaoCancelarSolicitacao"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="@string/cancelar_solicitacao"
+                        android:textAllCaps="false"
+                        android:textColor="@color/rosa_ecociente"
+                        android:visibility="gone"
+                        app:backgroundTint="@color/rosa_fundo_recusar"
+                        app:cornerRadius="10dp"
+                        app:strokeColor="@color/rosa_ecociente" />
 
                     <LinearLayout
                         android:id="@+id/acoesDetalhe"
