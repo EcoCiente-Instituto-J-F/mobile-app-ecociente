@@ -14,6 +14,7 @@ public class PerfilUsuario {
     private String endereco = "";
     private String cpf = "";
     private String fotoUrl = "";
+    private String fotoCondominioUrl = "";
     private String tipoPerfil = "";
     private String nomeCooperativa = "";
     private String cnpj = "";
@@ -119,6 +120,14 @@ public class PerfilUsuario {
     @NonNull
     public String getFotoUrl() {
         return fotoUrl == null ? "" : fotoUrl;
+    }
+
+    public String getFotoCondominioUrl() {
+        return fotoCondominioUrl == null ? "" : fotoCondominioUrl;
+    }
+
+    public void setFotoCondominioUrl(String fotoCondominioUrl) {
+        this.fotoCondominioUrl = fotoCondominioUrl;
     }
 
     public void setFotoUrl(String fotoUrl) {

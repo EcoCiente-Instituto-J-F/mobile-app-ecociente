@@ -74,6 +74,24 @@ public class PerfilViewModel extends ViewModelComCarregamento {
     @NonNull
     public LiveData<ResultadoUploadFoto> atualizarFotoPerfil(
             @NonNull Context contexto, @NonNull String uid, @NonNull Uri imagem) {
+        return enviarFoto(contexto, uid, imagem, PerfilRepository.CAMPO_FOTO_URL, true);
+    }
+
+    // Foto do condomínio do síndico: vai ao Cloudinary e a URL fica no documento do usuário.
+    // A API de cadastro ainda não tem campo para ela, por isso não sincroniza.
+    @NonNull
+    public LiveData<ResultadoUploadFoto> atualizarFotoCondominio(
+            @NonNull Context contexto, @NonNull String uid, @NonNull Uri imagem) {
+        return enviarFoto(contexto, uid, imagem, PerfilRepository.CAMPO_FOTO_CONDOMINIO_URL, false);
+    }
+
+    @NonNull
+    private LiveData<ResultadoUploadFoto> enviarFoto(
+            @NonNull Context contexto,
+            @NonNull String uid,
+            @NonNull Uri imagem,
+            @NonNull String campo,
+            boolean sincronizarComApi) {
         definirCarregando(true);
 
         MediatorLiveData<ResultadoUploadFoto> resultado = new MediatorLiveData<>();
@@ -92,13 +110,21 @@ public class PerfilViewModel extends ViewModelComCarregamento {
                     }
 
                     LiveData<ResultadoApi> gravacao =
-                            repositorio.atualizarCampo(
-                                    uid, PerfilRepository.CAMPO_FOTO_URL, respostaEnvio.getUrl());
+                            repositorio.atualizarCampo(uid, campo, respostaEnvio.getUrl());
 
                     resultado.addSource(
                             gravacao,
                             respostaGravacao -> {
                                 definirCarregando(false);
+
+                                // A URL do Cloudinary também vai para a API de cadastro (urlAvatar).
+                                if (sincronizarComApi && respostaGravacao.isSucesso()) {
+                                    atualizacaoExterna.sincronizarCampo(
+                                            contexto,
+                                            PerfilRepository.CAMPO_FOTO_URL,
+                                            respostaEnvio.getUrl(),
+                                            null);
+                                }
 
                                 resultado.setValue(
                                         respostaGravacao.isSucesso()

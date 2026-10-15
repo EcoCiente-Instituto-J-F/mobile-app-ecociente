@@ -34,6 +34,7 @@ public class PerfilRepository {
     public static final String CAMPO_NOME_COOPERATIVA = "nomeCooperativa";
     public static final String CAMPO_EMAIL_COOPERATIVA = "emailCooperativa";
     public static final String CAMPO_FOTO_URL = "fotoUrl";
+    public static final String CAMPO_FOTO_CONDOMINIO_URL = "fotoCondominioUrl";
 
     private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
     private final FirebaseFirestore bancoFirestore = FirestoreProvider.obterInstancia();

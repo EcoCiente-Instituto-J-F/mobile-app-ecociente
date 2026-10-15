@@ -26,7 +26,9 @@ import com.example.ecociente.R;
 import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.model.SindicoDadosCondominio;
 import com.example.ecociente.model.SindicoItemUnidade;
+import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.example.ecociente.viewmodels.SindicoUnidadesViewModel;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
@@ -44,7 +46,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 if (uri != null && viewModel != null) {
                     viewModel.salvarFotoUri(uri.toString());
                     mostrarFoto();
-                    Toast.makeText(getApplicationContext(), R.string.sindico_foto_alterada_somente_nesta_demons, Toast.LENGTH_LONG).show();
+                    enviarFotoDoCondominio(uri);
                 }
             });
 
@@ -75,6 +77,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         ViewCompat.requestApplyInsets(raiz);
 
         viewModel = new ViewModelProvider(this).get(SindicoUnidadesViewModel.class);
+        carregarFotoSalva();
         nome = findViewById(R.id.nomeCondominioSindico);
         endereco = findViewById(R.id.enderecoCondominioSindico);
         cidade = findViewById(R.id.cidadeCondominioSindico);
@@ -146,6 +149,52 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 ? R.string.sindico_selecionar_comercial_ou_industrial : R.string.sindico_comercial_ou_industrial_selecionad));
     }
 
+    // Envia ao Cloudinary e guarda a URL no usuário do síndico; enquanto isso a foto escolhida
+    // já aparece, e se o envio falhar ela continua só neste aparelho.
+    private void enviarFotoDoCondominio(Uri imagem) {
+        PerfilViewModel perfil = new ViewModelProvider(this).get(PerfilViewModel.class);
+        FirebaseUser usuario = perfil.usuarioAtual();
+
+        if (usuario == null) {
+            return;
+        }
+
+        perfil.atualizarFotoCondominio(getApplicationContext(), usuario.getUid(), imagem)
+                .observe(this, resultado -> {
+                    if (resultado == null) {
+                        return;
+                    }
+
+                    if (resultado.isSucesso()) {
+                        viewModel.salvarFotoUri(resultado.getUrl());
+                        mostrarFoto();
+                        Toast.makeText(getApplicationContext(),
+                                R.string.sindico_foto_condominio_salva, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(),
+                                resultado.getMensagemErro(), Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
+    // Foto que o síndico já salvou: vem do documento dele quando a tela abre.
+    private void carregarFotoSalva() {
+        PerfilViewModel perfil = new ViewModelProvider(this).get(PerfilViewModel.class);
+        FirebaseUser usuario = perfil.usuarioAtual();
+
+        if (usuario == null) {
+            return;
+        }
+
+        perfil.buscarPerfil(usuario.getUid()).observe(this, dados -> {
+            if (dados != null && !dados.getFotoCondominioUrl().isEmpty()
+                    && viewModel.getFotoUri() == null) {
+                viewModel.salvarFotoUri(dados.getFotoCondominioUrl());
+                mostrarFoto();
+            }
+        });
+    }
+
     private void mostrarFoto() {
         ImageView foto = findViewById(R.id.fotoSindicoUnidades);
         String uri = viewModel.getFotoUri();
@@ -160,7 +209,11 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
             foto.setImageTintList(null);
             foto.setPadding(0, 0, 0, 0);
             foto.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            foto.setImageURI(Uri.parse(uri));
+            if (uri.startsWith("http")) {
+                com.bumptech.glide.Glide.with(foto).load(uri).into(foto);
+            } else {
+                foto.setImageURI(Uri.parse(uri));
+            }
             foto.setContentDescription(getString(R.string.sindico_foto_escolhida_para_o_condominio));
         }
     }
