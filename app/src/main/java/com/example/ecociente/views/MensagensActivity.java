@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -51,19 +52,12 @@ public class MensagensActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_mensagens);
 
-        if (sindico) {
-            findViewById(R.id.botaoVoltarMensagens).setVisibility(android.view.View.VISIBLE);
-            findViewById(R.id.botaoVoltarMensagens).setOnClickListener(view -> finish());
-
-            android.widget.TextView titulo = findViewById(R.id.tituloMensagens);
-            titulo.setTextColor(getColor(R.color.verde_escuro_principal));
-            titulo.setTextSize(24);
-
-            android.view.ViewGroup.MarginLayoutParams margem =
-                    (android.view.ViewGroup.MarginLayoutParams) titulo.getLayoutParams();
-            margem.topMargin = Math.round(4 * getResources().getDisplayMetrics().density);
-            titulo.setLayoutParams(margem);
-        }
+        Motion.entrar(
+                this,
+                R.id.tituloMensagens,
+                R.id.campoBuscaConversa,
+                R.id.cardAbasMensagens,
+                R.id.listaConversas);
 
         lista = findViewById(R.id.listaConversas);
         textoSemConversas = findViewById(R.id.textoSemConversas);
@@ -110,7 +104,7 @@ public class MensagensActivity extends AppCompatActivity {
 
         LayoutInflater inflador = LayoutInflater.from(this);
 
-        for (Conversa conversa : Conversa.lista()) {
+        for (Conversa conversa : sindico ? Conversa.listaDoSindico() : Conversa.lista()) {
 
             if (!pertence(conversa, aba)) {
                 continue;

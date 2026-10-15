@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -55,6 +56,13 @@ public class CalendarioColetasActivity extends AppCompatActivity {
         JanelaEdgeToEdge.aplicar(this);
 
         setContentView(R.layout.activity_calendario_coletas);
+
+        Motion.entrar(
+                this,
+                R.id.tituloCalendarioColetas,
+                R.id.subtituloCalendarioColetas,
+                R.id.proximaColeta,
+                R.id.calendarioMensal);
 
         viewModel = new ViewModelProvider(this).get(CalendarioViewModel.class);
 

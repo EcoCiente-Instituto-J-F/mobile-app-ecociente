@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -62,6 +63,11 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
         JanelaEdgeToEdge.aplicar(this);
 
         setContentView(R.layout.activity_central_notificacoes);
+
+        Motion.entrar(
+                this,
+                R.id.tituloCentralNotificacoes,
+                R.id.listaCentralNotificacoes);
 
         View raiz = findViewById(R.id.raizCentralNotificacoes);
 

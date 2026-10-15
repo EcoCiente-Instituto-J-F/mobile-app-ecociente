@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -39,6 +40,12 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
         super.onCreate(estadoSalvo);
         JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_cooperativas);
+
+        Motion.entrar(
+                this,
+                R.id.tituloSindicoCooperativas,
+                R.id.buscaCooperativas,
+                R.id.listaCooperativas);
 
         View raiz = findViewById(R.id.raizSindicoCooperativas);
         InsetsSistema.aplicarComoPadding(raiz);

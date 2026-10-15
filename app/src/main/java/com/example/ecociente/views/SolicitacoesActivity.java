@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -67,6 +68,13 @@ public class SolicitacoesActivity extends AppCompatActivity {
         JanelaEdgeToEdge.aplicar(this);
 
         setContentView(R.layout.activity_solicitacoes);
+
+        Motion.entrar(
+                this,
+                R.id.tituloSolicitacoes,
+                R.id.campoBuscaSolicitacao,
+                R.id.rolagemFiltros,
+                R.id.listaSolicitacoes);
 
         viewModel = new ViewModelProvider(this).get(SolicitacoesViewModel.class);
 

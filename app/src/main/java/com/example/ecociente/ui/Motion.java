@@ -7,7 +7,10 @@ import android.animation.ObjectAnimator;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,27 @@ public final class Motion {
     public static final long STATE_MS = 220;
     public static final long ENTER_MS = 320;
     private final List<Animator> running = new ArrayList<>();
+
+    // Entrada em cascata dos blocos de uma tela (mesma animação das homes). Cancela sozinha
+    // quando a tela é destruída, então a Activity não precisa guardar nada.
+    public static void entrar(AppCompatActivity tela, int... ids) {
+        Motion movimento = new Motion();
+
+        View[] blocos = new View[ids.length];
+
+        for (int i = 0; i < ids.length; i++) {
+            blocos[i] = tela.findViewById(ids[i]);
+        }
+
+        movimento.staggerIn(blocos);
+
+        tela.getLifecycle().addObserver(new DefaultLifecycleObserver() {
+            @Override
+            public void onDestroy(LifecycleOwner dono) {
+                movimento.cancelAll();
+            }
+        });
+    }
 
     public void fadeUp(View view, long delay) {
         if (view == null) return;

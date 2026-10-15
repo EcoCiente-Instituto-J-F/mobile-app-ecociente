@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,15 +22,26 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
         JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_dashboard);
 
+        Motion.entrar(
+                this,
+                R.id.tituloSindicoDashboard,
+                R.id.graficoQuizzesSindico,
+                R.id.graficoCooperativasSindico);
+
         View raiz = findViewById(R.id.raizSindicoDashboard);
         InsetsSistema.aplicarComoPadding(raiz);
 
         findViewById(R.id.voltarSindicoDashboard).setOnClickListener(view -> finish());
-        // API: notas por quiz e desempenho por cooperativa (dashboard do sindico, sem endpoint)
-        ((SindicoDashboardGraficoView) findViewById(R.id.graficoQuizzesSindico))
-                .setDados(new String[0], new int[0], new int[0], 1);
+        ((SindicoDashboardGraficoView) findViewById(R.id.graficoQuizzesSindico)).setDados(
+                new String[]{"Composta-\ngem", "Vidro", "Sustentabi-\nlidade", "Papel"},
+                new int[]{14, 18, 14, 26},
+                new int[]{R.color.verde_escuro_principal, R.color.verde_claro_ecociente,
+                        R.color.cinza_borda_clara_home, R.color.rosa_ecociente}, 30);
         ((SindicoDashboardGraficoView) findViewById(R.id.graficoCooperativasSindico))
-                .setDados(new String[0], new int[0], new int[0], 1);
+                .setDados(new String[]{"Coop\nEstrela", "Coop\nLua", "Coop\nSol", "Coop\nVerde"},
+                        new int[]{3, 9, 12, 15},
+                        new int[]{R.color.verde_escuro_principal, R.color.verde_claro_ecociente,
+                                R.color.rosa_ecociente, R.color.amarelo_avaliacao}, 15);
 
         BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
         barra.configurar(ItensBarra.sindico());

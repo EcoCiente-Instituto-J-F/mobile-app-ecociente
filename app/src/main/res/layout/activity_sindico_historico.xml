@@ -8,18 +8,21 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:paddingStart="26dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="8dp"
         android:paddingEnd="12dp">
         <TextView
+            android:id="@+id/tituloSindicoHistorico"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/nunito_bold"
             android:text="@string/sindico_historico_de_coletas"
-            android:textColor="@color/verde_escuro_principal"
-            android:textSize="20sp" />
+            android:textColor="@color/rosa_ecociente"
+            android:textSize="22sp" />
         <ImageButton
             android:id="@+id/filtrarHistorico"
             android:layout_width="48dp"

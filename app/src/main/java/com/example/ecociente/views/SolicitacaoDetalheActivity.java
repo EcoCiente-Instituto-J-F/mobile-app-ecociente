@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -79,6 +80,13 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
         cooperativaDoSindico = getIntent().getStringExtra(EXTRA_COOPERATIVA);
 
         setContentView(R.layout.activity_solicitacao_detalhe);
+
+        Motion.entrar(
+                this,
+                R.id.tituloDetalheSolicitacao,
+                R.id.linhaDoTempoDetalhe,
+                R.id.linhasDetalhe,
+                R.id.caixaRespostaCooperativa);
 
         viewModel = new ViewModelProvider(this).get(ResponderSolicitacaoViewModel.class);
 

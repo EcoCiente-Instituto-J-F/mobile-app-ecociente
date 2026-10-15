@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -44,6 +45,12 @@ public final class SindicoBlocoActivity extends AppCompatActivity {
         super.onCreate(estadoSalvo);
         JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_bloco);
+
+        Motion.entrar(
+                this,
+                R.id.tituloSindicoBloco,
+                R.id.buscaSindicoBloco,
+                R.id.listaSindicoApartamentos);
 
         View raiz = findViewById(R.id.raizSindicoBloco);
         ViewCompat.setOnApplyWindowInsetsListener(raiz, (view, insets) -> {

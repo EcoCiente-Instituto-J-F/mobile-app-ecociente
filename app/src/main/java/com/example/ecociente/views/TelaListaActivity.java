@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -54,6 +55,11 @@ public class TelaListaActivity extends AppCompatActivity {
         morador = getIntent().getBooleanExtra(EXTRA_MORADOR, false);
 
         setContentView(R.layout.activity_tela_lista);
+
+        Motion.entrar(
+                this,
+                R.id.tituloTelaLista,
+                R.id.listaItens);
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizTelaLista));
 

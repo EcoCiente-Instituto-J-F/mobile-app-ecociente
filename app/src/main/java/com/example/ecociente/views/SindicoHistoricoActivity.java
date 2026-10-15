@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -38,6 +39,11 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
         super.onCreate(estadoSalvo);
         JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_historico);
+
+        Motion.entrar(
+                this,
+                R.id.tituloSindicoHistorico,
+                R.id.listaSindicoHistorico);
 
         View raiz = findViewById(R.id.raizSindicoHistorico);
         InsetsSistema.aplicarComoPadding(raiz);

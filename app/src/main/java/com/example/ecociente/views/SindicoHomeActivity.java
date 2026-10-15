@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -50,6 +51,15 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         super.onCreate(estadoSalvo);
         JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_home);
+
+        Motion.entrar(
+                this,
+                R.id.sindicoSaudacao,
+                R.id.sindicoCondominio,
+                R.id.semanaColetas,
+                R.id.sindicoDashboardResumo,
+                R.id.sindicoRankingTitulo,
+                R.id.sindicoRanking);
 
         View raiz = findViewById(R.id.raizSindicoHome);
         InsetsSistema.aplicarComoPadding(raiz);

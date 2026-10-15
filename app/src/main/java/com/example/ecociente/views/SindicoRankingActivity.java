@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -31,6 +32,15 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         super.onCreate(estadoSalvo);
         JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_ranking);
+
+        Motion.entrar(
+                this,
+                R.id.tituloSindicoRanking,
+                R.id.rankingPorBloco,
+                R.id.avatarPrimeiroRanking,
+                R.id.avatarSegundoRanking,
+                R.id.avatarTerceiroRanking,
+                R.id.listaSindicoRankingCompleta);
 
         View raiz = findViewById(R.id.raizSindicoRanking);
         InsetsSistema.aplicarComoPadding(raiz);

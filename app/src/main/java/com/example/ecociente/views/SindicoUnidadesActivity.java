@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
@@ -62,6 +63,13 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         super.onCreate(estadoSalvo);
         JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_unidades);
+
+        Motion.entrar(
+                this,
+                R.id.tituloSindicoUnidades,
+                R.id.fotoSindicoUnidades,
+                R.id.salvarDadosCondominioSindico,
+                R.id.listaBlocosSindico);
 
         View raiz = findViewById(R.id.raizSindicoUnidades);
         ViewCompat.setOnApplyWindowInsetsListener(raiz, (view, insets) -> {
