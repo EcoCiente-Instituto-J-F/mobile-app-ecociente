@@ -108,7 +108,6 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         });
         findViewById(R.id.adicionarAreaSindico).setOnClickListener(
                 view -> abrirFormulario(false, null));
-        findViewById(R.id.voltarSindicoUnidades).setOnClickListener(view -> finish());
 
         BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
         barra.configurar(ItensBarra.sindico());

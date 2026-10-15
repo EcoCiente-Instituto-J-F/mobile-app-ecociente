@@ -10,14 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:gravity="center_vertical"
-        android:paddingStart="12dp"
+        android:paddingStart="26dp"
         android:paddingEnd="16dp">
-        <ImageView
-            android:id="@+id/voltarCooperativas"
-            style="@style/BotaoVoltar"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            android:contentDescription="@string/sindico_voltar_a_home_do_sindico" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"

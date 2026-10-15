@@ -53,7 +53,6 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
             }
             @Override public void afterTextChanged(Editable s) { }
         });
-        findViewById(R.id.voltarCooperativas).setOnClickListener(view -> finish());
         BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
         barra.configurar(ItensBarra.sindico());
         Navegacao.marcarNaBarra(this, barra, ItensBarra.SEGUNDO);

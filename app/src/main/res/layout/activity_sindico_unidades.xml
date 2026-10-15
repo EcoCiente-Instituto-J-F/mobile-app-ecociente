@@ -11,14 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:gravity="center_vertical"
-        android:paddingStart="8dp"
+        android:paddingStart="26dp"
         android:paddingEnd="16dp">
-        <ImageView
-            android:id="@+id/voltarSindicoUnidades"
-            style="@style/BotaoVoltar"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            android:contentDescription="@string/voltar" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -45,7 +45,6 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(SindicoColetaViewModel.class);
         lista = findViewById(R.id.listaSindicoHistorico);
         filtro = estadoSalvo == null ? 0 : estadoSalvo.getInt(ESTADO_FILTRO, 0);
-        findViewById(R.id.voltarHistorico).setOnClickListener(view -> finish());
         findViewById(R.id.filtrarHistorico).setOnClickListener(view -> abrirFiltro());
 
         BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
