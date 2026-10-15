@@ -27,7 +27,8 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/sindico_fechar_solicitacao_de_coleta"
                 android:padding="14dp"
-                android:src="@drawable/ic_voltar" />
+                android:src="@drawable/ic_voltar"
+        android:scaleType="centerInside" />
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"

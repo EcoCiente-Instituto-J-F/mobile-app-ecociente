@@ -147,7 +147,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             LinearLayout card = new LinearLayout(this);
             card.setOrientation(LinearLayout.VERTICAL);
             card.setPadding(dp(8), dp(10), dp(8), dp(8));
-            card.setBackgroundResource(R.drawable.sindico_card);
+            card.setBackgroundResource(R.drawable.fundo_cartao_borda);
             LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(0, -2, 1);
             if (i > 0) parametros.leftMargin = dp(6);
             painel.addView(card, parametros);

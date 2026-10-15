@@ -2,6 +2,7 @@ package com.example.ecociente.views;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,7 +16,6 @@ import com.example.ecociente.R;
 import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.model.SindicoHistoricoColeta;
 import com.example.ecociente.viewmodels.SindicoColetaViewModel;
-import com.google.android.material.snackbar.Snackbar;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.InsetsSistema;
 import androidx.core.view.ViewCompat;
@@ -60,8 +60,7 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
                 SindicoAvaliarColetaDialogFragment.RESULTADO_AVALIACAO, this,
                 (chave, resultado) -> {
                     mostrarHistorico();
-                    Snackbar.make(raiz, R.string.sindico_avaliacao_salva_somente_nesta_demo,
-                            Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.sindico_avaliacao_salva_somente_nesta_demo, Toast.LENGTH_LONG).show();
                 });
         mostrarHistorico();
     }

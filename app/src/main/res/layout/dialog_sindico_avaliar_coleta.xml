@@ -29,7 +29,8 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/sindico_fechar_avaliacao"
             android:padding="12dp"
-            android:src="@drawable/ic_fechar" />
+            android:src="@drawable/ic_fechar"
+        android:scaleType="centerInside" />
     </LinearLayout>
 
     <TextView

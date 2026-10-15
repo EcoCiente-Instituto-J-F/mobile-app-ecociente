@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="82dp"
-    android:background="@drawable/sindico_card"
+    android:background="@drawable/fundo_cartao_borda"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="12dp"

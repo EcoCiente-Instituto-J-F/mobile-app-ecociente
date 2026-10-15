@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
@@ -23,7 +24,6 @@ import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.SindicoViewModel;
-import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
@@ -129,8 +129,7 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
                         "rascunhoSindico",
                         this,
                         (chave, resultado) ->
-                                Snackbar.make(raiz, R.string.sindico_rascunho_salvo, Snackbar.LENGTH_LONG)
-                                        .show());
+                                Toast.makeText(getApplicationContext(), R.string.sindico_rascunho_salvo, Toast.LENGTH_LONG).show());
     }
 
     private void abrirFormularioDoSindico() {

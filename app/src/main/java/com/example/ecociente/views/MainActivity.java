@@ -89,6 +89,10 @@ public class MainActivity extends AppCompatActivity {
         viewModel.carregar();
     }
 
+    private static final long ESPERA_PERFIL_MS = 25_000;
+
+    private boolean esperouLoginDaApi;
+
     private void renderizar(@NonNull EstadoHome estado) {
 
         switch (estado.getTipo()) {
@@ -119,6 +123,22 @@ public class MainActivity extends AppCompatActivity {
 
             case CONDOMINIO:
             case PRONTA:
+                // Primeiro acesso da sessão: o perfil da API ainda pode estar a caminho.
+                if (!esperouLoginDaApi && AutenticacaoExternaRepository.loginEmAndamento()) {
+                    esperouLoginDaApi = true;
+
+                    findViewById(R.id.indicadorCarregamentoHome).setVisibility(View.VISIBLE);
+
+                    AutenticacaoExternaRepository.aguardarLogin(
+                            ESPERA_PERFIL_MS,
+                            () -> {
+                                if (!isFinishing() && !isDestroyed()) {
+                                    renderizar(estado);
+                                }
+                            });
+                    break;
+                }
+
                 if (abrirHomePeloPerfilDaApi()) {
                     break;
                 }

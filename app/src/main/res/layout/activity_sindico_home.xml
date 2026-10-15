@@ -149,7 +149,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/sindico_card"
+                android:background="@drawable/fundo_cartao_borda"
                 android:orientation="vertical"
                 android:padding="10dp">
 
@@ -208,7 +208,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:background="@drawable/sindico_card"
+                android:background="@drawable/fundo_cartao_borda"
                 android:clickable="true"
                 android:contentDescription="@string/sindico_abrir_dashboard_de_desempenho_comp"
                 android:focusable="true"

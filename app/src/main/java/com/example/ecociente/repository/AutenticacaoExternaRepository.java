@@ -45,6 +45,8 @@ public class AutenticacaoExternaRepository {
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
+    private static final ExecutorService EXECUTOR_ESPERA = Executors.newSingleThreadExecutor();
+
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
     public interface Retorno {
@@ -101,9 +103,32 @@ public class AutenticacaoExternaRepository {
         return salvo != null ? salvo : renovarToken(contexto);
     }
 
-    private void aguardarLoginEmAndamento() {
+    // Login por e-mail e senha ainda falando com a API (o Render pode levar mais de 1 min a acordar).
+    public static boolean loginEmAndamento() {
 
-        long limite = SystemClock.elapsedRealtime() + ESPERA_MAXIMA_MS;
+        synchronized (ESPERA) {
+            return loginsEmAndamento > 0;
+        }
+    }
+
+    // Espera, fora da thread principal, o login terminar (ou o limite) e avisa na principal.
+    public static void aguardarLogin(long limiteMs, @NonNull Runnable aoConcluir) {
+
+        EXECUTOR_ESPERA.execute(
+                () -> {
+                    aguardarLoginEmAndamento(limiteMs);
+
+                    PRINCIPAL.post(aoConcluir);
+                });
+    }
+
+    private void aguardarLoginEmAndamento() {
+        aguardarLoginEmAndamento(ESPERA_MAXIMA_MS);
+    }
+
+    private static void aguardarLoginEmAndamento(long limiteMs) {
+
+        long limite = SystemClock.elapsedRealtime() + limiteMs;
 
         synchronized (ESPERA) {
             while (loginsEmAndamento > 0) {

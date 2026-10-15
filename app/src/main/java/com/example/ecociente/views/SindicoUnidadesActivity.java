@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,6 @@ import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.model.SindicoDadosCondominio;
 import com.example.ecociente.model.SindicoItemUnidade;
 import com.example.ecociente.viewmodels.SindicoUnidadesViewModel;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
@@ -44,9 +44,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 if (uri != null && viewModel != null) {
                     viewModel.salvarFotoUri(uri.toString());
                     mostrarFoto();
-                    Snackbar.make(findViewById(R.id.raizSindicoUnidades),
-                            R.string.sindico_foto_alterada_somente_nesta_demons,
-                            Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.sindico_foto_alterada_somente_nesta_demons, Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -189,8 +187,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         viewModel.salvarDados(new SindicoDadosCondominio(residencial,
                 nome.getText().toString().trim(), endereco.getText().toString().trim(),
                 cidade.getText().toString().trim(), uf, codigoPostal));
-        Snackbar.make(raiz, R.string.sindico_dados_salvos_somente_nesta_demonst,
-                Snackbar.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), R.string.sindico_dados_salvos_somente_nesta_demonst, Toast.LENGTH_LONG).show();
     }
 
     private boolean validar(EditText campo, String erro) {
@@ -314,9 +311,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                         viewModel.salvarArea(id, valorNome, valorDetalhe);
                     }
                     mostrarListas();
-                    Snackbar.make(findViewById(R.id.raizSindicoUnidades),
-                            R.string.sindico_alteracao_salva_somente_nesta_demo,
-                            Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.sindico_alteracao_salva_somente_nesta_demo, Toast.LENGTH_LONG).show();
                     return true;
                 })
                 .botao(R.string.perfil_cancelar, DialogoEco.Estilo.CONTORNO, null)
@@ -332,9 +327,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                     if (bloco) viewModel.excluirBloco(item.getId());
                     else viewModel.excluirArea(item.getId());
                     mostrarListas();
-                    Snackbar.make(findViewById(R.id.raizSindicoUnidades),
-                            R.string.sindico_item_removido_desta_demonstracao,
-                            Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), R.string.sindico_item_removido_desta_demonstracao, Toast.LENGTH_LONG).show();
                 })
                 .mostrar();
     }

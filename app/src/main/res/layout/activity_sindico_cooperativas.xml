@@ -12,14 +12,12 @@
         android:gravity="center_vertical"
         android:paddingStart="12dp"
         android:paddingEnd="16dp">
-        <ImageButton
+        <ImageView
             android:id="@+id/voltarCooperativas"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/sindico_voltar_a_home_do_sindico"
-            android:padding="12dp"
-            android:src="@drawable/ic_voltar" />
+            style="@style/BotaoVoltar"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:contentDescription="@string/sindico_voltar_a_home_do_sindico" />
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -53,20 +51,13 @@
 
             <EditText
                 android:id="@+id/buscaCooperativas"
+                style="@style/CampoBusca"
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:background="@drawable/sindico_campo"
-                android:drawableStart="@drawable/buscar_icon"
-                android:drawablePadding="8dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="0dp"
                 android:hint="@string/sindico_buscar_cooperativa"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp"
-                android:singleLine="true"
-                android:textColor="@color/preto_texto_home"
-                android:textColorHint="@color/cinza_secundario_home"
-                android:textSize="14sp" />
+                android:importantForAutofill="no" />
 
             <LinearLayout
                 android:id="@+id/listaCooperativas"
