@@ -26,19 +26,93 @@ function lerCredencial() {
   return JSON.parse(json);
 }
 
-const app = getApps().length
-  ? getApp()
-  : initializeApp({
-      credential: cert(lerCredencial())
-    });
+function obterApp() {
+  return getApps().length
+    ? getApp()
+    : initializeApp({
+        credential: cert(lerCredencial())
+      });
+}
+
+const tipos = {
+  dica: {},
+  retorno: {},
+  quiz: {},
+  revisao: {},
+  motivacional: {},
+  conteudos: {},
+  aulas: {},
+  coleta_amanha: {},
+  coleta_hoje: {},
+  coleta_alterada: {},
+  ecoregistro_aprovado: {},
+  ranking_subiu: {},
+  aviso_condominio: {},
+  mensagem_nova: {},
+  solicitacao_nova: {},
+  solicitacao_aceita: {},
+  solicitacao_recusada: {},
+  calendario: {},
+  sazonal: {}
+};
+
+function exibirUso() {
+  console.error(
+    "Uso: node backend/scripts/enviarPushTeste.js <TOKEN_FCM> <TIPO> [--titulo TEXTO] [--mensagem TEXTO] [--destino DESTINO] [--acao TEXTO]"
+  );
+  console.error("Tipos aceitos:");
+  console.error(Object.keys(tipos).join("\n"));
+}
+
+if (process.argv[2] === "--listar") {
+  console.log(Object.keys(tipos).join("\n"));
+  process.exit(0);
+}
 
 const token = process.argv[2];
+const tipo = process.argv[3];
 
-if (!token) {
-  console.error(
-    "Uso: node backend/scripts/enviarPushTeste.js <TOKEN_FCM>"
-  );
+if (!token || !tipo) {
+  exibirUso();
+  process.exit(1);
+}
 
+if (!Object.prototype.hasOwnProperty.call(tipos, tipo)) {
+  console.error(`Tipo inválido: ${tipo}`);
+  exibirUso();
+  process.exit(1);
+}
+
+function lerSobrescritas(argumentos) {
+  const chaves = {
+    "--titulo": "titulo",
+    "--mensagem": "mensagem",
+    "--destino": "destino",
+    "--acao": "acao"
+  };
+  const sobrescritas = {};
+
+  for (let indice = 4; indice < argumentos.length; indice += 2) {
+    const chave = chaves[argumentos[indice]];
+    const valor = argumentos[indice + 1];
+
+    if (!chave || !valor) {
+      throw new Error("Sobrescrita inválida. Use pares como --titulo \"Novo título\".");
+    }
+
+    sobrescritas[chave] = valor;
+  }
+
+  return sobrescritas;
+}
+
+let sobrescritas;
+
+try {
+  sobrescritas = lerSobrescritas(process.argv);
+} catch (erro) {
+  console.error(erro.message);
+  exibirUso();
   process.exit(1);
 }
 
@@ -47,11 +121,8 @@ async function enviar() {
     token,
 
     data: {
-      titulo: "Bora de desafio? 👀",
-      mensagem:
-        "Tem um quiz rapidinho esperando por você!",
-      destino: "quiz",
-      acao: "Fazer quiz"
+      tipo,
+      ...sobrescritas
     },
 
     android: {
@@ -61,7 +132,7 @@ async function enviar() {
   };
 
   const resposta =
-    await getMessaging(app).send(mensagem);
+    await getMessaging(obterApp()).send(mensagem);
 
   console.log(
     "Notificação enviada com sucesso:"

@@ -17,7 +17,13 @@ import androidx.core.content.ContextCompat;
 
 import com.example.ecociente.R;
 import com.example.ecociente.views.MainActivity;
+import com.example.ecociente.views.CalendarioColetasActivity;
+import com.example.ecociente.views.MensagensActivity;
 import com.example.ecociente.views.QuizActivity;
+import com.example.ecociente.views.SolicitacoesActivity;
+
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class NotificacaoEcoCiente {
 
@@ -30,15 +36,16 @@ public final class NotificacaoEcoCiente {
     private static final String CANAL_DESCRICAO =
             "Quizzes, dicas e lembretes enviados pelo Eko";
 
+    private static final AtomicInteger PROXIMO_CODIGO =
+            new AtomicInteger((int) (System.currentTimeMillis() & 0x0FFFFFFF));
+
     private NotificacaoEcoCiente() {
     }
 
     public static void exibir(
             @NonNull Context context,
-            @NonNull String titulo,
-            @NonNull String mensagem,
-            @NonNull String destino,
-            @NonNull String textoAcao
+            @NonNull TipoNotificacaoEcoCiente tipo,
+            @NonNull Map<String, String> dados
     ) {
         criarCanal(context);
 
@@ -52,14 +59,30 @@ public final class NotificacaoEcoCiente {
             return;
         }
 
-        PendingIntent abrirHome =
-                criarPendingIntentHome(context);
+        String titulo = obterValor(dados, "titulo", tipo.getTituloPadrao());
+        String mensagem = obterValor(dados, "mensagem", tipo.getMensagemPadrao());
+        String destino = obterValor(dados, "destino", tipo.getDestinoPadrao());
+        String textoAcao = tipo.possuiCta()
+                ? obterValor(dados, "acao", tipo.getAcaoPadrao())
+                : null;
 
-        PendingIntent abrirDestino =
-                criarPendingIntentDestino(
+        int idNotificacao = proximoCodigo();
+
+        PendingIntent abrirCorpo = criarPendingIntent(
+                context,
+                tipo.possuiCta() ? "home" : destino,
+                dados,
+                proximoCodigo()
+        );
+
+        PendingIntent abrirDestino = textoAcao == null
+                ? null
+                : criarPendingIntent(
                         context,
-                        destino
-                );
+                        destino,
+                        dados,
+                        proximoCodigo()
+        );
 
         RemoteViews compacta =
                 new RemoteViews(
@@ -70,13 +93,16 @@ public final class NotificacaoEcoCiente {
         RemoteViews expandida =
                 new RemoteViews(
                         context.getPackageName(),
-                        R.layout.notification_ecociente_expandida
+                        tipo.possuiCta()
+                                ? R.layout.notification_ecociente_expandida
+                                : R.layout.notification_ecociente_expandida_sem_acao
                 );
 
         preencherLayout(
                 compacta,
                 titulo,
                 mensagem,
+                tipo.getImagemEko(),
                 null
         );
 
@@ -84,13 +110,13 @@ public final class NotificacaoEcoCiente {
                 expandida,
                 titulo,
                 mensagem,
+                tipo.getImagemEko(),
                 textoAcao
         );
 
-        expandida.setOnClickPendingIntent(
-                R.id.acaoNotificacao,
-                abrirDestino
-        );
+        if (abrirDestino != null) {
+            expandida.setOnClickPendingIntent(R.id.acaoNotificacao, abrirDestino);
+        }
 
         NotificationCompat.Builder notificacao =
                 new NotificationCompat.Builder(
@@ -116,7 +142,7 @@ public final class NotificacaoEcoCiente {
                                 new NotificationCompat.DecoratedCustomViewStyle()
                         )
                         .setContentIntent(
-                                abrirHome
+                                abrirCorpo
                         )
                         .setAutoCancel(true)
                         .setPriority(
@@ -128,12 +154,6 @@ public final class NotificacaoEcoCiente {
                         .setVisibility(
                                 NotificationCompat.VISIBILITY_PUBLIC
                         );
-
-        int idNotificacao =
-                (int) (
-                        System.currentTimeMillis()
-                                & 0x0FFFFFFF
-                );
 
         NotificationManagerCompat
                 .from(context)
@@ -147,6 +167,7 @@ public final class NotificacaoEcoCiente {
             @NonNull RemoteViews layout,
             @NonNull String titulo,
             @NonNull String mensagem,
+            int imagemEko,
             String textoAcao
     ) {
         layout.setTextViewText(
@@ -159,6 +180,11 @@ public final class NotificacaoEcoCiente {
                 mensagem
         );
 
+        layout.setImageViewResource(
+                R.id.imagemEkoNotificacao,
+                imagemEko
+        );
+
         if (textoAcao != null) {
             layout.setTextViewText(
                     R.id.acaoNotificacao,
@@ -168,33 +194,11 @@ public final class NotificacaoEcoCiente {
     }
 
     @NonNull
-    private static PendingIntent criarPendingIntentHome(
-            @NonNull Context context
-    ) {
-        Intent intent =
-                new Intent(
-                        context,
-                        MainActivity.class
-                );
-
-        intent.addFlags(
-                Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        | Intent.FLAG_ACTIVITY_SINGLE_TOP
-        );
-
-        return PendingIntent.getActivity(
-                context,
-                2101,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-                        | PendingIntent.FLAG_IMMUTABLE
-        );
-    }
-
-    @NonNull
-    private static PendingIntent criarPendingIntentDestino(
+    private static PendingIntent criarPendingIntent(
             @NonNull Context context,
-            @NonNull String destino
+            @NonNull String destino,
+            @NonNull Map<String, String> dados,
+            int codigoSolicitacao
     ) {
         Intent intent;
 
@@ -205,6 +209,18 @@ public final class NotificacaoEcoCiente {
                             context,
                             QuizActivity.class
                     );
+
+        } else if ("calendario".equalsIgnoreCase(destino)) {
+
+            intent = new Intent(context, CalendarioColetasActivity.class);
+
+        } else if ("mensagens".equalsIgnoreCase(destino)) {
+
+            intent = new Intent(context, MensagensActivity.class);
+
+        } else if ("solicitacoes".equalsIgnoreCase(destino)) {
+
+            intent = new Intent(context, SolicitacoesActivity.class);
 
         } else {
 
@@ -220,12 +236,32 @@ public final class NotificacaoEcoCiente {
                         | Intent.FLAG_ACTIVITY_SINGLE_TOP
         );
 
+        for (Map.Entry<String, String> entrada : dados.entrySet()) {
+            intent.putExtra(entrada.getKey(), entrada.getValue());
+        }
+
         return PendingIntent.getActivity(
                 context,
-                2102,
+                codigoSolicitacao,
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT
                         | PendingIntent.FLAG_IMMUTABLE
+        );
+    }
+
+    @NonNull
+    private static String obterValor(
+            @NonNull Map<String, String> dados,
+            @NonNull String chave,
+            @NonNull String padrao
+    ) {
+        String valor = dados.get(chave);
+        return valor == null || valor.trim().isEmpty() ? padrao : valor.trim();
+    }
+
+    private static int proximoCodigo() {
+        return PROXIMO_CODIGO.getAndUpdate(
+                codigo -> codigo == Integer.MAX_VALUE ? 1 : codigo + 1
         );
     }
 
