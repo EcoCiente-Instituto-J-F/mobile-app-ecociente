@@ -30,7 +30,9 @@ import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.model.SindicoAviso;
 import android.widget.ImageView;
+import com.example.ecociente.model.CondominioAtual;
 import com.example.ecociente.model.PerfilUsuario;
+import com.example.ecociente.repository.RankingExternoRepository;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -196,10 +198,39 @@ public final class SindicoHomeActivity extends AppCompatActivity {
     }
 
     private void montarRanking(SindicoDashboard dados) {
+        exibirRanking(dados.getBlocosRanking(), dados.getIniciaisRanking(), dados.getPontosRanking());
+
+        if (CondominioAtual.ID <= 0) {
+            return;
+        }
+
+        new RankingExternoRepository()
+                .listarTorres(
+                        this,
+                        CondominioAtual.ID,
+                        5,
+                        posicoes -> {
+                            if (posicoes == null || isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            String[] nomes = new String[posicoes.size()];
+                            String[] siglas = new String[posicoes.size()];
+                            int[] total = new int[posicoes.size()];
+
+                            for (int i = 0; i < nomes.length; i++) {
+                                nomes[i] = posicoes.get(i).getNome();
+                                siglas[i] = posicoes.get(i).getIniciais();
+                                total[i] = posicoes.get(i).getPontos();
+                            }
+
+                            exibirRanking(nomes, siglas, total);
+                        });
+    }
+
+    private void exibirRanking(String[] blocos, String[] iniciais, int[] pontos) {
         LinearLayout ranking = findViewById(R.id.sindicoRanking);
-        String[] blocos = dados.getBlocosRanking();
-        String[] iniciais = dados.getIniciaisRanking();
-        int[] pontos = dados.getPontosRanking();
+        ranking.removeAllViews();
         for (int i = 0; i < blocos.length; i++) {
             LinearLayout linha = new LinearLayout(this);
             linha.setGravity(Gravity.CENTER_VERTICAL);

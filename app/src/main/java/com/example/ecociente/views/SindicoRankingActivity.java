@@ -11,7 +11,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ecociente.R;
+import com.example.ecociente.model.CondominioAtual;
 import com.example.ecociente.model.SindicoPosicaoRanking;
+import com.example.ecociente.repository.RankingExternoRepository;
 import com.example.ecociente.repository.SindicoRankingRepository;
 
 import java.util.List;
@@ -24,6 +26,8 @@ import com.example.ecociente.ui.Navegacao;
 
 /** Ranking ilustrativo em dois modos; nenhum dado é lido de banco ou API. */
 public final class SindicoRankingActivity extends AppCompatActivity {
+    private List<SindicoPosicaoRanking> torresDaApi;
+
     private static final String ESTADO_APARTAMENTOS = "rankingPorApartamento";
     private boolean porApartamento;
 
@@ -59,6 +63,20 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         barra.setOnItemClickListener(
                 indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM));
         atualizarRanking();
+
+        if (CondominioAtual.ID > 0) {
+            new RankingExternoRepository()
+                    .listarTorres(
+                            this,
+                            CondominioAtual.ID,
+                            20,
+                            posicoes -> {
+                                if (posicoes != null && !isFinishing() && !isDestroyed()) {
+                                    torresDaApi = posicoes;
+                                    atualizarRanking();
+                                }
+                            });
+        }
     }
 
     private void selecionarModo(boolean apartamentos) {
@@ -81,6 +99,11 @@ public final class SindicoRankingActivity extends AppCompatActivity {
 
         List<SindicoPosicaoRanking> posicoes = SindicoRankingRepository.getInstance()
                 .getRanking(porApartamento);
+
+        // Por bloco/torre: usa o ranking da API quando ele já chegou.
+        if (!porApartamento && torresDaApi != null) {
+            posicoes = torresDaApi;
+        }
         int[] avatares = {R.id.avatarPrimeiroRanking, R.id.avatarSegundoRanking,
                 R.id.avatarTerceiroRanking};
         int[] pontos = {R.id.pontosPrimeiroRanking, R.id.pontosSegundoRanking,
