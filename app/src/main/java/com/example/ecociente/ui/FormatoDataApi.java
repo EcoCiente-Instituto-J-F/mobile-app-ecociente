@@ -44,6 +44,23 @@ public final class FormatoDataApi {
         return texto.isEmpty() ? texto : Character.toUpperCase(texto.charAt(0)) + texto.substring(1);
     }
 
+    // Mesmo texto da data extensa, sem repetir o ano quando é o ano corrente (cabe numa linha).
+    @NonNull
+    public static String dataExtensaSemAnoCorrente(@Nullable String iso) {
+
+        Calendar calendario = calendario(iso);
+
+        if (calendario == null) {
+            return "";
+        }
+
+        boolean anoCorrente = calendario.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR);
+
+        String texto = formatar(iso, anoCorrente ? "EEE, d 'de' MMM" : "EEE, d 'de' MMM 'de' yyyy");
+
+        return texto.isEmpty() ? texto : Character.toUpperCase(texto.charAt(0)) + texto.substring(1);
+    }
+
     @NonNull
     public static String horaCurta(@Nullable String iso) {
 
