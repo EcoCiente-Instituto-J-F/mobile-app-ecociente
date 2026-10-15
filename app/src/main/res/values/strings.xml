@@ -488,4 +488,7 @@
     <string name="guia_erro">Não foi possível carregar o guia. Entre com e-mail e senha e tente de novo.</string>
     <string name="guia_vazio">Nenhum conteúdo por enquanto.</string>
     <string name="lista_vazia">Nada por aqui ainda.</string>
+    <string name="feed_subtitulo">Fotos de descarte do seu condomínio</string>
+    <string name="feed_vazio">Ainda não há fotos por aqui. Quando os moradores registrarem descartes, elas aparecem neste feed.</string>
+    <string name="feed_foto_descarte">Foto de descarte</string>
 </resources>

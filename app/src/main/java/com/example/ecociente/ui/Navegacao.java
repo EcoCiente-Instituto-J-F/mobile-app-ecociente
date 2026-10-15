@@ -10,6 +10,7 @@ import com.example.ecociente.views.GerenciarPerfilActivity;
 import com.example.ecociente.views.Login;
 import com.example.ecociente.views.MainActivity;
 import com.example.ecociente.views.MensagensActivity;
+import com.example.ecociente.views.FeedActivity;
 import com.example.ecociente.views.QuizActivity;
 import com.example.ecociente.views.SolicitacoesActivity;
 import com.example.ecociente.views.TelaListaActivity;
@@ -124,7 +125,7 @@ public final class Navegacao {
         } else {
             rota =
                     morador
-                            ? TelaListaActivity.criarIntent(de, TipoLista.FEED, true)
+                            ? new Intent(de, FeedActivity.class)
                             : new Intent(de, GerenciarPerfilActivity.class);
         }
 

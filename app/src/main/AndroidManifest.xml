@@ -96,6 +96,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".views.FeedActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".views.DetalheItemActivity"
             android:exported="false" />
 
