@@ -185,11 +185,10 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void abrirInicioQuiz(@NonNull QuizItem quiz) {
-        QuizConteudo.definir(quiz.listaPerguntas);
-
         Intent rota = new Intent(this, InicioQuizActivity.class);
 
         rota.putExtra(InicioQuizActivity.EXTRA_CATEGORIA, quiz.categoria);
+        QuizConteudo.anexar(rota, quiz.listaPerguntas);
         rota.putExtra(InicioQuizActivity.EXTRA_PERGUNTAS, quiz.perguntas);
 
         startActivity(rota);

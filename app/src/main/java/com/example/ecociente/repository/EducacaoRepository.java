@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,6 +38,11 @@ public class EducacaoRepository {
 
     private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
 
+    private static final long VALIDADE_CACHE_MS = 5 * 60_000L;
+    private static final Object CACHE_LOCK = new Object();
+    private static JSONArray cacheCursos;
+    private static long cacheEm;
+
     public interface Retorno<T> {
         void aoConcluir(boolean sucesso, @NonNull List<T> itens);
     }
@@ -51,15 +57,12 @@ public class EducacaoRepository {
                     boolean sucesso = false;
 
                     try {
-                        JSONArray cursos = obterArray(contextoApp, "/api/cursos");
+                        JSONArray cursos = carregarCursosComAulas(contextoApp);
 
                         for (int i = 0; i < cursos.length(); i++) {
                             JSONObject curso = cursos.getJSONObject(i);
 
-                            JSONArray aulas =
-                                    obterArray(
-                                            contextoApp,
-                                            "/api/cursos/" + curso.getInt("id") + "/aulas");
+                            JSONArray aulas = curso.getJSONArray("aulas");
 
                             for (int j = 0; j < aulas.length(); j++) {
                                 JSONObject aula = aulas.getJSONObject(j);
@@ -101,15 +104,12 @@ public class EducacaoRepository {
                     boolean sucesso = false;
 
                     try {
-                        JSONArray cursos = obterArray(contextoApp, "/api/cursos");
+                        JSONArray cursos = carregarCursosComAulas(contextoApp);
 
                         for (int i = 0; i < cursos.length(); i++) {
                             JSONObject curso = cursos.getJSONObject(i);
 
-                            JSONArray aulas =
-                                    obterArray(
-                                            contextoApp,
-                                            "/api/cursos/" + curso.getInt("id") + "/aulas");
+                            JSONArray aulas = curso.getJSONArray("aulas");
 
                             for (int j = 0; j < aulas.length(); j++) {
                                 JSONObject aula = aulas.getJSONObject(j);
@@ -140,6 +140,50 @@ public class EducacaoRepository {
                 });
     }
 
+    // Cursos com as aulas ordenadas, buscados uma vez e reaproveitados por alguns minutos: o guia
+    // e a lista de quizzes pedem a mesma árvore, e cada pedido pode acordar o Render.
+    @NonNull
+    private JSONArray carregarCursosComAulas(@NonNull Context contexto) throws Exception {
+
+        synchronized (CACHE_LOCK) {
+            if (cacheCursos != null && System.currentTimeMillis() - cacheEm < VALIDADE_CACHE_MS) {
+                return cacheCursos;
+            }
+        }
+
+        JSONArray cursos = obterArray(contexto, "/api/cursos");
+
+        for (int i = 0; i < cursos.length(); i++) {
+            JSONObject curso = cursos.getJSONObject(i);
+
+            curso.put(
+                    "aulas",
+                    ordenarPorOrdem(
+                            obterArray(contexto, "/api/cursos/" + curso.getInt("id") + "/aulas")));
+        }
+
+        synchronized (CACHE_LOCK) {
+            cacheCursos = cursos;
+            cacheEm = System.currentTimeMillis();
+        }
+
+        return cursos;
+    }
+
+    @NonNull
+    private JSONArray ordenarPorOrdem(@NonNull JSONArray itens) throws Exception {
+
+        List<JSONObject> lista = new ArrayList<>();
+
+        for (int i = 0; i < itens.length(); i++) {
+            lista.add(itens.getJSONObject(i));
+        }
+
+        Collections.sort(lista, (a, b) -> Integer.compare(a.optInt("ordem", 0), b.optInt("ordem", 0)));
+
+        return new JSONArray(lista);
+    }
+
     // A API ainda não manda o gabarito: lê "correta" (alternativa) e "explicacao" (pergunta) se vierem.
     @NonNull
     private QuizResumo montarQuiz(
@@ -148,7 +192,11 @@ public class EducacaoRepository {
 
         List<QuizConteudo.Pergunta> perguntas = new ArrayList<>();
 
-        JSONArray listaPerguntas = quiz.optJSONArray("perguntas");
+        JSONArray listaPerguntas =
+                ordenarPorOrdem(
+                        quiz.optJSONArray("perguntas") != null
+                                ? quiz.optJSONArray("perguntas")
+                                : new JSONArray());
 
         for (int i = 0; listaPerguntas != null && i < listaPerguntas.length(); i++) {
             JSONObject pergunta = listaPerguntas.getJSONObject(i);
@@ -156,12 +204,14 @@ public class EducacaoRepository {
             JSONArray alternativas = pergunta.optJSONArray("alternativas");
 
             List<String> opcoes = new ArrayList<>();
+            int[] idsAlternativas = new int[alternativas != null ? alternativas.length() : 0];
             int correta = -1;
 
             for (int j = 0; alternativas != null && j < alternativas.length(); j++) {
                 JSONObject alternativa = alternativas.getJSONObject(j);
 
                 opcoes.add(alternativa.optString("texto"));
+                idsAlternativas[j] = alternativa.optInt("id", 0);
 
                 if (alternativa.optBoolean("correta", false)) {
                     correta = j;
@@ -173,7 +223,9 @@ public class EducacaoRepository {
                             pergunta.optString("enunciado"),
                             opcoes.toArray(new String[0]),
                             correta,
-                            pergunta.optString("explicacao", "")));
+                            pergunta.optString("explicacao", ""),
+                            pergunta.optInt("id", 0),
+                            idsAlternativas));
         }
 
         String titulo = quiz.optString("titulo", "");
@@ -182,7 +234,9 @@ public class EducacaoRepository {
                 titulo.isEmpty() ? tituloAula : titulo,
                 categoria,
                 quiz.optInt("pontosRecompensa", 0),
-                perguntas);
+                perguntas,
+                quiz.optInt("id", 0),
+                quiz.optDouble("notaMinimaAprovacao", 0));
     }
 
     @NonNull

@@ -81,7 +81,7 @@ public class QuizPerguntasActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz_perguntas);
         configurarInsetsDaTela();
 
-        perguntas = QuizConteudo.obterPerguntas();
+        perguntas = QuizConteudo.doIntent(getIntent());
 
         if (perguntas.isEmpty()) {
             finish();
@@ -376,6 +376,7 @@ public class QuizPerguntasActivity extends AppCompatActivity {
         Intent rota = new Intent(this, QuizResultadoActivity.class);
         rota.putExtra(QuizResultadoActivity.EXTRA_CATEGORIA, categoria);
         rota.putExtra(QuizResultadoActivity.EXTRA_RESPOSTAS, respostas);
+        QuizConteudo.anexar(rota, perguntas);
         startActivity(rota);
         overridePendingTransition(0, 0);
         finish();

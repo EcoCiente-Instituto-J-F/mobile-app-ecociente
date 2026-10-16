@@ -76,7 +76,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
         rosa = ContextCompat.getColor(this, R.color.rosa_ecociente);
         branco = ContextCompat.getColor(this, R.color.branco);
 
-        perguntas = QuizConteudo.obterPerguntas();
+        perguntas = QuizConteudo.doIntent(getIntent());
 
         if (perguntas.isEmpty()) {
             finish();
@@ -141,7 +141,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
         listaResultados.removeAllViews();
 
         // A API ainda não manda o gabarito: sem ele só dá para confirmar o envio das respostas.
-        if (!QuizConteudo.temGabarito()) {
+        if (!QuizConteudo.temGabarito(perguntas)) {
             textoPontuacao.setText(R.string.quiz_resultado_sem_nota);
             textoMensagem.setText(R.string.quiz_resultado_sem_gabarito);
             return;
@@ -267,6 +267,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
             rota.putExtra(QuizRevisaoActivity.EXTRA_CATEGORIA, categoria);
             rota.putExtra(QuizRevisaoActivity.EXTRA_RESPOSTAS, respostas);
             rota.putExtra(QuizRevisaoActivity.EXTRA_INDICE_INICIAL, indice);
+            QuizConteudo.anexar(rota, perguntas);
             startActivity(rota);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             return;
@@ -323,6 +324,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
     private void repetirQuiz() {
         Intent rota = new Intent(this, QuizPerguntasActivity.class);
         rota.putExtra(QuizPerguntasActivity.EXTRA_CATEGORIA, categoria);
+        QuizConteudo.anexar(rota, perguntas);
         startActivity(rota);
         overridePendingTransition(0, 0);
         finish();
@@ -336,7 +338,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
         motion.fadeUp(findViewById(R.id.botaoFinalizarResultadoQuiz), 190L);
         motion.fadeUp(findViewById(R.id.botaoRepetirResultadoQuiz), 235L);
 
-        if (!QuizConteudo.temGabarito()) {
+        if (!QuizConteudo.temGabarito(perguntas)) {
             return;
         }
 
