@@ -67,7 +67,7 @@ Complementam as regras acima. O que o app já cumpre está marcado com ✔; o qu
 
 34. Nomes em minúsculas com `_`: `activity_x`, `item_x`, `dialog_x`, `view_x`, `ic_x`, `img_x`.
 35. Cores, textos e dimensões que se repetem ficam em `colors.xml`, `strings*.xml` e `dimens.xml`.
-36. Texto de exemplo em layout só com `tools:text`. Valor de demonstração visível vem de `DadosDemonstracao`. ◻ (alguns `android:text` de exemplo nos layouts do quiz e do dashboard)
+36. Texto de exemplo em layout só com `tools:text`. Valor de demonstração visível vem de `DadosDemonstracao`, no código. ✔
 37. Não colocar chave de API, senha ou token em `strings.xml`.
 
 ### Java

@@ -181,4 +181,5 @@
     <string name="sindico_foto_condominio_salva">Foto do condomínio salva.</string>
     <string name="sindico_pontos_mes">300 pts</string>
     <string name="sindico_materiais_percentuais">Papel 25%  ·  Plástico 50%  ·  Vidro 8%\nMetal 12%  ·  Orgânico 5%</string>
+    <string name="sindico_sem_dado">—</string>
 </resources>
