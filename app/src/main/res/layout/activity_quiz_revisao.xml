@@ -278,7 +278,7 @@
                     android:layout_gravity="center"
                     android:contentDescription="@null"
                     android:scaleType="centerInside"
-                    android:src="@drawable/icon_quiz_verde" />
+                    android:src="@drawable/ic_quiz_verde" />
             </com.google.android.material.card.MaterialCardView>
 
             <TextView

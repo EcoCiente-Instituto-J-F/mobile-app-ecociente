@@ -47,7 +47,7 @@
                 android:contentDescription="@string/notificacoes"
                 android:padding="2dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/icon_notificacoes" />
+                android:src="@drawable/ic_notificacoes" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="40dp"
@@ -292,7 +292,7 @@
                     android:layout_height="25dp"
                     android:contentDescription="@string/icone_conteudos"
                     android:scaleType="centerInside"
-                    android:src="@drawable/icon_livro" />
+                    android:src="@drawable/ic_livro" />
 
                 <TextView
                     android:layout_width="0dp"

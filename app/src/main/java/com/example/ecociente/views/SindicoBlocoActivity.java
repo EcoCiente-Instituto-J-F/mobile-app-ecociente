@@ -89,7 +89,7 @@ public final class SindicoBlocoActivity extends AppCompatActivity {
                 SindicoAdicionarUnidadeDialogFragment.RESULTADO_UNIDADE, this,
                 (chave, resultado) -> {
                     mostrarApartamentos();
-                    AvisoFlutuante.mostrar(this, R.string.sindico_unidade_salva_somente_nesta_demons);
+                    AvisoFlutuante.mostrar(this, R.string.sindico_demo_unidade_salva);
                 });
 
         BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
@@ -162,7 +162,7 @@ public final class SindicoBlocoActivity extends AppCompatActivity {
                 .botao(R.string.perfil_excluir_confirmar, DialogoEco.Estilo.PERIGO, () -> {
                     viewModel.excluirApartamento(apartamento.getId());
                     mostrarApartamentos();
-                    AvisoFlutuante.mostrar(this, R.string.sindico_unidade_removida_desta_demonstraca);
+                    AvisoFlutuante.mostrar(this, R.string.sindico_demo_unidade_removida);
                 })
                 .mostrar();
     }

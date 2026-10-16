@@ -58,7 +58,7 @@
                     android:layout_height="22dp"
                     android:layout_gravity="center"
                     android:contentDescription="@null"
-                    android:src="@drawable/icon_notificacoes" />
+                    android:src="@drawable/ic_notificacoes" />
                 <View
                     android:id="@+id/pontoAvisosSindico"
                     android:layout_width="8dp"

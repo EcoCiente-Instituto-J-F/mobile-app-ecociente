@@ -70,11 +70,11 @@ public class NotificacoesActivity extends AppCompatActivity {
 
         View linhaSustentaveis = findViewById(R.id.toggleDicasSustentaveis);
 
-        configurarRotulo(linhaGerais, R.string.perfil_notificacao_gerais, R.drawable.icon_notificacoes);
+        configurarRotulo(linhaGerais, R.string.perfil_notificacao_gerais, R.drawable.ic_notificacoes);
 
-        configurarRotulo(linhaLembretes, R.string.perfil_notificacao_lembretes, R.drawable.icon_notificacoes);
+        configurarRotulo(linhaLembretes, R.string.perfil_notificacao_lembretes, R.drawable.ic_notificacoes);
 
-        configurarRotulo(linhaAtividades, R.string.perfil_notificacao_atividades, R.drawable.icon_notificacoes);
+        configurarRotulo(linhaAtividades, R.string.perfil_notificacao_atividades, R.drawable.ic_notificacoes);
 
         configurarRotulo(
                 linhaSustentaveis,

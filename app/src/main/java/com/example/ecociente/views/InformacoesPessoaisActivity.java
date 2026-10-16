@@ -267,7 +267,7 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
         linhas.addView(linha);
 
         if (comDivisor) {
-            linhas.addView(inflador.inflate(R.layout.divisor_campo_pessoal, linhas, false));
+            linhas.addView(inflador.inflate(R.layout.view_divisor_campo_pessoal, linhas, false));
         }
     }
 

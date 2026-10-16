@@ -65,7 +65,7 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
                 SindicoAvaliarColetaDialogFragment.RESULTADO_AVALIACAO, this,
                 (chave, resultado) -> {
                     mostrarHistorico();
-                    AvisoFlutuante.mostrar(this, R.string.sindico_avaliacao_salva_somente_nesta_demo);
+                    AvisoFlutuante.mostrar(this, R.string.sindico_demo_avaliacao_salva);
                 });
         mostrarHistorico();
     }

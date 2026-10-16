@@ -245,7 +245,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         viewModel.salvarDados(new SindicoDadosCondominio(residencial,
                 nome.getText().toString().trim(), endereco.getText().toString().trim(),
                 cidade.getText().toString().trim(), uf, codigoPostal));
-        AvisoFlutuante.mostrar(this, R.string.sindico_dados_salvos_somente_nesta_demonst);
+        AvisoFlutuante.mostrar(this, R.string.sindico_demo_dados_salvos);
     }
 
     private boolean validar(EditText campo, String erro) {
@@ -369,7 +369,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                         viewModel.salvarArea(id, valorNome, valorDetalhe);
                     }
                     mostrarListas();
-                    AvisoFlutuante.mostrar(this, R.string.sindico_alteracao_salva_somente_nesta_demo);
+                    AvisoFlutuante.mostrar(this, R.string.sindico_demo_alteracao_salva);
                     return true;
                 })
                 .botao(R.string.perfil_cancelar, DialogoEco.Estilo.CONTORNO, null)
@@ -385,7 +385,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                     if (bloco) viewModel.excluirBloco(item.getId());
                     else viewModel.excluirArea(item.getId());
                     mostrarListas();
-                    AvisoFlutuante.mostrar(this, R.string.sindico_item_removido_desta_demonstracao);
+                    AvisoFlutuante.mostrar(this, R.string.sindico_demo_item_removido);
                 })
                 .mostrar();
     }

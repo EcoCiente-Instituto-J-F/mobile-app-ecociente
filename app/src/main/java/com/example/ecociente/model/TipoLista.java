@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 public enum TipoLista {
-    GUIA(R.string.guia, R.drawable.icon_guia_verde),
+    GUIA(R.string.guia, R.drawable.ic_guia_verde),
     FEED(R.string.feed, R.drawable.ic_nav_feed_verde),
     CONDOMINIOS(R.string.condominios_atendidos, R.drawable.ic_perfil_cooperativa),
     AVALIACOES(R.string.avaliacoes_recebidas, R.drawable.ic_estrela),

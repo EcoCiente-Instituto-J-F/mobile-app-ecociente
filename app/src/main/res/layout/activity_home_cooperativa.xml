@@ -53,7 +53,7 @@
                     android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:importantForAccessibility="no"
-                    android:src="@drawable/icon_notificacoes" />
+                    android:src="@drawable/ic_notificacoes" />
 
                 <View
                     android:id="@+id/pontoAvisosCooperativa"

@@ -44,7 +44,7 @@
                 android:paddingStart="4dp"
                 android:paddingBottom="8dp"
                 android:fontFamily="@font/nunito_regular"
-                android:text="@string/sindico_dados_de_demonstracao_alteracoes_t"
+                android:text="@string/sindico_demo_dados_alteracoes_temporarias"
                 android:textColor="@color/cinza_texto_home"
                 android:textSize="11sp" />
 

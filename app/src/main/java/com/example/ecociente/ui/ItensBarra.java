@@ -17,9 +17,9 @@ public final class ItensBarra {
     public static ItemBarra[] usuario() {
         return new ItemBarra[] {
             home(),
-            new ItemBarra(R.string.guia, R.drawable.icon_guia_verde, R.drawable.icon_guia_cinza),
-            new ItemBarra(R.string.quiz, R.drawable.icon_quiz_verde, R.drawable.icon_quiz_cinza),
-            new ItemBarra(R.string.perfil, R.drawable.icon_perfil_verde, R.drawable.icon_perfil_cinza)
+            new ItemBarra(R.string.guia, R.drawable.ic_guia_verde, R.drawable.ic_guia_cinza),
+            new ItemBarra(R.string.quiz, R.drawable.ic_quiz_verde, R.drawable.ic_quiz_cinza),
+            new ItemBarra(R.string.perfil, R.drawable.ic_perfil_verde, R.drawable.ic_perfil_cinza)
         };
     }
 
@@ -58,6 +58,6 @@ public final class ItensBarra {
     }
 
     private static ItemBarra home() {
-        return new ItemBarra(R.string.home, R.drawable.icon_home_verde, R.drawable.icon_home_cinza);
+        return new ItemBarra(R.string.home, R.drawable.ic_home_verde, R.drawable.ic_home_cinza);
     }
 }

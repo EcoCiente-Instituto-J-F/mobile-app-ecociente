@@ -95,7 +95,7 @@
                         android:focusable="true"
                         android:padding="2dp"
                         android:scaleType="centerInside"
-                        android:src="@drawable/icon_notificacoes" />
+                        android:src="@drawable/ic_notificacoes" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="40dp"
@@ -146,7 +146,7 @@
                         android:layout_height="24dp"
                         android:contentDescription="@string/buscar"
                         android:scaleType="centerInside"
-                        android:src="@drawable/buscar_icon" />
+                        android:src="@drawable/ic_buscar" />
 
                     <EditText
                         android:importantForAutofill="no"

@@ -84,7 +84,7 @@
 
                     android:scaleType="centerInside"
 
-                    android:src="@drawable/icon_notificacoes" />
+                    android:src="@drawable/ic_notificacoes" />
 
 
                 <com.google.android.material.card.MaterialCardView
@@ -236,7 +236,7 @@
 
                         android:scaleType="centerInside"
 
-                        android:src="@drawable/icon_grafico" />
+                        android:src="@drawable/ic_grafico" />
 
 
                     <TextView
@@ -389,7 +389,7 @@
 
                 android:scaleType="centerInside"
 
-                android:src="@drawable/icon_livro" />
+                android:src="@drawable/ic_livro" />
 
 
             <TextView
