@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="sindico_voltar_a_home_do_sindico">Voltar à home do síndico</string>
     <string name="sindico_voltar_aos_blocos">Voltar aos blocos</string>
     <string name="sindico_buscar_unidade">Buscar unidade…</string>
     <string name="sindico_adicionar_unidade">Adicionar unidade</string>
@@ -123,9 +122,7 @@
     <string name="sindico_participacao_dos_moradores">Participação dos moradores</string>
     <string name="sindico_descartes_registrados_no_mes">Descartes registrados no mês</string>
     <string name="sindico_taxa_de_adesao_a_coleta_seletiva">Taxa de adesão à coleta seletiva</string>
-    <string name="sindico_variacao_mes">%1$s  vs. mês anterior</string>
     <string name="sindico_grafico_descricao">Evolução dos descartes: %1$d em %2$s até %3$d em %4$s</string>
-    <string name="sindico_foto_alterada_somente_nesta_demons">Foto alterada neste aparelho.</string>
     <string name="sindico_residencial_selecionado">Residencial, selecionado</string>
     <string name="sindico_selecionar_residencial">Selecionar residencial</string>
     <string name="sindico_selecionar_comercial_ou_industrial">Selecionar comercial ou industrial</string>
@@ -180,7 +177,6 @@
     <string name="resposta_da_cooperativa">Resposta da cooperativa</string>
     <string name="resposta_da_cooperativa_texto">Podemos realizar a coleta na data combinada. Por favor, deixe o material separado por tipo.</string>
     <string name="coleta_confirmada_em">Coleta confirmada: %1$s • %2$s</string>
-    <string name="valor_indisponivel">—</string>
     <string name="sindico_vs_mes_anterior">(vs. mês anterior)</string>
     <string name="sindico_foto_condominio_salva">Foto do condomínio salva.</string>
     <string name="sindico_pontos_mes">300 pts</string>

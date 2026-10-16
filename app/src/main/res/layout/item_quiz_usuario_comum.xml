@@ -37,7 +37,6 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/imagemIconeQuiz"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/icone_quiz"
@@ -149,7 +148,6 @@
             app:layout_constraintTop_toBottomOf="@id/textoTituloQuiz" />
 
         <LinearLayout
-            android:id="@+id/metadadosQuiz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="9dp"

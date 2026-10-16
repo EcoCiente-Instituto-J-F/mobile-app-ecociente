@@ -11,7 +11,6 @@
 
     <!-- A tela não rola. Somente a lista dentro do card central possui rolagem. -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/conteudoQuizResultado"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingStart="24dp"
@@ -114,7 +113,6 @@
                 android:textSize="18sp" />
 
             <androidx.core.widget.NestedScrollView
-                android:id="@+id/rolagemListaResultado"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="18dp"

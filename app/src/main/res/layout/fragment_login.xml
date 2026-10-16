@@ -47,7 +47,6 @@
                 android:paddingEnd="12dp">
 
                 <ImageView
-                    android:id="@+id/iconeEmail"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:contentDescription="@string/icone_email"
@@ -116,7 +115,6 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/iconeSenha"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:contentDescription="@string/icone_senha"

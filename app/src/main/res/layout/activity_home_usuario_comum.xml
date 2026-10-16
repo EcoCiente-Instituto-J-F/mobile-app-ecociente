@@ -39,7 +39,6 @@
 
 
             <ImageView
-                android:id="@+id/imagemLogoHome"
 
                 android:layout_width="136dp"
                 android:layout_height="44dp"
@@ -227,7 +226,6 @@
 
 
                     <ImageView
-                        android:id="@+id/imagemIconeAnalise"
 
                         android:layout_width="25dp"
                         android:layout_height="25dp"
@@ -410,7 +408,6 @@
 
 
             <LinearLayout
-                android:id="@+id/acaoVerTodos"
 
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -469,7 +466,6 @@
 
 
         <LinearLayout
-            android:id="@+id/listaConteudosHome"
 
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -497,7 +493,6 @@
 
 
             <include
-                android:id="@+id/cardConteudoGuia"
 
                 layout="@layout/item_conteudo_home_guia"
 
@@ -510,7 +505,6 @@
 
 
             <include
-                android:id="@+id/cardConteudoDica"
 
                 layout="@layout/item_conteudo_home_dica"
 
@@ -524,7 +518,6 @@
 
 
             <include
-                android:id="@+id/cardConteudoArtigo"
 
                 layout="@layout/item_conteudo_home_artigo"
 

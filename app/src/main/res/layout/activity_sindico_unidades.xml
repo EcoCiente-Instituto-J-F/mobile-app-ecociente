@@ -97,7 +97,7 @@
                                 android:contentDescription="@string/sindico_foto_ilustrativa_do_condominio"
                                 android:padding="17dp"
                                 android:scaleType="fitCenter"
-                                android:src="@drawable/sindico_nav_unidades"
+                                android:src="@drawable/sindico_building"
                                 app:tint="@color/verde_escuro_principal" />
                             <FrameLayout
                                 android:id="@+id/cameraSindicoUnidades"

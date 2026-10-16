@@ -205,7 +205,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         ImageView foto = findViewById(R.id.fotoSindicoUnidades);
         String uri = viewModel.getFotoUri();
         if (uri == null) {
-            foto.setImageResource(R.drawable.sindico_nav_unidades);
+            foto.setImageResource(R.drawable.sindico_building);
             foto.setImageTintList(ColorStateList.valueOf(
                     getColor(R.color.verde_escuro_principal)));
             foto.setPadding(dp(17), dp(17), dp(17), dp(17));
