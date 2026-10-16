@@ -3,9 +3,7 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission
-        android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
@@ -19,11 +17,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EcoCiente">
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notification_ecociente" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/verde_escuro_principal" />
+
+        <service
+            android:name=".notifications.EcoCienteFirebaseMessagingService"
+            android:exported="false">
+
+            <intent-filter>
+                <action
+                    android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+
+        </service>
+
         <activity
             android:name=".views.MainActivity"
             android:exported="false" />
 
-        <!-- Fluxo separado até existir identificação/autorização do perfil síndico. -->
         <activity
             android:name=".views.SindicoHomeActivity"
             android:exported="false"

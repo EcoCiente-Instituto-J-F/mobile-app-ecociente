@@ -90,6 +90,22 @@
     <string name="perfil_sair_mensagem">Tem certeza que deseja sair?</string>
     <string name="perfil_sair_confirmar">Sair</string>
     <string name="sessao_encerrada">Você saiu da conta.</string>
+
+    <!-- Recursos compartilhados: perfis, cooperativa e síndico -->
+    <string name="home_sem_login">Entre na sua conta para continuar.</string>
+    <string name="home_cadastro_incompleto">Complete seu cadastro antes de acessar a home.</string>
+    <string name="home_sem_acesso">Não foi possível identificar o seu perfil de acesso.</string>
+    <string name="solicitacoes">Solicitações</string>
+    <string name="solicitacao">Solicitação</string>
+    <string name="coletas">Coletas</string>
+    <string name="mensagens">Mensagens</string>
+    <string name="unidades">Unidades</string>
+    <string name="feed">Feed</string>
+    <string name="nome_responsavel">Nome do responsável</string>
+    <string name="dados_responsavel">Dados do responsável</string>
+    <string name="nome_cooperativa">Nome da cooperativa</string>
+    <string name="email_cooperativa">E-mail da cooperativa</string>
+    <string name="cnpj">CNPJ</string>
     <string name="perfil_foto_alterar">Alterar foto de perfil</string>
     <string name="perfil_foto_tirar">Tirar foto</string>
     <string name="perfil_foto_galeria">Escolher da galeria</string>
@@ -465,19 +481,6 @@
     <string name="chatbot_card_texto">Teste nosso chatbot e tire dúvidas sobre seus agendamentos e funcionalidades do app.</string>
     <string name="avisos_do_condominio">Avisos do condomínio</string>
     <string name="avisos_card_subtitulo">Informações do seu condomínio</string>
-    <string name="cnpj">CNPJ</string>
-    <string name="coletas">Coletas</string>
-    <string name="dados_responsavel">Dados do responsável</string>
-    <string name="email_cooperativa">E-mail da cooperativa</string>
-    <string name="feed">Feed</string>
-    <string name="home_cadastro_incompleto">Complete seu cadastro antes de acessar a home.</string>
-    <string name="home_sem_acesso">Não foi possível identificar o seu perfil de acesso.</string>
-    <string name="home_sem_login">Entre na sua conta para continuar.</string>
-    <string name="mensagens">Mensagens</string>
-    <string name="nome_cooperativa">Nome da cooperativa</string>
-    <string name="nome_responsavel">Nome do responsável</string>
-    <string name="solicitacao">Solicitação</string>
-    <string name="unidades">Unidades</string>
     <string name="quizzes_carregando">Carregando quizzes…</string>
     <string name="quizzes_erro">Não foi possível carregar os quizzes. Entre com e-mail e senha e tente de novo.</string>
     <string name="quiz_n_perguntas">%1$d perguntas</string>

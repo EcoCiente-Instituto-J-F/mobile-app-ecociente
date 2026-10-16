@@ -86,6 +86,10 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
 
+    // Necessário para as notificações push do EcoCiente.
+    // Continua usando a versão gerenciada pelo Firebase BoM.
+    implementation("com.google.firebase:firebase-messaging")
+
     implementation(libs.credentials)
     implementation(libs.credentials.play.services.auth)
     implementation(libs.googleid)

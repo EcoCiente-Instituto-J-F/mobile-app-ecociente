@@ -86,16 +86,16 @@ public class QuizPerformanceView extends View {
         super.onDraw(canvas);
 
         float esquerda =
-                dp(34);
+                dp(40);
 
         float direita =
                 getWidth() - dp(24);
 
         float topo =
-                dp(29);
+                dp(36);
 
         float base =
-                getHeight() - dp(25);
+                getHeight() - dp(30);
 
         float largura =
                 direita - esquerda;
@@ -162,7 +162,7 @@ public class QuizPerformanceView extends View {
         );
 
         tinta.setTextSize(
-                dp(10.3f)
+                dp(13.2f)
         );
 
         tinta.setTextAlign(
@@ -178,7 +178,7 @@ public class QuizPerformanceView extends View {
 
                 getWidth() / 2f,
 
-                dp(16),
+                dp(21),
 
                 tinta
         );
@@ -292,7 +292,7 @@ public class QuizPerformanceView extends View {
         );
 
         tinta.setTextSize(
-                dp(9)
+                dp(10.5f)
         );
 
         tinta.setTextAlign(
@@ -461,7 +461,7 @@ public class QuizPerformanceView extends View {
         );
 
         tinta.setStrokeWidth(
-                dp(1.7f)
+                dp(2.1f)
         );
 
         tinta.setStrokeCap(
@@ -528,7 +528,7 @@ public class QuizPerformanceView extends View {
             canvas.drawCircle(
                     x,
                     y,
-                    dp(3.2f),
+                    dp(3.8f),
                     tinta
             );
 
@@ -538,7 +538,7 @@ public class QuizPerformanceView extends View {
             );
 
             tinta.setStrokeWidth(
-                    dp(1.1f)
+                    dp(1.3f)
             );
 
             tinta.setColor(
@@ -552,7 +552,7 @@ public class QuizPerformanceView extends View {
             canvas.drawCircle(
                     x,
                     y,
-                    dp(3.2f),
+                    dp(3.8f),
                     tinta
             );
 
@@ -591,7 +591,7 @@ public class QuizPerformanceView extends View {
         }
 
         tinta.setTextSize(
-                dp(8.8f)
+                dp(10.2f)
         );
 
         tinta.setTextAlign(
@@ -609,7 +609,7 @@ public class QuizPerformanceView extends View {
             canvas.drawText(
                     DATAS[i],
                     x,
-                    base + dp(15),
+                    base + dp(19),
                     tinta
             );
         }
