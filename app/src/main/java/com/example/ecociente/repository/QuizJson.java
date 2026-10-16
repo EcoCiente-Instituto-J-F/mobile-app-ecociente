@@ -3,10 +3,12 @@ package com.example.ecociente.repository;
 import androidx.annotation.NonNull;
 import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.QuizResumo;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // Converte as respostas da ds-mobile-api (cursos, aulas e quiz) nos modelos do app.
@@ -16,7 +18,7 @@ final class QuizJson {
 
     // Devolve os itens ordenados pelo campo "ordem"; sem o campo, mantém a ordem recebida.
     @NonNull
-    static JSONArray ordenarPorOrdem(@NonNull JSONArray itens) throws Exception {
+    static JSONArray ordenarPorOrdem(@NonNull JSONArray itens) throws IOException, JSONException {
 
         List<JSONObject> lista = new ArrayList<>();
 
@@ -33,7 +35,7 @@ final class QuizJson {
     @NonNull
     static QuizResumo montar(
             @NonNull String categoria, @NonNull String tituloAula, @NonNull JSONObject quiz)
-            throws Exception {
+            throws IOException, JSONException {
 
         List<QuizConteudo.Pergunta> perguntas = new ArrayList<>();
 

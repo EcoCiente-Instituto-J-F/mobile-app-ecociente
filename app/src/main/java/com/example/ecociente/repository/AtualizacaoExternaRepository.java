@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // PATCH /api/usuarios/me e /api/usuarios/me/endereco da ds-cadastro-api (nome, telefone, foto, endereço). O Firestore continua
@@ -73,13 +74,13 @@ public class AtualizacaoExternaRepository {
                     // A API não tem onde guardar os demais campos (CPF, nome da cooperativa...).
                     break;
             }
-        } catch (Exception erro) {
+        } catch (JSONException erro) {
             Log.w(TAG, "Não foi possível montar a atualização de " + campo, erro);
         }
     }
 
     private void sincronizarEndereco(@NonNull Context contexto, @Nullable PerfilUsuario perfil)
-            throws Exception {
+            throws JSONException {
 
         if (perfil == null) {
             return;

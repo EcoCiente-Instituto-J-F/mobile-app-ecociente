@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // Fala com a ds-autenticacao-api (Java/Postgres, repositório separado deste
@@ -228,7 +229,7 @@ public class AutenticacaoExternaRepository {
     }
 
     @NonNull
-    private SessaoExterna login(@NonNull String email, @NonNull String senha) throws Exception {
+    private SessaoExterna login(@NonNull String email, @NonNull String senha) throws IOException, JSONException {
 
         HttpURLConnection conexao = (HttpURLConnection) new URL(URL_LOGIN).openConnection();
 

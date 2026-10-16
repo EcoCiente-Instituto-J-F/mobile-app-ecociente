@@ -3,6 +3,8 @@ package com.example.ecociente.repository;
 import android.content.Context;
 import com.example.ecociente.model.RespostaChat;
 
+import java.io.IOException;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -23,7 +25,7 @@ public class ChatRepository {
     private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
 
     // A identidade vem do JWT da ds-autenticacao-api: o servidor valida o token e descobre o usuário e o perfil.
-    public RespostaChat enviarMensagem(Context contexto, String mensagem, String sessionId) throws Exception {
+    public RespostaChat enviarMensagem(Context contexto, String mensagem, String sessionId) throws IOException, JSONException {
         String token = autenticacao.tokenParaUso(contexto);
 
         if (token == null) {
@@ -63,7 +65,7 @@ public class ChatRepository {
         return new RespostaChat(resposta, novaSessao);
     }
 
-    private String enviar(JSONObject corpo, String token, int[] codigo) throws Exception {
+    private String enviar(JSONObject corpo, String token, int[] codigo) throws IOException {
         HttpURLConnection conexao = null;
 
         try {
@@ -96,7 +98,7 @@ public class ChatRepository {
         }
     }
 
-    private static String lerUtf8(InputStream fluxo) throws Exception {
+    private static String lerUtf8(InputStream fluxo) throws IOException {
         if (fluxo == null) {
             return "";
         }

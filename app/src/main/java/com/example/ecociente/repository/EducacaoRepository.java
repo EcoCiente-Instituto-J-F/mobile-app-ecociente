@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // Cursos, aulas e quizzes da ds-mobile-api (só leitura, exige o JWT da ds-autenticacao-api).
@@ -143,7 +144,7 @@ public class EducacaoRepository {
     // Cursos com as aulas ordenadas, buscados uma vez e reaproveitados por alguns minutos: o guia
     // e a lista de quizzes pedem a mesma árvore, e cada pedido pode acordar o Render.
     @NonNull
-    private JSONArray carregarCursosComAulas(@NonNull Context contexto) throws Exception {
+    private JSONArray carregarCursosComAulas(@NonNull Context contexto) throws IOException, JSONException {
 
         synchronized (CACHE_LOCK) {
             if (cacheCursos != null && System.currentTimeMillis() - cacheEm < VALIDADE_CACHE_MS) {
@@ -171,7 +172,7 @@ public class EducacaoRepository {
     }
 
     @NonNull
-    private JSONArray obterArray(@NonNull Context contexto, @NonNull String caminho) throws Exception {
+    private JSONArray obterArray(@NonNull Context contexto, @NonNull String caminho) throws IOException, JSONException {
 
         String corpo = obter(contexto, caminho);
 

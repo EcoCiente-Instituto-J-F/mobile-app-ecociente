@@ -74,7 +74,7 @@ Complementam as regras acima. O que o app já cumpre está marcado com ✔; o qu
 
 38. `PascalCase` em classe, `camelCase` em método e variável, `UPPER_SNAKE_CASE` em constante.
 39. Campos `private`. Constante em vez de número ou texto mágico.
-40. Capture exceção específica quando souber qual é. `catch (Exception)` só na fronteira de rede, para a falha não derrubar a tela, e sempre com `Log.w`. ◻ (20 ocorrências a revisar)
+40. Capture exceção específica quando souber qual é (`IOException`, `JSONException`, `GeneralSecurityException`). `catch (Exception)` só dentro da tarefa de uma thread de rede, para o retorno à tela sempre acontecer, e sempre com `Log`. ✔ (15, todos nesse caso)
 41. Valide entrada do usuário e resposta da API nas fronteiras. Não use `null` como erro genérico: diga o motivo.
 42. Remova import, variável e método sem uso. Comente o porquê, não o quê.
 

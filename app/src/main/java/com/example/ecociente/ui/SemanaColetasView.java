@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.ecociente.R;
+import com.example.ecociente.model.SemanaDeColetas;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
 import java.text.SimpleDateFormat;
@@ -18,7 +19,6 @@ import java.util.Locale;
 
 public class SemanaColetasView extends LinearLayout {
 
-    private static final int DIAS_UTEIS = 5;
     private static final Locale PORTUGUES = new Locale("pt", "BR");
 
     private final LayoutInflater inflador;
@@ -33,46 +33,18 @@ public class SemanaColetasView extends LinearLayout {
         exibir(null);
     }
 
-    @NonNull
-    public static Calendar segundaDaSemana() {
-
-        Calendar dia = Calendar.getInstance();
-
-        dia.set(Calendar.HOUR_OF_DAY, 0);
-        dia.set(Calendar.MINUTE, 0);
-        dia.set(Calendar.SECOND, 0);
-        dia.set(Calendar.MILLISECOND, 0);
-
-        int desvio = (dia.get(Calendar.DAY_OF_WEEK) + 5) % 7;
-
-        dia.add(Calendar.DAY_OF_MONTH, -desvio);
-
-        return dia;
-    }
-
-    @NonNull
-    public static Calendar fimDaSemana() {
-
-        Calendar fim = segundaDaSemana();
-
-        fim.add(Calendar.DAY_OF_MONTH, DIAS_UTEIS);
-        fim.add(Calendar.SECOND, -1);
-
-        return fim;
-    }
-
     public void exibir(@Nullable List<Solicitacao> coletas) {
 
         removeAllViews();
 
-        Calendar dia = segundaDaSemana();
+        Calendar dia = SemanaDeColetas.segunda();
 
         Calendar hoje = Calendar.getInstance();
 
         SimpleDateFormat nomeDoDia = new SimpleDateFormat("EEE", PORTUGUES);
         SimpleDateFormat dataCurta = new SimpleDateFormat("dd/MM", PORTUGUES);
 
-        for (int i = 0; i < DIAS_UTEIS; i++) {
+        for (int i = 0; i < SemanaDeColetas.DIAS_UTEIS; i++) {
 
             boolean ehHoje = mesmoDia(dia, hoje);
 
