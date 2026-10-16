@@ -47,7 +47,7 @@ Complementam as regras acima. O que o app já cumpre está marcado com ✔; o qu
 ### Arquitetura
 
 21. Fluxo de dados: Tela → ViewModel → Repository → API. A tela não acessa API nem banco. ✔
-22. ViewModel não depende de `Activity`, `Fragment` ou `View`. Para `Context`, só `Application`. ◻ (6 ViewModels a auditar)
+22. ViewModel não depende de `Activity`, `Fragment` ou `View`. Para `Context`, só `Application` (`AndroidViewModel`) ou `getApplicationContext()` recebido por parâmetro. ✔
 23. Estado de tela (por exemplo, o quiz atual) vive no ViewModel, não em `static`. ◻ (`QuizConteudo.perguntasAtuais`)
 24. Uma responsabilidade por classe. Se a tela valida, calcula, acessa a API e desenha, separe.
 25. Não crie interface ou camada só por criar (KISS e YAGNI). Aplique SOLID quando reduzir acoplamento ou facilitar teste.

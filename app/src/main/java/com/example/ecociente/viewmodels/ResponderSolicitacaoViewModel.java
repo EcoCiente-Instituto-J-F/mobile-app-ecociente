@@ -27,7 +27,7 @@ public class ResponderSolicitacaoViewModel extends ViewModelComCarregamento {
             return executar(resultado);
         }
 
-        repositorio.alterarStatus(contexto, id, resposta, resultado::setValue);
+        repositorio.alterarStatus(contexto.getApplicationContext(), id, resposta, resultado::setValue);
 
         return executar(resultado);
     }
