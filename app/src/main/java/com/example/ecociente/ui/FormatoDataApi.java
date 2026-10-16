@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public final class FormatoDataApi {
 
@@ -21,6 +22,16 @@ public final class FormatoDataApi {
     }
 
     @NonNull
+    public static String dataCompacta(@Nullable String iso) {
+        return formatar(iso, "d 'de' MMM 'de' yyyy");
+    }
+
+    @NonNull
+    public static String dataLonga(@Nullable String iso) {
+        return formatar(iso, "d 'de' MMMM 'de' yyyy");
+    }
+
+    @NonNull
     public static String hora(@Nullable String iso) {
         return formatar(iso, "HH:mm");
     }
@@ -29,6 +40,23 @@ public final class FormatoDataApi {
     public static String dataExtensa(@Nullable String iso) {
 
         String texto = formatar(iso, "EEE, d 'de' MMM 'de' yyyy");
+
+        return texto.isEmpty() ? texto : Character.toUpperCase(texto.charAt(0)) + texto.substring(1);
+    }
+
+    // Mesmo texto da data extensa, sem repetir o ano quando é o ano corrente (cabe numa linha).
+    @NonNull
+    public static String dataExtensaSemAnoCorrente(@Nullable String iso) {
+
+        Calendar calendario = calendario(iso);
+
+        if (calendario == null) {
+            return "";
+        }
+
+        boolean anoCorrente = calendario.get(Calendar.YEAR) == Calendar.getInstance().get(Calendar.YEAR);
+
+        String texto = formatar(iso, anoCorrente ? "EEE, d 'de' MMM" : "EEE, d 'de' MMM 'de' yyyy");
 
         return texto.isEmpty() ? texto : Character.toUpperCase(texto.charAt(0)) + texto.substring(1);
     }
@@ -48,6 +76,40 @@ public final class FormatoDataApi {
                 ? calendario.get(Calendar.HOUR_OF_DAY) + "h"
                 : String.format(
                         PORTUGUES, "%dh%02d", calendario.get(Calendar.HOUR_OF_DAY), minutos);
+    }
+
+    @NonNull
+    public static String relativa(@Nullable String iso, long agoraMs) {
+
+        Calendar data = calendario(iso);
+
+        if (data == null) {
+            return "";
+        }
+
+        long minutos = TimeUnit.MILLISECONDS.toMinutes(agoraMs - data.getTimeInMillis());
+
+        if (minutos < 1) {
+            return "Agora";
+        }
+
+        if (minutos < 60) {
+            return "Há " + minutos + " min";
+        }
+
+        long horas = minutos / 60;
+
+        if (horas < 24) {
+            return "Há " + horas + " h";
+        }
+
+        long dias = horas / 24;
+
+        if (dias == 1) {
+            return "Ontem";
+        }
+
+        return dias < 7 ? "Há " + dias + " dias" : formatar(iso, "d 'de' MMM");
     }
 
     @Nullable

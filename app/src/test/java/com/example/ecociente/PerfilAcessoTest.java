@@ -53,6 +53,25 @@ public class PerfilAcessoTest {
     }
 
     @Test
+    public void sindicoVaiParaHomeDoSindico() {
+        assertEquals(
+                PerfilAcesso.DestinoHome.SINDICO,
+                PerfilAcesso.destinoDaHome(perfil("sindico", true, "")));
+    }
+
+    @Test
+    public void sindicoNaoDependeDeMaiusculasNemDeCodigoDeCondominio() {
+        assertEquals(
+                PerfilAcesso.DestinoHome.SINDICO,
+                PerfilAcesso.destinoDaHome(perfil(" Sindico ", false, "")));
+    }
+
+    @Test
+    public void sindicoNaoEhUsuarioComum() {
+        assertFalse(PerfilAcesso.ehUsuarioComum("sindico", false, "Rua das Flores"));
+    }
+
+    @Test
     public void usuarioSemCondominioVaiParaHomeComum() {
         assertEquals(
                 PerfilAcesso.DestinoHome.USUARIO_COMUM,

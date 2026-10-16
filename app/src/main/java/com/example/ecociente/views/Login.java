@@ -31,6 +31,7 @@ import com.example.ecociente.model.TipoUsuario;
 import com.google.android.material.card.MaterialCardView;
 import java.util.HashMap;
 import java.util.Map;
+import com.example.ecociente.ui.AvisoFlutuante;
 
 public class Login extends AppCompatActivity {
 
@@ -46,6 +47,8 @@ public class Login extends AppCompatActivity {
     private static final String CHAVE_TELEFONE = "telefone";
     private static final String CHAVE_CPF = "cpf";
     private static final String CHAVE_NOME_COOPERATIVA = "nomeCooperativa";
+    public static final String EXTRA_AVISO = "avisoLogin";
+
     private static final String CHAVE_CNPJ = "cnpj";
     private static final String CHAVE_EMAIL_COOPERATIVA = "emailCooperativa";
 
@@ -132,6 +135,12 @@ public class Login extends AppCompatActivity {
         if (estadoSalvo == null) {
 
             abrirLogin(false);
+
+            int aviso = getIntent().getIntExtra(EXTRA_AVISO, 0);
+
+            if (aviso != 0) {
+                findViewById(android.R.id.content).post(() -> AvisoFlutuante.mostrar(this, aviso));
+            }
 
         } else {
 

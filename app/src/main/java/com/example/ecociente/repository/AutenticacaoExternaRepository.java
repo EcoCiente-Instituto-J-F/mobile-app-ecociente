@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,10 +33,19 @@ public class AutenticacaoExternaRepository {
 
     private static final String PREFERENCIAS = "sessao_externa";
     private static final String CHAVE_TOKEN = "token";
+    private static final String CHAVE_PERFIL = "perfil";
 
     private static final Object TRAVA = new Object();
 
+    // Quem precisa do JWT espera o login em andamento terminar: no primeiro acesso da sessão a Home
+    // pede a agenda antes de a API responder (cold start do Render leva de 70 a 150 s).
+    private static final Object ESPERA = new Object();
+    private static final long ESPERA_MAXIMA_MS = 180_000;
+    private static int loginsEmAndamento = 0;
+
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
+
+    private static final ExecutorService EXECUTOR_ESPERA = Executors.newSingleThreadExecutor();
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
@@ -51,6 +61,10 @@ public class AutenticacaoExternaRepository {
 
         Context contextoApp = contexto.getApplicationContext();
 
+        synchronized (ESPERA) {
+            loginsEmAndamento++;
+        }
+
         EXECUTOR.execute(
                 () -> {
                     SessaoExterna sessao = null;
@@ -59,11 +73,17 @@ public class AutenticacaoExternaRepository {
                         sessao = login(email, senha);
 
                         persistirToken(contextoApp, sessao.getToken());
+                        persistirPerfil(contextoApp, sessao.getPerfil());
 
                         CredenciaisSeguras.salvar(contextoApp, email, senha);
 
                     } catch (Exception erro) {
                         Log.w(TAG, "Não foi possível autenticar na API externa", erro);
+                    }
+
+                    synchronized (ESPERA) {
+                        loginsEmAndamento--;
+                        ESPERA.notifyAll();
                     }
 
                     SessaoExterna sessaoFinal = sessao;
@@ -72,12 +92,76 @@ public class AutenticacaoExternaRepository {
                 });
     }
 
+    // Só chamar fora da thread principal: pode esperar o login terminar.
     @Nullable
     public String tokenParaUso(@NonNull Context contexto) {
+
+        aguardarLoginEmAndamento();
 
         String salvo = obterTokenSalvo(contexto);
 
         return salvo != null ? salvo : renovarToken(contexto);
+    }
+
+    // Login por e-mail e senha ainda falando com a API (o Render pode levar mais de 1 min a acordar).
+    public static boolean loginEmAndamento() {
+
+        synchronized (ESPERA) {
+            return loginsEmAndamento > 0;
+        }
+    }
+
+    // Sessão antiga do Firebase (app aberto sem passar pelo login): ainda não há perfil da API
+    // guardado. Se há credenciais guardadas, refaz o login em segundo plano para obtê-lo.
+    public static void garantirPerfil(@NonNull Context contexto, @NonNull Runnable aoConcluir) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        EXECUTOR_ESPERA.execute(
+                () -> {
+                    if (perfilSalvo(contextoApp) == null) {
+                        new AutenticacaoExternaRepository().renovarToken(contextoApp);
+                    }
+
+                    PRINCIPAL.post(aoConcluir);
+                });
+    }
+
+    // Espera, fora da thread principal, o login terminar (ou o limite) e avisa na principal.
+    public static void aguardarLogin(long limiteMs, @NonNull Runnable aoConcluir) {
+
+        EXECUTOR_ESPERA.execute(
+                () -> {
+                    aguardarLoginEmAndamento(limiteMs);
+
+                    PRINCIPAL.post(aoConcluir);
+                });
+    }
+
+    private void aguardarLoginEmAndamento() {
+        aguardarLoginEmAndamento(ESPERA_MAXIMA_MS);
+    }
+
+    private static void aguardarLoginEmAndamento(long limiteMs) {
+
+        long limite = SystemClock.elapsedRealtime() + limiteMs;
+
+        synchronized (ESPERA) {
+            while (loginsEmAndamento > 0) {
+                long restante = limite - SystemClock.elapsedRealtime();
+
+                if (restante <= 0) {
+                    return;
+                }
+
+                try {
+                    ESPERA.wait(restante);
+                } catch (InterruptedException erro) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+        }
     }
 
     @Nullable
@@ -96,6 +180,7 @@ public class AutenticacaoExternaRepository {
                 SessaoExterna sessao = login(credenciais[0], credenciais[1]);
 
                 persistirToken(contextoApp, sessao.getToken());
+                persistirPerfil(contextoApp, sessao.getPerfil());
 
                 return sessao.getToken();
 
@@ -120,6 +205,25 @@ public class AutenticacaoExternaRepository {
                 .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
                 .edit()
                 .remove(CHAVE_TOKEN)
+                .remove(CHAVE_PERFIL)
+                .apply();
+    }
+
+    // Perfil que a API devolveu no último login (SINDICO, COOPERATIVA...): é o dado do Postgres,
+    // usado para escolher a home quando o Firestore está com outro tipoPerfil.
+    @Nullable
+    public static String perfilSalvo(@NonNull Context contexto) {
+
+        return contexto.getApplicationContext()
+                .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
+                .getString(CHAVE_PERFIL, null);
+    }
+
+    private void persistirPerfil(@NonNull Context contextoApp, @NonNull String perfil) {
+
+        contextoApp.getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
+                .edit()
+                .putString(CHAVE_PERFIL, perfil)
                 .apply();
     }
 

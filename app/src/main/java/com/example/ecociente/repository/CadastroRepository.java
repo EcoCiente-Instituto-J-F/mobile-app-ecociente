@@ -126,7 +126,7 @@ public class CadastroRepository {
     @NonNull
     private ResultadoCadastro traduzirErroCadastro(Exception erro) {
         if (erro instanceof FirebaseAuthUserCollisionException) {
-            return ResultadoCadastro.erro("Já existe uma conta cadastrada com este e-mail.");
+            return ResultadoCadastro.contaJaExistente("Já existe uma conta cadastrada com este e-mail.");
         }
 
         if (erro instanceof FirebaseAuthWeakPasswordException) {

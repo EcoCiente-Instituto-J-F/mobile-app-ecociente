@@ -8,34 +8,30 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:paddingStart="8dp"
+        android:paddingStart="26dp"
+        android:paddingTop="22dp"
+        android:paddingBottom="8dp"
         android:paddingEnd="12dp">
-        <ImageButton
-            android:id="@+id/voltarHistorico"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Voltar"
-            android:padding="12dp"
-            android:src="@drawable/sindico_voltar" />
         <TextView
+            android:id="@+id/tituloSindicoHistorico"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/nunito_bold"
-            android:text="Histórico de coletas"
-            android:textColor="@color/verde_escuro_principal"
-            android:textSize="20sp" />
+            android:text="@string/sindico_historico_de_coletas"
+            android:textColor="@color/rosa_ecociente"
+            android:textSize="22sp" />
         <ImageButton
             android:id="@+id/filtrarHistorico"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Filtrar histórico"
+            android:contentDescription="@string/sindico_filtrar_historico"
             android:padding="12dp"
-            android:src="@drawable/sindico_filtro" />
+            android:src="@drawable/sindico_filtro"
+        android:scaleType="centerInside" />
     </LinearLayout>
 
     <TextView
@@ -46,7 +42,7 @@
         android:paddingEnd="21dp"
         android:paddingBottom="12dp"
         android:fontFamily="@font/nunito_regular"
-        android:text="Exemplos locais · avaliações não enviadas"
+        android:text="@string/sindico_exemplos_locais_avaliacoes_nao_env"
         android:textColor="@color/cinza_texto_home"
         android:textSize="11sp" />
 
@@ -65,8 +61,8 @@
             android:paddingBottom="20dp" />
     </ScrollView>
 
-    <com.example.ecociente.views.SindicoBottomBar
+    <com.example.ecociente.ui.BarraNavegacaoView
         android:id="@+id/barraInferiorSindico"
         android:layout_width="match_parent"
-        android:layout_height="86dp" />
+        android:layout_height="wrap_content" />
 </LinearLayout>

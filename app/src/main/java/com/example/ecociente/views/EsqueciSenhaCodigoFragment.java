@@ -19,7 +19,10 @@ import com.example.ecociente.ui.BotaoCarregando;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 
-// Passo 2: 4 caixas de dígito com avanço automático de foco.
+// Passo 2 do esqueci senha: 4 caixas de dígito com avanço automático de foco.
+// Esta tela NÃO chama a API: só confere que há 4 dígitos, guarda o código no ViewModel e segue
+// para a nova senha. A ds-esqueceusenha-api não tem endpoint de verificação, então o código só é
+// validado no passo seguinte, em POST /senhas/redefinir.
 public class EsqueciSenhaCodigoFragment extends Fragment {
     private EditText digito1;
     private EditText digito2;
@@ -55,7 +58,7 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
         configurarAvancoAutomatico(digito3, digito2, digito4);
         configurarAvancoAutomatico(digito4, digito3, null);
 
-        botaoVerificar.setOnClickListener(clique -> verificarCodigo());
+        botaoVerificar.setOnClickListener(clique -> guardarCodigoEAvancar());
     }
 
     // Ao digitar um dígito, pula pro próximo campo; ao apagar num campo vazio, volta pro anterior.
@@ -97,7 +100,7 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
                 });
     }
 
-    private void verificarCodigo() {
+    private void guardarCodigoEAvancar() {
         String codigo =
                 digito1.getText().toString()
                         + digito2.getText().toString()

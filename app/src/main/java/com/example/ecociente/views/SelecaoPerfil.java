@@ -158,7 +158,7 @@ public class SelecaoPerfil extends AppCompatActivity {
         int corBorda =
                 selecionado
                         ? ContextCompat.getColor(this, R.color.verde_escuro_principal)
-                        : android.graphics.Color.parseColor("#D7E6E1");
+                        : ContextCompat.getColor(this, R.color.cinza_borda_card_perfil);
 
         card.setStrokeColor(corBorda);
         card.setStrokeWidth(dp(selecionado ? 2 : 1));

@@ -82,6 +82,12 @@ public class QuizPerguntasActivity extends AppCompatActivity {
         configurarInsetsDaTela();
 
         perguntas = QuizConteudo.obterPerguntas();
+
+        if (perguntas.isEmpty()) {
+            finish();
+            return;
+        }
+
         respostas = new int[perguntas.size()];
         Arrays.fill(respostas, -1);
 
@@ -245,7 +251,13 @@ public class QuizPerguntasActivity extends AppCompatActivity {
 
         String[] opcoes = pergunta.getOpcoes();
         for (int i = 0; i < textosOpcoes.length; i++) {
-            textosOpcoes[i].setText(opcoes[i]);
+            boolean existe = i < opcoes.length;
+
+            cardsOpcoes[i].setVisibility(existe ? View.VISIBLE : View.GONE);
+
+            if (existe) {
+                textosOpcoes[i].setText(opcoes[i]);
+            }
         }
 
         atualizarEstadoOpcoes();

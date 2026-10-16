@@ -2,7 +2,10 @@ package com.example.ecociente.repository;
 
 import com.example.ecociente.model.SindicoCooperativa;
 import com.example.ecociente.model.SindicoHistoricoColeta;
+import com.example.ecociente.model.SindicoSolicitacao;
+import com.example.ecociente.model.StatusAgendamento;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,9 +37,13 @@ public final class SindicoColetaRepository {
             new SindicoHistoricoColeta(107, "Cooperativa Reciclar Juntos", "25/08/2026", "4,5 (58 avaliações)"),
             new SindicoHistoricoColeta(108, "Cooperativa Nova Vida", "19/08/2026", "4,6 (82 avaliações)")));
     private final Map<Integer, Integer> avaliacoes = new HashMap<>();
+    private final List<SindicoSolicitacao> solicitacoes = new ArrayList<>();
+    private int proximaSolicitacao = 201;
 
     private SindicoColetaRepository() {
         avaliacoes.put(108, 4);
+        solicitacoes.add(new SindicoSolicitacao(
+                200, 2, "Cooperativa VerdeMais", "2026-10-16T09:00:00", false, StatusAgendamento.AGENDADO));
     }
 
     public static SindicoColetaRepository getInstance() { return INSTANCIA; }
@@ -50,6 +57,36 @@ public final class SindicoColetaRepository {
     }
 
     public List<SindicoHistoricoColeta> getHistorico() { return historico; }
+
+    public List<SindicoSolicitacao> getSolicitacoes() {
+        return Collections.unmodifiableList(solicitacoes);
+    }
+
+    public SindicoSolicitacao buscarSolicitacao(int id) {
+        for (SindicoSolicitacao solicitacao : solicitacoes) {
+            if (solicitacao.getId() == id) return solicitacao;
+        }
+        return null;
+    }
+
+    public SindicoSolicitacao criarSolicitacao(int cooperativaId, String inicio, boolean recorrente) {
+        SindicoCooperativa cooperativa = buscar(cooperativaId);
+        if (cooperativa == null) throw new IllegalArgumentException("Cooperativa não encontrada");
+        SindicoSolicitacao nova = new SindicoSolicitacao(proximaSolicitacao++, cooperativaId,
+                cooperativa.getNome(), inicio, recorrente, StatusAgendamento.AGENDADO);
+        solicitacoes.add(0, nova);
+        return nova;
+    }
+
+    public void cancelarSolicitacao(int id) {
+        for (int i = 0; i < solicitacoes.size(); i++) {
+            if (solicitacoes.get(i).getId() == id) {
+                solicitacoes.set(i, solicitacoes.get(i).comStatus(StatusAgendamento.CANCELADO));
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Solicitação não encontrada");
+    }
 
     public int getAvaliacao(int coletaId) {
         Integer nota = avaliacoes.get(coletaId);

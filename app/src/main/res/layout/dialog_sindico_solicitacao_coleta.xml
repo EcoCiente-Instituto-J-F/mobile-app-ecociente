@@ -25,9 +25,10 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="-12dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Fechar solicitação de coleta"
+                android:contentDescription="@string/sindico_fechar_solicitacao_de_coleta"
                 android:padding="14dp"
-                android:src="@drawable/sindico_voltar" />
+                android:src="@drawable/ic_voltar"
+        android:scaleType="centerInside" />
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
@@ -39,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/nunito_bold"
-                android:text="Solicitação de coleta"
+                android:text="@string/solicitacao_de_coleta"
                 android:textColor="@color/verde_escuro_principal"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -52,14 +53,14 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
                 android:fontFamily="@font/nunito_regular"
-                android:text="Nome da cooperativa"
+                android:text="@string/nome_cooperativa"
                 android:textColor="@color/cinza_texto_home"
                 android:textSize="13sp" />
             <ImageView
                 android:layout_width="113dp"
                 android:layout_height="60dp"
                 android:layout_gravity="end|top"
-                android:contentDescription="Caminhão de reciclagem"
+                android:contentDescription="@string/sindico_caminhao_de_reciclagem"
                 android:scaleType="centerCrop"
                 android:src="@drawable/sindico_caminhao_coleta" />
         </FrameLayout>
@@ -86,7 +87,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/nunito_regular"
-                android:text="Cooperativa Recicla Mais"
+                android:text="@string/sindico_cooperativa_recicla_mais"
                 android:textColor="@color/preto_texto_home"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -97,7 +98,7 @@
             android:layout_marginTop="14dp"
             android:fontFamily="@font/nunito_regular"
             android:labelFor="@id/enderecoSolicitacao"
-            android:text="Endereço"
+            android:text="@string/perfil_rotulo_endereco"
             android:textColor="@color/cinza_texto_home"
             android:textSize="13sp" />
         <FrameLayout
@@ -111,12 +112,12 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:fontFamily="@font/nunito_regular"
-                android:hint="Endereço da coleta"
+                android:hint="@string/sindico_endereco_da_coleta"
                 android:inputType="textPostalAddress"
                 android:paddingStart="50dp"
                 android:paddingEnd="12dp"
                 android:singleLine="true"
-                android:text="Rua das Hortênsias, 123 - Jardim das Flores"
+                android:text="@string/sindico_rua_das_hortensias_123_jardim_das"
                 android:textColor="@color/preto_texto_home"
                 android:textColorHint="@color/cinza_texto_home"
                 android:textSize="12sp" />
@@ -143,7 +144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_regular"
-                    android:text="Data"
+                    android:text="@string/data"
                     android:textColor="@color/cinza_texto_home"
                     android:textSize="13sp" />
                 <FrameLayout
@@ -156,7 +157,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:clickable="true"
-                        android:contentDescription="Escolher data da coleta"
+                        android:contentDescription="@string/sindico_escolher_data_da_coleta"
                         android:focusable="true"
                         android:fontFamily="@font/nunito_regular"
                         android:gravity="center_vertical"
@@ -184,7 +185,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_regular"
-                    android:text="Horário"
+                    android:text="@string/rotulo_horario"
                     android:textColor="@color/cinza_texto_home"
                     android:textSize="13sp" />
                 <FrameLayout
@@ -197,7 +198,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:clickable="true"
-                        android:contentDescription="Escolher horário da coleta"
+                        android:contentDescription="@string/sindico_escolher_horario_da_coleta"
                         android:focusable="true"
                         android:fontFamily="@font/nunito_regular"
                         android:gravity="center_vertical"
@@ -222,7 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             android:fontFamily="@font/nunito_regular"
-            android:text="A coleta será recorrente?"
+            android:text="@string/sindico_a_coleta_sera_recorrente"
             android:textColor="@color/cinza_texto_home"
             android:textSize="13sp" />
         <LinearLayout
@@ -238,7 +239,7 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/verde_escuro_principal"
-                android:text="Sim"
+                android:text="@string/sindico_sim"
                 android:textAllCaps="false"
                 android:textColor="@color/branco" />
             <Button
@@ -248,9 +249,20 @@
                 android:layout_marginStart="20dp"
                 android:layout_weight="1"
                 android:backgroundTint="@color/rosa_ecociente"
-                android:text="Não"
+                android:text="@string/sindico_nao"
                 android:textAllCaps="false"
                 android:textColor="@color/branco" />
         </LinearLayout>
+        <Button
+            android:id="@+id/enviarSolicitacao"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:backgroundTint="@color/verde_escuro_principal"
+            android:text="@string/sindico_enviar_solicitacao"
+            android:textAllCaps="false"
+            android:textColor="@color/branco" />
     </LinearLayout>
 </ScrollView>

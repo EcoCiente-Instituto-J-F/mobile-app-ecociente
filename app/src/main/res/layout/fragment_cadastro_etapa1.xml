@@ -164,6 +164,7 @@
                         android:src="@drawable/ic_calendario" />
 
                     <EditText
+                        android:importantForAutofill="no"
                         android:id="@+id/campoDataNascimento"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -468,7 +469,7 @@
                             android:fontFamily="@font/nunito_semibold"
                             android:text="@string/possui_codigo_condominio"
                             android:textColor="@color/cinza_texto_opcao"
-                            android:textSize="10sp" />
+                            android:textSize="11sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -477,7 +478,7 @@
                             android:fontFamily="@font/nunito_regular"
                             android:text="@string/codigo_condominio_descricao"
                             android:textColor="@color/cinza_texto_auxiliar"
-                            android:textSize="8sp" />
+                            android:textSize="11sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -514,6 +515,7 @@
                         android:src="@drawable/ic_senha"/>
 
                     <EditText
+                        android:importantForAutofill="no"
                         android:id="@+id/campoCodigoCondominio"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"

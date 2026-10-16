@@ -6,10 +6,12 @@ import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.example.ecociente.model.DadosDemonstracao;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
+import com.example.ecociente.ui.FormatoDataApi;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -186,7 +188,36 @@ public class CalendarioExternoRepository {
         }
     }
 
+    // Agenda de exemplo no lugar da API (DadosDemonstracao.ATIVO).
+    private void responderComExemplos(
+            @NonNull java.util.List<Solicitacao> itens, @NonNull Retorno retorno) {
+
+        PRINCIPAL.post(() -> retorno.aoConcluir(ResultadoSolicitacoes.sucesso(itens, true)));
+    }
+
     public void proxima(@NonNull Context contexto, @NonNull Retorno retorno) {
+
+        if (DadosDemonstracao.ATIVO) {
+            java.util.List<Solicitacao> proxima = new java.util.ArrayList<>();
+            long agora = System.currentTimeMillis();
+            long melhor = Long.MAX_VALUE;
+
+            for (Solicitacao s : Solicitacao.exemplos()) {
+                Calendar inicio = FormatoDataApi.calendario(s.getDataInicio());
+                boolean aberta = s.getStatus() == StatusAgendamento.AGENDADO
+                        || s.getStatus() == StatusAgendamento.CONFIRMADO;
+
+                if (inicio != null && aberta && inicio.getTimeInMillis() >= agora
+                        && inicio.getTimeInMillis() < melhor) {
+                    melhor = inicio.getTimeInMillis();
+                    proxima.clear();
+                    proxima.add(s);
+                }
+            }
+
+            responderComExemplos(proxima, retorno);
+            return;
+        }
 
         executar(contexto, URL_AGENDAMENTOS + "/proxima", retorno);
     }
@@ -209,6 +240,23 @@ public class CalendarioExternoRepository {
             @NonNull Calendar inicio,
             @NonNull Calendar fim,
             @NonNull Retorno retorno) {
+
+        if (DadosDemonstracao.ATIVO) {
+            java.util.List<Solicitacao> noPeriodo = new java.util.ArrayList<>();
+
+            for (Solicitacao s : Solicitacao.exemplos()) {
+                Calendar inicioColeta = FormatoDataApi.calendario(s.getDataInicio());
+
+                if (inicioColeta != null
+                        && !inicioColeta.before(inicio)
+                        && !inicioColeta.after(fim)) {
+                    noPeriodo.add(s);
+                }
+            }
+
+            responderComExemplos(noPeriodo, retorno);
+            return;
+        }
 
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
@@ -264,6 +312,10 @@ public class CalendarioExternoRepository {
 
             if (novoToken != null) {
                 resultado = buscar(novoToken, endereco);
+
+                if (resultado.getTipo() == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
+                    resultado = ResultadoSolicitacoes.semAcesso();
+                }
             }
         }
 

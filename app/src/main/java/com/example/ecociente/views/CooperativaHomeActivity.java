@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.model.Aviso;
 import com.example.ecociente.model.Coletas;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.ResultadoSolicitacoes;
@@ -69,7 +70,28 @@ public class CooperativaHomeActivity extends AppCompatActivity {
                 findViewById(R.id.cardProximaColeta),
                 findViewById(R.id.cardCalendarioColetas));
 
+        // A raiz não recorta os filhos (por causa da barra); sem isto o conteúdo rolado
+        // desenha por cima do cabeçalho.
+        findViewById(R.id.rolagemHomeCooperativa)
+                .addOnLayoutChangeListener(
+                        (rolagem, esquerda, topo, direita, base, e, t, d, b) ->
+                                rolagem.setClipBounds(
+                                        new android.graphics.Rect(0, 0, direita - esquerda, base - topo)));
+
         configurarCalendario();
+
+        findViewById(R.id.botaoAvisosCooperativa)
+                .setOnClickListener(
+                        view ->
+                                startActivity(
+                                        CentralNotificacoesActivity.criarIntent(
+                                                this, CentralNotificacoesActivity.Destino.COOPERATIVA)));
+
+        findViewById(R.id.cardAvisosCooperativa)
+                .setOnClickListener(view -> startActivity(CentralNotificacoesActivity.criarIntent(this, CentralNotificacoesActivity.Destino.COOPERATIVA)));
+
+        findViewById(R.id.cardChatbotCooperativa)
+                .setOnClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
     }
 
     private void configurarCalendario() {
@@ -136,6 +158,22 @@ public class CooperativaHomeActivity extends AppCompatActivity {
         super.onStart();
 
         carregarPerfil();
+
+        TextView avisoDestaque = findViewById(R.id.textoAvisoDestaqueCooperativa);
+        TextView avisoOrigem = findViewById(R.id.textoAvisoOrigemCooperativa);
+
+        if (Aviso.lista().isEmpty()) {
+            avisoDestaque.setText(R.string.sem_avisos);
+            avisoOrigem.setText("");
+        } else {
+            Aviso recente = Aviso.lista().get(0);
+
+            avisoDestaque.setText(recente.titulo);
+            avisoOrigem.setText(recente.remetente);
+        }
+
+        findViewById(R.id.pontoAvisosCooperativa)
+                .setVisibility(Aviso.quantidadeNaoLidos() > 0 ? View.VISIBLE : View.GONE);
 
         if (calendarioViewModel != null && calendarioViewModel.jaCarregou()) {
             calendarioViewModel.carregar();

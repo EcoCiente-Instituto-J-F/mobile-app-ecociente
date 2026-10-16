@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="92dp"
-    android:background="@drawable/sindico_card"
+    android:background="@drawable/fundo_cartao_borda"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="12dp"
@@ -56,8 +56,8 @@
         android:layout_marginStart="5dp"
         android:backgroundTint="@color/verde_escuro_principal"
         android:minWidth="86dp"
-        android:text="Solicitar coleta"
+        android:text="@string/sindico_solicitar_coleta"
         android:textAllCaps="false"
         android:textColor="@color/branco"
-        android:textSize="10sp" />
+        android:textSize="11sp" />
 </LinearLayout>

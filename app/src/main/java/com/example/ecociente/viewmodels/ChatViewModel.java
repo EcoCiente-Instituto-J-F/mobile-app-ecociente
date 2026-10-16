@@ -84,6 +84,5 @@ public class ChatViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         executorRede.shutdownNow();
-        super.onCleared();
     }
 }

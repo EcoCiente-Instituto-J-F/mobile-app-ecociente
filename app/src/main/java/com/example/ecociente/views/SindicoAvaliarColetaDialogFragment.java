@@ -68,7 +68,7 @@ public final class SindicoAvaliarColetaDialogFragment extends DialogFragment {
             estrela.setBackgroundResource(android.R.color.transparent);
             estrela.setScaleType(ImageButton.ScaleType.FIT_CENTER);
             estrela.setPadding(dp(6), dp(6), dp(6), dp(6));
-            estrela.setContentDescription(nota + (nota == 1 ? " estrela" : " estrelas"));
+            estrela.setContentDescription(getResources().getQuantityString(R.plurals.sindico_estrelas, nota, nota));
             estrela.setOnClickListener(view -> selecionar(nota));
             linha.addView(estrela, new LinearLayout.LayoutParams(0, dp(52), 1));
             estrelas[i] = estrela;
@@ -103,12 +103,12 @@ public final class SindicoAvaliarColetaDialogFragment extends DialogFragment {
             estrelas[i].setImageResource(i < notaSelecionada
                     ? R.drawable.sindico_estrela_cheia : R.drawable.sindico_estrela_vazia);
             estrelas[i].setSelected(i < notaSelecionada);
-            estrelas[i].setContentDescription((i + 1) + (i == 0 ? " estrela" : " estrelas")
-                    + (i + 1 == notaSelecionada ? ", nota selecionada" : ""));
+            String descricaoNota = getResources().getQuantityString(R.plurals.sindico_estrelas, i + 1, i + 1);
+            estrelas[i].setContentDescription(i + 1 == notaSelecionada
+                    ? getString(R.string.sindico_nota_selecionada, descricaoNota) : descricaoNota);
         }
-        legenda.setText(notaSelecionada == 0 ? "Escolha de 1 a 5 estrelas"
-                : notaSelecionada + (notaSelecionada == 1 ? " estrela selecionada"
-                : " estrelas selecionadas"));
+        legenda.setText(notaSelecionada == 0 ? getString(R.string.sindico_escolha_de_1_a_5_estrelas)
+                : getResources().getQuantityString(R.plurals.sindico_estrelas_selecionadas, notaSelecionada, notaSelecionada));
         salvar.setVisibility(notaSelecionada == 0 ? View.GONE : View.VISIBLE);
     }
 

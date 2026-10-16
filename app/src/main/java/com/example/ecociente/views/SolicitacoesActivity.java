@@ -1,8 +1,10 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import android.app.Activity;
@@ -29,11 +31,14 @@ import com.example.ecociente.viewmodels.SolicitacoesViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import java.util.ArrayList;
 import java.util.List;
+import com.example.ecociente.ui.AoDigitar;
+import java.util.Locale;
 
 public class SolicitacoesActivity extends AppCompatActivity {
 
-    public static final String EXTRA_HISTORICO = "historico";
+    public static final String EXTRA_INDICE_BARRA = "indiceBarra";
 
     private static final int FALTAM_PARA_CARREGAR_MAIS = 3;
 
@@ -50,11 +55,10 @@ public class SolicitacoesActivity extends AppCompatActivity {
                         }
                     });
 
-    private boolean historico;
-
     private SwipeRefreshLayout atualizacao;
     private View indicador;
     private TextView textoEstado;
+    private EditText campoBusca;
     private MaterialButton botaoEstado;
 
     @Override
@@ -65,19 +69,19 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_solicitacoes);
 
+        Motion.entrar(
+                this,
+                R.id.tituloSolicitacoes,
+                R.id.campoBuscaSolicitacao,
+                R.id.rolagemFiltros,
+                R.id.listaSolicitacoes);
+
         viewModel = new ViewModelProvider(this).get(SolicitacoesViewModel.class);
-
-        historico = getIntent().getBooleanExtra(EXTRA_HISTORICO, false);
-
-        if (historico) {
-            viewModel.definirFiltroInicial(StatusAgendamento.REALIZADO);
-
-            ((TextView) findViewById(R.id.tituloSolicitacoes)).setText(R.string.historico);
-        }
 
         atualizacao = findViewById(R.id.atualizacaoSolicitacoes);
         indicador = findViewById(R.id.indicadorSolicitacoes);
         textoEstado = findViewById(R.id.textoEstadoSolicitacoes);
+        campoBusca = findViewById(R.id.campoBuscaSolicitacao);
         botaoEstado = findViewById(R.id.botaoAcaoEstadoSolicitacoes);
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizSolicitacoes));
@@ -85,6 +89,8 @@ public class SolicitacoesActivity extends AppCompatActivity {
         configurarFiltros();
 
         configurarLista();
+
+        configurarBusca();
 
         configurarNavegacao();
 
@@ -170,9 +176,40 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
     private void exibirItens(@NonNull List<Solicitacao> itens) {
 
-        adaptador.submitList(itens);
+        String busca = campoBusca.getText().toString().trim().toLowerCase(Locale.ROOT);
+
+        if (busca.isEmpty()) {
+            adaptador.submitList(itens);
+
+        } else {
+            List<Solicitacao> filtrados = new ArrayList<>();
+
+            for (Solicitacao solicitacao : itens) {
+                String nome = SolicitacaoAdapter.nomeExibido(this, solicitacao);
+
+                if (nome.toLowerCase(Locale.ROOT).contains(busca)) {
+                    filtrados.add(solicitacao);
+                }
+            }
+
+            adaptador.submitList(filtrados);
+        }
 
         atualizarEstado();
+    }
+
+    private void configurarBusca() {
+
+        AoDigitar.em(
+                campoBusca,
+                () -> {
+                    List<Solicitacao> itens = viewModel.getItens().getValue();
+
+                    if (itens != null) {
+                        exibirItens(itens);
+                    }
+                });
+
     }
 
     private void atualizarEstado() {
@@ -196,6 +233,9 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
         if (situacao == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
             mostrarEstado(R.string.solicitacoes_sessao_expirada, R.string.entrar_novamente, view -> sair());
+
+        } else if (situacao == ResultadoSolicitacoes.Tipo.SEM_ACESSO) {
+            mostrarEstado(R.string.solicitacoes_sem_acesso, 0, null);
 
         } else if (situacao == ResultadoSolicitacoes.Tipo.ERRO) {
             mostrarEstado(R.string.solicitacoes_erro, R.string.tentar_novamente, view -> viewModel.recarregar());
@@ -238,6 +278,9 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
     private void configurarNavegacao() {
 
+        ((android.widget.TextView) findViewById(R.id.tituloSolicitacoes))
+                .setText(indiceAtual() == ItensBarra.SEGUNDO ? R.string.coletas : R.string.historico);
+
         BarraNavegacaoView barra = findViewById(R.id.barraNavegacao);
 
         barra.configurar(ItensBarra.cooperativa());
@@ -251,6 +294,6 @@ public class SolicitacoesActivity extends AppCompatActivity {
     }
 
     private int indiceAtual() {
-        return historico ? ItensBarra.QUARTO : ItensBarra.SEGUNDO;
+        return getIntent().getIntExtra(EXTRA_INDICE_BARRA, ItensBarra.SEGUNDO);
     }
 }

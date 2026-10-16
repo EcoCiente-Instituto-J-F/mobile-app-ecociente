@@ -244,7 +244,7 @@
                 android:fontFamily="@font/nunito_medium"
                 android:text="@string/separador_ou"
                 android:textColor="@color/cinza_escuro_textos"
-                android:textSize="10sp" />
+                android:textSize="11sp" />
 
             <View
                 android:layout_width="0dp"

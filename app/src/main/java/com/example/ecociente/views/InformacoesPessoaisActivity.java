@@ -5,18 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.model.PerfilAcesso;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.repository.PerfilRepository;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.ui.DialogoEco;
 
 public class InformacoesPessoaisActivity extends AppCompatActivity {
 
@@ -25,6 +27,10 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
     private final Motion motion = new Motion();
 
     private String uid;
+
+    private boolean cooperativa;
+
+    private PerfilUsuario perfilAtual;
 
     private TextView textoNomeCabecalho;
     private TextView textoEmailCabecalho;
@@ -90,10 +96,27 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
         // Trocar o e-mail é o identificador de login no Firebase Auth e exige um
         // fluxo próprio (reautenticação + verificação) - fora do escopo por ora.
+        // Na cooperativa o e-mail da linha é o de contato (emailCooperativa), esse pode ser editado.
         linhaEmail.setClickable(false);
 
         linhaNome.setOnClickListener(
-                view -> abrirEdicao(PerfilRepository.CAMPO_NOME, R.string.perfil_rotulo_nome, linhaNome));
+                view ->
+                        abrirEdicao(
+                                cooperativa
+                                        ? PerfilRepository.CAMPO_NOME_COOPERATIVA
+                                        : PerfilRepository.CAMPO_NOME,
+                                cooperativa ? R.string.nome_cooperativa : R.string.perfil_rotulo_nome,
+                                linhaNome));
+
+        linhaEmail.setOnClickListener(
+                view -> {
+                    if (cooperativa) {
+                        abrirEdicao(
+                                PerfilRepository.CAMPO_EMAIL_COOPERATIVA,
+                                R.string.perfil_rotulo_email_cooperativa,
+                                linhaEmail);
+                    }
+                });
 
         linhaTelefone.setOnClickListener(
                 view ->
@@ -110,7 +133,11 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
                                 linhaEndereco));
 
         linhaCpf.setOnClickListener(
-                view -> abrirEdicao(PerfilRepository.CAMPO_CPF, R.string.perfil_rotulo_cpf, linhaCpf));
+                view -> {
+                    if (!cooperativa) {
+                        abrirEdicao(PerfilRepository.CAMPO_CPF, R.string.perfil_rotulo_cpf, linhaCpf);
+                    }
+                });
     }
 
     private void configurarLinha(View linha, int icone, int rotulo) {
@@ -135,28 +162,132 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
     private void preencherCampos(FirebaseUser usuario, PerfilUsuario perfil) {
 
-        String nome = PerfilUsuario.nomeExibicao(perfil, usuario);
+        perfilAtual = perfil;
 
-        String email = PerfilUsuario.emailExibicao(perfil, usuario);
+        cooperativa = perfil != null && PerfilAcesso.ehCooperativa(perfil.getTipoPerfil());
 
-        textoNomeCabecalho.setText(nome);
+        String emailLogin = PerfilUsuario.emailExibicao(perfil, usuario);
 
-        textoEmailCabecalho.setText(email);
+        if (cooperativa) {
+            preencherCooperativa(perfil, emailLogin);
 
-        definirValor(linhaNome, nome);
+        } else {
+            String nome = PerfilUsuario.nomeExibicao(perfil, usuario);
 
-        definirValor(linhaEmail, email);
+            textoNomeCabecalho.setText(nome);
+
+            textoEmailCabecalho.setText(emailLogin);
+
+            definirValor(linhaNome, nome);
+
+            definirValor(linhaEmail, emailLogin);
+
+            definirValor(linhaCpf, perfil != null ? perfil.getCpf() : "");
+        }
 
         definirValor(linhaTelefone, perfil != null ? perfil.getTelefone() : "");
 
         definirValor(linhaEndereco, perfil != null ? perfil.getEndereco() : "");
 
-        definirValor(linhaCpf, perfil != null ? perfil.getCpf() : "");
+        if (perfil != null && (cooperativa || usuarioComum(perfil))) {
+            montarInformacoesBasicas(perfil);
+        }
 
         if (perfil != null) {
             AvatarPerfil.exibir(
                     findViewById(R.id.imagemAvatarInformacoesPessoais), perfil.getFotoUrl());
         }
+    }
+
+    private void preencherCooperativa(PerfilUsuario perfil, String emailLogin) {
+
+        configurarLinha(linhaNome, R.drawable.ic_predio, R.string.nome_cooperativa);
+
+        configurarLinha(linhaEmail, R.drawable.ic_email, R.string.perfil_rotulo_email_cooperativa);
+
+        configurarLinha(linhaCpf, R.drawable.ic_cpf_perfil, R.string.cnpj);
+
+        linhaEmail.setClickable(true);
+
+        linhaCpf.setClickable(false);
+
+        textoNomeCabecalho.setText(perfil.getNomeCooperativa());
+
+        textoEmailCabecalho.setText(emailLogin);
+
+        definirValor(linhaNome, perfil.getNomeCooperativa());
+
+        definirValor(
+                linhaEmail,
+                perfil.getEmailCooperativa().isEmpty() ? emailLogin : perfil.getEmailCooperativa());
+
+        definirValor(linhaCpf, formatarCnpj(perfil.getCnpj()));
+    }
+
+    private void montarInformacoesBasicas(PerfilUsuario perfil) {
+
+        LinearLayout linhas = findViewById(R.id.linhasInformacoesBasicas);
+
+        linhas.removeAllViews();
+
+        adicionarLinhaBasica(linhas, PerfilRepository.CAMPO_NUMERO, R.string.rotulo_numero, perfil.getNumero(), true, true);
+        adicionarLinhaBasica(
+                linhas, PerfilRepository.CAMPO_COMPLEMENTO, R.string.rotulo_complemento, perfil.getComplemento(), true, true);
+        adicionarLinhaBasica(linhas, PerfilRepository.CAMPO_CIDADE, R.string.rotulo_cidade, perfil.getCidade(), true, false);
+        adicionarLinhaBasica(linhas, PerfilRepository.CAMPO_ESTADO, R.string.rotulo_estado, perfil.getEstado(), true, false);
+        adicionarLinhaBasica(linhas, PerfilRepository.CAMPO_CEP, R.string.rotulo_cep, perfil.getCep(), false, true);
+
+        findViewById(R.id.tituloInformacoesBasicas).setVisibility(View.VISIBLE);
+        findViewById(R.id.containerInformacoesBasicas).setVisibility(View.VISIBLE);
+    }
+
+    private void adicionarLinhaBasica(
+            LinearLayout linhas,
+            String campo,
+            int rotulo,
+            String valor,
+            boolean comDivisor,
+            boolean editavel) {
+
+        LayoutInflater inflador = LayoutInflater.from(this);
+
+        View linha = inflador.inflate(R.layout.item_campo_pessoal, linhas, false);
+
+        configurarLinha(linha, R.drawable.ic_endereco_perfil, rotulo);
+
+        definirValor(linha, valor);
+
+        // Cidade e estado vêm do CEP na ds-cadastro-api; editar à mão só criaria divergência.
+        if (editavel) {
+            linha.setOnClickListener(view -> abrirEdicao(campo, rotulo, linha));
+        } else {
+            linha.setClickable(false);
+        }
+
+        linhas.addView(linha);
+
+        if (comDivisor) {
+            linhas.addView(inflador.inflate(R.layout.divisor_campo_pessoal, linhas, false));
+        }
+    }
+
+    private String formatarCnpj(String valor) {
+
+        String digitos = valor.replaceAll("\\D", "");
+
+        if (digitos.length() != 14) {
+            return valor;
+        }
+
+        return digitos.substring(0, 2)
+                + "."
+                + digitos.substring(2, 5)
+                + "."
+                + digitos.substring(5, 8)
+                + "/"
+                + digitos.substring(8, 12)
+                + "-"
+                + digitos.substring(12);
     }
 
     private void definirValor(View linha, String valor) {
@@ -187,15 +318,15 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
         campoValor.setSelection(campoValor.getText().length());
 
-        new AlertDialog.Builder(this)
-                .setTitle(rotulo)
-                .setView(corpo)
-                .setPositiveButton(
+        new DialogoEco.Builder(this)
+                .titulo(rotulo)
+                .conteudo(corpo)
+                .botao(
                         R.string.perfil_salvar,
-                        (dialogo, botao) ->
-                                salvarCampo(campo, campoValor.getText().toString().trim(), linha))
-                .setNegativeButton(R.string.perfil_cancelar, null)
-                .show();
+                        DialogoEco.Estilo.PREENCHIDO,
+                        () -> salvarCampo(campo, campoValor.getText().toString().trim(), linha))
+                .botao(R.string.perfil_cancelar, DialogoEco.Estilo.CONTORNO, null)
+                .mostrar();
     }
 
     private void salvarCampo(String campo, String novoValor, View linha) {
@@ -219,9 +350,70 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
                             // inteiro do Firestore de novo.
                             definirValor(linha, novoValor);
 
-                            if (campo.equals(PerfilRepository.CAMPO_NOME)) {
+                            aplicarNoPerfilAtual(campo, novoValor);
+
+                            if (campo.equals(PerfilRepository.CAMPO_CEP)) {
+                                atualizarCidadeEstadoPeloCep(novoValor);
+                            }
+
+                            viewModel.sincronizarCampoComApi(
+                                    getApplicationContext(), campo, novoValor, perfilAtual);
+
+                            if (campo.equals(PerfilRepository.CAMPO_NOME)
+                                    || campo.equals(PerfilRepository.CAMPO_NOME_COOPERATIVA)) {
                                 textoNomeCabecalho.setText(novoValor);
                             }
                         });
+    }
+
+    private void aplicarNoPerfilAtual(String campo, String valor) {
+
+        if (perfilAtual == null) {
+            return;
+        }
+
+        switch (campo) {
+            case PerfilRepository.CAMPO_CEP:
+                perfilAtual.setCep(valor);
+                break;
+
+            case PerfilRepository.CAMPO_NUMERO:
+                perfilAtual.setNumero(valor);
+                break;
+
+            case PerfilRepository.CAMPO_COMPLEMENTO:
+                perfilAtual.setComplemento(valor);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private boolean usuarioComum(PerfilUsuario perfil) {
+        return PerfilAcesso.ehUsuarioComum(
+                perfil.getTipoPerfil(), perfil.isPossuiCodigoCondominio(), perfil.getEndereco());
+    }
+
+    // A API recalcula cidade e estado pelo CEP; o perfil do app acompanha para não ficar com a antiga.
+    private void atualizarCidadeEstadoPeloCep(String cep) {
+
+        viewModel.buscarLocalidadePorCep(
+                cep,
+                localidade -> {
+                    if (localidade == null || perfilAtual == null || uid == null) {
+                        return;
+                    }
+
+                    perfilAtual.setCidade(localidade.getCidade());
+                    perfilAtual.setEstado(localidade.getEstado());
+
+                    viewModel.atualizarCampo(
+                            uid, PerfilRepository.CAMPO_CIDADE, localidade.getCidade());
+                    viewModel.atualizarCampo(
+                            uid, PerfilRepository.CAMPO_ESTADO, localidade.getEstado());
+
+                    montarInformacoesBasicas(perfilAtual);
+                });
     }
 }

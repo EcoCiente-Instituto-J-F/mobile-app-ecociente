@@ -50,8 +50,14 @@
             android:paddingBottom="3dp"
             android:text="@string/tipo_coleta_reciclaveis"
             android:textColor="@color/verde_escuro_principal"
-            android:textSize="10sp" />
+            android:textSize="11sp" />
 
     </LinearLayout>
+
+    <com.google.android.material.materialswitch.MaterialSwitch
+        android:id="@+id/switchLembrete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/lembrete_de_coleta" />
 
 </LinearLayout>

@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/nunito_bold"
-            android:text="Avaliar Coleta"
+            android:text="@string/sindico_avaliar_coleta"
             android:textColor="@color/verde_escuro_principal"
             android:textSize="24sp" />
         <ImageButton
@@ -27,9 +27,10 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Fechar avaliação"
+            android:contentDescription="@string/sindico_fechar_avaliacao"
             android:padding="12dp"
-            android:src="@drawable/sindico_fechar" />
+            android:src="@drawable/ic_fechar"
+        android:scaleType="centerInside" />
     </LinearLayout>
 
     <TextView
@@ -56,7 +57,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@font/nunito_regular"
         android:gravity="center"
-        android:text="Escolha de 1 a 5 estrelas"
+        android:text="@string/sindico_escolha_de_1_a_5_estrelas"
         android:textColor="@color/cinza_texto_home"
         android:textSize="12sp" />
 
@@ -68,7 +69,7 @@
         android:layout_marginTop="14dp"
         android:layout_marginEnd="14dp"
         android:backgroundTint="@color/verde_escuro_principal"
-        android:text="Salvar avaliação local"
+        android:text="@string/sindico_salvar_avaliacao_local"
         android:textAllCaps="false"
         android:textColor="@color/branco"
         android:textSize="14sp"

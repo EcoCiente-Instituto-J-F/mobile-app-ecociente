@@ -10,6 +10,8 @@ import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.PreferenciasNotificacao;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.ResultadoUploadFoto;
+import com.example.ecociente.repository.AtualizacaoExternaRepository;
+import com.example.ecociente.repository.ConsultaCepRepository;
 import com.example.ecociente.repository.FotoPerfilRepository;
 import com.example.ecociente.repository.PerfilRepository;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,6 +19,8 @@ import com.google.firebase.auth.FirebaseUser;
 public class PerfilViewModel extends ViewModelComCarregamento {
     private final PerfilRepository repositorio = new PerfilRepository();
     private final FotoPerfilRepository fotoRepositorio = new FotoPerfilRepository();
+    private final AtualizacaoExternaRepository atualizacaoExterna = new AtualizacaoExternaRepository();
+    private final ConsultaCepRepository consultaCep = new ConsultaCepRepository();
 
     @Nullable
     public FirebaseUser usuarioAtual() {
@@ -38,6 +42,19 @@ public class PerfilViewModel extends ViewModelComCarregamento {
         return executar(repositorio.atualizarCampo(uid, campo, valor));
     }
 
+    public void sincronizarCampoComApi(
+            @NonNull Context contexto,
+            @NonNull String campo,
+            @NonNull String valor,
+            @Nullable PerfilUsuario perfil) {
+        atualizacaoExterna.sincronizarCampo(contexto, campo, valor, perfil);
+    }
+
+    public void buscarLocalidadePorCep(
+            @NonNull String cep, @NonNull ConsultaCepRepository.Retorno retorno) {
+        consultaCep.buscar(cep, retorno);
+    }
+
     @NonNull
     public LiveData<PreferenciasNotificacao> buscarPreferencias(@NonNull String uid) {
         return executar(repositorio.buscarPreferencias(uid));
@@ -57,6 +74,24 @@ public class PerfilViewModel extends ViewModelComCarregamento {
     @NonNull
     public LiveData<ResultadoUploadFoto> atualizarFotoPerfil(
             @NonNull Context contexto, @NonNull String uid, @NonNull Uri imagem) {
+        return enviarFoto(contexto, uid, imagem, PerfilRepository.CAMPO_FOTO_URL, true);
+    }
+
+    // Foto do condomínio do síndico: vai ao Cloudinary e a URL fica no documento do usuário.
+    // A API de cadastro ainda não tem campo para ela, por isso não sincroniza.
+    @NonNull
+    public LiveData<ResultadoUploadFoto> atualizarFotoCondominio(
+            @NonNull Context contexto, @NonNull String uid, @NonNull Uri imagem) {
+        return enviarFoto(contexto, uid, imagem, PerfilRepository.CAMPO_FOTO_CONDOMINIO_URL, false);
+    }
+
+    @NonNull
+    private LiveData<ResultadoUploadFoto> enviarFoto(
+            @NonNull Context contexto,
+            @NonNull String uid,
+            @NonNull Uri imagem,
+            @NonNull String campo,
+            boolean sincronizarComApi) {
         definirCarregando(true);
 
         MediatorLiveData<ResultadoUploadFoto> resultado = new MediatorLiveData<>();
@@ -75,13 +110,21 @@ public class PerfilViewModel extends ViewModelComCarregamento {
                     }
 
                     LiveData<ResultadoApi> gravacao =
-                            repositorio.atualizarCampo(
-                                    uid, PerfilRepository.CAMPO_FOTO_URL, respostaEnvio.getUrl());
+                            repositorio.atualizarCampo(uid, campo, respostaEnvio.getUrl());
 
                     resultado.addSource(
                             gravacao,
                             respostaGravacao -> {
                                 definirCarregando(false);
+
+                                // A URL do Cloudinary também vai para a API de cadastro (urlAvatar).
+                                if (sincronizarComApi && respostaGravacao.isSucesso()) {
+                                    atualizacaoExterna.sincronizarCampo(
+                                            contexto,
+                                            PerfilRepository.CAMPO_FOTO_URL,
+                                            respostaEnvio.getUrl(),
+                                            null);
+                                }
 
                                 resultado.setValue(
                                         respostaGravacao.isSucesso()

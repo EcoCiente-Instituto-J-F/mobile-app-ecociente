@@ -16,7 +16,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -483,6 +485,10 @@ public class CadastroEtapa1Fragment extends Fragment {
                                 !checkPossuiCodigoCondominio.isChecked()));
     }
 
+    private int cor(@ColorRes int cor) {
+        return ContextCompat.getColor(requireContext(), cor);
+    }
+
     private void atualizarModoCodigoCondominio(boolean possuiCodigo) {
 
         campoCodigoCondominio.setEnabled(possuiCodigo);
@@ -491,9 +497,9 @@ public class CadastroEtapa1Fragment extends Fragment {
 
             containerEtapas.setVisibility(View.GONE);
 
-            containerCodigoCondominio.setCardBackgroundColor(Color.parseColor("#FAFCFB"));
+            containerCodigoCondominio.setCardBackgroundColor(cor(R.color.branco_fundo_campo));
 
-            containerCodigoCondominio.setStrokeColor(Color.parseColor("#064E3B"));
+            containerCodigoCondominio.setStrokeColor(cor(R.color.verde_escuro_principal));
 
             botaoContinuar.setText(R.string.cadastrar_se);
 
@@ -501,11 +507,11 @@ public class CadastroEtapa1Fragment extends Fragment {
 
             containerEtapas.setVisibility(View.VISIBLE);
 
-            containerCodigoCondominio.setCardBackgroundColor(Color.parseColor("#E1E3E2"));
+            containerCodigoCondominio.setCardBackgroundColor(cor(R.color.cinza_fundo_desabilitado));
 
-            containerCodigoCondominio.setStrokeColor(Color.parseColor("#B6BAB8"));
+            containerCodigoCondominio.setStrokeColor(cor(R.color.cinza_borda_desabilitada));
 
-            botaoContinuar.setText("Continuar");
+            botaoContinuar.setText(R.string.continuar);
         }
     }
 

@@ -191,7 +191,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/nunito_extrabold"
-                                    android:text="75%"
+                                    android:text="@string/progresso_exemplo"
                                     android:textColor="@color/verde_escuro_principal"
                                     android:textSize="20sp" />
 
@@ -201,7 +201,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/nunito_bold"
-                                android:text="›"
+                                android:text="@string/simbolo_avancar"
                                 android:textColor="@color/verde_escuro_principal"
                                 android:textSize="27sp" />
 
@@ -292,7 +292,7 @@
                             android:fontFamily="@font/nunito_bold"
                             android:gravity="center"
                             android:includeFontPadding="false"
-                            android:text="›"
+                            android:text="@string/simbolo_avancar"
                             android:textColor="@color/verde_escuro_principal"
                             android:textSize="22sp" />
 
@@ -344,7 +344,6 @@
                             android:layout_height="212dp"
                             android:layout_marginEnd="12dp" />
 
-                        <!-- Temporários: repetem os dois primeiros cards até os conteúdos reais chegarem. -->
                         <include
                             android:id="@+id/cardConteudoGuiaExtra"
                             layout="@layout/item_conteudo_home_guia"

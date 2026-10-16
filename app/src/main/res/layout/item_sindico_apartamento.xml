@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:background="@drawable/sindico_card"
+    android:background="@drawable/fundo_cartao_borda"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="10dp"
@@ -47,7 +47,7 @@
                 android:paddingEnd="6dp"
                 android:paddingBottom="2dp"
                 android:textColor="@color/verde_escuro_principal"
-                android:textSize="9sp" />
+                android:textSize="11sp" />
         </LinearLayout>
         <TextView
             android:id="@+id/moradorApartamentoSindico"
@@ -56,7 +56,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/cinza_texto_home"
-            android:textSize="10sp" />
+            android:textSize="11sp" />
     </LinearLayout>
 
     <ImageButton
@@ -64,15 +64,17 @@
         android:layout_width="40dp"
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Editar unidade"
+        android:contentDescription="@string/sindico_editar_unidade"
         android:padding="12dp"
-        android:src="@drawable/sindico_unidades_editar" />
+        android:src="@drawable/sindico_unidades_editar"
+        android:scaleType="centerInside" />
     <ImageButton
         android:id="@+id/excluirApartamentoSindico"
         android:layout_width="40dp"
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Excluir unidade"
+        android:contentDescription="@string/sindico_excluir_unidade"
         android:padding="12dp"
-        android:src="@drawable/ic_excluir" />
+        android:src="@drawable/ic_excluir"
+        android:scaleType="centerInside" />
 </LinearLayout>

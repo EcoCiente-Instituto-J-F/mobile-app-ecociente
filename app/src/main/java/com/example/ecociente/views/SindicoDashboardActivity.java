@@ -1,36 +1,35 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.JanelaEdgeToEdge;
+import com.example.ecociente.ui.InsetsSistema;
+import com.example.ecociente.ui.BarraNavegacaoView;
+import com.example.ecociente.ui.ItensBarra;
+import com.example.ecociente.ui.Navegacao;
 
-/** Detalhamento visual com números fictícios para demonstração. */
+/** Detalhamento do dashboard; os números vêm da API de dashboard. */
 public final class SindicoDashboardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-        getWindow().setStatusBarColor(Color.TRANSPARENT);
-        getWindow().setNavigationBarColor(Color.TRANSPARENT);
+        JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_dashboard);
 
+        Motion.entrar(
+                this,
+                R.id.tituloSindicoDashboard,
+                R.id.graficoQuizzesSindico,
+                R.id.graficoCooperativasSindico);
+
         View raiz = findViewById(R.id.raizSindicoDashboard);
-        ViewCompat.setOnApplyWindowInsetsListener(raiz, (view, insets) -> {
-            Insets barras = insets.getInsets(WindowInsetsCompat.Type.systemBars()
-                    | WindowInsetsCompat.Type.displayCutout());
-            view.setPadding(barras.left, barras.top, barras.right, barras.bottom);
-            return insets;
-        });
-        ViewCompat.requestApplyInsets(raiz);
+        InsetsSistema.aplicarComoPadding(raiz);
 
         findViewById(R.id.voltarSindicoDashboard).setOnClickListener(view -> finish());
         ((SindicoDashboardGraficoView) findViewById(R.id.graficoQuizzesSindico)).setDados(
@@ -44,12 +43,13 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
                         new int[]{R.color.verde_escuro_principal, R.color.verde_claro_ecociente,
                                 R.color.rosa_ecociente, R.color.amarelo_avaliacao}, 15);
 
-        SindicoBottomBar barra = findViewById(R.id.barraInferiorSindico);
-        barra.selecionar(SindicoBottomBar.Aba.HOME);
-        barra.aoTocarHome(view -> navegar(SindicoHomeActivity.class));
-        barra.aoTocarSolicitacao(view -> navegar(SindicoCooperativasActivity.class));
-        barra.aoTocarHistorico(view -> navegar(SindicoHistoricoActivity.class));
-        barra.aoTocarUnidades(view -> navegar(SindicoUnidadesActivity.class));
+        BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
+        barra.configurar(ItensBarra.sindico());
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.HOME);
+        barra.setOnAssistenteClickListener(
+                view -> startActivity(new Intent(this, ChatActivity.class)));
+        barra.setOnItemClickListener(
+                indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM));
     }
 
     private void navegar(Class<?> destino) {

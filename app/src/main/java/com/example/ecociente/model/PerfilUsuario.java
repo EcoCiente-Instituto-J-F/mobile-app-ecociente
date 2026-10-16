@@ -14,8 +14,16 @@ public class PerfilUsuario {
     private String endereco = "";
     private String cpf = "";
     private String fotoUrl = "";
+    private String fotoCondominioUrl = "";
     private String tipoPerfil = "";
     private String nomeCooperativa = "";
+    private String cnpj = "";
+    private String emailCooperativa = "";
+    private String numero = "";
+    private String complemento = "";
+    private String cidade = "";
+    private String estado = "";
+    private String cep = "";
     private boolean possuiCodigoCondominio;
 
     public PerfilUsuario() {}
@@ -38,6 +46,69 @@ public class PerfilUsuario {
     }
 
     @NonNull
+    public String getNumero() {
+        return numero == null ? "" : numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    @NonNull
+    public String getComplemento() {
+        return complemento == null ? "" : complemento;
+    }
+
+    public void setComplemento(String complemento) {
+        this.complemento = complemento;
+    }
+
+    @NonNull
+    public String getCidade() {
+        return cidade == null ? "" : cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    @NonNull
+    public String getEstado() {
+        return estado == null ? "" : estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    @NonNull
+    public String getCep() {
+        return cep == null ? "" : cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    @NonNull
+    public String getCnpj() {
+        return cnpj == null ? "" : cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    @NonNull
+    public String getEmailCooperativa() {
+        return emailCooperativa == null ? "" : emailCooperativa;
+    }
+
+    public void setEmailCooperativa(String emailCooperativa) {
+        this.emailCooperativa = emailCooperativa;
+    }
+
+    @NonNull
     public String getNomeCooperativa() {
         return nomeCooperativa == null ? "" : nomeCooperativa;
     }
@@ -49,6 +120,14 @@ public class PerfilUsuario {
     @NonNull
     public String getFotoUrl() {
         return fotoUrl == null ? "" : fotoUrl;
+    }
+
+    public String getFotoCondominioUrl() {
+        return fotoCondominioUrl == null ? "" : fotoCondominioUrl;
+    }
+
+    public void setFotoCondominioUrl(String fotoCondominioUrl) {
+        this.fotoCondominioUrl = fotoCondominioUrl;
     }
 
     public void setFotoUrl(String fotoUrl) {
