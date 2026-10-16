@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.model.SindicoPosicaoRanking;
 import com.example.ecociente.ui.Iniciais;
 import java.io.ByteArrayOutputStream;
@@ -14,8 +15,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONArray;
@@ -34,6 +37,11 @@ public class RankingExternoRepository {
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
     private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
+
+    public interface RetornoMoradores {
+        // null quando a API não respondeu; lista vazia = ninguém pontuou no ciclo.
+        void aoConcluir(@Nullable List<ItemLista> moradores);
+    }
 
     public interface Retorno {
         // null quando a API não respondeu (sem JWT, 403, fora do ar); lista vazia = sem pontuação.
@@ -67,6 +75,62 @@ public class RankingExternoRepository {
 
                     PRINCIPAL.post(() -> retorno.aoConcluir(resultado));
                 });
+    }
+
+    // GET /api/v1/rankings/moradores: ranking semanal dos moradores do condomínio.
+    public void listarMoradores(
+            @NonNull Context contexto, int condominioId, int limite, @NonNull RetornoMoradores retorno) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        EXECUTOR.execute(
+                () -> {
+                    List<ItemLista> moradores = null;
+
+                    try {
+                        String corpo =
+                                obter(
+                                        contextoApp,
+                                        "/api/v1/rankings/moradores?condominioId=" + condominioId
+                                                + "&limit=" + limite);
+
+                        if (corpo != null) {
+                            moradores = converterMoradores(new JSONObject(corpo));
+                        }
+                    } catch (Exception erro) {
+                        Log.w(TAG, "Não foi possível carregar o ranking de moradores", erro);
+                    }
+
+                    List<ItemLista> resultado = moradores;
+
+                    PRINCIPAL.post(() -> retorno.aoConcluir(resultado));
+                });
+    }
+
+    @NonNull
+    private List<ItemLista> converterMoradores(@NonNull JSONObject resposta) {
+
+        List<ItemLista> moradores = new ArrayList<>();
+
+        JSONArray ranking = resposta.optJSONArray("ranking");
+
+        for (int i = 0; ranking != null && i < ranking.length(); i++) {
+            JSONObject item = ranking.optJSONObject(i);
+
+            if (item == null) {
+                continue;
+            }
+
+            moradores.add(
+                    new ItemLista(
+                            item.optInt("posicao", i + 1) + "º  " + item.optString("nome", ""),
+                            "",
+                            NumberFormat.getIntegerInstance(new Locale("pt", "BR"))
+                                    .format(item.optLong("pontos", 0))
+                                    + " pts"));
+        }
+
+        return moradores;
     }
 
     @NonNull

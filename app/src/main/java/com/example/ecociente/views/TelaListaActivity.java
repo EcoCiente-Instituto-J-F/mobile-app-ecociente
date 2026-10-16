@@ -13,8 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
+import com.example.ecociente.model.CondominioAtual;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.repository.EducacaoRepository;
+import com.example.ecociente.repository.RankingExternoRepository;
 import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
@@ -94,6 +96,11 @@ public class TelaListaActivity extends AppCompatActivity {
             return;
         }
 
+        if (tipo == TipoLista.RANKING && CondominioAtual.ID > 0) {
+            carregarRanking(lista);
+            return;
+        }
+
         java.util.List<ItemLista> itens = tipo.itens();
 
         if (itens.isEmpty()) {
@@ -132,6 +139,34 @@ public class TelaListaActivity extends AppCompatActivity {
                         });
     }
 
+    // Ranking dos moradores da ds-pontuacao-api; sem resposta (403, fora do ar), mostra o exemplo.
+    private void carregarRanking(LinearLayout lista) {
+
+        TextView estado = textoDeEstado(lista, R.string.ranking_carregando);
+
+        new RankingExternoRepository()
+                .listarMoradores(
+                        this,
+                        CondominioAtual.ID,
+                        20,
+                        moradores -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            lista.removeAllViews();
+
+                            java.util.List<ItemLista> itens = moradores != null ? moradores : tipo.itens();
+
+                            if (itens.isEmpty()) {
+                                textoDeEstado(lista, R.string.ranking_sem_pontuacao);
+                                return;
+                            }
+
+                            exibirItens(lista, itens);
+                        });
+    }
+
     private TextView textoDeEstado(LinearLayout lista, int mensagem) {
 
         TextView texto = new TextView(this);
@@ -157,7 +192,9 @@ public class TelaListaActivity extends AppCompatActivity {
 
             ((ImageView) linha.findViewById(R.id.iconeLinha)).setImageResource(tipo.icone);
             ((TextView) linha.findViewById(R.id.textoTituloLinha)).setText(item.titulo);
-            ((TextView) linha.findViewById(R.id.textoSubtituloLinha)).setText(item.subtitulo);
+            TextView subtitulo = linha.findViewById(R.id.textoSubtituloLinha);
+            subtitulo.setText(item.subtitulo);
+            subtitulo.setVisibility(item.subtitulo.isEmpty() ? View.GONE : View.VISIBLE);
             ((TextView) linha.findViewById(R.id.textoDestaqueLinha)).setText(item.destaque);
 
             linha.findViewById(R.id.pontoNaoLida).setVisibility(View.GONE);

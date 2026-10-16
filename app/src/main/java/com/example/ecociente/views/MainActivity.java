@@ -23,6 +23,7 @@ import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.MenuPerfil;
+import com.example.ecociente.ui.Motion;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.HomeViewModel;
 
@@ -194,6 +195,14 @@ public class MainActivity extends AppCompatActivity {
 
         ((TextView) findViewById(R.id.textoSaudacao))
                 .setText(getString(R.string.home_saudacao, primeiroNome(nomeCompleto)));
+
+        Motion.entrar(
+                this,
+                R.id.cabecalhoHome,
+                R.id.textoSaudacao,
+                R.id.textoMensagemMotivacional,
+                R.id.cardAnaliseQuiz,
+                R.id.cabecalhoConteudos);
 
         findViewById(R.id.imagemPerfilHome)
                 .setOnClickListener(

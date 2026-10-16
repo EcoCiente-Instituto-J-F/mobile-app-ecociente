@@ -68,6 +68,7 @@ public class CondominioHomeActivity extends AppCompatActivity {
                 findViewById(R.id.cabecalhoHomeCondominio),
                 findViewById(R.id.blocoSaudacaoCondominio),
                 findViewById(R.id.cardSemanaColetas),
+                findViewById(R.id.cardRanking),
                 findViewById(R.id.cabecalhoConteudosCondominio));
     }
 
