@@ -25,6 +25,7 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.ecociente.R;
 import com.example.ecociente.model.QuizConteudo;
+import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -362,14 +363,12 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     }
 
     private void mostrarConfirmacaoFinalizacao() {
-        QuizDialogos.mostrarConfirmacao(
-                this,
-                getString(R.string.quiz_dialogo_finalizar_titulo),
-                getString(R.string.quiz_dialogo_finalizar_mensagem),
-                getString(R.string.quiz_finalizar),
-                getString(R.string.cancelar),
-                this::abrirResultado
-        );
+        new DialogoEco.Builder(this)
+                .titulo(R.string.quiz_dialogo_finalizar_titulo)
+                .mensagem(R.string.quiz_dialogo_finalizar_mensagem)
+                .botao(R.string.quiz_finalizar, DialogoEco.Estilo.PREENCHIDO, this::abrirResultado)
+                .botao(R.string.cancelar, DialogoEco.Estilo.CONTORNO, null)
+                .mostrar();
     }
 
     private void abrirResultado() {

@@ -27,6 +27,7 @@ import androidx.core.widget.ImageViewCompat;
 
 import com.example.ecociente.R;
 import com.example.ecociente.model.QuizConteudo;
+import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -276,13 +277,17 @@ public class QuizResultadoActivity extends AppCompatActivity {
         String[] opcoes = pergunta.getOpcoes();
         String respostaCorreta = opcoes[pergunta.getIndiceCorreto()];
 
-        QuizDialogos.mostrarExplicacaoQuestao(
-                this,
-                getString(R.string.quiz_questao_numero, indice + 1),
-                getString(R.string.quiz_resposta_correta, respostaCorreta),
-                pergunta.getExplicacao(),
-                getString(R.string.quiz_dialogo_fechar)
-        );
+        View conteudo = getLayoutInflater().inflate(R.layout.dialog_eco_explicacao, null);
+
+        ((TextView) conteudo.findViewById(R.id.respostaCorretaDialogo))
+                .setText(getString(R.string.quiz_resposta_correta, respostaCorreta));
+        ((TextView) conteudo.findViewById(R.id.textoExplicacaoDialogo)).setText(pergunta.getExplicacao());
+
+        new DialogoEco.Builder(this)
+                .titulo(getString(R.string.quiz_questao_numero, indice + 1))
+                .conteudo(conteudo)
+                .botao(R.string.quiz_dialogo_fechar, DialogoEco.Estilo.PREENCHIDO, null)
+                .mostrar();
     }
 
     @NonNull
