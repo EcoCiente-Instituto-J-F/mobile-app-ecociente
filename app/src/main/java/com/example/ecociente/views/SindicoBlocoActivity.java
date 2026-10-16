@@ -3,7 +3,6 @@ package com.example.ecociente.views;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.model.SindicoApartamento;
 import com.example.ecociente.model.SindicoItemUnidade;
@@ -89,7 +89,7 @@ public final class SindicoBlocoActivity extends AppCompatActivity {
                 SindicoAdicionarUnidadeDialogFragment.RESULTADO_UNIDADE, this,
                 (chave, resultado) -> {
                     mostrarApartamentos();
-                    Toast.makeText(getApplicationContext(), R.string.sindico_unidade_salva_somente_nesta_demons, Toast.LENGTH_LONG).show();
+                    AvisoFlutuante.mostrar(this, R.string.sindico_unidade_salva_somente_nesta_demons);
                 });
 
         BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
@@ -162,7 +162,7 @@ public final class SindicoBlocoActivity extends AppCompatActivity {
                 .botao(R.string.perfil_excluir_confirmar, DialogoEco.Estilo.PERIGO, () -> {
                     viewModel.excluirApartamento(apartamento.getId());
                     mostrarApartamentos();
-                    Toast.makeText(getApplicationContext(), R.string.sindico_unidade_removida_desta_demonstraca, Toast.LENGTH_LONG).show();
+                    AvisoFlutuante.mostrar(this, R.string.sindico_unidade_removida_desta_demonstraca);
                 })
                 .mostrar();
     }

@@ -164,6 +164,7 @@ public class TelaListaActivity extends AppCompatActivity {
 
             if (item.detalhes != null) {
                 linha.setOnClickListener(view -> startActivity(DetalheItemActivity.criarIntent(this, item)));
+                Motion.pressFeedback(linha);
             }
 
             lista.addView(linha);

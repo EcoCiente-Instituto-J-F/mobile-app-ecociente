@@ -8,12 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.Aviso;
 import com.example.ecociente.model.Notificacao;
 import com.example.ecociente.model.SindicoAviso;
@@ -135,7 +135,7 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
                         "rascunhoSindico",
                         this,
                         (chave, resultado) ->
-                                Toast.makeText(getApplicationContext(), R.string.sindico_rascunho_salvo, Toast.LENGTH_LONG).show());
+                                AvisoFlutuante.mostrar(this, R.string.sindico_rascunho_salvo));
     }
 
     private void abrirFormularioDoSindico() {
@@ -176,6 +176,7 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
                 View cartao = CartoesCentral.avisoDoSindico(inflador, lista, aviso);
 
                 cartao.setOnClickListener(view -> abrirAvisoDoSindico(aviso));
+                Motion.pressFeedback(cartao);
 
                 // O síndico guarda o momento como texto ("Agora", "Há 2 dias").
                 grupos.get("Agora".equals(aviso.getMomento()) ? hoje : anteriores).add(cartao);
@@ -186,6 +187,7 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
 
                 cartao.setOnClickListener(
                         view -> startActivity(AvisoDetalheActivity.criarIntent(this, aviso.id)));
+                Motion.pressFeedback(cartao);
 
                 grupos.get(grupoDoAviso(aviso, hoje, ontem, anteriores)).add(cartao);
             }

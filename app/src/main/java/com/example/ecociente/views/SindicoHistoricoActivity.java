@@ -3,7 +3,6 @@ package com.example.ecociente.views;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -14,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.model.SindicoHistoricoColeta;
 import com.example.ecociente.viewmodels.SindicoColetaViewModel;
@@ -65,7 +65,7 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
                 SindicoAvaliarColetaDialogFragment.RESULTADO_AVALIACAO, this,
                 (chave, resultado) -> {
                     mostrarHistorico();
-                    Toast.makeText(getApplicationContext(), R.string.sindico_avaliacao_salva_somente_nesta_demo, Toast.LENGTH_LONG).show();
+                    AvisoFlutuante.mostrar(this, R.string.sindico_avaliacao_salva_somente_nesta_demo);
                 });
         mostrarHistorico();
     }
@@ -137,6 +137,7 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
         cartao.setOnClickListener(view -> startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
                 this, solicitacao.paraSolicitacao(getString(R.string.sindico_condominio_demo)),
                 solicitacao.getCooperativa())));
+        Motion.pressFeedback(cartao);
         return cartao;
     }
 

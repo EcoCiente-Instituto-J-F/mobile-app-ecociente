@@ -9,13 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.Coletas;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
@@ -39,7 +39,7 @@ public class CalendarioColetasActivity extends AppCompatActivity {
                     new ActivityResultContracts.RequestPermission(),
                     permitido -> {
                         if (!permitido) {
-                            Toast.makeText(this, R.string.lembrete_sem_permissao, Toast.LENGTH_SHORT).show();
+                            AvisoFlutuante.mostrar(this, R.string.lembrete_sem_permissao);
                         }
                     });
 
@@ -182,7 +182,7 @@ public class CalendarioColetasActivity extends AppCompatActivity {
                     if (!LembretesColeta.ativar(this, coleta)) {
                         botao.setChecked(false);
 
-                        Toast.makeText(this, R.string.lembrete_coleta_proxima, Toast.LENGTH_SHORT).show();
+                        AvisoFlutuante.mostrar(this, R.string.lembrete_coleta_proxima);
                     }
                 });
     }

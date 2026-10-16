@@ -8,13 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.ui.BotaoCarregando;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
@@ -122,6 +122,6 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
     }
 
     private void mostrarMensagem(@NonNull String mensagem) {
-        Toast.makeText(requireContext(), mensagem, Toast.LENGTH_SHORT).show();
+        AvisoFlutuante.mostrar(requireActivity(), mensagem);
     }
 }

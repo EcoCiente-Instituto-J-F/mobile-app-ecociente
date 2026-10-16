@@ -6,10 +6,10 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
@@ -242,6 +242,6 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
 
     private void mostrarMensagem(String mensagem) {
 
-        Toast.makeText(this, mensagem, Toast.LENGTH_SHORT).show();
+        AvisoFlutuante.mostrar(this, mensagem);
     }
 }

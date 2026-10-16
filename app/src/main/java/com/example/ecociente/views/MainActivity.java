@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.EstadoHome;
 import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.ui.AvatarPerfil;
@@ -372,7 +372,7 @@ public class MainActivity extends AppCompatActivity {
             viewModel.encerrarSessao();
         }
 
-        Toast.makeText(this, mensagem, Toast.LENGTH_LONG).show();
+        AvisoFlutuante.mostrar(this, mensagem);
 
         Navegacao.abrirLoginLimpandoPilha(this);
     }
