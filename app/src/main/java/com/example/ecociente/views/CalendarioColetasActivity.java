@@ -47,7 +47,7 @@ public class CalendarioColetasActivity extends AppCompatActivity {
 
     private CalendarioMensalView calendarioMensal;
     private LinearLayout listaColetas;
-    private View textoSemColetas;
+    private TextView textoSemColetas;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -122,6 +122,19 @@ public class CalendarioColetasActivity extends AppCompatActivity {
         calendarioMensal.exibir(mes[0], mes[1], Coletas.diasDoMes(coletas, mes[0], mes[1]));
 
         exibirLista(Coletas.ativasDoMes(coletas, mes[0], mes[1]));
+
+        boolean falhou = resultado != null && resultado.getTipo() != ResultadoSolicitacoes.Tipo.SUCESSO;
+
+        if (falhou) {
+            textoSemColetas.setText(R.string.coletas_do_mes_erro);
+            textoSemColetas.setVisibility(View.VISIBLE);
+            textoSemColetas.setOnClickListener(view -> viewModel.carregar());
+
+        } else {
+            textoSemColetas.setText(R.string.nenhuma_coleta_no_mes);
+            textoSemColetas.setOnClickListener(null);
+            textoSemColetas.setClickable(false);
+        }
     }
 
     private void exibirLista(List<Solicitacao> coletas) {

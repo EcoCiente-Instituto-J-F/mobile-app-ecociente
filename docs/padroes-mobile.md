@@ -60,7 +60,7 @@ Complementam as regras acima. O que o app já cumpre está marcado com ✔; o qu
 29. Rede, banco e arquivo nunca na thread principal. ✔
 30. Dimensões em `dp`, texto em `sp`. Teste com fonte maior.
 31. Toda imagem ou botão de ícone tem `contentDescription`. Não indique status só por cor.
-32. Toda tela de dados tem os quatro estados: carregando, sucesso, lista vazia e erro. Lista vazia não é erro.
+32. Toda tela de dados tem os quatro estados: carregando, sucesso, lista vazia e erro. Lista vazia não é erro, e só o erro oferece "tentar novamente". ✔
 33. Imagens grandes sempre com Glide.
 
 ### Recursos (`res/`)

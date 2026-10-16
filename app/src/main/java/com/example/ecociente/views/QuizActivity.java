@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -101,6 +102,7 @@ public class QuizActivity extends AppCompatActivity {
 
                     if (!sucesso) {
                         textoQuantidadeQuizzes.setText(R.string.quizzes_erro);
+                        mostrarEstadoDosQuizzes(true);
                         return;
                     }
 
@@ -121,7 +123,39 @@ public class QuizActivity extends AppCompatActivity {
 
                     preencherListaQuizzes();
                     atualizarQuantidadeQuizzes(quizzes.size());
+
+                    if (quizzes.isEmpty()) {
+                        mostrarEstadoDosQuizzes(false);
+                    }
                 });
+    }
+
+    // Lista vazia (sem quizzes) e erro de carregamento são coisas diferentes: só o erro oferece tentar de novo.
+    private void mostrarEstadoDosQuizzes(boolean erro) {
+        LinearLayout lista = findViewById(R.id.listaQuizzes);
+
+        lista.removeAllViews();
+
+        TextView mensagem = new TextView(this);
+
+        mensagem.setText(erro ? R.string.quizzes_erro : R.string.quizzes_vazio);
+        mensagem.setTextColor(getColor(R.color.cinza_texto_auxiliar));
+        mensagem.setTextSize(14);
+        mensagem.setGravity(Gravity.CENTER);
+        mensagem.setPadding(48, 64, 48, 24);
+
+        lista.addView(mensagem);
+
+        if (!erro) {
+            return;
+        }
+
+        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
+
+        tentar.setText(R.string.tentar_novamente);
+        tentar.setOnClickListener(view -> carregarQuizzes());
+
+        lista.addView(tentar);
     }
 
     private void configurarCabecalho() {

@@ -464,6 +464,8 @@
     <string name="solicitacao">Solicitação</string>
     <string name="unidades">Unidades</string>
     <string name="quizzes_carregando">Carregando quizzes…</string>
+    <string name="quizzes_vazio">Nenhum quiz disponível por enquanto.</string>
+    <string name="coletas_do_mes_erro">Não foi possível carregar as coletas do mês. Toque para tentar de novo.</string>
     <string name="quizzes_erro">Não foi possível carregar os quizzes. Entre com e-mail e senha e tente de novo.</string>
     <string name="quiz_n_perguntas">%1$d perguntas</string>
     <string name="quiz_pontos_recompensa">+%1$d pts</string>
