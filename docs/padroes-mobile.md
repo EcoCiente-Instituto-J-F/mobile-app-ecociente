@@ -89,7 +89,7 @@ Complementam as regras acima. O que o app já cumpre está marcado com ✔; o qu
 
 ### Testes e qualidade
 
-49. Regra de negócio, validação e parser de resposta de API têm teste de unidade, com caso de sucesso, erro e valor inválido. ◻ (hoje só 7 arquivos de teste)
+49. Regra de negócio, validação e parser de resposta de API têm teste de unidade, com caso de sucesso, erro e valor inválido. Parser de JSON fica em classe própria (`RankingJson`, `QuizJson`) para testar na JVM. ◻ (faltam os parsers do calendário e do cadastro)
 50. Teste sem depender da API de produção (use dados falsos).
 51. Antes de concluir: `assembleDebug` e `lintDebug` sem erro, e os testes relevantes passando. Não desative aviso para o build passar.
 

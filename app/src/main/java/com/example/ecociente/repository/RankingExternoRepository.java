@@ -8,20 +8,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.model.SindicoPosicaoRanking;
-import com.example.ecociente.ui.Iniciais;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 // GET /api/v1/rankings/torres da ds-pontuacao-api (exige o JWT da ds-autenticacao-api).
@@ -65,7 +61,7 @@ public class RankingExternoRepository {
                                                 + "&limit=" + limite);
 
                         if (corpo != null) {
-                            posicoes = converter(new JSONObject(corpo));
+                            posicoes = RankingJson.torres(new JSONObject(corpo));
                         }
                     } catch (Exception erro) {
                         Log.w(TAG, "Não foi possível carregar o ranking", erro);
@@ -95,7 +91,7 @@ public class RankingExternoRepository {
                                                 + "&limit=" + limite);
 
                         if (corpo != null) {
-                            moradores = converterMoradores(new JSONObject(corpo));
+                            moradores = RankingJson.moradores(new JSONObject(corpo));
                         }
                     } catch (Exception erro) {
                         Log.w(TAG, "Não foi possível carregar o ranking de moradores", erro);
@@ -105,56 +101,6 @@ public class RankingExternoRepository {
 
                     PRINCIPAL.post(() -> retorno.aoConcluir(resultado));
                 });
-    }
-
-    @NonNull
-    private List<ItemLista> converterMoradores(@NonNull JSONObject resposta) {
-
-        List<ItemLista> moradores = new ArrayList<>();
-
-        JSONArray ranking = resposta.optJSONArray("ranking");
-
-        for (int i = 0; ranking != null && i < ranking.length(); i++) {
-            JSONObject item = ranking.optJSONObject(i);
-
-            if (item == null) {
-                continue;
-            }
-
-            moradores.add(
-                    new ItemLista(
-                            item.optInt("posicao", i + 1) + "º  " + item.optString("nome", ""),
-                            "",
-                            NumberFormat.getIntegerInstance(new Locale("pt", "BR"))
-                                    .format(item.optLong("pontos", 0))
-                                    + " pts"));
-        }
-
-        return moradores;
-    }
-
-    @NonNull
-    private List<SindicoPosicaoRanking> converter(@NonNull JSONObject resposta) {
-
-        List<SindicoPosicaoRanking> posicoes = new ArrayList<>();
-
-        JSONArray ranking = resposta.optJSONArray("ranking");
-
-        for (int i = 0; ranking != null && i < ranking.length(); i++) {
-            JSONObject item = ranking.optJSONObject(i);
-
-            if (item == null) {
-                continue;
-            }
-
-            String nome = item.optString("nome", "");
-
-            posicoes.add(
-                    new SindicoPosicaoRanking(
-                            Iniciais.de(nome), nome, (int) item.optLong("pontos", 0), false));
-        }
-
-        return posicoes;
     }
 
     @Nullable
