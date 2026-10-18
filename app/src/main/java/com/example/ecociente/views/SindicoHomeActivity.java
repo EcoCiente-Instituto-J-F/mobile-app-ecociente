@@ -153,7 +153,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
                 dados.getAdesao() + "%"};
         int[] variacoes = {dados.getVariacaoParticipacao(), dados.getVariacaoDescartes(),
                 dados.getVariacaoAdesao()};
-        int[] icones = {R.drawable.sindico_people, R.drawable.sindico_recycle,
+        int[] icones = {R.drawable.ic_grupo, R.drawable.ic_reciclar,
                 R.drawable.sindico_check};
 
         for (int i = 0; i < nomes.length; i++) {

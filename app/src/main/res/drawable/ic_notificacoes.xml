@@ -11,7 +11,7 @@
         android:strokeColor="@color/verde_escuro_principal"
         android:strokeLineCap="butt"
         android:strokeLineJoin="round"
-        android:strokeWidth="7" />
+        android:strokeWidth="5.5" />
     <path
         android:fillColor="@color/verde_escuro_principal"
         android:pathData="M3,49 H57 V57 H3 Z" />

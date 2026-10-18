@@ -98,7 +98,7 @@
                     android:layout_height="16dp"
                     android:contentDescription="@string/nome_cooperativa"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_cooperativa" />
+                    android:src="@drawable/ic_perfil_cooperativa" />
 
                 <EditText
                     android:importantForAutofill="no"

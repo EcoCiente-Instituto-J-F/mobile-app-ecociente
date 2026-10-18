@@ -19,7 +19,7 @@
             android:layout_height="24dp"
             android:layout_gravity="center"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_reciclar_chat" />
+            android:src="@drawable/ic_reciclar" />
 
     </FrameLayout>
 

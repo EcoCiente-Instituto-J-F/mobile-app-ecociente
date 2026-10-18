@@ -18,7 +18,7 @@
         android:background="@drawable/sindico_nav_mascote_fundo"
         android:contentDescription="@null"
         android:padding="9dp"
-        android:src="@drawable/ic_folha_sustentabilidade" />
+        android:src="@drawable/ic_reciclar" />
 
     <LinearLayout
         android:layout_width="0dp"

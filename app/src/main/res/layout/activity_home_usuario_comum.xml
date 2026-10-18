@@ -72,8 +72,8 @@
                 <ImageView
                     android:id="@+id/botaoNotificacoes"
 
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
 
                     android:background="?attr/selectableItemBackgroundBorderless"
 
@@ -393,7 +393,7 @@
 
                 android:scaleType="centerInside"
 
-                android:src="@drawable/ic_livro" />
+                android:src="@drawable/ic_guia_cinza" app:tint="@color/verde_escuro_principal" />
 
 
             <TextView

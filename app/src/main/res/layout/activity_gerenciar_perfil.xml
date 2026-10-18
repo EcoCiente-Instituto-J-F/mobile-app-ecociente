@@ -198,7 +198,8 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:contentDescription="@null"
-                            android:src="@drawable/ic_perfil_usuario" />
+                            android:src="@drawable/ic_usuario"
+                            app:tint="@color/verde_escuro_principal" />
 
                         <TextView
                             android:layout_width="0dp"

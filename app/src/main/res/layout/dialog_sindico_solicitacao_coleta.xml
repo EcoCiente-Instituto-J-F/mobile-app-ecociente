@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -35,7 +36,7 @@
                 android:layout_height="28dp"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/sindico_building_campo" />
+                android:src="@drawable/ic_predio" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -80,7 +81,7 @@
                 android:layout_height="28dp"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/sindico_building_campo" />
+                android:src="@drawable/ic_predio" />
             <TextView
                 android:id="@+id/nomeSolicitacao"
                 android:layout_width="0dp"
@@ -128,7 +129,7 @@
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="12dp"
                 android:contentDescription="@null"
-                android:src="@drawable/ic_localizacao_chat" />
+                android:src="@drawable/ic_endereco_perfil" />
         </FrameLayout>
 
         <LinearLayout
@@ -173,7 +174,7 @@
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginStart="9dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_calendario" />
+                        android:src="@drawable/ic_calendario" app:tint="@color/verde_escuro_principal" />
                 </FrameLayout>
             </LinearLayout>
             <LinearLayout
@@ -214,7 +215,7 @@
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginStart="8dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_horario" />
+                        android:src="@drawable/ic_relogio" />
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>

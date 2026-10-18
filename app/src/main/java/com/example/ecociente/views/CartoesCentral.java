@@ -95,7 +95,7 @@ public final class CartoesCentral {
         View cartao = inflador.inflate(R.layout.item_aviso, pai, false);
 
         ((ImageView) cartao.findViewById(R.id.iconeRemetenteAviso))
-                .setImageResource(deCooperativa ? R.drawable.ic_reciclar_chat : R.drawable.ic_perfil_cooperativa);
+                .setImageResource(deCooperativa ? R.drawable.ic_reciclar : R.drawable.ic_perfil_cooperativa);
 
         ((TextView) cartao.findViewById(R.id.textoTituloAviso)).setText(titulo);
         ((TextView) cartao.findViewById(R.id.textoPreviaAviso)).setText(mensagem);

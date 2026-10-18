@@ -205,7 +205,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         ImageView foto = findViewById(R.id.fotoSindicoUnidades);
         String uri = viewModel.getFotoUri();
         if (uri == null) {
-            foto.setImageResource(R.drawable.sindico_building);
+            foto.setImageResource(R.drawable.ic_predio);
             foto.setImageTintList(ColorStateList.valueOf(
                     getColor(R.color.verde_escuro_principal)));
             foto.setPadding(dp(17), dp(17), dp(17), dp(17));
@@ -281,8 +281,8 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
             SindicoItemUnidade item = itens.get(i);
             View linha = inflater.inflate(R.layout.item_sindico_unidades, lista, false);
             ImageView icone = linha.findViewById(R.id.iconeItemUnidades);
-            icone.setImageResource(bloco ? R.drawable.sindico_building
-                    : R.drawable.ic_localizacao_chat);
+            icone.setImageResource(bloco ? R.drawable.ic_predio
+                    : R.drawable.ic_endereco_perfil);
             icone.setImageTintList(ColorStateList.valueOf(
                     getColor(R.color.verde_escuro_principal)));
             ((TextView) linha.findViewById(R.id.nomeItemUnidades)).setText(item.getNome());

@@ -42,7 +42,7 @@
                 android:contentDescription="@string/icone_quiz"
                 android:padding="15dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/ic_reciclar_chat"
+                android:src="@drawable/ic_reciclar"
                 app:tint="@color/verde_escuro_principal" />
 
         </com.google.android.material.card.MaterialCardView>
