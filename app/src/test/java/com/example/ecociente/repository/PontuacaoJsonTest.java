@@ -90,6 +90,18 @@ public class PontuacaoJsonTest {
     }
 
     @Test
+    public void posicaoENulaParaQuemAindaNaoPontuou() throws Exception {
+        // A API devolve null (e não 0) para quem não está no ranking do ciclo.
+        PosicaoNoRanking posicao =
+                PontuacaoJson.posicao(
+                        new JSONObject("{\"usuarioId\":1345,\"condominioId\":1,\"posicao\":null,\"pontos\":null,\"totalParticipantes\":6}"));
+
+        assertFalse(posicao.estaNoRanking());
+        assertEquals(0L, posicao.getPontos());
+        assertEquals(6L, posicao.getTotalParticipantes());
+    }
+
+    @Test
     public void quemNaoPontuouNaoEstaNoRanking() throws Exception {
         assertFalse(PontuacaoJson.posicao(new JSONObject("{\"posicao\":0,\"pontos\":0,\"totalParticipantes\":5}")).estaNoRanking());
         assertFalse(PontuacaoJson.posicao(new JSONObject("{}")).estaNoRanking());
