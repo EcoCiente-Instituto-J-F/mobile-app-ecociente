@@ -1,5 +1,9 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.model.MovimentacaoPontos;
+import com.example.ecociente.repository.PerfilApiRepository;
+import com.example.ecociente.repository.PontuacaoRepository;
+import com.example.ecociente.ui.FormatoDataApi;
 import com.example.ecociente.ui.Motion;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +17,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
-import com.example.ecociente.model.CondominioAtual;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.repository.EducacaoRepository;
 import com.example.ecociente.repository.RankingExternoRepository;
@@ -24,6 +27,8 @@ import com.example.ecociente.ui.ItemBarra;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Navegacao;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class TelaListaActivity extends AppCompatActivity {
 
@@ -96,8 +101,13 @@ public class TelaListaActivity extends AppCompatActivity {
             return;
         }
 
-        if (tipo == TipoLista.RANKING && CondominioAtual.ID > 0) {
+        if (tipo == TipoLista.RANKING) {
             carregarRanking(lista);
+            return;
+        }
+
+        if (tipo == TipoLista.PONTOS) {
+            carregarPontos(lista);
             return;
         }
 
@@ -147,7 +157,7 @@ public class TelaListaActivity extends AppCompatActivity {
         new RankingExternoRepository()
                 .listarMoradores(
                         this,
-                        CondominioAtual.ID,
+                        PerfilApiRepository.condominioId(this),
                         20,
                         moradores -> {
                             if (isFinishing() || isDestroyed()) {
@@ -164,7 +174,128 @@ public class TelaListaActivity extends AppCompatActivity {
                             }
 
                             exibirItens(lista, itens);
+
+                            mostrarSuaPosicao(lista);
                         });
+    }
+
+    // "Você: 3º de 12" no topo do ranking, quando a API sabe onde o morador está.
+    private void mostrarSuaPosicao(LinearLayout lista) {
+
+        new PontuacaoRepository()
+                .posicaoNoRanking(
+                        this,
+                        posicao -> {
+                            if (posicao == null || isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            ItemLista voce =
+                                    posicao.estaNoRanking()
+                                            ? new ItemLista(
+                                                    getString(R.string.sua_posicao_titulo),
+                                                    getString(
+                                                            R.string.sua_posicao_valor,
+                                                            posicao.getPosicao(),
+                                                            posicao.getTotalParticipantes()),
+                                                    formatarPontos(posicao.getPontos()))
+                                            : new ItemLista(
+                                                    getString(R.string.sua_posicao_titulo),
+                                                    getString(R.string.sua_posicao_fora),
+                                                    "");
+
+                            LinearLayout area = new LinearLayout(this);
+
+                            area.setOrientation(LinearLayout.VERTICAL);
+
+                            exibirItens(area, java.util.Collections.singletonList(voce));
+
+                            if (area.getChildCount() > 0) {
+                                View linha = area.getChildAt(0);
+
+                                area.removeView(linha);
+                                lista.addView(linha, 0);
+                            }
+                        });
+    }
+
+    // Saldo e histórico de pontos do usuário (ds-pontuacao-api).
+    private void carregarPontos(LinearLayout lista) {
+
+        TextView estado = textoDeEstado(lista, R.string.pontos_carregando_historico);
+
+        PontuacaoRepository repositorio = new PontuacaoRepository();
+
+        repositorio.saldo(
+                this,
+                saldo ->
+                        repositorio.movimentacoes(
+                                this,
+                                0,
+                                20,
+                                pagina -> {
+                                    if (isFinishing() || isDestroyed()) {
+                                        return;
+                                    }
+
+                                    if (saldo == null && pagina == null) {
+                                        estado.setText(R.string.pontos_erro);
+                                        return;
+                                    }
+
+                                    lista.removeAllViews();
+
+                                    java.util.List<ItemLista> itens = new java.util.ArrayList<>();
+
+                                    itens.add(
+                                            new ItemLista(
+                                                    getString(R.string.pontos_saldo_atual),
+                                                    "",
+                                                    formatarPontos(saldo == null ? 0 : saldo)));
+
+                                    if (pagina != null) {
+                                        for (MovimentacaoPontos movimentacao : pagina.itens) {
+                                            itens.add(itemDaMovimentacao(movimentacao));
+                                        }
+                                    }
+
+                                    exibirItens(lista, itens);
+
+                                    if (pagina != null && pagina.itens.isEmpty()) {
+                                        textoDeEstado(lista, R.string.pontos_sem_movimentacao);
+                                    }
+                                }));
+    }
+
+    private ItemLista itemDaMovimentacao(MovimentacaoPontos movimentacao) {
+
+        int titulo;
+
+        if (movimentacao.getTipo() == MovimentacaoPontos.Tipo.ESTORNO) {
+            titulo = R.string.pontos_estorno;
+        } else if (movimentacao.getTipo() == MovimentacaoPontos.Tipo.RESTAURACAO) {
+            titulo = R.string.pontos_restauracao;
+        } else if (movimentacao.getOrigem() == MovimentacaoPontos.Origem.POSTAGEM) {
+            titulo = R.string.pontos_origem_descarte;
+        } else if (movimentacao.getOrigem() == MovimentacaoPontos.Origem.QUIZ) {
+            titulo = R.string.pontos_origem_quiz;
+        } else {
+            titulo = R.string.pontos_origem_outra;
+        }
+
+        int sinal = movimentacao.getPontosComSinal();
+
+        return new ItemLista(
+                getString(titulo),
+                FormatoDataApi.dataCompacta(movimentacao.getOcorridoEm()),
+                getString(
+                        sinal < 0 ? R.string.pontos_valor_negativo : R.string.pontos_valor_positivo,
+                        NumberFormat.getIntegerInstance(new Locale("pt", "BR")).format(Math.abs(sinal))));
+    }
+
+    private String formatarPontos(long pontos) {
+        return getString(
+                R.string.pontos_saldo, NumberFormat.getIntegerInstance(new Locale("pt", "BR")).format(pontos));
     }
 
     private TextView textoDeEstado(LinearLayout lista, int mensagem) {
@@ -227,6 +358,7 @@ public class TelaListaActivity extends AppCompatActivity {
                 break;
 
             case RANKING:
+            case PONTOS:
                 itens = ItensBarra.morador();
                 break;
 

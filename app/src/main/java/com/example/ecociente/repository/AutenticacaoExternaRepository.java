@@ -35,6 +35,7 @@ public class AutenticacaoExternaRepository {
     private static final String PREFERENCIAS = "sessao_externa";
     private static final String CHAVE_TOKEN = "token";
     private static final String CHAVE_PERFIL = "perfil";
+    private static final String CHAVE_USUARIO_ID = "usuarioId";
 
     private static final Object TRAVA = new Object();
 
@@ -75,6 +76,7 @@ public class AutenticacaoExternaRepository {
 
                         persistirToken(contextoApp, sessao.getToken());
                         persistirPerfil(contextoApp, sessao.getPerfil());
+                        persistirUsuarioId(contextoApp, sessao.getUsuarioId());
 
                         CredenciaisSeguras.salvar(contextoApp, email, senha);
 
@@ -182,6 +184,7 @@ public class AutenticacaoExternaRepository {
 
                 persistirToken(contextoApp, sessao.getToken());
                 persistirPerfil(contextoApp, sessao.getPerfil());
+                        persistirUsuarioId(contextoApp, sessao.getUsuarioId());
 
                 return sessao.getToken();
 
@@ -218,6 +221,24 @@ public class AutenticacaoExternaRepository {
         return contexto.getApplicationContext()
                 .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
                 .getString(CHAVE_PERFIL, null);
+    }
+
+    // Id do usuário no Postgres (vem no login). Trocar de conta apaga o que era do usuário anterior.
+    public static int usuarioIdSalvo(@NonNull Context contexto) {
+        return contexto.getApplicationContext()
+                .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
+                .getInt(CHAVE_USUARIO_ID, 0);
+    }
+
+    private void persistirUsuarioId(@NonNull Context contextoApp, int usuarioId) {
+
+        SharedPreferences preferencias = contextoApp.getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
+
+        if (preferencias.getInt(CHAVE_USUARIO_ID, 0) != usuarioId) {
+            PerfilApiRepository.limpar(contextoApp);
+        }
+
+        preferencias.edit().putInt(CHAVE_USUARIO_ID, usuarioId).apply();
     }
 
     private void persistirPerfil(@NonNull Context contextoApp, @NonNull String perfil) {

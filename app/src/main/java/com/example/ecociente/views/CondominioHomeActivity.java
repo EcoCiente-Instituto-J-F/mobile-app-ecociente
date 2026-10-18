@@ -12,6 +12,8 @@ import com.example.ecociente.R;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.model.ResultadoSolicitacoes;
+import com.example.ecociente.repository.PerfilApiRepository;
+import com.example.ecociente.repository.PontuacaoRepository;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
@@ -45,6 +47,9 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_home_condominio);
 
+        new PerfilApiRepository().atualizarSeNecessario(this);
+        carregarPontosNoCard(true);
+
         perfilViewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
 
         calendarioViewModel = new ViewModelProvider(this).get(CalendarioViewModel.class);
@@ -70,6 +75,33 @@ public class CondominioHomeActivity extends AppCompatActivity {
                 findViewById(R.id.cardSemanaColetas),
                 findViewById(R.id.cardRanking),
                 findViewById(R.id.cabecalhoConteudosCondominio));
+    }
+
+    private void carregarPontosNoCard(boolean morador) {
+
+        android.widget.TextView texto = findViewById(R.id.textoSaldoPontos);
+
+        findViewById(R.id.cardPontos)
+                .setOnClickListener(
+                        view -> startActivity(TelaListaActivity.criarIntent(this, TipoLista.PONTOS, morador)));
+
+        new PontuacaoRepository()
+                .saldo(
+                        this,
+                        saldo -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            texto.setText(
+                                    saldo == null
+                                            ? getString(R.string.pontos_indisponivel)
+                                            : getString(
+                                                    R.string.pontos_saldo,
+                                                    java.text.NumberFormat.getIntegerInstance(
+                                                                    new java.util.Locale("pt", "BR"))
+                                                            .format(saldo)));
+                        });
     }
 
     @Override

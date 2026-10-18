@@ -8,12 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.model.SindicoPosicaoRanking;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -31,8 +25,6 @@ public class RankingExternoRepository {
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
-
-    private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
 
     public interface RetornoMoradores {
         // null quando a API não respondeu; lista vazia = ninguém pontuou no ciclo.
@@ -55,9 +47,9 @@ public class RankingExternoRepository {
 
                     try {
                         String corpo =
-                                obter(
+                                ApiAutenticada.obter(
                                         contextoApp,
-                                        "/api/v1/rankings/torres?condominioId=" + condominioId
+                                        URL_BASE + "/api/v1/rankings/torres?condominioId=" + condominioId
                                                 + "&limit=" + limite);
 
                         if (corpo != null) {
@@ -85,9 +77,9 @@ public class RankingExternoRepository {
 
                     try {
                         String corpo =
-                                obter(
+                                ApiAutenticada.obter(
                                         contextoApp,
-                                        "/api/v1/rankings/moradores?condominioId=" + condominioId
+                                        URL_BASE + "/api/v1/rankings/moradores?condominioId=" + condominioId
                                                 + "&limit=" + limite);
 
                         if (corpo != null) {
@@ -101,70 +93,5 @@ public class RankingExternoRepository {
 
                     PRINCIPAL.post(() -> retorno.aoConcluir(resultado));
                 });
-    }
-
-    @Nullable
-    private String obter(@NonNull Context contexto, @NonNull String caminho) throws IOException {
-
-        String token = autenticacao.tokenParaUso(contexto);
-
-        if (token == null) {
-            return null;
-        }
-
-        int[] codigo = new int[1];
-        String corpo = requisitar(caminho, token, codigo);
-
-        if (codigo[0] == 401 || codigo[0] == 403) {
-            String renovado = autenticacao.renovarToken(contexto);
-
-            if (renovado != null) {
-                corpo = requisitar(caminho, renovado, codigo);
-            }
-        }
-
-        if (codigo[0] < 200 || codigo[0] >= 300) {
-            Log.w(TAG, "HTTP " + codigo[0] + " em " + caminho);
-            return null;
-        }
-
-        return corpo;
-    }
-
-    @NonNull
-    private String requisitar(@NonNull String caminho, @NonNull String token, @NonNull int[] codigo)
-            throws IOException {
-
-        HttpURLConnection conexao = (HttpURLConnection) new URL(URL_BASE + caminho).openConnection();
-
-        try {
-            conexao.setRequestMethod("GET");
-            conexao.setRequestProperty("Accept", "application/json");
-            conexao.setRequestProperty("Authorization", "Bearer " + token);
-            conexao.setConnectTimeout(180_000);
-            conexao.setReadTimeout(180_000);
-
-            codigo[0] = conexao.getResponseCode();
-
-            InputStream fluxo = codigo[0] >= 400 ? conexao.getErrorStream() : conexao.getInputStream();
-
-            if (fluxo == null) {
-                return "";
-            }
-
-            try (InputStream entrada = fluxo;
-                    ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
-                byte[] buffer = new byte[1024];
-                int lidos;
-
-                while ((lidos = entrada.read(buffer)) != -1) {
-                    saida.write(buffer, 0, lidos);
-                }
-
-                return saida.toString(StandardCharsets.UTF_8.name());
-            }
-        } finally {
-            conexao.disconnect();
-        }
     }
 }

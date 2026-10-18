@@ -134,6 +134,8 @@
 
             </LinearLayout>
 
+            <include layout="@layout/card_pontos" />
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardSemanaColetas"
                 android:layout_width="match_parent"

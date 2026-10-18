@@ -13,7 +13,8 @@ public enum TipoLista {
     FEED(R.string.feed, R.drawable.ic_nav_feed_verde),
     CONDOMINIOS(R.string.condominios_atendidos, R.drawable.ic_perfil_cooperativa),
     AVALIACOES(R.string.avaliacoes_recebidas, R.drawable.ic_estrela),
-    RANKING(R.string.ranking_do_morador, R.drawable.ic_trofeu);
+    RANKING(R.string.ranking_do_morador, R.drawable.ic_trofeu),
+    PONTOS(R.string.meus_pontos, R.drawable.ic_trofeu);
 
     @StringRes public final int titulo;
     @DrawableRes public final int icone;
@@ -28,6 +29,7 @@ public enum TipoLista {
 
         switch (this) {
             case GUIA:
+            case PONTOS:
                 return Collections.emptyList();
 
             case FEED:

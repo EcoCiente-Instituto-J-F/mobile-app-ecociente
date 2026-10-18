@@ -13,6 +13,9 @@ import androidx.core.graphics.Insets;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.ecociente.R;
+import com.example.ecociente.model.TipoLista;
+import com.example.ecociente.repository.PerfilApiRepository;
+import com.example.ecociente.repository.PontuacaoRepository;
 import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.EstadoHome;
 import com.example.ecociente.repository.AutenticacaoExternaRepository;
@@ -179,9 +182,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void carregarPontosNoCard(boolean morador) {
+
+        android.widget.TextView texto = findViewById(R.id.textoSaldoPontos);
+
+        findViewById(R.id.cardPontos)
+                .setOnClickListener(
+                        view -> startActivity(TelaListaActivity.criarIntent(this, TipoLista.PONTOS, morador)));
+
+        new PontuacaoRepository()
+                .saldo(
+                        this,
+                        saldo -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            texto.setText(
+                                    saldo == null
+                                            ? getString(R.string.pontos_indisponivel)
+                                            : getString(
+                                                    R.string.pontos_saldo,
+                                                    java.text.NumberFormat.getIntegerInstance(
+                                                                    new java.util.Locale("pt", "BR"))
+                                                            .format(saldo)));
+                        });
+    }
+
     private void carregarHome(@NonNull String nomeCompleto) {
 
         setContentView(R.layout.activity_home_usuario_comum);
+
+        new PerfilApiRepository().atualizarSeNecessario(this);
+        carregarPontosNoCard(false);
 
         homeCarregada = true;
 

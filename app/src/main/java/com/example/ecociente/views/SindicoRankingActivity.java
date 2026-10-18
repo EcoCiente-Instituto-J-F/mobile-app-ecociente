@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ecociente.R;
-import com.example.ecociente.model.CondominioAtual;
 import com.example.ecociente.model.SindicoPosicaoRanking;
 import com.example.ecociente.repository.RankingExternoRepository;
 import com.example.ecociente.repository.SindicoRankingRepository;
@@ -64,19 +64,17 @@ public final class SindicoRankingActivity extends AppCompatActivity {
                 indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM));
         atualizarRanking();
 
-        if (CondominioAtual.ID > 0) {
-            new RankingExternoRepository()
-                    .listarTorres(
-                            this,
-                            CondominioAtual.ID,
-                            20,
-                            posicoes -> {
-                                if (posicoes != null && !isFinishing() && !isDestroyed()) {
-                                    torresDaApi = posicoes;
-                                    atualizarRanking();
-                                }
-                            });
-        }
+        new RankingExternoRepository()
+                .listarTorres(
+                        this,
+                        PerfilApiRepository.condominioId(this),
+                        20,
+                        posicoes -> {
+                            if (posicoes != null && !isFinishing() && !isDestroyed()) {
+                                torresDaApi = posicoes;
+                                atualizarRanking();
+                            }
+                        });
     }
 
     private void selecionarModo(boolean apartamentos) {

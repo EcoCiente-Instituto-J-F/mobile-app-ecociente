@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/raizSindicoHome"
     android:layout_width="match_parent"
@@ -134,7 +135,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunito_regular"
-                        android:text="@string/sindico_condominio_demo"
+                        tools:text="@string/sindico_condominio_demo"
                         android:textColor="@color/cinza_texto_home"
                         android:textSize="12sp" />
                 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +31,6 @@ import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.model.SindicoAviso;
 import android.widget.ImageView;
-import com.example.ecociente.model.CondominioAtual;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.repository.RankingExternoRepository;
 import com.example.ecociente.ui.AvatarPerfil;
@@ -53,6 +53,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         super.onCreate(estadoSalvo);
         JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_home);
+
 
         Motion.entrar(
                 this,
@@ -84,7 +85,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
                 }
             });
         }
-        ((TextView) findViewById(R.id.sindicoCondominio)).setText(dados.getCondominio());
+        exibirNomeDoCondominio(dados.getCondominio());
         ((SindicoGraficoView) findViewById(R.id.sindicoGrafico))
                 .setDados(dados.getEvolucao(), dados.getDatasEvolucao());
 
@@ -197,17 +198,41 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         }
     }
 
-    private void montarRanking(SindicoDashboard dados) {
-        exibirRanking(dados.getBlocosRanking(), dados.getIniciaisRanking(), dados.getPontosRanking());
+    // Mostra "Carregando…" até o perfil chegar. Se a API não devolver o condomínio, fica o nome de exemplo.
+    private void exibirNomeDoCondominio(String nomeDeExemplo) {
 
-        if (CondominioAtual.ID <= 0) {
+        TextView texto = findViewById(R.id.sindicoCondominio);
+
+        String nome = PerfilApiRepository.condominioNome(this);
+
+        texto.setText(nome != null ? nome : getString(R.string.sindico_condominio_carregando));
+
+        if (nome != null) {
+            new PerfilApiRepository().atualizarSeNecessario(this);
             return;
         }
 
-        new RankingExternoRepository()
+        new PerfilApiRepository()
+                .atualizarSeNecessario(
+                        this,
+                        () -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            String recebido = PerfilApiRepository.condominioNome(this);
+
+                            texto.setText(recebido != null ? recebido : nomeDeExemplo);
+                        });
+    }
+
+    private void montarRanking(SindicoDashboard dados) {
+        exibirRanking(dados.getBlocosRanking(), dados.getIniciaisRanking(), dados.getPontosRanking());
+
+                new RankingExternoRepository()
                 .listarTorres(
                         this,
-                        CondominioAtual.ID,
+                        PerfilApiRepository.condominioId(this),
                         5,
                         posicoes -> {
                             if (posicoes == null || isFinishing() || isDestroyed()) {
