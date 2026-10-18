@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.ecociente.R;
 import com.example.ecociente.model.TipoLista;
+import com.example.ecociente.repository.AquecimentoDasApis;
 import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.repository.PontuacaoRepository;
 import com.example.ecociente.ui.AvisoFlutuante;
@@ -213,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_home_usuario_comum);
 
+        AquecimentoDasApis.aquecer(this);
         new PerfilApiRepository().atualizarSeNecessario(this);
         carregarPontosNoCard(false);
 

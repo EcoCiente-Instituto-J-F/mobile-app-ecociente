@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.repository.AquecimentoDasApis;
 import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
@@ -208,7 +209,8 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         texto.setText(nome != null ? nome : getString(R.string.sindico_condominio_carregando));
 
         if (nome != null) {
-            new PerfilApiRepository().atualizarSeNecessario(this);
+            AquecimentoDasApis.aquecer(this);
+        new PerfilApiRepository().atualizarSeNecessario(this);
             return;
         }
 

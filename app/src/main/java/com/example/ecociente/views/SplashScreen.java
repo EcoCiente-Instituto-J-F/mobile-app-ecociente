@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
+import com.example.ecociente.repository.AquecimentoDasApis;
 
 public class SplashScreen extends AppCompatActivity {
     private static final String MARCADOR_LOG = "SplashScreen";
@@ -32,6 +33,8 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
+
+        AquecimentoDasApis.aquecer(this);
 
         setContentView(R.layout.activity_splashscreen);
 
