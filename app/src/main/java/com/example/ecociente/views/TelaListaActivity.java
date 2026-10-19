@@ -6,6 +6,12 @@ import com.example.ecociente.repository.PontuacaoRepository;
 import com.example.ecociente.ui.FormatoDataApi;
 import com.example.ecociente.ui.Motion;
 import android.content.Context;
+import android.widget.RadioGroup;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.example.ecociente.repository.FavoritosRepository;
+import com.example.ecociente.model.FiltroGuia;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,6 +43,8 @@ public class TelaListaActivity extends AppCompatActivity {
 
     private TipoLista tipo;
     private boolean morador;
+    private java.util.List<ItemLista> guiaCompleto;
+    private final FiltroGuia filtro = new FiltroGuia();
 
     @NonNull
     public static Intent criarIntent(@NonNull Context contexto, @NonNull TipoLista tipo, boolean morador) {
@@ -87,6 +95,10 @@ public class TelaListaActivity extends AppCompatActivity {
             titulo.setLayoutParams(parametros);
         }
 
+        if (tipo == TipoLista.GUIA) {
+            configurarAcoesDoGuia();
+        }
+
         preencherLista();
 
         configurarNavegacao();
@@ -98,6 +110,11 @@ public class TelaListaActivity extends AppCompatActivity {
 
         if (tipo == TipoLista.GUIA) {
             carregarGuia(lista);
+            return;
+        }
+
+        if (tipo == TipoLista.SALVOS) {
+            carregarSalvos(lista);
             return;
         }
 
@@ -140,13 +157,223 @@ public class TelaListaActivity extends AppCompatActivity {
                                 return;
                             }
 
-                            if (itens.isEmpty()) {
-                                textoDeEstado(lista, R.string.guia_vazio);
+                            guiaCompleto = itens;
+
+                            mostrarGuia();
+                        });
+    }
+
+    // O guia com o filtro e a ordem escolhidos.
+    private void mostrarGuia() {
+
+        LinearLayout lista = findViewById(R.id.listaItens);
+
+        lista.removeAllViews();
+
+        if (guiaCompleto.isEmpty()) {
+            textoDeEstado(lista, R.string.guia_vazio);
+            return;
+        }
+
+        java.util.List<ItemLista> itens = filtro.aplicar(guiaCompleto);
+
+        if (itens.isEmpty()) {
+            textoDeEstado(lista, R.string.guia_filtro_vazio);
+            return;
+        }
+
+        exibirItens(lista, itens);
+    }
+
+    private void carregarSalvos(LinearLayout lista) {
+
+        indicadorDeCarregamento(lista, R.string.guia_carregando);
+
+        new EducacaoRepository()
+                .listarGuia(
+                        this,
+                        (sucesso, itens) -> {
+                            if (isFinishing() || isDestroyed()) {
                                 return;
                             }
 
-                            exibirItens(lista, itens);
+                            if (!sucesso) {
+                                lista.removeAllViews();
+                                textoDeEstado(lista, R.string.guia_erro);
+                                return;
+                            }
+
+                            guiaCompleto = itens;
+
+                            mostrarSalvos();
                         });
+    }
+
+    private void mostrarSalvos() {
+
+        LinearLayout lista = findViewById(R.id.listaItens);
+
+        lista.removeAllViews();
+
+        java.util.List<ItemLista> salvos = new java.util.ArrayList<>();
+
+        for (ItemLista item : guiaCompleto) {
+            if (item.chave != null && FavoritosRepository.ehSalvo(this, item.chave)) {
+                salvos.add(item);
+            }
+        }
+
+        if (salvos.isEmpty()) {
+            textoDeEstado(lista, R.string.salvos_vazio);
+            return;
+        }
+
+        exibirItens(lista, salvos);
+    }
+
+    private void configurarAcoesDoGuia() {
+
+        View salvos = findViewById(R.id.botaoSalvosTelaLista);
+        View filtrar = findViewById(R.id.botaoFiltrarTelaLista);
+
+        salvos.setVisibility(View.VISIBLE);
+        filtrar.setVisibility(View.VISIBLE);
+
+        salvos.setOnClickListener(view -> startActivity(criarIntent(this, TipoLista.SALVOS, morador)));
+
+        filtrar.setOnClickListener(
+                view -> {
+                    if (guiaCompleto != null && !guiaCompleto.isEmpty()) {
+                        abrirFiltro();
+                    }
+                });
+    }
+
+    private void abrirFiltro() {
+
+        BottomSheetDialog folha = new BottomSheetDialog(this);
+
+        View conteudo = getLayoutInflater().inflate(R.layout.dialog_filtro_guia, null);
+
+        ChipGroup categorias = conteudo.findViewById(R.id.chipsCategoria);
+        ChipGroup tempos = conteudo.findViewById(R.id.chipsTempo);
+        RadioGroup ordem = conteudo.findViewById(R.id.grupoOrdem);
+
+        for (String categoria : FiltroGuia.categoriasDe(guiaCompleto)) {
+            Chip chip = criarChip(categoria, filtro.getCategorias().contains(categoria));
+            chip.setTag(categoria);
+            categorias.addView(chip);
+        }
+
+        int[] rotulos = {R.string.filtro_tempo_ate3, R.string.filtro_tempo_3a6, R.string.filtro_tempo_mais6};
+
+        for (FiltroGuia.Tempo tempo : FiltroGuia.Tempo.values()) {
+            Chip chip = criarChip(getString(rotulos[tempo.ordinal()]), filtro.getTempos().contains(tempo));
+            chip.setTag(tempo);
+            tempos.addView(chip);
+        }
+
+        ordem.check(
+                filtro.getOrdem() == FiltroGuia.Ordem.A_Z ? R.id.radioOrdemAz : R.id.radioOrdemCurso);
+
+        conteudo.findViewById(R.id.botaoLimparFiltro)
+                .setOnClickListener(
+                        view -> {
+                            filtro.limpar();
+                            folha.dismiss();
+                            mostrarGuia();
+                        });
+
+        conteudo.findViewById(R.id.botaoAplicarFiltro)
+                .setOnClickListener(
+                        view -> {
+                            filtro.getCategorias().clear();
+                            filtro.getTempos().clear();
+
+                            for (int i = 0; i < categorias.getChildCount(); i++) {
+                                Chip chip = (Chip) categorias.getChildAt(i);
+
+                                if (chip.isChecked()) {
+                                    filtro.getCategorias().add((String) chip.getTag());
+                                }
+                            }
+
+                            for (int i = 0; i < tempos.getChildCount(); i++) {
+                                Chip chip = (Chip) tempos.getChildAt(i);
+
+                                if (chip.isChecked()) {
+                                    filtro.getTempos().add((FiltroGuia.Tempo) chip.getTag());
+                                }
+                            }
+
+                            filtro.setOrdem(
+                                    ordem.getCheckedRadioButtonId() == R.id.radioOrdemAz
+                                            ? FiltroGuia.Ordem.A_Z
+                                            : FiltroGuia.Ordem.ORDEM_DO_CURSO);
+
+                            folha.dismiss();
+                            mostrarGuia();
+                        });
+
+        folha.setContentView(conteudo);
+        folha.show();
+    }
+
+    private Chip criarChip(String texto, boolean marcado) {
+
+        Chip chip = new Chip(this);
+
+        chip.setText(texto);
+        chip.setCheckable(true);
+        chip.setCheckedIconVisible(false);
+        chip.setChecked(marcado);
+        chip.setTextColor(getColor(R.color.verde_escuro_principal));
+        chip.setChipBackgroundColor(
+                new android.content.res.ColorStateList(
+                        new int[][] {{android.R.attr.state_checked}, {}},
+                        new int[] {getColor(R.color.verde_claro_ecociente), getColor(R.color.branco)}));
+        chip.setChipStrokeColor(
+                android.content.res.ColorStateList.valueOf(getColor(R.color.cinza_borda_clara_home)));
+        chip.setChipStrokeWidth(getResources().getDisplayMetrics().density);
+
+        return chip;
+    }
+
+    // Tempo de leitura e marcador de salvo nas linhas do guia.
+    private void configurarSalvar(View linha, ItemLista item) {
+
+        if (item.chave == null || (tipo != TipoLista.GUIA && tipo != TipoLista.SALVOS)) {
+            return;
+        }
+
+        ((TextView) linha.findViewById(R.id.textoDestaqueLinha))
+                .setText(
+                        getString(
+                                R.string.guia_minutos,
+                                FiltroGuia.minutosDeLeitura(FiltroGuia.conteudoDe(item))));
+
+        ImageView marcador = linha.findViewById(R.id.botaoSalvarLinha);
+
+        marcador.setVisibility(View.VISIBLE);
+
+        atualizarMarcador(marcador, FavoritosRepository.ehSalvo(this, item.chave));
+
+        marcador.setOnClickListener(
+                view -> {
+                    boolean salvo = FavoritosRepository.alternar(this, item.chave);
+
+                    atualizarMarcador(marcador, salvo);
+
+                    if (tipo == TipoLista.SALVOS && !salvo) {
+                        mostrarSalvos();
+                    }
+                });
+    }
+
+    private void atualizarMarcador(ImageView marcador, boolean salvo) {
+
+        marcador.setImageResource(salvo ? R.drawable.ic_marcador_cheio : R.drawable.ic_marcador);
+        marcador.setContentDescription(getString(salvo ? R.string.remover_salvo : R.string.salvar_conteudo));
     }
 
     // Ranking dos moradores da ds-pontuacao-api; sem resposta (403, fora do ar), mostra o exemplo.
@@ -358,6 +585,8 @@ public class TelaListaActivity extends AppCompatActivity {
 
             linha.findViewById(R.id.pontoNaoLida).setVisibility(View.GONE);
 
+            configurarSalvar(linha, item);
+
             if (item.detalhes != null) {
                 linha.setOnClickListener(view -> startActivity(DetalheItemActivity.criarIntent(this, item)));
                 Motion.pressFeedback(linha);
@@ -375,6 +604,7 @@ public class TelaListaActivity extends AppCompatActivity {
         int atual = ItensBarra.NENHUM;
 
         switch (tipo) {
+            case SALVOS:
             case GUIA:
                 itens = morador ? ItensBarra.morador() : ItensBarra.usuario();
                 atual = ItensBarra.SEGUNDO;

@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.example.ecociente.model.FiltroGuia;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.QuizResumo;
@@ -119,12 +120,13 @@ public class EducacaoRepository {
 
                                 itens.add(
                                         new ItemLista(
+                                                "aula:" + aula.optInt("id"),
                                                 aula.optString("titulo"),
                                                 tituloCurso,
                                                 "",
                                                 new String[][] {
                                                     {"Curso", tituloCurso},
-                                                    {"Conteúdo", aula.optString("conteudo")}
+                                                    {FiltroGuia.ROTULO_CONTEUDO, aula.optString("conteudo")}
                                                 }));
                             }
                         }

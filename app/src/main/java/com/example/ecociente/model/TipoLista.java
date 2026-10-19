@@ -14,7 +14,8 @@ public enum TipoLista {
     CONDOMINIOS(R.string.condominios_atendidos, R.drawable.ic_perfil_cooperativa),
     AVALIACOES(R.string.avaliacoes_recebidas, R.drawable.ic_estrela),
     RANKING(R.string.ranking_do_morador, R.drawable.ic_trofeu),
-    PONTOS(R.string.meus_pontos, R.drawable.ic_trofeu);
+    PONTOS(R.string.meus_pontos, R.drawable.ic_trofeu),
+    SALVOS(R.string.conteudos_salvos, R.drawable.ic_guia_verde);
 
     @StringRes public final int titulo;
     @DrawableRes public final int icone;
@@ -29,6 +30,7 @@ public enum TipoLista {
 
         switch (this) {
             case GUIA:
+            case SALVOS:
             case PONTOS:
                 return Collections.emptyList();
 

@@ -33,6 +33,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/botaoVoltarTelaLista" />
 
+    <ImageView
+        android:id="@+id/botaoSalvosTelaLista"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginEnd="4dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/ver_salvos"
+        android:padding="10dp"
+        android:src="@drawable/ic_marcador"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tituloTelaLista"
+        app:layout_constraintEnd_toStartOf="@id/botaoFiltrarTelaLista"
+        app:layout_constraintTop_toTopOf="@id/tituloTelaLista" />
+
+    <ImageView
+        android:id="@+id/botaoFiltrarTelaLista"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginEnd="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/filtrar_conteudos"
+        android:padding="10dp"
+        android:src="@drawable/ic_filtrar"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/tituloTelaLista"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tituloTelaLista" />
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
