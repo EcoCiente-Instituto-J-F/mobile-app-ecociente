@@ -106,6 +106,7 @@ public class InicioQuizActivity extends AppCompatActivity {
             Intent rota = new Intent(this, QuizPerguntasActivity.class);
             rota.putExtra(QuizPerguntasActivity.EXTRA_CATEGORIA, categoria);
             QuizConteudo.anexar(rota, QuizConteudo.doIntent(getIntent()));
+            QuizConteudo.anexarContexto(rota, getIntent());
             startActivity(rota);
             overridePendingTransition(0, 0);
         });

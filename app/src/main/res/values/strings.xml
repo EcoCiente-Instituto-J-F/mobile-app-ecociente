@@ -493,6 +493,9 @@
     <string name="sua_posicao_valor">%1$dº de %2$d</string>
     <string name="sua_posicao_fora">Você ainda não pontuou neste ciclo</string>
     <string name="home_saudacao_sem_nome">Olá!</string>
+    <string name="quiz_corrigindo">Corrigindo…</string>
+    <string name="quiz_resultado_pontos">Você ganhou %1$d pontos!</string>
+    <string name="ranking_home_indisponivel">Não foi possível carregar o ranking agora.</string>
     <string name="ranking_carregando">Carregando o ranking…</string>
     <string name="ranking_sem_pontuacao">Ninguém pontuou nesta semana ainda.</string>
     <string name="lista_vazia">Nada por aqui ainda.</string>

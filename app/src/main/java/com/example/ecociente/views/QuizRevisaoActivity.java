@@ -293,6 +293,7 @@ public class QuizRevisaoActivity extends AppCompatActivity {
         Intent rota = new Intent(this, QuizPerguntasActivity.class);
         rota.putExtra(QuizPerguntasActivity.EXTRA_CATEGORIA, categoria);
         QuizConteudo.anexar(rota, perguntas);
+        QuizConteudo.anexarContexto(rota, getIntent());
         rota.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(rota);
         overridePendingTransition(0, 0);

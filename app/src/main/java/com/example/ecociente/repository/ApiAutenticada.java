@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -26,6 +27,20 @@ final class ApiAutenticada {
     // Corpo da resposta, ou null quando não há credenciais ou a API não respondeu 2xx.
     @Nullable
     static String obter(@NonNull Context contexto, @NonNull String url) throws IOException {
+        return chamar(contexto, "GET", url, null);
+    }
+
+    // POST com corpo JSON; mesma regra de retorno do `obter`.
+    @Nullable
+    static String enviar(@NonNull Context contexto, @NonNull String url, @NonNull String json)
+            throws IOException {
+        return chamar(contexto, "POST", url, json);
+    }
+
+    @Nullable
+    private static String chamar(
+            @NonNull Context contexto, @NonNull String metodo, @NonNull String url, @Nullable String json)
+            throws IOException {
 
         String token = AUTENTICACAO.tokenParaUso(contexto);
 
@@ -34,19 +49,19 @@ final class ApiAutenticada {
         }
 
         int[] codigo = new int[1];
-        String corpo = requisitar(url, token, codigo);
+        String corpo = requisitar(metodo, url, token, json, codigo);
 
         // O JWT dura minutos: o salvo costuma estar vencido.
         if (codigo[0] == 401 || codigo[0] == 403) {
             String renovado = AUTENTICACAO.renovarToken(contexto);
 
             if (renovado != null) {
-                corpo = requisitar(url, renovado, codigo);
+                corpo = requisitar(metodo, url, renovado, json, codigo);
             }
         }
 
         if (codigo[0] < 200 || codigo[0] >= 300) {
-            Log.w(TAG, "HTTP " + codigo[0] + " em " + url);
+            Log.w(TAG, "HTTP " + codigo[0] + " em " + metodo + " " + url);
             return null;
         }
 
@@ -54,17 +69,34 @@ final class ApiAutenticada {
     }
 
     @NonNull
-    private static String requisitar(@NonNull String url, @NonNull String token, @NonNull int[] codigo)
+    private static String requisitar(
+            @NonNull String metodo,
+            @NonNull String url,
+            @NonNull String token,
+            @Nullable String json,
+            @NonNull int[] codigo)
             throws IOException {
 
         HttpURLConnection conexao = (HttpURLConnection) new URL(url).openConnection();
 
         try {
-            conexao.setRequestMethod("GET");
+            conexao.setRequestMethod(metodo);
             conexao.setRequestProperty("Accept", "application/json");
             conexao.setRequestProperty("Authorization", "Bearer " + token);
             conexao.setConnectTimeout(TIMEOUT_MS);
             conexao.setReadTimeout(TIMEOUT_MS);
+
+            if (json != null) {
+                byte[] dados = json.getBytes(StandardCharsets.UTF_8);
+
+                conexao.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                conexao.setDoOutput(true);
+                conexao.setFixedLengthStreamingMode(dados.length);
+
+                try (OutputStream saida = conexao.getOutputStream()) {
+                    saida.write(dados);
+                }
+            }
 
             codigo[0] = conexao.getResponseCode();
 

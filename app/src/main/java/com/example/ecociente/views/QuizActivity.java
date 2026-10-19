@@ -111,6 +111,7 @@ public class QuizActivity extends AppCompatActivity {
                     for (QuizResumo quiz : itens) {
                         quizzes.add(
                                 new QuizItem(
+                                        quiz.getId(),
                                         quiz.getTitulo(),
                                         quiz.getCategoria(),
                                         getString(R.string.quiz_n_perguntas, quiz.getPerguntas().size()),
@@ -223,6 +224,7 @@ public class QuizActivity extends AppCompatActivity {
 
         rota.putExtra(InicioQuizActivity.EXTRA_CATEGORIA, quiz.categoria);
         QuizConteudo.anexar(rota, quiz.listaPerguntas);
+        QuizConteudo.anexarQuizId(rota, quiz.id);
         rota.putExtra(InicioQuizActivity.EXTRA_PERGUNTAS, quiz.perguntas);
 
         startActivity(rota);
@@ -326,6 +328,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private static final class QuizItem {
+        private final int id;
         private final String titulo;
         private final String categoria;
         private final String perguntas;
@@ -334,12 +337,14 @@ public class QuizActivity extends AppCompatActivity {
         private final List<QuizConteudo.Pergunta> listaPerguntas;
 
         private QuizItem(
+                int id,
                 String titulo,
                 String categoria,
                 String perguntas,
                 String duracao,
                 String resultado,
                 List<QuizConteudo.Pergunta> listaPerguntas) {
+            this.id = id;
             this.listaPerguntas = listaPerguntas;
             this.titulo = titulo;
             this.categoria = categoria;

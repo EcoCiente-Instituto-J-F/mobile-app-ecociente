@@ -27,6 +27,7 @@ import androidx.core.widget.ImageViewCompat;
 
 import com.example.ecociente.R;
 import com.example.ecociente.model.QuizConteudo;
+import com.example.ecociente.model.ResultadoQuiz;
 import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
@@ -149,7 +150,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
         }
 
         textoPontuacao.setText(String.format(Locale.getDefault(), "%02d/%02d", 0, perguntas.size()));
-        textoMensagem.setText(mensagemParaPontuacao());
+        textoMensagem.setText(mensagemComPontos());
 
         for (int i = 0; i < perguntas.size(); i++) {
             QuizConteudo.Pergunta pergunta = perguntas.get(i);
@@ -269,6 +270,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
             rota.putExtra(QuizRevisaoActivity.EXTRA_RESPOSTAS, respostas);
             rota.putExtra(QuizRevisaoActivity.EXTRA_INDICE_INICIAL, indice);
             QuizConteudo.anexar(rota, perguntas);
+            QuizConteudo.anexarContexto(rota, getIntent());
             startActivity(rota);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             return;
@@ -288,6 +290,20 @@ public class QuizResultadoActivity extends AppCompatActivity {
                 .conteudo(conteudo)
                 .botao(R.string.quiz_dialogo_fechar, DialogoEco.Estilo.PREENCHIDO, null)
                 .mostrar();
+    }
+
+    // A mensagem de sempre, mais os pontos que a ds-pontuacao registrou para esta tentativa.
+    @NonNull
+    private String mensagemComPontos() {
+        String mensagem = mensagemParaPontuacao();
+
+        ResultadoQuiz resultado = ResultadoQuiz.doIntent(getIntent());
+
+        if (resultado == null || resultado.getPontosConcedidos() <= 0) {
+            return mensagem;
+        }
+
+        return mensagem + "\n" + getString(R.string.quiz_resultado_pontos, resultado.getPontosConcedidos());
     }
 
     @NonNull
@@ -330,6 +346,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
         Intent rota = new Intent(this, QuizPerguntasActivity.class);
         rota.putExtra(QuizPerguntasActivity.EXTRA_CATEGORIA, categoria);
         QuizConteudo.anexar(rota, perguntas);
+        QuizConteudo.anexarContexto(rota, getIntent());
         startActivity(rota);
         overridePendingTransition(0, 0);
         finish();
