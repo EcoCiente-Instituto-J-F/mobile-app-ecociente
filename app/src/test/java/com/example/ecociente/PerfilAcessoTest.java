@@ -84,4 +84,20 @@ public class PerfilAcessoTest {
                 PerfilAcesso.DestinoHome.SEM_ACESSO,
                 PerfilAcesso.destinoDaHome(perfil("", false, "")));
     }
+
+    @Test
+    public void perfilDaApiMandaNaHomeMesmoComFirestoreDiferente() {
+        assertEquals(PerfilAcesso.DestinoHome.SINDICO, PerfilAcesso.destinoFinal("SINDICO", PerfilAcesso.DestinoHome.USUARIO_COMUM));
+        assertEquals(PerfilAcesso.DestinoHome.COOPERATIVA, PerfilAcesso.destinoFinal("COOPERATIVA", PerfilAcesso.DestinoHome.CONDOMINIO));
+        assertEquals(PerfilAcesso.DestinoHome.CONDOMINIO, PerfilAcesso.destinoFinal("MORADOR", PerfilAcesso.DestinoHome.USUARIO_COMUM));
+        assertEquals(PerfilAcesso.DestinoHome.USUARIO_COMUM, PerfilAcesso.destinoFinal("USUARIO_COMUM", PerfilAcesso.DestinoHome.CONDOMINIO));
+        assertEquals(PerfilAcesso.DestinoHome.CONDOMINIO, PerfilAcesso.destinoFinal("MORADOR", PerfilAcesso.DestinoHome.SINDICO));
+    }
+
+    @Test
+    public void semPerfilDaApiValeOFirestore() {
+        assertEquals(PerfilAcesso.DestinoHome.SINDICO, PerfilAcesso.destinoFinal(null, PerfilAcesso.DestinoHome.SINDICO));
+        assertEquals(PerfilAcesso.DestinoHome.CONDOMINIO, PerfilAcesso.destinoFinal("", PerfilAcesso.DestinoHome.CONDOMINIO));
+        assertEquals(PerfilAcesso.DestinoHome.USUARIO_COMUM, PerfilAcesso.destinoFinal("OUTRO", PerfilAcesso.DestinoHome.USUARIO_COMUM));
+    }
 }
