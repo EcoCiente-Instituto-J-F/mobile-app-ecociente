@@ -27,6 +27,9 @@ import com.example.ecociente.ui.SemanaColetasView;
 import com.example.ecociente.viewmodels.CalendarioViewModel;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.repository.RankingExternoRepository;
+import com.example.ecociente.model.ItemLista;
+import com.example.ecociente.ui.Iniciais;
 
 public class CondominioHomeActivity extends AppCompatActivity {
 
@@ -71,6 +74,8 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
         calendarioViewModel.carregarSemana();
 
+        carregarPodio();
+
         motion.staggerIn(
                 findViewById(R.id.cabecalhoHomeCondominio),
                 findViewById(R.id.blocoSaudacaoCondominio),
@@ -104,6 +109,64 @@ public class CondominioHomeActivity extends AppCompatActivity {
                                                                     new java.util.Locale("pt", "BR"))
                                                             .format(saldo)));
                         });
+    }
+
+    // Os três primeiros do ranking dos moradores, direto no cartão da home.
+    private void carregarPodio() {
+
+        new RankingExternoRepository()
+                .listarMoradores(
+                        this,
+                        PerfilApiRepository.condominioId(this),
+                        3,
+                        moradores -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            android.widget.TextView estado = findViewById(R.id.textoEstadoRankingHome);
+                            View podio = findViewById(R.id.podioHome);
+
+                            if (moradores == null || moradores.isEmpty()) {
+                                podio.setVisibility(View.GONE);
+                                estado.setVisibility(View.VISIBLE);
+                                estado.setText(
+                                        moradores == null
+                                                ? R.string.ranking_home_indisponivel
+                                                : R.string.ranking_sem_pontuacao);
+                                return;
+                            }
+
+                            estado.setVisibility(View.GONE);
+                            podio.setVisibility(View.VISIBLE);
+
+                            preencherPodio(moradores, 0, R.id.avatarPrimeiroHome, R.id.pontosPrimeiroHome);
+                            preencherPodio(moradores, 1, R.id.avatarSegundoHome, R.id.pontosSegundoHome);
+                            preencherPodio(moradores, 2, R.id.avatarTerceiroHome, R.id.pontosTerceiroHome);
+                        });
+    }
+
+    private void preencherPodio(
+            java.util.List<ItemLista> moradores, int posicao, int idAvatar, int idPontos) {
+
+        android.widget.TextView avatar = findViewById(idAvatar);
+        android.widget.TextView pontos = findViewById(idPontos);
+
+        if (posicao >= moradores.size()) {
+            avatar.setText("");
+            avatar.setContentDescription(null);
+            pontos.setText("");
+            return;
+        }
+
+        ItemLista morador = moradores.get(posicao);
+
+        // O título vem como "1º  Nome".
+        String nome = morador.titulo.replaceFirst("^\\d+º\\s*", "");
+
+        avatar.setText(Iniciais.de(nome));
+        avatar.setContentDescription(nome + ", " + morador.destaque);
+        pontos.setText(morador.destaque);
     }
 
     @Override

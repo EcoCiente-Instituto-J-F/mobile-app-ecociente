@@ -232,46 +232,196 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:padding="14dp">
 
-                    <ImageView
-                        android:layout_width="26dp"
-                        android:layout_height="26dp"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_trofeu" />
-
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_trofeu" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
                             android:fontFamily="@font/nunito_bold"
                             android:text="@string/ranking_do_morador"
                             android:textColor="@color/verde_escuro_principal"
                             android:textSize="14sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular"
-                            android:text="@string/ranking_resumo"
-                            android:textColor="@color/cinza_texto_home"
-                            android:textSize="12sp" />
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:importantForAccessibility="no"
+                            android:src="@drawable/ic_seta_direita" />
 
                     </LinearLayout>
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_seta_direita" />
+                    <TextView
+                        android:id="@+id/textoEstadoRankingHome"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/nunito_regular"
+                        android:text="@string/ranking_carregando"
+                        android:textColor="@color/cinza_texto_home"
+                        android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:id="@+id/podioHome"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="32dp"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/avatarSegundoHome"
+                                android:layout_width="46dp"
+                                android:layout_height="46dp"
+                                android:background="@drawable/sindico_ranking_avatar_segundo"
+                                android:fontFamily="@font/nunito_bold"
+                                android:gravity="center"
+                                android:textColor="@color/preto_texto_home"
+                                android:textSize="14sp" />
+
+                            <LinearLayout
+                                android:layout_width="70dp"
+                                android:layout_height="57dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@drawable/sindico_ranking_podio_lateral"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nunito_bold"
+                                    android:text="@string/sindico_2o"
+                                    android:textColor="@color/preto_texto_home"
+                                    android:textSize="18sp" />
+
+                                <TextView
+                                    android:id="@+id/pontosSegundoHome"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nunito_regular"
+                                    android:textColor="@color/cinza_texto_home"
+                                    android:textSize="11sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="0dp"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/avatarPrimeiroHome"
+                                android:layout_width="50dp"
+                                android:layout_height="50dp"
+                                android:background="@drawable/sindico_ranking_avatar_primeiro"
+                                android:fontFamily="@font/nunito_bold"
+                                android:gravity="center"
+                                android:textColor="@color/preto_texto_home"
+                                android:textSize="14sp" />
+
+                            <LinearLayout
+                                android:layout_width="70dp"
+                                android:layout_height="63dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@drawable/sindico_ranking_podio_primeiro"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nunito_bold"
+                                    android:text="@string/sindico_1o"
+                                    android:textColor="@color/branco"
+                                    android:textSize="18sp" />
+
+                                <TextView
+                                    android:id="@+id/pontosPrimeiroHome"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nunito_bold"
+                                    android:textColor="@color/branco"
+                                    android:textSize="11sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="45dp"
+                            android:layout_weight="1"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/avatarTerceiroHome"
+                                android:layout_width="46dp"
+                                android:layout_height="46dp"
+                                android:background="@drawable/sindico_ranking_avatar_terceiro"
+                                android:fontFamily="@font/nunito_bold"
+                                android:gravity="center"
+                                android:textColor="@color/preto_texto_home"
+                                android:textSize="14sp" />
+
+                            <LinearLayout
+                                android:layout_width="70dp"
+                                android:layout_height="57dp"
+                                android:layout_marginTop="5dp"
+                                android:background="@drawable/sindico_ranking_podio_lateral"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nunito_bold"
+                                    android:text="@string/sindico_3o"
+                                    android:textColor="@color/preto_texto_home"
+                                    android:textSize="18sp" />
+
+                                <TextView
+                                    android:id="@+id/pontosTerceiroHome"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/nunito_regular"
+                                    android:textColor="@color/cinza_texto_home"
+                                    android:textSize="11sp" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
