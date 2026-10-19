@@ -117,6 +117,18 @@ public final class SindicoRankingActivity extends AppCompatActivity {
 
         LinearLayout lista = findViewById(R.id.listaSindicoRankingCompleta);
         lista.removeAllViews();
+
+        if (posicoes.isEmpty()) {
+            TextView vazio = new TextView(this);
+
+            vazio.setText(R.string.sindico_ranking_vazio);
+            vazio.setTextColor(getColor(R.color.cinza_texto_home));
+            vazio.setTextSize(14);
+            vazio.setPadding(32, 112, 32, 112);
+
+            lista.addView(vazio);
+        }
+
         LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 3; i < posicoes.size(); i++) {
             SindicoPosicaoRanking posicao = posicoes.get(i);

@@ -6,5 +6,10 @@ public final class DadosDemonstracao {
 
     public static final boolean ATIVO = true;
 
+    // O síndico nunca vê exemplo: o que a API não entrega aparece vazio.
+    public static boolean ativoPara(String perfil) {
+        return ATIVO && !"SINDICO".equals(perfil);
+    }
+
     private DadosDemonstracao() {}
 }

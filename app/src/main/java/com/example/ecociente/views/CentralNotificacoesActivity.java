@@ -27,6 +27,7 @@ import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.SindicoViewModel;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,7 +164,8 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
         grupos.put(ontem, new ArrayList<>());
         grupos.put(anteriores, new ArrayList<>());
 
-        for (Notificacao notificacao : Notificacao.lista()) {
+        // As notificações de exemplo não são do síndico: ele só vê os avisos que existem de verdade.
+        for (Notificacao notificacao : destino == Destino.SINDICO ? Collections.<Notificacao>emptyList() : Notificacao.lista()) {
             List<View> grupo = grupos.get(notificacao.grupo);
 
             if (grupo != null) {

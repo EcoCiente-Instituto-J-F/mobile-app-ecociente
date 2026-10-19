@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
@@ -135,7 +136,7 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
         etiqueta.setTextColor(getColor(status.getTextoEtiqueta()));
         ViewCompat.setBackgroundTintList(etiqueta, getColorStateList(status.getFundoEtiqueta()));
         cartao.setOnClickListener(view -> startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
-                this, solicitacao.paraSolicitacao(getString(R.string.sindico_condominio_demo)),
+                this, solicitacao.paraSolicitacao(PerfilApiRepository.condominioNomeOuVazio(this)),
                 solicitacao.getCooperativa())));
         Motion.pressFeedback(cartao);
         return cartao;

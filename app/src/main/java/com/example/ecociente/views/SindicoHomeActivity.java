@@ -72,7 +72,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         SindicoDashboard dados = viewModel.getDashboard();
         TextView saudacao = findViewById(R.id.sindicoSaudacao);
         ImageView imagemPerfil = findViewById(R.id.imagemPerfilSindico);
-        saudacao.setText(getString(R.string.home_saudacao, dados.getNome()));
+        saudacao.setText(R.string.home_saudacao_sem_nome);
         PerfilViewModel perfilViewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
         FirebaseUser usuario = perfilViewModel.usuarioAtual();
         if (usuario != null) {
@@ -86,9 +86,11 @@ public final class SindicoHomeActivity extends AppCompatActivity {
                 }
             });
         }
-        exibirNomeDoCondominio(dados.getCondominio());
+        AquecimentoDasApis.aquecer(this);
+        exibirNomeDoCondominio();
         ((SindicoGraficoView) findViewById(R.id.sindicoGrafico))
                 .setDados(dados.getEvolucao(), dados.getDatasEvolucao());
+        findViewById(R.id.sindicoGrafico).setVisibility(dados.semDados() ? View.GONE : View.VISIBLE);
 
         semana = findViewById(R.id.semanaColetas);
         View textoErroSemana = findViewById(R.id.textoErroSemana);
@@ -150,8 +152,12 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         LinearLayout painel = findViewById(R.id.sindicoMetricas);
         String[] nomes = {getString(R.string.sindico_participacao_dos_moradores), getString(R.string.sindico_descartes_registrados_no_mes),
                 getString(R.string.sindico_taxa_de_adesao_a_coleta_seletiva)};
-        String[] valores = {dados.getParticipacao() + "%", String.valueOf(dados.getDescartes()),
-                dados.getAdesao() + "%"};
+        boolean semDados = dados.semDados();
+        String semValor = getString(R.string.sindico_sem_dado);
+        String[] valores = semDados
+                ? new String[] {semValor, semValor, semValor}
+                : new String[] {dados.getParticipacao() + "%", String.valueOf(dados.getDescartes()),
+                        dados.getAdesao() + "%"};
         int[] variacoes = {dados.getVariacaoParticipacao(), dados.getVariacaoDescartes(),
                 dados.getVariacaoAdesao()};
         int[] icones = {R.drawable.ic_grupo, R.drawable.ic_reciclar,
@@ -185,6 +191,11 @@ public final class SindicoHomeActivity extends AppCompatActivity {
 
             adicionarTexto(card, valores[i], 22, R.color.verde_escuro_principal, true);
 
+            // Sem API de dashboard não há mês anterior para comparar.
+            if (semDados) {
+                continue;
+            }
+
             LinearLayout linha = new LinearLayout(this);
             linha.setGravity(Gravity.CENTER_VERTICAL);
             card.addView(linha, new LinearLayout.LayoutParams(-1, -2));
@@ -199,20 +210,14 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         }
     }
 
-    // Mostra "Carregando…" até o perfil chegar. Se a API não devolver o condomínio, fica o nome de exemplo.
-    private void exibirNomeDoCondominio(String nomeDeExemplo) {
+    // Mostra "Carregando…" até o perfil chegar. Se a API não devolver o condomínio, o campo some.
+    private void exibirNomeDoCondominio() {
 
         TextView texto = findViewById(R.id.sindicoCondominio);
 
         String nome = PerfilApiRepository.condominioNome(this);
 
         texto.setText(nome != null ? nome : getString(R.string.sindico_condominio_carregando));
-
-        if (nome != null) {
-            AquecimentoDasApis.aquecer(this);
-        new PerfilApiRepository().atualizarSeNecessario(this);
-            return;
-        }
 
         new PerfilApiRepository()
                 .atualizarSeNecessario(
@@ -224,7 +229,8 @@ public final class SindicoHomeActivity extends AppCompatActivity {
 
                             String recebido = PerfilApiRepository.condominioNome(this);
 
-                            texto.setText(recebido != null ? recebido : nomeDeExemplo);
+                            texto.setText(recebido != null ? recebido : "");
+                            texto.setVisibility(recebido != null ? View.VISIBLE : View.GONE);
                         });
     }
 
@@ -237,7 +243,12 @@ public final class SindicoHomeActivity extends AppCompatActivity {
                         PerfilApiRepository.condominioId(this),
                         5,
                         posicoes -> {
-                            if (posicoes == null || isFinishing() || isDestroyed()) {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            if (posicoes == null) {
+                                exibirRanking(new String[0], new String[0], new int[0]);
                                 return;
                             }
 
@@ -258,6 +269,14 @@ public final class SindicoHomeActivity extends AppCompatActivity {
     private void exibirRanking(String[] blocos, String[] iniciais, int[] pontos) {
         LinearLayout ranking = findViewById(R.id.sindicoRanking);
         ranking.removeAllViews();
+
+        if (blocos.length == 0) {
+            TextView vazio = adicionarTexto(ranking, getString(R.string.sindico_ranking_vazio), 14,
+                    R.color.cinza_texto_home, false);
+            vazio.setPadding(dp(4), dp(14), dp(4), dp(14));
+            return;
+        }
+
         for (int i = 0; i < blocos.length; i++) {
             LinearLayout linha = new LinearLayout(this);
             linha.setGravity(Gravity.CENTER_VERTICAL);

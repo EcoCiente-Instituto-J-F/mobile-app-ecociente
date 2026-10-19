@@ -41,6 +41,17 @@ public final class SindicoDashboard {
         this.pontosRanking = pontosRanking.clone();
     }
 
+    // Sem API de dashboard ainda: tudo zerado e sem listas.
+    public static SindicoDashboard vazio() {
+        return new SindicoDashboard("", "", 0, 0, 0, 0, 0, 0,
+                new int[0], new String[0], new String[0], new String[0], new int[0]);
+    }
+
+    public boolean semDados() {
+        return participacao == 0 && descartes == 0 && adesao == 0
+                && evolucao.length == 0 && blocosRanking.length == 0;
+    }
+
     public String getNome() { return nome; }
     public String getCondominio() { return condominio; }
     public int getParticipacao() { return participacao; }

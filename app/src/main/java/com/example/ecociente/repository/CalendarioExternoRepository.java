@@ -198,7 +198,7 @@ public class CalendarioExternoRepository {
 
     public void proxima(@NonNull Context contexto, @NonNull Retorno retorno) {
 
-        if (DadosDemonstracao.ATIVO) {
+        if (DadosDemonstracao.ativoPara(AutenticacaoExternaRepository.perfilSalvo(contexto))) {
             java.util.List<Solicitacao> proxima = new java.util.ArrayList<>();
             long agora = System.currentTimeMillis();
             long melhor = Long.MAX_VALUE;
@@ -242,7 +242,7 @@ public class CalendarioExternoRepository {
             @NonNull Calendar fim,
             @NonNull Retorno retorno) {
 
-        if (DadosDemonstracao.ATIVO) {
+        if (DadosDemonstracao.ativoPara(AutenticacaoExternaRepository.perfilSalvo(contexto))) {
             java.util.List<Solicitacao> noPeriodo = new java.util.ArrayList<>();
 
             for (Solicitacao s : Solicitacao.exemplos()) {

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
+import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.SindicoCooperativa;
 import com.example.ecociente.viewmodels.SindicoColetaViewModel;
@@ -85,7 +86,7 @@ public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
         String inicio = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).format(momento.getTime());
         SindicoSolicitacao criada = viewModel.criarSolicitacao(cooperativa.getId(), inicio, recorrente);
         startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
-                this, criada.paraSolicitacao(getString(R.string.sindico_condominio_demo)), cooperativa.getNome()));
+                this, criada.paraSolicitacao(PerfilApiRepository.condominioNomeOuVazio(this)), cooperativa.getNome()));
         finish();
     }
 

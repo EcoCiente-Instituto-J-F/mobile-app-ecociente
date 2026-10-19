@@ -114,7 +114,7 @@
     <string name="sindico_nota_texto">%1$d/5 estrelas</string>
     <string name="sindico_avaliacao_local">Avaliação local: %1$d de 5 estrelas. Toque para alterar.</string>
     <string name="sindico_avaliar_coleta_de">Avaliar coleta de %1$s</string>
-    <string name="sindico_todas_as_coletas_de_exemplo_ja_for">Todas as coletas de exemplo já foram avaliadas.</string>
+    <string name="sindico_todas_as_coletas_de_exemplo_ja_for">Todas as coletas já foram avaliadas.</string>
     <string name="sindico_nenhuma_coleta_avaliada_neste_filt">Nenhuma coleta avaliada neste filtro.</string>
     <string name="sindico_todas">Todas</string>
     <string name="sindico_para_avaliar">Para avaliar</string>
@@ -179,8 +179,7 @@
     <string name="coleta_confirmada_em">Coleta confirmada: %1$s • %2$s</string>
     <string name="sindico_vs_mes_anterior">(vs. mês anterior)</string>
     <string name="sindico_foto_condominio_salva">Foto do condomínio salva.</string>
-    <string name="sindico_pontos_mes">300 pts</string>
-    <string name="sindico_materiais_percentuais" formatted="false">Papel 25%  ·  Plástico 50%  ·  Vidro 8%\nMetal 12%  ·  Orgânico 5%</string>
     <string name="sindico_sem_dado">—</string>
     <string name="sindico_condominio_carregando">Carregando…</string>
+    <string name="sindico_ranking_vazio">Ninguém pontuou neste ciclo ainda.</string>
 </resources>

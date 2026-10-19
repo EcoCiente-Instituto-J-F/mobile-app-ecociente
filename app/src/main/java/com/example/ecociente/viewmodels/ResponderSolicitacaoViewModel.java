@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.model.DadosDemonstracao;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.StatusAgendamento;
+import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.repository.CalendarioExternoRepository;
 import com.example.ecociente.repository.SolicitacoesExemplosRepository;
 
@@ -20,7 +21,7 @@ public class ResponderSolicitacaoViewModel extends ViewModelComCarregamento {
 
         MutableLiveData<ResultadoApi> resultado = new MutableLiveData<>();
 
-        if (DadosDemonstracao.ATIVO) {
+        if (DadosDemonstracao.ativoPara(AutenticacaoExternaRepository.perfilSalvo(contexto))) {
             SolicitacoesExemplosRepository.getInstance().alterarStatus(id, resposta);
 
             resultado.setValue(ResultadoApi.sucesso());

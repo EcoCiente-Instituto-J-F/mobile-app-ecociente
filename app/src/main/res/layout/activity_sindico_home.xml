@@ -135,7 +135,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunito_regular"
-                        tools:text="@string/sindico_condominio_demo"
+                        tools:text="Nome do condomínio"
                         android:textColor="@color/cinza_texto_home"
                         android:textSize="12sp" />
                 </LinearLayout>

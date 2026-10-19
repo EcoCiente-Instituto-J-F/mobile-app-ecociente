@@ -48,6 +48,14 @@ public class PerfilApiRepository {
         return nome == null || nome.trim().isEmpty() ? null : nome;
     }
 
+    // Para quem precisa de um texto e prefere vazio a inventar um nome.
+    @NonNull
+    public static String condominioNomeOuVazio(@NonNull Context contexto) {
+        String nome = condominioNome(contexto);
+
+        return nome != null ? nome : "";
+    }
+
     // Esquece o que era do usuário anterior (troca de conta).
     static void limpar(@NonNull Context contexto) {
         preferencias(contexto).edit().clear().apply();

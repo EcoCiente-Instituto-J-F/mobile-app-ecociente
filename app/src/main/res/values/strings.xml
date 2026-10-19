@@ -1,6 +1,5 @@
 <resources>
     <string name="sindico_saudacao_demo">Olá, Júlio!</string>
-    <string name="sindico_condominio_demo">Condomínio Residencial Jardim das Flores</string>
     <string name="sindico_rascunho_salvo">Rascunho salvo nesta sessão. O envio aos moradores estará disponível após a integração com a API.</string>
 
     <string name="app_name">
@@ -493,6 +492,7 @@
     <string name="sua_posicao_titulo">Você</string>
     <string name="sua_posicao_valor">%1$dº de %2$d</string>
     <string name="sua_posicao_fora">Você ainda não pontuou neste ciclo</string>
+    <string name="home_saudacao_sem_nome">Olá!</string>
     <string name="ranking_carregando">Carregando o ranking…</string>
     <string name="ranking_sem_pontuacao">Ninguém pontuou nesta semana ainda.</string>
     <string name="lista_vazia">Nada por aqui ainda.</string>

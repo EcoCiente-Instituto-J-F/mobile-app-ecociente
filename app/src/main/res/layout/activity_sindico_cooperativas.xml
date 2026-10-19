@@ -38,14 +38,6 @@
             android:paddingEnd="16dp"
             android:paddingBottom="24dp">
 
-            <ImageView
-                android:layout_width="104dp"
-                android:layout_height="56dp"
-                android:layout_gravity="end"
-                android:contentDescription="@string/sindico_caminhao_de_reciclagem"
-                android:scaleType="centerCrop"
-                android:src="@drawable/sindico_caminhao_coleta" />
-
             <EditText
                 android:id="@+id/buscaCooperativas"
                 style="@style/CampoBusca"
