@@ -20,6 +20,7 @@ import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.ui.Navegacao;
 import java.util.List;
+import com.example.ecociente.ui.IndicadorCarregamento;
 
 // Aba Feed do morador: fotos de descarte do condomínio.
 public class FeedActivity extends AppCompatActivity {
@@ -43,6 +44,8 @@ public class FeedActivity extends AppCompatActivity {
         Motion.entrar(this, R.id.tituloFeed, R.id.subtituloFeed, R.id.listaFeed);
 
         configurarBarra();
+
+        IndicadorCarregamento.mostrar(lista, R.string.feed_carregando);
 
         new FeedRepository().listar(this, this::exibir);
     }

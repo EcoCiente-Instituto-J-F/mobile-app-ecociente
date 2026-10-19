@@ -31,6 +31,7 @@ import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import java.util.Collections;
 import java.util.List;
+import com.example.ecociente.ui.IndicadorCarregamento;
 
 public class CalendarioColetasActivity extends AppCompatActivity {
 
@@ -120,6 +121,14 @@ public class CalendarioColetasActivity extends AppCompatActivity {
                 resultado == null ? Collections.emptyList() : resultado.getItens();
 
         calendarioMensal.exibir(mes[0], mes[1], Coletas.diasDoMes(coletas, mes[0], mes[1]));
+
+        // Antes da primeira resposta: o indicador no lugar da lista.
+        if (resultado == null) {
+            listaColetas.removeAllViews();
+            textoSemColetas.setVisibility(View.GONE);
+            IndicadorCarregamento.mostrar(listaColetas, R.string.carregando);
+            return;
+        }
 
         exibirLista(Coletas.ativasDoMes(coletas, mes[0], mes[1]));
 

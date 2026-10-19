@@ -32,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import com.example.ecociente.ui.IndicadorCarregamento;
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -91,7 +92,13 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void carregarQuizzes() {
-        textoQuantidadeQuizzes.setText(R.string.quizzes_carregando);
+        textoQuantidadeQuizzes.setText("");
+
+        LinearLayout listaCarregando = findViewById(R.id.listaQuizzes);
+
+        listaCarregando.removeAllViews();
+
+        IndicadorCarregamento.mostrar(listaCarregando, R.string.quizzes_carregando);
 
         repositorio.listarQuizzes(
                 this,
