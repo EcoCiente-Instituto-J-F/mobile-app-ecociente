@@ -67,4 +67,11 @@ public class PerfilApiJsonTest {
 
         assertEquals("", PerfilApiJson.condominio(json).nome);
     }
+
+    @Test
+    public void cooperativaIdVemDoObjetoCooperativa() throws Exception {
+        assertEquals(5, PerfilApiJson.cooperativaId(new JSONObject("{\"cooperativa\":{\"id\":5,\"nome\":\"Eco\"}}")));
+        assertEquals(0, PerfilApiJson.cooperativaId(new JSONObject("{\"cooperativa\":null}")));
+        assertEquals(0, PerfilApiJson.cooperativaId(new JSONObject("{}")));
+    }
 }

@@ -31,6 +31,7 @@ public enum TipoLista {
         switch (this) {
             case GUIA:
             case SALVOS:
+            case AVALIACOES:
             case PONTOS:
                 return Collections.emptyList();
 
@@ -44,14 +45,6 @@ public enum TipoLista {
                         condominio("Condomínio Vila Verde", "Rua das Palmeiras, 33", "56 unidades", "Quarta"),
                         condominio("Edifício Solar", "Rua do Sol, 410", "72 unidades", "Segunda"),
                         condominio("Residencial Aurora", "Rua da Aurora, 88", "40 unidades", "Quinta"));
-
-            case AVALIACOES:
-                return Arrays.asList(
-                        new ItemLista("Condomínio Raio de Luz", "“Equipe pontual e muito educada.”", "5,0"),
-                        new ItemLista("Residencial Jardim das Flores", "“A coleta atrasou um pouco, mas avisaram.”", "4,0"),
-                        new ItemLista("Condomínio Vila Verde", "“Ótimo atendimento, recomendo.”", "5,0"),
-                        new ItemLista("Edifício Solar", "“Poderiam passar mais cedo.”", "3,5"),
-                        new ItemLista("Residencial Aurora", "“Tudo certo, sem reclamações.”", "4,5"));
 
             default:
                 return Arrays.asList(

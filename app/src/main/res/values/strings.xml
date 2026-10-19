@@ -153,7 +153,6 @@
 
     <string name="quizzes">Quizzes</string>
 
-    <string name="subtitulo_quizzes">Teste seus conhecimentos sobre sustentabilidade</string>
 
     <string name="buscar">Buscar quizzes</string>
 
@@ -470,6 +469,15 @@
     <string name="quiz_pontos_recompensa">+%1$d pts</string>
     <string name="quiz_resultado_sem_nota">--/--</string>
     <string name="quiz_resultado_sem_gabarito">Respostas registradas. A correção aparece quando o gabarito estiver disponível.</string>
+    <string name="feed_carregando">Carregando o feed…</string>
+    <string name="avaliacoes_carregando">Carregando as avaliações…</string>
+    <string name="avaliacoes_erro">Não foi possível carregar as avaliações. Tente de novo mais tarde.</string>
+    <string name="avaliacoes_vazio">Nenhum condomínio avaliou a cooperativa ainda.</string>
+    <string name="avaliacoes_media_titulo">Média geral</string>
+    <plurals name="avaliacoes_total">
+        <item quantity="one">%1$d avaliação</item>
+        <item quantity="other">%1$d avaliações</item>
+    </plurals>
     <string name="conteudos_salvos">Conteúdos salvos</string>
     <string name="salvar_conteudo">Salvar conteúdo</string>
     <string name="remover_salvo">Remover dos salvos</string>

@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.repository.EducacaoRepository;
+import com.example.ecociente.repository.AvaliacaoRepository;
 import com.example.ecociente.repository.RankingExternoRepository;
 import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.ui.BarraNavegacaoView;
@@ -35,6 +36,7 @@ import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Navegacao;
 import java.text.NumberFormat;
 import java.util.Locale;
+import com.example.ecociente.ui.IndicadorCarregamento;
 
 public class TelaListaActivity extends AppCompatActivity {
 
@@ -115,6 +117,11 @@ public class TelaListaActivity extends AppCompatActivity {
 
         if (tipo == TipoLista.SALVOS) {
             carregarSalvos(lista);
+            return;
+        }
+
+        if (tipo == TipoLista.AVALIACOES) {
+            carregarAvaliacoes(lista);
             return;
         }
 
@@ -206,6 +213,75 @@ public class TelaListaActivity extends AppCompatActivity {
                             guiaCompleto = itens;
 
                             mostrarSalvos();
+                        });
+    }
+
+    // Avaliações da cooperativa na ds-mobile-api; o id dela vem do perfil (/usuarios/me).
+    private void carregarAvaliacoes(LinearLayout lista) {
+
+        indicadorDeCarregamento(lista, R.string.avaliacoes_carregando);
+
+        if (PerfilApiRepository.cooperativaId(this) > 0) {
+            buscarAvaliacoes(lista);
+            return;
+        }
+
+        new PerfilApiRepository()
+                .atualizar(
+                        this,
+                        () -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            if (PerfilApiRepository.cooperativaId(this) > 0) {
+                                buscarAvaliacoes(lista);
+                                return;
+                            }
+
+                            lista.removeAllViews();
+                            textoDeEstado(lista, R.string.avaliacoes_erro);
+                        });
+    }
+
+    private void buscarAvaliacoes(LinearLayout lista) {
+
+        new AvaliacaoRepository()
+                .listar(
+                        this,
+                        PerfilApiRepository.cooperativaId(this),
+                        avaliacoes -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            lista.removeAllViews();
+
+                            if (avaliacoes == null) {
+                                textoDeEstado(lista, R.string.avaliacoes_erro);
+                                return;
+                            }
+
+                            if (avaliacoes.getItens().isEmpty()) {
+                                textoDeEstado(lista, R.string.avaliacoes_vazio);
+                                return;
+                            }
+
+                            java.util.List<ItemLista> itens = new java.util.ArrayList<>();
+
+                            itens.add(
+                                    new ItemLista(
+                                            getString(R.string.avaliacoes_media_titulo),
+                                            getResources()
+                                                    .getQuantityString(
+                                                            R.plurals.avaliacoes_total,
+                                                            (int) avaliacoes.getTotal(),
+                                                            (int) avaliacoes.getTotal()),
+                                            String.format(
+                                                    new Locale("pt", "BR"), "%.1f", avaliacoes.getMedia())));
+                            itens.addAll(avaliacoes.getItens());
+
+                            exibirItens(lista, itens);
                         });
     }
 
@@ -449,7 +525,7 @@ public class TelaListaActivity extends AppCompatActivity {
     // Saldo e histórico de pontos do usuário (ds-pontuacao-api).
     private void carregarPontos(LinearLayout lista) {
 
-        TextView estado = textoDeEstado(lista, R.string.pontos_carregando_historico);
+        indicadorDeCarregamento(lista, R.string.pontos_carregando_historico);
 
         PontuacaoRepository repositorio = new PontuacaoRepository();
 
@@ -465,12 +541,12 @@ public class TelaListaActivity extends AppCompatActivity {
                                         return;
                                     }
 
+                                    lista.removeAllViews();
+
                                     if (saldo == null && pagina == null) {
-                                        estado.setText(R.string.pontos_erro);
+                                        textoDeEstado(lista, R.string.pontos_erro);
                                         return;
                                     }
-
-                                    lista.removeAllViews();
 
                                     java.util.List<ItemLista> itens = new java.util.ArrayList<>();
 
@@ -525,32 +601,8 @@ public class TelaListaActivity extends AppCompatActivity {
                 R.string.pontos_saldo, NumberFormat.getIntegerInstance(new Locale("pt", "BR")).format(pontos));
     }
 
-    // Indicador giratório com a mensagem; sai junto com a lista ao `removeAllViews`.
     private View indicadorDeCarregamento(LinearLayout lista, int mensagem) {
-
-        LinearLayout bloco = new LinearLayout(this);
-        bloco.setOrientation(LinearLayout.VERTICAL);
-        bloco.setGravity(android.view.Gravity.CENTER);
-        bloco.setPadding(48, 96, 48, 0);
-
-        android.widget.ProgressBar indicador = new android.widget.ProgressBar(this);
-        indicador.setIndeterminateTintList(
-                android.content.res.ColorStateList.valueOf(getColor(R.color.verde_escuro_principal)));
-        bloco.addView(indicador, new LinearLayout.LayoutParams(
-                (int) (42 * getResources().getDisplayMetrics().density),
-                (int) (42 * getResources().getDisplayMetrics().density)));
-
-        TextView texto = new TextView(this);
-        texto.setText(mensagem);
-        texto.setTextColor(getColor(R.color.cinza_texto_auxiliar));
-        texto.setTextSize(14);
-        texto.setGravity(android.view.Gravity.CENTER);
-        texto.setPadding(0, 24, 0, 0);
-        bloco.addView(texto);
-
-        lista.addView(bloco);
-
-        return bloco;
+        return IndicadorCarregamento.mostrar(lista, mensagem);
     }
 
     private TextView textoDeEstado(LinearLayout lista, int mensagem) {

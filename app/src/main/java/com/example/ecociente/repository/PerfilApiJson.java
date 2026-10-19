@@ -20,6 +20,14 @@ final class PerfilApiJson {
         }
     }
 
+    // Id da cooperativa do usuário (perfil COOPERATIVA); 0 quando não há.
+    static int cooperativaId(@NonNull JSONObject perfil) {
+
+        JSONObject cooperativa = perfil.optJSONObject("cooperativa");
+
+        return cooperativa == null ? 0 : cooperativa.optInt("id", 0);
+    }
+
     // O síndico fica com o condomínio em que é responsável; o morador, com o primeiro vínculo
     // aprovado e ativo. Sem nenhum dos dois, null.
     @Nullable

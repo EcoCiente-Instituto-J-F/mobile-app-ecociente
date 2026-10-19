@@ -26,6 +26,7 @@ public class PerfilApiRepository {
     private static final String PREFERENCIAS = "perfil_api";
     private static final String CHAVE_CONDOMINIO_ID = "condominioId";
     private static final String CHAVE_CONDOMINIO_NOME = "condominioNome";
+    private static final String CHAVE_COOPERATIVA_ID = "cooperativaId";
     private static final String CHAVE_ATUALIZADO_EM = "atualizadoEm";
     private static final long VALIDADE_MS = 6 * 60 * 60_000L;
 
@@ -38,6 +39,11 @@ public class PerfilApiRepository {
         int salvo = preferencias(contexto).getInt(CHAVE_CONDOMINIO_ID, 0);
 
         return salvo > 0 ? salvo : CONDOMINIO_DE_DEMONSTRACAO;
+    }
+
+    // Id da cooperativa do usuário (perfil COOPERATIVA); 0 se a API ainda não informou.
+    public static int cooperativaId(@NonNull Context contexto) {
+        return preferencias(contexto).getInt(CHAVE_COOPERATIVA_ID, 0);
     }
 
     // Nome do condomínio vindo da API; null se ainda não veio.
@@ -81,6 +87,16 @@ public class PerfilApiRepository {
             return;
         }
 
+        executar(contextoApp, aoConcluir);
+    }
+
+    // Consulta a API mesmo que o que está guardado ainda valha (por exemplo, quando falta um dado).
+    public void atualizar(@NonNull Context contexto, @NonNull Runnable aoConcluir) {
+        executar(contexto.getApplicationContext(), aoConcluir);
+    }
+
+    private void executar(@NonNull Context contextoApp, @Nullable Runnable aoConcluir) {
+
         EXECUTOR.execute(
                 () -> {
                     buscarEGuardar(contextoApp);
@@ -100,13 +116,21 @@ public class PerfilApiRepository {
                 return;
             }
 
-            PerfilApiJson.Condominio condominio = PerfilApiJson.condominio(new JSONObject(corpo));
+            JSONObject perfil = new JSONObject(corpo);
+
+            PerfilApiJson.Condominio condominio = PerfilApiJson.condominio(perfil);
 
             SharedPreferences.Editor editor = preferencias(contexto).edit();
 
             if (condominio != null) {
                 editor.putInt(CHAVE_CONDOMINIO_ID, condominio.id);
                 editor.putString(CHAVE_CONDOMINIO_NOME, condominio.nome);
+            }
+
+            int cooperativaId = PerfilApiJson.cooperativaId(perfil);
+
+            if (cooperativaId > 0) {
+                editor.putInt(CHAVE_COOPERATIVA_ID, cooperativaId);
             }
 
             editor.putLong(CHAVE_ATUALIZADO_EM, System.currentTimeMillis()).apply();
