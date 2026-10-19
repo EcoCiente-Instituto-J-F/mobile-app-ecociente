@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.DetalheSolicitacao;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
@@ -443,8 +444,8 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
                                                     .get(SindicoColetaViewModel.class)
                                                     .cancelarSolicitacao(solicitacao.getId());
 
-                                            Toast.makeText(this, R.string.solicitacao_cancelada, Toast.LENGTH_SHORT)
-                                                    .show();
+                                            // A tela fecha em seguida, então o aviso precisa sobreviver a ela: continua Toast.
+                                            Toast.makeText(this, R.string.solicitacao_cancelada, Toast.LENGTH_SHORT).show();
 
                                             setResult(RESULT_OK);
 
@@ -481,15 +482,14 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
                         this,
                         resultado -> {
                             if (!resultado.isSucesso()) {
-                                Toast.makeText(this, resultado.getMensagemErro(), Toast.LENGTH_LONG).show();
+                                AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
                                 return;
                             }
 
+                            // A tela fecha em seguida, então o aviso precisa sobreviver a ela: continua Toast.
                             Toast.makeText(
                                             this,
-                                            resposta == StatusAgendamento.CONFIRMADO
-                                                    ? R.string.solicitacao_aceita
-                                                    : R.string.solicitacao_recusada,
+                                            resposta == StatusAgendamento.CONFIRMADO ? R.string.solicitacao_aceita : R.string.solicitacao_recusada,
                                             Toast.LENGTH_SHORT)
                                     .show();
 

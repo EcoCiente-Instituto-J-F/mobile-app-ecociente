@@ -155,7 +155,7 @@ public final class LembretesColeta {
                     .notify(
                             idColeta,
                             new NotificationCompat.Builder(contexto, CANAL)
-                                    .setSmallIcon(R.drawable.ic_reciclar_chat)
+                                    .setSmallIcon(R.drawable.ic_notificacao_coleta)
                                     .setContentTitle(contexto.getString(R.string.lembrete_de_coleta))
                                     .setContentText(intent.getStringExtra(EXTRA_TEXTO))
                                     .setAutoCancel(true)

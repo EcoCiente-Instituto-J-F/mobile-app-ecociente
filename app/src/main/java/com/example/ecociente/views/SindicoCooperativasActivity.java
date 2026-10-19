@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
@@ -104,7 +105,7 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
                 acao.setTextColor(getColor(R.color.etiqueta_pendente_texto));
                 acao.setBackgroundTintList(getColorStateList(R.color.etiqueta_pendente_fundo));
                 acao.setOnClickListener(view -> startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
-                        this, pendente.paraSolicitacao(getString(R.string.sindico_condominio_demo)),
+                        this, pendente.paraSolicitacao(PerfilApiRepository.condominioNomeOuVazio(this)),
                         pendente.getCooperativa())));
                 lista.addView(item, margemDoCartao());
                 continue;

@@ -25,6 +25,10 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.ecociente.R;
 import com.example.ecociente.model.QuizConteudo;
+import com.example.ecociente.model.ResultadoQuiz;
+import com.example.ecociente.repository.TentativaQuizRepository;
+import com.example.ecociente.ui.BotaoCarregando;
+import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -54,6 +58,9 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     private LinearLayout conteudoQuestao;
     private LinearLayout containerProgresso;
     private MaterialButton botaoProximo;
+    private int quizId;
+    private Integer tentativaId;
+    private boolean finalizando;
 
     private MaterialCardView[] cardsOpcoes;
     private TextView[] textosOpcoes;
@@ -81,7 +88,7 @@ public class QuizPerguntasActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz_perguntas);
         configurarInsetsDaTela();
 
-        perguntas = QuizConteudo.obterPerguntas();
+        perguntas = QuizConteudo.doIntent(getIntent());
 
         if (perguntas.isEmpty()) {
             finish();
@@ -90,6 +97,13 @@ public class QuizPerguntasActivity extends AppCompatActivity {
 
         respostas = new int[perguntas.size()];
         Arrays.fill(respostas, -1);
+
+        // A API abre a tentativa (e acorda) assim que a tela aparece; se falhar, ela é aberta ao finalizar.
+        quizId = QuizConteudo.quizIdDoIntent(getIntent());
+
+        if (quizId > 0) {
+            new TentativaQuizRepository().iniciar(this, quizId, id -> tentativaId = id);
+        }
 
         categoria = getIntent().getStringExtra(EXTRA_CATEGORIA);
         if (categoria == null || categoria.trim().isEmpty()) {
@@ -362,20 +376,61 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     }
 
     private void mostrarConfirmacaoFinalizacao() {
-        QuizDialogos.mostrarConfirmacao(
-                this,
-                getString(R.string.quiz_dialogo_finalizar_titulo),
-                getString(R.string.quiz_dialogo_finalizar_mensagem),
-                getString(R.string.quiz_finalizar),
-                getString(R.string.cancelar),
-                this::abrirResultado
-        );
+        new DialogoEco.Builder(this)
+                .titulo(R.string.quiz_dialogo_finalizar_titulo)
+                .mensagem(R.string.quiz_dialogo_finalizar_mensagem)
+                .botao(R.string.quiz_finalizar, DialogoEco.Estilo.PREENCHIDO, this::abrirResultado)
+                .botao(R.string.cancelar, DialogoEco.Estilo.CONTORNO, null)
+                .mostrar();
     }
 
     private void abrirResultado() {
+
+        if (finalizando) {
+            return;
+        }
+
+        // Quiz que não veio da API (ou sem id): só mostra as respostas, como antes.
+        if (quizId <= 0) {
+            abrirResultadoCom(perguntas, null);
+            return;
+        }
+
+        finalizando = true;
+
+        BotaoCarregando.definir(botaoProximo, true, R.string.quiz_finalizar, R.string.quiz_corrigindo);
+
+        new TentativaQuizRepository()
+                .concluir(
+                        this,
+                        quizId,
+                        tentativaId,
+                        perguntas,
+                        respostas,
+                        conclusao -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            if (conclusao == null) {
+                                abrirResultadoCom(perguntas, null);
+                            } else {
+                                abrirResultadoCom(conclusao.perguntasComGabarito, conclusao.resultado);
+                            }
+                        });
+    }
+
+    private void abrirResultadoCom(List<QuizConteudo.Pergunta> perguntasDoResultado, ResultadoQuiz resultado) {
         Intent rota = new Intent(this, QuizResultadoActivity.class);
         rota.putExtra(QuizResultadoActivity.EXTRA_CATEGORIA, categoria);
         rota.putExtra(QuizResultadoActivity.EXTRA_RESPOSTAS, respostas);
+        QuizConteudo.anexar(rota, perguntasDoResultado);
+        QuizConteudo.anexarQuizId(rota, quizId);
+
+        if (resultado != null) {
+            ResultadoQuiz.anexar(rota, resultado);
+        }
+
         startActivity(rota);
         overridePendingTransition(0, 0);
         finish();

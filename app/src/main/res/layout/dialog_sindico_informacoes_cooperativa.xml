@@ -34,7 +34,7 @@
                 android:layout_height="28dp"
                 android:layout_marginStart="8dp"
                 android:contentDescription="@null"
-                android:src="@drawable/sindico_building_campo" />
+                android:src="@drawable/ic_predio" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -85,7 +85,7 @@
                         android:layout_width="26dp"
                         android:layout_height="26dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_building_campo" />
+                        android:src="@drawable/ic_predio" />
                     <TextView
                         android:id="@+id/nomeInformacoesCooperativa"
                         android:layout_width="0dp"
@@ -122,7 +122,7 @@
                 android:layout_width="27dp"
                 android:layout_height="27dp"
                 android:contentDescription="@null"
-                android:src="@drawable/ic_localizacao_chat" />
+                android:src="@drawable/ic_endereco_perfil" />
             <TextView
                 android:id="@+id/enderecoInformacoesCooperativa"
                 android:layout_width="0dp"
@@ -166,7 +166,7 @@
                         android:layout_width="26dp"
                         android:layout_height="26dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_building_campo" />
+                        android:src="@drawable/ic_predio" />
                     <TextView
                         android:id="@+id/cidadeInformacoesCooperativa"
                         android:layout_width="0dp"
@@ -241,7 +241,7 @@
                 android:layout_width="27dp"
                 android:layout_height="27dp"
                 android:contentDescription="@null"
-                android:src="@drawable/ic_localizacao_chat" />
+                android:src="@drawable/ic_endereco_perfil" />
             <TextView
                 android:id="@+id/cepInformacoesCooperativa"
                 android:layout_width="0dp"

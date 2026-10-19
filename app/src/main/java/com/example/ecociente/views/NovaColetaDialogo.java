@@ -5,11 +5,11 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.model.TipoLista;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -141,16 +141,16 @@ public final class NovaColetaDialogo {
                 || campoData.getText().length() == 0
                 || inicio.isEmpty()
                 || fim.isEmpty()) {
-            Toast.makeText(tela, R.string.preencha_todos_os_campos, Toast.LENGTH_SHORT).show();
+            AvisoFlutuante.mostrar(tela, R.string.preencha_todos_os_campos);
             return;
         }
 
         if (fim.compareTo(inicio) <= 0) {
-            Toast.makeText(tela, R.string.fim_antes_do_inicio, Toast.LENGTH_SHORT).show();
+            AvisoFlutuante.mostrar(tela, R.string.fim_antes_do_inicio);
             return;
         }
 
-        Toast.makeText(tela, R.string.coleta_salva_exemplo, Toast.LENGTH_SHORT).show();
+        AvisoFlutuante.mostrar(tela, R.string.coleta_salva_exemplo);
 
         dialogo.dismiss();
 

@@ -113,6 +113,8 @@ dependencies {
     implementation(libs.glide)
 
     testImplementation(libs.junit)
+    // O org.json do android.jar é só um esqueleto: nos testes de JVM entra a implementação real.
+    testImplementation("org.json:json:20240303")
 
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

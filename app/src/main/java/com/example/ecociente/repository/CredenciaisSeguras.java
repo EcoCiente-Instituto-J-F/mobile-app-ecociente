@@ -8,7 +8,9 @@ import android.util.Base64;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -44,7 +46,7 @@ final class CredenciaisSeguras {
                     .putString(CHAVE_DADOS, codificar(cifra.getIV()) + SEPARADOR_PARTES + codificar(cifrado))
                     .apply();
 
-        } catch (Exception erro) {
+        } catch (GeneralSecurityException | IOException erro) {
             Log.w(TAG, "Não foi possível guardar as credenciais", erro);
         }
     }
@@ -75,7 +77,7 @@ final class CredenciaisSeguras {
 
             return texto.split(SEPARADOR_CAMPOS, 2);
 
-        } catch (Exception erro) {
+        } catch (GeneralSecurityException | IOException | IllegalArgumentException | ArrayIndexOutOfBoundsException erro) {
             Log.w(TAG, "Credenciais guardadas inválidas; descartando", erro);
 
             limpar(contexto);
@@ -99,7 +101,7 @@ final class CredenciaisSeguras {
     }
 
     @NonNull
-    private static SecretKey chave() throws Exception {
+    private static SecretKey chave() throws GeneralSecurityException, IOException {
 
         KeyStore repositorio = KeyStore.getInstance(PROVEDOR);
 

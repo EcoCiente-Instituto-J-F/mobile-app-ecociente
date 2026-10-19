@@ -8,12 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.Aviso;
 import com.example.ecociente.model.Notificacao;
 import com.example.ecociente.model.SindicoAviso;
@@ -27,6 +27,7 @@ import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.SindicoViewModel;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,7 +136,7 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
                         "rascunhoSindico",
                         this,
                         (chave, resultado) ->
-                                Toast.makeText(getApplicationContext(), R.string.sindico_rascunho_salvo, Toast.LENGTH_LONG).show());
+                                AvisoFlutuante.mostrar(this, R.string.sindico_rascunho_salvo));
     }
 
     private void abrirFormularioDoSindico() {
@@ -163,7 +164,8 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
         grupos.put(ontem, new ArrayList<>());
         grupos.put(anteriores, new ArrayList<>());
 
-        for (Notificacao notificacao : Notificacao.lista()) {
+        // As notificações de exemplo não são do síndico: ele só vê os avisos que existem de verdade.
+        for (Notificacao notificacao : destino == Destino.SINDICO ? Collections.<Notificacao>emptyList() : Notificacao.lista()) {
             List<View> grupo = grupos.get(notificacao.grupo);
 
             if (grupo != null) {
@@ -176,6 +178,7 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
                 View cartao = CartoesCentral.avisoDoSindico(inflador, lista, aviso);
 
                 cartao.setOnClickListener(view -> abrirAvisoDoSindico(aviso));
+                Motion.pressFeedback(cartao);
 
                 // O síndico guarda o momento como texto ("Agora", "Há 2 dias").
                 grupos.get("Agora".equals(aviso.getMomento()) ? hoje : anteriores).add(cartao);
@@ -186,6 +189,7 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
 
                 cartao.setOnClickListener(
                         view -> startActivity(AvisoDetalheActivity.criarIntent(this, aviso.id)));
+                Motion.pressFeedback(cartao);
 
                 grupos.get(grupoDoAviso(aviso, hoje, ontem, anteriores)).add(cartao);
             }

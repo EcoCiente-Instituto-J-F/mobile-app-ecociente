@@ -306,7 +306,7 @@ public class LoginFragment extends Fragment {
                                 finalizarLogin();
                             });
 
-        } catch (Exception erro) {
+        } catch (RuntimeException erro) {
             Log.e(TAG, "Erro ao interpretar token Google", erro);
 
             mostrarMensagem("Não foi possível validar a conta Google");

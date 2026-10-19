@@ -89,6 +89,17 @@
                     android:background="@drawable/fundo_ponto_nao_lida"
                     android:visibility="invisible" />
 
+                <ImageView
+                    android:id="@+id/botaoSalvarLinha"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginTop="2dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/salvar_conteudo"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_marcador"
+                    android:visibility="gone" />
+
             </LinearLayout>
 
         </LinearLayout>

@@ -19,8 +19,10 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class FotoPerfilRepository {
@@ -76,7 +78,8 @@ public class FotoPerfilRepository {
     // Glide já aplica a rotação do EXIF e reduz sem estourar memória; o recorte
     // quadrado combina com o avatar circular e deixa o upload bem menor.
     @NonNull
-    private byte[] prepararImagem(@NonNull Context contexto, @NonNull Uri imagem) throws Exception {
+    private byte[] prepararImagem(@NonNull Context contexto, @NonNull Uri imagem)
+            throws IOException, ExecutionException, InterruptedException {
 
         Bitmap bitmap =
                 Glide.with(contexto)
@@ -97,7 +100,7 @@ public class FotoPerfilRepository {
     }
 
     @NonNull
-    private String enviarParaCloudinary(@NonNull byte[] jpeg) throws Exception {
+    private String enviarParaCloudinary(@NonNull byte[] jpeg) throws IOException, JSONException {
 
         String limite = "EcoCiente" + System.currentTimeMillis();
 

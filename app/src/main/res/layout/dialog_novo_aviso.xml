@@ -21,7 +21,7 @@
                 android:layout_width="26dp"
                 android:layout_height="26dp"
                 android:importantForAccessibility="no"
-                android:src="@drawable/icon_notificacoes"
+                android:src="@drawable/ic_notificacoes"
                 app:tint="@color/rosa_ecociente" />
 
             <TextView

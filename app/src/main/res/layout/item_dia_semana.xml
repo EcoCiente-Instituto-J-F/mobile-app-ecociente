@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:importantForAccessibility="no"
-            android:src="@drawable/ic_reciclar_chat" />
+            android:src="@drawable/ic_reciclar" />
 
         <View
             android:id="@+id/pontoSemColetaDiaSemana"

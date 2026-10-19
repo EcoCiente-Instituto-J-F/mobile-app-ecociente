@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -19,6 +18,7 @@ import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.PerfilAcesso;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.TipoLista;
@@ -293,7 +293,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
             camera.launch(uriFotoCamera);
 
         } catch (ActivityNotFoundException erro) {
-            Toast.makeText(this, R.string.perfil_foto_erro_camera, Toast.LENGTH_SHORT).show();
+            AvisoFlutuante.mostrar(this, R.string.perfil_foto_erro_camera);
         }
     }
 
@@ -315,15 +315,13 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
                             indicadorFoto.setVisibility(View.GONE);
 
                             if (!resultado.isSucesso()) {
-                                Toast.makeText(this, resultado.getMensagemErro(), Toast.LENGTH_LONG)
-                                        .show();
+                                AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
                                 return;
                             }
 
                             mostrarFoto(resultado.getUrl());
 
-                            Toast.makeText(this, R.string.perfil_foto_sucesso, Toast.LENGTH_SHORT)
-                                    .show();
+                            AvisoFlutuante.mostrar(this, R.string.perfil_foto_sucesso);
                         });
     }
 
@@ -379,8 +377,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
                             String senha = campoSenha.getText().toString();
 
                             if (senha.isEmpty()) {
-                                Toast.makeText(this, R.string.perfil_excluir_senha_vazia, Toast.LENGTH_SHORT)
-                                        .show();
+                                AvisoFlutuante.mostrar(this, R.string.perfil_excluir_senha_vazia);
                                 return;
                             }
 
@@ -401,8 +398,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
                             }
 
                             if (!resultado.isSucesso()) {
-                                Toast.makeText(this, resultado.getMensagemErro(), Toast.LENGTH_LONG)
-                                        .show();
+                                AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
                                 return;
                             }
 

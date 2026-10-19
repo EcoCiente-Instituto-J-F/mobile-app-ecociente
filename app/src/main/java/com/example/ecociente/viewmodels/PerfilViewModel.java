@@ -47,7 +47,7 @@ public class PerfilViewModel extends ViewModelComCarregamento {
             @NonNull String campo,
             @NonNull String valor,
             @Nullable PerfilUsuario perfil) {
-        atualizacaoExterna.sincronizarCampo(contexto, campo, valor, perfil);
+        atualizacaoExterna.sincronizarCampo(contexto.getApplicationContext(), campo, valor, perfil);
     }
 
     public void buscarLocalidadePorCep(
@@ -94,9 +94,12 @@ public class PerfilViewModel extends ViewModelComCarregamento {
             boolean sincronizarComApi) {
         definirCarregando(true);
 
+        // O envio sobrevive à tela: não prende a Activity nas callbacks.
+        Context contextoApp = contexto.getApplicationContext();
+
         MediatorLiveData<ResultadoUploadFoto> resultado = new MediatorLiveData<>();
 
-        LiveData<ResultadoUploadFoto> envio = fotoRepositorio.enviar(contexto, imagem);
+        LiveData<ResultadoUploadFoto> envio = fotoRepositorio.enviar(contextoApp, imagem);
 
         resultado.addSource(
                 envio,
@@ -120,7 +123,7 @@ public class PerfilViewModel extends ViewModelComCarregamento {
                                 // A URL do Cloudinary também vai para a API de cadastro (urlAvatar).
                                 if (sincronizarComApi && respostaGravacao.isSucesso()) {
                                     atualizacaoExterna.sincronizarCampo(
-                                            contexto,
+                                            contextoApp,
                                             PerfilRepository.CAMPO_FOTO_URL,
                                             respostaEnvio.getUrl(),
                                             null);

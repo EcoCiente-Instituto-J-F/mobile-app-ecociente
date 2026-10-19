@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // ds-calendario-api: lista os agendamentos de acordo com o perfil do JWT (cooperativa ou síndico).
@@ -94,7 +95,7 @@ public class CalendarioExternoRepository {
 
     @NonNull
     private ResultadoApi alterarComRenovacao(Context contexto, int id, StatusAgendamento status)
-            throws Exception {
+            throws IOException, JSONException {
 
         String token = autenticacao.tokenParaUso(contexto);
 
@@ -121,7 +122,7 @@ public class CalendarioExternoRepository {
         return ResultadoApi.erro(mensagemDoCodigo(codigo));
     }
 
-    private int enviarStatus(String token, int id, StatusAgendamento status) throws Exception {
+    private int enviarStatus(String token, int id, StatusAgendamento status) throws IOException, JSONException {
 
         HttpURLConnection conexao =
                 (HttpURLConnection) new URL(URL_AGENDAMENTOS + "/" + id + "/status").openConnection();
@@ -197,7 +198,7 @@ public class CalendarioExternoRepository {
 
     public void proxima(@NonNull Context contexto, @NonNull Retorno retorno) {
 
-        if (DadosDemonstracao.ATIVO) {
+        if (DadosDemonstracao.ativoPara(AutenticacaoExternaRepository.perfilSalvo(contexto))) {
             java.util.List<Solicitacao> proxima = new java.util.ArrayList<>();
             long agora = System.currentTimeMillis();
             long melhor = Long.MAX_VALUE;
@@ -241,7 +242,7 @@ public class CalendarioExternoRepository {
             @NonNull Calendar fim,
             @NonNull Retorno retorno) {
 
-        if (DadosDemonstracao.ATIVO) {
+        if (DadosDemonstracao.ativoPara(AutenticacaoExternaRepository.perfilSalvo(contexto))) {
             java.util.List<Solicitacao> noPeriodo = new java.util.ArrayList<>();
 
             for (Solicitacao s : Solicitacao.exemplos()) {
@@ -297,7 +298,7 @@ public class CalendarioExternoRepository {
 
     @NonNull
     private ResultadoSolicitacoes buscarComRenovacao(Context contexto, String endereco)
-            throws Exception {
+            throws IOException, JSONException {
 
         String token = autenticacao.tokenParaUso(contexto);
 
@@ -323,7 +324,7 @@ public class CalendarioExternoRepository {
     }
 
     @NonNull
-    private ResultadoSolicitacoes buscar(String token, String endereco) throws Exception {
+    private ResultadoSolicitacoes buscar(String token, String endereco) throws IOException, JSONException {
 
         HttpURLConnection conexao = (HttpURLConnection) new URL(endereco).openConnection();
 

@@ -94,7 +94,6 @@
             android:textSize="34sp" />
 
         <TextView
-            android:id="@+id/textoDescricaoInicioQuiz"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -120,7 +119,6 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/textoPontosInicioQuiz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -158,7 +156,6 @@
 
     <!-- Mantém um respiro entre as informações e o botão sem criar rolagem. -->
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barreiraInformacoesInicioQuiz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"

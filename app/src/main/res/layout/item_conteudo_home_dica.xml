@@ -32,7 +32,7 @@
                 android:contentDescription="@string/imagem_dica"
                 android:padding="6dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/png_greenplastic" />
+                android:src="@drawable/img_greenplastic" />
 
             <TextView
                 android:layout_width="wrap_content"

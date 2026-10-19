@@ -10,7 +10,6 @@
     android:background="@color/branco">
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/rolagemPerfil"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -199,7 +198,8 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:contentDescription="@null"
-                            android:src="@drawable/ic_perfil_usuario" />
+                            android:src="@drawable/ic_usuario"
+                            app:tint="@color/verde_escuro_principal" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -286,7 +286,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:contentDescription="@null"
-                            android:src="@drawable/icon_notificacoes" />
+                            android:src="@drawable/ic_notificacoes" />
 
                         <TextView
                             android:layout_width="0dp"

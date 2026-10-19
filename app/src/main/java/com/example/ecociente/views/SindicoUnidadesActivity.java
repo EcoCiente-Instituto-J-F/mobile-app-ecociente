@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.Toast;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +23,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.model.SindicoDadosCondominio;
 import com.example.ecociente.model.SindicoItemUnidade;
@@ -176,11 +176,9 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                     if (resultado.isSucesso()) {
                         viewModel.salvarFotoUri(resultado.getUrl());
                         mostrarFoto();
-                        Toast.makeText(getApplicationContext(),
-                                R.string.sindico_foto_condominio_salva, Toast.LENGTH_SHORT).show();
+                        AvisoFlutuante.mostrar(this, R.string.sindico_foto_condominio_salva);
                     } else {
-                        Toast.makeText(getApplicationContext(),
-                                resultado.getMensagemErro(), Toast.LENGTH_LONG).show();
+                        AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
                     }
                 });
     }
@@ -207,7 +205,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         ImageView foto = findViewById(R.id.fotoSindicoUnidades);
         String uri = viewModel.getFotoUri();
         if (uri == null) {
-            foto.setImageResource(R.drawable.sindico_nav_unidades);
+            foto.setImageResource(R.drawable.ic_predio);
             foto.setImageTintList(ColorStateList.valueOf(
                     getColor(R.color.verde_escuro_principal)));
             foto.setPadding(dp(17), dp(17), dp(17), dp(17));
@@ -247,7 +245,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         viewModel.salvarDados(new SindicoDadosCondominio(residencial,
                 nome.getText().toString().trim(), endereco.getText().toString().trim(),
                 cidade.getText().toString().trim(), uf, codigoPostal));
-        Toast.makeText(getApplicationContext(), R.string.sindico_dados_salvos_somente_nesta_demonst, Toast.LENGTH_LONG).show();
+        AvisoFlutuante.mostrar(this, R.string.sindico_demo_dados_salvos);
     }
 
     private boolean validar(EditText campo, String erro) {
@@ -283,8 +281,8 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
             SindicoItemUnidade item = itens.get(i);
             View linha = inflater.inflate(R.layout.item_sindico_unidades, lista, false);
             ImageView icone = linha.findViewById(R.id.iconeItemUnidades);
-            icone.setImageResource(bloco ? R.drawable.sindico_building
-                    : R.drawable.ic_localizacao_chat);
+            icone.setImageResource(bloco ? R.drawable.ic_predio
+                    : R.drawable.ic_endereco_perfil);
             icone.setImageTintList(ColorStateList.valueOf(
                     getColor(R.color.verde_escuro_principal)));
             ((TextView) linha.findViewById(R.id.nomeItemUnidades)).setText(item.getNome());
@@ -371,7 +369,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                         viewModel.salvarArea(id, valorNome, valorDetalhe);
                     }
                     mostrarListas();
-                    Toast.makeText(getApplicationContext(), R.string.sindico_alteracao_salva_somente_nesta_demo, Toast.LENGTH_LONG).show();
+                    AvisoFlutuante.mostrar(this, R.string.sindico_demo_alteracao_salva);
                     return true;
                 })
                 .botao(R.string.perfil_cancelar, DialogoEco.Estilo.CONTORNO, null)
@@ -387,7 +385,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                     if (bloco) viewModel.excluirBloco(item.getId());
                     else viewModel.excluirArea(item.getId());
                     mostrarListas();
-                    Toast.makeText(getApplicationContext(), R.string.sindico_item_removido_desta_demonstracao, Toast.LENGTH_LONG).show();
+                    AvisoFlutuante.mostrar(this, R.string.sindico_demo_item_removido);
                 })
                 .mostrar();
     }

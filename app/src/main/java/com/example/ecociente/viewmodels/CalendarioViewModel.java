@@ -6,8 +6,8 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.model.ResultadoSolicitacoes;
+import com.example.ecociente.model.SemanaDeColetas;
 import com.example.ecociente.repository.CalendarioExternoRepository;
-import com.example.ecociente.ui.SemanaColetasView;
 import java.util.Calendar;
 
 public class CalendarioViewModel extends AndroidViewModel {
@@ -62,8 +62,8 @@ public class CalendarioViewModel extends AndroidViewModel {
 
         repositorio.doPeriodo(
                 getApplication(),
-                SemanaColetasView.segundaDaSemana(),
-                SemanaColetasView.fimDaSemana(),
+                SemanaDeColetas.segunda(),
+                SemanaDeColetas.fim(),
                 coletasDaSemana::setValue);
     }
 

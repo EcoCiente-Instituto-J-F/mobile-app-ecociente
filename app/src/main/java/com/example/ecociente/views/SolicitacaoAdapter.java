@@ -15,6 +15,7 @@ import com.example.ecociente.R;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
 import com.example.ecociente.ui.FormatoDataApi;
+import com.example.ecociente.ui.Motion;
 
 public class SolicitacaoAdapter
         extends ListAdapter<Solicitacao, SolicitacaoAdapter.SolicitacaoHolder> {
@@ -79,6 +80,7 @@ public class SolicitacaoAdapter
         holder.recorrencia.setVisibility(solicitacao.possuiRecorrencia() ? View.VISIBLE : View.GONE);
 
         holder.itemView.setOnClickListener(view -> ouvinte.aoClicar(solicitacao));
+        Motion.pressFeedback(holder.itemView);
     }
 
     @NonNull

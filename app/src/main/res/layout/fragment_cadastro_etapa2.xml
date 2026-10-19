@@ -98,7 +98,7 @@
                     android:layout_height="16dp"
                     android:contentDescription="@string/nome_cooperativa"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_cooperativa" />
+                    android:src="@drawable/ic_perfil_cooperativa" />
 
                 <EditText
                     android:importantForAutofill="no"
@@ -439,7 +439,6 @@
             app:layout_constraintTop_toBottomOf="@id/containerEstado">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/containerTelefone"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
@@ -473,7 +472,6 @@
                 android:layout_height="match_parent" />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/containerCpf"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
@@ -505,7 +503,6 @@
         </LinearLayout>
 
         <FrameLayout
-            android:id="@+id/containerBotaoCadastrar"
             android:layout_width="0dp"
             android:layout_height="46dp"
             android:layout_marginStart="12dp"

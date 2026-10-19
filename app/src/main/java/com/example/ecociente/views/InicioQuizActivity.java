@@ -54,7 +54,7 @@ public class InicioQuizActivity extends AppCompatActivity {
             return;
         }
 
-        if (QuizConteudo.obterPerguntas().isEmpty()) {
+        if (QuizConteudo.doIntent(getIntent()).isEmpty()) {
             finish();
             return;
         }
@@ -83,7 +83,7 @@ public class InicioQuizActivity extends AppCompatActivity {
             categoria = getString(R.string.inicio_quiz_titulo_padrao);
         }
 
-        int quantidadePerguntas = QuizConteudo.obterPerguntas().size();
+        int quantidadePerguntas = QuizConteudo.doIntent(getIntent()).size();
 
         textoTitulo.setText(categoria);
         textoPerguntas.setText(
@@ -105,6 +105,8 @@ public class InicioQuizActivity extends AppCompatActivity {
 
             Intent rota = new Intent(this, QuizPerguntasActivity.class);
             rota.putExtra(QuizPerguntasActivity.EXTRA_CATEGORIA, categoria);
+            QuizConteudo.anexar(rota, QuizConteudo.doIntent(getIntent()));
+            QuizConteudo.anexarContexto(rota, getIntent());
             startActivity(rota);
             overridePendingTransition(0, 0);
         });

@@ -11,7 +11,6 @@
     android:clipToPadding="false">
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/rolagemQuizzes"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/espaco_barra_navegacao"
@@ -58,23 +57,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/linhaCentroCabecalhoQuiz" />
 
-                <TextView
-                    android:id="@+id/textoSubtituloQuizTela"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="1dp"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/nunito_regular"
-                    android:includeFontPadding="false"
-                    android:maxLines="2"
-                    android:text="@string/subtitulo_quizzes"
-                    android:textColor="@color/cinza_texto_home"
-                    android:textSize="12.5sp"
-                    app:layout_constraintEnd_toStartOf="@id/acoesCabecalhoQuiz"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textoTituloQuizTela" />
-
                 <LinearLayout
                     android:id="@+id/acoesCabecalhoQuiz"
                     android:layout_width="wrap_content"
@@ -95,7 +77,7 @@
                         android:focusable="true"
                         android:padding="2dp"
                         android:scaleType="centerInside"
-                        android:src="@drawable/icon_notificacoes" />
+                        android:src="@drawable/ic_notificacoes" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="40dp"
@@ -106,7 +88,6 @@
                         app:cardElevation="0dp">
 
                         <ImageView
-                            android:id="@+id/imagemPerfilQuiz"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:contentDescription="@string/foto_perfil"
@@ -146,7 +127,7 @@
                         android:layout_height="24dp"
                         android:contentDescription="@string/buscar"
                         android:scaleType="centerInside"
-                        android:src="@drawable/buscar_icon" />
+                        android:src="@drawable/ic_busca" app:tint="@color/verde_escuro_principal" />
 
                     <EditText
                         android:importantForAutofill="no"
@@ -191,7 +172,6 @@
                     android:textSize="15sp" />
 
                 <ImageView
-                    android:id="@+id/botaoFiltrosQuiz"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="?attr/selectableItemBackgroundBorderless"

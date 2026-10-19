@@ -27,6 +27,8 @@ import androidx.core.widget.ImageViewCompat;
 
 import com.example.ecociente.R;
 import com.example.ecociente.model.QuizConteudo;
+import com.example.ecociente.model.ResultadoQuiz;
+import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -76,7 +78,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
         rosa = ContextCompat.getColor(this, R.color.rosa_ecociente);
         branco = ContextCompat.getColor(this, R.color.branco);
 
-        perguntas = QuizConteudo.obterPerguntas();
+        perguntas = QuizConteudo.doIntent(getIntent());
 
         if (perguntas.isEmpty()) {
             finish();
@@ -141,14 +143,14 @@ public class QuizResultadoActivity extends AppCompatActivity {
         listaResultados.removeAllViews();
 
         // A API ainda não manda o gabarito: sem ele só dá para confirmar o envio das respostas.
-        if (!QuizConteudo.temGabarito()) {
+        if (!QuizConteudo.temGabarito(perguntas)) {
             textoPontuacao.setText(R.string.quiz_resultado_sem_nota);
             textoMensagem.setText(R.string.quiz_resultado_sem_gabarito);
             return;
         }
 
         textoPontuacao.setText(String.format(Locale.getDefault(), "%02d/%02d", 0, perguntas.size()));
-        textoMensagem.setText(mensagemParaPontuacao());
+        textoMensagem.setText(mensagemComPontos());
 
         for (int i = 0; i < perguntas.size(); i++) {
             QuizConteudo.Pergunta pergunta = perguntas.get(i);
@@ -267,6 +269,8 @@ public class QuizResultadoActivity extends AppCompatActivity {
             rota.putExtra(QuizRevisaoActivity.EXTRA_CATEGORIA, categoria);
             rota.putExtra(QuizRevisaoActivity.EXTRA_RESPOSTAS, respostas);
             rota.putExtra(QuizRevisaoActivity.EXTRA_INDICE_INICIAL, indice);
+            QuizConteudo.anexar(rota, perguntas);
+            QuizConteudo.anexarContexto(rota, getIntent());
             startActivity(rota);
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             return;
@@ -275,13 +279,31 @@ public class QuizResultadoActivity extends AppCompatActivity {
         String[] opcoes = pergunta.getOpcoes();
         String respostaCorreta = opcoes[pergunta.getIndiceCorreto()];
 
-        QuizDialogos.mostrarExplicacaoQuestao(
-                this,
-                getString(R.string.quiz_questao_numero, indice + 1),
-                getString(R.string.quiz_resposta_correta, respostaCorreta),
-                pergunta.getExplicacao(),
-                getString(R.string.quiz_dialogo_fechar)
-        );
+        View conteudo = getLayoutInflater().inflate(R.layout.dialog_eco_explicacao, null);
+
+        ((TextView) conteudo.findViewById(R.id.respostaCorretaDialogo))
+                .setText(getString(R.string.quiz_resposta_correta, respostaCorreta));
+        ((TextView) conteudo.findViewById(R.id.textoExplicacaoDialogo)).setText(pergunta.getExplicacao());
+
+        new DialogoEco.Builder(this)
+                .titulo(getString(R.string.quiz_questao_numero, indice + 1))
+                .conteudo(conteudo)
+                .botao(R.string.quiz_dialogo_fechar, DialogoEco.Estilo.PREENCHIDO, null)
+                .mostrar();
+    }
+
+    // A mensagem de sempre, mais os pontos que a ds-pontuacao registrou para esta tentativa.
+    @NonNull
+    private String mensagemComPontos() {
+        String mensagem = mensagemParaPontuacao();
+
+        ResultadoQuiz resultado = ResultadoQuiz.doIntent(getIntent());
+
+        if (resultado == null || resultado.getPontosConcedidos() <= 0) {
+            return mensagem;
+        }
+
+        return mensagem + "\n" + getString(R.string.quiz_resultado_pontos, resultado.getPontosConcedidos());
     }
 
     @NonNull
@@ -323,6 +345,8 @@ public class QuizResultadoActivity extends AppCompatActivity {
     private void repetirQuiz() {
         Intent rota = new Intent(this, QuizPerguntasActivity.class);
         rota.putExtra(QuizPerguntasActivity.EXTRA_CATEGORIA, categoria);
+        QuizConteudo.anexar(rota, perguntas);
+        QuizConteudo.anexarContexto(rota, getIntent());
         startActivity(rota);
         overridePendingTransition(0, 0);
         finish();
@@ -336,7 +360,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
         motion.fadeUp(findViewById(R.id.botaoFinalizarResultadoQuiz), 190L);
         motion.fadeUp(findViewById(R.id.botaoRepetirResultadoQuiz), 235L);
 
-        if (!QuizConteudo.temGabarito()) {
+        if (!QuizConteudo.temGabarito(perguntas)) {
             return;
         }
 

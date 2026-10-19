@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -31,6 +32,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import com.example.ecociente.ui.IndicadorCarregamento;
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -90,7 +92,13 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void carregarQuizzes() {
-        textoQuantidadeQuizzes.setText(R.string.quizzes_carregando);
+        textoQuantidadeQuizzes.setText("");
+
+        LinearLayout listaCarregando = findViewById(R.id.listaQuizzes);
+
+        listaCarregando.removeAllViews();
+
+        IndicadorCarregamento.mostrar(listaCarregando, R.string.quizzes_carregando);
 
         repositorio.listarQuizzes(
                 this,
@@ -101,6 +109,7 @@ public class QuizActivity extends AppCompatActivity {
 
                     if (!sucesso) {
                         textoQuantidadeQuizzes.setText(R.string.quizzes_erro);
+                        mostrarEstadoDosQuizzes(true);
                         return;
                     }
 
@@ -109,6 +118,7 @@ public class QuizActivity extends AppCompatActivity {
                     for (QuizResumo quiz : itens) {
                         quizzes.add(
                                 new QuizItem(
+                                        quiz.getId(),
                                         quiz.getTitulo(),
                                         quiz.getCategoria(),
                                         getString(R.string.quiz_n_perguntas, quiz.getPerguntas().size()),
@@ -121,7 +131,39 @@ public class QuizActivity extends AppCompatActivity {
 
                     preencherListaQuizzes();
                     atualizarQuantidadeQuizzes(quizzes.size());
+
+                    if (quizzes.isEmpty()) {
+                        mostrarEstadoDosQuizzes(false);
+                    }
                 });
+    }
+
+    // Lista vazia (sem quizzes) e erro de carregamento são coisas diferentes: só o erro oferece tentar de novo.
+    private void mostrarEstadoDosQuizzes(boolean erro) {
+        LinearLayout lista = findViewById(R.id.listaQuizzes);
+
+        lista.removeAllViews();
+
+        TextView mensagem = new TextView(this);
+
+        mensagem.setText(erro ? R.string.quizzes_erro : R.string.quizzes_vazio);
+        mensagem.setTextColor(getColor(R.color.cinza_texto_auxiliar));
+        mensagem.setTextSize(14);
+        mensagem.setGravity(Gravity.CENTER);
+        mensagem.setPadding(48, 64, 48, 24);
+
+        lista.addView(mensagem);
+
+        if (!erro) {
+            return;
+        }
+
+        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
+
+        tentar.setText(R.string.tentar_novamente);
+        tentar.setOnClickListener(view -> carregarQuizzes());
+
+        lista.addView(tentar);
     }
 
     private void configurarCabecalho() {
@@ -185,11 +227,11 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void abrirInicioQuiz(@NonNull QuizItem quiz) {
-        QuizConteudo.definir(quiz.listaPerguntas);
-
         Intent rota = new Intent(this, InicioQuizActivity.class);
 
         rota.putExtra(InicioQuizActivity.EXTRA_CATEGORIA, quiz.categoria);
+        QuizConteudo.anexar(rota, quiz.listaPerguntas);
+        QuizConteudo.anexarQuizId(rota, quiz.id);
         rota.putExtra(InicioQuizActivity.EXTRA_PERGUNTAS, quiz.perguntas);
 
         startActivity(rota);
@@ -293,6 +335,7 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private static final class QuizItem {
+        private final int id;
         private final String titulo;
         private final String categoria;
         private final String perguntas;
@@ -301,12 +344,14 @@ public class QuizActivity extends AppCompatActivity {
         private final List<QuizConteudo.Pergunta> listaPerguntas;
 
         private QuizItem(
+                int id,
                 String titulo,
                 String categoria,
                 String perguntas,
                 String duracao,
                 String resultado,
                 List<QuizConteudo.Pergunta> listaPerguntas) {
+            this.id = id;
             this.listaPerguntas = listaPerguntas;
             this.titulo = titulo;
             this.categoria = categoria;

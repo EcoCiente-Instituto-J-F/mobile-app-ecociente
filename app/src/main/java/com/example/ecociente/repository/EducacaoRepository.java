@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.example.ecociente.model.FiltroGuia;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.QuizResumo;
@@ -16,10 +17,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // Cursos, aulas e quizzes da ds-mobile-api (só leitura, exige o JWT da ds-autenticacao-api).
@@ -37,6 +40,11 @@ public class EducacaoRepository {
 
     private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
 
+    private static final long VALIDADE_CACHE_MS = 5 * 60_000L;
+    private static final Object CACHE_LOCK = new Object();
+    private static JSONArray cacheCursos;
+    private static long cacheEm;
+
     public interface Retorno<T> {
         void aoConcluir(boolean sucesso, @NonNull List<T> itens);
     }
@@ -51,15 +59,12 @@ public class EducacaoRepository {
                     boolean sucesso = false;
 
                     try {
-                        JSONArray cursos = obterArray(contextoApp, "/api/cursos");
+                        JSONArray cursos = carregarCursosComAulas(contextoApp);
 
                         for (int i = 0; i < cursos.length(); i++) {
                             JSONObject curso = cursos.getJSONObject(i);
 
-                            JSONArray aulas =
-                                    obterArray(
-                                            contextoApp,
-                                            "/api/cursos/" + curso.getInt("id") + "/aulas");
+                            JSONArray aulas = curso.getJSONArray("aulas");
 
                             for (int j = 0; j < aulas.length(); j++) {
                                 JSONObject aula = aulas.getJSONObject(j);
@@ -72,7 +77,7 @@ public class EducacaoRepository {
                                 }
 
                                 quizzes.add(
-                                        montarQuiz(
+                                        QuizJson.montar(
                                                 curso.optString("titulo"),
                                                 aula.optString("titulo"),
                                                 new JSONObject(corpo)));
@@ -101,15 +106,12 @@ public class EducacaoRepository {
                     boolean sucesso = false;
 
                     try {
-                        JSONArray cursos = obterArray(contextoApp, "/api/cursos");
+                        JSONArray cursos = carregarCursosComAulas(contextoApp);
 
                         for (int i = 0; i < cursos.length(); i++) {
                             JSONObject curso = cursos.getJSONObject(i);
 
-                            JSONArray aulas =
-                                    obterArray(
-                                            contextoApp,
-                                            "/api/cursos/" + curso.getInt("id") + "/aulas");
+                            JSONArray aulas = curso.getJSONArray("aulas");
 
                             for (int j = 0; j < aulas.length(); j++) {
                                 JSONObject aula = aulas.getJSONObject(j);
@@ -118,12 +120,13 @@ public class EducacaoRepository {
 
                                 itens.add(
                                         new ItemLista(
+                                                "aula:" + aula.optInt("id"),
                                                 aula.optString("titulo"),
                                                 tituloCurso,
                                                 "",
                                                 new String[][] {
                                                     {"Curso", tituloCurso},
-                                                    {"Conteúdo", aula.optString("conteudo")}
+                                                    {FiltroGuia.ROTULO_CONTEUDO, aula.optString("conteudo")}
                                                 }));
                             }
                         }
@@ -140,53 +143,38 @@ public class EducacaoRepository {
                 });
     }
 
-    // A API ainda não manda o gabarito: lê "correta" (alternativa) e "explicacao" (pergunta) se vierem.
+    // Cursos com as aulas ordenadas, buscados uma vez e reaproveitados por alguns minutos: o guia
+    // e a lista de quizzes pedem a mesma árvore, e cada pedido pode acordar o Render.
     @NonNull
-    private QuizResumo montarQuiz(
-            @NonNull String categoria, @NonNull String tituloAula, @NonNull JSONObject quiz)
-            throws Exception {
+    private JSONArray carregarCursosComAulas(@NonNull Context contexto) throws IOException, JSONException {
 
-        List<QuizConteudo.Pergunta> perguntas = new ArrayList<>();
-
-        JSONArray listaPerguntas = quiz.optJSONArray("perguntas");
-
-        for (int i = 0; listaPerguntas != null && i < listaPerguntas.length(); i++) {
-            JSONObject pergunta = listaPerguntas.getJSONObject(i);
-
-            JSONArray alternativas = pergunta.optJSONArray("alternativas");
-
-            List<String> opcoes = new ArrayList<>();
-            int correta = -1;
-
-            for (int j = 0; alternativas != null && j < alternativas.length(); j++) {
-                JSONObject alternativa = alternativas.getJSONObject(j);
-
-                opcoes.add(alternativa.optString("texto"));
-
-                if (alternativa.optBoolean("correta", false)) {
-                    correta = j;
-                }
+        synchronized (CACHE_LOCK) {
+            if (cacheCursos != null && System.currentTimeMillis() - cacheEm < VALIDADE_CACHE_MS) {
+                return cacheCursos;
             }
-
-            perguntas.add(
-                    new QuizConteudo.Pergunta(
-                            pergunta.optString("enunciado"),
-                            opcoes.toArray(new String[0]),
-                            correta,
-                            pergunta.optString("explicacao", "")));
         }
 
-        String titulo = quiz.optString("titulo", "");
+        JSONArray cursos = obterArray(contexto, "/api/cursos");
 
-        return new QuizResumo(
-                titulo.isEmpty() ? tituloAula : titulo,
-                categoria,
-                quiz.optInt("pontosRecompensa", 0),
-                perguntas);
+        for (int i = 0; i < cursos.length(); i++) {
+            JSONObject curso = cursos.getJSONObject(i);
+
+            curso.put(
+                    "aulas",
+                    QuizJson.ordenarPorOrdem(
+                            obterArray(contexto, "/api/cursos/" + curso.getInt("id") + "/aulas")));
+        }
+
+        synchronized (CACHE_LOCK) {
+            cacheCursos = cursos;
+            cacheEm = System.currentTimeMillis();
+        }
+
+        return cursos;
     }
 
     @NonNull
-    private JSONArray obterArray(@NonNull Context contexto, @NonNull String caminho) throws Exception {
+    private JSONArray obterArray(@NonNull Context contexto, @NonNull String caminho) throws IOException, JSONException {
 
         String corpo = obter(contexto, caminho);
 

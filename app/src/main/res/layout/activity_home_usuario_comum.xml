@@ -73,7 +73,7 @@
                             android:contentDescription="@string/notificacoes"
                             android:padding="2dp"
                             android:scaleType="centerInside"
-                            android:src="@drawable/icon_notificacoes" />
+                            android:src="@drawable/ic_notificacoes" />
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="40dp"
@@ -123,6 +123,8 @@
                     android:textColor="@color/cinza_texto_home"
                     android:textSize="16sp" />
 
+                <include layout="@layout/card_pontos" />
+
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardAnaliseQuiz"
                     android:layout_width="match_parent"
@@ -160,7 +162,7 @@
                                 android:layout_height="30dp"
                                 android:contentDescription="@string/icone_analise_quiz"
                                 android:scaleType="centerInside"
-                                android:src="@drawable/icon_grafico" />
+                                android:src="@drawable/ic_grafico" />
 
                             <TextView
                                 android:layout_width="0dp"
@@ -252,7 +254,8 @@
                         android:layout_height="29dp"
                         android:contentDescription="@string/icone_conteudos"
                         android:scaleType="centerInside"
-                        android:src="@drawable/icon_livro" />
+                        android:src="@drawable/ic_guia_cinza"
+                        app:tint="@color/verde_escuro_principal" />
 
                     <TextView
                         android:layout_width="0dp"

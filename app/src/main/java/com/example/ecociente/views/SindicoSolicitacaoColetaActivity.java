@@ -10,13 +10,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
+import com.example.ecociente.repository.PerfilApiRepository;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.SindicoCooperativa;
 import com.example.ecociente.viewmodels.SindicoColetaViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import android.widget.Toast;
 import com.example.ecociente.model.SindicoSolicitacao;
 
 public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
@@ -79,13 +80,13 @@ public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
         momento.set(Calendar.MINUTE, minutoEscolhido);
         momento.set(Calendar.SECOND, 0);
         if (momento.getTimeInMillis() <= System.currentTimeMillis()) {
-            Toast.makeText(this, R.string.sindico_horario_passado, Toast.LENGTH_SHORT).show();
+            AvisoFlutuante.mostrar(this, R.string.sindico_horario_passado);
             return;
         }
         String inicio = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).format(momento.getTime());
         SindicoSolicitacao criada = viewModel.criarSolicitacao(cooperativa.getId(), inicio, recorrente);
         startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
-                this, criada.paraSolicitacao(getString(R.string.sindico_condominio_demo)), cooperativa.getNome()));
+                this, criada.paraSolicitacao(PerfilApiRepository.condominioNomeOuVazio(this)), cooperativa.getNome()));
         finish();
     }
 

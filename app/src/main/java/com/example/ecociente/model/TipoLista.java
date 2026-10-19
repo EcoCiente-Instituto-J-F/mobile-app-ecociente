@@ -9,11 +9,13 @@ import java.util.Collections;
 import java.util.List;
 
 public enum TipoLista {
-    GUIA(R.string.guia, R.drawable.icon_guia_verde),
+    GUIA(R.string.guia, R.drawable.ic_guia_verde),
     FEED(R.string.feed, R.drawable.ic_nav_feed_verde),
     CONDOMINIOS(R.string.condominios_atendidos, R.drawable.ic_perfil_cooperativa),
     AVALIACOES(R.string.avaliacoes_recebidas, R.drawable.ic_estrela),
-    RANKING(R.string.ranking_do_morador, R.drawable.ic_trofeu);
+    RANKING(R.string.ranking_do_morador, R.drawable.ic_trofeu),
+    PONTOS(R.string.meus_pontos, R.drawable.ic_trofeu),
+    SALVOS(R.string.conteudos_salvos, R.drawable.ic_guia_verde);
 
     @StringRes public final int titulo;
     @DrawableRes public final int icone;
@@ -28,6 +30,9 @@ public enum TipoLista {
 
         switch (this) {
             case GUIA:
+            case SALVOS:
+            case AVALIACOES:
+            case PONTOS:
                 return Collections.emptyList();
 
             case FEED:
@@ -40,14 +45,6 @@ public enum TipoLista {
                         condominio("Condomínio Vila Verde", "Rua das Palmeiras, 33", "56 unidades", "Quarta"),
                         condominio("Edifício Solar", "Rua do Sol, 410", "72 unidades", "Segunda"),
                         condominio("Residencial Aurora", "Rua da Aurora, 88", "40 unidades", "Quinta"));
-
-            case AVALIACOES:
-                return Arrays.asList(
-                        new ItemLista("Condomínio Raio de Luz", "“Equipe pontual e muito educada.”", "5,0"),
-                        new ItemLista("Residencial Jardim das Flores", "“A coleta atrasou um pouco, mas avisaram.”", "4,0"),
-                        new ItemLista("Condomínio Vila Verde", "“Ótimo atendimento, recomendo.”", "5,0"),
-                        new ItemLista("Edifício Solar", "“Poderiam passar mais cedo.”", "3,5"),
-                        new ItemLista("Residencial Aurora", "“Tudo certo, sem reclamações.”", "4,5"));
 
             default:
                 return Arrays.asList(

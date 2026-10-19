@@ -44,7 +44,7 @@
                 android:paddingStart="4dp"
                 android:paddingBottom="8dp"
                 android:fontFamily="@font/nunito_regular"
-                android:text="@string/sindico_dados_de_demonstracao_alteracoes_t"
+                android:text="@string/sindico_demo_dados_alteracoes_temporarias"
                 android:textColor="@color/cinza_texto_home"
                 android:textSize="11sp" />
 
@@ -63,7 +63,7 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_building"
+                        android:src="@drawable/ic_predio"
                         app:tint="@color/verde_escuro_principal" />
                     <TextView
                         android:layout_width="match_parent"
@@ -97,7 +97,7 @@
                                 android:contentDescription="@string/sindico_foto_ilustrativa_do_condominio"
                                 android:padding="17dp"
                                 android:scaleType="fitCenter"
-                                android:src="@drawable/sindico_nav_unidades"
+                                android:src="@drawable/ic_predio"
                                 app:tint="@color/verde_escuro_principal" />
                             <FrameLayout
                                 android:id="@+id/cameraSindicoUnidades"
@@ -115,7 +115,7 @@
                                     android:background="@drawable/sindico_unidades_camera_badge"
                                     android:contentDescription="@null"
                                     android:padding="5dp"
-                                    android:src="@drawable/sindico_unidades_camera" />
+                                    android:src="@drawable/ic_camera" />
                             </FrameLayout>
                         </FrameLayout>
                         <TextView
@@ -179,7 +179,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
                             android:background="@drawable/sindico_campo"
-                            android:drawableStart="@drawable/sindico_building_campo"
+                            android:drawableStart="@drawable/ic_predio"
                             android:drawablePadding="6dp"
                             android:inputType="textCapWords"
                             android:paddingStart="8dp"
@@ -201,7 +201,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
                             android:background="@drawable/sindico_campo"
-                            android:drawableStart="@drawable/ic_localizacao_chat"
+                            android:drawableStart="@drawable/ic_endereco_perfil"
                             android:drawablePadding="6dp"
                             android:inputType="textPostalAddress"
                             android:paddingStart="8dp"
@@ -232,7 +232,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="46dp"
                                     android:background="@drawable/sindico_campo"
-                                    android:drawableStart="@drawable/sindico_building_campo"
+                                    android:drawableStart="@drawable/ic_predio"
                                     android:drawablePadding="4dp"
                                     android:inputType="textCapWords"
                                     android:paddingStart="8dp"
@@ -283,7 +283,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
                             android:background="@drawable/sindico_campo"
-                            android:drawableStart="@drawable/ic_localizacao_chat"
+                            android:drawableStart="@drawable/ic_endereco_perfil"
                             android:drawablePadding="6dp"
                             android:inputType="phone"
                             android:maxLength="9"
@@ -323,7 +323,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_people" />
+                        android:src="@drawable/ic_grupo" />
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -360,7 +360,7 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_unidades_adicionar" />
+                        android:src="@drawable/ic_adicionar" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -388,7 +388,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_localizacao_chat" />
+                        android:src="@drawable/ic_endereco_perfil" />
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -425,7 +425,7 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_unidades_adicionar" />
+                        android:src="@drawable/ic_adicionar" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.PreferenciasNotificacao;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.ui.Motion;
@@ -70,11 +70,11 @@ public class NotificacoesActivity extends AppCompatActivity {
 
         View linhaSustentaveis = findViewById(R.id.toggleDicasSustentaveis);
 
-        configurarRotulo(linhaGerais, R.string.perfil_notificacao_gerais, R.drawable.icon_notificacoes);
+        configurarRotulo(linhaGerais, R.string.perfil_notificacao_gerais, R.drawable.ic_notificacoes);
 
-        configurarRotulo(linhaLembretes, R.string.perfil_notificacao_lembretes, R.drawable.icon_notificacoes);
+        configurarRotulo(linhaLembretes, R.string.perfil_notificacao_lembretes, R.drawable.ic_notificacoes);
 
-        configurarRotulo(linhaAtividades, R.string.perfil_notificacao_atividades, R.drawable.icon_notificacoes);
+        configurarRotulo(linhaAtividades, R.string.perfil_notificacao_atividades, R.drawable.ic_notificacoes);
 
         configurarRotulo(
                 linhaSustentaveis,
@@ -167,7 +167,7 @@ public class NotificacoesActivity extends AppCompatActivity {
 
         // Falhou salvar no Firestore: desfaz o toggle na tela pra não mentir
         // pro usuário sobre uma preferência que não foi realmente gravada.
-        Toast.makeText(this, R.string.perfil_notificacao_erro_salvar, Toast.LENGTH_SHORT).show();
+        AvisoFlutuante.mostrar(this, R.string.perfil_notificacao_erro_salvar);
 
         definirSemDispararListener(botao, !valorTentado);
 

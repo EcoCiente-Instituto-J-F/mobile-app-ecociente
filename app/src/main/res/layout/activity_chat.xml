@@ -250,7 +250,6 @@
 
         <ImageView
             android:importantForAccessibility="no"
-            android:id="@+id/fundoCabecalhoChat"
             android:layout_width="0dp"
             android:layout_height="108dp"
             android:elevation="4dp"
@@ -275,7 +274,6 @@
             app:tint="@color/branco" />
 
         <TextView
-            android:id="@+id/tituloCabecalhoChat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -312,7 +310,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/painelEntradaChat"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_gravity="bottom"

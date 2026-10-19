@@ -32,7 +32,7 @@
                 android:contentDescription="@string/imagem_guia"
                 android:padding="4dp"
                 android:scaleType="centerInside"
-                android:src="@drawable/png_greenpapers" />
+                android:src="@drawable/img_greenpapers" />
 
             <TextView
                 android:layout_width="wrap_content"

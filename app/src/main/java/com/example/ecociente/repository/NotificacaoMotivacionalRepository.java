@@ -20,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class NotificacaoMotivacionalRepository {
@@ -93,7 +94,7 @@ public class NotificacaoMotivacionalRepository {
 
     @NonNull
     private String buscarMensagem()
-            throws Exception {
+            throws IOException, JSONException {
 
         String endereco =
                 criarUrlRequisicao();
@@ -198,7 +199,7 @@ public class NotificacaoMotivacionalRepository {
 
     @NonNull
     private String criarUrlRequisicao()
-            throws Exception {
+            throws IOException {
 
         if (
                 ultimoIdNotificacao == null

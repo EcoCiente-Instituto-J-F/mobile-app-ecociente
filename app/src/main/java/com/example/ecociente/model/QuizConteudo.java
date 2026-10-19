@@ -1,57 +1,92 @@
 package com.example.ecociente.model;
 
+import android.content.Intent;
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * Quiz em andamento. A lista de quizzes carrega as perguntas da ds-mobile-api e a tela escolhida
- * fica aqui para as telas de introdução, perguntas, resultado e revisão lerem a mesma fonte.
+ * Perguntas do quiz em andamento. Elas viajam na Intent de uma tela para a outra (introdução,
+ * perguntas, resultado e revisão), então sobrevivem à recriação do processo e não há estado global.
  */
 public final class QuizConteudo {
 
-    private static List<Pergunta> perguntasAtuais = Collections.emptyList();
+    private static final String EXTRA_PERGUNTAS = "quizPerguntas";
+    private static final String EXTRA_QUIZ_ID = "quizId";
 
     private QuizConteudo() {
     }
 
-    public static void definir(@NonNull List<Pergunta> perguntas) {
-        perguntasAtuais = perguntas;
+    public static void anexar(@NonNull Intent rota, @NonNull List<Pergunta> perguntas) {
+        rota.putExtra(EXTRA_PERGUNTAS, new ArrayList<>(perguntas));
+    }
+
+    // Id do quiz na ds-mobile-api, para abrir e finalizar a tentativa. 0 quando não se sabe.
+    public static void anexarQuizId(@NonNull Intent rota, int quizId) {
+        rota.putExtra(EXTRA_QUIZ_ID, quizId);
+    }
+
+    public static int quizIdDoIntent(@NonNull Intent rota) {
+        return rota.getIntExtra(EXTRA_QUIZ_ID, 0);
+    }
+
+    // Leva o id do quiz e o resultado (se já houver) de uma tela para a seguinte.
+    public static void anexarContexto(@NonNull Intent destino, @NonNull Intent origem) {
+        destino.putExtra(EXTRA_QUIZ_ID, quizIdDoIntent(origem));
+
+        ResultadoQuiz resultado = ResultadoQuiz.doIntent(origem);
+
+        if (resultado != null) {
+            ResultadoQuiz.anexar(destino, resultado);
+        }
     }
 
     @NonNull
-    public static List<Pergunta> obterPerguntas() {
-        return perguntasAtuais;
+    @SuppressWarnings("unchecked")
+    public static List<Pergunta> doIntent(@NonNull Intent rota) {
+        Serializable perguntas = rota.getSerializableExtra(EXTRA_PERGUNTAS);
+
+        return perguntas instanceof ArrayList
+                ? (ArrayList<Pergunta>) perguntas
+                : Collections.<Pergunta>emptyList();
     }
 
     // Sem gabarito em alguma pergunta não dá para corrigir o quiz no aparelho.
-    public static boolean temGabarito() {
-        for (Pergunta pergunta : perguntasAtuais) {
+    public static boolean temGabarito(@NonNull List<Pergunta> perguntas) {
+        for (Pergunta pergunta : perguntas) {
             if (pergunta.getIndiceCorreto() < 0) {
                 return false;
             }
         }
 
-        return !perguntasAtuais.isEmpty();
+        return !perguntas.isEmpty();
     }
 
-    public static final class Pergunta {
+    public static final class Pergunta implements Serializable {
         private final String enunciado;
         private final String[] opcoes;
         private final int indiceCorreto;
         private final String explicacao;
+        private final int id;
+        private final int[] idsAlternativas;
 
         public Pergunta(
                 @NonNull String enunciado,
                 @NonNull String[] opcoes,
                 int indiceCorreto,
-                @NonNull String explicacao
+                @NonNull String explicacao,
+                int id,
+                @NonNull int[] idsAlternativas
         ) {
             this.enunciado = enunciado;
             this.opcoes = opcoes;
             this.indiceCorreto = indiceCorreto;
             this.explicacao = explicacao;
+            this.id = id;
+            this.idsAlternativas = idsAlternativas;
         }
 
         @NonNull
@@ -67,6 +102,32 @@ public final class QuizConteudo {
         // -1 quando a API não informou a alternativa correta.
         public int getIndiceCorreto() {
             return indiceCorreto;
+        }
+
+        // Mesma pergunta, agora com a alternativa certa e a explicação que a API devolveu na revisão.
+        @NonNull
+        public Pergunta comGabarito(int novoIndiceCorreto, @NonNull String novaExplicacao) {
+            return new Pergunta(enunciado, opcoes, novoIndiceCorreto, novaExplicacao, id, idsAlternativas);
+        }
+
+        // Posição da alternativa com esse id, ou -1.
+        public int indiceDaAlternativa(int alternativaId) {
+            for (int i = 0; i < idsAlternativas.length; i++) {
+                if (idsAlternativas[i] == alternativaId) {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        // Ids da pergunta e das alternativas na API: é o que o envio das respostas vai precisar.
+        public int getId() {
+            return id;
+        }
+
+        public int getIdAlternativa(int indice) {
+            return indice >= 0 && indice < idsAlternativas.length ? idsAlternativas[indice] : 0;
         }
 
         @NonNull

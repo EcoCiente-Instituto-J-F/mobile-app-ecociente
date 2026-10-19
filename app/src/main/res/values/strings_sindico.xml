@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="sindico_voltar_a_home_do_sindico">Voltar à home do síndico</string>
     <string name="sindico_voltar_aos_blocos">Voltar aos blocos</string>
     <string name="sindico_buscar_unidade">Buscar unidade…</string>
     <string name="sindico_adicionar_unidade">Adicionar unidade</string>
@@ -39,7 +38,7 @@
     <string name="sindico_1o">1º</string>
     <string name="sindico_3o">3º</string>
     <string name="sindico_dados_do_condominio">Dados do condomínio</string>
-    <string name="sindico_dados_de_demonstracao_alteracoes_t">Mantenha os dados do condomínio atualizados</string>
+    <string name="sindico_demo_dados_alteracoes_temporarias">Mantenha os dados do condomínio atualizados</string>
     <string name="sindico_foto_ilustrativa_do_condominio">Foto ilustrativa do condomínio</string>
     <string name="sindico_escolher_foto_do_condominio">Escolher foto do condomínio</string>
     <string name="sindico_alterar_foto">Alterar foto</string>
@@ -95,7 +94,7 @@
     <string name="sindico_escreva_a_mensagem_do_aviso">Escreva a mensagem do aviso.</string>
     <string name="sindico_aviso_detalhe">%1$s\n\nDestinatário: %2$s\nAutor: %3$s · %4$s</string>
     <string name="sindico_rascunho_local_ainda_nao_enviado">Rascunho local, ainda não enviado.</string>
-    <string name="sindico_unidade_salva_somente_nesta_demons">Unidade salva neste aparelho.</string>
+    <string name="sindico_demo_unidade_salva">Unidade salva neste aparelho.</string>
     <string name="sindico_morador_nome">Morador: %1$s</string>
     <string name="sindico_sem_responsavel_vinculado">Sem responsável vinculado</string>
     <string name="sindico_vinculado">Vinculado</string>
@@ -106,16 +105,16 @@
     <string name="sindico_nenhuma_unidade_corresponde_a_busc">Nenhuma unidade corresponde à busca.</string>
     <string name="sindico_excluir_titulo">Excluir %1$s?</string>
     <string name="sindico_a_exclusao_afeta_apenas_os_dados_l">Esta ação não pode ser desfeita.</string>
-    <string name="sindico_unidade_removida_desta_demonstraca">Unidade removida.</string>
+    <string name="sindico_demo_unidade_removida">Unidade removida.</string>
     <string name="sindico_ver_informacoes">Ver informações de %1$s</string>
     <string name="sindico_distancia">⌖ %1$s</string>
     <string name="sindico_avaliacao_cooperativa">★ %1$s</string>
     <string name="sindico_nenhuma_cooperativa_de_exemplo_enc">Nenhuma cooperativa encontrada.</string>
-    <string name="sindico_avaliacao_salva_somente_nesta_demo">Avaliação registrada neste aparelho.</string>
+    <string name="sindico_demo_avaliacao_salva">Avaliação registrada neste aparelho.</string>
     <string name="sindico_nota_texto">%1$d/5 estrelas</string>
     <string name="sindico_avaliacao_local">Avaliação local: %1$d de 5 estrelas. Toque para alterar.</string>
     <string name="sindico_avaliar_coleta_de">Avaliar coleta de %1$s</string>
-    <string name="sindico_todas_as_coletas_de_exemplo_ja_for">Todas as coletas de exemplo já foram avaliadas.</string>
+    <string name="sindico_todas_as_coletas_de_exemplo_ja_for">Todas as coletas já foram avaliadas.</string>
     <string name="sindico_nenhuma_coleta_avaliada_neste_filt">Nenhuma coleta avaliada neste filtro.</string>
     <string name="sindico_todas">Todas</string>
     <string name="sindico_para_avaliar">Para avaliar</string>
@@ -123,9 +122,7 @@
     <string name="sindico_participacao_dos_moradores">Participação dos moradores</string>
     <string name="sindico_descartes_registrados_no_mes">Descartes registrados no mês</string>
     <string name="sindico_taxa_de_adesao_a_coleta_seletiva">Taxa de adesão à coleta seletiva</string>
-    <string name="sindico_variacao_mes">%1$s  vs. mês anterior</string>
     <string name="sindico_grafico_descricao">Evolução dos descartes: %1$d em %2$s até %3$d em %4$s</string>
-    <string name="sindico_foto_alterada_somente_nesta_demons">Foto alterada neste aparelho.</string>
     <string name="sindico_residencial_selecionado">Residencial, selecionado</string>
     <string name="sindico_selecionar_residencial">Selecionar residencial</string>
     <string name="sindico_selecionar_comercial_ou_industrial">Selecionar comercial ou industrial</string>
@@ -139,7 +136,7 @@
     <string name="sindico_informe_o_cep">Informe o CEP</string>
     <string name="sindico_use_duas_letras_como_sp">Use duas letras, como SP</string>
     <string name="sindico_use_o_formato_01234_567">Use o formato 01234-567</string>
-    <string name="sindico_dados_salvos_somente_nesta_demonst">Dados salvos neste aparelho.</string>
+    <string name="sindico_demo_dados_salvos">Dados salvos neste aparelho.</string>
     <string name="sindico_nenhum_bloco_adicione_o_primeiro_a">Nenhum bloco. Adicione o primeiro abaixo.</string>
     <string name="sindico_nenhuma_area_de_descarte_adicione">Nenhuma área de descarte. Adicione a primeira abaixo.</string>
     <string name="sindico_abrir_unidades_bloco">Abrir unidades do %1$s</string>
@@ -154,8 +151,8 @@
     <string name="sindico_informe_a_localizacao">Informe a localização</string>
     <string name="sindico_informe_uma_quantidade_valida">Informe uma quantidade válida</string>
     <string name="sindico_a_quantidade_deve_ser_maior_que_ze">A quantidade deve ser maior que zero</string>
-    <string name="sindico_alteracao_salva_somente_nesta_demo">Alteração salva neste aparelho.</string>
-    <string name="sindico_item_removido_desta_demonstracao">Item removido.</string>
+    <string name="sindico_demo_alteracao_salva">Alteração salva neste aparelho.</string>
+    <string name="sindico_demo_item_removido">Item removido.</string>
     <plurals name="sindico_estrelas">
         <item quantity="one">%d estrela</item>
         <item quantity="other">%d estrelas</item>
@@ -180,9 +177,9 @@
     <string name="resposta_da_cooperativa">Resposta da cooperativa</string>
     <string name="resposta_da_cooperativa_texto">Podemos realizar a coleta na data combinada. Por favor, deixe o material separado por tipo.</string>
     <string name="coleta_confirmada_em">Coleta confirmada: %1$s • %2$s</string>
-    <string name="valor_indisponivel">—</string>
     <string name="sindico_vs_mes_anterior">(vs. mês anterior)</string>
     <string name="sindico_foto_condominio_salva">Foto do condomínio salva.</string>
-    <string name="sindico_300_pts">300 pts</string>
-    <string name="sindico_papel_25_plastico_50_vidro_8_nmeta">Papel 25%  ·  Plástico 50%  ·  Vidro 8%\nMetal 12%  ·  Orgânico 5%</string>
+    <string name="sindico_sem_dado">—</string>
+    <string name="sindico_condominio_carregando">Carregando…</string>
+    <string name="sindico_ranking_vazio">Ninguém pontuou neste ciclo ainda.</string>
 </resources>

@@ -5,17 +5,17 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import com.example.ecociente.model.DadosDemonstracao;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
+import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.repository.CalendarioExternoRepository;
 import com.example.ecociente.repository.SolicitacoesExemplosRepository;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SolicitacoesViewModel extends AndroidViewModel {
-
-    public static final boolean USAR_EXEMPLOS = true;
 
     private final CalendarioExternoRepository repositorio = new CalendarioExternoRepository();
 
@@ -106,7 +106,7 @@ public class SolicitacoesViewModel extends AndroidViewModel {
             return;
         }
 
-        if (USAR_EXEMPLOS) {
+        if (DadosDemonstracao.ativoPara(AutenticacaoExternaRepository.perfilSalvo(getApplication()))) {
             exibirExemplos();
             return;
         }

@@ -14,6 +14,7 @@ import com.example.ecociente.model.Coletas;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
+import com.example.ecociente.repository.AquecimentoDasApis;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.CalendarioMensalView;
@@ -47,6 +48,8 @@ public class CooperativaHomeActivity extends AppCompatActivity {
         super.onCreate(estadoSalvo);
 
         setContentView(R.layout.activity_home_cooperativa);
+
+        AquecimentoDasApis.aquecer(this);
 
         viewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
 

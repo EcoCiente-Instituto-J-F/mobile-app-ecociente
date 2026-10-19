@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // Fala com a ds-cadastro-api (Java/Postgres, repositório separado deste
@@ -68,7 +69,7 @@ public class CadastroExternoRepository {
 
     @NonNull
     private ResultadoApi enviarCadastro(
-            @NonNull Map<String, Object> dadosUsuario, @NonNull String senha) throws Exception {
+            @NonNull Map<String, Object> dadosUsuario, @NonNull String senha) throws IOException, JSONException, ParseException {
 
         switch (texto(dadosUsuario, "tipoUsuario", TipoUsuario.COMUM)) {
             case TipoUsuario.COOPERATIVA:
@@ -84,7 +85,7 @@ public class CadastroExternoRepository {
 
     @NonNull
     private JSONObject corpoBasePessoa(
-            @NonNull Map<String, Object> dados, @NonNull String senha) throws Exception {
+            @NonNull Map<String, Object> dados, @NonNull String senha) throws IOException, JSONException, ParseException {
 
         return new JSONObject()
                 .put("nomeUsuario", texto(dados, "nome"))
@@ -96,7 +97,7 @@ public class CadastroExternoRepository {
 
     @NonNull
     private JSONObject corpoComum(
-            @NonNull Map<String, Object> dados, @NonNull String senha) throws Exception {
+            @NonNull Map<String, Object> dados, @NonNull String senha) throws IOException, JSONException, ParseException {
 
         return corpoBasePessoa(dados, senha)
                 .put("cep", texto(dados, "cep"))
@@ -106,14 +107,14 @@ public class CadastroExternoRepository {
 
     @NonNull
     private JSONObject corpoMorador(
-            @NonNull Map<String, Object> dados, @NonNull String senha) throws Exception {
+            @NonNull Map<String, Object> dados, @NonNull String senha) throws IOException, JSONException, ParseException {
 
         return corpoBasePessoa(dados, senha).put("codigoCondominio", texto(dados, "codigoCondominio"));
     }
 
     @NonNull
     private JSONObject corpoCooperativa(
-            @NonNull Map<String, Object> dados, @NonNull String senha) throws Exception {
+            @NonNull Map<String, Object> dados, @NonNull String senha) throws IOException, JSONException, ParseException {
 
         return new JSONObject()
                 .put("nomeResponsavel", texto(dados, "nome"))
@@ -150,7 +151,7 @@ public class CadastroExternoRepository {
     }
 
     @NonNull
-    private ResultadoApi enviar(@NonNull String endpoint, @NonNull JSONObject corpo) throws Exception {
+    private ResultadoApi enviar(@NonNull String endpoint, @NonNull JSONObject corpo) throws IOException {
 
         HttpURLConnection conexao = (HttpURLConnection) new URL(endpoint).openConnection();
 
@@ -203,7 +204,7 @@ public class CadastroExternoRepository {
                 }
             }
 
-        } catch (Exception erro) {
+        } catch (JSONException erro) {
             Log.w(TAG, "Não foi possível interpretar o erro da API de cadastro", erro);
         }
 

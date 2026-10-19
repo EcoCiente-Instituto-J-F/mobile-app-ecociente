@@ -12,6 +12,6 @@ public class SenhaViewModel extends ViewModelComCarregamento {
     @NonNull
     public LiveData<ResultadoApi> alterarSenha(
             @NonNull Context contexto, @NonNull String senhaAtual, @NonNull String novaSenha) {
-        return executar(repositorio.alterarSenha(contexto, senhaAtual, novaSenha));
+        return executar(repositorio.alterarSenha(contexto.getApplicationContext(), senhaAtual, novaSenha));
     }
 }

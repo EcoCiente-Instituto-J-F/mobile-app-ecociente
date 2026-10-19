@@ -6,12 +6,14 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // Consulta pública de CEP (ViaCEP). Serve para manter cidade e estado do perfil iguais ao que a
@@ -74,7 +76,7 @@ public class ConsultaCepRepository {
     }
 
     @Nullable
-    private Localidade consultar(@NonNull String digitos) throws Exception {
+    private Localidade consultar(@NonNull String digitos) throws IOException, JSONException {
 
         HttpURLConnection conexao =
                 (HttpURLConnection)
@@ -106,7 +108,7 @@ public class ConsultaCepRepository {
     }
 
     @NonNull
-    private String lerFluxo(@NonNull InputStream fluxo) throws Exception {
+    private String lerFluxo(@NonNull InputStream fluxo) throws IOException {
 
         try (InputStream entrada = fluxo;
                 ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
