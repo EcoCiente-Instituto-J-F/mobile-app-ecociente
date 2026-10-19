@@ -123,7 +123,7 @@ public class TelaListaActivity extends AppCompatActivity {
 
     private void carregarGuia(LinearLayout lista) {
 
-        TextView estado = textoDeEstado(lista, R.string.guia_carregando);
+        indicadorDeCarregamento(lista, R.string.guia_carregando);
 
         new EducacaoRepository()
                 .listarGuia(
@@ -133,12 +133,12 @@ public class TelaListaActivity extends AppCompatActivity {
                                 return;
                             }
 
+                            lista.removeAllViews();
+
                             if (!sucesso) {
-                                estado.setText(R.string.guia_erro);
+                                textoDeEstado(lista, R.string.guia_erro);
                                 return;
                             }
-
-                            lista.removeAllViews();
 
                             if (itens.isEmpty()) {
                                 textoDeEstado(lista, R.string.guia_vazio);
@@ -152,7 +152,7 @@ public class TelaListaActivity extends AppCompatActivity {
     // Ranking dos moradores da ds-pontuacao-api; sem resposta (403, fora do ar), mostra o exemplo.
     private void carregarRanking(LinearLayout lista) {
 
-        TextView estado = textoDeEstado(lista, R.string.ranking_carregando);
+        indicadorDeCarregamento(lista, R.string.ranking_carregando);
 
         new RankingExternoRepository()
                 .listarMoradores(
@@ -296,6 +296,34 @@ public class TelaListaActivity extends AppCompatActivity {
     private String formatarPontos(long pontos) {
         return getString(
                 R.string.pontos_saldo, NumberFormat.getIntegerInstance(new Locale("pt", "BR")).format(pontos));
+    }
+
+    // Indicador giratório com a mensagem; sai junto com a lista ao `removeAllViews`.
+    private View indicadorDeCarregamento(LinearLayout lista, int mensagem) {
+
+        LinearLayout bloco = new LinearLayout(this);
+        bloco.setOrientation(LinearLayout.VERTICAL);
+        bloco.setGravity(android.view.Gravity.CENTER);
+        bloco.setPadding(48, 96, 48, 0);
+
+        android.widget.ProgressBar indicador = new android.widget.ProgressBar(this);
+        indicador.setIndeterminateTintList(
+                android.content.res.ColorStateList.valueOf(getColor(R.color.verde_escuro_principal)));
+        bloco.addView(indicador, new LinearLayout.LayoutParams(
+                (int) (42 * getResources().getDisplayMetrics().density),
+                (int) (42 * getResources().getDisplayMetrics().density)));
+
+        TextView texto = new TextView(this);
+        texto.setText(mensagem);
+        texto.setTextColor(getColor(R.color.cinza_texto_auxiliar));
+        texto.setTextSize(14);
+        texto.setGravity(android.view.Gravity.CENTER);
+        texto.setPadding(0, 24, 0, 0);
+        bloco.addView(texto);
+
+        lista.addView(bloco);
+
+        return bloco;
     }
 
     private TextView textoDeEstado(LinearLayout lista, int mensagem) {
