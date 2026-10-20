@@ -32,19 +32,12 @@ public enum TipoLista {
             case GUIA:
             case SALVOS:
             case AVALIACOES:
+            case CONDOMINIOS:
             case PONTOS:
                 return Collections.emptyList();
 
             case FEED:
                 return Collections.emptyList();
-
-            case CONDOMINIOS:
-                return Arrays.asList(
-                        condominio("Condomínio Raio de Luz", "Rua das Flores, 120", "84 unidades", "Segunda e quinta"),
-                        condominio("Residencial Jardim das Flores", "Av. Brasil, 560", "120 unidades", "Terça e sexta"),
-                        condominio("Condomínio Vila Verde", "Rua das Palmeiras, 33", "56 unidades", "Quarta"),
-                        condominio("Edifício Solar", "Rua do Sol, 410", "72 unidades", "Segunda"),
-                        condominio("Residencial Aurora", "Rua da Aurora, 88", "40 unidades", "Quinta"));
 
             default:
                 return Arrays.asList(
@@ -55,21 +48,5 @@ public enum TipoLista {
                         new ItemLista("5º  Juliana Costa", "Bloco B · Apto 302", "1.410 pts"),
                         new ItemLista("6º  Pedro Henrique Dias", "Bloco B · Apto 101", "1.250 pts"));
         }
-    }
-
-    @NonNull
-    private static ItemLista condominio(
-            String nome, String endereco, String unidades, String diasDeColeta) {
-
-        return new ItemLista(
-                nome,
-                endereco + " · " + unidades,
-                diasDeColeta,
-                new String[][] {
-                    {"Endereço", endereco},
-                    {"Unidades", unidades},
-                    {"Dias de coleta", diasDeColeta},
-                    {"Atendido desde", "Março de 2026"}
-                });
     }
 }

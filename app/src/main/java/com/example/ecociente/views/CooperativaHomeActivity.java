@@ -22,6 +22,7 @@ import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.MenuPerfil;
 import com.example.ecociente.ui.ProximaColetaView;
+import com.example.ecociente.notifications.PermissaoNotificacoes;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.CalendarioViewModel;
@@ -50,6 +51,8 @@ public class CooperativaHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home_cooperativa);
 
         AquecimentoDasApis.aquecer(this);
+
+        new PermissaoNotificacoes(this).pedirSeNecessario();
 
         viewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
 
