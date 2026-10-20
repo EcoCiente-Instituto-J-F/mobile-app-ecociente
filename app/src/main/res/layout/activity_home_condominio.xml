@@ -456,38 +456,47 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="162dp"
-                android:layout_marginStart="18dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="18dp"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:scrollbars="none">
 
-                <include
-                    layout="@layout/item_conteudo_home_guia"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="9dp"
-                    android:layout_weight="1" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:baselineAligned="false"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingStart="18dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="18dp"
+                    android:paddingBottom="4dp">
 
-                <include
-                    layout="@layout/item_conteudo_home_dica"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="9dp"
-                    android:layout_marginEnd="9dp"
-                    android:layout_weight="1" />
+                    <include
+                        layout="@layout/item_conteudo_home_guia"
+                        android:layout_width="158dp"
+                        android:layout_height="212dp"
+                        android:layout_marginEnd="12dp" />
 
-                <include
-                    layout="@layout/item_conteudo_home_artigo"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="9dp"
-                    android:layout_weight="1" />
+                    <include
+                        layout="@layout/item_conteudo_home_dica"
+                        android:layout_width="158dp"
+                        android:layout_height="212dp"
+                        android:layout_marginEnd="12dp" />
 
-            </LinearLayout>
+                    <include
+                        layout="@layout/item_conteudo_home_artigo"
+                        android:layout_width="158dp"
+                        android:layout_height="212dp" />
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
 
         </LinearLayout>
 

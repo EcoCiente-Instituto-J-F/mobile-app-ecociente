@@ -55,9 +55,9 @@
     <string name="titulo_dica_home">Como reduzir o uso de plástico</string>
     <string name="titulo_artigo_home">Compostagem caseira</string>
     <string name="tempo_leitura">Tempo de leitura</string>
-    <string name="quatro_minutos_leitura">4 min de leitura</string>
-    <string name="tres_minutos_leitura">3 min de leitura</string>
-    <string name="cinco_minutos_leitura">5 min de leitura</string>
+    <string name="quatro_minutos_leitura">4 min</string>
+    <string name="tres_minutos_leitura">3 min</string>
+    <string name="cinco_minutos_leitura">5 min</string>
     <string name="erro_carregar_perfil">Não foi possível confirmar seu perfil agora.</string>
     <string name="tentar_novamente">Tentar novamente</string>
     <string name="voltar">Voltar</string>

@@ -80,7 +80,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
+                android:ellipsize="end"
                 android:fontFamily="@font/nunito_semibold"
+                android:maxLines="1"
                 android:text="@string/quatro_minutos_leitura"
                 android:textColor="@color/cinza_secundario_home"
                 android:textSize="11.5sp" />
