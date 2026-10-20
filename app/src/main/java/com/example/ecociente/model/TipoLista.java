@@ -15,7 +15,8 @@ public enum TipoLista {
     AVALIACOES(R.string.avaliacoes_recebidas, R.drawable.ic_estrela),
     RANKING(R.string.ranking_do_morador, R.drawable.ic_trofeu),
     PONTOS(R.string.meus_pontos, R.drawable.ic_trofeu),
-    SALVOS(R.string.conteudos_salvos, R.drawable.ic_guia_verde);
+    SALVOS(R.string.conteudos_salvos, R.drawable.ic_guia_verde),
+    MEUS_DESCARTES(R.string.feed_meus_descartes, R.drawable.ic_nav_feed_verde);
 
     @StringRes public final int titulo;
     @DrawableRes public final int icone;
@@ -31,6 +32,7 @@ public enum TipoLista {
         switch (this) {
             case GUIA:
             case SALVOS:
+            case MEUS_DESCARTES:
             case AVALIACOES:
             case CONDOMINIOS:
             case PONTOS:

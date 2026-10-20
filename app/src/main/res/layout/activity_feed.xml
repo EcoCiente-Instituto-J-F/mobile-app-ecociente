@@ -45,9 +45,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="@dimen/espaco_barra_navegacao"
         android:overScrollMode="never"
-        app:layout_constraintBottom_toBottomOf="@id/barraNavegacao"
+        app:layout_constraintBottom_toTopOf="@id/botoesFeed"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subtituloFeed">
@@ -81,6 +80,45 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/botoesFeed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="@dimen/espaco_barra_navegacao"
+        android:gravity="start"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botaoEnviarFotoFeed"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:backgroundTint="@color/verde_escuro_principal"
+            android:fontFamily="@font/nunito_bold"
+            android:text="@string/feed_registrar"
+            android:textColor="@color/branco"
+            android:textSize="13sp"
+            app:cornerRadius="10dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/botaoMeusDescartes"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/nunito_bold"
+            android:text="@string/feed_meus_descartes"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="13sp"
+            app:cornerRadius="10dp"
+            app:strokeColor="@color/verde_escuro_principal" />
+
+    </LinearLayout>
 
     <com.example.ecociente.ui.BarraNavegacaoView
         android:id="@+id/barraNavegacao"

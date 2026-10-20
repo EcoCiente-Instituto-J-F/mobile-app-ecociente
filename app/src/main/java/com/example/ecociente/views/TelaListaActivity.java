@@ -115,6 +115,11 @@ public class TelaListaActivity extends AppCompatActivity {
             return;
         }
 
+        if (tipo == TipoLista.MEUS_DESCARTES) {
+            textoDeEstado(lista, R.string.meus_descartes_vazio);
+            return;
+        }
+
         if (tipo == TipoLista.SALVOS) {
             carregarSalvos(lista);
             return;
@@ -669,6 +674,7 @@ public class TelaListaActivity extends AppCompatActivity {
 
             case RANKING:
             case PONTOS:
+            case MEUS_DESCARTES:
                 itens = ItensBarra.morador();
                 break;
 
