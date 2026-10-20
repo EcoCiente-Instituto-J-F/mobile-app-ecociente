@@ -23,9 +23,24 @@
         android:text="@string/feed"
         android:textColor="@color/rosa_ecociente"
         android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/textoMeusDescartes"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textoMeusDescartes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="26dp"
+        android:background="?attr/selectableItemBackground"
+        android:fontFamily="@font/nunito_semibold"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:text="@string/feed_meus_descartes"
+        android:textColor="@color/verde_escuro_principal"
+        android:textSize="13sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tituloFeed"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/subtituloFeed"
@@ -45,8 +60,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
+        android:layout_marginBottom="@dimen/espaco_barra_navegacao"
         android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@id/botoesFeed"
+        app:layout_constraintBottom_toBottomOf="@id/barraNavegacao"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subtituloFeed">
@@ -81,44 +97,19 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <LinearLayout
-        android:id="@+id/botoesFeed"
-        android:layout_width="0dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/botaoRegistrarDescarte"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginEnd="22dp"
         android:layout_marginBottom="@dimen/espaco_barra_navegacao"
-        android:gravity="start"
-        android:orientation="horizontal"
+        android:contentDescription="@string/feed_registrar_descarte"
+        android:src="@drawable/ic_adicionar"
+        app:backgroundTint="@color/verde_escuro_principal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/botaoEnviarFotoFeed"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:backgroundTint="@color/verde_escuro_principal"
-            android:fontFamily="@font/nunito_bold"
-            android:text="@string/feed_registrar"
-            android:textColor="@color/branco"
-            android:textSize="13sp"
-            app:cornerRadius="10dp" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/botaoMeusDescartes"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/nunito_bold"
-            android:text="@string/feed_meus_descartes"
-            android:textColor="@color/verde_escuro_principal"
-            android:textSize="13sp"
-            app:cornerRadius="10dp"
-            app:strokeColor="@color/verde_escuro_principal" />
-
-    </LinearLayout>
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.EcoCiente.Circulo"
+        app:tint="@color/branco" />
 
     <com.example.ecociente.ui.BarraNavegacaoView
         android:id="@+id/barraNavegacao"

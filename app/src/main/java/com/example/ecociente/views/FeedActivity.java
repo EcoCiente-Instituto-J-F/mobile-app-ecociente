@@ -9,9 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.io.File;
-import com.google.android.material.button.MaterialButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.example.ecociente.ui.DialogoEco;
-import com.example.ecociente.ui.BotaoCarregando;
 import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.repository.FotoPerfilRepository;
 import androidx.core.content.FileProvider;
@@ -41,7 +40,7 @@ public class FeedActivity extends AppCompatActivity {
 
     private LinearLayout lista;
     private View textoVazio;
-    private MaterialButton botaoEnviarFoto;
+    private FloatingActionButton botaoEnviarFoto;
     private Uri uriFotoCamera;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> seletorFoto =
@@ -73,11 +72,11 @@ public class FeedActivity extends AppCompatActivity {
 
         configurarBarra();
 
-        botaoEnviarFoto = findViewById(R.id.botaoEnviarFotoFeed);
+        botaoEnviarFoto = findViewById(R.id.botaoRegistrarDescarte);
         botaoEnviarFoto.setOnClickListener(view -> mostrarOpcoesFoto());
         Motion.pressFeedback(botaoEnviarFoto);
 
-        View meusDescartes = findViewById(R.id.botaoMeusDescartes);
+        View meusDescartes = findViewById(R.id.textoMeusDescartes);
         meusDescartes.setOnClickListener(
                 view -> startActivity(TelaListaActivity.criarIntent(this, TipoLista.MEUS_DESCARTES, true)));
         Motion.pressFeedback(meusDescartes);
@@ -137,15 +136,18 @@ public class FeedActivity extends AppCompatActivity {
             return;
         }
 
-        BotaoCarregando.definir(botaoEnviarFoto, true, R.string.feed_registrar, R.string.feed_enviando);
+        botaoEnviarFoto.setEnabled(false);
+        botaoEnviarFoto.setAlpha(0.5f);
+
+        AvisoFlutuante.mostrar(this, R.string.feed_enviando);
 
         new FotoPerfilRepository()
                 .enviarParaFeed(getApplicationContext(), imagem)
                 .observe(
                         this,
                         resultado -> {
-                            BotaoCarregando.definir(
-                                    botaoEnviarFoto, false, R.string.feed_registrar, R.string.feed_enviando);
+                            botaoEnviarFoto.setEnabled(true);
+                            botaoEnviarFoto.setAlpha(1f);
 
                             if (!resultado.isSucesso()) {
                                 AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
