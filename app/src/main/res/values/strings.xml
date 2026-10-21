@@ -472,6 +472,7 @@
     <string name="quiz_pontos_recompensa">+%1$d pts</string>
     <string name="quiz_resultado_sem_nota">--/--</string>
     <string name="quiz_resultado_sem_gabarito">Respostas registradas. A correção aparece quando o gabarito estiver disponível.</string>
+    <string name="login_demora">O servidor está acordando. O primeiro acesso pode levar até 2 minutos.</string>
     <string name="feed_registrar_descarte">Registrar descarte</string>
     <string name="feed_meus_descartes">Meus descartes</string>
     <string name="meus_descartes_vazio">Você ainda não registrou nenhum descarte.</string>
