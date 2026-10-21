@@ -20,8 +20,6 @@ import com.example.ecociente.R;
 import com.example.ecociente.model.SindicoCooperativa;
 import com.example.ecociente.viewmodels.SindicoColetaViewModel;
 
-import java.text.Normalizer;
-import java.util.Locale;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.BarraNavegacaoView;
@@ -78,11 +76,10 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
 
     private void mostrarCooperativas(String filtro) {
         lista.removeAllViews();
-        String termo = normalizar(filtro);
         int encontrados = 0;
         LayoutInflater inflater = LayoutInflater.from(this);
         for (SindicoCooperativa cooperativa : viewModel.getCooperativas()) {
-            if (!normalizar(cooperativa.getNome()).contains(termo)) continue;
+            if (!cooperativa.corresponde(filtro)) continue;
             encontrados++;
             View item = inflater.inflate(R.layout.item_sindico_cooperativa, lista, false);
             TextView nome = item.findViewById(R.id.nomeCooperativa);
@@ -126,11 +123,6 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
             vazio.setPadding(8, 28, 8, 28);
             lista.addView(vazio);
         }
-    }
-
-    private String normalizar(String valor) {
-        return Normalizer.normalize(valor, Normalizer.Form.NFD)
-                .replaceAll("\\p{M}", "").toLowerCase(Locale.ROOT).trim();
     }
 
     private LinearLayout.LayoutParams margemDoCartao() {

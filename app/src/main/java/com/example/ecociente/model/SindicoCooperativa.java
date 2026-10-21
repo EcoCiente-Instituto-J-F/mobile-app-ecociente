@@ -1,6 +1,9 @@
 package com.example.ecociente.model;
 
 /** Dados ilustrativos de uma cooperativa; ainda não representam resultados de uma API. */
+import java.text.Normalizer;
+import java.util.Locale;
+
 public final class SindicoCooperativa {
     private final int id;
     private final String nome;
@@ -21,6 +24,16 @@ public final class SindicoCooperativa {
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
+    }
+
+    // Busca pelo nome, sem diferenciar maiúsculas nem acentos; termo vazio casa com todas.
+    public boolean corresponde(String termo) {
+        return normalizar(nome).contains(normalizar(termo));
+    }
+
+    private static String normalizar(String valor) {
+        return Normalizer.normalize(valor, Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "").toLowerCase(Locale.ROOT).trim();
     }
 
     public int getId() { return id; }
