@@ -282,7 +282,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
             View linha = inflater.inflate(R.layout.item_sindico_unidades, lista, false);
             ImageView icone = linha.findViewById(R.id.iconeItemUnidades);
             icone.setImageResource(bloco ? R.drawable.ic_predio
-                    : R.drawable.ic_endereco_perfil);
+                    : R.drawable.ic_reciclar);
             icone.setImageTintList(ColorStateList.valueOf(
                     getColor(R.color.verde_escuro_principal)));
             ((TextView) linha.findViewById(R.id.nomeItemUnidades)).setText(item.getNome());
