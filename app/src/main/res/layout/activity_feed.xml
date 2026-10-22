@@ -101,7 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="22dp"
-        android:layout_marginBottom="@dimen/espaco_barra_navegacao"
+        android:layout_marginBottom="88dp"
         android:contentDescription="@string/feed_registrar_descarte"
         android:src="@drawable/ic_adicionar"
         app:backgroundTint="@color/verde_escuro_principal"
