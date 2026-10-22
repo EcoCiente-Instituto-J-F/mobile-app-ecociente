@@ -370,10 +370,10 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
         View acoes = findViewById(R.id.acoesDetalhe);
 
+        // O síndico também responde às solicitações que a cooperativa abriu. Se foi ele quem pediu,
+        // a API recusa (403) e o aviso mostra o motivo.
         if (cooperativaDoSindico != null) {
-            acoes.setVisibility(View.GONE);
             configurarCancelamento();
-            return;
         }
 
         if (solicitacao.getStatus() != StatusAgendamento.AGENDADO) {
