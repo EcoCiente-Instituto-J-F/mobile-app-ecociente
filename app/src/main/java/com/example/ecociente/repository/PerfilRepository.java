@@ -60,7 +60,9 @@ public class PerfilRepository {
                 .document(uid)
                 .get()
                 .addOnSuccessListener(
-                        documento -> resultado.setValue(documento.toObject(PerfilUsuario.class)))
+                        documento ->
+                                resultado.setValue(
+                                        comDadosDaApi(uid, documento.toObject(PerfilUsuario.class))))
                 .addOnFailureListener(
                         erro -> {
                             Log.e(TAG, "Erro ao buscar perfil", erro);
@@ -81,7 +83,9 @@ public class PerfilRepository {
                 .addOnSuccessListener(
                         documento -> {
                             PerfilUsuario perfil =
-                                    documento.exists() ? documento.toObject(PerfilUsuario.class) : null;
+                                    documento.exists()
+                                            ? comDadosDaApi(uid, documento.toObject(PerfilUsuario.class))
+                                            : null;
 
                             resultado.setValue(
                                     perfil != null
@@ -95,6 +99,26 @@ public class PerfilRepository {
                         });
 
         return resultado;
+    }
+
+    // O que a API (Postgres) informou na última consulta vale mais que o Firestore: aplica por cima
+    // e ajusta o documento para ficar igual. Usa o que já está guardado, sem pedir nada à rede.
+    // Edição ainda a caminho da API: o app tem o dado mais novo e fica como está.
+    @Nullable
+    private PerfilUsuario comDadosDaApi(@NonNull String uid, @Nullable PerfilUsuario perfil) {
+
+        if (perfil == null || AtualizacaoExternaRepository.temAtualizacaoEmAndamento()) {
+            return perfil;
+        }
+
+        java.util.Map<String, String> mudancas =
+                PerfilApiRepository.dadosDoPerfil(FirebaseApp.getInstance().getApplicationContext()).aplicarEm(perfil);
+
+        for (java.util.Map.Entry<String, String> mudanca : mudancas.entrySet()) {
+            atualizarCampo(uid, mudanca.getKey(), mudanca.getValue());
+        }
+
+        return perfil;
     }
 
     @NonNull
