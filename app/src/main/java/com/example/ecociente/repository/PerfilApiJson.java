@@ -6,6 +6,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import com.example.ecociente.model.PerfilDaApi;
 import com.example.ecociente.model.SindicoDadosCondominio;
+import com.example.ecociente.model.SindicoItemUnidade;
+import java.util.ArrayList;
+import java.util.List;
 
 // Lê GET /api/usuarios/me da ds-mobile-api e escolhe o condomínio do usuário.
 final class PerfilApiJson {
@@ -102,6 +105,26 @@ final class PerfilApiJson {
                 endereco == null ? "" : texto(endereco, "cidade"),
                 endereco == null ? "" : texto(endereco, "estado"),
                 endereco == null ? "" : texto(endereco, "cep"));
+    }
+
+    // Torres do condomínio escolhido (id e nome); vazio quando não há condomínio ou torres.
+    @NonNull
+    static List<SindicoItemUnidade> torres(@NonNull JSONObject perfil) {
+
+        List<SindicoItemUnidade> torres = new ArrayList<>();
+
+        JSONObject condominio = condominioEscolhido(perfil);
+        JSONArray itens = condominio == null ? null : condominio.optJSONArray("torres");
+
+        for (int i = 0; itens != null && i < itens.length(); i++) {
+            JSONObject item = itens.optJSONObject(i);
+
+            if (item != null && item.optInt("id", 0) > 0 && !texto(item, "nome").trim().isEmpty()) {
+                torres.add(new SindicoItemUnidade(item.optInt("id"), texto(item, "nome").trim(), ""));
+            }
+        }
+
+        return torres;
     }
 
     @Nullable

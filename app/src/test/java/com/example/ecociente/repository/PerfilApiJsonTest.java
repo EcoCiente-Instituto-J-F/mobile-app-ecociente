@@ -7,6 +7,8 @@ import static org.junit.Assert.assertNull;
 import org.json.JSONObject;
 import org.junit.Test;
 import com.example.ecociente.model.SindicoDadosCondominio;
+import com.example.ecociente.model.SindicoItemUnidade;
+import java.util.List;
 
 public class PerfilApiJsonTest {
 
@@ -140,5 +142,19 @@ public class PerfilApiJsonTest {
     @Test
     public void semCondominioNaoHaDadosDoCondominio() throws Exception {
         assertNull(PerfilApiJson.dadosDoCondominio(perfil("[]")));
+    }
+
+    @Test
+    public void torresVemDoCondominioEscolhido() throws Exception {
+        JSONObject json =
+                perfil(
+                        "[{\"id\":1,\"nome\":\"Residencial Eco\",\"ativo\":true,\"sindicoResponsavel\":true,"
+                                + "\"torres\":[{\"id\":10,\"nome\":\"Torre A\"},{\"id\":11,\"nome\":\" \"},{\"id\":12,\"nome\":\"Torre B\"}]}]");
+
+        List<SindicoItemUnidade> torres = PerfilApiJson.torres(json);
+
+        assertEquals(2, torres.size());
+        assertEquals(10, torres.get(0).getId());
+        assertEquals("Torre B", torres.get(1).getNome());
     }
 }

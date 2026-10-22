@@ -7,6 +7,8 @@ import static org.junit.Assert.assertTrue;
 import com.example.ecociente.model.SindicoApartamento;
 import com.example.ecociente.model.SindicoDadosCondominio;
 import org.junit.Test;
+import com.example.ecociente.model.SindicoItemUnidade;
+import java.util.Arrays;
 
 public class SindicoUnidadesRepositoryTest {
 
@@ -108,5 +110,20 @@ public class SindicoUnidadesRepositoryTest {
 
         assertTrue(repositorio.existeNumero(1, -1, "101"));
         assertTrue(!repositorio.existeNumero(2, -1, "101"));
+    }
+
+    @Test
+    public void torresDaApiViramBlocosSemDuplicar() {
+        SindicoUnidadesRepository repositorio = preenchido();
+
+        boolean acrescentou = repositorio.aplicarTorresDaApi(Arrays.asList(
+                new SindicoItemUnidade(10, "torre a", ""),
+                new SindicoItemUnidade(11, "Torre C", "")), "Torre do condomínio");
+
+        assertTrue(acrescentou);
+        assertEquals(3, repositorio.getBlocos().size());
+        assertEquals("Torre C", repositorio.getBlocos().get(2).getNome());
+        assertEquals("Torre do condomínio", repositorio.getBlocos().get(2).getDetalhe());
+        assertEquals(false, repositorio.aplicarTorresDaApi(Arrays.asList(new SindicoItemUnidade(11, "Torre C", "")), "x"));
     }
 }

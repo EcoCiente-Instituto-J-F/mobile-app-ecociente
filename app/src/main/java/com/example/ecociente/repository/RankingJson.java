@@ -40,6 +40,25 @@ final class RankingJson {
         return posicoes;
     }
 
+    // O ranking só traz as torres com pontos no limite pedido; a torre que ficou de fora é
+    // identificada pelo nome.
+    static boolean contem(@NonNull List<SindicoPosicaoRanking> ranking, @NonNull String nome) {
+
+        for (SindicoPosicaoRanking posicao : ranking) {
+            if (posicao.getNome().trim().equalsIgnoreCase(nome.trim())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // Resposta de GET /rankings/torres/{id}/posicao como entrada do ranking.
+    @NonNull
+    static SindicoPosicaoRanking torreDaPosicao(@NonNull JSONObject resposta, @NonNull String nome) {
+        return new SindicoPosicaoRanking(Iniciais.de(nome), nome, (int) resposta.optLong("pontos", 0), false);
+    }
+
     @NonNull
     static List<ItemLista> moradores(@NonNull JSONObject resposta) {
 

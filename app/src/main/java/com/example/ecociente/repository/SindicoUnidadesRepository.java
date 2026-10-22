@@ -167,6 +167,23 @@ public final class SindicoUnidadesRepository {
     public void salvarDados(SindicoDadosCondominio novosDados) { dados = novosDados; persistir(); }
     // A API manda no que ela sabe (nome, tipo, endereço); o que ela não trouxe fica como estava.
     public void aplicarDadosDaApi(SindicoDadosCondominio api) { dados = dados.comDadosDaApi(api); persistir(); }
+    // Cada torre da API vira um bloco, se ainda não houver um com o mesmo nome. `detalhe` é o texto
+    // da linha (a API não informa quantas unidades a torre tem). Devolve se algo foi acrescentado.
+    public boolean aplicarTorresDaApi(List<SindicoItemUnidade> torres, String detalhe) {
+        boolean acrescentou = false;
+        for (SindicoItemUnidade torre : torres) {
+            boolean existe = false;
+            for (SindicoItemUnidade bloco : blocos) {
+                if (bloco.getNome().trim().equalsIgnoreCase(torre.getNome().trim())) existe = true;
+            }
+            if (!existe) {
+                blocos.add(new SindicoItemUnidade(proximoId++, torre.getNome(), detalhe));
+                acrescentou = true;
+            }
+        }
+        if (acrescentou) persistir();
+        return acrescentou;
+    }
     public String getFotoUri() { return fotoUri; }
     public void salvarFotoUri(String uri) { fotoUri = uri; persistir(); }
     public List<SindicoItemUnidade> getBlocos() {

@@ -179,6 +179,7 @@
     <string name="sindico_vs_mes_anterior">(vs. mês anterior)</string>
     <string name="sindico_foto_condominio_salva">Foto do condomínio salva.</string>
     <string name="sindico_sem_dado">—</string>
+    <string name="sindico_torre_do_condominio">Torre do condomínio</string>
     <string name="sindico_carregando_dado">…</string>
     <string name="sindico_dash_descartes">Descartes nos últimos 30 dias</string>
     <string name="sindico_dash_moradores">Moradores que descartaram no mês</string>

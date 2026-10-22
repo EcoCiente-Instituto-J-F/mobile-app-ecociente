@@ -157,6 +157,10 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 return;
             }
 
+            if (viewModel.aplicarTorresDaApi(PerfilApiRepository.torresDoCondominio(this),
+                    getString(R.string.sindico_torre_do_condominio))) {
+                mostrarListas();
+            }
             viewModel.aplicarDadosDaApi(api);
             preencherSeVazio(nome, api.getNome());
             preencherSeVazio(endereco, api.getEndereco());
