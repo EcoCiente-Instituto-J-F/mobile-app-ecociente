@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="4dp"
                 android:paddingBottom="8dp"
+                android:paddingEnd="0dp"
                 android:fontFamily="@font/nunito_regular"
                 android:text="@string/sindico_demo_dados_alteracoes_temporarias"
                 android:textColor="@color/cinza_texto_home"
@@ -179,6 +180,7 @@
                             android:textSize="11sp" />
                         <EditText
                             android:id="@+id/nomeCondominioSindico"
+                            android:importantForAutofill="no"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
                             android:background="@drawable/sindico_campo"
@@ -203,6 +205,7 @@
                         <EditText
                             android:baselineAligned="false"
                             android:id="@+id/enderecoCondominioSindico"
+                            android:importantForAutofill="no"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
                             android:background="@drawable/sindico_campo"
@@ -298,6 +301,7 @@
                                     android:textSize="11sp" />
                                 <EditText
                                     android:id="@+id/cidadeCondominioSindico"
+                                    android:importantForAutofill="no"
                                     android:layout_width="match_parent"
                                     android:layout_height="46dp"
                                     android:background="@drawable/sindico_campo"
@@ -325,6 +329,7 @@
                                     android:textSize="11sp" />
                                 <EditText
                                     android:id="@+id/estadoCondominioSindico"
+                                    android:importantForAutofill="no"
                                     android:layout_width="match_parent"
                                     android:layout_height="46dp"
                                     android:background="@drawable/sindico_campo"
@@ -351,6 +356,7 @@
                             android:textSize="11sp" />
                         <EditText
                             android:id="@+id/cepCondominioSindico"
+                            android:importantForAutofill="no"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
                             android:background="@drawable/sindico_campo"

@@ -30,6 +30,8 @@ public class ConfettiView extends View {
     private static final int MAX_TENTATIVAS_MEDICAO = 8;
 
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    private final RectF retangulo = new RectF();
     private final List<Particula> particulas = new ArrayList<>();
     private final Random random = new Random();
 
@@ -219,21 +221,21 @@ public class ConfettiView extends View {
             canvas.rotate(rotacao, x, y);
 
             if (p.tipo == 0) {
-                RectF rect = new RectF(
+                retangulo.set(
                         x - p.tamanho * .78f,
                         y - p.tamanho * .24f,
                         x + p.tamanho * .78f,
                         y + p.tamanho * .24f
                 );
-                canvas.drawRoundRect(rect, dp(1.7f), dp(1.7f), paint);
+                canvas.drawRoundRect(retangulo, dp(1.7f), dp(1.7f), paint);
             } else if (p.tipo == 1) {
-                RectF rect = new RectF(
+                retangulo.set(
                         x - p.tamanho * .40f,
                         y - p.tamanho * .67f,
                         x + p.tamanho * .40f,
                         y + p.tamanho * .67f
                 );
-                canvas.drawRoundRect(rect, dp(1.5f), dp(1.5f), paint);
+                canvas.drawRoundRect(retangulo, dp(1.5f), dp(1.5f), paint);
             } else {
                 canvas.drawCircle(x, y, p.tamanho * .34f, paint);
             }

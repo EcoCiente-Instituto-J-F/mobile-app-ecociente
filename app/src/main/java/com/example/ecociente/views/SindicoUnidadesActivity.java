@@ -319,7 +319,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                               int idLista, int idContagem) {
         LinearLayout lista = findViewById(idLista);
         lista.removeAllViews();
-        ((TextView) findViewById(idContagem)).setText(itens.size() + " itens cadastrados");
+        ((TextView) findViewById(idContagem)).setText(getResources().getQuantityString(R.plurals.sindico_itens_cadastrados, itens.size(), itens.size()));
         if (itens.isEmpty()) {
             TextView vazio = new TextView(this);
             vazio.setText(bloco ? R.string.sindico_nenhum_bloco_adicione_o_primeiro_a : R.string.sindico_nenhuma_area_de_descarte_adicione);

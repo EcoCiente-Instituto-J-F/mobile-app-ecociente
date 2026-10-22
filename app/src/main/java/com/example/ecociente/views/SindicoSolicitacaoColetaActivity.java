@@ -3,7 +3,6 @@ package com.example.ecociente.views;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +30,6 @@ public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
     private Calendar dataEscolhida;
     private int horaEscolhida = 12;
     private int minutoEscolhido = 30;
-    private boolean recorrente;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -57,20 +55,10 @@ public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
             int minutos = estadoSalvo.getInt(ESTADO_HORA, 750);
             horaEscolhida = minutos / 60;
             minutoEscolhido = minutos % 60;
-            recorrente = estadoSalvo.getBoolean("recorrente", false);
         }
         atualizarDataHora();
-        atualizarRecorrencia();
         botaoData.setOnClickListener(view -> escolherData());
         botaoHora.setOnClickListener(view -> escolherHora());
-        findViewById(R.id.recorrenciaSim).setOnClickListener(view -> {
-            recorrente = true;
-            atualizarRecorrencia();
-        });
-        findViewById(R.id.recorrenciaNao).setOnClickListener(view -> {
-            recorrente = false;
-            atualizarRecorrencia();
-        });
         findViewById(R.id.voltarSolicitacao).setOnClickListener(view -> finish());
         findViewById(R.id.enviarSolicitacao).setOnClickListener(view -> enviar(viewModel, cooperativa));
     }
@@ -91,7 +79,6 @@ public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
         }
         View enviar = findViewById(R.id.enviarSolicitacao);
         enviar.setEnabled(false);
-        // A API não guarda recorrência ao criar a coleta: só data e hora seguem na solicitação.
         new CalendarioExternoRepository().solicitar(this, condominioId, cooperativa.getId(),
                 momento.getTimeInMillis(), (criada, mensagemErro) -> {
                     if (isFinishing() || isDestroyed()) return;
@@ -133,20 +120,10 @@ public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
                 horaEscolhida, minutoEscolhido));
     }
 
-    private void atualizarRecorrencia() {
-        Button sim = findViewById(R.id.recorrenciaSim);
-        Button nao = findViewById(R.id.recorrenciaNao);
-        sim.setAlpha(recorrente ? 1f : 0.7f);
-        nao.setAlpha(recorrente ? 0.7f : 1f);
-        sim.setContentDescription(recorrente ? "Sim, selecionado" : "Sim");
-        nao.setContentDescription(recorrente ? "Não" : "Não, selecionado");
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle estado) {
         estado.putLong(ESTADO_DATA, dataEscolhida.getTimeInMillis());
         estado.putInt(ESTADO_HORA, horaEscolhida * 60 + minutoEscolhido);
-        estado.putBoolean("recorrente", recorrente);
         super.onSaveInstanceState(estado);
     }
 }

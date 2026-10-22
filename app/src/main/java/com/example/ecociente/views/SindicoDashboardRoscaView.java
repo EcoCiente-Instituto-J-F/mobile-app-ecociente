@@ -16,6 +16,7 @@ import com.example.ecociente.R;
 /** Distribuição percentual dos materiais descartados no condomínio. */
 public final class SindicoDashboardRoscaView extends View {
     private final Paint tinta = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final RectF area = new RectF();
     private int[] percentuais = new int[0];
     private static final int[] CORES = {R.color.verde_escuro_principal,
             R.color.rosa_ecociente, R.color.verde_claro_ecociente,
@@ -36,7 +37,7 @@ public final class SindicoDashboardRoscaView extends View {
         float raio = Math.min(getWidth(), getHeight()) / 2f - dp(19);
         float cx = getWidth() / 2f;
         float cy = getHeight() / 2f;
-        RectF area = new RectF(cx - raio, cy - raio, cx + raio, cy + raio);
+        area.set(cx - raio, cy - raio, cx + raio, cy + raio);
         tinta.setStyle(Paint.Style.STROKE);
         tinta.setStrokeWidth(dp(29));
         float inicio = -90;

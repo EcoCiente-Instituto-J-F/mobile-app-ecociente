@@ -19,6 +19,7 @@ import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.firebase.auth.FirebaseUser;
 import com.example.ecociente.ui.DialogoEco;
+import android.widget.FrameLayout;
 
 public class InformacoesPessoaisActivity extends AppCompatActivity {
 
@@ -323,7 +324,7 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
         String valorAtual = textoValor.getText().toString();
 
-        View corpo = LayoutInflater.from(this).inflate(R.layout.dialog_editar_campo, null);
+        View corpo = LayoutInflater.from(this).inflate(R.layout.dialog_editar_campo, new FrameLayout(this), false);
 
         EditText campoValor = corpo.findViewById(R.id.campoEditarValor);
 

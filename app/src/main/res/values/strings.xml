@@ -174,7 +174,6 @@
 
     <string name="seis_quizzes_disponiveis">6 quizzes disponíveis</string>
 
-    <string name="quizzes_disponiveis_formatado">%1$d quizzes disponíveis</string>
 
     <string name="filtros">Filtros</string>
 
@@ -387,7 +386,6 @@
     <string name="proxima_coleta_hoje">Hoje</string>
     <string name="proxima_coleta_rotulo_faltam">Faltam</string>
     <string name="proxima_coleta_rotulo_coleta">Coleta</string>
-    <string name="proxima_coleta_dias">%1$d dias</string>
     <string name="tipo_coleta_reciclaveis">Recicláveis</string>
     <string name="enviando">Enviando…</string>
     <string name="verificando">Verificando…</string>
@@ -455,7 +453,6 @@
     <string name="quizzes_vazio">Nenhum quiz disponível por enquanto.</string>
     <string name="coletas_do_mes_erro">Não foi possível carregar as coletas do mês. Toque para tentar de novo.</string>
     <string name="quizzes_erro">Não foi possível carregar os quizzes. Entre com e-mail e senha e tente de novo.</string>
-    <string name="quiz_n_perguntas">%1$d perguntas</string>
     <string name="quiz_pontos_recompensa">+%1$d pts</string>
     <string name="quiz_resultado_sem_nota">--/--</string>
     <string name="quiz_resultado_sem_gabarito">Respostas registradas. A correção aparece quando o gabarito estiver disponível.</string>
@@ -532,7 +529,6 @@
     <string name="sua_posicao_fora">Você ainda não pontuou neste ciclo</string>
     <string name="home_saudacao_sem_nome">Olá!</string>
     <string name="quiz_corrigindo">Corrigindo…</string>
-    <string name="quiz_resultado_pontos">Você ganhou %1$d pontos!</string>
     <string name="ranking_home_indisponivel">Não foi possível carregar o ranking agora.</string>
     <string name="ranking_erro">Não foi possível carregar o ranking. Tente de novo mais tarde.</string>
     <string name="registro_sem_condominio">Não encontramos o seu condomínio. Atualize o perfil e tente de novo.</string>
@@ -542,4 +538,23 @@
     <string name="feed_subtitulo">Fotos de descarte do seu condomínio</string>
     <string name="feed_vazio">Ainda não há fotos por aqui. Quando os moradores registrarem descartes, elas aparecem neste feed.</string>
     <string name="feed_foto_descarte">Foto de descarte</string>
+    <plurals name="quizzes_disponiveis_formatado">
+        <item quantity="one">%1$d quiz disponível</item>
+        <item quantity="other">%1$d quizzes disponíveis</item>
+    </plurals>
+    <plurals name="proxima_coleta_dias">
+        <item quantity="one">%1$d dia</item>
+        <item quantity="other">%1$d dias</item>
+    </plurals>
+    <plurals name="quiz_n_perguntas">
+        <item quantity="one">%1$d pergunta</item>
+        <item quantity="other">%1$d perguntas</item>
+    </plurals>
+    <plurals name="quiz_resultado_pontos">
+        <item quantity="one">Você ganhou %1$d ponto!</item>
+        <item quantity="other">Você ganhou %1$d pontos!</item>
+    </plurals>
+    <string name="notificacao_eko">Eko</string>
+    <string name="notificacao_fazer_quiz">Fazer quiz</string>
+    <string name="sindico_posicao_ordinal">%1$dº</string>
 </resources>

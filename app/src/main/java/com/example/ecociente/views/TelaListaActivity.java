@@ -40,6 +40,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 import com.example.ecociente.ui.ChipEco;
 import com.example.ecociente.ui.IndicadorCarregamento;
+import android.widget.FrameLayout;
 
 public class TelaListaActivity extends AppCompatActivity {
 
@@ -378,7 +379,7 @@ public class TelaListaActivity extends AppCompatActivity {
 
         BottomSheetDialog folha = new BottomSheetDialog(this);
 
-        View conteudo = getLayoutInflater().inflate(R.layout.dialog_filtro_guia, null);
+        View conteudo = getLayoutInflater().inflate(R.layout.dialog_filtro_guia, new FrameLayout(this), false);
 
         ChipGroup categorias = conteudo.findViewById(R.id.chipsCategoria);
         ChipGroup tempos = conteudo.findViewById(R.id.chipsTempo);

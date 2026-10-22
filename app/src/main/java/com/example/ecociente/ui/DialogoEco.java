@@ -53,7 +53,7 @@ public final class DialogoEco {
 
         public Builder(@NonNull Context contexto) {
             this.contexto = contexto;
-            this.raiz = LayoutInflater.from(contexto).inflate(R.layout.dialog_eco, null);
+            this.raiz = LayoutInflater.from(contexto).inflate(R.layout.dialog_eco, new FrameLayout(contexto), false);
             this.botoes = raiz.findViewById(R.id.botoesDialogoEco);
         }
 

@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.File;
 import com.example.ecociente.ui.DialogoEco;
 import androidx.annotation.StringRes;
+import android.widget.FrameLayout;
 
 public class GerenciarPerfilActivity extends AppCompatActivity {
 
@@ -373,7 +374,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
     private void pedirSenhaParaExcluir() {
 
-        View corpo = LayoutInflater.from(this).inflate(R.layout.dialog_confirmar_senha, null);
+        View corpo = LayoutInflater.from(this).inflate(R.layout.dialog_confirmar_senha, new FrameLayout(this), false);
 
         EditText campoSenha = corpo.findViewById(R.id.campoConfirmarSenhaExclusao);
 

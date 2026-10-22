@@ -20,6 +20,10 @@ public final class SindicoGraficoView extends View {
     private final Paint tinta = new Paint(Paint.ANTI_ALIAS_FLAG);
     private int[] valores = new int[0];
     private String[] datas = new String[0];
+    private final Path linha = new Path();
+    private final Path area = new Path();
+    private DashPathEffect tracejado;
+    private LinearGradient degrade;
 
     public SindicoGraficoView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -37,6 +41,12 @@ public final class SindicoGraficoView extends View {
     }
 
     @Override
+    protected void onSizeChanged(int largura, int altura, int larguraAnterior, int alturaAnterior) {
+        super.onSizeChanged(largura, altura, larguraAnterior, alturaAnterior);
+        degrade = null;
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         float esquerda = dp(35);
@@ -50,7 +60,10 @@ public final class SindicoGraficoView extends View {
         tinta.setStyle(Paint.Style.STROKE);
         tinta.setStrokeWidth(dp(1));
         tinta.setColor(ContextCompat.getColor(getContext(), R.color.cinza_borda_clara_home));
-        tinta.setPathEffect(new DashPathEffect(new float[] {dp(4), dp(4)}, 0));
+        if (tracejado == null) {
+            tracejado = new DashPathEffect(new float[] {dp(4), dp(4)}, 0);
+        }
+        tinta.setPathEffect(tracejado);
         for (int i = 0; i <= 3; i++) {
             float y = base - altura * i / 3f;
             canvas.drawLine(esquerda, y, direita, y, tinta);
@@ -64,7 +77,7 @@ public final class SindicoGraficoView extends View {
             canvas.drawText(String.valueOf(i * 100), dp(2), base - altura * i / 3f + dp(3), tinta);
         }
 
-        Path linha = new Path();
+        linha.reset();
         for (int i = 0; i < valores.length; i++) {
             float x = esquerda + largura * i / (valores.length - 1);
             float y = base - altura * Math.min(300, Math.max(0, valores[i])) / 300f;
@@ -77,15 +90,19 @@ public final class SindicoGraficoView extends View {
         if (valores.length < 2) return;
 
         // área sob a linha, em rosa que some para baixo
-        Path area = new Path(linha);
+        area.reset();
+        area.addPath(linha);
         area.lineTo(direita, base);
         area.lineTo(esquerda, base);
         area.close();
         int rosa = ContextCompat.getColor(getContext(), R.color.rosa_ecociente);
         tinta.setStyle(Paint.Style.FILL);
-        tinta.setShader(new LinearGradient(0, topo, 0, base,
-                (rosa & 0x00FFFFFF) | 0x66000000, (rosa & 0x00FFFFFF) | 0x08000000,
-                Shader.TileMode.CLAMP));
+        if (degrade == null) {
+            degrade = new LinearGradient(0, topo, 0, base,
+                    (rosa & 0x00FFFFFF) | 0x66000000, (rosa & 0x00FFFFFF) | 0x08000000,
+                    Shader.TileMode.CLAMP);
+        }
+        tinta.setShader(degrade);
         canvas.drawPath(area, tinta);
         tinta.setShader(null);
 

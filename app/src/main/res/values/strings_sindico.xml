@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <string name="sindico_voltar_aos_blocos">Voltar aos blocos</string>
     <string name="sindico_buscar_unidade">Buscar unidade…</string>
     <string name="sindico_adicionar_unidade">Adicionar unidade</string>
@@ -50,7 +51,7 @@
     <string name="sindico_nome_do_morador">Nome do morador</string>
     <string name="sindico_maria_clara">Maria Clara</string>
     <string name="sindico_telefone_do_morador">Telefone do morador</string>
-    <string name="sindico_11_95376_2717">(11) 95376-2717</string>
+    <string name="sindico_11_95376_2717" tools:ignore="TypographyDashes">(11) 95376-2717</string>
     <string name="sindico_enviar_unidade">Enviar unidade</string>
     <string name="sindico_enviar">Enviar</string>
     <string name="sindico_criar_notificacao">Criar notificação</string>
@@ -127,7 +128,7 @@
     <string name="sindico_informe_a_sigla_do_estado">Informe a sigla do estado</string>
     <string name="sindico_informe_o_cep">Informe o CEP</string>
     <string name="sindico_use_duas_letras_como_sp">Use duas letras, como SP</string>
-    <string name="sindico_use_o_formato_01234_567">Use o formato 01234-567</string>
+    <string name="sindico_use_o_formato_01234_567" tools:ignore="TypographyDashes">Use o formato 01234-567</string>
     <string name="sindico_demo_dados_salvos">Dados do condomínio salvos.</string>
     <string name="sindico_condominio_sincronizacao_falhou">O endereço foi salvo no aparelho, mas a API não aceitou. Só o síndico responsável pode alterá-lo.</string>
     <string name="sindico_nenhum_bloco_adicione_o_primeiro_a">Nenhum bloco. Adicione o primeiro abaixo.</string>
@@ -178,4 +179,8 @@
     <string name="sindico_dashboard_erro">Não foi possível calcular o dashboard. Tente de novo em instantes.</string>
     <string name="sindico_condominio_carregando">Carregando…</string>
     <string name="sindico_ranking_vazio">Ninguém pontuou neste ciclo ainda.</string>
+    <plurals name="sindico_itens_cadastrados">
+        <item quantity="one">%1$d item cadastrado</item>
+        <item quantity="other">%1$d itens cadastrados</item>
+    </plurals>
 </resources>

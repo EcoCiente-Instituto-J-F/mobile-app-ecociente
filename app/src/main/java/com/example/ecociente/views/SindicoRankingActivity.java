@@ -134,7 +134,7 @@ public final class SindicoRankingActivity extends AppCompatActivity {
             SindicoPosicaoRanking posicao = posicoes.get(i);
             View linha = inflater.inflate(R.layout.item_sindico_ranking, lista, false);
             ((TextView) linha.findViewById(R.id.posicaoItemRanking))
-                    .setText((i + 1) + "º");
+                    .setText(getString(R.string.sindico_posicao_ordinal, i + 1));
             ((TextView) linha.findViewById(R.id.avatarItemRanking))
                     .setText(posicao.getIniciais());
             ((TextView) linha.findViewById(R.id.nomeItemRanking))

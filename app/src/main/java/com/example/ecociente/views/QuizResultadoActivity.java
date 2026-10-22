@@ -36,6 +36,7 @@ import com.google.android.material.card.MaterialCardView;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import android.widget.FrameLayout;
 
 public class QuizResultadoActivity extends AppCompatActivity {
 
@@ -279,7 +280,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
         String[] opcoes = pergunta.getOpcoes();
         String respostaCorreta = opcoes[pergunta.getIndiceCorreto()];
 
-        View conteudo = getLayoutInflater().inflate(R.layout.dialog_eco_explicacao, null);
+        View conteudo = getLayoutInflater().inflate(R.layout.dialog_eco_explicacao, new FrameLayout(this), false);
 
         ((TextView) conteudo.findViewById(R.id.respostaCorretaDialogo))
                 .setText(getString(R.string.quiz_resposta_correta, respostaCorreta));
@@ -303,7 +304,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
             return mensagem;
         }
 
-        return mensagem + "\n" + getString(R.string.quiz_resultado_pontos, resultado.getPontosConcedidos());
+        return mensagem + "\n" + getResources().getQuantityString(R.plurals.quiz_resultado_pontos, resultado.getPontosConcedidos(), resultado.getPontosConcedidos());
     }
 
     @NonNull

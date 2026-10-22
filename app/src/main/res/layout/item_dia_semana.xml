@@ -59,6 +59,6 @@
         android:gravity="center"
         android:maxLines="1"
         android:textColor="@color/cinza_texto_home"
-        android:textSize="10sp" />
+        android:textSize="11sp" />
 
 </LinearLayout>
