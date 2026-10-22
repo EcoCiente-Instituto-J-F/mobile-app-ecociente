@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,26 +13,40 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
-import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.ui.DialogoEco;
-import com.example.ecociente.model.SindicoHistoricoColeta;
+import com.example.ecociente.model.ResultadoSolicitacoes;
+import com.example.ecociente.model.SindicoCooperativa;
+import com.example.ecociente.model.Solicitacao;
+import com.example.ecociente.repository.CalendarioExternoRepository;
+import com.example.ecociente.repository.CooperativaRepository;
 import com.example.ecociente.viewmodels.SindicoColetaViewModel;
+import com.example.ecociente.ui.IndicadorCarregamento;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.InsetsSistema;
 import androidx.core.view.ViewCompat;
-import com.example.ecociente.model.SindicoSolicitacao;
 import com.example.ecociente.model.StatusAgendamento;
 import com.example.ecociente.ui.FormatoDataApi;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Navegacao;
+import com.google.android.material.button.MaterialButton;
 
-/** Histórico ilustrativo: avaliações ficam só na memória desta execução. */
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+/** Coletas do condomínio vindas da ds-calendario-api, da mais recente para a mais antiga. */
 public final class SindicoHistoricoActivity extends AppCompatActivity {
     private static final String ESTADO_FILTRO = "filtroHistorico";
+    private static final int TODAS = 0;
+    private static final int EM_ANDAMENTO = 1;
+    private static final int CONCLUIDAS = 2;
+    private static final int ENCERRADAS = 3;
+
     private SindicoColetaViewModel viewModel;
     private LinearLayout lista;
     private int filtro;
+    private boolean carregadas;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -51,7 +64,7 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(SindicoColetaViewModel.class);
         lista = findViewById(R.id.listaSindicoHistorico);
-        filtro = estadoSalvo == null ? 0 : estadoSalvo.getInt(ESTADO_FILTRO, 0);
+        filtro = estadoSalvo == null ? TODAS : estadoSalvo.getInt(ESTADO_FILTRO, TODAS);
         findViewById(R.id.filtrarHistorico).setOnClickListener(view -> abrirFiltro());
 
         BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
@@ -61,54 +74,90 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
                 view -> startActivity(new Intent(this, ChatActivity.class)));
         barra.setOnItemClickListener(
                 indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.TERCEIRO));
+    }
 
-        getSupportFragmentManager().setFragmentResultListener(
-                SindicoAvaliarColetaDialogFragment.RESULTADO_AVALIACAO, this,
-                (chave, resultado) -> {
-                    mostrarHistorico();
-                    AvisoFlutuante.mostrar(this, R.string.sindico_demo_avaliacao_salva);
-                });
-        mostrarHistorico();
+    @Override
+    protected void onStart() {
+        super.onStart();
+        carregar();
+    }
+
+    private void carregar() {
+        if (!carregadas) {
+            lista.removeAllViews();
+            IndicadorCarregamento.mostrar(lista, R.string.historico_carregando);
+        }
+
+        // Os nomes das cooperativas vêm de outra API; chegando depois, a lista se redesenha.
+        if (viewModel.getCooperativas().isEmpty()) {
+            new CooperativaRepository().listar(this, cooperativas -> {
+                if (cooperativas == null || isFinishing() || isDestroyed()) return;
+                viewModel.definirCooperativas(cooperativas);
+                if (carregadas) mostrarHistorico();
+            });
+        }
+
+        new CalendarioExternoRepository().listarTodos(this, resultado -> {
+            if (isFinishing() || isDestroyed()) return;
+
+            if (resultado.getTipo() != ResultadoSolicitacoes.Tipo.SUCESSO) {
+                if (!carregadas) mostrarErro();
+                return;
+            }
+
+            List<Solicitacao> recentes = new ArrayList<>(resultado.getItens());
+            Collections.sort(recentes, (a, b) -> texto(b.getDataInicio()).compareTo(texto(a.getDataInicio())));
+            viewModel.definirSolicitacoes(recentes);
+            carregadas = true;
+            mostrarHistorico();
+        });
+    }
+
+    private static String texto(String valor) {
+        return valor == null ? "" : valor;
+    }
+
+    private void mostrarErro() {
+        lista.removeAllViews();
+
+        TextView mensagem = new TextView(this);
+        mensagem.setText(R.string.historico_erro);
+        mensagem.setTextColor(getColor(R.color.cinza_texto_home));
+        mensagem.setTextSize(14);
+        mensagem.setPadding(dp(8), dp(28), dp(8), dp(12));
+        lista.addView(mensagem);
+
+        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
+        tentar.setText(R.string.tentar_novamente);
+        tentar.setOnClickListener(view -> carregar());
+        lista.addView(tentar);
+    }
+
+    private boolean passaNoFiltro(StatusAgendamento status) {
+        switch (filtro) {
+            case EM_ANDAMENTO:
+                return status == StatusAgendamento.AGENDADO || status == StatusAgendamento.CONFIRMADO;
+            case CONCLUIDAS:
+                return status == StatusAgendamento.REALIZADO;
+            case ENCERRADAS:
+                return status == StatusAgendamento.CANCELADO || status == StatusAgendamento.RECUSADO;
+            default:
+                return true;
+        }
     }
 
     private void mostrarHistorico() {
         lista.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(this);
         int encontrados = 0;
-        if (filtro == 0) {
-            for (SindicoSolicitacao solicitacao : viewModel.getSolicitacoes()) {
-                encontrados++;
-                lista.addView(criarCartaoSolicitacao(inflater, solicitacao), margemEntreCartoes());
-            }
-        }
-        for (SindicoHistoricoColeta coleta : viewModel.getHistorico()) {
-            int nota = viewModel.getAvaliacao(coleta.getId());
-            if ((filtro == 1 && nota != 0) || (filtro == 2 && nota == 0)) continue;
+        for (Solicitacao solicitacao : viewModel.getSolicitacoes()) {
+            if (!passaNoFiltro(solicitacao.getStatus())) continue;
             encontrados++;
-            View cartao = inflater.inflate(R.layout.item_sindico_historico, lista, false);
-            ((TextView) cartao.findViewById(R.id.nomeHistorico)).setText(coleta.getCooperativa());
-            ((TextView) cartao.findViewById(R.id.dataHistorico)).setText(coleta.getData());
-            ((TextView) cartao.findViewById(R.id.avaliacaoPublicaHistorico))
-                    .setText(coleta.getAvaliacaoPublica());
-
-            FrameLayout acao = cartao.findViewById(R.id.acaoAvaliarHistorico);
-            TextView textoAcao = cartao.findViewById(R.id.textoAcaoAvaliarHistorico);
-            if (nota > 0) {
-                textoAcao.setText(getString(R.string.sindico_nota_texto, nota));
-                textoAcao.setBackgroundResource(R.drawable.sindico_status_concluida);
-                textoAcao.setTextColor(getColor(R.color.branco));
-                acao.setContentDescription(getString(R.string.sindico_avaliacao_local, nota));
-            } else {
-                acao.setContentDescription(getString(R.string.sindico_avaliar_coleta_de, coleta.getCooperativa()));
-            }
-            acao.setOnClickListener(view -> abrirAvaliacao(coleta));
-            LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(-1, -2);
-            parametros.bottomMargin = dp(12);
-            lista.addView(cartao, parametros);
+            lista.addView(criarCartao(inflater, solicitacao), margemEntreCartoes());
         }
         if (encontrados == 0) {
             TextView vazio = new TextView(this);
-            vazio.setText(filtro == 1 ? R.string.sindico_todas_as_coletas_de_exemplo_ja_for : R.string.sindico_nenhuma_coleta_avaliada_neste_filt);
+            vazio.setText(R.string.sindico_historico_vazio);
             vazio.setTextColor(getColor(R.color.cinza_texto_home));
             vazio.setTextSize(14);
             vazio.setPadding(dp(8), dp(28), dp(8), dp(28));
@@ -122,62 +171,45 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
         return parametros;
     }
 
-    private View criarCartaoSolicitacao(LayoutInflater inflater, SindicoSolicitacao solicitacao) {
+    private View criarCartao(LayoutInflater inflater, Solicitacao solicitacao) {
+        SindicoCooperativa cooperativa = viewModel.buscar(solicitacao.getCooperativaId());
+        String nome = cooperativa != null ? cooperativa.getNome()
+                : getString(R.string.sindico_cooperativa_numero, solicitacao.getCooperativaId());
+
         View cartao = inflater.inflate(R.layout.item_sindico_historico, lista, false);
-        ((TextView) cartao.findViewById(R.id.nomeHistorico)).setText(solicitacao.getCooperativa());
+        ((TextView) cartao.findViewById(R.id.nomeHistorico)).setText(nome);
         ((TextView) cartao.findViewById(R.id.dataHistorico)).setText(getString(
                 R.string.sindico_solicitacao_andamento,
-                FormatoDataApi.data(solicitacao.getInicio()), FormatoDataApi.hora(solicitacao.getInicio())));
-        cartao.findViewById(R.id.linhaAvaliacaoHistorico).setVisibility(View.GONE);
-        cartao.findViewById(R.id.acaoAvaliarHistorico).setVisibility(View.GONE);
+                FormatoDataApi.data(solicitacao.getDataInicio()), FormatoDataApi.hora(solicitacao.getDataInicio())));
         TextView etiqueta = cartao.findViewById(R.id.etiquetaHistorico);
         StatusAgendamento status = solicitacao.getStatus();
         etiqueta.setText(status.getEtiqueta());
         etiqueta.setTextColor(getColor(status.getTextoEtiqueta()));
         ViewCompat.setBackgroundTintList(etiqueta, getColorStateList(status.getFundoEtiqueta()));
         cartao.setOnClickListener(view -> startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
-                this, solicitacao.paraSolicitacao(PerfilApiRepository.condominioNomeOuVazio(this)),
-                solicitacao.getCooperativa())));
+                this, solicitacao.comNomeCondominio(PerfilApiRepository.condominioNomeOuVazio(this)), nome)));
         Motion.pressFeedback(cartao);
         return cartao;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mostrarHistorico();
     }
 
     private void abrirFiltro() {
         new DialogoEco.Builder(this)
                 .titulo(R.string.sindico_filtrar_historico)
-                .botao(R.string.sindico_todas, filtro == 0 ? DialogoEco.Estilo.PREENCHIDO : DialogoEco.Estilo.CONTORNO,
-                        () -> aplicarFiltro(0))
-                .botao(R.string.sindico_para_avaliar, filtro == 1 ? DialogoEco.Estilo.PREENCHIDO : DialogoEco.Estilo.CONTORNO,
-                        () -> aplicarFiltro(1))
-                .botao(R.string.sindico_avaliadas, filtro == 2 ? DialogoEco.Estilo.PREENCHIDO : DialogoEco.Estilo.CONTORNO,
-                        () -> aplicarFiltro(2))
+                .botao(R.string.sindico_todas, estilo(TODAS), () -> aplicarFiltro(TODAS))
+                .botao(R.string.sindico_filtro_andamento, estilo(EM_ANDAMENTO), () -> aplicarFiltro(EM_ANDAMENTO))
+                .botao(R.string.sindico_filtro_concluidas, estilo(CONCLUIDAS), () -> aplicarFiltro(CONCLUIDAS))
+                .botao(R.string.sindico_filtro_encerradas, estilo(ENCERRADAS), () -> aplicarFiltro(ENCERRADAS))
                 .botao(R.string.perfil_cancelar, DialogoEco.Estilo.CONTORNO, null)
                 .mostrar();
     }
 
+    private DialogoEco.Estilo estilo(int opcao) {
+        return filtro == opcao ? DialogoEco.Estilo.PREENCHIDO : DialogoEco.Estilo.CONTORNO;
+    }
+
     private void aplicarFiltro(int novoFiltro) {
         filtro = novoFiltro;
-        mostrarHistorico();
-    }
-
-    private void abrirAvaliacao(SindicoHistoricoColeta coleta) {
-        if (getSupportFragmentManager().findFragmentByTag("avaliarColetaSindico") == null) {
-            SindicoAvaliarColetaDialogFragment.criar(coleta.getId(), coleta.getCooperativa())
-                    .show(getSupportFragmentManager(), "avaliarColetaSindico");
-        }
-    }
-
-    private void navegar(Class<?> destino) {
-        Intent intent = new Intent(this, destino);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-        finish();
+        if (carregadas) mostrarHistorico();
     }
 
     private int dp(int valor) {

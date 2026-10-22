@@ -25,12 +25,14 @@ import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Navegacao;
-import com.example.ecociente.model.SindicoSolicitacao;
+import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
 import com.example.ecociente.repository.CooperativaRepository;
 import com.example.ecociente.ui.AbrirMapa;
 import com.example.ecociente.ui.IndicadorCarregamento;
 import com.google.android.material.button.MaterialButton;
+import com.example.ecociente.model.ResultadoSolicitacoes;
+import com.example.ecociente.repository.CalendarioExternoRepository;
 
 /** Cooperativas da cidade do condomínio (API), com a rota até elas no Google Maps. */
 public final class SindicoCooperativasActivity extends AppCompatActivity {
@@ -78,6 +80,8 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
         super.onStart();
         if (!carregadas) {
             carregarCooperativas();
+        } else {
+            carregarSolicitacoes();
         }
     }
 
@@ -103,6 +107,18 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
 
             viewModel.definirCooperativas(cooperativas);
             carregadas = true;
+            mostrarCooperativas(busca.getText().toString());
+            carregarSolicitacoes();
+        });
+    }
+
+    // Coletas já pedidas: a cooperativa com pedido em andamento mostra "Solicitação enviada".
+    private void carregarSolicitacoes() {
+        new CalendarioExternoRepository().listarTodos(this, resultado -> {
+            if (isFinishing() || isDestroyed()
+                    || resultado.getTipo() != ResultadoSolicitacoes.Tipo.SUCESSO) return;
+
+            viewModel.definirSolicitacoes(resultado.getItens());
             mostrarCooperativas(busca.getText().toString());
         });
     }
@@ -151,14 +167,14 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
             comoChegar.setContentDescription(getString(R.string.sindico_como_chegar_em, cooperativa.getNome()));
             comoChegar.setOnClickListener(view -> AbrirMapa.rota(this, cooperativa.getEnderecoCompleto()));
             Button acao = item.findViewById(R.id.acaoCooperativa);
-            SindicoSolicitacao pendente = solicitacaoEmAndamento(cooperativa.getId());
+            Solicitacao pendente = solicitacaoEmAndamento(cooperativa.getId());
             if (pendente != null) {
                 acao.setText(R.string.sindico_solicitacao_enviada);
                 acao.setTextColor(getColor(R.color.etiqueta_pendente_texto));
                 acao.setBackgroundTintList(getColorStateList(R.color.etiqueta_pendente_fundo));
                 acao.setOnClickListener(view -> startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
-                        this, pendente.paraSolicitacao(PerfilApiRepository.condominioNomeOuVazio(this)),
-                        pendente.getCooperativa())));
+                        this, pendente.comNomeCondominio(PerfilApiRepository.condominioNomeOuVazio(this)),
+                        cooperativa.getNome())));
                 lista.addView(item, margemDoCartao());
                 continue;
             }
@@ -186,8 +202,8 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
         return parametros;
     }
 
-    private SindicoSolicitacao solicitacaoEmAndamento(int cooperativaId) {
-        for (SindicoSolicitacao solicitacao : viewModel.getSolicitacoes()) {
+    private Solicitacao solicitacaoEmAndamento(int cooperativaId) {
+        for (Solicitacao solicitacao : viewModel.getSolicitacoes()) {
             boolean ativa = solicitacao.getStatus() == StatusAgendamento.AGENDADO
                     || solicitacao.getStatus() == StatusAgendamento.CONFIRMADO;
             if (ativa && solicitacao.getCooperativaId() == cooperativaId) return solicitacao;

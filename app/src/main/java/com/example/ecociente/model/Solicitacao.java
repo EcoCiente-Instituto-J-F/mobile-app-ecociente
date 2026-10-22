@@ -55,6 +55,12 @@ public final class Solicitacao implements Serializable {
                 id, condominioId, cooperativaId, dataInicio, dataFim, novoStatus, possuiRecorrencia, nomeCondominio, detalhe);
     }
 
+    @NonNull
+    public Solicitacao comNomeCondominio(@Nullable String nome) {
+        return new Solicitacao(
+                id, condominioId, cooperativaId, dataInicio, dataFim, status, possuiRecorrencia, nome, detalhe);
+    }
+
     @Nullable
     public DetalheSolicitacao getDetalhe() {
         return detalhe;

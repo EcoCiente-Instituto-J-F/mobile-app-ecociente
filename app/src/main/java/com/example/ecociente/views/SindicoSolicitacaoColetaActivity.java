@@ -18,7 +18,8 @@ import com.example.ecociente.viewmodels.SindicoColetaViewModel;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import com.example.ecociente.model.SindicoSolicitacao;
+import com.example.ecociente.repository.CalendarioExternoRepository;
+import android.view.View;
 
 public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
     public static final String EXTRA_COOPERATIVA_ID = "cooperativa_id";
@@ -83,11 +84,28 @@ public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
             AvisoFlutuante.mostrar(this, R.string.sindico_horario_passado);
             return;
         }
-        String inicio = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).format(momento.getTime());
-        SindicoSolicitacao criada = viewModel.criarSolicitacao(cooperativa.getId(), inicio, recorrente);
-        startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
-                this, criada.paraSolicitacao(PerfilApiRepository.condominioNomeOuVazio(this)), cooperativa.getNome()));
-        finish();
+        int condominioId = PerfilApiRepository.condominioId(this);
+        if (condominioId <= 0) {
+            AvisoFlutuante.mostrar(this, R.string.sindico_coleta_sem_condominio);
+            return;
+        }
+        View enviar = findViewById(R.id.enviarSolicitacao);
+        enviar.setEnabled(false);
+        // A API não guarda recorrência ao criar a coleta: só data e hora seguem na solicitação.
+        new CalendarioExternoRepository().solicitar(this, condominioId, cooperativa.getId(),
+                momento.getTimeInMillis(), (criada, mensagemErro) -> {
+                    if (isFinishing() || isDestroyed()) return;
+                    if (criada == null) {
+                        enviar.setEnabled(true);
+                        AvisoFlutuante.mostrar(this, mensagemErro);
+                        return;
+                    }
+                    viewModel.adicionarSolicitacao(criada);
+                    startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
+                            this, criada.comNomeCondominio(PerfilApiRepository.condominioNomeOuVazio(this)),
+                            cooperativa.getNome()));
+                    finish();
+                });
     }
 
     private void escolherData() {
