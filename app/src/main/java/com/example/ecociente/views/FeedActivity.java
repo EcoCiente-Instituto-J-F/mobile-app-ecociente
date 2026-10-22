@@ -111,6 +111,15 @@ public class FeedActivity extends AppCompatActivity {
 
         ((TextView) textoVazio).setText(R.string.feed_erro);
         textoVazio.setVisibility(View.VISIBLE);
+
+        com.google.android.material.button.MaterialButton tentar =
+                (com.google.android.material.button.MaterialButton)
+                        getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
+
+        tentar.setText(R.string.tentar_novamente);
+        tentar.setOnClickListener(view -> carregarFeed());
+
+        lista.addView(tentar);
     }
 
     private void configurarBarra() {

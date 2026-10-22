@@ -169,7 +169,7 @@ public class TelaListaActivity extends AppCompatActivity {
                             lista.removeAllViews();
 
                             if (!sucesso) {
-                                textoDeEstado(lista, R.string.guia_erro);
+                                erroComTentar(lista, R.string.guia_erro);
                                 return;
                             }
 
@@ -217,7 +217,7 @@ public class TelaListaActivity extends AppCompatActivity {
                             lista.removeAllViews();
 
                             if (postagens == null) {
-                                textoDeEstado(lista, R.string.meus_descartes_erro);
+                                erroComTentar(lista, R.string.meus_descartes_erro);
                                 return;
                             }
 
@@ -256,7 +256,7 @@ public class TelaListaActivity extends AppCompatActivity {
 
                             if (!sucesso) {
                                 lista.removeAllViews();
-                                textoDeEstado(lista, R.string.guia_erro);
+                                erroComTentar(lista, R.string.guia_erro);
                                 return;
                             }
 
@@ -290,7 +290,7 @@ public class TelaListaActivity extends AppCompatActivity {
                             }
 
                             lista.removeAllViews();
-                            textoDeEstado(lista, R.string.avaliacoes_erro);
+                            erroComTentar(lista, R.string.avaliacoes_erro);
                         });
     }
 
@@ -308,7 +308,7 @@ public class TelaListaActivity extends AppCompatActivity {
                             lista.removeAllViews();
 
                             if (avaliacoes == null) {
-                                textoDeEstado(lista, R.string.avaliacoes_erro);
+                                erroComTentar(lista, R.string.avaliacoes_erro);
                                 return;
                             }
 
@@ -500,7 +500,7 @@ public class TelaListaActivity extends AppCompatActivity {
                             lista.removeAllViews();
 
                             if (moradores == null) {
-                                textoDeEstado(lista, R.string.ranking_erro);
+                                erroComTentar(lista, R.string.ranking_erro);
                                 return;
                             }
 
@@ -579,7 +579,7 @@ public class TelaListaActivity extends AppCompatActivity {
                                     lista.removeAllViews();
 
                                     if (saldo == null && pagina == null) {
-                                        textoDeEstado(lista, R.string.pontos_erro);
+                                        erroComTentar(lista, R.string.pontos_erro);
                                         return;
                                     }
 
@@ -638,6 +638,25 @@ public class TelaListaActivity extends AppCompatActivity {
 
     private View indicadorDeCarregamento(LinearLayout lista, int mensagem) {
         return IndicadorCarregamento.mostrar(lista, mensagem);
+    }
+
+    // Falha ao carregar: a mensagem e um botão que refaz a consulta da lista inteira.
+    private void erroComTentar(LinearLayout lista, int mensagem) {
+
+        textoDeEstado(lista, mensagem);
+
+        com.google.android.material.button.MaterialButton tentar =
+                (com.google.android.material.button.MaterialButton)
+                        getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
+
+        tentar.setText(R.string.tentar_novamente);
+        tentar.setOnClickListener(
+                view -> {
+                    lista.removeAllViews();
+                    preencherLista();
+                });
+
+        lista.addView(tentar);
     }
 
     private TextView textoDeEstado(LinearLayout lista, int mensagem) {

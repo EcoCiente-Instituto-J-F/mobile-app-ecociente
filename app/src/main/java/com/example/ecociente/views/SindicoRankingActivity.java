@@ -24,9 +24,10 @@ import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Navegacao;
 
-/** Ranking ilustrativo em dois modos; nenhum dado é lido de banco ou API. */
+/** Ranking do condomínio: por torre vem da API; por apartamento ainda não existe API. */
 public final class SindicoRankingActivity extends AppCompatActivity {
     private List<SindicoPosicaoRanking> torresDaApi;
+    private boolean erroNoRanking;
 
     private static final String ESTADO_APARTAMENTOS = "rankingPorApartamento";
     private boolean porApartamento;
@@ -63,6 +64,11 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         barra.setOnItemClickListener(
                 indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM));
         atualizarRanking();
+        carregarRanking();
+    }
+
+    private void carregarRanking() {
+        erroNoRanking = false;
 
         new RankingExternoRepository()
                 .listarTorres(
@@ -70,10 +76,14 @@ public final class SindicoRankingActivity extends AppCompatActivity {
                         PerfilApiRepository.condominioId(this),
                         20,
                         posicoes -> {
-                            if (posicoes != null && !isFinishing() && !isDestroyed()) {
+                            if (isFinishing() || isDestroyed()) return;
+
+                            if (posicoes == null) {
+                                erroNoRanking = true;
+                            } else {
                                 torresDaApi = posicoes;
-                                atualizarRanking();
                             }
+                            atualizarRanking();
                         });
     }
 
@@ -118,15 +128,32 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         LinearLayout lista = findViewById(R.id.listaSindicoRankingCompleta);
         lista.removeAllViews();
 
+        boolean falhou = erroNoRanking && !porApartamento && torresDaApi == null;
+
         if (posicoes.isEmpty()) {
             TextView vazio = new TextView(this);
 
-            vazio.setText(R.string.sindico_ranking_vazio);
+            vazio.setText(falhou ? R.string.ranking_erro : R.string.sindico_ranking_vazio);
             vazio.setTextColor(getColor(R.color.cinza_texto_home));
             vazio.setTextSize(14);
-            vazio.setPadding(32, 112, 32, 112);
+            vazio.setPadding(32, 112, 32, falhou ? 24 : 112);
 
             lista.addView(vazio);
+
+            if (falhou) {
+                com.google.android.material.button.MaterialButton tentar =
+                        (com.google.android.material.button.MaterialButton)
+                                getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
+
+                tentar.setText(R.string.tentar_novamente);
+                tentar.setOnClickListener(view -> {
+                    erroNoRanking = false;
+                    atualizarRanking();
+                    carregarRanking();
+                });
+
+                lista.addView(tentar);
+            }
         }
 
         LayoutInflater inflater = LayoutInflater.from(this);
