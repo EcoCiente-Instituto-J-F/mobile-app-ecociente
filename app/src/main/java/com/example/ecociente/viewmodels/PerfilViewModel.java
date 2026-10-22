@@ -15,11 +15,14 @@ import com.example.ecociente.repository.ConsultaCepRepository;
 import com.example.ecociente.repository.FotoPerfilRepository;
 import com.example.ecociente.repository.PerfilRepository;
 import com.google.firebase.auth.FirebaseUser;
+import androidx.lifecycle.MutableLiveData;
 
 public class PerfilViewModel extends ViewModelComCarregamento {
     private final PerfilRepository repositorio = new PerfilRepository();
     private final FotoPerfilRepository fotoRepositorio = new FotoPerfilRepository();
     private final AtualizacaoExternaRepository atualizacaoExterna = new AtualizacaoExternaRepository();
+    private final MutableLiveData<Boolean> falhaDeSincronizacao = new MutableLiveData<>(false);
+    private final Runnable avisarFalhaDeSincronizacao = () -> falhaDeSincronizacao.setValue(true);
     private final ConsultaCepRepository consultaCep = new ConsultaCepRepository();
 
     @Nullable
@@ -47,7 +50,18 @@ public class PerfilViewModel extends ViewModelComCarregamento {
             @NonNull String campo,
             @NonNull String valor,
             @Nullable PerfilUsuario perfil) {
-        atualizacaoExterna.sincronizarCampo(contexto.getApplicationContext(), campo, valor, perfil);
+        atualizacaoExterna.sincronizarCampo(
+                contexto.getApplicationContext(), campo, valor, perfil, avisarFalhaDeSincronizacao);
+    }
+
+    // true quando a API recusou ou não recebeu a atualização; a tela mostra o aviso e chama
+    // `falhaDeSincronizacaoAvisada`.
+    public LiveData<Boolean> getFalhaDeSincronizacao() {
+        return falhaDeSincronizacao;
+    }
+
+    public void falhaDeSincronizacaoAvisada() {
+        falhaDeSincronizacao.setValue(false);
     }
 
     public void buscarLocalidadePorCep(
@@ -126,7 +140,8 @@ public class PerfilViewModel extends ViewModelComCarregamento {
                                             contextoApp,
                                             PerfilRepository.CAMPO_FOTO_URL,
                                             respostaEnvio.getUrl(),
-                                            null);
+                                            null,
+                                            avisarFalhaDeSincronizacao);
                                 }
 
                                 resultado.setValue(

@@ -49,6 +49,17 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
 
+        viewModel
+                .getFalhaDeSincronizacao()
+                .observe(
+                        this,
+                        falhou -> {
+                            if (Boolean.TRUE.equals(falhou)) {
+                                AvisoFlutuante.mostrar(this, R.string.perfil_sincronizacao_falhou);
+                                viewModel.falhaDeSincronizacaoAvisada();
+                            }
+                        });
+
         inicializarComponentes();
 
         findViewById(R.id.botaoVoltarInformacoesPessoais).setOnClickListener(view -> finish());
