@@ -22,6 +22,7 @@ public final class SindicoUnidadesViewModel extends AndroidViewModel {
 
     public SindicoDadosCondominio getDados() { return repositorio.getDados(); }
     public void salvarDados(SindicoDadosCondominio dados) { repositorio.salvarDados(dados); }
+    public void aplicarDadosDaApi(SindicoDadosCondominio api) { repositorio.aplicarDadosDaApi(api); }
     public String getFotoUri() { return repositorio.getFotoUri(); }
     public void salvarFotoUri(String uri) { repositorio.salvarFotoUri(uri); }
     public List<SindicoItemUnidade> getBlocos() { return repositorio.getBlocos(); }

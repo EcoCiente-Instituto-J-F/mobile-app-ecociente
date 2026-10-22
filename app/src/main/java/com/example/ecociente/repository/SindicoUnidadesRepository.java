@@ -22,7 +22,7 @@ import org.json.JSONObject;
 public final class SindicoUnidadesRepository {
     private static final SindicoUnidadesRepository INSTANCIA = new SindicoUnidadesRepository();
 
-    private SindicoDadosCondominio dados = new SindicoDadosCondominio(true, "", "", "", "", "");
+    private SindicoDadosCondominio dados = new SindicoDadosCondominio(true, "", "", "", "", "", "", "");
     private String fotoUri;
     private final List<SindicoItemUnidade> blocos = new ArrayList<>();
     private final List<SindicoItemUnidade> areas = new ArrayList<>();
@@ -71,6 +71,8 @@ public final class SindicoUnidadesRepository {
                     .put("residencial", dados.isResidencial())
                     .put("nome", dados.getNome())
                     .put("endereco", dados.getEndereco())
+                    .put("numero", dados.getNumero())
+                    .put("complemento", dados.getComplemento())
                     .put("cidade", dados.getCidade())
                     .put("estado", dados.getEstado())
                     .put("cep", dados.getCep()));
@@ -101,7 +103,7 @@ public final class SindicoUnidadesRepository {
         blocos.clear();
         areas.clear();
         apartamentos.clear();
-        dados = new SindicoDadosCondominio(true, "", "", "", "", "");
+        dados = new SindicoDadosCondominio(true, "", "", "", "", "", "", "");
         fotoUri = null;
         proximoId = 1;
         proximoApartamentoId = 1;
@@ -121,7 +123,7 @@ public final class SindicoUnidadesRepository {
             if (d != null) {
                 dados = new SindicoDadosCondominio(
                         d.optBoolean("residencial", true), d.optString("nome"), d.optString("endereco"),
-                        d.optString("cidade"), d.optString("estado"), d.optString("cep"));
+                        d.optString("numero"), d.optString("complemento"), d.optString("cidade"), d.optString("estado"), d.optString("cep"));
             }
 
             itensDeJson(raiz.optJSONArray("blocos"), blocos);
@@ -163,6 +165,8 @@ public final class SindicoUnidadesRepository {
     public static SindicoUnidadesRepository getInstance() { return INSTANCIA; }
     public SindicoDadosCondominio getDados() { return dados; }
     public void salvarDados(SindicoDadosCondominio novosDados) { dados = novosDados; persistir(); }
+    // A API manda no que ela sabe (nome, tipo, endereço); o que ela não trouxe fica como estava.
+    public void aplicarDadosDaApi(SindicoDadosCondominio api) { dados = dados.comDadosDaApi(api); persistir(); }
     public String getFotoUri() { return fotoUri; }
     public void salvarFotoUri(String uri) { fotoUri = uri; persistir(); }
     public List<SindicoItemUnidade> getBlocos() {

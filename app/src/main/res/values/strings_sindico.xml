@@ -141,7 +141,8 @@
     <string name="sindico_informe_o_cep">Informe o CEP</string>
     <string name="sindico_use_duas_letras_como_sp">Use duas letras, como SP</string>
     <string name="sindico_use_o_formato_01234_567">Use o formato 01234-567</string>
-    <string name="sindico_demo_dados_salvos">Dados salvos neste aparelho.</string>
+    <string name="sindico_demo_dados_salvos">Dados do condomínio salvos.</string>
+    <string name="sindico_condominio_sincronizacao_falhou">O endereço foi salvo no aparelho, mas a API não aceitou. Só o síndico responsável pode alterá-lo.</string>
     <string name="sindico_nenhum_bloco_adicione_o_primeiro_a">Nenhum bloco. Adicione o primeiro abaixo.</string>
     <string name="sindico_nenhuma_area_de_descarte_adicione">Nenhuma área de descarte. Adicione a primeira abaixo.</string>
     <string name="sindico_abrir_unidades_bloco">Abrir unidades do %1$s</string>

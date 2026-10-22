@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 
 import org.json.JSONObject;
 import org.junit.Test;
+import com.example.ecociente.model.SindicoDadosCondominio;
 
 public class PerfilApiJsonTest {
 
@@ -114,5 +115,30 @@ public class PerfilApiJsonTest {
         assertEquals("", perfil.getNome());
         assertEquals("", perfil.getUrlAvatar());
         assertEquals("", perfil.getTelefone());
+    }
+
+    @Test
+    public void dadosDoCondominioVemDoCondominioDoSindico() throws Exception {
+        JSONObject json =
+                perfil(
+                        "[{\"id\":1,\"nome\":\"Residencial Eco\",\"ativo\":true,\"sindicoResponsavel\":true,"
+                                + "\"tipoCondominio\":\"Comercial\","
+                                + "\"endereco\":{\"logradouro\":\"Avenida Paulista\",\"numero\":\"1000\","
+                                + "\"complemento\":null,\"cidade\":\"São Paulo\",\"estado\":\"SP\",\"cep\":\"01310100\"}}]");
+
+        SindicoDadosCondominio dados = PerfilApiJson.dadosDoCondominio(json);
+
+        assertNotNull(dados);
+        assertEquals("Residencial Eco", dados.getNome());
+        assertEquals("Avenida Paulista", dados.getEndereco());
+        assertEquals("1000", dados.getNumero());
+        assertEquals("", dados.getComplemento());
+        assertEquals("SP", dados.getEstado());
+        assertEquals(false, dados.isResidencial());
+    }
+
+    @Test
+    public void semCondominioNaoHaDadosDoCondominio() throws Exception {
+        assertNull(PerfilApiJson.dadosDoCondominio(perfil("[]")));
     }
 }

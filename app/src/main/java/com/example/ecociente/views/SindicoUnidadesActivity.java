@@ -36,8 +36,10 @@ import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Navegacao;
+import com.example.ecociente.repository.AtualizacaoExternaRepository;
+import com.example.ecociente.repository.PerfilApiRepository;
 
-/** Tela demonstrativa da aba Unidades; não consulta nem grava em banco. */
+/** Aba Unidades: dados do condomínio vêm da API e o endereço volta a ela; blocos e áreas ficam no aparelho. */
 public final class SindicoUnidadesActivity extends AppCompatActivity {
     private static final String ESTADO_TIPO = "tipoResidencialSelecionado";
     private SindicoUnidadesViewModel viewModel;
@@ -54,6 +56,8 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
     private boolean residencial;
     private EditText nome;
     private EditText endereco;
+    private EditText numero;
+    private EditText complemento;
     private EditText cidade;
     private EditText estado;
     private EditText cep;
@@ -88,6 +92,8 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         carregarFotoSalva();
         nome = findViewById(R.id.nomeCondominioSindico);
         endereco = findViewById(R.id.enderecoCondominioSindico);
+        numero = findViewById(R.id.numeroCondominioSindico);
+        complemento = findViewById(R.id.complementoCondominioSindico);
         cidade = findViewById(R.id.cidadeCondominioSindico);
         estado = findViewById(R.id.estadoCondominioSindico);
         cep = findViewById(R.id.cepCondominioSindico);
@@ -95,6 +101,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         residencial = estadoSalvo == null ? viewModel.getDados().isResidencial()
                 : estadoSalvo.getBoolean(ESTADO_TIPO, viewModel.getDados().isResidencial());
         atualizarTipo();
+        carregarDadosDaApi(estadoSalvo == null);
         mostrarFoto();
         mostrarListas();
 
@@ -133,9 +140,43 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         SindicoDadosCondominio dados = viewModel.getDados();
         nome.setText(dados.getNome());
         endereco.setText(dados.getEndereco());
+        numero.setText(dados.getNumero());
+        complemento.setText(dados.getComplemento());
         cidade.setText(dados.getCidade());
         estado.setText(dados.getEstado());
         cep.setText(dados.getCep());
+    }
+
+    // O condomínio vem de /api/usuarios/me. O que o síndico já digitou enquanto a API respondia
+    // (ela pode levar minutos para acordar) não é apagado: só os campos vazios são preenchidos.
+    private void carregarDadosDaApi(boolean primeiraAbertura) {
+        new PerfilApiRepository().atualizarSeNecessario(this, () -> {
+            SindicoDadosCondominio api = PerfilApiRepository.dadosDoCondominio(this);
+
+            if (api == null || isFinishing() || isDestroyed()) {
+                return;
+            }
+
+            viewModel.aplicarDadosDaApi(api);
+            preencherSeVazio(nome, api.getNome());
+            preencherSeVazio(endereco, api.getEndereco());
+            preencherSeVazio(numero, api.getNumero());
+            preencherSeVazio(complemento, api.getComplemento());
+            preencherSeVazio(cidade, api.getCidade());
+            preencherSeVazio(estado, api.getEstado());
+            preencherSeVazio(cep, api.getCep());
+
+            if (primeiraAbertura) {
+                residencial = api.isResidencial();
+                atualizarTipo();
+            }
+        });
+    }
+
+    private static void preencherSeVazio(EditText campo, String valor) {
+        if (campo.getText().toString().trim().isEmpty()) {
+            campo.setText(valor);
+        }
     }
 
     private void atualizarTipo() {
@@ -242,10 +283,18 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
             cep.requestFocus();
             return;
         }
+        String valorNumero = numero.getText().toString().trim();
         viewModel.salvarDados(new SindicoDadosCondominio(residencial,
                 nome.getText().toString().trim(), endereco.getText().toString().trim(),
+                valorNumero, complemento.getText().toString().trim(),
                 cidade.getText().toString().trim(), uf, codigoPostal));
         AvisoFlutuante.mostrar(this, R.string.sindico_demo_dados_salvos);
+
+        // A API só guarda CEP, número e complemento; nome e tipo ficam neste aparelho.
+        new AtualizacaoExternaRepository().sincronizarEnderecoDoCondominio(
+                getApplicationContext(), PerfilApiRepository.condominioId(this), codigoPostal,
+                valorNumero, complemento.getText().toString(),
+                () -> AvisoFlutuante.mostrar(this, R.string.sindico_condominio_sincronizacao_falhou));
     }
 
     private boolean validar(EditText campo, String erro) {

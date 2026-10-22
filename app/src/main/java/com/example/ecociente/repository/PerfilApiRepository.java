@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import org.json.JSONObject;
 import com.example.ecociente.model.PerfilDaApi;
 import org.json.JSONException;
+import com.example.ecociente.model.SindicoDadosCondominio;
 
 // GET /api/usuarios/me da ds-mobile-api: de onde o app descobre o condomínio do usuário.
 // O resultado fica guardado para as telas lerem na hora; enquanto a API não responder
@@ -61,6 +62,26 @@ public class PerfilApiRepository {
             Log.w(TAG, "Perfil guardado inválido", erro);
 
             return PerfilDaApi.vazio();
+        }
+    }
+
+    // Dados do condomínio na última consulta; null se ainda não vieram ou o usuário não tem condomínio.
+    @Nullable
+    public static SindicoDadosCondominio dadosDoCondominio(@NonNull Context contexto) {
+
+        String corpo = preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
+
+        if (corpo == null) {
+            return null;
+        }
+
+        try {
+            return PerfilApiJson.dadosDoCondominio(new JSONObject(corpo));
+
+        } catch (JSONException erro) {
+            Log.w(TAG, "Perfil guardado inválido", erro);
+
+            return null;
         }
     }
 

@@ -28,6 +28,8 @@ public class AtualizacaoExternaRepository {
 
     private static final String URL_USUARIO = "https://ds-cadastro-api.onrender.com/api/usuarios/me";
 
+    private static final String URL_CONDOMINIOS = "https://ds-cadastro-api.onrender.com/api/condominios/";
+
     private static final Pattern CEP = Pattern.compile("^\\d{5}-?\\d{3}$");
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
@@ -99,6 +101,35 @@ public class AtualizacaoExternaRepository {
             }
         } catch (JSONException erro) {
             Log.w(TAG, "Não foi possível montar a atualização de " + campo, erro);
+        }
+    }
+
+    // PATCH /api/condominios/{id}/endereco: só o síndico responsável pode, e a API exige CEP e número.
+    // `aoFalhar` roda na thread principal se a API não aceitou; sem id, CEP ou número, nada é enviado.
+    public void sincronizarEnderecoDoCondominio(
+            @NonNull Context contexto,
+            int condominioId,
+            @NonNull String cep,
+            @NonNull String numero,
+            @NonNull String complemento,
+            @Nullable Runnable aoFalhar) {
+
+        if (condominioId <= 0 || !CEP.matcher(cep.trim()).matches() || numero.trim().isEmpty()) {
+            return;
+        }
+
+        try {
+            enviar(
+                    contexto,
+                    aoFalhar,
+                    URL_CONDOMINIOS + condominioId + "/endereco",
+                    new JSONObject()
+                            .put("cep", cep.trim())
+                            .put("numero", numero.trim())
+                            .put("complemento", complemento.trim()));
+
+        } catch (JSONException erro) {
+            Log.w(TAG, "Não foi possível montar o endereço do condomínio", erro);
         }
     }
 

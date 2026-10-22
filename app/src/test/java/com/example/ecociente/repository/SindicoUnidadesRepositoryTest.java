@@ -13,7 +13,7 @@ public class SindicoUnidadesRepositoryTest {
     private static SindicoUnidadesRepository preenchido() {
         SindicoUnidadesRepository repositorio = new SindicoUnidadesRepository();
 
-        repositorio.salvarDados(new SindicoDadosCondominio(false, "Raio de Luz", "Rua A, 10", "Recife", "PE", "50000-000"));
+        repositorio.salvarDados(new SindicoDadosCondominio(false, "Raio de Luz", "Rua A", "10", "Bloco 2", "Recife", "PE", "50000-000"));
         repositorio.salvarFotoUri("content://foto/1");
         repositorio.salvarBloco(-1, "Torre A", 12);
         repositorio.salvarBloco(-1, "Torre B", 8);
@@ -24,12 +24,29 @@ public class SindicoUnidadesRepositoryTest {
     }
 
     @Test
+    public void dadosDaApiSubstituemOQueTrouxeEMantemOResto() {
+        SindicoUnidadesRepository repositorio = preenchido();
+
+        repositorio.aplicarDadosDaApi(new SindicoDadosCondominio(true, "Residencial Eco", "Avenida Nova", "200", "", "", "", "01310-100"));
+
+        assertEquals("Residencial Eco", repositorio.getDados().getNome());
+        assertEquals("Avenida Nova", repositorio.getDados().getEndereco());
+        assertEquals("200", repositorio.getDados().getNumero());
+        assertEquals("Bloco 2", repositorio.getDados().getComplemento());
+        assertEquals("Recife", repositorio.getDados().getCidade());
+        assertEquals("01310-100", repositorio.getDados().getCep());
+        assertTrue(repositorio.getDados().isResidencial());
+    }
+
+    @Test
     public void tudoQueFoiCadastradoVoltaDoJson() {
         SindicoUnidadesRepository novo = new SindicoUnidadesRepository();
 
         novo.deJson(preenchido().paraJson());
 
         assertEquals("Raio de Luz", novo.getDados().getNome());
+        assertEquals("10", novo.getDados().getNumero());
+        assertEquals("Bloco 2", novo.getDados().getComplemento());
         assertEquals("content://foto/1", novo.getFotoUri());
         assertEquals(2, novo.getBlocos().size());
         assertEquals("Torre B", novo.getBlocos().get(1).getNome());
