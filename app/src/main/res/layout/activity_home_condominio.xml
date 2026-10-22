@@ -14,7 +14,8 @@
     <FrameLayout
         android:id="@+id/cabecalhoHomeCondominio"
         android:layout_width="0dp"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
         android:layout_marginStart="18dp"
         android:layout_marginEnd="18dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +51,8 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
                 android:layout_marginStart="7dp"
                 app:cardBackgroundColor="@color/cinza_fundo_imagem_home"
                 app:cardCornerRadius="20dp"
@@ -303,7 +305,8 @@
 
                             <LinearLayout
                                 android:layout_width="70dp"
-                                android:layout_height="57dp"
+                                android:layout_height="wrap_content"
+                                android:minHeight="57dp"
                                 android:layout_marginTop="5dp"
                                 android:background="@drawable/sindico_ranking_podio_lateral"
                                 android:gravity="center"
@@ -349,7 +352,8 @@
 
                             <LinearLayout
                                 android:layout_width="70dp"
-                                android:layout_height="63dp"
+                                android:layout_height="wrap_content"
+                                android:minHeight="63dp"
                                 android:layout_marginTop="5dp"
                                 android:background="@drawable/sindico_ranking_podio_primeiro"
                                 android:gravity="center"
@@ -395,7 +399,8 @@
 
                             <LinearLayout
                                 android:layout_width="70dp"
-                                android:layout_height="57dp"
+                                android:layout_height="wrap_content"
+                                android:minHeight="57dp"
                                 android:layout_marginTop="5dp"
                                 android:background="@drawable/sindico_ranking_podio_lateral"
                                 android:gravity="center"
@@ -430,7 +435,8 @@
             <LinearLayout
                 android:id="@+id/cabecalhoConteudosCondominio"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
+                android:layout_height="wrap_content"
+                android:minHeight="32dp"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="22dp"
                 android:layout_marginEnd="18dp"

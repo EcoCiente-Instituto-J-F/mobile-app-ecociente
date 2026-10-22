@@ -52,7 +52,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/containerAvatarInformacoesPessoais"
                     android:layout_width="64dp"
-                    android:layout_height="64dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="64dp"
                     android:layout_marginTop="10dp"
                     app:cardBackgroundColor="@color/branco"
                     app:cardCornerRadius="32dp"

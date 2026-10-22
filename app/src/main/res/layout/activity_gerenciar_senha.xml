@@ -63,7 +63,8 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="64dp"
-                    android:layout_height="64dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="64dp"
                     android:layout_marginTop="14dp"
                     app:cardBackgroundColor="@color/branco"
                     app:cardCornerRadius="32dp"
@@ -138,7 +139,8 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginTop="6dp"
                     app:cardBackgroundColor="@color/branco"
                     app:cardCornerRadius="10dp"
@@ -213,7 +215,8 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginTop="6dp"
                     app:cardBackgroundColor="@color/branco"
                     app:cardCornerRadius="10dp"
@@ -288,7 +291,8 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginTop="6dp"
                     app:cardBackgroundColor="@color/branco"
                     app:cardCornerRadius="10dp"
@@ -354,7 +358,8 @@
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginTop="20dp">
 
                     <com.google.android.material.button.MaterialButton

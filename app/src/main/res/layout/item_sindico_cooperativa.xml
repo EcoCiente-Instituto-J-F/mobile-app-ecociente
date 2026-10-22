@@ -63,7 +63,8 @@
     <Button
         android:id="@+id/acaoCooperativa"
         android:layout_width="wrap_content"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
         android:layout_marginStart="5dp"
         android:backgroundTint="@color/verde_escuro_principal"
         android:minWidth="86dp"

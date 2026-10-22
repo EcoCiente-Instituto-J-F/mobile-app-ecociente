@@ -101,7 +101,8 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="24dp"
                         android:elevation="2dp"
                         app:cardBackgroundColor="@color/verde_claro_ecociente"
                         app:cardCornerRadius="12dp"
@@ -184,7 +185,8 @@
                     <LinearLayout
                         android:id="@+id/linhaInformacoesPessoais"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="56dp"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
@@ -228,7 +230,8 @@
                     <LinearLayout
                         android:id="@+id/linhaGerenciarSenha"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="56dp"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
@@ -272,7 +275,8 @@
                     <LinearLayout
                         android:id="@+id/linhaNotificacoes"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="56dp"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
@@ -322,7 +326,8 @@
                         <LinearLayout
                             android:id="@+id/linhaCondominiosAtendidos"
                             android:layout_width="match_parent"
-                            android:layout_height="56dp"
+                            android:layout_height="wrap_content"
+                            android:minHeight="56dp"
                             android:background="?attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
@@ -365,7 +370,8 @@
                         <LinearLayout
                             android:id="@+id/linhaAvaliacoesRecebidas"
                             android:layout_width="match_parent"
-                            android:layout_height="56dp"
+                            android:layout_height="wrap_content"
+                            android:minHeight="56dp"
                             android:background="?attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
@@ -437,7 +443,8 @@
                     <LinearLayout
                         android:id="@+id/linhaSairConta"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="56dp"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"
@@ -480,7 +487,8 @@
                     <LinearLayout
                         android:id="@+id/linhaExcluirConta"
                         android:layout_width="match_parent"
-                        android:layout_height="56dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="56dp"
                         android:background="?attr/selectableItemBackground"
                         android:clickable="true"
                         android:focusable="true"

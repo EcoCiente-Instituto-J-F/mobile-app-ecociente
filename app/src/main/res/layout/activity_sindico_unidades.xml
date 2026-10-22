@@ -89,7 +89,8 @@
                         android:orientation="vertical">
                         <FrameLayout
                             android:layout_width="86dp"
-                            android:layout_height="86dp">
+                            android:layout_height="wrap_content"
+                            android:minHeight="86dp">
                             <ImageView
                                 android:id="@+id/fotoSindicoUnidades"
                                 android:layout_width="76dp"
@@ -105,7 +106,8 @@
                             <FrameLayout
                                 android:id="@+id/cameraSindicoUnidades"
                                 android:layout_width="48dp"
-                                android:layout_height="48dp"
+                                android:layout_height="wrap_content"
+                                android:minHeight="48dp"
                                 android:layout_gravity="bottom|end"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:clickable="true"
@@ -124,7 +126,8 @@
                         <TextView
                             android:id="@+id/alterarFotoSindicoUnidades"
                             android:layout_width="match_parent"
-                            android:layout_height="48dp"
+                            android:layout_height="wrap_content"
+                            android:minHeight="48dp"
                             android:clickable="true"
                             android:focusable="true"
                             android:fontFamily="@font/nunito_regular"
@@ -142,7 +145,8 @@
                         android:orientation="vertical">
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                            android:layout_height="wrap_content"
+                            android:minHeight="40dp"
                             android:background="@drawable/sindico_unidades_segmento"
                             android:orientation="horizontal">
                             <TextView
@@ -182,7 +186,8 @@
                             android:id="@+id/nomeCondominioSindico"
                             android:importantForAutofill="no"
                             android:layout_width="match_parent"
-                            android:layout_height="46dp"
+                            android:layout_height="wrap_content"
+                            android:minHeight="46dp"
                             android:background="@drawable/sindico_campo"
                             android:drawableStart="@drawable/ic_predio"
                             android:drawablePadding="6dp"
@@ -207,7 +212,8 @@
                             android:id="@+id/enderecoCondominioSindico"
                             android:importantForAutofill="no"
                             android:layout_width="match_parent"
-                            android:layout_height="46dp"
+                            android:layout_height="wrap_content"
+                            android:minHeight="46dp"
                             android:background="@drawable/sindico_campo"
                             android:drawableStart="@drawable/ic_endereco_perfil"
                             android:drawablePadding="6dp"
@@ -240,7 +246,8 @@
                                     android:id="@+id/numeroCondominioSindico"
                                     android:importantForAutofill="no"
                                     android:layout_width="match_parent"
-                                    android:layout_height="46dp"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="46dp"
                                     android:background="@drawable/sindico_campo"
                                     android:inputType="text"
                                     android:maxLength="10"
@@ -268,7 +275,8 @@
                                     android:id="@+id/complementoCondominioSindico"
                                     android:importantForAutofill="no"
                                     android:layout_width="match_parent"
-                                    android:layout_height="46dp"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="46dp"
                                     android:background="@drawable/sindico_campo"
                                     android:inputType="textCapSentences"
                                     android:maxLength="100"
@@ -303,7 +311,8 @@
                                     android:id="@+id/cidadeCondominioSindico"
                                     android:importantForAutofill="no"
                                     android:layout_width="match_parent"
-                                    android:layout_height="46dp"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="46dp"
                                     android:background="@drawable/sindico_campo"
                                     android:drawableStart="@drawable/ic_predio"
                                     android:drawablePadding="4dp"
@@ -331,7 +340,8 @@
                                     android:id="@+id/estadoCondominioSindico"
                                     android:importantForAutofill="no"
                                     android:layout_width="match_parent"
-                                    android:layout_height="46dp"
+                                    android:layout_height="wrap_content"
+                                    android:minHeight="46dp"
                                     android:background="@drawable/sindico_campo"
                                     android:drawableStart="@drawable/sindico_unidades_estado"
                                     android:drawablePadding="3dp"
@@ -358,7 +368,8 @@
                             android:id="@+id/cepCondominioSindico"
                             android:importantForAutofill="no"
                             android:layout_width="match_parent"
-                            android:layout_height="46dp"
+                            android:layout_height="wrap_content"
+                            android:minHeight="46dp"
                             android:background="@drawable/sindico_campo"
                             android:drawableStart="@drawable/ic_endereco_perfil"
                             android:drawablePadding="6dp"
@@ -375,7 +386,8 @@
                 <Button
                     android:id="@+id/salvarDadosCondominioSindico"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginTop="16dp"
                     android:backgroundTint="@color/verde_escuro_principal"
                     android:text="@string/sindico_salvar_dados_locais"
@@ -393,7 +405,8 @@
                 android:padding="10dp">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
                     <ImageView
@@ -425,7 +438,8 @@
                 <LinearLayout
                     android:id="@+id/adicionarBlocoSindico"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginTop="7dp"
                     android:background="@drawable/sindico_unidades_botao_contorno"
                     android:clickable="true"
@@ -458,7 +472,8 @@
                 android:padding="10dp">
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
                     <ImageView
@@ -490,7 +505,8 @@
                 <LinearLayout
                     android:id="@+id/adicionarAreaSindico"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:layout_marginTop="7dp"
                     android:background="@drawable/sindico_unidades_botao_contorno"
                     android:clickable="true"

@@ -59,7 +59,8 @@
                 <LinearLayout
                     android:id="@+id/acoesCabecalhoQuiz"
                     android:layout_width="wrap_content"
-                    android:layout_height="64dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="64dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:translationY="4dp"
@@ -80,7 +81,8 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_height="wrap_content"
+                        android:minHeight="40dp"
                         android:layout_marginStart="7dp"
                         app:cardBackgroundColor="@color/cinza_fundo_imagem_home"
                         app:cardCornerRadius="20dp"
@@ -103,7 +105,8 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardPesquisaQuiz"
                 android:layout_width="match_parent"
-                android:layout_height="54dp"
+                android:layout_height="wrap_content"
+                android:minHeight="54dp"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="18dp"
                 android:layout_marginEnd="18dp"
@@ -153,7 +156,8 @@
             <LinearLayout
                 android:id="@+id/linhaResumoQuiz"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="wrap_content"
+                android:minHeight="44dp"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="18dp"

@@ -37,7 +37,8 @@
 
             <FrameLayout
                 android:layout_width="146dp"
-                android:layout_height="146dp"
+                android:layout_height="wrap_content"
+                android:minHeight="146dp"
                 android:layout_marginTop="73dp"
                 android:background="@drawable/fundo_avatar_chat">
 
@@ -82,7 +83,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/opcaoMaterialReciclavel"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
                     android:clickable="true"
                     android:focusable="true"
                     app:cardBackgroundColor="@android:color/transparent"
@@ -129,7 +131,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/opcaoComoReciclar"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
                     android:layout_marginTop="20dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -177,7 +180,8 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/opcaoCooperativaProxima"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="50dp"
                     android:layout_marginTop="20dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -310,7 +314,8 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
         android:layout_gravity="bottom"
         android:layout_marginStart="14dp"
         android:layout_marginEnd="14dp"
@@ -329,7 +334,8 @@
                 android:importantForAutofill="no"
                 android:id="@+id/campoMensagemChat"
                 android:layout_width="0dp"
-                android:layout_height="34dp"
+                android:layout_height="wrap_content"
+                android:minHeight="34dp"
                 android:background="@drawable/fundo_campo_chat"
                 android:fontFamily="@font/nunito_regular"
                 android:hint="@string/chat_hint_mensagem"

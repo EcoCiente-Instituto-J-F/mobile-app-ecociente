@@ -6,7 +6,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
         android:layout_gravity="bottom"
         android:layout_marginStart="18dp"
         android:layout_marginEnd="18dp"
@@ -38,7 +39,8 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/botaoAssistenteBarra"
         android:layout_width="68dp"
-        android:layout_height="68dp"
+        android:layout_height="wrap_content"
+        android:minHeight="68dp"
         android:layout_gravity="top|center_horizontal"
         android:clickable="true"
         android:focusable="true"

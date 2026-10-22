@@ -9,7 +9,8 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
         android:paddingStart="16dp"
         android:paddingEnd="12dp">
 
@@ -32,7 +33,8 @@
             <FrameLayout
                 android:id="@+id/botaoMensagensSindico"
                 android:layout_width="34dp"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:contentDescription="@string/mensagens"
@@ -48,7 +50,8 @@
             <FrameLayout
                 android:id="@+id/botaoAvisosSindico"
                 android:layout_width="34dp"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:contentDescription="@string/sindico_abrir_avisos"
@@ -73,7 +76,8 @@
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/botaoPerfilSindico"
                 android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
                 android:layout_marginStart="6dp"
                 android:clickable="true"
                 android:contentDescription="@string/sindico_perfil_do_sindico"
@@ -111,7 +115,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="108dp"
+                android:layout_height="wrap_content"
+                android:minHeight="108dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingStart="11dp"

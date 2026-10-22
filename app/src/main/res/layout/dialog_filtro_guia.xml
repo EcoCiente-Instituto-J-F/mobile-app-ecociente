@@ -59,7 +59,8 @@
             <RadioButton
                 android:id="@+id/radioOrdemCurso"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:fontFamily="@font/nunito_regular"
                 android:text="@string/filtro_ordem_curso"
                 android:textColor="@color/cinza_texto_home" />
@@ -67,7 +68,8 @@
             <RadioButton
                 android:id="@+id/radioOrdemAz"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
                 android:fontFamily="@font/nunito_regular"
                 android:text="@string/filtro_ordem_az"
                 android:textColor="@color/cinza_texto_home" />

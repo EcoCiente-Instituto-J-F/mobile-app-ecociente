@@ -51,7 +51,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
             app:cardBackgroundColor="@color/branco"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp"
@@ -78,7 +79,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
             android:layout_marginStart="12dp"
             app:cardBackgroundColor="@color/branco"
             app:cardCornerRadius="12dp"
@@ -106,7 +108,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
             android:layout_marginStart="12dp"
             app:cardBackgroundColor="@color/branco"
             app:cardCornerRadius="12dp"
@@ -134,7 +137,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_height="wrap_content"
+            android:minHeight="56dp"
             android:layout_marginStart="12dp"
             app:cardBackgroundColor="@color/branco"
             app:cardCornerRadius="12dp"
@@ -165,7 +169,8 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/botaoVerificar"
         android:layout_width="0dp"
-        android:layout_height="52dp"
+        android:layout_height="wrap_content"
+        android:minHeight="52dp"
         android:layout_marginTop="28dp"
         android:fontFamily="@font/nunito_semibold"
         android:text="@string/verificar"
