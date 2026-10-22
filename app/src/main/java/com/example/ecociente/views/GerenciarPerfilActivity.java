@@ -165,7 +165,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         }
 
         viewModel
-                .buscarPerfil(usuario.getUid())
+                .buscarPerfilAtualizado(getApplicationContext(), usuario.getUid())
                 .observe(this, perfil -> preencherCabecalho(usuario, perfil));
     }
 

@@ -168,7 +168,9 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
         uid = usuario.getUid();
 
-        viewModel.buscarPerfil(uid).observe(this, perfil -> preencherCampos(usuario, perfil));
+        viewModel
+                .buscarPerfilAtualizado(getApplicationContext(), uid)
+                .observe(this, perfil -> preencherCampos(usuario, perfil));
     }
 
     private void preencherCampos(FirebaseUser usuario, PerfilUsuario perfil) {

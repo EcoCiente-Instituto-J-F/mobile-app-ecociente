@@ -74,4 +74,45 @@ public class PerfilApiJsonTest {
         assertEquals(0, PerfilApiJson.cooperativaId(new JSONObject("{\"cooperativa\":null}")));
         assertEquals(0, PerfilApiJson.cooperativaId(new JSONObject("{}")));
     }
+
+    @Test
+    public void perfilDaApiLeNomeFotoTelefoneEEndereco() throws Exception {
+        JSONObject json =
+                new JSONObject(
+                        "{\"nome\":\"Ana Souza\",\"urlAvatar\":\"https://res.cloudinary.com/x/a.jpg\",\"cpf\":\"12345678901\","
+                                + "\"endereco\":{\"cep\":\"01001000\",\"estado\":\"SP\",\"cidade\":\"São Paulo\","
+                                + "\"logradouro\":\"Rua Um\",\"numero\":\"10\",\"complemento\":null},"
+                                + "\"telefones\":[{\"numero\":\"11999990000\",\"ativo\":false},"
+                                + "{\"numero\":\"81988887777\",\"ativo\":true}]}");
+
+        com.example.ecociente.model.PerfilDaApi perfil = PerfilApiJson.perfilDaApi(json);
+
+        assertEquals("Ana Souza", perfil.getNome());
+        assertEquals("https://res.cloudinary.com/x/a.jpg", perfil.getUrlAvatar());
+        assertEquals("81988887777", perfil.getTelefone());
+        assertEquals("01001000", perfil.getCep());
+        assertEquals("Rua Um", perfil.getLogradouro());
+        assertEquals("", perfil.getComplemento());
+    }
+
+    @Test
+    public void perfilDaApiDeCooperativaTrazNomeEEmailDela() throws Exception {
+        JSONObject json =
+                new JSONObject("{\"nome\":\"Resp\",\"cooperativa\":{\"id\":5,\"nome\":\"Coop Verde\",\"email\":\"c@verde.com\"}}");
+
+        com.example.ecociente.model.PerfilDaApi perfil = PerfilApiJson.perfilDaApi(json);
+
+        assertEquals("Coop Verde", perfil.getNomeCooperativa());
+        assertEquals("c@verde.com", perfil.getEmailCooperativa());
+    }
+
+    @Test
+    public void camposNulosOuAusentesViramTextoVazio() throws Exception {
+        com.example.ecociente.model.PerfilDaApi perfil =
+                PerfilApiJson.perfilDaApi(new JSONObject("{\"nome\":null,\"urlAvatar\":null}"));
+
+        assertEquals("", perfil.getNome());
+        assertEquals("", perfil.getUrlAvatar());
+        assertEquals("", perfil.getTelefone());
+    }
 }

@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONObject;
+import com.example.ecociente.model.PerfilDaApi;
+import org.json.JSONException;
 
 // GET /api/usuarios/me da ds-mobile-api: de onde o app descobre o condomínio do usuário.
 // O resultado fica guardado para as telas lerem na hora; enquanto a API não responder
@@ -24,6 +26,7 @@ public class PerfilApiRepository {
     private static final String CHAVE_CONDOMINIO_ID = "condominioId";
     private static final String CHAVE_CONDOMINIO_NOME = "condominioNome";
     private static final String CHAVE_COOPERATIVA_ID = "cooperativaId";
+    private static final String CHAVE_DADOS_DO_PERFIL = "dadosDoPerfil";
     private static final String CHAVE_ATUALIZADO_EM = "atualizadoEm";
     private static final long VALIDADE_MS = 6 * 60 * 60_000L;
 
@@ -39,6 +42,26 @@ public class PerfilApiRepository {
     // Id da cooperativa do usuário (perfil COOPERATIVA); 0 se a API ainda não informou.
     public static int cooperativaId(@NonNull Context contexto) {
         return preferencias(contexto).getInt(CHAVE_COOPERATIVA_ID, 0);
+    }
+
+    // O que a API informou do usuário na última consulta; vazio se ainda não veio.
+    @NonNull
+    public static PerfilDaApi dadosDoPerfil(@NonNull Context contexto) {
+
+        String corpo = preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
+
+        if (corpo == null) {
+            return PerfilDaApi.vazio();
+        }
+
+        try {
+            return PerfilApiJson.perfilDaApi(new JSONObject(corpo));
+
+        } catch (JSONException erro) {
+            Log.w(TAG, "Perfil guardado inválido", erro);
+
+            return PerfilDaApi.vazio();
+        }
     }
 
     // Nome do condomínio vindo da API; null se ainda não veio.
@@ -121,6 +144,8 @@ public class PerfilApiRepository {
                 editor.putInt(CHAVE_CONDOMINIO_ID, condominio.id);
                 editor.putString(CHAVE_CONDOMINIO_NOME, condominio.nome);
             }
+
+            editor.putString(CHAVE_DADOS_DO_PERFIL, corpo);
 
             int cooperativaId = PerfilApiJson.cooperativaId(perfil);
 

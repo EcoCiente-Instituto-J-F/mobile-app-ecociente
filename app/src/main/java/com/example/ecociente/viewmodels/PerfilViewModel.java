@@ -16,6 +16,7 @@ import com.example.ecociente.repository.FotoPerfilRepository;
 import com.example.ecociente.repository.PerfilRepository;
 import com.google.firebase.auth.FirebaseUser;
 import androidx.lifecycle.MutableLiveData;
+import com.example.ecociente.repository.PerfilApiRepository;
 
 public class PerfilViewModel extends ViewModelComCarregamento {
     private final PerfilRepository repositorio = new PerfilRepository();
@@ -43,6 +44,55 @@ public class PerfilViewModel extends ViewModelComCarregamento {
     public LiveData<ResultadoApi> atualizarCampo(
             @NonNull String uid, @NonNull String campo, @NonNull Object valor) {
         return executar(repositorio.atualizarCampo(uid, campo, valor));
+    }
+
+    // Perfil do Firestore na hora e, quando a API responde, o mesmo perfil com os dados dela por cima
+    // (o documento do Firestore é ajustado para ficar igual). Sem resposta da API, fica o do Firestore.
+    @NonNull
+    public LiveData<PerfilUsuario> buscarPerfilAtualizado(@NonNull Context contexto, @NonNull String uid) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        MediatorLiveData<PerfilUsuario> resultado = new MediatorLiveData<>();
+
+        LiveData<PerfilUsuario> doFirestore = repositorio.buscarPerfil(uid);
+
+        resultado.addSource(
+                doFirestore,
+                perfil -> {
+                    resultado.removeSource(doFirestore);
+
+                    resultado.setValue(perfil);
+
+                    if (perfil == null) {
+                        return;
+                    }
+
+                    new PerfilApiRepository()
+                            .atualizar(
+                                    contextoApp,
+                                    () -> {
+                                        // Edição ainda a caminho da API: o app tem o dado mais novo.
+                                        if (AtualizacaoExternaRepository.temAtualizacaoEmAndamento()) {
+                                            return;
+                                        }
+
+                                        java.util.Map<String, String> mudancas =
+                                                PerfilApiRepository.dadosDoPerfil(contextoApp).aplicarEm(perfil);
+
+                                        if (mudancas.isEmpty()) {
+                                            return;
+                                        }
+
+                                        for (java.util.Map.Entry<String, String> mudanca : mudancas.entrySet()) {
+                                            repositorio.atualizarCampo(uid, mudanca.getKey(), mudanca.getValue());
+                                        }
+
+                                        resultado.setValue(perfil);
+                                    });
+                });
+
+        return resultado;
     }
 
     public void sincronizarCampoComApi(

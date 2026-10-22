@@ -34,6 +34,15 @@ public class AtualizacaoExternaRepository {
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
+    // Atualizações a caminho da API: enquanto houver, o perfil da API pode estar atrasado em
+    // relação ao que o usuário acabou de editar, e não deve sobrescrever o app.
+    private static final java.util.concurrent.atomic.AtomicInteger EM_ANDAMENTO =
+            new java.util.concurrent.atomic.AtomicInteger();
+
+    public static boolean temAtualizacaoEmAndamento() {
+        return EM_ANDAMENTO.get() > 0;
+    }
+
     private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
 
     public void sincronizarCampo(
@@ -126,6 +135,8 @@ public class AtualizacaoExternaRepository {
 
         Context contextoApp = contexto.getApplicationContext();
 
+        EM_ANDAMENTO.incrementAndGet();
+
         EXECUTOR.execute(
                 () -> {
                     try {
@@ -157,6 +168,9 @@ public class AtualizacaoExternaRepository {
                     } catch (Exception erro) {
                         Log.w(TAG, "Falha ao atualizar na API", erro);
                         falhar(aoFalhar);
+
+                    } finally {
+                        EM_ANDAMENTO.decrementAndGet();
                     }
                 });
     }
