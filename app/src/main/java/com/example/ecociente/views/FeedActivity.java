@@ -8,23 +8,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import java.io.File;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.ui.AvisoFlutuante;
-import com.example.ecociente.repository.FotoPerfilRepository;
-import androidx.core.content.FileProvider;
-import androidx.annotation.Nullable;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.ActivityResultLauncher;
-import android.net.Uri;
-import android.content.ActivityNotFoundException;
 import com.bumptech.glide.Glide;
 import com.example.ecociente.R;
 import com.example.ecociente.model.PostagemFeed;
 import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.repository.FeedRepository;
+import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.Iniciais;
@@ -40,18 +32,14 @@ public class FeedActivity extends AppCompatActivity {
 
     private LinearLayout lista;
     private View textoVazio;
-    private FloatingActionButton botaoEnviarFoto;
-    private Uri uriFotoCamera;
 
-    private final ActivityResultLauncher<PickVisualMediaRequest> seletorFoto =
-            registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), this::enviarFoto);
-
-    private final ActivityResultLauncher<Uri> camera =
+    private final ActivityResultLauncher<Intent> registro =
             registerForActivityResult(
-                    new ActivityResultContracts.TakePicture(),
-                    tirou -> {
-                        if (tirou) {
-                            enviarFoto(uriFotoCamera);
+                    new ActivityResultContracts.StartActivityForResult(),
+                    resultado -> {
+                        if (resultado.getResultCode() == RESULT_OK) {
+                            AvisoFlutuante.mostrar(this, R.string.registro_enviado);
+                            carregarFeed();
                         }
                     });
 
@@ -72,92 +60,57 @@ public class FeedActivity extends AppCompatActivity {
 
         configurarBarra();
 
-        botaoEnviarFoto = findViewById(R.id.botaoRegistrarDescarte);
-        botaoEnviarFoto.setOnClickListener(view -> mostrarOpcoesFoto());
-        Motion.pressFeedback(botaoEnviarFoto);
+        View registrar = findViewById(R.id.botaoRegistrarDescarte);
+        registrar.setOnClickListener(view -> registro.launch(new Intent(this, RegistroDescarteActivity.class)));
+        Motion.pressFeedback(registrar);
 
         View meusDescartes = findViewById(R.id.textoMeusDescartes);
         meusDescartes.setOnClickListener(
                 view -> startActivity(TelaListaActivity.criarIntent(this, TipoLista.MEUS_DESCARTES, true)));
         Motion.pressFeedback(meusDescartes);
 
+        carregarFeed();
+    }
+
+    // O condomínio do morador vem do perfil da API: atualiza antes de pedir o feed.
+    private void carregarFeed() {
+
+        lista.removeAllViews();
+        textoVazio.setVisibility(View.GONE);
+
         IndicadorCarregamento.mostrar(lista, R.string.feed_carregando);
 
-        new FeedRepository().listar(this, this::exibir);
-    }
-
-    private void mostrarOpcoesFoto() {
-
-        new DialogoEco.Builder(this)
-                .titulo(R.string.feed_foto_titulo)
-                .botao(R.string.perfil_foto_tirar, DialogoEco.Estilo.PREENCHIDO, this::abrirCamera)
-                .botao(R.string.perfil_foto_galeria, DialogoEco.Estilo.CONTORNO, this::abrirGaleria)
-                .botao(R.string.perfil_cancelar, DialogoEco.Estilo.CONTORNO, null)
-                .mostrar();
-    }
-
-    private void abrirGaleria() {
-
-        seletorFoto.launch(
-                new PickVisualMediaRequest.Builder()
-                        .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
-                        .build());
-    }
-
-    private void abrirCamera() {
-
-        File pasta = new File(getCacheDir(), "fotos");
-
-        pasta.mkdirs();
-
-        File[] antigas = pasta.listFiles();
-
-        if (antigas != null) {
-            for (File antiga : antigas) {
-                antiga.delete();
-            }
-        }
-
-        File arquivo = new File(pasta, "feed_" + System.currentTimeMillis() + ".jpg");
-
-        uriFotoCamera = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", arquivo);
-
-        try {
-            camera.launch(uriFotoCamera);
-
-        } catch (ActivityNotFoundException erro) {
-            AvisoFlutuante.mostrar(this, R.string.perfil_foto_erro_camera);
-        }
-    }
-
-    private void enviarFoto(@Nullable Uri imagem) {
-
-        if (imagem == null) {
-            return;
-        }
-
-        botaoEnviarFoto.setEnabled(false);
-        botaoEnviarFoto.setAlpha(0.5f);
-
-        AvisoFlutuante.mostrar(this, R.string.feed_enviando);
-
-        new FotoPerfilRepository()
-                .enviarParaFeed(getApplicationContext(), imagem)
-                .observe(
+        new PerfilApiRepository()
+                .atualizarSeNecessario(
                         this,
-                        resultado -> {
-                            botaoEnviarFoto.setEnabled(true);
-                            botaoEnviarFoto.setAlpha(1f);
-
-                            if (!resultado.isSucesso()) {
-                                AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
+                        () -> {
+                            if (isFinishing() || isDestroyed()) {
                                 return;
                             }
 
-                            // A URL (resultado.getUrl()) já está no Cloudinary. Registrar a postagem
-                            // na ds-pontuacao-api depende da rota de criação, que ainda não existe.
-                            AvisoFlutuante.mostrar(this, R.string.feed_foto_enviada);
+                            new FeedRepository()
+                                    .listar(
+                                            this,
+                                            new FeedRepository.Retorno() {
+                                                @Override
+                                                public void aoConcluir(List<PostagemFeed> postagens) {
+                                                    exibir(postagens);
+                                                }
+
+                                                @Override
+                                                public void aoFalhar() {
+                                                    exibirErro();
+                                                }
+                                            });
                         });
+    }
+
+    private void exibirErro() {
+
+        lista.removeAllViews();
+
+        ((TextView) textoVazio).setText(R.string.feed_erro);
+        textoVazio.setVisibility(View.VISIBLE);
     }
 
     private void configurarBarra() {
@@ -198,6 +151,7 @@ public class FeedActivity extends AppCompatActivity {
             lista.addView(cartao);
         }
 
+        ((TextView) textoVazio).setText(R.string.feed_vazio);
         textoVazio.setVisibility(postagens.isEmpty() ? View.VISIBLE : View.GONE);
     }
 }

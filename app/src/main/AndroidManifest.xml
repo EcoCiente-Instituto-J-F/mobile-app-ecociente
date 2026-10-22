@@ -116,6 +116,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".views.RegistroDescarteActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".views.DetalheItemActivity"
             android:exported="false" />
 

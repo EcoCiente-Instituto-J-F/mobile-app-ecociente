@@ -51,10 +51,11 @@ public class FotoPerfilRepository {
         return enviar(contexto, imagem, UPLOAD_PRESET, true);
     }
 
-    // Foto de descarte do feed: preset próprio e a foto inteira, sem recorte quadrado.
+    // Sobe a foto do feed e devolve a URL; só chamar fora da thread principal.
     @NonNull
-    public LiveData<ResultadoUploadFoto> enviarParaFeed(@NonNull Context contexto, @NonNull Uri imagem) {
-        return enviar(contexto, imagem, UPLOAD_PRESET_FEED, false);
+    String urlDaFotoDoFeed(@NonNull Context contexto, @NonNull Uri imagem) throws Exception {
+        return enviarParaCloudinary(
+                prepararImagem(contexto.getApplicationContext(), imagem, false), UPLOAD_PRESET_FEED);
     }
 
     @NonNull
