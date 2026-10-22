@@ -20,21 +20,26 @@ import com.example.ecociente.R;
 import com.example.ecociente.model.SindicoCooperativa;
 import com.example.ecociente.viewmodels.SindicoColetaViewModel;
 
-import java.text.Normalizer;
-import java.util.Locale;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Navegacao;
-import com.example.ecociente.model.SindicoSolicitacao;
+import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
+import com.example.ecociente.repository.CooperativaRepository;
+import com.example.ecociente.ui.AbrirMapa;
+import com.example.ecociente.ui.IndicadorCarregamento;
+import com.google.android.material.button.MaterialButton;
+import com.example.ecociente.model.ResultadoSolicitacoes;
+import com.example.ecociente.repository.CalendarioExternoRepository;
 
-/** Lista local de demonstração, sem busca remota ou solicitação real. */
+/** Cooperativas da cidade do condomínio (API), com a rota até elas no Google Maps. */
 public final class SindicoCooperativasActivity extends AppCompatActivity {
     private SindicoColetaViewModel viewModel;
     private LinearLayout lista;
     private EditText busca;
+    private boolean carregadas;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -71,18 +76,75 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (!carregadas) {
+            carregarCooperativas();
+        } else {
+            carregarSolicitacoes();
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        mostrarCooperativas(busca.getText().toString());
+        if (carregadas) {
+            mostrarCooperativas(busca.getText().toString());
+        }
+    }
+
+    private void carregarCooperativas() {
+        lista.removeAllViews();
+        IndicadorCarregamento.mostrar(lista, R.string.cooperativas_carregando);
+
+        new CooperativaRepository().listar(this, cooperativas -> {
+            if (isFinishing() || isDestroyed()) return;
+
+            if (cooperativas == null) {
+                mostrarErroDeCooperativas();
+                return;
+            }
+
+            viewModel.definirCooperativas(cooperativas);
+            carregadas = true;
+            mostrarCooperativas(busca.getText().toString());
+            carregarSolicitacoes();
+        });
+    }
+
+    // Coletas já pedidas: a cooperativa com pedido em andamento mostra "Solicitação enviada".
+    private void carregarSolicitacoes() {
+        new CalendarioExternoRepository().listarTodos(this, resultado -> {
+            if (isFinishing() || isDestroyed()
+                    || resultado.getTipo() != ResultadoSolicitacoes.Tipo.SUCESSO) return;
+
+            viewModel.definirSolicitacoes(resultado.getItens());
+            mostrarCooperativas(busca.getText().toString());
+        });
+    }
+
+    private void mostrarErroDeCooperativas() {
+        lista.removeAllViews();
+
+        TextView mensagem = new TextView(this);
+        mensagem.setText(R.string.cooperativas_erro);
+        mensagem.setTextColor(getColor(R.color.cinza_texto_home));
+        mensagem.setTextSize(14);
+        mensagem.setPadding(8, 28, 8, 12);
+        lista.addView(mensagem);
+
+        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
+        tentar.setText(R.string.tentar_novamente);
+        tentar.setOnClickListener(view -> carregarCooperativas());
+        lista.addView(tentar);
     }
 
     private void mostrarCooperativas(String filtro) {
         lista.removeAllViews();
-        String termo = normalizar(filtro);
         int encontrados = 0;
         LayoutInflater inflater = LayoutInflater.from(this);
         for (SindicoCooperativa cooperativa : viewModel.getCooperativas()) {
-            if (!normalizar(cooperativa.getNome()).contains(termo)) continue;
+            if (!cooperativa.corresponde(filtro)) continue;
             encontrados++;
             View item = inflater.inflate(R.layout.item_sindico_cooperativa, lista, false);
             TextView nome = item.findViewById(R.id.nomeCooperativa);
@@ -94,19 +156,25 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
                         cooperativa.getId());
                 startActivity(informacoes);
             });
-            ((TextView) item.findViewById(R.id.distanciaCooperativa))
-                    .setText(getString(R.string.sindico_distancia, cooperativa.getDistancia()));
+            ((TextView) item.findViewById(R.id.enderecoCooperativa))
+                    .setText(cooperativa.getEnderecoCompleto());
             ((TextView) item.findViewById(R.id.avaliacaoCooperativa))
-                    .setText(getString(R.string.sindico_avaliacao_cooperativa, cooperativa.getAvaliacao()));
+                    .setText(cooperativa.getAvaliacao().isEmpty()
+                            ? getString(R.string.sindico_sem_avaliacoes)
+                            : getString(R.string.sindico_avaliacao_cooperativa,
+                                    cooperativa.getAvaliacao(), cooperativa.getTotalAvaliacoes()));
+            TextView comoChegar = item.findViewById(R.id.comoChegarCooperativa);
+            comoChegar.setContentDescription(getString(R.string.sindico_como_chegar_em, cooperativa.getNome()));
+            comoChegar.setOnClickListener(view -> AbrirMapa.rota(this, cooperativa.getEnderecoCompleto()));
             Button acao = item.findViewById(R.id.acaoCooperativa);
-            SindicoSolicitacao pendente = solicitacaoEmAndamento(cooperativa.getId());
+            Solicitacao pendente = solicitacaoEmAndamento(cooperativa.getId());
             if (pendente != null) {
                 acao.setText(R.string.sindico_solicitacao_enviada);
                 acao.setTextColor(getColor(R.color.etiqueta_pendente_texto));
                 acao.setBackgroundTintList(getColorStateList(R.color.etiqueta_pendente_fundo));
                 acao.setOnClickListener(view -> startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
-                        this, pendente.paraSolicitacao(PerfilApiRepository.condominioNomeOuVazio(this)),
-                        pendente.getCooperativa())));
+                        this, pendente.comNomeCondominio(PerfilApiRepository.condominioNomeOuVazio(this)),
+                        cooperativa.getNome())));
                 lista.addView(item, margemDoCartao());
                 continue;
             }
@@ -128,19 +196,14 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
         }
     }
 
-    private String normalizar(String valor) {
-        return Normalizer.normalize(valor, Normalizer.Form.NFD)
-                .replaceAll("\\p{M}", "").toLowerCase(Locale.ROOT).trim();
-    }
-
     private LinearLayout.LayoutParams margemDoCartao() {
         LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(-1, -2);
         parametros.bottomMargin = Math.round(12 * getResources().getDisplayMetrics().density);
         return parametros;
     }
 
-    private SindicoSolicitacao solicitacaoEmAndamento(int cooperativaId) {
-        for (SindicoSolicitacao solicitacao : viewModel.getSolicitacoes()) {
+    private Solicitacao solicitacaoEmAndamento(int cooperativaId) {
+        for (Solicitacao solicitacao : viewModel.getSolicitacoes()) {
             boolean ativa = solicitacao.getStatus() == StatusAgendamento.AGENDADO
                     || solicitacao.getStatus() == StatusAgendamento.CONFIRMADO;
             if (ativa && solicitacao.getCooperativaId() == cooperativaId) return solicitacao;

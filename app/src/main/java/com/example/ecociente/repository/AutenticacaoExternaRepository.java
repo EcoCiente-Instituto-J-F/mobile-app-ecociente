@@ -300,7 +300,14 @@ public class AutenticacaoExternaRepository {
         SharedPreferences preferencias =
                 contextoApp.getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
 
-        preferencias.edit().putString(CHAVE_TOKEN, token).apply();
+        String cifrado = CredenciaisSeguras.cifrar(token);
+
+        // Sem Keystore não há como guardar com segurança: o token fica só na memória do login.
+        if (cifrado != null) {
+            preferencias.edit().putString(CHAVE_TOKEN, cifrado).apply();
+        } else {
+            preferencias.edit().remove(CHAVE_TOKEN).apply();
+        }
     }
 
     @Nullable
@@ -311,7 +318,10 @@ public class AutenticacaoExternaRepository {
                         .getApplicationContext()
                         .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
 
-        return preferencias.getString(CHAVE_TOKEN, null);
+        String guardado = preferencias.getString(CHAVE_TOKEN, null);
+
+        // Token de versões antigas (texto puro) ou ilegível: descarta e o app renova com o login.
+        return guardado == null ? null : CredenciaisSeguras.decifrar(guardado);
     }
 
     @NonNull

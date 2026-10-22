@@ -24,7 +24,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
 import com.example.ecociente.model.ItemLista;
+import com.example.ecociente.model.PostagemFeed;
 import com.example.ecociente.repository.EducacaoRepository;
+import com.example.ecociente.repository.PostagemRepository;
 import com.example.ecociente.repository.AvaliacaoRepository;
 import com.example.ecociente.repository.RankingExternoRepository;
 import com.example.ecociente.model.TipoLista;
@@ -36,7 +38,9 @@ import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Navegacao;
 import java.text.NumberFormat;
 import java.util.Locale;
+import com.example.ecociente.ui.ChipEco;
 import com.example.ecociente.ui.IndicadorCarregamento;
+import android.widget.FrameLayout;
 
 public class TelaListaActivity extends AppCompatActivity {
 
@@ -115,6 +119,11 @@ public class TelaListaActivity extends AppCompatActivity {
             return;
         }
 
+        if (tipo == TipoLista.MEUS_DESCARTES) {
+            carregarMeusDescartes(lista);
+            return;
+        }
+
         if (tipo == TipoLista.SALVOS) {
             carregarSalvos(lista);
             return;
@@ -160,7 +169,7 @@ public class TelaListaActivity extends AppCompatActivity {
                             lista.removeAllViews();
 
                             if (!sucesso) {
-                                textoDeEstado(lista, R.string.guia_erro);
+                                erroComTentar(lista, R.string.guia_erro);
                                 return;
                             }
 
@@ -192,6 +201,47 @@ public class TelaListaActivity extends AppCompatActivity {
         exibirItens(lista, itens);
     }
 
+    // "Meus descartes": as postagens do próprio usuário na ds-mobile-api.
+    private void carregarMeusDescartes(LinearLayout lista) {
+
+        indicadorDeCarregamento(lista, R.string.meus_descartes_carregando);
+
+        new PostagemRepository()
+                .minhas(
+                        this,
+                        postagens -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            lista.removeAllViews();
+
+                            if (postagens == null) {
+                                erroComTentar(lista, R.string.meus_descartes_erro);
+                                return;
+                            }
+
+                            if (postagens.isEmpty()) {
+                                textoDeEstado(lista, R.string.meus_descartes_vazio);
+                                return;
+                            }
+
+                            java.util.List<ItemLista> itens = new java.util.ArrayList<>();
+
+                            for (PostagemFeed postagem : postagens) {
+                                itens.add(
+                                        new ItemLista(
+                                                postagem.getCategoria().isEmpty()
+                                                        ? getString(R.string.descarte)
+                                                        : postagem.getCategoria(),
+                                                postagem.getQuando(),
+                                                postagem.getStatus()));
+                            }
+
+                            exibirItens(lista, itens);
+                        });
+    }
+
     private void carregarSalvos(LinearLayout lista) {
 
         indicadorDeCarregamento(lista, R.string.guia_carregando);
@@ -206,7 +256,7 @@ public class TelaListaActivity extends AppCompatActivity {
 
                             if (!sucesso) {
                                 lista.removeAllViews();
-                                textoDeEstado(lista, R.string.guia_erro);
+                                erroComTentar(lista, R.string.guia_erro);
                                 return;
                             }
 
@@ -240,7 +290,7 @@ public class TelaListaActivity extends AppCompatActivity {
                             }
 
                             lista.removeAllViews();
-                            textoDeEstado(lista, R.string.avaliacoes_erro);
+                            erroComTentar(lista, R.string.avaliacoes_erro);
                         });
     }
 
@@ -258,7 +308,7 @@ public class TelaListaActivity extends AppCompatActivity {
                             lista.removeAllViews();
 
                             if (avaliacoes == null) {
-                                textoDeEstado(lista, R.string.avaliacoes_erro);
+                                erroComTentar(lista, R.string.avaliacoes_erro);
                                 return;
                             }
 
@@ -329,14 +379,14 @@ public class TelaListaActivity extends AppCompatActivity {
 
         BottomSheetDialog folha = new BottomSheetDialog(this);
 
-        View conteudo = getLayoutInflater().inflate(R.layout.dialog_filtro_guia, null);
+        View conteudo = getLayoutInflater().inflate(R.layout.dialog_filtro_guia, new FrameLayout(this), false);
 
         ChipGroup categorias = conteudo.findViewById(R.id.chipsCategoria);
         ChipGroup tempos = conteudo.findViewById(R.id.chipsTempo);
         RadioGroup ordem = conteudo.findViewById(R.id.grupoOrdem);
 
         for (String categoria : FiltroGuia.categoriasDe(guiaCompleto)) {
-            Chip chip = criarChip(categoria, filtro.getCategorias().contains(categoria));
+            Chip chip = ChipEco.criar(this, categoria, filtro.getCategorias().contains(categoria));
             chip.setTag(categoria);
             categorias.addView(chip);
         }
@@ -344,7 +394,7 @@ public class TelaListaActivity extends AppCompatActivity {
         int[] rotulos = {R.string.filtro_tempo_ate3, R.string.filtro_tempo_3a6, R.string.filtro_tempo_mais6};
 
         for (FiltroGuia.Tempo tempo : FiltroGuia.Tempo.values()) {
-            Chip chip = criarChip(getString(rotulos[tempo.ordinal()]), filtro.getTempos().contains(tempo));
+            Chip chip = ChipEco.criar(this, getString(rotulos[tempo.ordinal()]), filtro.getTempos().contains(tempo));
             chip.setTag(tempo);
             tempos.addView(chip);
         }
@@ -393,26 +443,6 @@ public class TelaListaActivity extends AppCompatActivity {
 
         folha.setContentView(conteudo);
         folha.show();
-    }
-
-    private Chip criarChip(String texto, boolean marcado) {
-
-        Chip chip = new Chip(this);
-
-        chip.setText(texto);
-        chip.setCheckable(true);
-        chip.setCheckedIconVisible(false);
-        chip.setChecked(marcado);
-        chip.setTextColor(getColor(R.color.verde_escuro_principal));
-        chip.setChipBackgroundColor(
-                new android.content.res.ColorStateList(
-                        new int[][] {{android.R.attr.state_checked}, {}},
-                        new int[] {getColor(R.color.verde_claro_ecociente), getColor(R.color.branco)}));
-        chip.setChipStrokeColor(
-                android.content.res.ColorStateList.valueOf(getColor(R.color.cinza_borda_clara_home)));
-        chip.setChipStrokeWidth(getResources().getDisplayMetrics().density);
-
-        return chip;
     }
 
     // Tempo de leitura e marcador de salvo nas linhas do guia.
@@ -469,7 +499,12 @@ public class TelaListaActivity extends AppCompatActivity {
 
                             lista.removeAllViews();
 
-                            java.util.List<ItemLista> itens = moradores != null ? moradores : tipo.itens();
+                            if (moradores == null) {
+                                erroComTentar(lista, R.string.ranking_erro);
+                                return;
+                            }
+
+                            java.util.List<ItemLista> itens = moradores;
 
                             if (itens.isEmpty()) {
                                 textoDeEstado(lista, R.string.ranking_sem_pontuacao);
@@ -544,7 +579,7 @@ public class TelaListaActivity extends AppCompatActivity {
                                     lista.removeAllViews();
 
                                     if (saldo == null && pagina == null) {
-                                        textoDeEstado(lista, R.string.pontos_erro);
+                                        erroComTentar(lista, R.string.pontos_erro);
                                         return;
                                     }
 
@@ -603,6 +638,25 @@ public class TelaListaActivity extends AppCompatActivity {
 
     private View indicadorDeCarregamento(LinearLayout lista, int mensagem) {
         return IndicadorCarregamento.mostrar(lista, mensagem);
+    }
+
+    // Falha ao carregar: a mensagem e um botão que refaz a consulta da lista inteira.
+    private void erroComTentar(LinearLayout lista, int mensagem) {
+
+        textoDeEstado(lista, mensagem);
+
+        com.google.android.material.button.MaterialButton tentar =
+                (com.google.android.material.button.MaterialButton)
+                        getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
+
+        tentar.setText(R.string.tentar_novamente);
+        tentar.setOnClickListener(
+                view -> {
+                    lista.removeAllViews();
+                    preencherLista();
+                });
+
+        lista.addView(tentar);
     }
 
     private TextView textoDeEstado(LinearLayout lista, int mensagem) {
@@ -669,6 +723,7 @@ public class TelaListaActivity extends AppCompatActivity {
 
             case RANKING:
             case PONTOS:
+            case MEUS_DESCARTES:
                 itens = ItensBarra.morador();
                 break;
 

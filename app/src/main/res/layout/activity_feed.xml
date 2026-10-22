@@ -7,7 +7,6 @@
     android:id="@+id/raizFeed"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/branco"
     android:clipChildren="false"
     android:clipToPadding="false"
     tools:context=".views.FeedActivity">
@@ -23,9 +22,24 @@
         android:text="@string/feed"
         android:textColor="@color/rosa_ecociente"
         android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/textoMeusDescartes"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textoMeusDescartes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="26dp"
+        android:background="?attr/selectableItemBackground"
+        android:fontFamily="@font/nunito_semibold"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:text="@string/feed_meus_descartes"
+        android:textColor="@color/verde_escuro_principal"
+        android:textSize="13sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tituloFeed"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/subtituloFeed"
@@ -81,6 +95,20 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/botaoRegistrarDescarte"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="88dp"
+        android:contentDescription="@string/feed_registrar_descarte"
+        android:src="@drawable/ic_adicionar"
+        app:backgroundTint="@color/verde_escuro_principal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.EcoCiente.Circulo"
+        app:tint="@color/branco" />
 
     <com.example.ecociente.ui.BarraNavegacaoView
         android:id="@+id/barraNavegacao"

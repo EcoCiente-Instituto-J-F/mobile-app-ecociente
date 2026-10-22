@@ -22,8 +22,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.ecociente.R;
 import com.example.ecociente.model.PerfilAcesso;
-import com.example.ecociente.model.TipoPerfil;
-import com.example.ecociente.model.TipoUsuario;
 import com.example.ecociente.model.EstadoHome;
 import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.ui.AvatarPerfil;
@@ -918,7 +916,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         if (destino != doFirestore) {
-            corrigirPerfilNoFirestore(destino);
+            viewModel.sincronizarPerfil(destino);
         }
 
         switch (destino) {
@@ -952,58 +950,6 @@ public class MainActivity extends AppCompatActivity {
                 carregarHome(nome);
                 break;
         }
-    }
-
-    /*
-     * Deixa o documento do usuário igual ao
-     * que a API confirmou, para as outras telas.
-     */
-    private void corrigirPerfilNoFirestore(
-            @NonNull PerfilAcesso.DestinoHome destino
-    ) {
-
-        com.google.firebase.auth.FirebaseUser usuario =
-                com.google.firebase.auth.FirebaseAuth
-                        .getInstance()
-                        .getCurrentUser();
-
-        if (usuario == null) {
-            return;
-        }
-
-        boolean sindico =
-                destino == PerfilAcesso.DestinoHome.SINDICO;
-        boolean cooperativa =
-                destino == PerfilAcesso.DestinoHome.COOPERATIVA;
-        boolean morador =
-                destino == PerfilAcesso.DestinoHome.CONDOMINIO;
-
-        com.example.ecociente.repository.PerfilRepository repositorio =
-                new com.example.ecociente.repository.PerfilRepository();
-
-        repositorio.atualizarCampo(
-                usuario.getUid(),
-                "tipoPerfil",
-                cooperativa
-                        ? TipoPerfil.COOPERATIVA
-                        : sindico ? TipoPerfil.SINDICO : TipoPerfil.USUARIO
-        );
-
-        repositorio.atualizarCampo(
-                usuario.getUid(),
-                "tipoUsuario",
-                cooperativa
-                        ? TipoUsuario.COOPERATIVA
-                        : sindico
-                                ? TipoPerfil.SINDICO
-                                : morador ? TipoUsuario.MORADOR : TipoUsuario.COMUM
-        );
-
-        repositorio.atualizarCampo(
-                usuario.getUid(),
-                "possuiCodigoCondominio",
-                morador || sindico
-        );
     }
 
     private void abrirHomeSindico() {

@@ -10,23 +10,27 @@ import androidx.annotation.Nullable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONObject;
+import com.example.ecociente.model.PerfilDaApi;
+import org.json.JSONException;
+import com.example.ecociente.model.SindicoDadosCondominio;
+import com.example.ecociente.model.SindicoItemUnidade;
+import java.util.Collections;
+import java.util.List;
 
 // GET /api/usuarios/me da ds-mobile-api: de onde o app descobre o condomínio do usuário.
 // O resultado fica guardado para as telas lerem na hora; enquanto a API não responder
-// (ou o usuário não tiver vínculo), vale o condomínio de demonstração.
+// (ou o usuário não tiver vínculo), o id fica 0.
 public class PerfilApiRepository {
 
     private static final String TAG = "PerfilApi";
 
     private static final String URL_PERFIL = "https://ds-mobile-api.onrender.com/api/usuarios/me";
 
-    // Condomínio do síndico de teste, usado enquanto a API não devolver o do usuário.
-    public static final int CONDOMINIO_DE_DEMONSTRACAO = 1;
-
     private static final String PREFERENCIAS = "perfil_api";
     private static final String CHAVE_CONDOMINIO_ID = "condominioId";
     private static final String CHAVE_CONDOMINIO_NOME = "condominioNome";
     private static final String CHAVE_COOPERATIVA_ID = "cooperativaId";
+    private static final String CHAVE_DADOS_DO_PERFIL = "dadosDoPerfil";
     private static final String CHAVE_ATUALIZADO_EM = "atualizadoEm";
     private static final long VALIDADE_MS = 6 * 60 * 60_000L;
 
@@ -34,16 +38,74 @@ public class PerfilApiRepository {
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
-    // Id do condomínio do usuário; o de demonstração enquanto não houver o real.
+    // Id do condomínio do usuário; 0 enquanto a API não informar um (sem vínculo ou sem resposta).
     public static int condominioId(@NonNull Context contexto) {
-        int salvo = preferencias(contexto).getInt(CHAVE_CONDOMINIO_ID, 0);
-
-        return salvo > 0 ? salvo : CONDOMINIO_DE_DEMONSTRACAO;
+        return Math.max(0, preferencias(contexto).getInt(CHAVE_CONDOMINIO_ID, 0));
     }
 
     // Id da cooperativa do usuário (perfil COOPERATIVA); 0 se a API ainda não informou.
     public static int cooperativaId(@NonNull Context contexto) {
         return preferencias(contexto).getInt(CHAVE_COOPERATIVA_ID, 0);
+    }
+
+    // O que a API informou do usuário na última consulta; vazio se ainda não veio.
+    @NonNull
+    public static PerfilDaApi dadosDoPerfil(@NonNull Context contexto) {
+
+        String corpo = preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
+
+        if (corpo == null) {
+            return PerfilDaApi.vazio();
+        }
+
+        try {
+            return PerfilApiJson.perfilDaApi(new JSONObject(corpo));
+
+        } catch (JSONException erro) {
+            Log.w(TAG, "Perfil guardado inválido", erro);
+
+            return PerfilDaApi.vazio();
+        }
+    }
+
+    // Dados do condomínio na última consulta; null se ainda não vieram ou o usuário não tem condomínio.
+    @Nullable
+    public static SindicoDadosCondominio dadosDoCondominio(@NonNull Context contexto) {
+
+        String corpo = preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
+
+        if (corpo == null) {
+            return null;
+        }
+
+        try {
+            return PerfilApiJson.dadosDoCondominio(new JSONObject(corpo));
+
+        } catch (JSONException erro) {
+            Log.w(TAG, "Perfil guardado inválido", erro);
+
+            return null;
+        }
+    }
+
+    // Torres do condomínio na última consulta; vazio se ainda não vieram.
+    @NonNull
+    public static List<SindicoItemUnidade> torresDoCondominio(@NonNull Context contexto) {
+
+        String corpo = preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
+
+        if (corpo == null) {
+            return Collections.emptyList();
+        }
+
+        try {
+            return PerfilApiJson.torres(new JSONObject(corpo));
+
+        } catch (JSONException erro) {
+            Log.w(TAG, "Perfil guardado inválido", erro);
+
+            return Collections.emptyList();
+        }
     }
 
     // Nome do condomínio vindo da API; null se ainda não veio.
@@ -126,6 +188,8 @@ public class PerfilApiRepository {
                 editor.putInt(CHAVE_CONDOMINIO_ID, condominio.id);
                 editor.putString(CHAVE_CONDOMINIO_NOME, condominio.nome);
             }
+
+            editor.putString(CHAVE_DADOS_DO_PERFIL, corpo);
 
             int cooperativaId = PerfilApiJson.cooperativaId(perfil);
 

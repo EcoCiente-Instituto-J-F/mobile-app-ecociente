@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.model.SindicoApartamento;
 import com.example.ecociente.viewmodels.SindicoUnidadesViewModel;
+import android.widget.FrameLayout;
 
 /** Formulário local para cadastrar ou editar uma unidade de um bloco. */
 public final class SindicoAdicionarUnidadeDialogFragment extends DialogFragment {
@@ -40,7 +41,7 @@ public final class SindicoAdicionarUnidadeDialogFragment extends DialogFragment 
         Dialog dialogo = new Dialog(requireContext());
         dialogo.requestWindowFeature(Window.FEATURE_NO_TITLE);
         View conteudo = requireActivity().getLayoutInflater()
-                .inflate(R.layout.dialog_sindico_adicionar_unidade, null);
+                .inflate(R.layout.dialog_sindico_adicionar_unidade, new FrameLayout(requireContext()), false);
         dialogo.setContentView(conteudo);
         Window janela = dialogo.getWindow();
         if (janela != null) {

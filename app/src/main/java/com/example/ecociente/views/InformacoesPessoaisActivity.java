@@ -19,6 +19,7 @@ import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.firebase.auth.FirebaseUser;
 import com.example.ecociente.ui.DialogoEco;
+import android.widget.FrameLayout;
 
 public class InformacoesPessoaisActivity extends AppCompatActivity {
 
@@ -48,6 +49,17 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
         setContentView(R.layout.activity_informacoes_pessoais);
 
         viewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
+
+        viewModel
+                .getFalhaDeSincronizacao()
+                .observe(
+                        this,
+                        falhou -> {
+                            if (Boolean.TRUE.equals(falhou)) {
+                                AvisoFlutuante.mostrar(this, R.string.perfil_sincronizacao_falhou);
+                                viewModel.falhaDeSincronizacaoAvisada();
+                            }
+                        });
 
         inicializarComponentes();
 
@@ -157,7 +169,9 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
         uid = usuario.getUid();
 
-        viewModel.buscarPerfil(uid).observe(this, perfil -> preencherCampos(usuario, perfil));
+        viewModel
+                .buscarPerfilAtualizado(getApplicationContext(), uid)
+                .observe(this, perfil -> preencherCampos(usuario, perfil));
     }
 
     private void preencherCampos(FirebaseUser usuario, PerfilUsuario perfil) {
@@ -310,7 +324,7 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
         String valorAtual = textoValor.getText().toString();
 
-        View corpo = LayoutInflater.from(this).inflate(R.layout.dialog_editar_campo, null);
+        View corpo = LayoutInflater.from(this).inflate(R.layout.dialog_editar_campo, new FrameLayout(this), false);
 
         EditText campoValor = corpo.findViewById(R.id.campoEditarValor);
 

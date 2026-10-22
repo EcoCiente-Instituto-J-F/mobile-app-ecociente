@@ -37,8 +37,56 @@ final class ApiAutenticada {
         return chamar(contexto, "POST", url, json);
     }
 
+    // Código HTTP e corpo da resposta, para quem precisa distinguir o erro (409, 403...).
+    static final class Resposta {
+        final int codigo;
+        @NonNull final String corpo;
+
+        Resposta(int codigo, @NonNull String corpo) {
+            this.codigo = codigo;
+            this.corpo = corpo;
+        }
+
+        boolean sucesso() {
+            return codigo >= 200 && codigo < 300;
+        }
+    }
+
+    // POST com corpo JSON; null só quando não há credenciais.
+    @Nullable
+    static Resposta enviarComCodigo(@NonNull Context contexto, @NonNull String url, @NonNull String json)
+            throws IOException {
+        return requisitarComRenovacao(contexto, "POST", url, json);
+    }
+
+    // PATCH com corpo JSON; null só quando não há credenciais.
+    @Nullable
+    static Resposta alterarComCodigo(@NonNull Context contexto, @NonNull String url, @NonNull String json)
+            throws IOException {
+        return requisitarComRenovacao(contexto, "PATCH", url, json);
+    }
+
     @Nullable
     private static String chamar(
+            @NonNull Context contexto, @NonNull String metodo, @NonNull String url, @Nullable String json)
+            throws IOException {
+
+        Resposta resposta = requisitarComRenovacao(contexto, metodo, url, json);
+
+        if (resposta == null) {
+            return null;
+        }
+
+        if (!resposta.sucesso()) {
+            Log.w(TAG, "HTTP " + resposta.codigo + " em " + metodo + " " + url);
+            return null;
+        }
+
+        return resposta.corpo;
+    }
+
+    @Nullable
+    private static Resposta requisitarComRenovacao(
             @NonNull Context contexto, @NonNull String metodo, @NonNull String url, @Nullable String json)
             throws IOException {
 
@@ -60,12 +108,7 @@ final class ApiAutenticada {
             }
         }
 
-        if (codigo[0] < 200 || codigo[0] >= 300) {
-            Log.w(TAG, "HTTP " + codigo[0] + " em " + metodo + " " + url);
-            return null;
-        }
-
-        return corpo;
+        return new Resposta(codigo[0], corpo);
     }
 
     @NonNull

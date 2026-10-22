@@ -121,7 +121,7 @@ public class QuizActivity extends AppCompatActivity {
                                         quiz.getId(),
                                         quiz.getTitulo(),
                                         quiz.getCategoria(),
-                                        getString(R.string.quiz_n_perguntas, quiz.getPerguntas().size()),
+                                        getResources().getQuantityString(R.plurals.quiz_n_perguntas, quiz.getPerguntas().size(), quiz.getPerguntas().size()),
                                         quiz.getPontos() > 0
                                                 ? getString(R.string.quiz_pontos_recompensa, quiz.getPontos())
                                                 : "",
@@ -287,7 +287,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private void atualizarQuantidadeQuizzes(int quantidade) {
         textoQuantidadeQuizzes.setText(
-                getString(R.string.quizzes_disponiveis_formatado, quantidade)
+                getResources().getQuantityString(R.plurals.quizzes_disponiveis_formatado, quantidade, quantidade)
         );
     }
 

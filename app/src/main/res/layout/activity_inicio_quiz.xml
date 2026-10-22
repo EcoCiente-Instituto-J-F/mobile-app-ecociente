@@ -5,7 +5,6 @@
     android:id="@+id/raizInicioQuiz"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/verde_escuro_principal"
     android:clipChildren="false"
     android:clipToPadding="false">
 

@@ -35,7 +35,7 @@
             android:textColor="@color/verde_escuro_principal"
             android:textSize="13sp" />
         <TextView
-            android:id="@+id/distanciaCooperativa"
+            android:id="@+id/enderecoCooperativa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_regular"
@@ -48,6 +48,17 @@
             android:fontFamily="@font/nunito_regular"
             android:textColor="@color/cinza_texto_home"
             android:textSize="11sp" />
+        <TextView
+            android:id="@+id/comoChegarCooperativa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/nunito_bold"
+            android:gravity="center_vertical"
+            android:minHeight="44dp"
+            android:text="@string/sindico_como_chegar"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="12sp" />
     </LinearLayout>
     <Button
         android:id="@+id/acaoCooperativa"

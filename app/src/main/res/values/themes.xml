@@ -7,12 +7,27 @@
         <item name="colorOnPrimary">@color/branco</item>
         <item name="colorSecondary">@color/rosa_ecociente</item>
         <item name="colorOnSecondary">@color/branco</item>
+        <item name="android:windowBackground">@color/branco</item>
     </style>
 
     <style
         name="Theme.EcoCiente"
         parent="Base.Theme.EcoCiente" />
 
+
+    <style
+        name="Theme.EcoCiente.Verde"
+        parent="Theme.EcoCiente">
+
+        <item name="android:windowBackground">@color/verde_escuro_principal</item>
+    </style>
+
+    <style
+        name="Theme.EcoCiente.Splash"
+        parent="Theme.EcoCiente">
+
+        <item name="android:windowBackground">@color/verde_fundo_splash</item>
+    </style>
 
     <style
         name="Theme.EcoCiente.Quiz"

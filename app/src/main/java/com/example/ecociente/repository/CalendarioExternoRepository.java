@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.example.ecociente.model.DadosDemonstracao;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
@@ -37,6 +36,11 @@ public class CalendarioExternoRepository {
         void aoConcluir(@NonNull ResultadoSolicitacoes resultado);
     }
 
+    public interface RetornoCriacao {
+        // `criada` é null quando a API não aceitou; aí `mensagemErro` diz o motivo.
+        void aoConcluir(@Nullable Solicitacao criada, @NonNull String mensagemErro);
+    }
+
     public interface RetornoStatus {
         void aoConcluir(@NonNull ResultadoApi resultado);
     }
@@ -64,6 +68,127 @@ public class CalendarioExternoRepository {
         String consulta = "?status=" + status.name() + "&page=" + pagina + "&size=" + TAMANHO_PAGINA;
 
         executar(contexto, URL_AGENDAMENTOS + consulta, retorno);
+    }
+
+    // Agendamentos dos condomínios do síndico (ou da cooperativa), do mais recente ao mais antigo.
+    public void listarTodos(@NonNull Context contexto, @NonNull Retorno retorno) {
+
+        executar(contexto, URL_AGENDAMENTOS + "?size=" + TAMANHO_PAGINA_MES, retorno);
+    }
+
+    // POST /api/v1/agendamentos: o síndico responsável pede a coleta a uma cooperativa.
+    public void solicitar(
+            @NonNull Context contexto,
+            int condominioId,
+            int cooperativaId,
+            long inicioMs,
+            @NonNull RetornoCriacao retorno) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        EXECUTOR.execute(
+                () -> {
+                    Solicitacao criada = null;
+                    String erro = MENSAGEM_PADRAO;
+
+                    try {
+                        String token = autenticacao.tokenParaUso(contextoApp);
+
+                        if (token == null) {
+                            erro = MENSAGEM_SESSAO;
+
+                        } else {
+                            String corpo =
+                                    new JSONObject()
+                                            .put("condominioId", condominioId)
+                                            .put("cooperativaId", cooperativaId)
+                                            .put(
+                                                    "dataInicio",
+                                                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US)
+                                                            .format(new java.util.Date(inicioMs)))
+                                            .toString();
+
+                            Object[] resposta = criar(token, corpo);
+
+                            if ((int) resposta[0] == HttpURLConnection.HTTP_UNAUTHORIZED
+                                    || (int) resposta[0] == HttpURLConnection.HTTP_FORBIDDEN) {
+                                String novoToken = autenticacao.renovarToken(contextoApp);
+
+                                if (novoToken != null) {
+                                    resposta = criar(novoToken, corpo);
+                                }
+                            }
+
+                            int codigo = (int) resposta[0];
+
+                            if (codigo >= 200 && codigo < 300) {
+                                criada = CalendarioJson.solicitacao(new JSONObject((String) resposta[1]));
+
+                            } else {
+                                Log.w(TAG, "Resposta HTTP " + codigo + " ao criar a coleta");
+
+                                erro = mensagemDaCriacao(codigo);
+                            }
+                        }
+
+                    } catch (Exception falha) {
+                        Log.e(TAG, "Falha ao criar a coleta", falha);
+                    }
+
+                    Solicitacao criadaFinal = criada;
+                    String erroFinal = erro;
+
+                    PRINCIPAL.post(() -> retorno.aoConcluir(criadaFinal, erroFinal));
+                });
+    }
+
+    // [código HTTP, corpo da resposta (vazio se não houve)]
+    @NonNull
+    private Object[] criar(@NonNull String token, @NonNull String corpo) throws IOException {
+
+        HttpURLConnection conexao = (HttpURLConnection) new URL(URL_AGENDAMENTOS).openConnection();
+
+        try {
+            conexao.setRequestMethod("POST");
+            conexao.setRequestProperty("Content-Type", "application/json");
+            conexao.setRequestProperty("Accept", "application/json");
+            conexao.setRequestProperty("Authorization", "Bearer " + token);
+            conexao.setDoOutput(true);
+            conexao.setConnectTimeout(TIMEOUT_MS);
+            conexao.setReadTimeout(TIMEOUT_MS);
+
+            try (OutputStream saida = conexao.getOutputStream()) {
+                saida.write(corpo.getBytes(StandardCharsets.UTF_8));
+            }
+
+            int codigo = conexao.getResponseCode();
+
+            return new Object[] {codigo, codigo >= 200 && codigo < 300 ? lerFluxo(conexao.getInputStream()) : ""};
+
+        } finally {
+            conexao.disconnect();
+        }
+    }
+
+    @NonNull
+    private String mensagemDaCriacao(int codigo) {
+
+        switch (codigo) {
+            case HttpURLConnection.HTTP_BAD_REQUEST:
+                return "Confira a data e o horário: eles precisam estar no futuro.";
+
+            case HttpURLConnection.HTTP_UNAUTHORIZED:
+                return MENSAGEM_SESSAO;
+
+            case HttpURLConnection.HTTP_FORBIDDEN:
+                return "Só o síndico responsável pelo condomínio pode solicitar uma coleta.";
+
+            case HttpURLConnection.HTTP_NOT_FOUND:
+                return "Condomínio ou cooperativa não encontrados.";
+
+            default:
+                return MENSAGEM_PADRAO;
+        }
     }
 
     public void alterarStatus(
@@ -176,7 +301,7 @@ public class CalendarioExternoRepository {
                 return MENSAGEM_SESSAO;
 
             case HttpURLConnection.HTTP_FORBIDDEN:
-                return "Você não pode responder esta solicitação.";
+                return "Você não pode alterar esta solicitação: quem a criou não pode respondê-la nem cancelá-la.";
 
             case HttpURLConnection.HTTP_NOT_FOUND:
                 return "Solicitação não encontrada.";
@@ -189,36 +314,7 @@ public class CalendarioExternoRepository {
         }
     }
 
-    // Agenda de exemplo no lugar da API (DadosDemonstracao.ATIVO).
-    private void responderComExemplos(
-            @NonNull java.util.List<Solicitacao> itens, @NonNull Retorno retorno) {
-
-        PRINCIPAL.post(() -> retorno.aoConcluir(ResultadoSolicitacoes.sucesso(itens, true)));
-    }
-
     public void proxima(@NonNull Context contexto, @NonNull Retorno retorno) {
-
-        if (DadosDemonstracao.ativoPara(AutenticacaoExternaRepository.perfilSalvo(contexto))) {
-            java.util.List<Solicitacao> proxima = new java.util.ArrayList<>();
-            long agora = System.currentTimeMillis();
-            long melhor = Long.MAX_VALUE;
-
-            for (Solicitacao s : Solicitacao.exemplos()) {
-                Calendar inicio = FormatoDataApi.calendario(s.getDataInicio());
-                boolean aberta = s.getStatus() == StatusAgendamento.AGENDADO
-                        || s.getStatus() == StatusAgendamento.CONFIRMADO;
-
-                if (inicio != null && aberta && inicio.getTimeInMillis() >= agora
-                        && inicio.getTimeInMillis() < melhor) {
-                    melhor = inicio.getTimeInMillis();
-                    proxima.clear();
-                    proxima.add(s);
-                }
-            }
-
-            responderComExemplos(proxima, retorno);
-            return;
-        }
 
         executar(contexto, URL_AGENDAMENTOS + "/proxima", retorno);
     }
@@ -241,23 +337,6 @@ public class CalendarioExternoRepository {
             @NonNull Calendar inicio,
             @NonNull Calendar fim,
             @NonNull Retorno retorno) {
-
-        if (DadosDemonstracao.ativoPara(AutenticacaoExternaRepository.perfilSalvo(contexto))) {
-            java.util.List<Solicitacao> noPeriodo = new java.util.ArrayList<>();
-
-            for (Solicitacao s : Solicitacao.exemplos()) {
-                Calendar inicioColeta = FormatoDataApi.calendario(s.getDataInicio());
-
-                if (inicioColeta != null
-                        && !inicioColeta.before(inicio)
-                        && !inicioColeta.after(fim)) {
-                    noPeriodo.add(s);
-                }
-            }
-
-            responderComExemplos(noPeriodo, retorno);
-            return;
-        }
 
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
 
@@ -368,7 +447,7 @@ public class CalendarioExternoRepository {
         JSONArray conteudo = resposta.optJSONArray("content");
 
         if (conteudo == null) {
-            itens.add(solicitacao(resposta));
+            itens.add(CalendarioJson.solicitacao(resposta));
 
             return ResultadoSolicitacoes.sucesso(itens, true);
         }
@@ -378,29 +457,11 @@ public class CalendarioExternoRepository {
             JSONObject item = conteudo.optJSONObject(i);
 
             if (item != null) {
-                itens.add(solicitacao(item));
+                itens.add(CalendarioJson.solicitacao(item));
             }
         }
 
         return ResultadoSolicitacoes.sucesso(itens, resposta.optBoolean("last", true));
-    }
-
-    @NonNull
-    private Solicitacao solicitacao(@NonNull JSONObject item) {
-
-        return new Solicitacao(
-                item.optInt("id"),
-                item.optInt("condominioId"),
-                item.optInt("cooperativaId"),
-                texto(item, "dataInicio"),
-                texto(item, "dataFim"),
-                StatusAgendamento.daApi(item.optString("statusAgendamento")),
-                item.optBoolean("possuiRecorrencia"));
-    }
-
-    @Nullable
-    private String texto(@NonNull JSONObject item, @NonNull String campo) {
-        return item.isNull(campo) ? null : item.optString(campo);
     }
 
     @NonNull

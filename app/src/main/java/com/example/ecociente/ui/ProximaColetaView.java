@@ -118,7 +118,7 @@ public class ProximaColetaView extends FrameLayout {
 
         } else {
             rotuloFaltam.setText(R.string.proxima_coleta_rotulo_faltam);
-            valorFaltam.setText(getContext().getString(R.string.proxima_coleta_dias, (int) dias));
+            valorFaltam.setText(getResources().getQuantityString(R.plurals.proxima_coleta_dias, (int) dias, (int) dias));
         }
 
         caixaFaltam.setVisibility(VISIBLE);

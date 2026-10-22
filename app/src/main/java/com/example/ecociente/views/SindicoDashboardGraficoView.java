@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.ecociente.R;
 
-/** Gráfico de barras simples para os dados ilustrativos do dashboard. */
+/** Gráfico de barras simples do dashboard do síndico. */
 public final class SindicoDashboardGraficoView extends View {
     private final Paint tinta = new Paint(Paint.ANTI_ALIAS_FLAG);
     private String[] nomes = new String[0];

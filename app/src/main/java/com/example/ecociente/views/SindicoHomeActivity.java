@@ -20,6 +20,7 @@ import com.example.ecociente.viewmodels.CalendarioViewModel;
 import com.example.ecociente.ui.SemanaColetasView;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.SindicoDashboard;
+import com.example.ecociente.model.SindicoPosicaoRanking;
 import com.example.ecociente.viewmodels.SindicoViewModel;
 
 import java.util.Locale;
@@ -33,11 +34,12 @@ import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.model.SindicoAviso;
 import android.widget.ImageView;
 import com.example.ecociente.model.PerfilUsuario;
-import com.example.ecociente.repository.RankingExternoRepository;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.google.firebase.auth.FirebaseUser;
 
 public final class SindicoHomeActivity extends AppCompatActivity {
+    private SindicoViewModel viewModel;
+
     private CalendarioViewModel calendarioViewModel;
     private SemanaColetasView semana;
 
@@ -68,7 +70,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         View raiz = findViewById(R.id.raizSindicoHome);
         InsetsSistema.aplicarComoPadding(raiz);
 
-        SindicoViewModel viewModel = new ViewModelProvider(this).get(SindicoViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SindicoViewModel.class);
         SindicoDashboard dados = viewModel.getDashboard();
         TextView saudacao = findViewById(R.id.sindicoSaudacao);
         ImageView imagemPerfil = findViewById(R.id.imagemPerfilSindico);
@@ -103,6 +105,8 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         calendarioViewModel.carregarSemana();
         montarMetricas(dados);
         montarRanking(dados);
+        findViewById(R.id.sindicoValidarDescartes).setOnClickListener(
+                view -> startActivity(new Intent(this, SindicoValidacaoActivity.class)));
         findViewById(R.id.sindicoDashboardResumo).setOnClickListener(view -> startActivity(
                 new Intent(this, SindicoDashboardActivity.class)));
         View.OnClickListener abrirRanking = view -> startActivity(
@@ -237,33 +241,19 @@ public final class SindicoHomeActivity extends AppCompatActivity {
     private void montarRanking(SindicoDashboard dados) {
         exibirRanking(dados.getBlocosRanking(), dados.getIniciaisRanking(), dados.getPontosRanking());
 
-                new RankingExternoRepository()
-                .listarTorres(
-                        this,
-                        PerfilApiRepository.condominioId(this),
-                        5,
-                        posicoes -> {
-                            if (isFinishing() || isDestroyed()) {
-                                return;
-                            }
+        viewModel.getRankingTorres().observe(this, posicoes -> {
+            if (posicoes == null) {
+                exibirRanking(new String[0], new String[0], new int[0]);
+                return;
+            }
 
-                            if (posicoes == null) {
-                                exibirRanking(new String[0], new String[0], new int[0]);
-                                return;
-                            }
+            exibirRanking(
+                    SindicoPosicaoRanking.nomes(posicoes),
+                    SindicoPosicaoRanking.iniciais(posicoes),
+                    SindicoPosicaoRanking.pontos(posicoes));
+        });
 
-                            String[] nomes = new String[posicoes.size()];
-                            String[] siglas = new String[posicoes.size()];
-                            int[] total = new int[posicoes.size()];
-
-                            for (int i = 0; i < nomes.length; i++) {
-                                nomes[i] = posicoes.get(i).getNome();
-                                siglas[i] = posicoes.get(i).getIniciais();
-                                total[i] = posicoes.get(i).getPontos();
-                            }
-
-                            exibirRanking(nomes, siglas, total);
-                        });
+        viewModel.carregarRankingTorres(5);
     }
 
     private void exibirRanking(String[] blocos, String[] iniciais, int[] pontos) {

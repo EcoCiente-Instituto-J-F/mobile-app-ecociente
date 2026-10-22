@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
     <string name="sindico_voltar_aos_blocos">Voltar aos blocos</string>
     <string name="sindico_buscar_unidade">Buscar unidade…</string>
     <string name="sindico_adicionar_unidade">Adicionar unidade</string>
@@ -9,18 +10,10 @@
     <string name="sindico_buscar_cooperativa">Buscar cooperativa…</string>
     <string name="sindico_voltar_a_home">Voltar à home</string>
     <string name="sindico_dashboard">Dashboard</string>
-    <string name="sindico_total_de_aulas_concluidas">Total de aulas concluídas</string>
-    <string name="sindico_moradores_utilizando_o_app">Moradores utilizando o app</string>
-    <string name="sindico_media_de_pontos_por_pessoa">Média de pontos por pessoa</string>
-    <string name="sindico_quizzes_com_maiores_notas">Quizzes com maiores notas</string>
-    <string name="sindico_notas_ilustrativas_compostagem_14">Notas ilustrativas: Compostagem 14, Vidro 18, Sustentabilidade 14 e Papel 26</string>
-    <string name="sindico_deslize_para_ver_materiais_recicla">Deslize para ver materiais reciclados e análise por cooperativa</string>
-    <string name="sindico_materiais_reciclados">Materiais reciclados</string>
-    <string name="sindico_analise_por_cooperativa">Análise por cooperativa</string>
-    <string name="sindico_coletas_ilustrativas_coop_estrela">Coletas ilustrativas: Coop Estrela 3, Coop Lua 9, Coop Sol 12 e Coop Verde 15</string>
+    <string name="sindico_deslize_para_ver_materiais_recicla">Deslize para ver os materiais descartados e as coletas por cooperativa</string>
+    <string name="sindico_materiais_reciclados">Materiais descartados (30 dias)</string>
     <string name="sindico_historico_de_coletas">Histórico de coletas</string>
     <string name="sindico_filtrar_historico">Filtrar histórico</string>
-    <string name="sindico_exemplos_locais_avaliacoes_nao_env">Toque em “Avalie” para dar sua nota</string>
     <string name="sindico_abrir_avisos">Abrir avisos</string>
     <string name="sindico_perfil_do_sindico">Perfil do síndico</string>
     <string name="sindico_ilustracao_de_reciclagem">Ilustração de reciclagem</string>
@@ -53,17 +46,12 @@
     <string name="sindico_adicionar_area_de_descarte">Adicionar área de descarte</string>
     <string name="sindico_fechar_formulario">Fechar formulário</string>
     <string name="sindico_numero_do_apartamento">Número do apartamento</string>
-    <string name="sindico_apto_120">Apto 120</string>
     <string name="sindico_nome_do_morador">Nome do morador</string>
     <string name="sindico_maria_clara">Maria Clara</string>
     <string name="sindico_telefone_do_morador">Telefone do morador</string>
-    <string name="sindico_11_95376_2717">(11) 95376-2717</string>
+    <string name="sindico_11_95376_2717" tools:ignore="TypographyDashes">(11) 95376-2717</string>
     <string name="sindico_enviar_unidade">Enviar unidade</string>
     <string name="sindico_enviar">Enviar</string>
-    <string name="sindico_avaliar_coleta">Avaliar Coleta</string>
-    <string name="sindico_fechar_avaliacao">Fechar avaliação</string>
-    <string name="sindico_escolha_de_1_a_5_estrelas">Escolha de 1 a 5 estrelas</string>
-    <string name="sindico_salvar_avaliacao_local">Salvar avaliação local</string>
     <string name="sindico_criar_notificacao">Criar notificação</string>
     <string name="sindico_fechar_criacao_de_notificacao">Fechar criação de notificação</string>
     <string name="sindico_digite_seu_titulo">Digite seu título</string>
@@ -75,24 +63,17 @@
     <string name="sindico_dados_ilustrativos">Dados ilustrativos</string>
     <string name="sindico_fechar_solicitacao_de_coleta">Fechar solicitação de coleta</string>
     <string name="sindico_cooperativa_recicla_mais">Cooperativa Recicla Mais</string>
-    <string name="sindico_endereco_da_coleta">Endereço da coleta</string>
-    <string name="sindico_rua_das_hortensias_123_jardim_das">Rua das Hortênsias, 123 - Jardim das Flores</string>
     <string name="sindico_escolher_data_da_coleta">Escolher data da coleta</string>
     <string name="sindico_escolher_horario_da_coleta">Escolher horário da coleta</string>
-    <string name="sindico_a_coleta_sera_recorrente">A coleta será recorrente?</string>
-    <string name="sindico_sim">Sim</string>
-    <string name="sindico_nao">Não</string>
     <string name="sindico_editar_unidade">Editar unidade</string>
     <string name="sindico_excluir_unidade">Excluir unidade</string>
     <string name="sindico_solicitar_coleta">Solicitar coleta</string>
-    <string name="sindico_avaliar">Avaliar</string>
     <string name="sindico_informe_o_numero_da_unidade">Informe o número da unidade</string>
     <string name="sindico_esta_unidade_ja_esta_cadastrada_ne">Esta unidade já está cadastrada neste bloco</string>
     <string name="sindico_informe_o_morador_ou_remova_o_tele">Informe o morador ou remova o telefone</string>
-    <string name="sindico_nota_selecionada">%1$s, nota selecionada</string>
     <string name="sindico_informe_um_titulo">Informe um título.</string>
     <string name="sindico_escreva_a_mensagem_do_aviso">Escreva a mensagem do aviso.</string>
-    <string name="sindico_aviso_detalhe">%1$s\n\nDestinatário: %2$s\nAutor: %3$s · %4$s</string>
+    <string name="sindico_aviso_detalhe" tools:ignore="Typos">%1$s\n\nDestinatário: %2$s\nAutor: %3$s · %4$s</string>
     <string name="sindico_rascunho_local_ainda_nao_enviado">Rascunho local, ainda não enviado.</string>
     <string name="sindico_demo_unidade_salva">Unidade salva neste aparelho.</string>
     <string name="sindico_morador_nome">Morador: %1$s</string>
@@ -107,18 +88,24 @@
     <string name="sindico_a_exclusao_afeta_apenas_os_dados_l">Esta ação não pode ser desfeita.</string>
     <string name="sindico_demo_unidade_removida">Unidade removida.</string>
     <string name="sindico_ver_informacoes">Ver informações de %1$s</string>
-    <string name="sindico_distancia">⌖ %1$s</string>
-    <string name="sindico_avaliacao_cooperativa">★ %1$s</string>
+    <string name="sindico_avaliacao_cooperativa">★ %1$s (%2$d)</string>
+    <string name="sindico_sem_avaliacoes">Ainda sem avaliações</string>
+    <string name="sindico_como_chegar">Como chegar</string>
+    <string name="sindico_como_chegar_em">Como chegar em %1$s</string>
+    <string name="cooperativas_carregando">Carregando as cooperativas…</string>
+    <string name="cooperativas_erro">Não foi possível carregar as cooperativas. Só o síndico de um condomínio ativo vê esta lista.</string>
+    <string name="mapa_erro">Não foi possível abrir o mapa.</string>
+    <string name="mapa_sem_endereco">Esta cooperativa não tem endereço cadastrado.</string>
     <string name="sindico_nenhuma_cooperativa_de_exemplo_enc">Nenhuma cooperativa encontrada.</string>
-    <string name="sindico_demo_avaliacao_salva">Avaliação registrada neste aparelho.</string>
-    <string name="sindico_nota_texto">%1$d/5 estrelas</string>
-    <string name="sindico_avaliacao_local">Avaliação local: %1$d de 5 estrelas. Toque para alterar.</string>
-    <string name="sindico_avaliar_coleta_de">Avaliar coleta de %1$s</string>
-    <string name="sindico_todas_as_coletas_de_exemplo_ja_for">Todas as coletas já foram avaliadas.</string>
-    <string name="sindico_nenhuma_coleta_avaliada_neste_filt">Nenhuma coleta avaliada neste filtro.</string>
     <string name="sindico_todas">Todas</string>
-    <string name="sindico_para_avaliar">Para avaliar</string>
-    <string name="sindico_avaliadas">Avaliadas</string>
+    <string name="sindico_filtro_andamento">Em andamento</string>
+    <string name="sindico_filtro_concluidas">Concluídas</string>
+    <string name="sindico_filtro_encerradas">Canceladas e recusadas</string>
+    <string name="sindico_historico_vazio">Nenhuma coleta neste filtro.</string>
+    <string name="sindico_cooperativa_numero">Cooperativa %1$d</string>
+    <string name="sindico_coleta_sem_condominio">Seu condomínio ainda não foi carregado. Tente de novo em instantes.</string>
+    <string name="historico_carregando">Carregando as coletas…</string>
+    <string name="historico_erro">Não foi possível carregar as coletas.</string>
     <string name="sindico_participacao_dos_moradores">Participação dos moradores</string>
     <string name="sindico_descartes_registrados_no_mes">Descartes registrados no mês</string>
     <string name="sindico_taxa_de_adesao_a_coleta_seletiva">Taxa de adesão à coleta seletiva</string>
@@ -135,8 +122,9 @@
     <string name="sindico_informe_a_sigla_do_estado">Informe a sigla do estado</string>
     <string name="sindico_informe_o_cep">Informe o CEP</string>
     <string name="sindico_use_duas_letras_como_sp">Use duas letras, como SP</string>
-    <string name="sindico_use_o_formato_01234_567">Use o formato 01234-567</string>
-    <string name="sindico_demo_dados_salvos">Dados salvos neste aparelho.</string>
+    <string name="sindico_use_o_formato_01234_567" tools:ignore="TypographyDashes">Use o formato 01234-567</string>
+    <string name="sindico_demo_dados_salvos">Dados do condomínio salvos.</string>
+    <string name="sindico_condominio_sincronizacao_falhou">O endereço foi salvo no aparelho, mas a API não aceitou. Só o síndico responsável pode alterá-lo.</string>
     <string name="sindico_nenhum_bloco_adicione_o_primeiro_a">Nenhum bloco. Adicione o primeiro abaixo.</string>
     <string name="sindico_nenhuma_area_de_descarte_adicione">Nenhuma área de descarte. Adicione a primeira abaixo.</string>
     <string name="sindico_abrir_unidades_bloco">Abrir unidades do %1$s</string>
@@ -153,14 +141,6 @@
     <string name="sindico_a_quantidade_deve_ser_maior_que_ze">A quantidade deve ser maior que zero</string>
     <string name="sindico_demo_alteracao_salva">Alteração salva neste aparelho.</string>
     <string name="sindico_demo_item_removido">Item removido.</string>
-    <plurals name="sindico_estrelas">
-        <item quantity="one">%d estrela</item>
-        <item quantity="other">%d estrelas</item>
-    </plurals>
-    <plurals name="sindico_estrelas_selecionadas">
-        <item quantity="one">%d estrela selecionada</item>
-        <item quantity="other">%d estrelas selecionadas</item>
-    </plurals>
     <string name="sindico_enviar_solicitacao">Enviar solicitação</string>
     <string name="sindico_horario_passado">Escolha uma data e um horário futuros.</string>
     <string name="cooperativa_escolhida">Cooperativa escolhida</string>
@@ -180,6 +160,34 @@
     <string name="sindico_vs_mes_anterior">(vs. mês anterior)</string>
     <string name="sindico_foto_condominio_salva">Foto do condomínio salva.</string>
     <string name="sindico_sem_dado">—</string>
+    <string name="sindico_torre_do_condominio">Torre do condomínio</string>
+    <string name="sindico_carregando_dado">…</string>
+    <string name="sindico_dash_descartes">Descartes nos últimos 30 dias</string>
+    <string name="sindico_dash_moradores">Moradores que descartaram no mês</string>
+    <string name="sindico_dash_coletas">Coletas realizadas</string>
+    <string name="sindico_dash_semanas">Descartes por semana</string>
+    <string name="sindico_dash_cooperativas">Coletas por cooperativa</string>
+    <string name="sindico_descartes_semana_descricao">Descartes por semana: há 3 semanas %1$d, há 2 semanas %2$d, há 1 semana %3$d, esta semana %4$d</string>
+    <string name="sindico_sem_descartes">Nenhum descarte nos últimos 30 dias</string>
+    <string name="sindico_sem_coletas_realizadas">Nenhuma coleta realizada ainda</string>
+    <string name="sindico_dashboard_erro">Não foi possível calcular o dashboard. Tente de novo em instantes.</string>
     <string name="sindico_condominio_carregando">Carregando…</string>
     <string name="sindico_ranking_vazio">Ninguém pontuou neste ciclo ainda.</string>
+    <plurals name="sindico_itens_cadastrados">
+        <item quantity="one">%1$d item cadastrado</item>
+        <item quantity="other">%1$d itens cadastrados</item>
+    </plurals>
+    <string name="sindico_acao_editar">Editar</string>
+    <string name="sindico_acao_excluir">Excluir</string>
+    <string name="sindico_validar_descartes">Validar descartes dos moradores</string>
+    <string name="sindico_validar_descartes_subtitulo">Aprove ou reprove as fotos que estão em análise</string>
+    <string name="validacao_titulo">Validar descartes</string>
+    <string name="validacao_descricao">Descartes dos moradores do seu condomínio que aguardam a sua decisão.</string>
+    <string name="validacao_carregando">Carregando os descartes…</string>
+    <string name="validacao_vazio">Nenhum descarte em análise.</string>
+    <string name="validacao_erro">Não foi possível carregar os descartes.</string>
+    <string name="validacao_aprovar">Aprovar</string>
+    <string name="validacao_reprovar">Reprovar</string>
+    <string name="validacao_aprovado">Descarte aprovado.</string>
+    <string name="validacao_reprovado">Descarte reprovado.</string>
 </resources>

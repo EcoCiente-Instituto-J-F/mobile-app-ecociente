@@ -6,7 +6,6 @@
     android:id="@+id/raizQuizRevisao"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/branco"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:paddingStart="24dp"

@@ -5,7 +5,6 @@
     android:id="@+id/raizSindicoHome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/branco"
     android:orientation="vertical">
 
     <FrameLayout
@@ -115,7 +114,8 @@
                 android:layout_height="108dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="11dp">
+                android:paddingStart="11dp"
+                android:paddingEnd="0dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -203,6 +203,33 @@
                     android:textColor="@color/cinza_texto_auxiliar"
                     android:textSize="11sp"
                     android:visibility="gone" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/sindicoValidarDescartes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/fundo_cartao_borda"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:padding="14dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="@string/sindico_validar_descartes"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="14sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/nunito_regular"
+                    android:text="@string/sindico_validar_descartes_subtitulo"
+                    android:textColor="@color/cinza_texto_home"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout

@@ -5,7 +5,6 @@
     android:id="@+id/raizChat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/verde_escuro_principal"
     android:clipToPadding="false"
     tools:context=".views.ChatActivity">
 

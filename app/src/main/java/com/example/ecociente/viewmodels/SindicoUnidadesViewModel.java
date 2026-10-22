@@ -1,6 +1,8 @@
 package com.example.ecociente.viewmodels;
 
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
 
 import com.example.ecociente.model.SindicoDadosCondominio;
 import com.example.ecociente.model.SindicoApartamento;
@@ -9,11 +11,21 @@ import com.example.ecociente.repository.SindicoUnidadesRepository;
 
 import java.util.List;
 
-public final class SindicoUnidadesViewModel extends ViewModel {
+public final class SindicoUnidadesViewModel extends AndroidViewModel {
     private final SindicoUnidadesRepository repositorio = SindicoUnidadesRepository.getInstance();
+
+    public SindicoUnidadesViewModel(@NonNull Application aplicacao) {
+        super(aplicacao);
+
+        repositorio.carregar(aplicacao);
+    }
 
     public SindicoDadosCondominio getDados() { return repositorio.getDados(); }
     public void salvarDados(SindicoDadosCondominio dados) { repositorio.salvarDados(dados); }
+    public void aplicarDadosDaApi(SindicoDadosCondominio api) { repositorio.aplicarDadosDaApi(api); }
+    public boolean aplicarTorresDaApi(List<SindicoItemUnidade> torres, String detalhe) {
+        return repositorio.aplicarTorresDaApi(torres, detalhe);
+    }
     public String getFotoUri() { return repositorio.getFotoUri(); }
     public void salvarFotoUri(String uri) { repositorio.salvarFotoUri(uri); }
     public List<SindicoItemUnidade> getBlocos() { return repositorio.getBlocos(); }

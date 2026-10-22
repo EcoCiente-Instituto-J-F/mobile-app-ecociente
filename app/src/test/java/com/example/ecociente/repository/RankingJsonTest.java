@@ -76,4 +76,22 @@ public class RankingJsonTest {
     public void moradoresSemRankingDevolveListaVazia() throws Exception {
         assertTrue(RankingJson.moradores(new JSONObject("{\"ciclo\":{}}")).isEmpty());
     }
+
+    @Test
+    public void reconheceATorreQueJaEstaNoRankingPeloNome() throws Exception {
+        List<SindicoPosicaoRanking> ranking = RankingJson.torres(
+                new JSONObject("{\"ranking\":[{\"nome\":\"Torre A\",\"pontos\":40}]}"));
+
+        assertTrue(RankingJson.contem(ranking, " torre a "));
+        assertEquals(false, RankingJson.contem(ranking, "Torre B"));
+    }
+
+    @Test
+    public void torreForaDoRankingEntraComOsPontosDaPosicao() throws Exception {
+        SindicoPosicaoRanking torre = RankingJson.torreDaPosicao(
+                new JSONObject("{\"torreId\":2,\"posicao\":5,\"pontos\":12,\"totalParticipantes\":9}"), "Torre B");
+
+        assertEquals("Torre B", torre.getNome());
+        assertEquals(12, torre.getPontos());
+    }
 }

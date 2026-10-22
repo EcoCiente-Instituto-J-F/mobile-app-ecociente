@@ -109,21 +109,20 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/sindico_campo">
             <EditText
+                android:importantForAutofill="no"
                 android:id="@+id/enderecoSolicitacao"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:fontFamily="@font/nunito_regular"
-                android:hint="@string/sindico_endereco_da_coleta"
                 android:inputType="textPostalAddress"
                 android:paddingStart="50dp"
                 android:paddingEnd="12dp"
                 android:singleLine="true"
-                android:text="@string/sindico_rua_das_hortensias_123_jardim_das"
                 android:textColor="@color/preto_texto_home"
-                android:textColorHint="@color/cinza_texto_home"
                 android:textSize="12sp" />
             <ImageView
+                android:baselineAligned="false"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_gravity="start|center_vertical"
@@ -133,6 +132,7 @@
         </FrameLayout>
 
         <LinearLayout
+            android:baselineAligned="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
@@ -220,41 +220,6 @@
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:fontFamily="@font/nunito_regular"
-            android:text="@string/sindico_a_coleta_sera_recorrente"
-            android:textColor="@color/cinza_texto_home"
-            android:textSize="13sp" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
-            <Button
-                android:id="@+id/recorrenciaSim"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/verde_escuro_principal"
-                android:text="@string/sindico_sim"
-                android:textAllCaps="false"
-                android:textColor="@color/branco" />
-            <Button
-                android:id="@+id/recorrenciaNao"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/rosa_ecociente"
-                android:text="@string/sindico_nao"
-                android:textAllCaps="false"
-                android:textColor="@color/branco" />
-        </LinearLayout>
         <Button
             android:id="@+id/enviarSolicitacao"
             android:layout_width="match_parent"

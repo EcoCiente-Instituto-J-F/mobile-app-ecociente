@@ -31,7 +31,6 @@ import com.example.ecociente.viewmodels.ResponderSolicitacaoViewModel;
 import com.google.android.material.button.MaterialButton;
 import java.util.Locale;
 import com.example.ecociente.ui.DialogoEco;
-import com.example.ecociente.viewmodels.SindicoColetaViewModel;
 
 public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
@@ -371,10 +370,10 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
         View acoes = findViewById(R.id.acoesDetalhe);
 
+        // O síndico também responde às solicitações que a cooperativa abriu. Se foi ele quem pediu,
+        // a API recusa (403) e o aviso mostra o motivo.
         if (cooperativaDoSindico != null) {
-            acoes.setVisibility(View.GONE);
             configurarCancelamento();
-            return;
         }
 
         if (solicitacao.getStatus() != StatusAgendamento.AGENDADO) {
@@ -439,18 +438,7 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
                                 .botao(
                                         R.string.cancelar_solicitacao,
                                         DialogoEco.Estilo.PERIGO,
-                                        () -> {
-                                            new ViewModelProvider(this)
-                                                    .get(SindicoColetaViewModel.class)
-                                                    .cancelarSolicitacao(solicitacao.getId());
-
-                                            // A tela fecha em seguida, então o aviso precisa sobreviver a ela: continua Toast.
-                                            Toast.makeText(this, R.string.solicitacao_cancelada, Toast.LENGTH_SHORT).show();
-
-                                            setResult(RESULT_OK);
-
-                                            finish();
-                                        })
+                                        () -> responder(StatusAgendamento.CANCELADO))
                                 .botao(R.string.perfil_cancelar, DialogoEco.Estilo.PREENCHIDO, null)
                                 .mostrar());
     }
@@ -489,7 +477,11 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
                             // A tela fecha em seguida, então o aviso precisa sobreviver a ela: continua Toast.
                             Toast.makeText(
                                             this,
-                                            resposta == StatusAgendamento.CONFIRMADO ? R.string.solicitacao_aceita : R.string.solicitacao_recusada,
+                                            resposta == StatusAgendamento.CONFIRMADO
+                                                    ? R.string.solicitacao_aceita
+                                                    : resposta == StatusAgendamento.CANCELADO
+                                                            ? R.string.solicitacao_cancelada
+                                                            : R.string.solicitacao_recusada,
                                             Toast.LENGTH_SHORT)
                                     .show();
 

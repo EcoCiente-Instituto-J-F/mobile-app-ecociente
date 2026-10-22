@@ -175,6 +175,8 @@ public class QuizRevisaoActivity extends AppCompatActivity {
 
                 if (Math.abs(delta) >= limite && indicesErrados.size() > 1) {
                     trocarQuestao(delta < 0 ? 1 : -1);
+                } else if (Math.abs(delta) < limite) {
+                    view.performClick();
                 }
                 return true;
             }

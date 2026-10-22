@@ -98,11 +98,6 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
 
         View botaoNovo = findViewById(R.id.botaoNovaNotificacaoCentral);
 
-        if (destino == Destino.COOPERATIVA) {
-            botaoNovo.setVisibility(View.VISIBLE);
-            botaoNovo.setOnClickListener(view -> NovoAvisoCooperativaDialogo.mostrar(this));
-        }
-
         if (destino != Destino.SINDICO) {
             return;
         }
@@ -164,8 +159,10 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
         grupos.put(ontem, new ArrayList<>());
         grupos.put(anteriores, new ArrayList<>());
 
-        // As notificações de exemplo não são do síndico: ele só vê os avisos que existem de verdade.
-        for (Notificacao notificacao : destino == Destino.SINDICO ? Collections.<Notificacao>emptyList() : Notificacao.lista()) {
+        // Síndico e cooperativa não veem notificações de exemplo: só o que existe de verdade.
+        boolean exemplos = destino != Destino.SINDICO && destino != Destino.COOPERATIVA;
+
+        for (Notificacao notificacao : exemplos ? Notificacao.lista() : Collections.<Notificacao>emptyList()) {
             List<View> grupo = grupos.get(notificacao.grupo);
 
             if (grupo != null) {
@@ -183,7 +180,7 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
                 // O síndico guarda o momento como texto ("Agora", "Há 2 dias").
                 grupos.get("Agora".equals(aviso.getMomento()) ? hoje : anteriores).add(cartao);
             }
-        } else {
+        } else if (exemplos) {
             for (Aviso aviso : Aviso.lista()) {
                 View cartao = CartoesCentral.aviso(inflador, lista, aviso);
 
