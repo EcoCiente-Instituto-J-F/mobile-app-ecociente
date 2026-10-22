@@ -81,7 +81,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
-                            android:text="@string/sindico_total_de_aulas_concluidas"
+                            android:text="@string/sindico_dash_descartes"
                             android:textColor="@color/cinza_texto_home"
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -104,7 +104,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
-                            android:text="@string/sindico_moradores_utilizando_o_app"
+                            android:text="@string/sindico_dash_moradores"
                             android:textColor="@color/cinza_texto_home"
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -127,7 +127,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
-                            android:text="@string/sindico_media_de_pontos_por_pessoa"
+                            android:text="@string/sindico_dash_coletas"
                             android:textColor="@color/cinza_texto_home"
                             android:textSize="13sp" />
                     </LinearLayout>
@@ -147,15 +147,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="@string/sindico_quizzes_com_maiores_notas"
+                    android:text="@string/sindico_dash_semanas"
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="17sp" />
                 <com.example.ecociente.views.SindicoDashboardGraficoView
                     android:id="@+id/graficoQuizzesSindico"
                     android:layout_width="match_parent"
                     android:layout_height="210dp"
-                    android:layout_marginTop="10dp"
-                    android:contentDescription="@string/sindico_notas_ilustrativas_compostagem_14" />
+                    android:layout_marginTop="10dp" />
             </LinearLayout>
 
             <HorizontalScrollView
@@ -187,10 +186,10 @@
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="17sp" />
                 <com.example.ecociente.views.SindicoDashboardRoscaView
+                    android:id="@+id/roscaMateriaisSindico"
                     android:layout_width="match_parent"
                     android:layout_height="170dp"
-                    android:layout_marginTop="8dp"
-                    android:contentDescription="@string/sindico_materiais_reciclados" />
+                    android:layout_marginTop="8dp" />
                 <TextView
                     android:id="@+id/textoMateriaisPercentuais"
                     android:layout_width="match_parent"
@@ -213,15 +212,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_bold"
-                    android:text="@string/sindico_analise_por_cooperativa"
+                    android:text="@string/sindico_dash_cooperativas"
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="17sp" />
                 <com.example.ecociente.views.SindicoDashboardGraficoView
                     android:id="@+id/graficoCooperativasSindico"
                     android:layout_width="match_parent"
                     android:layout_height="205dp"
-                    android:layout_marginTop="10dp"
-                    android:contentDescription="@string/sindico_coletas_ilustrativas_coop_estrela" />
+                    android:layout_marginTop="10dp" />
             </LinearLayout>
                 </LinearLayout>
             </HorizontalScrollView>

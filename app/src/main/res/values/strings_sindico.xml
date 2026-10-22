@@ -9,15 +9,8 @@
     <string name="sindico_buscar_cooperativa">Buscar cooperativa…</string>
     <string name="sindico_voltar_a_home">Voltar à home</string>
     <string name="sindico_dashboard">Dashboard</string>
-    <string name="sindico_total_de_aulas_concluidas">Total de aulas concluídas</string>
-    <string name="sindico_moradores_utilizando_o_app">Moradores utilizando o app</string>
-    <string name="sindico_media_de_pontos_por_pessoa">Média de pontos por pessoa</string>
-    <string name="sindico_quizzes_com_maiores_notas">Quizzes com maiores notas</string>
-    <string name="sindico_notas_ilustrativas_compostagem_14">Notas ilustrativas: Compostagem 14, Vidro 18, Sustentabilidade 14 e Papel 26</string>
-    <string name="sindico_deslize_para_ver_materiais_recicla">Deslize para ver materiais reciclados e análise por cooperativa</string>
-    <string name="sindico_materiais_reciclados">Materiais reciclados</string>
-    <string name="sindico_analise_por_cooperativa">Análise por cooperativa</string>
-    <string name="sindico_coletas_ilustrativas_coop_estrela">Coletas ilustrativas: Coop Estrela 3, Coop Lua 9, Coop Sol 12 e Coop Verde 15</string>
+    <string name="sindico_deslize_para_ver_materiais_recicla">Deslize para ver os materiais descartados e as coletas por cooperativa</string>
+    <string name="sindico_materiais_reciclados">Materiais descartados (30 dias)</string>
     <string name="sindico_historico_de_coletas">Histórico de coletas</string>
     <string name="sindico_filtrar_historico">Filtrar histórico</string>
     <string name="sindico_exemplos_locais_avaliacoes_nao_env">Toque em “Avalie” para dar sua nota</string>
@@ -186,6 +179,16 @@
     <string name="sindico_vs_mes_anterior">(vs. mês anterior)</string>
     <string name="sindico_foto_condominio_salva">Foto do condomínio salva.</string>
     <string name="sindico_sem_dado">—</string>
+    <string name="sindico_carregando_dado">…</string>
+    <string name="sindico_dash_descartes">Descartes nos últimos 30 dias</string>
+    <string name="sindico_dash_moradores">Moradores que descartaram no mês</string>
+    <string name="sindico_dash_coletas">Coletas realizadas</string>
+    <string name="sindico_dash_semanas">Descartes por semana</string>
+    <string name="sindico_dash_cooperativas">Coletas por cooperativa</string>
+    <string name="sindico_descartes_semana_descricao">Descartes por semana: há 3 semanas %1$d, há 2 semanas %2$d, há 1 semana %3$d, esta semana %4$d</string>
+    <string name="sindico_sem_descartes">Nenhum descarte nos últimos 30 dias</string>
+    <string name="sindico_sem_coletas_realizadas">Nenhuma coleta realizada ainda</string>
+    <string name="sindico_dashboard_erro">Não foi possível calcular o dashboard. Tente de novo em instantes.</string>
     <string name="sindico_condominio_carregando">Carregando…</string>
     <string name="sindico_ranking_vazio">Ninguém pontuou neste ciclo ainda.</string>
 </resources>

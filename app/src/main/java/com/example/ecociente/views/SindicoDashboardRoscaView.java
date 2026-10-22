@@ -13,16 +13,21 @@ import androidx.core.content.ContextCompat;
 
 import com.example.ecociente.R;
 
-/** Distribuição ilustrativa de materiais, sem dependência de serviços externos. */
+/** Distribuição percentual dos materiais descartados no condomínio. */
 public final class SindicoDashboardRoscaView extends View {
     private final Paint tinta = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private static final int[] PERCENTUAIS = {25, 50, 8, 12, 5};
+    private int[] percentuais = new int[0];
     private static final int[] CORES = {R.color.verde_escuro_principal,
             R.color.rosa_ecociente, R.color.verde_claro_ecociente,
             R.color.amarelo_avaliacao, R.color.amarelo_botao_avaliar};
 
     public SindicoDashboardRoscaView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public void setPercentuais(@NonNull int[] percentuais) {
+        this.percentuais = percentuais.clone();
+        invalidate();
     }
 
     @Override
@@ -35,8 +40,8 @@ public final class SindicoDashboardRoscaView extends View {
         tinta.setStyle(Paint.Style.STROKE);
         tinta.setStrokeWidth(dp(29));
         float inicio = -90;
-        for (int i = 0; i < PERCENTUAIS.length; i++) {
-            float angulo = PERCENTUAIS[i] * 3.6f;
+        for (int i = 0; i < percentuais.length && i < CORES.length; i++) {
+            float angulo = percentuais[i] * 3.6f;
             tinta.setColor(ContextCompat.getColor(getContext(), CORES[i]));
             canvas.drawArc(area, inicio, angulo, false, tinta);
             inicio += angulo;
@@ -46,7 +51,7 @@ public final class SindicoDashboardRoscaView extends View {
         tinta.setTextAlign(Paint.Align.CENTER);
         tinta.setFakeBoldText(true);
         tinta.setTextSize(sp(18));
-        canvas.drawText("100%", cx, cy + dp(6), tinta);
+        canvas.drawText(percentuais.length == 0 ? "—" : "100%", cx, cy + dp(6), tinta);
         tinta.setFakeBoldText(false);
     }
 
