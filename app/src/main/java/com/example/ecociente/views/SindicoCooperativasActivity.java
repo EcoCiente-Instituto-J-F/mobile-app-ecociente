@@ -27,12 +27,17 @@ import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.model.SindicoSolicitacao;
 import com.example.ecociente.model.StatusAgendamento;
+import com.example.ecociente.repository.CooperativaRepository;
+import com.example.ecociente.ui.AbrirMapa;
+import com.example.ecociente.ui.IndicadorCarregamento;
+import com.google.android.material.button.MaterialButton;
 
-/** Lista local de demonstração, sem busca remota ou solicitação real. */
+/** Cooperativas da cidade do condomínio (API), com a rota até elas no Google Maps. */
 public final class SindicoCooperativasActivity extends AppCompatActivity {
     private SindicoColetaViewModel viewModel;
     private LinearLayout lista;
     private EditText busca;
+    private boolean carregadas;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -69,9 +74,53 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (!carregadas) {
+            carregarCooperativas();
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        mostrarCooperativas(busca.getText().toString());
+        if (carregadas) {
+            mostrarCooperativas(busca.getText().toString());
+        }
+    }
+
+    private void carregarCooperativas() {
+        lista.removeAllViews();
+        IndicadorCarregamento.mostrar(lista, R.string.cooperativas_carregando);
+
+        new CooperativaRepository().listar(this, cooperativas -> {
+            if (isFinishing() || isDestroyed()) return;
+
+            if (cooperativas == null) {
+                mostrarErroDeCooperativas();
+                return;
+            }
+
+            viewModel.definirCooperativas(cooperativas);
+            carregadas = true;
+            mostrarCooperativas(busca.getText().toString());
+        });
+    }
+
+    private void mostrarErroDeCooperativas() {
+        lista.removeAllViews();
+
+        TextView mensagem = new TextView(this);
+        mensagem.setText(R.string.cooperativas_erro);
+        mensagem.setTextColor(getColor(R.color.cinza_texto_home));
+        mensagem.setTextSize(14);
+        mensagem.setPadding(8, 28, 8, 12);
+        lista.addView(mensagem);
+
+        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
+        tentar.setText(R.string.tentar_novamente);
+        tentar.setOnClickListener(view -> carregarCooperativas());
+        lista.addView(tentar);
     }
 
     private void mostrarCooperativas(String filtro) {
@@ -91,10 +140,16 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
                         cooperativa.getId());
                 startActivity(informacoes);
             });
-            ((TextView) item.findViewById(R.id.distanciaCooperativa))
-                    .setText(getString(R.string.sindico_distancia, cooperativa.getDistancia()));
+            ((TextView) item.findViewById(R.id.enderecoCooperativa))
+                    .setText(cooperativa.getEnderecoCompleto());
             ((TextView) item.findViewById(R.id.avaliacaoCooperativa))
-                    .setText(getString(R.string.sindico_avaliacao_cooperativa, cooperativa.getAvaliacao()));
+                    .setText(cooperativa.getAvaliacao().isEmpty()
+                            ? getString(R.string.sindico_sem_avaliacoes)
+                            : getString(R.string.sindico_avaliacao_cooperativa,
+                                    cooperativa.getAvaliacao(), cooperativa.getTotalAvaliacoes()));
+            TextView comoChegar = item.findViewById(R.id.comoChegarCooperativa);
+            comoChegar.setContentDescription(getString(R.string.sindico_como_chegar_em, cooperativa.getNome()));
+            comoChegar.setOnClickListener(view -> AbrirMapa.rota(this, cooperativa.getEnderecoCompleto()));
             Button acao = item.findViewById(R.id.acaoCooperativa);
             SindicoSolicitacao pendente = solicitacaoEmAndamento(cooperativa.getId());
             if (pendente != null) {

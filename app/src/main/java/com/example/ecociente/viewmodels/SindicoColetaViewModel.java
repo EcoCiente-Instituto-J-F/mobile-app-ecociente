@@ -13,6 +13,7 @@ public final class SindicoColetaViewModel extends ViewModel {
     private final SindicoColetaRepository repositorio = SindicoColetaRepository.getInstance();
 
     public List<SindicoCooperativa> getCooperativas() { return repositorio.getCooperativas(); }
+    public void definirCooperativas(List<SindicoCooperativa> cooperativas) { repositorio.definirCooperativas(cooperativas); }
     public SindicoCooperativa buscar(int id) { return repositorio.buscar(id); }
     public List<SindicoHistoricoColeta> getHistorico() { return repositorio.getHistorico(); }
     public List<SindicoSolicitacao> getSolicitacoes() { return repositorio.getSolicitacoes(); }

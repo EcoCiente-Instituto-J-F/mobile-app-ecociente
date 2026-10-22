@@ -106,8 +106,14 @@
     <string name="sindico_a_exclusao_afeta_apenas_os_dados_l">Esta ação não pode ser desfeita.</string>
     <string name="sindico_demo_unidade_removida">Unidade removida.</string>
     <string name="sindico_ver_informacoes">Ver informações de %1$s</string>
-    <string name="sindico_distancia">⌖ %1$s</string>
-    <string name="sindico_avaliacao_cooperativa">★ %1$s</string>
+    <string name="sindico_avaliacao_cooperativa">★ %1$s (%2$d)</string>
+    <string name="sindico_sem_avaliacoes">Ainda sem avaliações</string>
+    <string name="sindico_como_chegar">Como chegar</string>
+    <string name="sindico_como_chegar_em">Como chegar em %1$s</string>
+    <string name="cooperativas_carregando">Carregando as cooperativas…</string>
+    <string name="cooperativas_erro">Não foi possível carregar as cooperativas. Só o síndico de um condomínio ativo vê esta lista.</string>
+    <string name="mapa_erro">Não foi possível abrir o mapa.</string>
+    <string name="mapa_sem_endereco">Esta cooperativa não tem endereço cadastrado.</string>
     <string name="sindico_nenhuma_cooperativa_de_exemplo_enc">Nenhuma cooperativa encontrada.</string>
     <string name="sindico_demo_avaliacao_salva">Avaliação registrada neste aparelho.</string>
     <string name="sindico_nota_texto">%1$d/5 estrelas</string>

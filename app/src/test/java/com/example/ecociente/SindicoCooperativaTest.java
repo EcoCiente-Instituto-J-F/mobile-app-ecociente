@@ -9,7 +9,7 @@ import org.junit.Test;
 public class SindicoCooperativaTest {
 
     private static SindicoCooperativa cooperativa(String nome) {
-        return new SindicoCooperativa(1, nome, "2 km", "4,5", "Rua A", "Recife", "PE", "50000-000");
+        return new SindicoCooperativa(1, nome, "4,5", 2, "Rua A", "Recife", "PE", "50000-000", "Rua A, Recife - PE");
     }
 
     @Test

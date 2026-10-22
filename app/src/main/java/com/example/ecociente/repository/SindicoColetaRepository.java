@@ -12,12 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Sem API de cooperativas e histórico: vazio. */
+/** Cooperativas da cidade (API) e solicitações locais; sem API de histórico: vazio. */
 public final class SindicoColetaRepository {
     private static final SindicoColetaRepository INSTANCIA = new SindicoColetaRepository();
 
-    // Cooperativas próximas e histórico de coletas ainda não existem em nenhuma API.
-    private final List<SindicoCooperativa> cooperativas = Collections.emptyList();
+    // Cooperativas vêm de GET /api/cooperativas; o histórico de coletas ainda não existe em nenhuma API.
+    private volatile List<SindicoCooperativa> cooperativas = Collections.emptyList();
     private final List<SindicoHistoricoColeta> historico = Collections.emptyList();
     private final Map<Integer, Integer> avaliacoes = new HashMap<>();
     private final List<SindicoSolicitacao> solicitacoes = new ArrayList<>();
@@ -27,6 +27,9 @@ public final class SindicoColetaRepository {
 
     public static SindicoColetaRepository getInstance() { return INSTANCIA; }
     public List<SindicoCooperativa> getCooperativas() { return cooperativas; }
+    public void definirCooperativas(List<SindicoCooperativa> novas) {
+        cooperativas = Collections.unmodifiableList(new ArrayList<>(novas));
+    }
 
     public SindicoCooperativa buscar(int id) {
         for (SindicoCooperativa cooperativa : cooperativas) {
