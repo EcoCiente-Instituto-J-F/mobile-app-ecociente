@@ -61,7 +61,6 @@
             android:background="@drawable/sindico_campo"
             android:drawableStart="@drawable/ic_predio"
             android:drawablePadding="8dp"
-            android:hint="@string/sindico_apto_120"
             android:inputType="textCapWords"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"

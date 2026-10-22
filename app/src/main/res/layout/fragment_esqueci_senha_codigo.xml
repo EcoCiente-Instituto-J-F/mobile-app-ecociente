@@ -61,7 +61,8 @@
             <EditText
                 android:importantForAutofill="no"
                 android:id="@+id/digito1"
-                android:contentDescription="@string/digito_codigo_1"
+                android:hint="@string/digito_codigo_1"
+                android:textColorHint="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
@@ -88,7 +89,8 @@
             <EditText
                 android:importantForAutofill="no"
                 android:id="@+id/digito2"
-                android:contentDescription="@string/digito_codigo_2"
+                android:hint="@string/digito_codigo_2"
+                android:textColorHint="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
@@ -115,7 +117,8 @@
             <EditText
                 android:importantForAutofill="no"
                 android:id="@+id/digito3"
-                android:contentDescription="@string/digito_codigo_3"
+                android:hint="@string/digito_codigo_3"
+                android:textColorHint="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
@@ -142,7 +145,8 @@
             <EditText
                 android:importantForAutofill="no"
                 android:id="@+id/digito4"
-                android:contentDescription="@string/digito_codigo_4"
+                android:hint="@string/digito_codigo_4"
+                android:textColorHint="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"

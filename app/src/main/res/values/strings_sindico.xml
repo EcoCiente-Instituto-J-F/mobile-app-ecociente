@@ -47,7 +47,6 @@
     <string name="sindico_adicionar_area_de_descarte">Adicionar área de descarte</string>
     <string name="sindico_fechar_formulario">Fechar formulário</string>
     <string name="sindico_numero_do_apartamento">Número do apartamento</string>
-    <string name="sindico_apto_120">Apto 120</string>
     <string name="sindico_nome_do_morador">Nome do morador</string>
     <string name="sindico_maria_clara">Maria Clara</string>
     <string name="sindico_telefone_do_morador">Telefone do morador</string>
@@ -65,12 +64,8 @@
     <string name="sindico_dados_ilustrativos">Dados ilustrativos</string>
     <string name="sindico_fechar_solicitacao_de_coleta">Fechar solicitação de coleta</string>
     <string name="sindico_cooperativa_recicla_mais">Cooperativa Recicla Mais</string>
-    <string name="sindico_endereco_da_coleta">Endereço da coleta</string>
     <string name="sindico_escolher_data_da_coleta">Escolher data da coleta</string>
     <string name="sindico_escolher_horario_da_coleta">Escolher horário da coleta</string>
-    <string name="sindico_a_coleta_sera_recorrente">A coleta será recorrente?</string>
-    <string name="sindico_sim">Sim</string>
-    <string name="sindico_nao">Não</string>
     <string name="sindico_editar_unidade">Editar unidade</string>
     <string name="sindico_excluir_unidade">Excluir unidade</string>
     <string name="sindico_solicitar_coleta">Solicitar coleta</string>
@@ -79,7 +74,7 @@
     <string name="sindico_informe_o_morador_ou_remova_o_tele">Informe o morador ou remova o telefone</string>
     <string name="sindico_informe_um_titulo">Informe um título.</string>
     <string name="sindico_escreva_a_mensagem_do_aviso">Escreva a mensagem do aviso.</string>
-    <string name="sindico_aviso_detalhe">%1$s\n\nDestinatário: %2$s\nAutor: %3$s · %4$s</string>
+    <string name="sindico_aviso_detalhe" tools:ignore="Typos">%1$s\n\nDestinatário: %2$s\nAutor: %3$s · %4$s</string>
     <string name="sindico_rascunho_local_ainda_nao_enviado">Rascunho local, ainda não enviado.</string>
     <string name="sindico_demo_unidade_salva">Unidade salva neste aparelho.</string>
     <string name="sindico_morador_nome">Morador: %1$s</string>
@@ -183,4 +178,6 @@
         <item quantity="one">%1$d item cadastrado</item>
         <item quantity="other">%1$d itens cadastrados</item>
     </plurals>
+    <string name="sindico_acao_editar">Editar</string>
+    <string name="sindico_acao_excluir">Excluir</string>
 </resources>

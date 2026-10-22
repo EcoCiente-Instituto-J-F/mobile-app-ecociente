@@ -38,6 +38,7 @@
     </LinearLayout>
     <ImageButton
         android:id="@+id/editarItemUnidades"
+        android:contentDescription="@string/sindico_acao_editar"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"
@@ -46,6 +47,7 @@
         android:scaleType="centerInside" />
     <ImageButton
         android:id="@+id/excluirItemUnidades"
+        android:contentDescription="@string/sindico_acao_excluir"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"

@@ -52,6 +52,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import java.util.Arrays;
+import androidx.credentials.exceptions.NoCredentialException;
 
 public class LoginFragment extends Fragment {
     private static final String TAG = "LoginEcoCiente";
@@ -282,6 +283,11 @@ public class LoginFragment extends Fragment {
 
                         if (erro instanceof GetCredentialCancellationException) {
                             mostrarMensagem("Login com Google cancelado");
+                            return;
+                        }
+
+                        if (erro instanceof NoCredentialException) {
+                            mostrarMensagem("Nenhuma conta Google encontrada neste aparelho");
                             return;
                         }
 

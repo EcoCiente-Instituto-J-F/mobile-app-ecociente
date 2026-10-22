@@ -38,6 +38,7 @@ import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.repository.AtualizacaoExternaRepository;
 import com.example.ecociente.repository.PerfilApiRepository;
+import java.util.Locale;
 
 /** Aba Unidades: dados do condomínio vêm da API e o endereço volta a ela; blocos e áreas ficam no aparelho. */
 public final class SindicoUnidadesActivity extends AppCompatActivity {
@@ -275,7 +276,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 || !validar(cidade, getString(R.string.sindico_informe_a_cidade))
                 || !validar(estado, getString(R.string.sindico_informe_a_sigla_do_estado))
                 || !validar(cep, getString(R.string.sindico_informe_o_cep))) return;
-        String uf = estado.getText().toString().trim().toUpperCase();
+        String uf = estado.getText().toString().trim().toUpperCase(Locale.ROOT);
         if (!uf.matches("[A-Z]{2}")) {
             estado.setError(getString(R.string.sindico_use_duas_letras_como_sp));
             estado.requestFocus();

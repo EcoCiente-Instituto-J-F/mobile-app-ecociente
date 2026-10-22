@@ -115,13 +115,11 @@
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:fontFamily="@font/nunito_regular"
-                android:hint="@string/sindico_endereco_da_coleta"
                 android:inputType="textPostalAddress"
                 android:paddingStart="50dp"
                 android:paddingEnd="12dp"
                 android:singleLine="true"
                 android:textColor="@color/preto_texto_home"
-                android:textColorHint="@color/cinza_texto_home"
                 android:textSize="12sp" />
             <ImageView
                 android:baselineAligned="false"
