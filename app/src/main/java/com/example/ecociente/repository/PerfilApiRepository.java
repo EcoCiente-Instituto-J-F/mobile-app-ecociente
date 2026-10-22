@@ -13,15 +13,12 @@ import org.json.JSONObject;
 
 // GET /api/usuarios/me da ds-mobile-api: de onde o app descobre o condomínio do usuário.
 // O resultado fica guardado para as telas lerem na hora; enquanto a API não responder
-// (ou o usuário não tiver vínculo), vale o condomínio de demonstração.
+// (ou o usuário não tiver vínculo), o id fica 0.
 public class PerfilApiRepository {
 
     private static final String TAG = "PerfilApi";
 
     private static final String URL_PERFIL = "https://ds-mobile-api.onrender.com/api/usuarios/me";
-
-    // Condomínio do síndico de teste, usado enquanto a API não devolver o do usuário.
-    public static final int CONDOMINIO_DE_DEMONSTRACAO = 1;
 
     private static final String PREFERENCIAS = "perfil_api";
     private static final String CHAVE_CONDOMINIO_ID = "condominioId";
@@ -34,11 +31,9 @@ public class PerfilApiRepository {
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
-    // Id do condomínio do usuário; o de demonstração enquanto não houver o real.
+    // Id do condomínio do usuário; 0 enquanto a API não informar um (sem vínculo ou sem resposta).
     public static int condominioId(@NonNull Context contexto) {
-        int salvo = preferencias(contexto).getInt(CHAVE_CONDOMINIO_ID, 0);
-
-        return salvo > 0 ? salvo : CONDOMINIO_DE_DEMONSTRACAO;
+        return Math.max(0, preferencias(contexto).getInt(CHAVE_CONDOMINIO_ID, 0));
     }
 
     // Id da cooperativa do usuário (perfil COOPERATIVA); 0 se a API ainda não informou.

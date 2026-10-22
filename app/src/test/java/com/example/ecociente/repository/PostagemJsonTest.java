@@ -93,6 +93,7 @@ public class PostagemJsonTest {
         assertTrue(PostagemJson.mensagemDoErro(409, "{\"codigo\":\"FOTO_JA_UTILIZADA\"}").contains("já foi usada"));
         assertTrue(PostagemJson.mensagemDoErro(403, "{\"codigo\":\"SEM_VINCULO_APROVADO\"}").contains("vínculo"));
         assertTrue(PostagemJson.mensagemDoErro(400, "{\"codigo\":\"CAPTURA_INVALIDA\"}").contains("horário"));
+        assertTrue(PostagemJson.mensagemDoErro(400, "{\"codigo\":\"CONDOMINIO_ID_INVALIDO\"}").contains("condomínio"));
     }
 
     @Test

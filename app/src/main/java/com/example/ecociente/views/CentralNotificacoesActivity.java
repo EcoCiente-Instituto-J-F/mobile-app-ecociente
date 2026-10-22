@@ -98,11 +98,6 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
 
         View botaoNovo = findViewById(R.id.botaoNovaNotificacaoCentral);
 
-        if (destino == Destino.COOPERATIVA) {
-            botaoNovo.setVisibility(View.VISIBLE);
-            botaoNovo.setOnClickListener(view -> NovoAvisoCooperativaDialogo.mostrar(this));
-        }
-
         if (destino != Destino.SINDICO) {
             return;
         }

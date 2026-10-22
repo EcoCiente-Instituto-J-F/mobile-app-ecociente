@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import com.example.ecociente.R;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -42,13 +41,7 @@ public enum TipoLista {
                 return Collections.emptyList();
 
             default:
-                return Arrays.asList(
-                        new ItemLista("1º  Rafael Mendes", "Bloco B · Apto 402", "1.980 pts"),
-                        new ItemLista("2º  Ana Paula Souza", "Bloco A · Apto 101", "1.840 pts"),
-                        new ItemLista("3º  Marina Alves", "Bloco A · Apto 201", "1.720 pts"),
-                        new ItemLista("4º  Carlos Eduardo Lima", "Bloco A · Apto 102", "1.560 pts"),
-                        new ItemLista("5º  Juliana Costa", "Bloco B · Apto 302", "1.410 pts"),
-                        new ItemLista("6º  Pedro Henrique Dias", "Bloco B · Apto 101", "1.250 pts"));
+                return Collections.emptyList();
         }
     }
 }

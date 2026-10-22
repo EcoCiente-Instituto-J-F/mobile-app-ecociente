@@ -170,6 +170,9 @@ final class PostagemJson {
             case "CATEGORIA_NAO_ENCONTRADA":
                 return "Esse tipo de resíduo não está disponível. Escolha outro.";
 
+            case "CONDOMINIO_ID_INVALIDO":
+                return "Não encontramos o seu condomínio. Atualize o perfil e tente de novo.";
+
             case "CAPTURA_INVALIDA":
                 return "A data da foto é inválida. Confira o horário do seu aparelho.";
 

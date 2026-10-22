@@ -226,6 +226,13 @@ public class RegistroDescarteActivity extends AppCompatActivity {
             return;
         }
 
+        int condominioId = PerfilApiRepository.condominioId(this);
+
+        if (condominioId <= 0) {
+            AvisoFlutuante.mostrar(this, R.string.registro_sem_condominio);
+            return;
+        }
+
         enviando = true;
 
         BotaoCarregando.definir(botaoEnviar, true, R.string.registro_enviar, R.string.registro_enviando);
@@ -234,7 +241,7 @@ public class RegistroDescarteActivity extends AppCompatActivity {
                 .registrar(
                         this,
                         uriFoto,
-                        PerfilApiRepository.condominioId(this),
+                        condominioId,
                         categoriaId,
                         capturadaEmMs,
                         resultado -> {

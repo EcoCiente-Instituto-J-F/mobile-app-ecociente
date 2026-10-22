@@ -5,13 +5,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import com.example.ecociente.model.DadosDemonstracao;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
 import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.repository.CalendarioExternoRepository;
-import com.example.ecociente.repository.SolicitacoesExemplosRepository;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,23 +89,9 @@ public class SolicitacoesViewModel extends AndroidViewModel {
         }
     }
 
-    private void exibirExemplos() {
-
-        itens.setValue(SolicitacoesExemplosRepository.getInstance().listar(filtro));
-
-        ultimaPagina = true;
-
-        situacao.setValue(ResultadoSolicitacoes.Tipo.SUCESSO);
-    }
-
     private void carregarPagina() {
 
         if (Boolean.TRUE.equals(carregando.getValue())) {
-            return;
-        }
-
-        if (DadosDemonstracao.ativoPara(AutenticacaoExternaRepository.perfilSalvo(getApplication()))) {
-            exibirExemplos();
             return;
         }
 

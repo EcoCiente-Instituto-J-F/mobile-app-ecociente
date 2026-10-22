@@ -498,7 +498,12 @@ public class TelaListaActivity extends AppCompatActivity {
 
                             lista.removeAllViews();
 
-                            java.util.List<ItemLista> itens = moradores != null ? moradores : tipo.itens();
+                            if (moradores == null) {
+                                textoDeEstado(lista, R.string.ranking_erro);
+                                return;
+                            }
+
+                            java.util.List<ItemLista> itens = moradores;
 
                             if (itens.isEmpty()) {
                                 textoDeEstado(lista, R.string.ranking_sem_pontuacao);

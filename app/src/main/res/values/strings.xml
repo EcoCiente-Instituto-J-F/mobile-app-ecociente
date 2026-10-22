@@ -36,7 +36,6 @@
     <string name="icone_analise_quiz">Ícone da análise do quiz</string>
     <string name="analise_quiz">Análise do seu quiz</string>
     <string name="acompanhe_quizzes">Acompanhe seu desempenho nos últimos quizzes</string>
-    <string name="media_acertos">Média acertos</string>
     <string name="grafico_desempenho">Gráfico de desempenho nos últimos quizzes</string>
     <string name="icone_conteudos">Ícone de conteúdos</string>
     <string name="conteudos_para_voce">Conteúdos para você</string>
@@ -241,7 +240,6 @@
     <string name="confirmar">Confirmar</string>
     <string name="conta_excluida_aviso">Sua conta foi excluída</string>
     <string name="mascara_senha">••••••</string>
-    <string name="progresso_exemplo">75%</string>
     <string name="simbolo_avancar">›</string>
     <string name="simbolo_voltar">‹</string>
     <string name="valor_do_campo">Valor do campo</string>
@@ -431,7 +429,6 @@
     <string name="coleta_recorrente">Coleta recorrente</string>
     <string name="preencha_todos_os_campos">Preencha todos os campos.</string>
     <string name="fim_antes_do_inicio">O horário final precisa ser depois do inicial.</string>
-    <string name="coleta_salva_exemplo">Coleta salva (exemplo).</string>
     <string name="ranking_resumo">Veja sua posição e a do seu condomínio</string>
     <string name="lembrete_de_coleta">Lembrete de coleta</string>
     <string name="canal_lembretes_coleta">Lembretes de coleta</string>
@@ -451,7 +448,6 @@
     <string name="destinatarios">Destinatários</string>
     <string name="titulo_aviso">Título</string>
     <string name="mensagem">Mensagem</string>
-    <string name="aviso_enviado_exemplo">Aviso enviado (exemplo).</string>
     <string name="aviso_origem">%1$s · %2$s</string>
     <string name="todos_os_condominios">Todos os meus condomínios</string>
     <string name="categoria_coleta">Coleta</string>
@@ -547,6 +543,8 @@
     <string name="quiz_corrigindo">Corrigindo…</string>
     <string name="quiz_resultado_pontos">Você ganhou %1$d pontos!</string>
     <string name="ranking_home_indisponivel">Não foi possível carregar o ranking agora.</string>
+    <string name="ranking_erro">Não foi possível carregar o ranking. Tente de novo mais tarde.</string>
+    <string name="registro_sem_condominio">Não encontramos o seu condomínio. Atualize o perfil e tente de novo.</string>
     <string name="ranking_carregando">Carregando o ranking…</string>
     <string name="ranking_sem_pontuacao">Ninguém pontuou nesta semana ainda.</string>
     <string name="lista_vazia">Nada por aqui ainda.</string>

@@ -119,7 +119,6 @@
                 android:paddingStart="50dp"
                 android:paddingEnd="12dp"
                 android:singleLine="true"
-                android:text="@string/sindico_rua_das_hortensias_123_jardim_das"
                 android:textColor="@color/preto_texto_home"
                 android:textColorHint="@color/cinza_texto_home"
                 android:textSize="12sp" />
