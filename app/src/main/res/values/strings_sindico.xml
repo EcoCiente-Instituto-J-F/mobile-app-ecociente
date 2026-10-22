@@ -53,10 +53,6 @@
     <string name="sindico_11_95376_2717">(11) 95376-2717</string>
     <string name="sindico_enviar_unidade">Enviar unidade</string>
     <string name="sindico_enviar">Enviar</string>
-    <string name="sindico_avaliar_coleta">Avaliar Coleta</string>
-    <string name="sindico_fechar_avaliacao">Fechar avaliação</string>
-    <string name="sindico_escolha_de_1_a_5_estrelas">Escolha de 1 a 5 estrelas</string>
-    <string name="sindico_salvar_avaliacao_local">Salvar avaliação local</string>
     <string name="sindico_criar_notificacao">Criar notificação</string>
     <string name="sindico_fechar_criacao_de_notificacao">Fechar criação de notificação</string>
     <string name="sindico_digite_seu_titulo">Digite seu título</string>
@@ -77,11 +73,9 @@
     <string name="sindico_editar_unidade">Editar unidade</string>
     <string name="sindico_excluir_unidade">Excluir unidade</string>
     <string name="sindico_solicitar_coleta">Solicitar coleta</string>
-    <string name="sindico_avaliar">Avaliar</string>
     <string name="sindico_informe_o_numero_da_unidade">Informe o número da unidade</string>
     <string name="sindico_esta_unidade_ja_esta_cadastrada_ne">Esta unidade já está cadastrada neste bloco</string>
     <string name="sindico_informe_o_morador_ou_remova_o_tele">Informe o morador ou remova o telefone</string>
-    <string name="sindico_nota_selecionada">%1$s, nota selecionada</string>
     <string name="sindico_informe_um_titulo">Informe um título.</string>
     <string name="sindico_escreva_a_mensagem_do_aviso">Escreva a mensagem do aviso.</string>
     <string name="sindico_aviso_detalhe">%1$s\n\nDestinatário: %2$s\nAutor: %3$s · %4$s</string>
@@ -152,14 +146,6 @@
     <string name="sindico_a_quantidade_deve_ser_maior_que_ze">A quantidade deve ser maior que zero</string>
     <string name="sindico_demo_alteracao_salva">Alteração salva neste aparelho.</string>
     <string name="sindico_demo_item_removido">Item removido.</string>
-    <plurals name="sindico_estrelas">
-        <item quantity="one">%d estrela</item>
-        <item quantity="other">%d estrelas</item>
-    </plurals>
-    <plurals name="sindico_estrelas_selecionadas">
-        <item quantity="one">%d estrela selecionada</item>
-        <item quantity="other">%d estrelas selecionadas</item>
-    </plurals>
     <string name="sindico_enviar_solicitacao">Enviar solicitação</string>
     <string name="sindico_horario_passado">Escolha uma data e um horário futuros.</string>
     <string name="cooperativa_escolhida">Cooperativa escolhida</string>

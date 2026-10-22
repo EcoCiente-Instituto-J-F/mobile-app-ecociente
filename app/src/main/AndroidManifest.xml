@@ -179,6 +179,7 @@
 
         <activity
             android:name=".views.ChatActivity"
+            android:theme="@style/Theme.EcoCiente.Verde"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
@@ -200,6 +201,7 @@
 
         <activity
             android:name=".views.Login"
+            android:theme="@style/Theme.EcoCiente.Verde"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
@@ -216,6 +218,7 @@
 
         <activity
             android:name=".views.SplashScreen"
+            android:theme="@style/Theme.EcoCiente.Splash"
             android:exported="true">
 
             <intent-filter>
