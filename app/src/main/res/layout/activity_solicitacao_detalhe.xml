@@ -88,8 +88,7 @@
 
                     <FrameLayout
                         android:layout_width="42dp"
-                        android:layout_height="wrap_content"
-                        android:minHeight="42dp"
+                        android:layout_height="42dp"
                         android:layout_marginStart="10dp"
                         android:background="@drawable/fundo_avatar_iniciais">
 
@@ -158,8 +157,7 @@
 
                         <FrameLayout
                             android:layout_width="64dp"
-                            android:layout_height="wrap_content"
-                            android:minHeight="64dp"
+                            android:layout_height="64dp"
                             android:background="@drawable/fundo_avatar_iniciais">
 
                             <ImageView
@@ -207,8 +205,7 @@
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/botaoChatDetalhe"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:minHeight="36dp"
+                            android:layout_height="36dp"
                             android:layout_marginStart="8dp"
                             android:fontFamily="@font/nunito_bold"
                             android:insetTop="0dp"
@@ -321,8 +318,7 @@
                         android:id="@+id/botaoCancelarSolicitacao"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="48dp"
+                        android:layout_height="48dp"
                         android:fontFamily="@font/nunito_bold"
                         android:text="@string/cancelar_solicitacao"
                         android:textAllCaps="false"
@@ -341,8 +337,7 @@
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/botaoAceitar"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:minHeight="48dp"
+                            android:layout_height="48dp"
                             android:layout_marginEnd="6dp"
                             android:layout_weight="1"
                             android:fontFamily="@font/nunito_bold"
@@ -355,8 +350,7 @@
                             android:id="@+id/botaoRecusar"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:minHeight="48dp"
+                            android:layout_height="48dp"
                             android:layout_marginStart="6dp"
                             android:layout_weight="1"
                             android:fontFamily="@font/nunito_bold"

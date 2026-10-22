@@ -13,8 +13,7 @@
     <FrameLayout
         android:id="@+id/cabecalhoQuizPerguntas"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minHeight="56dp"
+        android:layout_height="56dp"
         android:layout_marginStart="22dp"
         android:layout_marginEnd="22dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,8 +48,7 @@
     <LinearLayout
         android:id="@+id/containerProgressoQuiz"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="28dp"
+        android:layout_height="28dp"
         android:layout_marginTop="2dp"
         android:gravity="center"
         android:orientation="horizontal"
@@ -136,8 +134,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardOpcao1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="58dp"
+                    android:layout_height="58dp"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
@@ -158,8 +155,7 @@
                         <FrameLayout
                             android:id="@+id/caixaCheckOpcao1"
                             android:layout_width="27dp"
-                            android:layout_height="wrap_content"
-                            android:minHeight="27dp"
+                            android:layout_height="27dp"
                             android:background="@drawable/fundo_checkbox_quiz">
 
                             <ImageView
@@ -191,8 +187,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardOpcao2"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="58dp"
+                    android:layout_height="58dp"
                     android:layout_marginTop="12dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -214,8 +209,7 @@
                         <FrameLayout
                             android:id="@+id/caixaCheckOpcao2"
                             android:layout_width="27dp"
-                            android:layout_height="wrap_content"
-                            android:minHeight="27dp"
+                            android:layout_height="27dp"
                             android:background="@drawable/fundo_checkbox_quiz">
 
                             <ImageView
@@ -247,8 +241,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardOpcao3"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="58dp"
+                    android:layout_height="58dp"
                     android:layout_marginTop="12dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -270,8 +263,7 @@
                         <FrameLayout
                             android:id="@+id/caixaCheckOpcao3"
                             android:layout_width="27dp"
-                            android:layout_height="wrap_content"
-                            android:minHeight="27dp"
+                            android:layout_height="27dp"
                             android:background="@drawable/fundo_checkbox_quiz">
 
                             <ImageView
@@ -303,8 +295,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardOpcao4"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="58dp"
+                    android:layout_height="58dp"
                     android:layout_marginTop="12dp"
                     android:clickable="true"
                     android:focusable="true"
@@ -326,8 +317,7 @@
                         <FrameLayout
                             android:id="@+id/caixaCheckOpcao4"
                             android:layout_width="27dp"
-                            android:layout_height="wrap_content"
-                            android:minHeight="27dp"
+                            android:layout_height="27dp"
                             android:background="@drawable/fundo_checkbox_quiz">
 
                             <ImageView
@@ -361,8 +351,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/botaoProximaPergunta"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:minHeight="56dp"
+                android:layout_height="56dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/nunito_regular"
                 android:insetTop="0dp"

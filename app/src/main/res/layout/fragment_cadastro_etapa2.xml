@@ -71,8 +71,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/containerNomeCooperativa"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="46dp"
+            android:layout_height="46dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="45dp"
             android:layout_marginEnd="12dp"
@@ -125,8 +124,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/containerEmailCooperativa"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="46dp"
+            android:layout_height="46dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="12dp"
@@ -179,8 +177,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/containerEndereco"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="46dp"
+            android:layout_height="46dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="45dp"
             android:layout_marginEnd="12dp"
@@ -233,8 +230,7 @@
         <LinearLayout
             android:id="@+id/linhaNumeroCep"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="46dp"
+            android:layout_height="46dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="12dp"
@@ -311,8 +307,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/containerComplemento"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="46dp"
+            android:layout_height="46dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="12dp"
@@ -346,8 +341,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/containerCidade"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="46dp"
+            android:layout_height="46dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="12dp"
@@ -381,8 +375,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/containerEstado"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="46dp"
+            android:layout_height="46dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="12dp"
@@ -436,8 +429,7 @@
         <LinearLayout
             android:id="@+id/linhaTelefoneCpf"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="46dp"
+            android:layout_height="46dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="12dp"
@@ -512,8 +504,7 @@
 
         <FrameLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:minHeight="46dp"
+            android:layout_height="46dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="12dp"

@@ -77,8 +77,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minHeight="60dp"
+        android:layout_height="60dp"
         android:layout_marginStart="14dp"
         android:layout_marginEnd="14dp"
         android:layout_marginBottom="14dp"
@@ -98,8 +97,7 @@
             <EditText
                 android:id="@+id/campoMensagemConversa"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:minHeight="34dp"
+                android:layout_height="34dp"
                 android:autofillHints="none"
                 android:background="@drawable/fundo_campo_chat"
                 android:fontFamily="@font/nunito_regular"

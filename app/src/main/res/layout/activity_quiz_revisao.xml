@@ -59,8 +59,7 @@
     <LinearLayout
         android:id="@+id/indicadoresRevisao"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minHeight="14dp"
+        android:layout_height="14dp"
         android:layout_marginTop="6dp"
         android:gravity="center"
         android:orientation="horizontal"
@@ -138,8 +137,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardRespostaErradaRevisao"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:minHeight="54dp"
+                    android:layout_height="54dp"
                     android:layout_marginTop="7dp"
                     app:cardBackgroundColor="#F3BED0"
                     app:cardCornerRadius="16dp"
@@ -161,8 +159,7 @@
                         <!-- O X e uma imagem PNG; o circulo nao possui stroke. -->
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="32dp"
-                            android:layout_height="wrap_content"
-                            android:minHeight="32dp"
+                            android:layout_height="32dp"
                             app:cardBackgroundColor="@color/rosa_ecociente"
                             app:cardCornerRadius="16dp"
                             app:cardElevation="0dp"
@@ -210,8 +207,7 @@
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:minHeight="54dp"
+                    android:layout_height="54dp"
                     android:layout_marginTop="7dp"
                     app:cardBackgroundColor="@color/verde_escuro_principal"
                     app:cardCornerRadius="16dp"
@@ -259,8 +255,7 @@
         <LinearLayout
             android:id="@+id/cabecalhoExplicacaoRevisao"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="38dp"
+            android:layout_height="38dp"
             android:layout_marginTop="16dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -269,8 +264,7 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="34dp"
-                android:layout_height="wrap_content"
-                android:minHeight="34dp"
+                android:layout_height="34dp"
                 app:cardBackgroundColor="#E4F0E6"
                 app:cardCornerRadius="17dp"
                 app:cardElevation="0dp"
@@ -324,8 +318,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/botaoRepetirQuizRevisao"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:minHeight="56dp"
+        android:layout_height="56dp"
         android:layout_marginStart="38dp"
         android:layout_marginEnd="38dp"
         android:layout_marginBottom="16dp"

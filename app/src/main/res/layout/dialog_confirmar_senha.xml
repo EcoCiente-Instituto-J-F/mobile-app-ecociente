@@ -19,8 +19,7 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="50dp"
+        android:layout_height="50dp"
         app:cardBackgroundColor="@color/branco"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp"

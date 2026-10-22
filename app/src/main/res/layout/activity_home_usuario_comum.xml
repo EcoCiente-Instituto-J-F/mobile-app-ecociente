@@ -41,8 +41,7 @@
                 <FrameLayout
                     android:id="@+id/cabecalhoHome"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="64dp"
+                    android:layout_height="64dp"
                     android:layout_marginStart="18dp"
                     android:layout_marginEnd="18dp">
 
@@ -77,8 +76,7 @@
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="40dp"
-                            android:layout_height="wrap_content"
-                            android:minHeight="40dp"
+                            android:layout_height="40dp"
                             android:layout_marginStart="7dp"
                             app:cardBackgroundColor="@color/cinza_fundo_imagem_home"
                             app:cardCornerRadius="20dp"
@@ -196,8 +194,7 @@
 
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:minHeight="190dp"
+                            android:layout_height="190dp"
                             android:layout_marginTop="10dp"
                             app:cardBackgroundColor="@color/branco"
                             app:cardCornerRadius="14dp"
@@ -219,8 +216,7 @@
                 <LinearLayout
                     android:id="@+id/cabecalhoConteudos"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="48dp"
+                    android:layout_height="48dp"
                     android:layout_marginStart="18dp"
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="18dp"
