@@ -109,6 +109,7 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/sindico_campo">
             <EditText
+                android:importantForAutofill="no"
                 android:id="@+id/enderecoSolicitacao"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -123,6 +124,7 @@
                 android:textColorHint="@color/cinza_texto_home"
                 android:textSize="12sp" />
             <ImageView
+                android:baselineAligned="false"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_gravity="start|center_vertical"
@@ -132,6 +134,7 @@
         </FrameLayout>
 
         <LinearLayout
+            android:baselineAligned="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"

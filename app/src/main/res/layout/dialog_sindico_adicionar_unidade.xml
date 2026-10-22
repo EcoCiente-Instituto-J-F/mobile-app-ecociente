@@ -54,6 +54,7 @@
             android:textColor="@color/cinza_texto_home"
             android:textSize="14sp" />
         <EditText
+            android:importantForAutofill="no"
             android:id="@+id/numeroFormularioUnidade"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -69,6 +70,7 @@
             android:textSize="13sp" />
 
         <TextView
+            android:importantForAutofill="no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -77,6 +79,7 @@
             android:textColor="@color/cinza_texto_home"
             android:textSize="14sp" />
         <EditText
+            android:importantForAutofill="no"
             android:id="@+id/moradorFormularioUnidade"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -92,6 +95,7 @@
             android:textSize="13sp" />
 
         <TextView
+            android:importantForAutofill="no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -100,6 +104,7 @@
             android:textColor="@color/cinza_texto_home"
             android:textSize="14sp" />
         <EditText
+            android:importantForAutofill="no"
             android:id="@+id/telefoneFormularioUnidade"
             android:layout_width="match_parent"
             android:layout_height="48dp"

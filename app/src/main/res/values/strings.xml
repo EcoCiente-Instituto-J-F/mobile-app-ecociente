@@ -86,7 +86,6 @@
     <string name="home_sem_login">Entre na sua conta para continuar.</string>
     <string name="home_cadastro_incompleto">Complete seu cadastro antes de acessar a home.</string>
     <string name="home_sem_acesso">Não foi possível identificar o seu perfil de acesso.</string>
-    <string name="solicitacoes">Solicitações</string>
     <string name="solicitacao">Solicitação</string>
     <string name="coletas">Coletas</string>
     <string name="mensagens">Mensagens</string>
@@ -424,12 +423,6 @@
     <string name="ranking_do_morador">Ranking do morador</string>
     <string name="solicitacao_de_coleta">Solicitação de coleta</string>
     <string name="data">Data</string>
-    <string name="horario_inicio">Início</string>
-    <string name="horario_fim">Fim</string>
-    <string name="coleta_recorrente">Coleta recorrente</string>
-    <string name="preencha_todos_os_campos">Preencha todos os campos.</string>
-    <string name="fim_antes_do_inicio">O horário final precisa ser depois do inicial.</string>
-    <string name="ranking_resumo">Veja sua posição e a do seu condomínio</string>
     <string name="lembrete_de_coleta">Lembrete de coleta</string>
     <string name="canal_lembretes_coleta">Lembretes de coleta</string>
     <string name="lembrete_amanha">Coleta amanhã, %1$s, às %2$s.</string>
@@ -445,11 +438,9 @@
     <string name="grupo_ontem">Ontem</string>
     <string name="grupo_anteriores">Anteriores</string>
     <string name="nova_notificacao">Nova notificação</string>
-    <string name="destinatarios">Destinatários</string>
     <string name="titulo_aviso">Título</string>
     <string name="mensagem">Mensagem</string>
     <string name="aviso_origem">%1$s · %2$s</string>
-    <string name="todos_os_condominios">Todos os meus condomínios</string>
     <string name="categoria_coleta">Coleta</string>
     <string name="categoria_orientacao">Orientação</string>
     <string name="categoria_manutencao">Manutenção</string>

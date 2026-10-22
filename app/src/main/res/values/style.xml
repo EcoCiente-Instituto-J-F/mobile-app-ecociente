@@ -66,17 +66,6 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="CampoFormulario" parent="Widget.Material3.TextInputLayout.OutlinedBox">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginTop">12dp</item>
-        <item name="boxCornerRadiusTopStart">10dp</item>
-        <item name="boxCornerRadiusTopEnd">10dp</item>
-        <item name="boxCornerRadiusBottomStart">10dp</item>
-        <item name="boxCornerRadiusBottomEnd">10dp</item>
-        <item name="boxStrokeColor">@color/verde_borda_campo</item>
-        <item name="hintTextColor">@color/verde_escuro_principal</item>
-    </style>
 
     <style name="BotaoVoltar">
         <item name="android:layout_width">40dp</item>

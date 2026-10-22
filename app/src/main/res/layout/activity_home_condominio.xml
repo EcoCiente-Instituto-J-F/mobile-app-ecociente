@@ -276,6 +276,7 @@
                         android:textSize="12sp" />
 
                     <LinearLayout
+                        android:baselineAligned="false"
                         android:id="@+id/podioHome"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
