@@ -59,6 +59,13 @@ final class ApiAutenticada {
         return requisitarComRenovacao(contexto, "POST", url, json);
     }
 
+    // PATCH com corpo JSON; null só quando não há credenciais.
+    @Nullable
+    static Resposta alterarComCodigo(@NonNull Context contexto, @NonNull String url, @NonNull String json)
+            throws IOException {
+        return requisitarComRenovacao(contexto, "PATCH", url, json);
+    }
+
     @Nullable
     private static String chamar(
             @NonNull Context contexto, @NonNull String metodo, @NonNull String url, @Nullable String json)

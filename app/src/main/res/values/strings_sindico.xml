@@ -14,7 +14,6 @@
     <string name="sindico_materiais_reciclados">Materiais descartados (30 dias)</string>
     <string name="sindico_historico_de_coletas">Histórico de coletas</string>
     <string name="sindico_filtrar_historico">Filtrar histórico</string>
-    <string name="sindico_exemplos_locais_avaliacoes_nao_env">Toque em “Avalie” para dar sua nota</string>
     <string name="sindico_abrir_avisos">Abrir avisos</string>
     <string name="sindico_perfil_do_sindico">Perfil do síndico</string>
     <string name="sindico_ilustracao_de_reciclagem">Ilustração de reciclagem</string>
@@ -180,4 +179,15 @@
     </plurals>
     <string name="sindico_acao_editar">Editar</string>
     <string name="sindico_acao_excluir">Excluir</string>
+    <string name="sindico_validar_descartes">Validar descartes dos moradores</string>
+    <string name="sindico_validar_descartes_subtitulo">Aprove ou reprove as fotos que estão em análise</string>
+    <string name="validacao_titulo">Validar descartes</string>
+    <string name="validacao_descricao">Descartes dos moradores do seu condomínio que aguardam a sua decisão.</string>
+    <string name="validacao_carregando">Carregando os descartes…</string>
+    <string name="validacao_vazio">Nenhum descarte em análise.</string>
+    <string name="validacao_erro">Não foi possível carregar os descartes.</string>
+    <string name="validacao_aprovar">Aprovar</string>
+    <string name="validacao_reprovar">Reprovar</string>
+    <string name="validacao_aprovado">Descarte aprovado.</string>
+    <string name="validacao_reprovado">Descarte reprovado.</string>
 </resources>

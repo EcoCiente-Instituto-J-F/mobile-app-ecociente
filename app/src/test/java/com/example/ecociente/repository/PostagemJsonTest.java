@@ -102,4 +102,17 @@ public class PostagemJsonTest {
         assertTrue(PostagemJson.mensagemDoErro(500, "<html>").contains("Tente de novo"));
         assertTrue(PostagemJson.mensagemDoErro(0, "").contains("Tente de novo"));
     }
+
+    @Test
+    public void corpoDaDecisaoTrazSoOCampoAprovar() {
+        assertEquals("{\"aprovar\":true}", PostagemJson.corpoDecisao(true));
+        assertEquals("{\"aprovar\":false}", PostagemJson.corpoDecisao(false));
+    }
+
+    @Test
+    public void mensagemDaDecisaoExplicaOMotivo() {
+        assertEquals("Você não pode decidir os descartes deste condomínio.", PostagemJson.mensagemDaDecisao(403));
+        assertEquals("Este descarte não foi encontrado.", PostagemJson.mensagemDaDecisao(404));
+        assertEquals("Não foi possível registrar a decisão. Tente de novo.", PostagemJson.mensagemDaDecisao(500));
+    }
 }

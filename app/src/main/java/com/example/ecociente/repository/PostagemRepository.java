@@ -17,6 +17,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.util.ArrayList;
 
 // Descartes do morador na ds-mobile-api: feed do condomínio, "meus descartes", categorias e registro.
 public class PostagemRepository {
@@ -24,6 +25,8 @@ public class PostagemRepository {
     private static final String TAG = "PostagemRepository";
 
     private static final String URL_BASE = "https://ds-mobile-api.onrender.com";
+
+    private static final String URL_PONTUACAO = "https://ds-pontuacao-api.onrender.com";
 
     private static final int POR_PAGINA = 20;
 
@@ -47,6 +50,66 @@ public class PostagemRepository {
 
     public void feed(@NonNull Context contexto, int condominioId, @NonNull RetornoPostagens retorno) {
         listar(contexto, "/api/postagens?condominioId=" + condominioId + "&size=" + POR_PAGINA, retorno);
+    }
+
+    // Descartes do condomínio que ainda esperam a decisão do síndico (até as 100 postagens mais recentes).
+    public void emAnalise(@NonNull Context contexto, int condominioId, @NonNull RetornoPostagens retorno) {
+        listar(
+                contexto,
+                "/api/postagens?condominioId=" + condominioId + "&size=100",
+                postagens -> {
+                    if (postagens == null) {
+                        retorno.aoConcluir(null);
+                        return;
+                    }
+
+                    List<PostagemFeed> pendentes = new ArrayList<>();
+                    String emAnalise = PostagemJson.statusLegivel("em_analise");
+
+                    for (PostagemFeed postagem : postagens) {
+                        if (emAnalise.equals(postagem.getStatus())) {
+                            pendentes.add(postagem);
+                        }
+                    }
+
+                    retorno.aoConcluir(pendentes);
+                });
+    }
+
+    // PATCH /api/v1/postagens/{id}/decisao da ds-pontuacao-api: só o síndico do condomínio (ou admin).
+    public void decidir(
+            @NonNull Context contexto, int postagemId, boolean aprovar, @NonNull RetornoRegistro retorno) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        EXECUTOR.execute(
+                () -> {
+                    ResultadoApi resultado;
+
+                    try {
+                        ApiAutenticada.Resposta resposta =
+                                ApiAutenticada.alterarComCodigo(
+                                        contextoApp,
+                                        URL_PONTUACAO + "/api/v1/postagens/" + postagemId + "/decisao",
+                                        PostagemJson.corpoDecisao(aprovar));
+
+                        if (resposta != null && resposta.sucesso()) {
+                            resultado = ResultadoApi.sucesso();
+                        } else {
+                            resultado =
+                                    ResultadoApi.erro(
+                                            PostagemJson.mensagemDaDecisao(resposta == null ? 401 : resposta.codigo));
+                        }
+                    } catch (Exception erro) {
+                        Log.w(TAG, "Não foi possível registrar a decisão", erro);
+
+                        resultado = ResultadoApi.erro(PostagemJson.mensagemDaDecisao(0));
+                    }
+
+                    ResultadoApi resultadoFinal = resultado;
+
+                    PRINCIPAL.post(() -> retorno.aoConcluir(resultadoFinal));
+                });
     }
 
     public void minhas(@NonNull Context contexto, @NonNull RetornoPostagens retorno) {

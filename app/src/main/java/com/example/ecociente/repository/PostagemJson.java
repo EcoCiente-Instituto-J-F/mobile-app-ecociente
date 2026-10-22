@@ -95,6 +95,30 @@ final class PostagemJson {
         }
     }
 
+    // Corpo de PATCH /api/v1/postagens/{id}/decisao da ds-pontuacao-api.
+    @NonNull
+    static String corpoDecisao(boolean aprovar) {
+        return "{\"aprovar\":" + aprovar + "}";
+    }
+
+    @NonNull
+    static String mensagemDaDecisao(int codigoHttp) {
+
+        switch (codigoHttp) {
+            case 401:
+                return "Sua sessão expirou. Entre novamente.";
+
+            case 403:
+                return "Você não pode decidir os descartes deste condomínio.";
+
+            case 404:
+                return "Este descarte não foi encontrado.";
+
+            default:
+                return "Não foi possível registrar a decisão. Tente de novo.";
+        }
+    }
+
     @NonNull
     static String corpoCriar(
             int condominioId,

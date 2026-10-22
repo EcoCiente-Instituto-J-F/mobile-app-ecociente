@@ -33,18 +33,6 @@
         android:scaleType="centerInside" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="21dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="21dp"
-        android:paddingBottom="12dp"
-        android:fontFamily="@font/nunito_regular"
-        android:text="@string/sindico_exemplos_locais_avaliacoes_nao_env"
-        android:textColor="@color/cinza_texto_home"
-        android:textSize="11sp" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

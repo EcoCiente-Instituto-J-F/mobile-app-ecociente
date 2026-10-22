@@ -105,6 +105,8 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         calendarioViewModel.carregarSemana();
         montarMetricas(dados);
         montarRanking(dados);
+        findViewById(R.id.sindicoValidarDescartes).setOnClickListener(
+                view -> startActivity(new Intent(this, SindicoValidacaoActivity.class)));
         findViewById(R.id.sindicoDashboardResumo).setOnClickListener(view -> startActivity(
                 new Intent(this, SindicoDashboardActivity.class)));
         View.OnClickListener abrirRanking = view -> startActivity(
