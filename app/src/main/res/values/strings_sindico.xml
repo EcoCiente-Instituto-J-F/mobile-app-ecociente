@@ -11,7 +11,7 @@
     <string name="sindico_voltar_a_home">Voltar à home</string>
     <string name="sindico_dashboard">Dashboard</string>
     <string name="sindico_deslize_para_ver_materiais_recicla">Deslize para ver os materiais descartados e as coletas por cooperativa</string>
-    <string name="sindico_materiais_reciclados">Materiais descartados (30 dias)</string>
+    <string name="sindico_materiais_reciclados">Materiais reciclados por categoria</string>
     <string name="sindico_historico_de_coletas">Histórico de coletas</string>
     <string name="sindico_filtrar_historico">Filtrar histórico</string>
     <string name="sindico_abrir_avisos">Abrir avisos</string>
@@ -162,13 +162,12 @@
     <string name="sindico_sem_dado">—</string>
     <string name="sindico_torre_do_condominio">Torre do condomínio</string>
     <string name="sindico_carregando_dado">…</string>
-    <string name="sindico_dash_descartes">Descartes nos últimos 30 dias</string>
-    <string name="sindico_dash_moradores">Moradores que descartaram no mês</string>
+    <string name="sindico_dash_descartes">Materiais reciclados</string>
+    <string name="sindico_dash_moradores">Moradores do condomínio</string>
     <string name="sindico_dash_coletas">Coletas realizadas</string>
-    <string name="sindico_dash_semanas">Descartes por semana</string>
+    <string name="sindico_dash_semanas">Notas médias dos quizzes</string>
     <string name="sindico_dash_cooperativas">Coletas por cooperativa</string>
-    <string name="sindico_descartes_semana_descricao">Descartes por semana: há 3 semanas %1$d, há 2 semanas %2$d, há 1 semana %3$d, esta semana %4$d</string>
-    <string name="sindico_sem_descartes">Nenhum descarte nos últimos 30 dias</string>
+    <string name="sindico_sem_descartes">Nenhum material reciclado ainda</string>
     <string name="sindico_sem_coletas_realizadas">Nenhuma coleta realizada ainda</string>
     <string name="sindico_dashboard_erro">Não foi possível calcular o dashboard. Tente de novo em instantes.</string>
     <string name="sindico_condominio_carregando">Carregando…</string>
@@ -198,4 +197,7 @@
     <string name="sindico_avaliar_escolha_a_nota">Escolha de 1 a 5 estrelas.</string>
     <string name="sindico_avaliar_enviar">Enviar avaliação</string>
     <string name="sindico_avaliacao_enviada">Avaliação enviada.</string>
+    <string name="sindico_dash_pontos">Pontos no mês</string>
+    <string name="sindico_sem_quizzes">Nenhum quiz concluído ainda</string>
+    <string name="sindico_notas_dos_quizzes">Notas médias dos quizzes: %1$s</string>
 </resources>
