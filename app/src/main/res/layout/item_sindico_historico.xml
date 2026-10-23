@@ -62,5 +62,18 @@
             android:text="@string/etiqueta_concluida"
             android:textColor="@color/branco"
             android:textSize="11sp" />
+        <TextView
+            android:id="@+id/acaoAvaliarHistorico"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/nunito_bold"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:text="@string/sindico_avaliar"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="12sp"
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>

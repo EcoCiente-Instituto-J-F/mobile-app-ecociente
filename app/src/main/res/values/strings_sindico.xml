@@ -190,4 +190,12 @@
     <string name="validacao_reprovar">Reprovar</string>
     <string name="validacao_aprovado">Descarte aprovado.</string>
     <string name="validacao_reprovado">Descarte reprovado.</string>
+    <string name="sindico_avaliar">Avaliar</string>
+    <string name="sindico_avaliada">Avaliada</string>
+    <string name="sindico_avaliar_coleta_de">Avaliar a coleta de %1$s</string>
+    <string name="sindico_avaliar_titulo">Avaliar %1$s</string>
+    <string name="sindico_avaliar_comentario">Comentário (opcional)</string>
+    <string name="sindico_avaliar_escolha_a_nota">Escolha de 1 a 5 estrelas.</string>
+    <string name="sindico_avaliar_enviar">Enviar avaliação</string>
+    <string name="sindico_avaliacao_enviada">Avaliação enviada.</string>
 </resources>
