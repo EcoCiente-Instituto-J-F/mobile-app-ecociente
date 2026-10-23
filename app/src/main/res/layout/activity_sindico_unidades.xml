@@ -55,26 +55,17 @@
                 android:background="@drawable/fundo_cartao_borda"
                 android:orientation="vertical"
                 android:padding="12dp">
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="@string/informacoes_basicas"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="16sp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:contentDescription="@null"
-                        android:src="@drawable/ic_predio"
-                        app:tint="@color/verde_escuro_principal" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:fontFamily="@font/nunito_bold"
-                        android:text="@string/informacoes_basicas"
-                        android:textColor="@color/verde_escuro_principal"
-                        android:textSize="16sp" />
-                </LinearLayout>
+                    android:drawablePadding="6dp"
+                    app:drawableStartCompat="@drawable/ic_predio_22dp"
+                    app:drawableTint="@color/verde_escuro_principal" />
 
                 <LinearLayout
                     android:baselineAligned="false"

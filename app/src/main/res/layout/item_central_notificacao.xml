@@ -67,29 +67,17 @@
                 android:textColor="@color/cinza_texto_home"
                 android:textSize="12sp" />
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/horaCentralNotificacao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:fontFamily="@font/nunito_regular"
+                android:textColor="@color/cinza_texto_auxiliar"
+                android:textSize="11sp"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_relogio" />
-
-                <TextView
-                    android:id="@+id/horaCentralNotificacao"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:fontFamily="@font/nunito_regular"
-                    android:textColor="@color/cinza_texto_auxiliar"
-                    android:textSize="11sp" />
-
-            </LinearLayout>
+                android:drawablePadding="4dp"
+                app:drawableStartCompat="@drawable/ic_relogio_12dp" />
 
         </LinearLayout>
 

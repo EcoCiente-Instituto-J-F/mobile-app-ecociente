@@ -40,6 +40,7 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
         InsetsSistema.aplicarComoPadding(raiz);
 
         findViewById(R.id.voltarSindicoDashboard).setOnClickListener(view -> finish());
+        findViewById(R.id.botaoTentarDashboard).setOnClickListener(view -> carregar());
         exibirSemDados();
 
         BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
@@ -65,6 +66,8 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
             return;
         }
 
+        findViewById(R.id.botaoTentarDashboard).setVisibility(View.GONE);
+
         for (int id : new int[]{R.id.valorAulasConcluidas, R.id.valorMoradoresNoApp, R.id.valorPontosDoMes}) {
             ((TextView) findViewById(id)).setText(R.string.sindico_carregando_dado);
         }
@@ -74,6 +77,7 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
 
             if (resumo == null) {
                 exibirSemDados();
+                findViewById(R.id.botaoTentarDashboard).setVisibility(View.VISIBLE);
                 AvisoFlutuante.mostrar(this, R.string.sindico_dashboard_erro);
                 return;
             }

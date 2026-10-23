@@ -21,7 +21,6 @@ public class ProximaColetaView extends FrameLayout {
     private final TextView horario;
     private final TextView rotuloFaltam;
     private final TextView valorFaltam;
-    private final View linhaHorario;
     private final View tipo;
     private final View caixaFaltam;
     private final View cartao;
@@ -38,7 +37,6 @@ public class ProximaColetaView extends FrameLayout {
         horario = findViewById(R.id.textoHorarioProximaColeta);
         rotuloFaltam = findViewById(R.id.textoRotuloFaltam);
         valorFaltam = findViewById(R.id.textoValorFaltam);
-        linhaHorario = findViewById(R.id.linhaHorarioProximaColeta);
         tipo = findViewById(R.id.textoTipoColeta);
         caixaFaltam = findViewById(R.id.caixaFaltamDias);
         cartao = findViewById(R.id.cartaoProximaColeta);
@@ -49,7 +47,7 @@ public class ProximaColetaView extends FrameLayout {
             @NonNull Runnable aoTentarNovamente,
             @NonNull Runnable aoReautenticar) {
 
-        linhaHorario.setVisibility(GONE);
+        horario.setVisibility(GONE);
         tipo.setVisibility(GONE);
         caixaFaltam.setVisibility(GONE);
         cartao.setOnClickListener(null);
@@ -91,7 +89,7 @@ public class ProximaColetaView extends FrameLayout {
                     fim.isEmpty() || fim.equals(inicio)
                             ? getContext().getString(R.string.proxima_coleta_horario_inicio, inicio)
                             : getContext().getString(R.string.proxima_coleta_horario, inicio, fim));
-            linhaHorario.setVisibility(VISIBLE);
+            horario.setVisibility(VISIBLE);
         }
 
         exibirFaltam(FormatoDataApi.calendario(coleta.getDataInicio()));
