@@ -97,7 +97,16 @@ final class DashboardSindicoJson {
         int realizadas = 0;
         Map<Integer, Integer> porCooperativa = new LinkedHashMap<>();
 
+        // O nome que a própria coleta traz vale mais que a lista de cooperativas.
+        Map<Integer, String> nomes = new java.util.HashMap<>(nomesDasCooperativas);
+
         for (Solicitacao coleta : coletas) {
+            String nomeDaColeta = coleta.getCooperativaNome();
+
+            if (nomeDaColeta != null && !nomeDaColeta.isEmpty()) {
+                nomes.put(coleta.getCooperativaId(), nomeDaColeta);
+            }
+
             if (coleta.getStatus() == StatusAgendamento.REALIZADO) {
                 realizadas++;
                 porCooperativa.merge(coleta.getCooperativaId(), 1, Integer::sum);
@@ -113,7 +122,7 @@ final class DashboardSindicoJson {
 
         for (int i = 0; i < mostradas; i++) {
             Map.Entry<Integer, Integer> entrada = cooperativas.get(i);
-            String nome = nomesDasCooperativas.get(entrada.getKey());
+            String nome = nomes.get(entrada.getKey());
             nomesCooperativas[i] = abreviar(nome == null ? "Coop. " + entrada.getKey() : nome);
             coletasPorCooperativa[i] = entrada.getValue();
         }

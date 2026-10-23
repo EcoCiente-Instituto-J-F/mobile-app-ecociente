@@ -18,13 +18,15 @@ final class CalendarioJson {
                 ? item.optString("statusAgendamento") : item.optString("status");
 
         return new Solicitacao(
-                item.optInt("id"),
-                item.optInt("condominioId"),
-                item.optInt("cooperativaId"),
-                texto(item, "dataInicio"),
-                texto(item, "dataFim"),
-                StatusAgendamento.daApi(status),
-                item.optBoolean("possuiRecorrencia"));
+                        item.optInt("id"),
+                        item.optInt("condominioId"),
+                        item.optInt("cooperativaId"),
+                        texto(item, "dataInicio"),
+                        texto(item, "dataFim"),
+                        StatusAgendamento.daApi(status),
+                        item.optBoolean("possuiRecorrencia"))
+                .comNomeCondominio(texto(item, "condominioNome"))
+                .comDadosDoPedido(texto(item, "origemSolicitacao"), texto(item, "cooperativaNome"));
     }
 
     @Nullable
