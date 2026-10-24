@@ -1,6 +1,6 @@
 .git
 .github
-
+app\google-services.json
 .gradle
 build
 **/build
