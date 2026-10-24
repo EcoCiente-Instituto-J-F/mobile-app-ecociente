@@ -29,7 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// ds-calendario-api: lista os agendamentos de acordo com o perfil do JWT (cooperativa ou síndico).
+// ds-calendario-api: lista os agendamentos de acordo com o perfil do JWT (cooperativa, síndico ou morador).
 public class CalendarioExternoRepository {
 
     public interface Retorno {
