@@ -160,7 +160,7 @@ public class ChatActivity extends AppCompatActivity {
             transicionarParaConversa();
         }
 
-        viewModel.enviarMensagem(mensagem);
+        viewModel.enviarMensagem(this, mensagem);
     }
 
     private void renderizarMensagens(List<MensagemChat> mensagens) {

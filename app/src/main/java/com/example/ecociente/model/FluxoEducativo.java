@@ -112,10 +112,10 @@ public final class FluxoEducativo {
 
     public static int imagem(@NonNull CursoEducativo curso) {
         switch (curso.id) {
-            case -101: case -106: return R.drawable.png_greenrecyclecontainer;
-            case -103: case -105: return R.drawable.png_greenplastic;
-            case -102: case -104: return R.drawable.png_greenpapers;
-            default: return R.drawable.icon_livro;
+            case -101: case -106: return R.drawable.img_greenrecyclecontainer;
+            case -103: case -105: return R.drawable.img_greenplastic;
+            case -102: case -104: return R.drawable.img_greenpapers;
+            default: return R.drawable.ic_guia_verde;
         }
     }
 

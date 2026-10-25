@@ -1,0 +1,160 @@
+package com.example.ecociente.repository;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import org.json.JSONObject;
+import org.junit.Test;
+import com.example.ecociente.model.SindicoDadosCondominio;
+import com.example.ecociente.model.SindicoItemUnidade;
+import java.util.List;
+
+public class PerfilApiJsonTest {
+
+    private static JSONObject perfil(String condominios) throws Exception {
+        return new JSONObject("{\"id\":9,\"nome\":\"Teste\",\"condominios\":" + condominios + "}");
+    }
+
+    @Test
+    public void sindicoFicaComOCondominioEmQueEResponsavel() throws Exception {
+        JSONObject json =
+                perfil(
+                        "[{\"id\":3,\"nome\":\"Outro\",\"ativo\":true,\"sindicoResponsavel\":false,"
+                                + "\"vinculo\":{\"aprovado\":true}},"
+                                + "{\"id\":1,\"nome\":\"Residencial Eco\",\"ativo\":true,\"sindicoResponsavel\":true}]");
+
+        PerfilApiJson.Condominio condominio = PerfilApiJson.condominio(json);
+
+        assertNotNull(condominio);
+        assertEquals(1, condominio.id);
+        assertEquals("Residencial Eco", condominio.nome);
+    }
+
+    @Test
+    public void moradorFicaComOPrimeiroVinculoAprovado() throws Exception {
+        JSONObject json =
+                perfil(
+                        "[{\"id\":5,\"nome\":\"Pendente\",\"ativo\":true,\"vinculo\":{\"aprovado\":false}},"
+                                + "{\"id\":7,\"nome\":\"Aprovado\",\"ativo\":true,\"vinculo\":{\"aprovado\":true}}]");
+
+        assertEquals(7, PerfilApiJson.condominio(json).id);
+    }
+
+    @Test
+    public void vinculoNaoAprovadoNaoServe() throws Exception {
+        JSONObject json = perfil("[{\"id\":5,\"nome\":\"Pendente\",\"ativo\":true,\"vinculo\":{\"aprovado\":false}}]");
+
+        assertNull(PerfilApiJson.condominio(json));
+    }
+
+    @Test
+    public void condominioInativoOuSemIdNaoServe() throws Exception {
+        JSONObject json =
+                perfil(
+                        "[{\"id\":4,\"nome\":\"Inativo\",\"ativo\":false,\"sindicoResponsavel\":true},"
+                                + "{\"nome\":\"Sem id\",\"ativo\":true,\"sindicoResponsavel\":true}]");
+
+        assertNull(PerfilApiJson.condominio(json));
+    }
+
+    @Test
+    public void semCondominiosDevolveNull() throws Exception {
+        assertNull(PerfilApiJson.condominio(perfil("[]")));
+        assertNull(PerfilApiJson.condominio(new JSONObject("{\"id\":9}")));
+    }
+
+    @Test
+    public void nomeAusenteViraTextoVazio() throws Exception {
+        JSONObject json = perfil("[{\"id\":2,\"ativo\":true,\"sindicoResponsavel\":true}]");
+
+        assertEquals("", PerfilApiJson.condominio(json).nome);
+    }
+
+    @Test
+    public void cooperativaIdVemDoObjetoCooperativa() throws Exception {
+        assertEquals(5, PerfilApiJson.cooperativaId(new JSONObject("{\"cooperativa\":{\"id\":5,\"nome\":\"Eco\"}}")));
+        assertEquals(0, PerfilApiJson.cooperativaId(new JSONObject("{\"cooperativa\":null}")));
+        assertEquals(0, PerfilApiJson.cooperativaId(new JSONObject("{}")));
+    }
+
+    @Test
+    public void perfilDaApiLeNomeFotoTelefoneEEndereco() throws Exception {
+        JSONObject json =
+                new JSONObject(
+                        "{\"nome\":\"Ana Souza\",\"urlAvatar\":\"https://res.cloudinary.com/x/a.jpg\",\"cpf\":\"12345678901\","
+                                + "\"endereco\":{\"cep\":\"01001000\",\"estado\":\"SP\",\"cidade\":\"São Paulo\","
+                                + "\"logradouro\":\"Rua Um\",\"numero\":\"10\",\"complemento\":null},"
+                                + "\"telefones\":[{\"numero\":\"11999990000\",\"ativo\":false},"
+                                + "{\"numero\":\"81988887777\",\"ativo\":true}]}");
+
+        com.example.ecociente.model.PerfilDaApi perfil = PerfilApiJson.perfilDaApi(json);
+
+        assertEquals("Ana Souza", perfil.getNome());
+        assertEquals("https://res.cloudinary.com/x/a.jpg", perfil.getUrlAvatar());
+        assertEquals("81988887777", perfil.getTelefone());
+        assertEquals("01001000", perfil.getCep());
+        assertEquals("Rua Um", perfil.getLogradouro());
+        assertEquals("", perfil.getComplemento());
+    }
+
+    @Test
+    public void perfilDaApiDeCooperativaTrazNomeEEmailDela() throws Exception {
+        JSONObject json =
+                new JSONObject("{\"nome\":\"Resp\",\"cooperativa\":{\"id\":5,\"nome\":\"Coop Verde\",\"email\":\"c@verde.com\"}}");
+
+        com.example.ecociente.model.PerfilDaApi perfil = PerfilApiJson.perfilDaApi(json);
+
+        assertEquals("Coop Verde", perfil.getNomeCooperativa());
+        assertEquals("c@verde.com", perfil.getEmailCooperativa());
+    }
+
+    @Test
+    public void camposNulosOuAusentesViramTextoVazio() throws Exception {
+        com.example.ecociente.model.PerfilDaApi perfil =
+                PerfilApiJson.perfilDaApi(new JSONObject("{\"nome\":null,\"urlAvatar\":null}"));
+
+        assertEquals("", perfil.getNome());
+        assertEquals("", perfil.getUrlAvatar());
+        assertEquals("", perfil.getTelefone());
+    }
+
+    @Test
+    public void dadosDoCondominioVemDoCondominioDoSindico() throws Exception {
+        JSONObject json =
+                perfil(
+                        "[{\"id\":1,\"nome\":\"Residencial Eco\",\"ativo\":true,\"sindicoResponsavel\":true,"
+                                + "\"tipoCondominio\":\"Comercial\","
+                                + "\"endereco\":{\"logradouro\":\"Avenida Paulista\",\"numero\":\"1000\","
+                                + "\"complemento\":null,\"cidade\":\"São Paulo\",\"estado\":\"SP\",\"cep\":\"01310100\"}}]");
+
+        SindicoDadosCondominio dados = PerfilApiJson.dadosDoCondominio(json);
+
+        assertNotNull(dados);
+        assertEquals("Residencial Eco", dados.getNome());
+        assertEquals("Avenida Paulista", dados.getEndereco());
+        assertEquals("1000", dados.getNumero());
+        assertEquals("", dados.getComplemento());
+        assertEquals("SP", dados.getEstado());
+        assertEquals(false, dados.isResidencial());
+    }
+
+    @Test
+    public void semCondominioNaoHaDadosDoCondominio() throws Exception {
+        assertNull(PerfilApiJson.dadosDoCondominio(perfil("[]")));
+    }
+
+    @Test
+    public void torresVemDoCondominioEscolhido() throws Exception {
+        JSONObject json =
+                perfil(
+                        "[{\"id\":1,\"nome\":\"Residencial Eco\",\"ativo\":true,\"sindicoResponsavel\":true,"
+                                + "\"torres\":[{\"id\":10,\"nome\":\"Torre A\"},{\"id\":11,\"nome\":\" \"},{\"id\":12,\"nome\":\"Torre B\"}]}]");
+
+        List<SindicoItemUnidade> torres = PerfilApiJson.torres(json);
+
+        assertEquals(2, torres.size());
+        assertEquals(10, torres.get(0).getId());
+        assertEquals("Torre B", torres.get(1).getNome());
+    }
+}

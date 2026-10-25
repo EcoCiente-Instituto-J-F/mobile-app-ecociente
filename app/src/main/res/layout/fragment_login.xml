@@ -47,7 +47,6 @@
                 android:paddingEnd="12dp">
 
                 <ImageView
-                    android:id="@+id/iconeEmail"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:contentDescription="@string/icone_email"
@@ -116,7 +115,6 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/iconeSenha"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:contentDescription="@string/icone_senha"
@@ -267,7 +265,7 @@
             app:backgroundTint="@color/branco"
             app:cornerRadius="12dp"
             app:elevation="0dp"
-            app:icon="@drawable/icon_google"
+            app:icon="@drawable/ic_google"
             app:iconGravity="textStart"
             app:iconPadding="12dp"
             app:iconSize="20dp"
@@ -291,7 +289,7 @@
             app:backgroundTint="@color/azul_facebook"
             app:cornerRadius="12dp"
             app:elevation="0dp"
-            app:icon="@drawable/icon_facebook"
+            app:icon="@drawable/ic_facebook"
             app:iconGravity="textStart"
             app:iconPadding="12dp"
             app:iconSize="20dp"

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/raizSindicoHome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/branco"
     android:orientation="vertical">
 
     <FrameLayout
@@ -38,11 +38,11 @@
                 android:contentDescription="@string/mensagens"
                 android:focusable="true">
                 <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:contentDescription="@null"
-                    android:src="@drawable/ic_chat_bolha" />
+                    android:src="@drawable/ic_nav_mensagens_cinza" app:tint="@color/verde_escuro_principal" />
             </FrameLayout>
 
             <FrameLayout
@@ -54,11 +54,11 @@
                 android:contentDescription="@string/sindico_abrir_avisos"
                 android:focusable="true">
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="22dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center"
                     android:contentDescription="@null"
-                    android:src="@drawable/icon_notificacoes" />
+                    android:src="@drawable/ic_notificacoes" />
                 <View
                     android:id="@+id/pontoAvisosSindico"
                     android:layout_width="8dp"
@@ -114,7 +114,8 @@
                 android:layout_height="108dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="11dp">
+                android:paddingStart="11dp"
+                android:paddingEnd="0dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -134,7 +135,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunito_regular"
-                        android:text="@string/sindico_condominio_demo"
+                        tools:text="Nome do condomínio"
                         android:textColor="@color/cinza_texto_home"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -163,7 +164,7 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_calendario" />
+                        android:src="@drawable/ic_calendario" app:tint="@color/verde_escuro_principal" />
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -205,6 +206,33 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/sindicoValidarDescartes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/fundo_cartao_borda"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:padding="14dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="@string/sindico_validar_descartes"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="14sp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/nunito_regular"
+                    android:text="@string/sindico_validar_descartes_subtitulo"
+                    android:textColor="@color/cinza_texto_home"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/sindicoDashboardResumo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -225,7 +253,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_tendencia" />
+                        android:src="@drawable/ic_grafico" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

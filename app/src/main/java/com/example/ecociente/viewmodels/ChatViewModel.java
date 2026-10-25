@@ -1,7 +1,8 @@
 package com.example.ecociente.viewmodels;
 
-import android.util.Log;
+import android.content.Context;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -38,13 +39,14 @@ public class ChatViewModel extends ViewModel {
         return envioEmAndamento;
     }
 
-    public void enviarMensagem(String mensagem) {
+    public void enviarMensagem(Context contexto, String mensagem) {
         if (mensagem == null || mensagem.trim().isEmpty()
                 || Boolean.TRUE.equals(envioEmAndamento.getValue())) {
             return;
         }
 
         String mensagemNormalizada = mensagem.trim();
+        Context contextoApp = contexto.getApplicationContext();
         adicionarMensagem(MensagemChat.doUsuario(mensagemNormalizada));
         envioEmAndamento.setValue(true);
 
@@ -52,7 +54,7 @@ public class ChatViewModel extends ViewModel {
                 () -> {
                     try {
                         RespostaChat resposta =
-                                repositorio.enviarMensagem(mensagemNormalizada, sessionId);
+                                repositorio.enviarMensagem(contextoApp, mensagemNormalizada, sessionId);
 
                         if (!resposta.getSessionId().isEmpty()) {
                             sessionId = resposta.getSessionId();

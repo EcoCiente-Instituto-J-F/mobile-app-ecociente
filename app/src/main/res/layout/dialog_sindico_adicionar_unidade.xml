@@ -33,7 +33,7 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:contentDescription="@null"
-                android:src="@drawable/sindico_building_campo" />
+                android:src="@drawable/ic_predio" />
             <TextView
                 android:id="@+id/tituloFormularioUnidade"
                 android:layout_width="wrap_content"
@@ -54,13 +54,13 @@
             android:textColor="@color/cinza_texto_home"
             android:textSize="14sp" />
         <EditText
+            android:importantForAutofill="no"
             android:id="@+id/numeroFormularioUnidade"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@drawable/sindico_campo"
-            android:drawableStart="@drawable/sindico_building_campo"
+            android:drawableStart="@drawable/ic_predio"
             android:drawablePadding="8dp"
-            android:hint="@string/sindico_apto_120"
             android:inputType="textCapWords"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
@@ -69,6 +69,7 @@
             android:textSize="13sp" />
 
         <TextView
+            android:importantForAutofill="no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -77,6 +78,7 @@
             android:textColor="@color/cinza_texto_home"
             android:textSize="14sp" />
         <EditText
+            android:importantForAutofill="no"
             android:id="@+id/moradorFormularioUnidade"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -92,6 +94,7 @@
             android:textSize="13sp" />
 
         <TextView
+            android:importantForAutofill="no"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -100,6 +103,7 @@
             android:textColor="@color/cinza_texto_home"
             android:textSize="14sp" />
         <EditText
+            android:importantForAutofill="no"
             android:id="@+id/telefoneFormularioUnidade"
             android:layout_width="match_parent"
             android:layout_height="48dp"

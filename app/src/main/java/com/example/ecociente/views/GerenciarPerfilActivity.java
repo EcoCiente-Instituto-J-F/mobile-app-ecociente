@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -19,6 +18,7 @@ import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.PerfilAcesso;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.TipoLista;
@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.File;
 import com.example.ecociente.ui.DialogoEco;
 import androidx.annotation.StringRes;
+import android.widget.FrameLayout;
 
 public class GerenciarPerfilActivity extends AppCompatActivity {
 
@@ -74,6 +75,17 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gerenciar_perfil);
 
         viewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
+
+        viewModel
+                .getFalhaDeSincronizacao()
+                .observe(
+                        this,
+                        falhou -> {
+                            if (Boolean.TRUE.equals(falhou)) {
+                                AvisoFlutuante.mostrar(this, R.string.perfil_sincronizacao_falhou);
+                                viewModel.falhaDeSincronizacaoAvisada();
+                            }
+                        });
 
         inicializarComponentes();
 
@@ -157,7 +169,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         }
 
         viewModel
-                .buscarPerfil(usuario.getUid())
+                .buscarPerfilAtualizado(getApplicationContext(), usuario.getUid())
                 .observe(this, perfil -> preencherCabecalho(usuario, perfil));
     }
 
@@ -296,7 +308,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
             camera.launch(uriFotoCamera);
 
         } catch (ActivityNotFoundException erro) {
-            Toast.makeText(this, R.string.perfil_foto_erro_camera, Toast.LENGTH_SHORT).show();
+            AvisoFlutuante.mostrar(this, R.string.perfil_foto_erro_camera);
         }
     }
 
@@ -318,15 +330,13 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
                             indicadorFoto.setVisibility(View.GONE);
 
                             if (!resultado.isSucesso()) {
-                                Toast.makeText(this, resultado.getMensagemErro(), Toast.LENGTH_LONG)
-                                        .show();
+                                AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
                                 return;
                             }
 
                             mostrarFoto(resultado.getUrl());
 
-                            Toast.makeText(this, R.string.perfil_foto_sucesso, Toast.LENGTH_SHORT)
-                                    .show();
+                            AvisoFlutuante.mostrar(this, R.string.perfil_foto_sucesso);
                         });
     }
 
@@ -367,7 +377,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
     private void pedirSenhaParaExcluir() {
 
-        View corpo = LayoutInflater.from(this).inflate(R.layout.dialog_confirmar_senha, null);
+        View corpo = LayoutInflater.from(this).inflate(R.layout.dialog_confirmar_senha, new FrameLayout(this), false);
 
         EditText campoSenha = corpo.findViewById(R.id.campoConfirmarSenhaExclusao);
 
@@ -382,8 +392,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
                             String senha = campoSenha.getText().toString();
 
                             if (senha.isEmpty()) {
-                                Toast.makeText(this, R.string.perfil_excluir_senha_vazia, Toast.LENGTH_SHORT)
-                                        .show();
+                                AvisoFlutuante.mostrar(this, R.string.perfil_excluir_senha_vazia);
                                 return;
                             }
 
@@ -404,8 +413,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
                             }
 
                             if (!resultado.isSucesso()) {
-                                Toast.makeText(this, resultado.getMensagemErro(), Toast.LENGTH_LONG)
-                                        .show();
+                                AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
                                 return;
                             }
 

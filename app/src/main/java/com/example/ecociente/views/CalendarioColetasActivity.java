@@ -9,13 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.Coletas;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
@@ -31,6 +31,7 @@ import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import java.util.Collections;
 import java.util.List;
+import com.example.ecociente.ui.IndicadorCarregamento;
 
 public class CalendarioColetasActivity extends AppCompatActivity {
 
@@ -39,7 +40,7 @@ public class CalendarioColetasActivity extends AppCompatActivity {
                     new ActivityResultContracts.RequestPermission(),
                     permitido -> {
                         if (!permitido) {
-                            Toast.makeText(this, R.string.lembrete_sem_permissao, Toast.LENGTH_SHORT).show();
+                            AvisoFlutuante.mostrar(this, R.string.lembrete_sem_permissao);
                         }
                     });
 
@@ -47,7 +48,7 @@ public class CalendarioColetasActivity extends AppCompatActivity {
 
     private CalendarioMensalView calendarioMensal;
     private LinearLayout listaColetas;
-    private View textoSemColetas;
+    private TextView textoSemColetas;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -121,7 +122,28 @@ public class CalendarioColetasActivity extends AppCompatActivity {
 
         calendarioMensal.exibir(mes[0], mes[1], Coletas.diasDoMes(coletas, mes[0], mes[1]));
 
+        // Antes da primeira resposta: o indicador no lugar da lista.
+        if (resultado == null) {
+            listaColetas.removeAllViews();
+            textoSemColetas.setVisibility(View.GONE);
+            IndicadorCarregamento.mostrar(listaColetas, R.string.carregando);
+            return;
+        }
+
         exibirLista(Coletas.ativasDoMes(coletas, mes[0], mes[1]));
+
+        boolean falhou = resultado != null && resultado.getTipo() != ResultadoSolicitacoes.Tipo.SUCESSO;
+
+        if (falhou) {
+            textoSemColetas.setText(R.string.coletas_do_mes_erro);
+            textoSemColetas.setVisibility(View.VISIBLE);
+            textoSemColetas.setOnClickListener(view -> viewModel.carregar());
+
+        } else {
+            textoSemColetas.setText(R.string.nenhuma_coleta_no_mes);
+            textoSemColetas.setOnClickListener(null);
+            textoSemColetas.setClickable(false);
+        }
     }
 
     private void exibirLista(List<Solicitacao> coletas) {
@@ -182,7 +204,7 @@ public class CalendarioColetasActivity extends AppCompatActivity {
                     if (!LembretesColeta.ativar(this, coleta)) {
                         botao.setChecked(false);
 
-                        Toast.makeText(this, R.string.lembrete_coleta_proxima, Toast.LENGTH_SHORT).show();
+                        AvisoFlutuante.mostrar(this, R.string.lembrete_coleta_proxima);
                     }
                 });
     }

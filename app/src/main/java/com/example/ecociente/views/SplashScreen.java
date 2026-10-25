@@ -15,6 +15,7 @@ import android.widget.VideoView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ecociente.R;
+import com.example.ecociente.repository.AquecimentoDasApis;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashScreen extends AppCompatActivity {
@@ -41,6 +42,8 @@ public class SplashScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
+
+        AquecimentoDasApis.aquecer(this);
 
         setContentView(R.layout.activity_splashscreen);
 

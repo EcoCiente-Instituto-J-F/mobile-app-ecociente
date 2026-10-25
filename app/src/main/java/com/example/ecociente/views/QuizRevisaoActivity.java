@@ -75,8 +75,7 @@ public class QuizRevisaoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz_revisao);
         configurarInsetsDaTela();
 
-        perguntas = QuizConteudo.obterPerguntas();
-        if (!QuizConteudo.temGabarito()) { finish(); return; }
+        perguntas = QuizConteudo.doIntent(getIntent());
         respostas = getIntent().getIntArrayExtra(EXTRA_RESPOSTAS);
         categoria = getIntent().getStringExtra(EXTRA_CATEGORIA);
 
@@ -176,6 +175,8 @@ public class QuizRevisaoActivity extends AppCompatActivity {
 
                 if (Math.abs(delta) >= limite && indicesErrados.size() > 1) {
                     trocarQuestao(delta < 0 ? 1 : -1);
+                } else if (Math.abs(delta) < limite) {
+                    view.performClick();
                 }
                 return true;
             }
@@ -291,8 +292,10 @@ public class QuizRevisaoActivity extends AppCompatActivity {
     }
 
     private void repetirQuiz() {
-        Intent rota = new Intent(this, InicioQuizActivity.class);
-        rota.putExtra(InicioQuizActivity.EXTRA_CATEGORIA, categoria);
+        Intent rota = new Intent(this, QuizPerguntasActivity.class);
+        rota.putExtra(QuizPerguntasActivity.EXTRA_CATEGORIA, categoria);
+        QuizConteudo.anexar(rota, perguntas);
+        QuizConteudo.anexarContexto(rota, getIntent());
         rota.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(rota);
         overridePendingTransition(0, 0);

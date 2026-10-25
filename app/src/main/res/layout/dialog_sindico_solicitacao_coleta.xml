@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/sindico_dialog_solicitacao"
@@ -34,7 +36,7 @@
                 android:layout_height="28dp"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/sindico_building_campo" />
+                android:src="@drawable/ic_predio" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,7 +81,7 @@
                 android:layout_height="28dp"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/sindico_building_campo" />
+                android:src="@drawable/ic_predio" />
             <TextView
                 android:id="@+id/nomeSolicitacao"
                 android:layout_width="0dp"
@@ -107,30 +109,30 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/sindico_campo">
             <EditText
+                android:importantForAutofill="no"
                 android:id="@+id/enderecoSolicitacao"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
                 android:fontFamily="@font/nunito_regular"
-                android:hint="@string/sindico_endereco_da_coleta"
                 android:inputType="textPostalAddress"
                 android:paddingStart="50dp"
                 android:paddingEnd="12dp"
                 android:singleLine="true"
-                android:text="@string/sindico_rua_das_hortensias_123_jardim_das"
                 android:textColor="@color/preto_texto_home"
-                android:textColorHint="@color/cinza_texto_home"
                 android:textSize="12sp" />
             <ImageView
+                android:baselineAligned="false"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_gravity="start|center_vertical"
                 android:layout_marginStart="12dp"
                 android:contentDescription="@null"
-                android:src="@drawable/ic_localizacao_chat" />
+                android:src="@drawable/ic_endereco_perfil" />
         </FrameLayout>
 
         <LinearLayout
+            android:baselineAligned="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
@@ -163,7 +165,7 @@
                         android:gravity="center_vertical"
                         android:paddingStart="42dp"
                         android:paddingEnd="4dp"
-                        android:text="12/09/2026"
+                        tools:text="12/09/2026"
                         android:textColor="@color/preto_texto_home"
                         android:textSize="12sp" />
                     <ImageView
@@ -172,7 +174,7 @@
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginStart="9dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_calendario" />
+                        android:src="@drawable/ic_calendario" app:tint="@color/verde_escuro_principal" />
                 </FrameLayout>
             </LinearLayout>
             <LinearLayout
@@ -204,7 +206,7 @@
                         android:gravity="center_vertical"
                         android:paddingStart="40dp"
                         android:paddingEnd="4dp"
-                        android:text="12:30"
+                        tools:text="12:30"
                         android:textColor="@color/preto_texto_home"
                         android:textSize="12sp" />
                     <ImageView
@@ -213,46 +215,11 @@
                         android:layout_gravity="start|center_vertical"
                         android:layout_marginStart="8dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_horario" />
+                        android:src="@drawable/ic_relogio" />
                 </FrameLayout>
             </LinearLayout>
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:fontFamily="@font/nunito_regular"
-            android:text="@string/sindico_a_coleta_sera_recorrente"
-            android:textColor="@color/cinza_texto_home"
-            android:textSize="13sp" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp">
-            <Button
-                android:id="@+id/recorrenciaSim"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/verde_escuro_principal"
-                android:text="@string/sindico_sim"
-                android:textAllCaps="false"
-                android:textColor="@color/branco" />
-            <Button
-                android:id="@+id/recorrenciaNao"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/rosa_ecociente"
-                android:text="@string/sindico_nao"
-                android:textAllCaps="false"
-                android:textColor="@color/branco" />
-        </LinearLayout>
         <Button
             android:id="@+id/enviarSolicitacao"
             android:layout_width="match_parent"

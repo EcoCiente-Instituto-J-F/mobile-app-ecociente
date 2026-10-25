@@ -1,51 +1,191 @@
 package com.example.ecociente.repository;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import com.example.ecociente.model.SindicoDadosCondominio;
 import com.example.ecociente.model.SindicoApartamento;
 import com.example.ecociente.model.SindicoItemUnidade;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-/** Fonte substituível por API; todos os dados e alterações desta versão ficam em memória. */
+/**
+ * Sem API de unidades: começa vazio e o que o síndico cadastra fica guardado no aparelho
+ * (SharedPreferences, separado por usuário) até a API existir.
+ */
 public final class SindicoUnidadesRepository {
     private static final SindicoUnidadesRepository INSTANCIA = new SindicoUnidadesRepository();
 
-    private SindicoDadosCondominio dados = new SindicoDadosCondominio(true,
-            "Condomínio Jardim das Flores", "Rua das Hortênsias, 123 - Jardim das Flores",
-            "São Paulo", "SP", "01234-567");
+    private SindicoDadosCondominio dados = new SindicoDadosCondominio(true, "", "", "", "", "", "", "");
     private String fotoUri;
     private final List<SindicoItemUnidade> blocos = new ArrayList<>();
     private final List<SindicoItemUnidade> areas = new ArrayList<>();
     private final List<SindicoApartamento> apartamentos = new ArrayList<>();
-    private int proximoId = 10;
-    private int proximoApartamentoId = 8;
+    private int proximoId = 1;
+    private int proximoApartamentoId = 1;
 
-    private SindicoUnidadesRepository() {
-        blocos.add(new SindicoItemUnidade(1, "Bloco A", "48 unidades"));
-        blocos.add(new SindicoItemUnidade(2, "Bloco B", "36 unidades"));
-        blocos.add(new SindicoItemUnidade(3, "Bloco C", "52 unidades"));
-        blocos.add(new SindicoItemUnidade(4, "Bloco D", "40 unidades"));
-        areas.add(new SindicoItemUnidade(5, "Área de coleta - Bloco A",
-                "Térreo · Próximo ao elevador"));
-        areas.add(new SindicoItemUnidade(6, "Área de coleta - Bloco B", "Subsolo 1"));
-        areas.add(new SindicoItemUnidade(7, "Ponto de coleta - Área externa",
-                "Entrada principal"));
-        apartamentos.add(new SindicoApartamento(1, 1, "Apto 101", "João Silva", ""));
-        apartamentos.add(new SindicoApartamento(2, 1, "Apto 102", "Ana Costa", ""));
-        apartamentos.add(new SindicoApartamento(3, 1, "Apto 103", "", ""));
-        apartamentos.add(new SindicoApartamento(4, 1, "Apto 104", "Carlos Pereira", ""));
-        apartamentos.add(new SindicoApartamento(5, 1, "Apto 201", "", ""));
-        apartamentos.add(new SindicoApartamento(6, 1, "Apto 202", "Fernanda Lima", ""));
-        apartamentos.add(new SindicoApartamento(7, 1, "Apto 203", "", ""));
+    private static final String PREFERENCIAS = "sindico_unidades";
+
+    private SharedPreferences preferencias;
+    private String chaveDoUsuario;
+
+    // Visível ao pacote para os testes criarem um repositório novo, sem o singleton.
+    SindicoUnidadesRepository() { }
+
+    // Lê o que o usuário atual já cadastrou. Trocar de conta troca também os dados.
+    public synchronized void carregar(Context contexto) {
+
+        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        String chave = usuario != null ? usuario.getUid() : "sem_usuario";
+
+        if (preferencias != null && chave.equals(chaveDoUsuario)) {
+            return;
+        }
+
+        preferencias = contexto.getApplicationContext().getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
+        chaveDoUsuario = chave;
+
+        deJson(preferencias.getString(chave, null));
+    }
+
+    private void persistir() {
+        if (preferencias != null) {
+            preferencias.edit().putString(chaveDoUsuario, paraJson()).apply();
+        }
+    }
+
+    String paraJson() {
+        try {
+            JSONObject raiz = new JSONObject();
+
+            raiz.put("proximoId", proximoId);
+            raiz.put("proximoApartamentoId", proximoApartamentoId);
+            raiz.put("fotoUri", fotoUri == null ? JSONObject.NULL : fotoUri);
+            raiz.put("dados", new JSONObject()
+                    .put("residencial", dados.isResidencial())
+                    .put("nome", dados.getNome())
+                    .put("endereco", dados.getEndereco())
+                    .put("numero", dados.getNumero())
+                    .put("complemento", dados.getComplemento())
+                    .put("cidade", dados.getCidade())
+                    .put("estado", dados.getEstado())
+                    .put("cep", dados.getCep()));
+            raiz.put("blocos", itensParaJson(blocos));
+            raiz.put("areas", itensParaJson(areas));
+
+            JSONArray unidades = new JSONArray();
+            for (SindicoApartamento a : apartamentos) {
+                unidades.put(new JSONObject()
+                        .put("id", a.getId())
+                        .put("blocoId", a.getBlocoId())
+                        .put("numero", a.getNumero())
+                        .put("morador", a.getMorador())
+                        .put("telefone", a.getTelefone()));
+            }
+            raiz.put("apartamentos", unidades);
+
+            return raiz.toString();
+
+        } catch (JSONException erro) {
+            throw new IllegalStateException(erro);
+        }
+    }
+
+    // Texto vazio ou inválido deixa o repositório vazio, como na primeira vez.
+    void deJson(String json) {
+
+        blocos.clear();
+        areas.clear();
+        apartamentos.clear();
+        dados = new SindicoDadosCondominio(true, "", "", "", "", "", "", "");
+        fotoUri = null;
+        proximoId = 1;
+        proximoApartamentoId = 1;
+
+        if (json == null || json.isEmpty()) {
+            return;
+        }
+
+        try {
+            JSONObject raiz = new JSONObject(json);
+
+            proximoId = raiz.optInt("proximoId", 1);
+            proximoApartamentoId = raiz.optInt("proximoApartamentoId", 1);
+            fotoUri = raiz.isNull("fotoUri") ? null : raiz.optString("fotoUri", null);
+
+            JSONObject d = raiz.optJSONObject("dados");
+            if (d != null) {
+                dados = new SindicoDadosCondominio(
+                        d.optBoolean("residencial", true), d.optString("nome"), d.optString("endereco"),
+                        d.optString("numero"), d.optString("complemento"), d.optString("cidade"), d.optString("estado"), d.optString("cep"));
+            }
+
+            itensDeJson(raiz.optJSONArray("blocos"), blocos);
+            itensDeJson(raiz.optJSONArray("areas"), areas);
+
+            JSONArray unidades = raiz.optJSONArray("apartamentos");
+            for (int i = 0; unidades != null && i < unidades.length(); i++) {
+                JSONObject a = unidades.getJSONObject(i);
+                apartamentos.add(new SindicoApartamento(
+                        a.getInt("id"), a.getInt("blocoId"), a.optString("numero"),
+                        a.optString("morador"), a.optString("telefone")));
+            }
+
+        } catch (JSONException erro) {
+            blocos.clear();
+            areas.clear();
+            apartamentos.clear();
+        }
+    }
+
+    private static JSONArray itensParaJson(List<SindicoItemUnidade> itens) throws JSONException {
+        JSONArray lista = new JSONArray();
+        for (SindicoItemUnidade item : itens) {
+            lista.put(new JSONObject()
+                    .put("id", item.getId())
+                    .put("nome", item.getNome())
+                    .put("detalhe", item.getDetalhe()));
+        }
+        return lista;
+    }
+
+    private static void itensDeJson(JSONArray lista, List<SindicoItemUnidade> destino) throws JSONException {
+        for (int i = 0; lista != null && i < lista.length(); i++) {
+            JSONObject item = lista.getJSONObject(i);
+            destino.add(new SindicoItemUnidade(item.getInt("id"), item.optString("nome"), item.optString("detalhe")));
+        }
     }
 
     public static SindicoUnidadesRepository getInstance() { return INSTANCIA; }
     public SindicoDadosCondominio getDados() { return dados; }
-    public void salvarDados(SindicoDadosCondominio novosDados) { dados = novosDados; }
+    public void salvarDados(SindicoDadosCondominio novosDados) { dados = novosDados; persistir(); }
+    // A API manda no que ela sabe (nome, tipo, endereço); o que ela não trouxe fica como estava.
+    public void aplicarDadosDaApi(SindicoDadosCondominio api) { dados = dados.comDadosDaApi(api); persistir(); }
+    // Cada torre da API vira um bloco, se ainda não houver um com o mesmo nome. `detalhe` é o texto
+    // da linha (a API não informa quantas unidades a torre tem). Devolve se algo foi acrescentado.
+    public boolean aplicarTorresDaApi(List<SindicoItemUnidade> torres, String detalhe) {
+        boolean acrescentou = false;
+        for (SindicoItemUnidade torre : torres) {
+            boolean existe = false;
+            for (SindicoItemUnidade bloco : blocos) {
+                if (bloco.getNome().trim().equalsIgnoreCase(torre.getNome().trim())) existe = true;
+            }
+            if (!existe) {
+                blocos.add(new SindicoItemUnidade(proximoId++, torre.getNome(), detalhe));
+                acrescentou = true;
+            }
+        }
+        if (acrescentou) persistir();
+        return acrescentou;
+    }
     public String getFotoUri() { return fotoUri; }
-    public void salvarFotoUri(String uri) { fotoUri = uri; }
+    public void salvarFotoUri(String uri) { fotoUri = uri; persistir(); }
     public List<SindicoItemUnidade> getBlocos() {
         return Collections.unmodifiableList(new ArrayList<>(blocos));
     }
@@ -92,16 +232,19 @@ public final class SindicoUnidadesRepository {
             for (int i = 0; i < apartamentos.size(); i++) {
                 if (apartamentos.get(i).getId() == apartamentoId) {
                     apartamentos.set(i, novo);
+                    persistir();
                     return;
                 }
             }
             throw new IllegalArgumentException("Unidade não encontrada");
         }
         apartamentos.add(novo);
+        persistir();
     }
 
     public void excluirApartamento(int apartamentoId) {
         apartamentos.removeIf(apartamento -> apartamento.getId() == apartamentoId);
+        persistir();
     }
 
     public void salvarBloco(int id, String nome, int quantidade) {
@@ -119,21 +262,25 @@ public final class SindicoUnidadesRepository {
             for (int i = 0; i < itens.size(); i++) {
                 if (itens.get(i).getId() == id) {
                     itens.set(i, novo);
+                    persistir();
                     return;
                 }
             }
             throw new IllegalArgumentException("Item não encontrado");
         }
         itens.add(novo);
+        persistir();
     }
 
     public void excluirBloco(int id) {
         excluir(blocos, id);
         apartamentos.removeIf(apartamento -> apartamento.getBlocoId() == id);
+        persistir();
     }
     public void excluirArea(int id) { excluir(areas, id); }
 
     private void excluir(List<SindicoItemUnidade> itens, int id) {
         itens.removeIf(item -> item.getId() == id);
+        persistir();
     }
 }

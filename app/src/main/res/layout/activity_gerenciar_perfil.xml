@@ -43,7 +43,7 @@
           <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="14dp" android:layout_marginEnd="14dp" android:background="@color/cinza_borda_card_perfil"/>
           <LinearLayout android:id="@+id/linhaNotificacoes" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="14dp" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true">
             <FrameLayout android:layout_width="28dp" android:layout_height="28dp" android:background="@drawable/fundo_icone_perfil_claro">
-              <ImageView android:layout_width="17dp" android:layout_height="17dp" android:layout_gravity="center" android:src="@drawable/icon_notificacoes" app:tint="@color/verde_escuro_principal" android:contentDescription="@null"/>
+              <ImageView android:layout_width="17dp" android:layout_height="17dp" android:layout_gravity="center" android:src="@drawable/ic_notificacoes" app:tint="@color/verde_escuro_principal" android:contentDescription="@null"/>
             </FrameLayout>
             <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="13dp" android:layout_weight="1" android:fontFamily="@font/nunito_medium" android:textSize="15sp" android:textColor="@color/preto_texto_home" android:text="@string/notificacoes"/>
             <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/ic_seta_direita" android:contentDescription="@null" app:tint="@color/cinza_escuro_textos"/>

@@ -228,7 +228,6 @@
                     app:elevation="0dp" />
 
                 <ProgressBar
-                    android:id="@+id/indicadorCarregamentoSelecaoPerfil"
                     style="?android:attr/progressBarStyleSmall"
                     android:layout_width="22dp"
                     android:layout_height="22dp"

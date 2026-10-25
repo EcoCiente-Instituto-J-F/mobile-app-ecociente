@@ -8,12 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.Aviso;
 import com.example.ecociente.model.Notificacao;
 import com.example.ecociente.model.SindicoAviso;
@@ -27,6 +27,7 @@ import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.SindicoViewModel;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,11 +98,6 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
 
         View botaoNovo = findViewById(R.id.botaoNovaNotificacaoCentral);
 
-        if (destino == Destino.COOPERATIVA) {
-            botaoNovo.setVisibility(View.VISIBLE);
-            botaoNovo.setOnClickListener(view -> NovoAvisoCooperativaDialogo.mostrar(this));
-        }
-
         if (destino != Destino.SINDICO) {
             return;
         }
@@ -135,7 +131,7 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
                         "rascunhoSindico",
                         this,
                         (chave, resultado) ->
-                                Toast.makeText(getApplicationContext(), R.string.sindico_rascunho_salvo, Toast.LENGTH_LONG).show());
+                                AvisoFlutuante.mostrar(this, R.string.sindico_rascunho_salvo));
     }
 
     private void abrirFormularioDoSindico() {
@@ -163,7 +159,10 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
         grupos.put(ontem, new ArrayList<>());
         grupos.put(anteriores, new ArrayList<>());
 
-        for (Notificacao notificacao : Notificacao.lista()) {
+        // Síndico e cooperativa não veem notificações de exemplo: só o que existe de verdade.
+        boolean exemplos = destino != Destino.SINDICO && destino != Destino.COOPERATIVA;
+
+        for (Notificacao notificacao : exemplos ? Notificacao.lista() : Collections.<Notificacao>emptyList()) {
             List<View> grupo = grupos.get(notificacao.grupo);
 
             if (grupo != null) {
@@ -176,16 +175,18 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
                 View cartao = CartoesCentral.avisoDoSindico(inflador, lista, aviso);
 
                 cartao.setOnClickListener(view -> abrirAvisoDoSindico(aviso));
+                Motion.pressFeedback(cartao);
 
                 // O síndico guarda o momento como texto ("Agora", "Há 2 dias").
                 grupos.get("Agora".equals(aviso.getMomento()) ? hoje : anteriores).add(cartao);
             }
-        } else {
+        } else if (exemplos) {
             for (Aviso aviso : Aviso.lista()) {
                 View cartao = CartoesCentral.aviso(inflador, lista, aviso);
 
                 cartao.setOnClickListener(
                         view -> startActivity(AvisoDetalheActivity.criarIntent(this, aviso.id)));
+                Motion.pressFeedback(cartao);
 
                 grupos.get(grupoDoAviso(aviso, hoje, ontem, anteriores)).add(cartao);
             }

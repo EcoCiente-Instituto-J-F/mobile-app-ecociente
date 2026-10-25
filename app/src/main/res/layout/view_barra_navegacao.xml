@@ -5,7 +5,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout
-        android:id="@+id/fundoBarraNavegacao"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_gravity="bottom"

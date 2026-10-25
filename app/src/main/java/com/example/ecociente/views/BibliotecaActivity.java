@@ -240,7 +240,7 @@ public class BibliotecaActivity extends AppCompatActivity {
         FrameLayout imagemTopo = new FrameLayout(this);
         corpo.addView(imagemTopo, new LinearLayout.LayoutParams(-1, dp(112)));
         ImageView ilustra = new ImageView(this);
-        CarregadorMidias.mostrar(ilustra, MidiasEco.obter(this).iconeCurso(curso), false, R.drawable.icon_livro);
+        CarregadorMidias.mostrar(ilustra, MidiasEco.obter(this).iconeCurso(curso), false, R.drawable.ic_guia_verde);
         ilustra.setScaleType(ImageView.ScaleType.FIT_CENTER);
         ilustra.setContentDescription("Ilustração do conteúdo de sustentabilidade");
         FrameLayout.LayoutParams lpImagem = new FrameLayout.LayoutParams(-1, dp(91), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
@@ -401,7 +401,7 @@ public class BibliotecaActivity extends AppCompatActivity {
         linha.setGravity(Gravity.CENTER_VERTICAL);
         linha.setMinimumHeight(dp(82));
         ImageView ilustra = new ImageView(this);
-        CarregadorMidias.mostrar(ilustra, imagem, false, R.drawable.icon_livro);
+        CarregadorMidias.mostrar(ilustra, imagem, false, R.drawable.ic_guia_verde);
         ilustra.setScaleType(ImageView.ScaleType.FIT_CENTER);
         ilustra.setContentDescription(null);
         ilustra.setPadding(dp(2), dp(5), dp(9), dp(5));

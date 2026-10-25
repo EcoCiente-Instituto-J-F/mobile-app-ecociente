@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // Cliente HTTP da ds-esqueceusenha-api (Spring/Postgres, repositório separado deste app).
@@ -118,7 +119,7 @@ final class ApiEsqueciSenha {
                     return mensagem;
                 }
             }
-        } catch (Exception erro) {
+        } catch (JSONException erro) {
             Log.w(TAG, "Resposta de erro fora do formato esperado", erro);
         }
 

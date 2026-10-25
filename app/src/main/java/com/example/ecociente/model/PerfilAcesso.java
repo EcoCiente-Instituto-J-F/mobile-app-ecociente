@@ -46,6 +46,28 @@ public final class PerfilAcesso {
                 : DestinoHome.SEM_ACESSO;
     }
 
+    // O perfil que a API confirmou vale mais que o do Firestore; sem ele, fica o do Firestore.
+    @NonNull
+    public static DestinoHome destinoFinal(@Nullable String perfilApi, @NonNull DestinoHome doFirestore) {
+
+        switch (textoSeguro(perfilApi).toUpperCase(java.util.Locale.ROOT)) {
+            case "SINDICO":
+                return DestinoHome.SINDICO;
+
+            case "COOPERATIVA":
+                return DestinoHome.COOPERATIVA;
+
+            case "MORADOR":
+                return DestinoHome.CONDOMINIO;
+
+            case "USUARIO_COMUM":
+                return DestinoHome.USUARIO_COMUM;
+
+            default:
+                return doFirestore;
+        }
+    }
+
     public static boolean ehCooperativa(@Nullable String tipoPerfil) {
         return TipoPerfil.COOPERATIVA.equalsIgnoreCase(textoSeguro(tipoPerfil));
     }

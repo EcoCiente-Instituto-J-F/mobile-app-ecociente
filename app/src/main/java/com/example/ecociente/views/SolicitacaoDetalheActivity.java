@@ -6,11 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.DetalheSolicitacao;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
@@ -30,7 +31,6 @@ import com.example.ecociente.viewmodels.ResponderSolicitacaoViewModel;
 import com.google.android.material.button.MaterialButton;
 import java.util.Locale;
 import com.example.ecociente.ui.DialogoEco;
-import com.example.ecociente.viewmodels.SindicoColetaViewModel;
 
 public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
@@ -370,10 +370,10 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
         View acoes = findViewById(R.id.acoesDetalhe);
 
+        // O síndico também responde às solicitações que a cooperativa abriu. Se foi ele quem pediu,
+        // a API recusa (403) e o aviso mostra o motivo.
         if (cooperativaDoSindico != null) {
-            acoes.setVisibility(View.GONE);
             configurarCancelamento();
-            return;
         }
 
         if (solicitacao.getStatus() != StatusAgendamento.AGENDADO) {
@@ -438,18 +438,7 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
                                 .botao(
                                         R.string.cancelar_solicitacao,
                                         DialogoEco.Estilo.PERIGO,
-                                        () -> {
-                                            new ViewModelProvider(this)
-                                                    .get(SindicoColetaViewModel.class)
-                                                    .cancelarSolicitacao(solicitacao.getId());
-
-                                            Toast.makeText(this, R.string.solicitacao_cancelada, Toast.LENGTH_SHORT)
-                                                    .show();
-
-                                            setResult(RESULT_OK);
-
-                                            finish();
-                                        })
+                                        () -> responder(StatusAgendamento.CANCELADO))
                                 .botao(R.string.perfil_cancelar, DialogoEco.Estilo.PREENCHIDO, null)
                                 .mostrar());
     }
@@ -481,15 +470,18 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
                         this,
                         resultado -> {
                             if (!resultado.isSucesso()) {
-                                Toast.makeText(this, resultado.getMensagemErro(), Toast.LENGTH_LONG).show();
+                                AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
                                 return;
                             }
 
+                            // A tela fecha em seguida, então o aviso precisa sobreviver a ela: continua Toast.
                             Toast.makeText(
                                             this,
                                             resposta == StatusAgendamento.CONFIRMADO
                                                     ? R.string.solicitacao_aceita
-                                                    : R.string.solicitacao_recusada,
+                                                    : resposta == StatusAgendamento.CANCELADO
+                                                            ? R.string.solicitacao_cancelada
+                                                            : R.string.solicitacao_recusada,
                                             Toast.LENGTH_SHORT)
                                     .show();
 

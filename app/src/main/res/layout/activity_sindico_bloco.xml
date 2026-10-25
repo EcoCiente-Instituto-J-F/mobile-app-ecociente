@@ -4,7 +4,6 @@
     android:id="@+id/raizSindicoBloco"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/branco"
     android:orientation="vertical">
 
     <ImageView
@@ -69,7 +68,7 @@
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:contentDescription="@null"
-            android:src="@drawable/sindico_unidades_adicionar"
+            android:src="@drawable/ic_adicionar"
             app:tint="@color/branco" />
         <TextView
             android:layout_width="wrap_content"

@@ -18,7 +18,7 @@
         android:background="@drawable/sindico_nav_mascote_fundo"
         android:contentDescription="@null"
         android:padding="9dp"
-        android:src="@drawable/ic_folha_sustentabilidade" />
+        android:src="@drawable/ic_reciclar" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -43,28 +43,6 @@
             android:fontFamily="@font/nunito_regular"
             android:textColor="@color/cinza_texto_home"
             android:textSize="11sp" />
-        <LinearLayout
-            android:id="@+id/linhaAvaliacaoHistorico"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <ImageView
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:contentDescription="@null"
-                android:src="@drawable/sindico_estrela_cheia"
-                app:tint="@color/verde_escuro_principal" />
-            <TextView
-                android:id="@+id/avaliacaoPublicaHistorico"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:fontFamily="@font/nunito_regular"
-                android:textColor="@color/cinza_texto_home"
-                android:textSize="11sp" />
-        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -76,32 +54,13 @@
         <TextView
             android:id="@+id/etiquetaHistorico"
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
+            android:minHeight="20dp"
             android:background="@drawable/sindico_status_concluida"
             android:fontFamily="@font/nunito_regular"
             android:gravity="center"
             android:text="@string/etiqueta_concluida"
             android:textColor="@color/branco"
             android:textSize="11sp" />
-        <FrameLayout
-            android:id="@+id/acaoAvaliarHistorico"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="3dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackgroundBorderless">
-            <TextView
-                android:id="@+id/textoAcaoAvaliarHistorico"
-                android:layout_width="match_parent"
-                android:layout_height="22dp"
-                android:layout_gravity="center"
-                android:background="@drawable/sindico_botao_avaliar"
-                android:fontFamily="@font/nunito_bold"
-                android:gravity="center"
-                android:text="@string/sindico_avaliar"
-                android:textColor="@color/preto_texto_home"
-                android:textSize="11sp" />
-        </FrameLayout>
     </LinearLayout>
 </LinearLayout>

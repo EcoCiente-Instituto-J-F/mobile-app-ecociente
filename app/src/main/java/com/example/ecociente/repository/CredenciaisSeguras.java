@@ -8,7 +8,9 @@ import android.util.Base64;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -31,21 +33,53 @@ final class CredenciaisSeguras {
 
     static void salvar(@NonNull Context contexto, @NonNull String email, @NonNull String senha) {
 
+        String cifrado = cifrar(email + SEPARADOR_CAMPOS + senha);
+
+        if (cifrado != null) {
+            preferencias(contexto).edit().putString(CHAVE_DADOS, cifrado).apply();
+        }
+    }
+
+    // Texto cifrado (AES-256-GCM, chave no Keystore) no formato "iv:dados"; null se não deu.
+    @Nullable
+    static String cifrar(@NonNull String texto) {
+
         try {
             Cipher cifra = Cipher.getInstance(TRANSFORMACAO);
 
             cifra.init(Cipher.ENCRYPT_MODE, chave());
 
-            byte[] cifrado =
-                    cifra.doFinal((email + SEPARADOR_CAMPOS + senha).getBytes(StandardCharsets.UTF_8));
+            byte[] cifrado = cifra.doFinal(texto.getBytes(StandardCharsets.UTF_8));
 
-            preferencias(contexto)
-                    .edit()
-                    .putString(CHAVE_DADOS, codificar(cifra.getIV()) + SEPARADOR_PARTES + codificar(cifrado))
-                    .apply();
+            return codificar(cifra.getIV()) + SEPARADOR_PARTES + codificar(cifrado);
 
-        } catch (Exception erro) {
-            Log.w(TAG, "Não foi possível guardar as credenciais", erro);
+        } catch (GeneralSecurityException | IOException erro) {
+            Log.w(TAG, "Não foi possível cifrar", erro);
+
+            return null;
+        }
+    }
+
+    // Texto original de um valor feito por `cifrar`; null se estiver fora do formato ou inválido.
+    @Nullable
+    static String decifrar(@NonNull String valor) {
+
+        try {
+            String[] partes = valor.split(SEPARADOR_PARTES);
+
+            Cipher cifra = Cipher.getInstance(TRANSFORMACAO);
+
+            cifra.init(
+                    Cipher.DECRYPT_MODE,
+                    chave(),
+                    new GCMParameterSpec(BITS_TAG, Base64.decode(partes[0], Base64.NO_WRAP)));
+
+            return new String(cifra.doFinal(Base64.decode(partes[1], Base64.NO_WRAP)), StandardCharsets.UTF_8);
+
+        } catch (GeneralSecurityException | IOException | IllegalArgumentException | ArrayIndexOutOfBoundsException erro) {
+            Log.w(TAG, "Valor cifrado inválido", erro);
+
+            return null;
         }
     }
 
@@ -58,30 +92,17 @@ final class CredenciaisSeguras {
             return null;
         }
 
-        try {
-            String[] partes = dados.split(SEPARADOR_PARTES);
+        String texto = decifrar(dados);
 
-            Cipher cifra = Cipher.getInstance(TRANSFORMACAO);
-
-            cifra.init(
-                    Cipher.DECRYPT_MODE,
-                    chave(),
-                    new GCMParameterSpec(BITS_TAG, Base64.decode(partes[0], Base64.NO_WRAP)));
-
-            String texto =
-                    new String(
-                            cifra.doFinal(Base64.decode(partes[1], Base64.NO_WRAP)),
-                            StandardCharsets.UTF_8);
-
-            return texto.split(SEPARADOR_CAMPOS, 2);
-
-        } catch (Exception erro) {
-            Log.w(TAG, "Credenciais guardadas inválidas; descartando", erro);
+        if (texto == null) {
+            Log.w(TAG, "Credenciais guardadas inválidas; descartando");
 
             limpar(contexto);
 
             return null;
         }
+
+        return texto.split(SEPARADOR_CAMPOS, 2);
     }
 
     static void limpar(@NonNull Context contexto) {
@@ -99,7 +120,7 @@ final class CredenciaisSeguras {
     }
 
     @NonNull
-    private static SecretKey chave() throws Exception {
+    private static SecretKey chave() throws GeneralSecurityException, IOException {
 
         KeyStore repositorio = KeyStore.getInstance(PROVEDOR);
 

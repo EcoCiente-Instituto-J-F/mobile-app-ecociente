@@ -57,7 +57,7 @@ public class CursoEducativoActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.tituloCursoEducativo)).setText(curso.titulo);
         ((TextView) findViewById(R.id.descricaoCursoEducativo)).setText(curso.descricao);
         CarregadorMidias.mostrar(findViewById(R.id.imagemCursoEducativo),
-                MidiasEco.obter(this).iconeCurso(curso), false, R.drawable.icon_livro);
+                MidiasEco.obter(this).iconeCurso(curso), false, R.drawable.ic_guia_verde);
         ((TextView) findViewById(R.id.indicadoresCursoEducativo)).setText(
                 curso.aulas.size() + (curso.aulas.size() == 1 ? " aula" : " aulas")
                         + "   \u2022   No seu ritmo");

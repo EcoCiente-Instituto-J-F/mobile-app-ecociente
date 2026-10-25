@@ -13,7 +13,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
+import org.json.JSONException;
 import org.json.JSONObject;
+import android.os.Handler;
+import android.os.Looper;
 
 // PATCH /api/usuarios/me e /api/usuarios/me/endereco da ds-cadastro-api (nome, telefone, foto, endereço). O Firestore continua
 // sendo a fonte do app: aqui só se espelha o que a API sabe guardar, em segundo plano e sem
@@ -25,24 +28,47 @@ public class AtualizacaoExternaRepository {
 
     private static final String URL_USUARIO = "https://ds-cadastro-api.onrender.com/api/usuarios/me";
 
+    private static final String URL_CONDOMINIOS = "https://ds-cadastro-api.onrender.com/api/condominios/";
+
     private static final Pattern CEP = Pattern.compile("^\\d{5}-?\\d{3}$");
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
+    private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
+
+    // Atualizações a caminho da API: enquanto houver, o perfil da API pode estar atrasado em
+    // relação ao que o usuário acabou de editar, e não deve sobrescrever o app.
+    private static final java.util.concurrent.atomic.AtomicInteger EM_ANDAMENTO =
+            new java.util.concurrent.atomic.AtomicInteger();
+
+    public static boolean temAtualizacaoEmAndamento() {
+        return EM_ANDAMENTO.get() > 0;
+    }
+
     private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
 
-    // `perfil` já deve trazer o valor novo, porque o endereço da API exige CEP e número juntos.
     public void sincronizarCampo(
             @NonNull Context contexto,
             @NonNull String campo,
             @NonNull String valor,
             @Nullable PerfilUsuario perfil) {
+        sincronizarCampo(contexto, campo, valor, perfil, null);
+    }
+
+    // `perfil` já deve trazer o valor novo, porque o endereço da API exige CEP e número juntos.
+    // `aoFalhar` roda na thread principal se a API não aceitou (sem credenciais, erro HTTP ou rede).
+    public void sincronizarCampo(
+            @NonNull Context contexto,
+            @NonNull String campo,
+            @NonNull String valor,
+            @Nullable PerfilUsuario perfil,
+            @Nullable Runnable aoFalhar) {
 
         try {
             switch (campo) {
                 case PerfilRepository.CAMPO_NOME:
                     if (!valor.trim().isEmpty()) {
-                        enviar(contexto, URL_USUARIO, new JSONObject().put("nome", valor.trim()));
+                        enviar(contexto, aoFalhar, URL_USUARIO, new JSONObject().put("nome", valor.trim()));
                     }
                     break;
 
@@ -51,7 +77,7 @@ public class AtualizacaoExternaRepository {
                     if ((valor.startsWith("http://") || valor.startsWith("https://"))
                             && valor.trim().equals(valor)
                             && valor.length() <= 500) {
-                        enviar(contexto, URL_USUARIO, new JSONObject().put("urlAvatar", valor));
+                        enviar(contexto, aoFalhar, URL_USUARIO, new JSONObject().put("urlAvatar", valor));
                     }
                     break;
 
@@ -59,27 +85,57 @@ public class AtualizacaoExternaRepository {
                     String digitos = valor.replaceAll("\\D", "");
 
                     if (digitos.length() == 10 || digitos.length() == 11) {
-                        enviar(contexto, URL_USUARIO, new JSONObject().put("telefone", digitos));
+                        enviar(contexto, aoFalhar, URL_USUARIO, new JSONObject().put("telefone", digitos));
                     }
                     break;
 
                 case PerfilRepository.CAMPO_CEP:
                 case PerfilRepository.CAMPO_NUMERO:
                 case PerfilRepository.CAMPO_COMPLEMENTO:
-                    sincronizarEndereco(contexto, perfil);
+                    sincronizarEndereco(contexto, perfil, aoFalhar);
                     break;
 
                 default:
                     // A API não tem onde guardar os demais campos (CPF, nome da cooperativa...).
                     break;
             }
-        } catch (Exception erro) {
+        } catch (JSONException erro) {
             Log.w(TAG, "Não foi possível montar a atualização de " + campo, erro);
         }
     }
 
-    private void sincronizarEndereco(@NonNull Context contexto, @Nullable PerfilUsuario perfil)
-            throws Exception {
+    // PATCH /api/condominios/{id}/endereco: só o síndico responsável pode, e a API exige CEP e número.
+    // `aoFalhar` roda na thread principal se a API não aceitou; sem id, CEP ou número, nada é enviado.
+    public void sincronizarEnderecoDoCondominio(
+            @NonNull Context contexto,
+            int condominioId,
+            @NonNull String cep,
+            @NonNull String numero,
+            @NonNull String complemento,
+            @Nullable Runnable aoFalhar) {
+
+        if (condominioId <= 0 || !CEP.matcher(cep.trim()).matches() || numero.trim().isEmpty()) {
+            return;
+        }
+
+        try {
+            enviar(
+                    contexto,
+                    aoFalhar,
+                    URL_CONDOMINIOS + condominioId + "/endereco",
+                    new JSONObject()
+                            .put("cep", cep.trim())
+                            .put("numero", numero.trim())
+                            .put("complemento", complemento.trim()));
+
+        } catch (JSONException erro) {
+            Log.w(TAG, "Não foi possível montar o endereço do condomínio", erro);
+        }
+    }
+
+    private void sincronizarEndereco(
+            @NonNull Context contexto, @Nullable PerfilUsuario perfil, @Nullable Runnable aoFalhar)
+            throws JSONException {
 
         if (perfil == null) {
             return;
@@ -94,6 +150,7 @@ public class AtualizacaoExternaRepository {
 
         enviar(
                 contexto,
+                aoFalhar,
                 URL_USUARIO + "/endereco",
                 new JSONObject()
                         .put("cep", cep)
@@ -102,9 +159,14 @@ public class AtualizacaoExternaRepository {
     }
 
     private void enviar(
-            @NonNull Context contexto, @NonNull String endpoint, @NonNull JSONObject corpo) {
+            @NonNull Context contexto,
+            @Nullable Runnable aoFalhar,
+            @NonNull String endpoint,
+            @NonNull JSONObject corpo) {
 
         Context contextoApp = contexto.getApplicationContext();
+
+        EM_ANDAMENTO.incrementAndGet();
 
         EXECUTOR.execute(
                 () -> {
@@ -113,6 +175,7 @@ public class AtualizacaoExternaRepository {
 
                         if (token == null) {
                             Log.d(TAG, "Sem credenciais para a API; atualização fica só no app");
+                            falhar(aoFalhar);
                             return;
                         }
 
@@ -129,10 +192,24 @@ public class AtualizacaoExternaRepository {
 
                         Log.d(TAG, "PATCH " + endpoint + " -> " + codigo);
 
+                        if (codigo < 200 || codigo >= 300) {
+                            falhar(aoFalhar);
+                        }
+
                     } catch (Exception erro) {
                         Log.w(TAG, "Falha ao atualizar na API", erro);
+                        falhar(aoFalhar);
+
+                    } finally {
+                        EM_ANDAMENTO.decrementAndGet();
                     }
                 });
+    }
+
+    private static void falhar(@Nullable Runnable aoFalhar) {
+        if (aoFalhar != null) {
+            PRINCIPAL.post(aoFalhar);
+        }
     }
 
     private int patch(@NonNull String endpoint, @NonNull JSONObject corpo, @NonNull String token)

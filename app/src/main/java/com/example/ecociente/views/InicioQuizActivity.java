@@ -17,13 +17,10 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.ecociente.R;
-import com.example.ecociente.midias.MidiasEco;
-import com.example.ecociente.midias.Midia;
-import com.example.ecociente.midias.CarregadorMidias;
 import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.DadosDemonstracaoEducacao;
-import com.example.ecociente.repository.EducacaoRepository;
-import android.widget.Toast;
+import com.example.ecociente.midias.MidiasEco;
+import com.example.ecociente.midias.CarregadorMidias;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,13 +30,10 @@ import java.util.Locale;
 public class InicioQuizActivity extends AppCompatActivity {
 
     public static final String EXTRA_CATEGORIA = "categoriaQuiz";
-    public static final String EXTRA_TITULO = "eco.quiz.titulo";
-    public static final String EXTRA_QUIZ_ID = "eco.quiz.id";
     public static final String EXTRA_PERGUNTAS = "perguntasQuiz";
 
     private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
     private final Motion motion = new Motion();
-    private final EducacaoRepository repositorio = new EducacaoRepository();
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -63,7 +57,7 @@ public class InicioQuizActivity extends AppCompatActivity {
             return;
         }
 
-        if (QuizConteudo.obterPerguntas().isEmpty()) {
+        if (QuizConteudo.doIntent(getIntent()).isEmpty()) {
             finish();
             return;
         }
@@ -92,13 +86,11 @@ public class InicioQuizActivity extends AppCompatActivity {
             categoria = getString(R.string.inicio_quiz_titulo_padrao);
         }
 
-        int quantidadePerguntas = QuizConteudo.obterPerguntas().size();
+        int quantidadePerguntas = QuizConteudo.doIntent(getIntent()).size();
 
-        String titulo = getIntent().getStringExtra(EXTRA_TITULO);
-        if (titulo == null || titulo.trim().isEmpty()) titulo = categoria;
-        int quizId = getIntent().getIntExtra(EXTRA_QUIZ_ID, QuizConteudo.getQuizId());
+        int quizId = QuizConteudo.quizIdDoIntent(getIntent());
         CarregadorMidias.mostrar(findViewById(R.id.imagemIlustracaoInicioQuiz),
-                MidiasEco.obter(this).capaQuiz(quizId, titulo, categoria),
+                MidiasEco.obter(this).capaQuiz(quizId, categoria, categoria),
                 false, R.drawable.quiz_sustentabilidade_inicio);
         textoTitulo.setText(categoria);
         textoPerguntas.setText(
@@ -113,39 +105,21 @@ public class InicioQuizActivity extends AppCompatActivity {
         botaoVoltar.setOnClickListener(view -> voltarParaQuizzes());
 
         botaoIniciar.setOnClickListener(view -> {
-            if (DadosDemonstracaoEducacao.ehQuizDemonstracao(QuizConteudo.getQuizId())) {
-                // Não chama POST /tentativas: o quiz fictício será corrigido no dispositivo.
-                abrirPerguntas();
-                return;
+            String categoria = getIntent().getStringExtra(EXTRA_CATEGORIA);
+            if (categoria == null || categoria.trim().isEmpty()) {
+                categoria = getString(R.string.inicio_quiz_titulo_padrao);
             }
-            botaoIniciar.setEnabled(false);
-            botaoIniciar.setText("Iniciando...");
-            repositorio.iniciarTentativa(this, QuizConteudo.getQuizId(), (sucesso, id, erro) -> {
-                if (isFinishing() || isDestroyed()) return;
-                botaoIniciar.setEnabled(true);
-                botaoIniciar.setText("Iniciar quiz");
-                if (!sucesso) {
-                    Toast.makeText(this, erro, Toast.LENGTH_LONG).show();
-                    return;
-                }
-                QuizConteudo.definirTentativa(id);
-                abrirPerguntas();
-            });
+
+            Intent rota = new Intent(this, QuizPerguntasActivity.class);
+            rota.putExtra(QuizPerguntasActivity.EXTRA_CATEGORIA, categoria);
+            QuizConteudo.anexar(rota, QuizConteudo.doIntent(getIntent()));
+            QuizConteudo.anexarContexto(rota, getIntent());
+            startActivity(rota);
+            overridePendingTransition(0, 0);
         });
 
         Motion.pressFeedback(botaoVoltar);
         Motion.pressFeedback(botaoIniciar);
-    }
-
-    private void abrirPerguntas() {
-        String categoria = getIntent().getStringExtra(EXTRA_CATEGORIA);
-        if (categoria == null || categoria.trim().isEmpty()) {
-            categoria = getString(R.string.inicio_quiz_titulo_padrao);
-        }
-        Intent rota = new Intent(this, QuizPerguntasActivity.class);
-        rota.putExtra(QuizPerguntasActivity.EXTRA_CATEGORIA, categoria);
-        startActivity(rota);
-        overridePendingTransition(0, 0);
     }
 
     private void animarEntrada() {

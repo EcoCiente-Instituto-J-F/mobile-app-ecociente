@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/respostaCorretaDialogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nunito_semibold"
+        android:textColor="@color/verde_escuro_principal"
+        android:textSize="14.5sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:fontFamily="@font/nunito_semibold"
+        android:text="@string/quiz_revisao_explicacao"
+        android:textColor="@color/verde_escuro_principal"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/textoExplicacaoDialogo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/nunito_regular"
+        android:textColor="@color/cinza_texto_home"
+        android:textSize="14sp" />
+
+</LinearLayout>

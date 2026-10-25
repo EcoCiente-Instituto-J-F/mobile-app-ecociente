@@ -3,21 +3,22 @@ package com.example.ecociente.views;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
+import com.example.ecociente.repository.PerfilApiRepository;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.SindicoCooperativa;
 import com.example.ecociente.viewmodels.SindicoColetaViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import android.widget.Toast;
-import com.example.ecociente.model.SindicoSolicitacao;
+import com.example.ecociente.repository.CalendarioExternoRepository;
+import android.view.View;
 
 public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
     public static final String EXTRA_COOPERATIVA_ID = "cooperativa_id";
@@ -29,7 +30,6 @@ public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
     private Calendar dataEscolhida;
     private int horaEscolhida = 12;
     private int minutoEscolhido = 30;
-    private boolean recorrente;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -55,20 +55,10 @@ public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
             int minutos = estadoSalvo.getInt(ESTADO_HORA, 750);
             horaEscolhida = minutos / 60;
             minutoEscolhido = minutos % 60;
-            recorrente = estadoSalvo.getBoolean("recorrente", false);
         }
         atualizarDataHora();
-        atualizarRecorrencia();
         botaoData.setOnClickListener(view -> escolherData());
         botaoHora.setOnClickListener(view -> escolherHora());
-        findViewById(R.id.recorrenciaSim).setOnClickListener(view -> {
-            recorrente = true;
-            atualizarRecorrencia();
-        });
-        findViewById(R.id.recorrenciaNao).setOnClickListener(view -> {
-            recorrente = false;
-            atualizarRecorrencia();
-        });
         findViewById(R.id.voltarSolicitacao).setOnClickListener(view -> finish());
         findViewById(R.id.enviarSolicitacao).setOnClickListener(view -> enviar(viewModel, cooperativa));
     }
@@ -79,14 +69,30 @@ public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
         momento.set(Calendar.MINUTE, minutoEscolhido);
         momento.set(Calendar.SECOND, 0);
         if (momento.getTimeInMillis() <= System.currentTimeMillis()) {
-            Toast.makeText(this, R.string.sindico_horario_passado, Toast.LENGTH_SHORT).show();
+            AvisoFlutuante.mostrar(this, R.string.sindico_horario_passado);
             return;
         }
-        String inicio = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US).format(momento.getTime());
-        SindicoSolicitacao criada = viewModel.criarSolicitacao(cooperativa.getId(), inicio, recorrente);
-        startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
-                this, criada.paraSolicitacao(getString(R.string.sindico_condominio_demo)), cooperativa.getNome()));
-        finish();
+        int condominioId = PerfilApiRepository.condominioId(this);
+        if (condominioId <= 0) {
+            AvisoFlutuante.mostrar(this, R.string.sindico_coleta_sem_condominio);
+            return;
+        }
+        View enviar = findViewById(R.id.enviarSolicitacao);
+        enviar.setEnabled(false);
+        new CalendarioExternoRepository().solicitar(this, condominioId, cooperativa.getId(),
+                momento.getTimeInMillis(), (criada, mensagemErro) -> {
+                    if (isFinishing() || isDestroyed()) return;
+                    if (criada == null) {
+                        enviar.setEnabled(true);
+                        AvisoFlutuante.mostrar(this, mensagemErro);
+                        return;
+                    }
+                    viewModel.adicionarSolicitacao(criada);
+                    startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
+                            this, criada.comNomeCondominio(PerfilApiRepository.condominioNomeOuVazio(this)),
+                            cooperativa.getNome()));
+                    finish();
+                });
     }
 
     private void escolherData() {
@@ -114,20 +120,10 @@ public final class SindicoSolicitacaoColetaActivity extends AppCompatActivity {
                 horaEscolhida, minutoEscolhido));
     }
 
-    private void atualizarRecorrencia() {
-        Button sim = findViewById(R.id.recorrenciaSim);
-        Button nao = findViewById(R.id.recorrenciaNao);
-        sim.setAlpha(recorrente ? 1f : 0.7f);
-        nao.setAlpha(recorrente ? 0.7f : 1f);
-        sim.setContentDescription(recorrente ? "Sim, selecionado" : "Sim");
-        nao.setContentDescription(recorrente ? "Não" : "Não, selecionado");
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle estado) {
         estado.putLong(ESTADO_DATA, dataEscolhida.getTimeInMillis());
         estado.putInt(ESTADO_HORA, horaEscolhida * 60 + minutoEscolhido);
-        estado.putBoolean("recorrente", recorrente);
         super.onSaveInstanceState(estado);
     }
 }

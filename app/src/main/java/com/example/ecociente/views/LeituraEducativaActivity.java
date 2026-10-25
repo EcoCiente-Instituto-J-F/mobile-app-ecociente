@@ -182,9 +182,9 @@ public class LeituraEducativaActivity extends AppCompatActivity {
     /** Alterna ilustracoes LOCAIS enquanto as fotos reais nao foram cadastradas. */
     private int ilustracaoPanoramica(int indice) {
         int[] desenhos = {
-                R.drawable.png_greenrecyclecontainer,
-                R.drawable.png_greenpapers,
-                R.drawable.png_greenplastic
+                R.drawable.img_greenrecyclecontainer,
+                R.drawable.img_greenpapers,
+                R.drawable.img_greenplastic
         };
         return desenhos[Math.floorMod(indice, desenhos.length)];
     }

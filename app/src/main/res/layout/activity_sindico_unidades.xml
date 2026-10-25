@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/raizSindicoUnidades"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/branco"
     android:orientation="vertical">
 
     <LinearLayout
@@ -43,8 +43,9 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="4dp"
                 android:paddingBottom="8dp"
+                android:paddingEnd="0dp"
                 android:fontFamily="@font/nunito_regular"
-                android:text="@string/sindico_dados_de_demonstracao_alteracoes_t"
+                android:text="@string/sindico_demo_dados_alteracoes_temporarias"
                 android:textColor="@color/cinza_texto_home"
                 android:textSize="11sp" />
 
@@ -63,7 +64,7 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_building"
+                        android:src="@drawable/ic_predio"
                         app:tint="@color/verde_escuro_principal" />
                     <TextView
                         android:layout_width="match_parent"
@@ -76,6 +77,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:baselineAligned="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
@@ -94,10 +96,11 @@
                                 android:layout_height="76dp"
                                 android:background="@drawable/sindico_nav_mascote_fundo"
                                 android:clipToOutline="true"
+            tools:targetApi="s"
                                 android:contentDescription="@string/sindico_foto_ilustrativa_do_condominio"
                                 android:padding="17dp"
                                 android:scaleType="fitCenter"
-                                android:src="@drawable/sindico_nav_unidades"
+                                android:src="@drawable/ic_predio"
                                 app:tint="@color/verde_escuro_principal" />
                             <FrameLayout
                                 android:id="@+id/cameraSindicoUnidades"
@@ -115,7 +118,7 @@
                                     android:background="@drawable/sindico_unidades_camera_badge"
                                     android:contentDescription="@null"
                                     android:padding="5dp"
-                                    android:src="@drawable/sindico_unidades_camera" />
+                                    android:src="@drawable/ic_camera" />
                             </FrameLayout>
                         </FrameLayout>
                         <TextView
@@ -167,6 +170,7 @@
                         </LinearLayout>
 
                         <TextView
+                            android:importantForAutofill="no"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -176,10 +180,11 @@
                             android:textSize="11sp" />
                         <EditText
                             android:id="@+id/nomeCondominioSindico"
+                            android:importantForAutofill="no"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
                             android:background="@drawable/sindico_campo"
-                            android:drawableStart="@drawable/sindico_building_campo"
+                            android:drawableStart="@drawable/ic_predio"
                             android:drawablePadding="6dp"
                             android:inputType="textCapWords"
                             android:paddingStart="8dp"
@@ -189,6 +194,7 @@
                             android:textSize="12sp" />
 
                         <TextView
+                            android:importantForAutofill="no"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -197,11 +203,13 @@
                             android:textColor="@color/cinza_texto_home"
                             android:textSize="11sp" />
                         <EditText
+                            android:baselineAligned="false"
                             android:id="@+id/enderecoCondominioSindico"
+                            android:importantForAutofill="no"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
                             android:background="@drawable/sindico_campo"
-                            android:drawableStart="@drawable/ic_localizacao_chat"
+                            android:drawableStart="@drawable/ic_endereco_perfil"
                             android:drawablePadding="6dp"
                             android:inputType="textPostalAddress"
                             android:paddingStart="8dp"
@@ -211,6 +219,69 @@
                             android:textSize="12sp" />
 
                         <LinearLayout
+                            android:baselineAligned="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+                            <LinearLayout
+                                android:layout_width="96dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:importantForAutofill="no"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:labelFor="@id/numeroCondominioSindico"
+                                    android:text="@string/rotulo_numero"
+                                    android:textColor="@color/cinza_texto_home"
+                                    android:textSize="11sp" />
+                                <EditText
+                                    android:id="@+id/numeroCondominioSindico"
+                                    android:importantForAutofill="no"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="46dp"
+                                    android:background="@drawable/sindico_campo"
+                                    android:inputType="text"
+                                    android:maxLength="10"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:singleLine="true"
+                                    android:textColor="@color/preto_texto_home"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:importantForAutofill="no"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:labelFor="@id/complementoCondominioSindico"
+                                    android:text="@string/rotulo_complemento"
+                                    android:textColor="@color/cinza_texto_home"
+                                    android:textSize="11sp" />
+                                <EditText
+                                    android:id="@+id/complementoCondominioSindico"
+                                    android:importantForAutofill="no"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="46dp"
+                                    android:background="@drawable/sindico_campo"
+                                    android:inputType="textCapSentences"
+                                    android:maxLength="100"
+                                    android:paddingStart="10dp"
+                                    android:paddingEnd="10dp"
+                                    android:singleLine="true"
+                                    android:textColor="@color/preto_texto_home"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:baselineAligned="false"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -221,6 +292,7 @@
                                 android:layout_weight="1"
                                 android:orientation="vertical">
                                 <TextView
+                                    android:importantForAutofill="no"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:labelFor="@id/cidadeCondominioSindico"
@@ -229,10 +301,11 @@
                                     android:textSize="11sp" />
                                 <EditText
                                     android:id="@+id/cidadeCondominioSindico"
+                                    android:importantForAutofill="no"
                                     android:layout_width="match_parent"
                                     android:layout_height="46dp"
                                     android:background="@drawable/sindico_campo"
-                                    android:drawableStart="@drawable/sindico_building_campo"
+                                    android:drawableStart="@drawable/ic_predio"
                                     android:drawablePadding="4dp"
                                     android:inputType="textCapWords"
                                     android:paddingStart="8dp"
@@ -247,6 +320,7 @@
                                 android:layout_marginStart="8dp"
                                 android:orientation="vertical">
                                 <TextView
+                                    android:importantForAutofill="no"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:labelFor="@id/estadoCondominioSindico"
@@ -255,6 +329,7 @@
                                     android:textSize="11sp" />
                                 <EditText
                                     android:id="@+id/estadoCondominioSindico"
+                                    android:importantForAutofill="no"
                                     android:layout_width="match_parent"
                                     android:layout_height="46dp"
                                     android:background="@drawable/sindico_campo"
@@ -271,6 +346,7 @@
                         </LinearLayout>
 
                         <TextView
+                            android:importantForAutofill="no"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
@@ -280,10 +356,11 @@
                             android:textSize="11sp" />
                         <EditText
                             android:id="@+id/cepCondominioSindico"
+                            android:importantForAutofill="no"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
                             android:background="@drawable/sindico_campo"
-                            android:drawableStart="@drawable/ic_localizacao_chat"
+                            android:drawableStart="@drawable/ic_endereco_perfil"
                             android:drawablePadding="6dp"
                             android:inputType="phone"
                             android:maxLength="9"
@@ -323,7 +400,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_people" />
+                        android:src="@drawable/ic_grupo" />
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -360,7 +437,7 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_unidades_adicionar" />
+                        android:src="@drawable/ic_adicionar" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -388,7 +465,7 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_localizacao_chat" />
+                        android:src="@drawable/ic_endereco_perfil" />
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -425,7 +502,7 @@
                         android:layout_width="18dp"
                         android:layout_height="18dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/sindico_unidades_adicionar" />
+                        android:src="@drawable/ic_adicionar" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

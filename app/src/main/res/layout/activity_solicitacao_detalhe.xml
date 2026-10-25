@@ -7,7 +7,6 @@
     android:id="@+id/raizSolicitacaoDetalhe"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/branco"
     tools:context=".views.SolicitacaoDetalheActivity">
 
     <ImageView
@@ -56,6 +55,7 @@
                 android:layout_marginTop="0dp">
 
                 <LinearLayout
+                    android:baselineAligned="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
@@ -97,7 +97,7 @@
                             android:layout_height="22dp"
                             android:layout_gravity="center"
                             android:importantForAccessibility="no"
-                            android:src="@drawable/ic_folha_sustentabilidade" />
+                            android:src="@drawable/ic_reciclar" />
 
                     </FrameLayout>
 
@@ -221,7 +221,7 @@
                             android:textSize="13sp"
                             app:backgroundTint="@color/verde_claro_ecociente"
                             app:cornerRadius="10dp"
-                            app:icon="@drawable/ic_chat_bolha"
+                            app:icon="@drawable/ic_nav_mensagens_cinza"
                             app:iconPadding="6dp"
                             app:iconSize="16dp"
                             app:iconTint="@color/verde_escuro_principal" />

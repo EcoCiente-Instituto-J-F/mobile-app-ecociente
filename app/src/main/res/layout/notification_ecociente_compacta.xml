@@ -15,7 +15,7 @@
         android:layout_height="54dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:contentDescription="Eko"
+        android:contentDescription="@string/notificacao_eko"
         android:scaleType="centerInside"
         android:src="@drawable/eko_notificacao" />
 
@@ -25,7 +25,8 @@
         android:layout_toStartOf="@id/imagemEkoNotificacao"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        android:paddingEnd="8dp">
+        android:paddingEnd="8dp"
+        android:paddingStart="0dp">
 
         <TextView
             android:id="@+id/tituloNotificacao"

@@ -12,6 +12,9 @@ import com.example.ecociente.R;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.model.ResultadoSolicitacoes;
+import com.example.ecociente.repository.AquecimentoDasApis;
+import com.example.ecociente.repository.PerfilApiRepository;
+import com.example.ecociente.repository.PontuacaoRepository;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
@@ -24,6 +27,9 @@ import com.example.ecociente.ui.SemanaColetasView;
 import com.example.ecociente.viewmodels.CalendarioViewModel;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.repository.RankingExternoRepository;
+import com.example.ecociente.model.ItemLista;
+import com.example.ecociente.ui.Iniciais;
 
 public class CondominioHomeActivity extends AppCompatActivity {
 
@@ -45,6 +51,10 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_home_condominio);
 
+        AquecimentoDasApis.aquecer(this);
+        new PerfilApiRepository().atualizarSeNecessario(this);
+        carregarPontosNoCard(true);
+
         perfilViewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
 
         calendarioViewModel = new ViewModelProvider(this).get(CalendarioViewModel.class);
@@ -64,11 +74,99 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
         calendarioViewModel.carregarSemana();
 
+        carregarPodio();
+
         motion.staggerIn(
                 findViewById(R.id.cabecalhoHomeCondominio),
                 findViewById(R.id.blocoSaudacaoCondominio),
                 findViewById(R.id.cardSemanaColetas),
+                findViewById(R.id.cardRanking),
                 findViewById(R.id.cabecalhoConteudosCondominio));
+    }
+
+    private void carregarPontosNoCard(boolean morador) {
+
+        android.widget.TextView texto = findViewById(R.id.textoSaldoPontos);
+
+        findViewById(R.id.cardPontos)
+                .setOnClickListener(
+                        view -> startActivity(TelaListaActivity.criarIntent(this, TipoLista.PONTOS, morador)));
+
+        new PontuacaoRepository()
+                .saldo(
+                        this,
+                        saldo -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            texto.setText(
+                                    saldo == null
+                                            ? getString(R.string.pontos_indisponivel)
+                                            : getString(
+                                                    R.string.pontos_saldo,
+                                                    java.text.NumberFormat.getIntegerInstance(
+                                                                    new java.util.Locale("pt", "BR"))
+                                                            .format(saldo)));
+                        });
+    }
+
+    // Os três primeiros do ranking dos moradores, direto no cartão da home.
+    private void carregarPodio() {
+
+        new RankingExternoRepository()
+                .listarMoradores(
+                        this,
+                        PerfilApiRepository.condominioId(this),
+                        3,
+                        moradores -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            android.widget.TextView estado = findViewById(R.id.textoEstadoRankingHome);
+                            View podio = findViewById(R.id.podioHome);
+
+                            if (moradores == null || moradores.isEmpty()) {
+                                podio.setVisibility(View.GONE);
+                                estado.setVisibility(View.VISIBLE);
+                                estado.setText(
+                                        moradores == null
+                                                ? R.string.ranking_home_indisponivel
+                                                : R.string.ranking_sem_pontuacao);
+                                return;
+                            }
+
+                            estado.setVisibility(View.GONE);
+                            podio.setVisibility(View.VISIBLE);
+
+                            preencherPodio(moradores, 0, R.id.avatarPrimeiroHome, R.id.pontosPrimeiroHome);
+                            preencherPodio(moradores, 1, R.id.avatarSegundoHome, R.id.pontosSegundoHome);
+                            preencherPodio(moradores, 2, R.id.avatarTerceiroHome, R.id.pontosTerceiroHome);
+                        });
+    }
+
+    private void preencherPodio(
+            java.util.List<ItemLista> moradores, int posicao, int idAvatar, int idPontos) {
+
+        android.widget.TextView avatar = findViewById(idAvatar);
+        android.widget.TextView pontos = findViewById(idPontos);
+
+        if (posicao >= moradores.size()) {
+            avatar.setText("");
+            avatar.setContentDescription(null);
+            pontos.setText("");
+            return;
+        }
+
+        ItemLista morador = moradores.get(posicao);
+
+        // O título vem como "1º  Nome".
+        String nome = morador.titulo.replaceFirst("^\\d+º\\s*", "");
+
+        avatar.setText(Iniciais.de(nome));
+        avatar.setContentDescription(nome + ", " + morador.destaque);
+        pontos.setText(morador.destaque);
     }
 
     @Override

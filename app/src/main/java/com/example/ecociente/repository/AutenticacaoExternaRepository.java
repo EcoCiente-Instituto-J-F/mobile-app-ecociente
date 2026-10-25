@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 // Fala com a ds-autenticacao-api (Java/Postgres, repositório separado deste
@@ -34,6 +35,7 @@ public class AutenticacaoExternaRepository {
     private static final String PREFERENCIAS = "sessao_externa";
     private static final String CHAVE_TOKEN = "token";
     private static final String CHAVE_PERFIL = "perfil";
+    private static final String CHAVE_USUARIO_ID = "usuarioId";
 
     private static final Object TRAVA = new Object();
 
@@ -74,6 +76,7 @@ public class AutenticacaoExternaRepository {
 
                         persistirToken(contextoApp, sessao.getToken());
                         persistirPerfil(contextoApp, sessao.getPerfil());
+                        persistirUsuarioId(contextoApp, sessao.getUsuarioId());
 
                         CredenciaisSeguras.salvar(contextoApp, email, senha);
 
@@ -181,6 +184,7 @@ public class AutenticacaoExternaRepository {
 
                 persistirToken(contextoApp, sessao.getToken());
                 persistirPerfil(contextoApp, sessao.getPerfil());
+                        persistirUsuarioId(contextoApp, sessao.getUsuarioId());
 
                 return sessao.getToken();
 
@@ -219,6 +223,24 @@ public class AutenticacaoExternaRepository {
                 .getString(CHAVE_PERFIL, null);
     }
 
+    // Id do usuário no Postgres (vem no login). Trocar de conta apaga o que era do usuário anterior.
+    public static int usuarioIdSalvo(@NonNull Context contexto) {
+        return contexto.getApplicationContext()
+                .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
+                .getInt(CHAVE_USUARIO_ID, 0);
+    }
+
+    private void persistirUsuarioId(@NonNull Context contextoApp, int usuarioId) {
+
+        SharedPreferences preferencias = contextoApp.getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
+
+        if (preferencias.getInt(CHAVE_USUARIO_ID, 0) != usuarioId) {
+            PerfilApiRepository.limpar(contextoApp);
+        }
+
+        preferencias.edit().putInt(CHAVE_USUARIO_ID, usuarioId).apply();
+    }
+
     private void persistirPerfil(@NonNull Context contextoApp, @NonNull String perfil) {
 
         contextoApp.getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
@@ -228,7 +250,7 @@ public class AutenticacaoExternaRepository {
     }
 
     @NonNull
-    private SessaoExterna login(@NonNull String email, @NonNull String senha) throws Exception {
+    private SessaoExterna login(@NonNull String email, @NonNull String senha) throws IOException, JSONException {
 
         HttpURLConnection conexao = (HttpURLConnection) new URL(URL_LOGIN).openConnection();
 
@@ -278,7 +300,14 @@ public class AutenticacaoExternaRepository {
         SharedPreferences preferencias =
                 contextoApp.getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
 
-        preferencias.edit().putString(CHAVE_TOKEN, token).apply();
+        String cifrado = CredenciaisSeguras.cifrar(token);
+
+        // Sem Keystore não há como guardar com segurança: o token fica só na memória do login.
+        if (cifrado != null) {
+            preferencias.edit().putString(CHAVE_TOKEN, cifrado).apply();
+        } else {
+            preferencias.edit().remove(CHAVE_TOKEN).apply();
+        }
     }
 
     @Nullable
@@ -289,7 +318,10 @@ public class AutenticacaoExternaRepository {
                         .getApplicationContext()
                         .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
 
-        return preferencias.getString(CHAVE_TOKEN, null);
+        String guardado = preferencias.getString(CHAVE_TOKEN, null);
+
+        // Token de versões antigas (texto puro) ou ilegível: descarta e o app renova com o login.
+        return guardado == null ? null : CredenciaisSeguras.decifrar(guardado);
     }
 
     @NonNull

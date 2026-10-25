@@ -24,12 +24,12 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.ecociente.R;
-import com.example.ecociente.midias.DecoracaoQuizView;
-import androidx.core.widget.NestedScrollView;
 import com.example.ecociente.model.QuizConteudo;
-import com.example.ecociente.model.DadosDemonstracaoEducacao;
-import com.example.ecociente.repository.EducacaoRepository;
-import android.widget.Toast;
+import com.example.ecociente.model.ResultadoQuiz;
+import com.example.ecociente.midias.DecoracaoQuizView;
+import com.example.ecociente.repository.TentativaQuizRepository;
+import com.example.ecociente.ui.BotaoCarregando;
+import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -45,11 +45,6 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     public static final String EXTRA_RESPOSTAS = "respostasQuiz";
 
     private final Motion motion = new Motion();
-    private final EducacaoRepository repositorio = new EducacaoRepository();
-    private boolean finalizando;
-    private boolean trocandoPergunta;
-    private long sementeVisual;
-    private DecoracaoQuizView decoracao;
     private final List<View> pontosProgresso = new ArrayList<>();
     private final List<View> conectoresProgresso = new ArrayList<>();
 
@@ -64,6 +59,11 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     private LinearLayout conteudoQuestao;
     private LinearLayout containerProgresso;
     private MaterialButton botaoProximo;
+    private int quizId;
+    private Integer tentativaId;
+    private boolean finalizando;
+    private long sementeVisual;
+    private DecoracaoQuizView decoracao;
 
     private MaterialCardView[] cardsOpcoes;
     private TextView[] textosOpcoes;
@@ -91,7 +91,7 @@ public class QuizPerguntasActivity extends AppCompatActivity {
         setContentView(R.layout.activity_quiz_perguntas);
         configurarInsetsDaTela();
 
-        perguntas = QuizConteudo.obterPerguntas();
+        perguntas = QuizConteudo.doIntent(getIntent());
 
         if (perguntas.isEmpty()) {
             finish();
@@ -105,7 +105,15 @@ public class QuizPerguntasActivity extends AppCompatActivity {
         if (estadoSalvo != null) {
             int[] salvas = estadoSalvo.getIntArray("eco.quiz.respostas");
             if (salvas != null && salvas.length == respostas.length) respostas = salvas;
-            indiceAtual = Math.max(0, Math.min(perguntas.size() - 1, estadoSalvo.getInt("eco.quiz.indice", 0)));
+            indiceAtual = Math.max(0, Math.min(perguntas.size() - 1,
+                    estadoSalvo.getInt("eco.quiz.indice", 0)));
+        }
+
+        // A API abre a tentativa (e acorda) assim que a tela aparece; se falhar, ela é aberta ao finalizar.
+        quizId = QuizConteudo.quizIdDoIntent(getIntent());
+
+        if (quizId > 0) {
+            new TentativaQuizRepository().iniciar(this, quizId, id -> tentativaId = id);
         }
 
         categoria = getIntent().getStringExtra(EXTRA_CATEGORIA);
@@ -209,7 +217,6 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     }
 
     private void avancarOuFinalizar() {
-        if (finalizando) return;
         if (respostas[indiceAtual] < 0) {
             motion.shake(botaoProximo);
             return;
@@ -234,8 +241,6 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     }
 
     private void animarTrocaPergunta(boolean avancar) {
-        if (trocandoPergunta || finalizando) return;
-        trocandoPergunta = true;
         float distancia = dp(26);
         float saida = avancar ? -distancia : distancia;
         float entrada = avancar ? distancia : -distancia;
@@ -247,8 +252,6 @@ public class QuizPerguntasActivity extends AppCompatActivity {
                 .withEndAction(() -> {
                     indiceAtual += avancar ? 1 : -1;
                     exibirPergunta();
-                    trocandoPergunta = false;
-                    ((NestedScrollView) findViewById(R.id.areaPerguntaQuiz)).scrollTo(0, 0);
                     conteudoQuestao.setTranslationX(entrada);
                     conteudoQuestao.setAlpha(0f);
                     conteudoQuestao.animate()
@@ -261,8 +264,8 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     }
 
     private void exibirPergunta() {
+        if (decoracao != null) decoracao.mostrar(sementeVisual, indiceAtual);
         QuizConteudo.Pergunta pergunta = perguntas.get(indiceAtual);
-        decoracao.mostrar(sementeVisual, indiceAtual);
 
         textoContador.setText(String.format(
                 Locale.getDefault(),
@@ -386,44 +389,61 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     }
 
     private void mostrarConfirmacaoFinalizacao() {
-        QuizDialogos.mostrarConfirmacao(
-                this,
-                getString(R.string.quiz_dialogo_finalizar_titulo),
-                getString(R.string.quiz_dialogo_finalizar_mensagem),
-                getString(R.string.quiz_finalizar),
-                getString(R.string.cancelar),
-                this::abrirResultado
-        );
+        new DialogoEco.Builder(this)
+                .titulo(R.string.quiz_dialogo_finalizar_titulo)
+                .mensagem(R.string.quiz_dialogo_finalizar_mensagem)
+                .botao(R.string.quiz_finalizar, DialogoEco.Estilo.PREENCHIDO, this::abrirResultado)
+                .botao(R.string.cancelar, DialogoEco.Estilo.CONTORNO, null)
+                .mostrar();
     }
 
     private void abrirResultado() {
-        if (finalizando) return;
-        if (DadosDemonstracaoEducacao.ehQuizDemonstracao(QuizConteudo.getQuizId())) {
-            // O QuizResultadoActivity usa o gabarito local para calcular os acertos.
-            navegarParaResultado();
+
+        if (finalizando) {
             return;
         }
+
+        // Quiz que não veio da API (ou sem id): só mostra as respostas, como antes.
+        if (quizId <= 0) {
+            abrirResultadoCom(perguntas, null);
+            return;
+        }
+
         finalizando = true;
-        botaoProximo.setEnabled(false);
-        botaoProximo.setText("Salvando respostas...");
-        repositorio.finalizarTentativa(this, QuizConteudo.getTentativaId(), perguntas, respostas,
-                (sucesso, erro) -> {
-                    if (isFinishing() || isDestroyed()) return;
-                    finalizando = false;
-                    botaoProximo.setEnabled(true);
-                    botaoProximo.setText(R.string.quiz_finalizar);
-                    if (!sucesso) {
-                        Toast.makeText(this, erro, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                    navegarParaResultado();
-                });
+
+        BotaoCarregando.definir(botaoProximo, true, R.string.quiz_finalizar, R.string.quiz_corrigindo);
+
+        new TentativaQuizRepository()
+                .concluir(
+                        this,
+                        quizId,
+                        tentativaId,
+                        perguntas,
+                        respostas,
+                        conclusao -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            if (conclusao == null) {
+                                abrirResultadoCom(perguntas, null);
+                            } else {
+                                abrirResultadoCom(conclusao.perguntasComGabarito, conclusao.resultado);
+                            }
+                        });
     }
 
-    private void navegarParaResultado() {
+    private void abrirResultadoCom(List<QuizConteudo.Pergunta> perguntasDoResultado, ResultadoQuiz resultado) {
         Intent rota = new Intent(this, QuizResultadoActivity.class);
         rota.putExtra(QuizResultadoActivity.EXTRA_CATEGORIA, categoria);
         rota.putExtra(QuizResultadoActivity.EXTRA_RESPOSTAS, respostas);
+        QuizConteudo.anexar(rota, perguntasDoResultado);
+        QuizConteudo.anexarQuizId(rota, quizId);
+
+        if (resultado != null) {
+            ResultadoQuiz.anexar(rota, resultado);
+        }
+
         startActivity(rota);
         overridePendingTransition(0, 0);
         finish();

@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ecociente.R;
 import com.example.ecociente.model.SindicoPosicaoRanking;
+import com.example.ecociente.repository.RankingExternoRepository;
 import com.example.ecociente.repository.SindicoRankingRepository;
 
 import java.util.List;
@@ -22,8 +24,11 @@ import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Navegacao;
 
-/** Ranking ilustrativo em dois modos; nenhum dado é lido de banco ou API. */
+/** Ranking do condomínio: por torre vem da API; por apartamento ainda não existe API. */
 public final class SindicoRankingActivity extends AppCompatActivity {
+    private List<SindicoPosicaoRanking> torresDaApi;
+    private boolean erroNoRanking;
+
     private static final String ESTADO_APARTAMENTOS = "rankingPorApartamento";
     private boolean porApartamento;
 
@@ -59,6 +64,27 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         barra.setOnItemClickListener(
                 indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM));
         atualizarRanking();
+        carregarRanking();
+    }
+
+    private void carregarRanking() {
+        erroNoRanking = false;
+
+        new RankingExternoRepository()
+                .listarTorres(
+                        this,
+                        PerfilApiRepository.condominioId(this),
+                        20,
+                        posicoes -> {
+                            if (isFinishing() || isDestroyed()) return;
+
+                            if (posicoes == null) {
+                                erroNoRanking = true;
+                            } else {
+                                torresDaApi = posicoes;
+                            }
+                            atualizarRanking();
+                        });
     }
 
     private void selecionarModo(boolean apartamentos) {
@@ -81,6 +107,11 @@ public final class SindicoRankingActivity extends AppCompatActivity {
 
         List<SindicoPosicaoRanking> posicoes = SindicoRankingRepository.getInstance()
                 .getRanking(porApartamento);
+
+        // Por bloco/torre: usa o ranking da API quando ele já chegou.
+        if (!porApartamento && torresDaApi != null) {
+            posicoes = torresDaApi;
+        }
         int[] avatares = {R.id.avatarPrimeiroRanking, R.id.avatarSegundoRanking,
                 R.id.avatarTerceiroRanking};
         int[] pontos = {R.id.pontosPrimeiroRanking, R.id.pontosSegundoRanking,
@@ -96,12 +127,41 @@ public final class SindicoRankingActivity extends AppCompatActivity {
 
         LinearLayout lista = findViewById(R.id.listaSindicoRankingCompleta);
         lista.removeAllViews();
+
+        boolean falhou = erroNoRanking && !porApartamento && torresDaApi == null;
+
+        if (posicoes.isEmpty()) {
+            TextView vazio = new TextView(this);
+
+            vazio.setText(falhou ? R.string.ranking_erro : R.string.sindico_ranking_vazio);
+            vazio.setTextColor(getColor(R.color.cinza_texto_home));
+            vazio.setTextSize(14);
+            vazio.setPadding(32, 112, 32, falhou ? 24 : 112);
+
+            lista.addView(vazio);
+
+            if (falhou) {
+                com.google.android.material.button.MaterialButton tentar =
+                        (com.google.android.material.button.MaterialButton)
+                                getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
+
+                tentar.setText(R.string.tentar_novamente);
+                tentar.setOnClickListener(view -> {
+                    erroNoRanking = false;
+                    atualizarRanking();
+                    carregarRanking();
+                });
+
+                lista.addView(tentar);
+            }
+        }
+
         LayoutInflater inflater = LayoutInflater.from(this);
         for (int i = 3; i < posicoes.size(); i++) {
             SindicoPosicaoRanking posicao = posicoes.get(i);
             View linha = inflater.inflate(R.layout.item_sindico_ranking, lista, false);
             ((TextView) linha.findViewById(R.id.posicaoItemRanking))
-                    .setText((i + 1) + "º");
+                    .setText(getString(R.string.sindico_posicao_ordinal, i + 1));
             ((TextView) linha.findViewById(R.id.avatarItemRanking))
                     .setText(posicao.getIniciais());
             ((TextView) linha.findViewById(R.id.nomeItemRanking))

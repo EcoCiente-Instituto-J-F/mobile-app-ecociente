@@ -23,5 +23,5 @@
         android:background="@drawable/fundo_icone_chat"
         android:contentDescription="@string/chat_avatar_usuario"
         android:padding="9dp"
-        android:src="@drawable/ic_usuario_chat" />
+        android:src="@drawable/ic_perfil_usuario" />
 </LinearLayout>

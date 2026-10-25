@@ -21,6 +21,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.ecociente.R;
+import com.example.ecociente.model.PerfilAcesso;
 import com.example.ecociente.model.EstadoHome;
 import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.ui.AvatarPerfil;
@@ -238,17 +239,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case COOPERATIVA:
-
-                abrirHomeCooperativa();
-
-                break;
-
             case SINDICO:
-
-                abrirHomeSindico();
-
-                break;
-
             case CONDOMINIO:
             case PRONTA:
 
@@ -291,8 +282,13 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
 
+                boolean precisaDoPerfil =
+                        estado.getTipo() == EstadoHome.Tipo.CONDOMINIO
+                                || estado.getTipo() == EstadoHome.Tipo.PRONTA;
+
                 if (
-                        !tentouObterPerfil
+                        precisaDoPerfil
+                                && !tentouObterPerfil
                                 && AutenticacaoExternaRepository
                                 .perfilSalvo(this)
                                 == null
@@ -326,32 +322,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 }
 
-                if (
-                        abrirHomePeloPerfilDaApi()
-                ) {
-                    break;
-                }
-
-                Log.i(
-                        TAG_ROTA,
-                        "home do morador/usuário; perfil da API="
-                                + AutenticacaoExternaRepository
-                                .perfilSalvo(this)
+                abrirHomeDoPerfil(
+                        estado
                 );
-
-                if (
-                        estado.getTipo()
-                                == EstadoHome.Tipo.CONDOMINIO
-                ) {
-
-                    abrirHomeCondominio();
-
-                } else {
-
-                    carregarHome(
-                            estado.getNome()
-                    );
-                }
 
                 break;
 
@@ -907,85 +880,89 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    /*
-     * O Firestore pode estar com tipoPerfil
-     * desatualizado para usuários que no
-     * PostgreSQL já são síndico ou cooperativa.
-     *
-     * O perfil confirmado pela API prevalece.
-     */
-    private boolean abrirHomePeloPerfilDaApi() {
+    private static PerfilAcesso.DestinoHome destinoDoFirestore(
+            @NonNull EstadoHome estado
+    ) {
 
-        String perfil =
-                AutenticacaoExternaRepository
-                        .perfilSalvo(this);
+        switch (estado.getTipo()) {
 
-        if (
-                "SINDICO".equals(
-                        perfil
-                )
-        ) {
+            case COOPERATIVA:
+                return PerfilAcesso.DestinoHome.COOPERATIVA;
 
-            Log.i(
-                    TAG_ROTA,
-                    "perfil da API=SINDICO -> home do síndico"
-            );
+            case SINDICO:
+                return PerfilAcesso.DestinoHome.SINDICO;
 
-            corrigirTipoPerfilNoFirestore(
-                    "sindico"
-            );
+            case CONDOMINIO:
+                return PerfilAcesso.DestinoHome.CONDOMINIO;
 
-            abrirHomeSindico();
-
-            return true;
+            default:
+                return PerfilAcesso.DestinoHome.USUARIO_COMUM;
         }
-
-        if (
-                "COOPERATIVA".equals(
-                        perfil
-                )
-        ) {
-
-            Log.i(
-                    TAG_ROTA,
-                    "perfil da API=COOPERATIVA -> home da cooperativa"
-            );
-
-            corrigirTipoPerfilNoFirestore(
-                    "cooperativa"
-            );
-
-            abrirHomeCooperativa();
-
-            return true;
-        }
-
-        return false;
     }
 
     /*
-     * Mantém o documento Firebase
-     * sincronizado com o perfil
-     * confirmado pela API externa.
+     * O perfil confirmado pela API prevalece sobre
+     * o do Firestore; sem ele, vale o do Firestore.
      */
-    private void corrigirTipoPerfilNoFirestore(
-            String tipoPerfil
+    private void abrirHomeDoPerfil(
+            @NonNull EstadoHome estado
     ) {
 
-        com.google.firebase.auth.FirebaseUser usuario =
-                com.google.firebase.auth.FirebaseAuth
-                        .getInstance()
-                        .getCurrentUser();
+        String perfilApi =
+                AutenticacaoExternaRepository
+                        .perfilSalvo(this);
 
-        if (usuario != null) {
+        PerfilAcesso.DestinoHome doFirestore =
+                destinoDoFirestore(estado);
 
-            new com.example.ecociente.repository
-                    .PerfilRepository()
-                    .atualizarCampo(
-                            usuario.getUid(),
-                            "tipoPerfil",
-                            tipoPerfil
-                    );
+        PerfilAcesso.DestinoHome destino =
+                PerfilAcesso.destinoFinal(
+                        perfilApi,
+                        doFirestore
+                );
+
+        Log.i(
+                TAG_ROTA,
+                "perfil da API="
+                        + perfilApi
+                        + " -> "
+                        + destino
+        );
+
+        if (destino != doFirestore) {
+            viewModel.sincronizarPerfil(destino);
+        }
+
+        switch (destino) {
+
+            case SINDICO:
+                abrirHomeSindico();
+                break;
+
+            case COOPERATIVA:
+                abrirHomeCooperativa();
+                break;
+
+            case CONDOMINIO:
+                abrirHomeCondominio();
+                break;
+
+            default:
+                com.google.firebase.auth.FirebaseUser usuario =
+                        com.google.firebase.auth.FirebaseAuth
+                                .getInstance()
+                                .getCurrentUser();
+
+                String nome =
+                        !estado.getNome().isEmpty()
+                                ? estado.getNome()
+                                : usuario != null
+                                        && usuario.getDisplayName() != null
+                                        ? usuario.getDisplayName()
+                                        : "";
+
+                carregarHome(nome);
+                break;
         }
     }
 

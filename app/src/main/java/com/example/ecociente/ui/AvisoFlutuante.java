@@ -20,6 +20,10 @@ public final class AvisoFlutuante {
     private AvisoFlutuante() {}
 
     public static void mostrar(@NonNull Activity tela, @StringRes int texto) {
+        mostrar(tela, tela.getString(texto));
+    }
+
+    public static void mostrar(@NonNull Activity tela, @NonNull CharSequence texto) {
 
         ViewGroup conteudo = tela.findViewById(android.R.id.content);
 

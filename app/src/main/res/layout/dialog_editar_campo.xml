@@ -23,7 +23,8 @@
         <EditText
             android:importantForAutofill="no"
             android:id="@+id/campoEditarValor"
-            android:contentDescription="@string/valor_do_campo"
+            android:hint="@string/valor_do_campo"
+            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
