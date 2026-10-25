@@ -54,6 +54,13 @@ public class TelaListaActivity extends AppCompatActivity {
 
         morador = getIntent().getBooleanExtra(EXTRA_MORADOR, false);
 
+        if (tipo == TipoLista.GUIA) {
+            startActivity(new Intent(this, BibliotecaActivity.class)
+                    .putExtra(BibliotecaActivity.EXTRA_MORADOR, morador));
+            finish();
+            return;
+        }
+
         setContentView(R.layout.activity_tela_lista);
 
         Motion.entrar(

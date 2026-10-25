@@ -17,10 +17,19 @@ public class EcoCienteFirebaseMessagingService extends FirebaseMessagingService 
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
-        Map<String, String> dados = remoteMessage.getData();
+        Map<String, String> dados = new java.util.HashMap<>(remoteMessage.getData());
+        if (remoteMessage.getNotification() != null) {
+            if (!dados.containsKey("titulo") && remoteMessage.getNotification().getTitle() != null) {
+                dados.put("titulo", remoteMessage.getNotification().getTitle());
+            }
+            if (!dados.containsKey("mensagem") && remoteMessage.getNotification().getBody() != null) {
+                dados.put("mensagem", remoteMessage.getNotification().getBody());
+            }
+        }
+        if (dados.isEmpty()) return;
 
         TipoNotificacaoEcoCiente tipo =
-                TipoNotificacaoEcoCiente.porId(dados.get("tipo"));
+                TipoNotificacaoEcoCiente.porId(dados.containsKey("tipo") ? dados.get("tipo") : dados.get("type"));
 
         NotificacaoEcoCiente.exibir(
                 this,
@@ -33,10 +42,7 @@ public class EcoCienteFirebaseMessagingService extends FirebaseMessagingService 
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
 
-        Log.d(
-                TAG,
-                "NOVO_TOKEN_FCM = " + token
-        );
+        Log.d(TAG, "Token FCM atualizado com sucesso (valor não exibido no log)");
     }
 
 }

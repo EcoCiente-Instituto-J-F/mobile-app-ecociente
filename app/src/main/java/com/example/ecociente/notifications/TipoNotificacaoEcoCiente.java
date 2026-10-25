@@ -94,7 +94,28 @@ public enum TipoNotificacaoEcoCiente {
 
     @DrawableRes
     public int getImagemEko() {
-        // Fallback temporário para todos os tipos até cada ilustração existir.
-        return R.drawable.eko_notificacao;
+        switch (this) {
+            case DICA: return R.drawable.eko_notificacao_dica;
+            case RETORNO: return R.drawable.eko_notificacao_retorno;
+            case QUIZ: return R.drawable.eko_notificacao_quiz;
+            case REVISAO: return R.drawable.eko_notificacao_revisao;
+            case MOTIVACIONAL: return R.drawable.eko_notificacao_motivacional;
+            case CONTEUDOS: return R.drawable.eko_notificacao_conteudos;
+            case AULAS: return R.drawable.eko_notificacao_aulas;
+            case COLETA_AMANHA: return R.drawable.eko_notificacao_coleta_amanha;
+            case COLETA_HOJE: return R.drawable.eko_notificacao_coleta_hoje;
+            case COLETA_ALTERADA: return R.drawable.eko_notificacao_coleta_alterada;
+            case ECOREGISTRO_APROVADO: return R.drawable.eko_notificacao_ecoregistro_aprovado;
+            case RANKING_SUBIU: return R.drawable.eko_notificacao_ranking;
+            case AVISO_CONDOMINIO: return R.drawable.eko_notificacao_aviso;
+            case MENSAGEM_NOVA: return R.drawable.eko_notificacao_mensagem;
+            case SOLICITACAO_NOVA: return R.drawable.eko_notificacao_solicitacao_nova;
+            case SOLICITACAO_ACEITA: return R.drawable.eko_notificacao_solicitacao_aceita;
+            case SOLICITACAO_RECUSADA: return R.drawable.eko_notificacao_solicitacao_recusada;
+            case CALENDARIO: return R.drawable.eko_notificacao_calendario;
+            case SAZONAL: return R.drawable.eko_notificacao_sazonal;
+            case DESCONHECIDA:
+            default: return R.drawable.eko_notificacao;
+        }
     }
 }

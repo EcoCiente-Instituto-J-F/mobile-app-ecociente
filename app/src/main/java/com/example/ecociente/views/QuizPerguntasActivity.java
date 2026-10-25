@@ -24,7 +24,12 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.ecociente.R;
+import com.example.ecociente.midias.DecoracaoQuizView;
+import androidx.core.widget.NestedScrollView;
 import com.example.ecociente.model.QuizConteudo;
+import com.example.ecociente.model.DadosDemonstracaoEducacao;
+import com.example.ecociente.repository.EducacaoRepository;
+import android.widget.Toast;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -40,6 +45,11 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     public static final String EXTRA_RESPOSTAS = "respostasQuiz";
 
     private final Motion motion = new Motion();
+    private final EducacaoRepository repositorio = new EducacaoRepository();
+    private boolean finalizando;
+    private boolean trocandoPergunta;
+    private long sementeVisual;
+    private DecoracaoQuizView decoracao;
     private final List<View> pontosProgresso = new ArrayList<>();
     private final List<View> conectoresProgresso = new ArrayList<>();
 
@@ -90,6 +100,13 @@ public class QuizPerguntasActivity extends AppCompatActivity {
 
         respostas = new int[perguntas.size()];
         Arrays.fill(respostas, -1);
+        sementeVisual = estadoSalvo == null ? new java.util.Random().nextLong()
+                : estadoSalvo.getLong("eco.quiz.semente", 0L);
+        if (estadoSalvo != null) {
+            int[] salvas = estadoSalvo.getIntArray("eco.quiz.respostas");
+            if (salvas != null && salvas.length == respostas.length) respostas = salvas;
+            indiceAtual = Math.max(0, Math.min(perguntas.size() - 1, estadoSalvo.getInt("eco.quiz.indice", 0)));
+        }
 
         categoria = getIntent().getStringExtra(EXTRA_CATEGORIA);
         if (categoria == null || categoria.trim().isEmpty()) {
@@ -102,6 +119,7 @@ public class QuizPerguntasActivity extends AppCompatActivity {
         cinzaFuturo = Color.parseColor("#D3D3D3");
 
         vincularViews();
+        decoracao = new DecoracaoQuizView(this);
         criarProgresso();
         configurarAcoes();
         exibirPergunta();
@@ -191,6 +209,7 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     }
 
     private void avancarOuFinalizar() {
+        if (finalizando) return;
         if (respostas[indiceAtual] < 0) {
             motion.shake(botaoProximo);
             return;
@@ -215,6 +234,8 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     }
 
     private void animarTrocaPergunta(boolean avancar) {
+        if (trocandoPergunta || finalizando) return;
+        trocandoPergunta = true;
         float distancia = dp(26);
         float saida = avancar ? -distancia : distancia;
         float entrada = avancar ? distancia : -distancia;
@@ -226,6 +247,8 @@ public class QuizPerguntasActivity extends AppCompatActivity {
                 .withEndAction(() -> {
                     indiceAtual += avancar ? 1 : -1;
                     exibirPergunta();
+                    trocandoPergunta = false;
+                    ((NestedScrollView) findViewById(R.id.areaPerguntaQuiz)).scrollTo(0, 0);
                     conteudoQuestao.setTranslationX(entrada);
                     conteudoQuestao.setAlpha(0f);
                     conteudoQuestao.animate()
@@ -239,6 +262,7 @@ public class QuizPerguntasActivity extends AppCompatActivity {
 
     private void exibirPergunta() {
         QuizConteudo.Pergunta pergunta = perguntas.get(indiceAtual);
+        decoracao.mostrar(sementeVisual, indiceAtual);
 
         textoContador.setText(String.format(
                 Locale.getDefault(),
@@ -373,6 +397,30 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     }
 
     private void abrirResultado() {
+        if (finalizando) return;
+        if (DadosDemonstracaoEducacao.ehQuizDemonstracao(QuizConteudo.getQuizId())) {
+            // O QuizResultadoActivity usa o gabarito local para calcular os acertos.
+            navegarParaResultado();
+            return;
+        }
+        finalizando = true;
+        botaoProximo.setEnabled(false);
+        botaoProximo.setText("Salvando respostas...");
+        repositorio.finalizarTentativa(this, QuizConteudo.getTentativaId(), perguntas, respostas,
+                (sucesso, erro) -> {
+                    if (isFinishing() || isDestroyed()) return;
+                    finalizando = false;
+                    botaoProximo.setEnabled(true);
+                    botaoProximo.setText(R.string.quiz_finalizar);
+                    if (!sucesso) {
+                        Toast.makeText(this, erro, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    navegarParaResultado();
+                });
+    }
+
+    private void navegarParaResultado() {
         Intent rota = new Intent(this, QuizResultadoActivity.class);
         rota.putExtra(QuizResultadoActivity.EXTRA_CATEGORIA, categoria);
         rota.putExtra(QuizResultadoActivity.EXTRA_RESPOSTAS, respostas);
@@ -427,6 +475,14 @@ public class QuizPerguntasActivity extends AppCompatActivity {
 
     private float dp(float valor) {
         return valor * getResources().getDisplayMetrics().density;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle estado) {
+        estado.putLong("eco.quiz.semente", sementeVisual);
+        estado.putInt("eco.quiz.indice", indiceAtual);
+        estado.putIntArray("eco.quiz.respostas", respostas);
+        super.onSaveInstanceState(estado);
     }
 
     @Override

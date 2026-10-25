@@ -1,0 +1,444 @@
+{
+  "versao_schema": 1,
+  "revisao": "midias-local-20261023",
+  "sinonimos": {
+    "papel": [
+      "papeis",
+      "paper",
+      "papel"
+    ],
+    "papelao": [
+      "papelao",
+      "cardboard"
+    ],
+    "nao_reciclavel": [
+      "papel higienico",
+      "guardanapo sujo"
+    ],
+    "plastico": [
+      "plastic",
+      "plasticos",
+      "pet"
+    ],
+    "vidro": [
+      "vidros",
+      "glass"
+    ],
+    "metal": [
+      "metais",
+      "aluminio",
+      "aluminum",
+      "metal"
+    ],
+    "compostagem": [
+      "compostagem",
+      "compost",
+      "composting",
+      "organicos",
+      "adubo",
+      "composteira"
+    ],
+    "agua": [
+      "agua",
+      "water",
+      "hidrico"
+    ],
+    "energia": [
+      "energia",
+      "energy",
+      "solar"
+    ],
+    "reciclagem": [
+      "reciclar",
+      "reciclaveis",
+      "recycle",
+      "recycling",
+      "reciclagem",
+      "separacao correta",
+      "coleta seletiva"
+    ],
+    "sustentabilidade": [
+      "sustentabilidade",
+      "sustentavel",
+      "sustentaveis",
+      "consumo consciente",
+      "habitos"
+    ],
+    "geral": [
+      "ambiental",
+      "ambiente",
+      "sustainability"
+    ]
+  },
+  "associacoes": {},
+  "midias": [
+    {
+      "id": "icones_conteudo_papel",
+      "tipo": "icones_conteudo",
+      "tema": "papel",
+      "origem": "drawable",
+      "caminho": "png_greenpapers",
+      "formato": "png",
+      "grupo_imagem": "png_greenpapers",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "papel"
+      ]
+    },
+    {
+      "id": "icones_conteudo_plastico",
+      "tipo": "icones_conteudo",
+      "tema": "plastico",
+      "origem": "drawable",
+      "caminho": "png_greenplastic",
+      "formato": "png",
+      "grupo_imagem": "png_greenplastic",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "plastico"
+      ]
+    },
+    {
+      "id": "icones_conteudo_reciclagem",
+      "tipo": "icones_conteudo",
+      "tema": "reciclagem",
+      "origem": "drawable",
+      "caminho": "png_greenrecyclecontainer",
+      "formato": "png",
+      "grupo_imagem": "png_greenrecyclecontainer",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "reciclagem"
+      ]
+    },
+    {
+      "id": "icones_conteudo_compostagem",
+      "tipo": "icones_conteudo",
+      "tema": "compostagem",
+      "origem": "drawable",
+      "caminho": "ic_folha_sustentabilidade",
+      "formato": "png",
+      "grupo_imagem": "ic_folha_sustentabilidade",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "compostagem"
+      ]
+    },
+    {
+      "id": "icones_conteudo_sustentabilidade",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "drawable",
+      "caminho": "ic_folha_sustentabilidade",
+      "formato": "png",
+      "grupo_imagem": "ic_folha_sustentabilidade",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "sustentabilidade"
+      ]
+    },
+    {
+      "id": "icones_conteudo_geral",
+      "tipo": "icones_conteudo",
+      "tema": "geral",
+      "origem": "drawable",
+      "caminho": "quiz_planeta_pergunta",
+      "formato": "png",
+      "grupo_imagem": "quiz_planeta_pergunta",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "geral"
+      ]
+    },
+    {
+      "id": "icones_quiz_papel",
+      "tipo": "icones_quiz",
+      "tema": "papel",
+      "origem": "drawable",
+      "caminho": "png_greenpapers",
+      "formato": "png",
+      "grupo_imagem": "png_greenpapers",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "papel"
+      ]
+    },
+    {
+      "id": "icones_quiz_plastico",
+      "tipo": "icones_quiz",
+      "tema": "plastico",
+      "origem": "drawable",
+      "caminho": "png_greenplastic",
+      "formato": "png",
+      "grupo_imagem": "png_greenplastic",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "plastico"
+      ]
+    },
+    {
+      "id": "icones_quiz_reciclagem",
+      "tipo": "icones_quiz",
+      "tema": "reciclagem",
+      "origem": "drawable",
+      "caminho": "png_greenrecyclecontainer",
+      "formato": "png",
+      "grupo_imagem": "png_greenrecyclecontainer",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "reciclagem"
+      ]
+    },
+    {
+      "id": "icones_quiz_compostagem",
+      "tipo": "icones_quiz",
+      "tema": "compostagem",
+      "origem": "drawable",
+      "caminho": "ic_folha_sustentabilidade",
+      "formato": "png",
+      "grupo_imagem": "ic_folha_sustentabilidade",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "compostagem"
+      ]
+    },
+    {
+      "id": "icones_quiz_sustentabilidade",
+      "tipo": "icones_quiz",
+      "tema": "sustentabilidade",
+      "origem": "drawable",
+      "caminho": "ic_folha_sustentabilidade",
+      "formato": "png",
+      "grupo_imagem": "ic_folha_sustentabilidade",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "sustentabilidade"
+      ]
+    },
+    {
+      "id": "icones_quiz_geral",
+      "tipo": "icones_quiz",
+      "tema": "geral",
+      "origem": "drawable",
+      "caminho": "quiz_planeta_pergunta",
+      "formato": "png",
+      "grupo_imagem": "quiz_planeta_pergunta",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "geral"
+      ]
+    },
+    {
+      "id": "icones_quiz_reciclagem_b",
+      "tipo": "icones_quiz",
+      "tema": "reciclagem",
+      "origem": "drawable",
+      "caminho": "ic_reciclar_chat",
+      "formato": "png",
+      "grupo_imagem": "ic_reciclar_chat",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "reciclagem"
+      ]
+    },
+    {
+      "id": "decoracoes_conteudo_papel",
+      "tipo": "decoracoes_conteudo",
+      "tema": "papel",
+      "origem": "drawable",
+      "caminho": "png_greenpapers",
+      "formato": "png",
+      "grupo_imagem": "png_greenpapers",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "papel"
+      ]
+    },
+    {
+      "id": "decoracoes_conteudo_plastico",
+      "tipo": "decoracoes_conteudo",
+      "tema": "plastico",
+      "origem": "drawable",
+      "caminho": "png_greenplastic",
+      "formato": "png",
+      "grupo_imagem": "png_greenplastic",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "plastico"
+      ]
+    },
+    {
+      "id": "decoracoes_conteudo_reciclagem",
+      "tipo": "decoracoes_conteudo",
+      "tema": "reciclagem",
+      "origem": "drawable",
+      "caminho": "png_greenrecyclecontainer",
+      "formato": "png",
+      "grupo_imagem": "png_greenrecyclecontainer",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "reciclagem"
+      ]
+    },
+    {
+      "id": "decoracoes_conteudo_compostagem",
+      "tipo": "decoracoes_conteudo",
+      "tema": "compostagem",
+      "origem": "drawable",
+      "caminho": "ic_folha_sustentabilidade",
+      "formato": "png",
+      "grupo_imagem": "ic_folha_sustentabilidade",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "compostagem"
+      ]
+    },
+    {
+      "id": "decoracoes_conteudo_sustentabilidade",
+      "tipo": "decoracoes_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "drawable",
+      "caminho": "ic_folha_sustentabilidade",
+      "formato": "png",
+      "grupo_imagem": "ic_folha_sustentabilidade",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "sustentabilidade"
+      ]
+    },
+    {
+      "id": "decoracoes_conteudo_geral",
+      "tipo": "decoracoes_conteudo",
+      "tema": "geral",
+      "origem": "drawable",
+      "caminho": "quiz_planeta_pergunta",
+      "formato": "png",
+      "grupo_imagem": "quiz_planeta_pergunta",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "geral"
+      ]
+    },
+    {
+      "id": "capa_quiz_papel",
+      "tipo": "capa_quiz",
+      "tema": "papel",
+      "origem": "drawable",
+      "caminho": "png_greenpapers",
+      "formato": "png",
+      "grupo_imagem": "png_greenpapers",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "papel"
+      ]
+    },
+    {
+      "id": "capa_quiz_plastico",
+      "tipo": "capa_quiz",
+      "tema": "plastico",
+      "origem": "drawable",
+      "caminho": "png_greenplastic",
+      "formato": "png",
+      "grupo_imagem": "png_greenplastic",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "plastico"
+      ]
+    },
+    {
+      "id": "capa_quiz_reciclagem",
+      "tipo": "capa_quiz",
+      "tema": "reciclagem",
+      "origem": "drawable",
+      "caminho": "quiz_sustentabilidade_inicio",
+      "formato": "png",
+      "grupo_imagem": "quiz_sustentabilidade_inicio",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "reciclagem"
+      ]
+    },
+    {
+      "id": "capa_quiz_geral",
+      "tipo": "capa_quiz",
+      "tema": "geral",
+      "origem": "drawable",
+      "caminho": "quiz_sustentabilidade_inicio",
+      "formato": "png",
+      "grupo_imagem": "quiz_sustentabilidade_inicio",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "geral"
+      ]
+    },
+    {
+      "id": "eko_leitura_geral",
+      "tipo": "eko_leitura",
+      "tema": "geral",
+      "origem": "drawable",
+      "caminho": "mascote_eko",
+      "formato": "png",
+      "grupo_imagem": "mascote_eko",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "geral"
+      ],
+      "eko": true
+    },
+    {
+      "id": "quiz_planeta",
+      "tipo": "decoracoes_quiz",
+      "tema": "geral",
+      "origem": "drawable",
+      "caminho": "quiz_planeta_pergunta",
+      "formato": "png",
+      "grupo_imagem": "quiz_planeta_pergunta",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "geral"
+      ],
+      "neutra": true
+    },
+    {
+      "id": "quiz_eko_estatico",
+      "tipo": "decoracoes_quiz",
+      "tema": "geral",
+      "origem": "drawable",
+      "caminho": "mascote_eko",
+      "formato": "png",
+      "grupo_imagem": "mascote_eko",
+      "versao": 1,
+      "descricao": "",
+      "tags": [
+        "geral"
+      ],
+      "eko": true,
+      "neutra": true
+    }
+  ]
+}

@@ -13,6 +13,7 @@ import com.example.ecociente.R;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
+import com.example.ecociente.ui.Motion;
 
 public class DetalheItemActivity extends AppCompatActivity {
 
@@ -42,6 +43,7 @@ public class DetalheItemActivity extends AppCompatActivity {
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizDetalheItem));
 
         findViewById(R.id.botaoVoltarDetalheItem).setOnClickListener(view -> finish());
+        Motion.pressFeedback(findViewById(R.id.botaoVoltarDetalheItem));
 
         ((TextView) findViewById(R.id.tituloDetalheItem)).setText(item.titulo);
 
@@ -58,5 +60,6 @@ public class DetalheItemActivity extends AppCompatActivity {
 
             campos.addView(linha);
         }
+        Motion.entrar(this, R.id.tituloDetalheItem, R.id.camposDetalheItem);
     }
 }

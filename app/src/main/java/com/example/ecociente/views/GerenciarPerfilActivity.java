@@ -70,6 +70,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
 
+        com.example.ecociente.ui.JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_gerenciar_perfil);
 
         viewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
@@ -77,6 +78,8 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
         inicializarComponentes();
 
         configurarCliques();
+        findViewById(R.id.botaoVoltarPerfil).setOnClickListener(view -> finish());
+        Motion.pressFeedback(findViewById(R.id.botaoVoltarPerfil));
 
         cooperativa = getIntent().getBooleanExtra(EXTRA_COOPERATIVA, false);
 

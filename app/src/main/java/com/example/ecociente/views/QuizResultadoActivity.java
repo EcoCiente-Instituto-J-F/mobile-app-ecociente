@@ -122,6 +122,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
     }
 
     private int calcularPontuacao() {
+        if (QuizConteudo.getAcertosServidor() >= 0) return QuizConteudo.getAcertosServidor();
         int acertos = 0;
         for (int i = 0; i < perguntas.size(); i++) {
             if (acertou(i)) {
@@ -140,10 +141,10 @@ public class QuizResultadoActivity extends AppCompatActivity {
     private void preencherResultado() {
         listaResultados.removeAllViews();
 
-        // A API ainda não manda o gabarito: sem ele só dá para confirmar o envio das respostas.
+        // A nota é oficial do servidor, mesmo quando a revisão não pode ser consultada.
         if (!QuizConteudo.temGabarito()) {
-            textoPontuacao.setText(R.string.quiz_resultado_sem_nota);
-            textoMensagem.setText(R.string.quiz_resultado_sem_gabarito);
+            textoPontuacao.setText(String.format(Locale.getDefault(), "%02d/%02d", pontuacao, perguntas.size()));
+            textoMensagem.setText("Resultado salvo! A revisão das respostas está temporariamente indisponível.");
             return;
         }
 
@@ -289,10 +290,10 @@ public class QuizResultadoActivity extends AppCompatActivity {
         if (pontuacao == perguntas.size()) {
             return getString(R.string.quiz_resultado_mensagem_perfeita);
         }
-        if (pontuacao > 7) {
+        if (pontuacao >= Math.ceil(perguntas.size() * 0.8)) {
             return getString(R.string.quiz_resultado_mensagem_boa);
         }
-        if (pontuacao >= 6) {
+        if (pontuacao >= Math.ceil(perguntas.size() * 0.6)) {
             return getString(R.string.quiz_resultado_mensagem_media);
         }
         return getString(R.string.quiz_resultado_mensagem_praticar);
@@ -321,8 +322,9 @@ public class QuizResultadoActivity extends AppCompatActivity {
     }
 
     private void repetirQuiz() {
-        Intent rota = new Intent(this, QuizPerguntasActivity.class);
-        rota.putExtra(QuizPerguntasActivity.EXTRA_CATEGORIA, categoria);
+        // Uma nova tentativa precisa ser iniciada no backend para não reenviar a anterior.
+        Intent rota = new Intent(this, InicioQuizActivity.class);
+        rota.putExtra(InicioQuizActivity.EXTRA_CATEGORIA, categoria);
         startActivity(rota);
         overridePendingTransition(0, 0);
         finish();
@@ -354,7 +356,7 @@ public class QuizResultadoActivity extends AppCompatActivity {
         });
         contador.start();
 
-        if (pontuacao > 7) {
+        if (pontuacao >= Math.ceil(perguntas.size() * 0.8)) {
             // O confete nasce dos dois cantos inferiores, explode em diagonal e cai.
             confetti.postDelayed(confetti::lancar, 520L);
         }

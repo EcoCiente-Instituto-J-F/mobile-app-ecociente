@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/raizInicioConteudo" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:background="@color/verde_escuro_principal">
+
+    <LinearLayout android:layout_width="match_parent" android:layout_height="57dp" android:gravity="center_vertical" android:paddingStart="15dp" android:paddingEnd="15dp">
+        <TextView android:id="@+id/voltarInicioConteudo" android:layout_width="48dp" android:layout_height="48dp" android:gravity="center" android:text="✕" android:textSize="23sp" android:textColor="@color/branco" android:contentDescription="Fechar"/>
+        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="EcoCiente" android:fontFamily="@font/nunito_extrabold" android:textSize="25sp" android:textColor="@color/branco"/>
+        <View android:layout_width="48dp" android:layout_height="1dp"/>
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" android:fillViewport="true" android:scrollbars="none">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:minHeight="450dp" android:orientation="vertical" android:gravity="center" android:paddingStart="28dp" android:paddingEnd="28dp" android:paddingBottom="28dp" android:paddingTop="10dp">
+            <FrameLayout
+                android:id="@+id/containerAnimacaoEkoEstudar"
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="15dp"
+                android:contentDescription="Eko incentivando o aprendizado" />
+            <TextView android:id="@+id/tipoInicioConteudo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:text="AULA 01" android:fontFamily="@font/nunito_bold" android:textColor="#B5E0C8" android:textSize="13sp"/>
+            <TextView android:id="@+id/tituloInicioConteudo" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:gravity="center" android:text="Pequenas atitudes transformam o mundo" android:fontFamily="@font/nunito_extrabold" android:textColor="@color/branco" android:textSize="28sp"/>
+            <TextView android:id="@+id/descricaoInicioConteudo" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="15dp" android:gravity="center" android:lineSpacingExtra="3dp" android:text="Aprenda e coloque em prática uma atitude sustentável." android:fontFamily="@font/nunito_regular" android:textColor="#E2F0E9" android:textSize="16sp"/>
+            <TextView android:id="@+id/mensagemMotivacionalInicio" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="24dp" android:gravity="center" android:text="Aprender é uma forma de cuidar do planeta!" android:fontFamily="@font/nunito_semibold" android:textColor="#C5E8D4" android:textSize="16sp" android:lineSpacingExtra="3dp"/>
+            </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.button.MaterialButton android:id="@+id/botaoComecarConteudo" android:layout_width="match_parent" android:layout_height="59dp" android:layout_marginStart="29dp" android:layout_marginEnd="29dp" android:layout_marginBottom="17dp" android:text="Começar aula" android:textAllCaps="false" android:textSize="17sp" android:fontFamily="@font/nunito_extrabold" android:textColor="@color/verde_escuro_principal" app:backgroundTint="@color/branco" app:cornerRadius="14dp"/>
+</LinearLayout>

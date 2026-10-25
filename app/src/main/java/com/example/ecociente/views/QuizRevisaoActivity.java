@@ -76,6 +76,7 @@ public class QuizRevisaoActivity extends AppCompatActivity {
         configurarInsetsDaTela();
 
         perguntas = QuizConteudo.obterPerguntas();
+        if (!QuizConteudo.temGabarito()) { finish(); return; }
         respostas = getIntent().getIntArrayExtra(EXTRA_RESPOSTAS);
         categoria = getIntent().getStringExtra(EXTRA_CATEGORIA);
 
@@ -290,8 +291,8 @@ public class QuizRevisaoActivity extends AppCompatActivity {
     }
 
     private void repetirQuiz() {
-        Intent rota = new Intent(this, QuizPerguntasActivity.class);
-        rota.putExtra(QuizPerguntasActivity.EXTRA_CATEGORIA, categoria);
+        Intent rota = new Intent(this, InicioQuizActivity.class);
+        rota.putExtra(InicioQuizActivity.EXTRA_CATEGORIA, categoria);
         rota.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(rota);
         overridePendingTransition(0, 0);
