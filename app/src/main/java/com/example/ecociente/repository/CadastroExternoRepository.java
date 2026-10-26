@@ -32,7 +32,7 @@ public class CadastroExternoRepository {
 
     private static final String TAG = "CadastroExternaEcoCiente";
 
-    private static final String URL_BASE = "https://ds-cadastro-api.onrender.com/api/cadastro";
+    private static final String URL_BASE = ConfiguracaoServidores.URL_CADASTRO;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
@@ -161,10 +161,8 @@ public class CadastroExternoRepository {
             conexao.setRequestProperty("Accept", "application/json");
             conexao.setDoOutput(true);
             conexao.setUseCaches(false);
-            // Render free tier "dorme" a API após inatividade; medido de 72s
-            // a 148s para o primeiro request acordar o serviço.
-            conexao.setConnectTimeout(180_000);
-            conexao.setReadTimeout(180_000);
+            conexao.setConnectTimeout(ConfiguracaoServidores.TIMEOUT_CONEXAO_MS);
+            conexao.setReadTimeout(ConfiguracaoServidores.TIMEOUT_RESPOSTA_CADASTRO_MS);
 
             try (OutputStream saida = conexao.getOutputStream()) {
                 saida.write(corpo.toString().getBytes(StandardCharsets.UTF_8));
@@ -178,7 +176,11 @@ public class CadastroExternoRepository {
 
             String corpoErro = lerFluxo(conexao.getErrorStream());
 
-            return ResultadoApi.erro(extrairMensagemErro(corpoErro));
+            String mensagem = extrairMensagemErro(corpoErro);
+            if (codigoResposta == 404 && corpoErro.contains("EMAIL_ALREADY_EXISTS")) {
+                mensagem = "Este e-mail ja existe no PostgreSQL. Entre pela tela de Login para sincronizar o Firebase. Nao repita o cadastro.";
+            }
+            return ResultadoApi.erro(mensagem);
 
         } finally {
             conexao.disconnect();
