@@ -53,18 +53,39 @@
         Sem ScrollView: a tela inteira fica fixa.
         O bloco foi compactado e elevado para caber acima da navigation bar do Android.
     -->
-    <ImageView
-        android:id="@+id/imagemIlustracaoInicioQuiz"
-        android:layout_width="228dp"
+    <!-- Capa do tema e Eko animado compartilham a mesma altura da ilustracao antiga. -->
+    <LinearLayout
+        android:id="@+id/areaIlustracoesInicioQuiz"
+        android:layout_width="0dp"
         android:layout_height="230dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="18dp"
-        android:adjustViewBounds="true"
-        android:contentDescription="@string/inicio_quiz_ilustracao"
-        android:scaleType="fitCenter"
-        android:src="@drawable/quiz_sustentabilidade_inicio"
+        android:layout_marginEnd="20dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cabecalhoInicioQuiz" />
+        app:layout_constraintTop_toBottomOf="@id/cabecalhoInicioQuiz">
+
+        <!-- Mantem a capa tematica carregada pelo catalogo de midias. -->
+        <ImageView
+            android:id="@+id/imagemIlustracaoInicioQuiz"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/inicio_quiz_ilustracao"
+            android:scaleType="fitCenter"
+            android:src="@drawable/quiz_sustentabilidade_inicio" />
+
+        <!-- Recebe os frames PNG do Eko. Nenhum GIF ou video e necessario. -->
+        <FrameLayout
+            android:id="@+id/containerAnimacaoEkoQuiz"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.08"
+            android:contentDescription="Eko animado incentivando o quiz" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/blocoInformacoesInicioQuiz"
@@ -77,7 +98,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imagemIlustracaoInicioQuiz">
+        app:layout_constraintTop_toBottomOf="@id/areaIlustracoesInicioQuiz">
 
         <TextView
             android:id="@+id/textoTituloInicioQuiz"
