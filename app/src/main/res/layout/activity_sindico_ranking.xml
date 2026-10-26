@@ -65,12 +65,12 @@
             android:textColor="@color/verde_escuro_principal"
             android:textSize="11sp" />
         <TextView
-            android:id="@+id/rankingPorApartamento"
+            android:id="@+id/rankingPorMorador"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:clickable="true"
-            android:contentDescription="@string/sindico_ver_ranking_por_apartamento"
+            android:contentDescription="@string/sindico_ver_ranking_por_morador"
             app:drawableStartCompat="@drawable/sindico_ranking_icone_modo"
             android:drawablePadding="4dp"
             android:focusable="true"
@@ -78,7 +78,7 @@
             android:gravity="center"
             android:paddingStart="8dp"
             android:paddingEnd="4dp"
-            android:text="@string/sindico_por_apartamento"
+            android:text="@string/sindico_por_morador"
             android:textColor="@color/verde_escuro_principal"
             android:textSize="11sp" />
     </LinearLayout>

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -145,21 +144,7 @@ final class ApiAutenticada {
 
             InputStream fluxo = codigo[0] >= 400 ? conexao.getErrorStream() : conexao.getInputStream();
 
-            if (fluxo == null) {
-                return "";
-            }
-
-            try (InputStream entrada = fluxo;
-                    ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
-                byte[] buffer = new byte[1024];
-                int lidos;
-
-                while ((lidos = entrada.read(buffer)) != -1) {
-                    saida.write(buffer, 0, lidos);
-                }
-
-                return saida.toString(StandardCharsets.UTF_8.name());
-            }
+            return LeituraHttp.texto(fluxo);
         } finally {
             conexao.disconnect();
         }

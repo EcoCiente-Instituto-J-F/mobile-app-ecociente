@@ -7,9 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -146,7 +144,7 @@ public class NotificacaoMotivacionalRepository {
 
             JSONObject resposta =
                     new JSONObject(
-                            lerFluxo(
+                            LeituraHttp.texto(
                                     conexao.getInputStream()
                             )
                     );
@@ -221,46 +219,5 @@ public class NotificacaoMotivacionalRepository {
                 "?excluirId="
                 +
                 idCodificado;
-    }
-
-    @NonNull
-    private String lerFluxo(
-            @NonNull InputStream fluxo
-    ) throws IOException {
-
-        try (
-                InputStream entrada =
-                        fluxo;
-
-                ByteArrayOutputStream saida =
-                        new ByteArrayOutputStream()
-        ) {
-
-            byte[] buffer =
-                    new byte[1024];
-
-            int lidos;
-
-            while (
-                    (
-                            lidos =
-                                    entrada.read(
-                                            buffer
-                                    )
-                    )
-                            != -1
-            ) {
-
-                saida.write(
-                        buffer,
-                        0,
-                        lidos
-                );
-            }
-
-            return saida.toString(
-                    StandardCharsets.UTF_8.name()
-            );
-        }
     }
 }

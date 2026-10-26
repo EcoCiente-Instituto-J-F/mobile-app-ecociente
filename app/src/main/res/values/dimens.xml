@@ -3,4 +3,6 @@
 <resources>
     <dimen name="raio_card">14dp</dimen>
     <dimen name="espaco_barra_navegacao">72dp</dimen>
+    <!-- 0 = sem limite (celular). Em tablet, values-sw600dp limita a largura do conteúdo. -->
+    <dimen name="largura_maxima_conteudo">0dp</dimen>
 </resources>

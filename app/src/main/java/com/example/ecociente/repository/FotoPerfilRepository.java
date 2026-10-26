@@ -15,7 +15,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ecociente.model.ResultadoUploadFoto;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -154,7 +153,7 @@ public class FotoPerfilRepository {
 
             boolean deuCerto = codigoResposta >= 200 && codigoResposta < 300;
 
-            String corpo = lerFluxo(deuCerto ? conexao.getInputStream() : conexao.getErrorStream());
+            String corpo = LeituraHttp.texto(deuCerto ? conexao.getInputStream() : conexao.getErrorStream());
 
             if (!deuCerto) {
                 throw new IOException("Cloudinary respondeu " + codigoResposta + ": " + corpo);
@@ -169,26 +168,5 @@ public class FotoPerfilRepository {
 
     private void escrever(@NonNull OutputStream saida, @NonNull String texto) throws IOException {
         saida.write(texto.getBytes(StandardCharsets.UTF_8));
-    }
-
-    @NonNull
-    private String lerFluxo(InputStream fluxo) throws IOException {
-
-        if (fluxo == null) {
-            return "";
-        }
-
-        try (InputStream entrada = fluxo;
-                ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
-
-            byte[] buffer = new byte[1024];
-            int lidos;
-
-            while ((lidos = entrada.read(buffer)) != -1) {
-                saida.write(buffer, 0, lidos);
-            }
-
-            return saida.toString(StandardCharsets.UTF_8.name());
-        }
     }
 }

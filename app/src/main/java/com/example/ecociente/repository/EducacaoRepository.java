@@ -11,12 +11,10 @@ import com.example.ecociente.model.CursoEducativo;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.QuizResumo;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -269,31 +267,10 @@ public class EducacaoRepository {
 
             InputStream fluxo = codigo >= 400 ? conexao.getErrorStream() : conexao.getInputStream();
 
-            return new Resposta(codigo, lerFluxo(fluxo));
+            return new Resposta(codigo, LeituraHttp.texto(fluxo));
 
         } finally {
             conexao.disconnect();
-        }
-    }
-
-    @NonNull
-    private String lerFluxo(@Nullable InputStream fluxo) throws IOException {
-
-        if (fluxo == null) {
-            return "";
-        }
-
-        try (InputStream entrada = fluxo;
-                ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
-
-            byte[] buffer = new byte[1024];
-            int lidos;
-
-            while ((lidos = entrada.read(buffer)) != -1) {
-                saida.write(buffer, 0, lidos);
-            }
-
-            return saida.toString(StandardCharsets.UTF_8.name());
         }
     }
 

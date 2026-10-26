@@ -3,6 +3,7 @@ package com.example.ecociente.ui;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
@@ -84,6 +85,19 @@ public final class FieldFeedback {
             int normalColor
     ) {
         limparEstadoCard(card, normalColor);
+    }
+
+    // Erro de um campo: marca o card, avisa embaixo e leva o foco para o campo.
+    public static void errorAndFocus(
+            MaterialCardView card,
+            EditText field,
+            String text,
+            View anchor,
+            Motion motion
+    ) {
+        error(card, text, motion);
+        showErrorSnackbar(anchor, text);
+        field.requestFocus();
     }
 
     public static void showErrorSnackbar(

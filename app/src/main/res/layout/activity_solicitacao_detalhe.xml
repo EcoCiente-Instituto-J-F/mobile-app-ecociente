@@ -124,29 +124,17 @@
                     android:orientation="vertical"
                     android:padding="14dp">
 
-                    <LinearLayout
+                    <TextView
+                        android:id="@+id/tituloContraparteDetalhe"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="@string/condominio_solicitante"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textSize="17sp"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_grupo" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:fontFamily="@font/nunito_bold"
-                            android:id="@+id/tituloContraparteDetalhe"
-                            android:text="@string/condominio_solicitante"
-                            android:textColor="@color/verde_escuro_principal"
-                            android:textSize="17sp" />
-
-                    </LinearLayout>
+                        android:drawablePadding="8dp"
+                        app:drawableStartCompat="@drawable/ic_grupo" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -240,29 +228,17 @@
                     android:orientation="vertical"
                     android:padding="14dp">
 
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="14dp"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="@string/detalhe_da_solicitacao"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textSize="17sp"
                         android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_grupo" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:fontFamily="@font/nunito_bold"
-                            android:text="@string/detalhe_da_solicitacao"
-                            android:textColor="@color/verde_escuro_principal"
-                            android:textSize="17sp" />
-
-                    </LinearLayout>
+                        android:drawablePadding="8dp"
+                        app:drawableStartCompat="@drawable/ic_grupo" />
 
                     <LinearLayout
                         android:id="@+id/linhasDetalhe"

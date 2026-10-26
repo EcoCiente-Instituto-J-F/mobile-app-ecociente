@@ -40,6 +40,7 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
         InsetsSistema.aplicarComoPadding(raiz);
 
         findViewById(R.id.voltarSindicoDashboard).setOnClickListener(view -> finish());
+        findViewById(R.id.botaoTentarDashboard).setOnClickListener(view -> carregar());
         exibirSemDados();
 
         BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
@@ -65,7 +66,10 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
             return;
         }
 
-        for (int id : new int[]{R.id.valorAulasConcluidas, R.id.valorMoradoresNoApp, R.id.valorPontosDoMes}) {
+        findViewById(R.id.botaoTentarDashboard).setVisibility(View.GONE);
+
+        for (int id : new int[]{R.id.valorAulasConcluidas, R.id.valorMoradoresNoApp, R.id.valorPontosDoMes,
+                R.id.valorPontosNoMesDashboard}) {
             ((TextView) findViewById(id)).setText(R.string.sindico_carregando_dado);
         }
 
@@ -74,6 +78,7 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
 
             if (resumo == null) {
                 exibirSemDados();
+                findViewById(R.id.botaoTentarDashboard).setVisibility(View.VISIBLE);
                 AvisoFlutuante.mostrar(this, R.string.sindico_dashboard_erro);
                 return;
             }
@@ -83,17 +88,22 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
     }
 
     private void exibir(ResumoDashboard resumo) {
-        ((TextView) findViewById(R.id.valorAulasConcluidas)).setText(String.valueOf(resumo.getDescartes()));
+        ((TextView) findViewById(R.id.valorAulasConcluidas)).setText(String.valueOf(resumo.getReciclados()));
         ((TextView) findViewById(R.id.valorMoradoresNoApp)).setText(String.valueOf(resumo.getMoradores()));
         ((TextView) findViewById(R.id.valorPontosDoMes)).setText(String.valueOf(resumo.getColetasRealizadas()));
+        ((TextView) findViewById(R.id.valorPontosNoMesDashboard)).setText(String.valueOf(resumo.getPontosDoMes()));
 
-        String[] semanas = {"há 3\nsem.", "há 2\nsem.", "há 1\nsem.", "esta\nsemana"};
-        int[] porSemana = resumo.getDescartesPorSemana();
-        SindicoDashboardGraficoView graficoSemanas = findViewById(R.id.graficoQuizzesSindico);
-        graficoSemanas.setDados(semanas, porSemana, repetirCor(R.color.verde_escuro_principal, semanas.length),
-                maximo(porSemana));
-        graficoSemanas.setContentDescription(getString(R.string.sindico_descartes_semana_descricao,
-                porSemana[0], porSemana[1], porSemana[2], porSemana[3]));
+        String[] quizzes = resumo.getQuizzes();
+        int[] notas = resumo.getNotasDosQuizzes();
+        SindicoDashboardGraficoView graficoQuizzes = findViewById(R.id.graficoQuizzesSindico);
+        graficoQuizzes.setDados(quizzes, notas, repetirCor(R.color.verde_escuro_principal, quizzes.length), 100);
+        StringBuilder notasTexto = new StringBuilder();
+        for (int i = 0; i < quizzes.length; i++) {
+            if (i > 0) notasTexto.append(", ");
+            notasTexto.append(quizzes[i]).append(' ').append(notas[i]);
+        }
+        graficoQuizzes.setContentDescription(quizzes.length == 0
+                ? getString(R.string.sindico_sem_quizzes) : getString(R.string.sindico_notas_dos_quizzes, notasTexto));
 
         String[] materiais = resumo.getMateriais();
         int[] percentuais = resumo.getPercentuais();

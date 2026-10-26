@@ -55,26 +55,17 @@
                 android:background="@drawable/fundo_cartao_borda"
                 android:orientation="vertical"
                 android:padding="12dp">
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="@string/informacoes_basicas"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textSize="16sp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:contentDescription="@null"
-                        android:src="@drawable/ic_predio"
-                        app:tint="@color/verde_escuro_principal" />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="6dp"
-                        android:fontFamily="@font/nunito_bold"
-                        android:text="@string/informacoes_basicas"
-                        android:textColor="@color/verde_escuro_principal"
-                        android:textSize="16sp" />
-                </LinearLayout>
+                    android:drawablePadding="6dp"
+                    app:drawableStartCompat="@drawable/ic_predio_22dp"
+                    app:drawableTint="@color/verde_escuro_principal" />
 
                 <LinearLayout
                     android:baselineAligned="false"
@@ -422,31 +413,46 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/fundo_cartao_borda"
+                android:orientation="vertical"
+                android:padding="10dp">
                 <LinearLayout
-                    android:id="@+id/adicionarBlocoSindico"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
-                    android:layout_marginTop="7dp"
-                    android:background="@drawable/sindico_unidades_botao_contorno"
-                    android:clickable="true"
-                    android:contentDescription="@string/sindico_adicionar_bloco_ou_torre"
-                    android:focusable="true"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
                     <ImageView
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_adicionar" />
+                        android:src="@drawable/ic_usuario" />
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="7dp"
+                        android:layout_weight="1"
                         android:fontFamily="@font/nunito_bold"
-                        android:text="@string/sindico_adicionar_bloco_torre"
+                        android:text="@string/sindico_moradores"
                         android:textColor="@color/verde_escuro_principal"
-                        android:textSize="12sp" />
+                        android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/contagemMoradoresSindico"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textSize="11sp" />
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/listaMoradoresSindico"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
             </LinearLayout>
 
             <LinearLayout

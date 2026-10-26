@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
 import com.example.ecociente.model.SindicoPosicaoRanking;
 import com.example.ecociente.repository.RankingExternoRepository;
-import com.example.ecociente.repository.SindicoRankingRepository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
@@ -24,13 +24,15 @@ import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Navegacao;
 
-/** Ranking do condomínio: por torre vem da API; por apartamento ainda não existe API. */
+/** Ranking do condomínio, por torre e por morador, os dois vindos da ds-pontuacao-api. */
 public final class SindicoRankingActivity extends AppCompatActivity {
     private List<SindicoPosicaoRanking> torresDaApi;
+    private List<SindicoPosicaoRanking> moradoresDaApi;
     private boolean erroNoRanking;
+    private boolean erroNosMoradores;
 
-    private static final String ESTADO_APARTAMENTOS = "rankingPorApartamento";
-    private boolean porApartamento;
+    private static final String ESTADO_MORADORES = "rankingPorMorador";
+    private boolean porMorador;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -50,10 +52,10 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         View raiz = findViewById(R.id.raizSindicoRanking);
         InsetsSistema.aplicarComoPadding(raiz);
 
-        porApartamento = estadoSalvo != null && estadoSalvo.getBoolean(ESTADO_APARTAMENTOS);
+        porMorador = estadoSalvo != null && estadoSalvo.getBoolean(ESTADO_MORADORES);
         findViewById(R.id.voltarSindicoRanking).setOnClickListener(view -> finish());
         findViewById(R.id.rankingPorBloco).setOnClickListener(view -> selecionarModo(false));
-        findViewById(R.id.rankingPorApartamento).setOnClickListener(
+        findViewById(R.id.rankingPorMorador).setOnClickListener(
                 view -> selecionarModo(true));
 
         BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
@@ -69,6 +71,23 @@ public final class SindicoRankingActivity extends AppCompatActivity {
 
     private void carregarRanking() {
         erroNoRanking = false;
+        erroNosMoradores = false;
+
+        new RankingExternoRepository()
+                .listarMoradoresNoRanking(
+                        this,
+                        PerfilApiRepository.condominioId(this),
+                        100,
+                        posicoes -> {
+                            if (isFinishing() || isDestroyed()) return;
+
+                            if (posicoes == null) {
+                                erroNosMoradores = true;
+                            } else {
+                                moradoresDaApi = posicoes;
+                            }
+                            atualizarRanking();
+                        });
 
         new RankingExternoRepository()
                 .listarTorres(
@@ -87,31 +106,27 @@ public final class SindicoRankingActivity extends AppCompatActivity {
                         });
     }
 
-    private void selecionarModo(boolean apartamentos) {
-        if (porApartamento == apartamentos) return;
-        porApartamento = apartamentos;
+    private void selecionarModo(boolean moradores) {
+        if (porMorador == moradores) return;
+        porMorador = moradores;
         atualizarRanking();
     }
 
     private void atualizarRanking() {
         TextView bloco = findViewById(R.id.rankingPorBloco);
-        TextView apartamento = findViewById(R.id.rankingPorApartamento);
-        bloco.setBackgroundResource(porApartamento
+        TextView apartamento = findViewById(R.id.rankingPorMorador);
+        bloco.setBackgroundResource(porMorador
                 ? android.R.color.transparent : R.drawable.sindico_ranking_modo_ativo);
-        apartamento.setBackgroundResource(porApartamento
+        apartamento.setBackgroundResource(porMorador
                 ? R.drawable.sindico_ranking_modo_ativo : android.R.color.transparent);
-        bloco.setContentDescription(porApartamento ? "Ver ranking por bloco ou torre"
+        bloco.setContentDescription(porMorador ? "Ver ranking por bloco ou torre"
                 : "Ranking por bloco ou torre, selecionado");
-        apartamento.setContentDescription(porApartamento
-                ? "Ranking por apartamento, selecionado" : "Ver ranking por apartamento");
+        apartamento.setContentDescription(porMorador
+                ? "Ranking por morador, selecionado" : "Ver ranking por morador");
 
-        List<SindicoPosicaoRanking> posicoes = SindicoRankingRepository.getInstance()
-                .getRanking(porApartamento);
-
-        // Por bloco/torre: usa o ranking da API quando ele já chegou.
-        if (!porApartamento && torresDaApi != null) {
-            posicoes = torresDaApi;
-        }
+        List<SindicoPosicaoRanking> carregadas = porMorador ? moradoresDaApi : torresDaApi;
+        List<SindicoPosicaoRanking> posicoes =
+                carregadas != null ? carregadas : Collections.emptyList();
         int[] avatares = {R.id.avatarPrimeiroRanking, R.id.avatarSegundoRanking,
                 R.id.avatarTerceiroRanking};
         int[] pontos = {R.id.pontosPrimeiroRanking, R.id.pontosSegundoRanking,
@@ -128,7 +143,7 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         LinearLayout lista = findViewById(R.id.listaSindicoRankingCompleta);
         lista.removeAllViews();
 
-        boolean falhou = erroNoRanking && !porApartamento && torresDaApi == null;
+        boolean falhou = (porMorador ? erroNosMoradores : erroNoRanking) && carregadas == null;
 
         if (posicoes.isEmpty()) {
             TextView vazio = new TextView(this);
@@ -148,6 +163,7 @@ public final class SindicoRankingActivity extends AppCompatActivity {
                 tentar.setText(R.string.tentar_novamente);
                 tentar.setOnClickListener(view -> {
                     erroNoRanking = false;
+                    erroNosMoradores = false;
                     atualizarRanking();
                     carregarRanking();
                 });
@@ -198,7 +214,7 @@ public final class SindicoRankingActivity extends AppCompatActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle estado) {
-        estado.putBoolean(ESTADO_APARTAMENTOS, porApartamento);
+        estado.putBoolean(ESTADO_MORADORES, porMorador);
         super.onSaveInstanceState(estado);
     }
 }

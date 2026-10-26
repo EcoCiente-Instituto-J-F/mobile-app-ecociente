@@ -68,56 +68,31 @@
                                 android:textSize="12sp"
                                 android:visibility="gone" />
 
-                            <LinearLayout
+                            <TextView
+                                android:id="@+id/textoDataProximaColeta"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:text="@string/carregando"
+                                android:textColor="@color/cinza_texto_home"
+                                android:textSize="12sp"
                                 android:gravity="center_vertical"
-                                android:orientation="horizontal">
+                                android:drawablePadding="6dp"
+                                app:drawableStartCompat="@drawable/ic_calendario_14dp" />
 
-                                <ImageView
-                                    android:layout_width="14dp"
-                                    android:layout_height="14dp"
-                                    android:importantForAccessibility="no"
-                                    android:src="@drawable/ic_calendario" />
-
-                                <TextView
-                                    android:id="@+id/textoDataProximaColeta"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="6dp"
-                                    android:fontFamily="@font/nunito_regular"
-                                    android:text="@string/carregando"
-                                    android:textColor="@color/cinza_texto_home"
-                                    android:textSize="12sp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/linhaHorarioProximaColeta"
+                            <TextView
+                                android:id="@+id/textoHorarioProximaColeta"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
+                                android:visibility="gone"
+                                android:fontFamily="@font/nunito_regular"
+                                android:textColor="@color/cinza_texto_home"
+                                android:textSize="12sp"
                                 android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:visibility="gone">
-
-                                <ImageView
-                                    android:layout_width="14dp"
-                                    android:layout_height="14dp"
-                                    android:importantForAccessibility="no"
-                                    android:src="@drawable/ic_relogio" />
-
-                                <TextView
-                                    android:id="@+id/textoHorarioProximaColeta"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="6dp"
-                                    android:fontFamily="@font/nunito_regular"
-                                    android:textColor="@color/cinza_texto_home"
-                                    android:textSize="12sp" />
-
-                            </LinearLayout>
+                                android:drawablePadding="6dp"
+                                app:drawableStartCompat="@drawable/ic_relogio_14dp" />
 
                         </LinearLayout>
 

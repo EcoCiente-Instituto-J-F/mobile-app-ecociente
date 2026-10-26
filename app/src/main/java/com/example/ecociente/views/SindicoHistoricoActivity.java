@@ -34,6 +34,10 @@ import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import android.widget.EditText;
+import android.widget.RatingBar;
+import com.example.ecociente.repository.AvaliacaoColetaRepository;
+import com.example.ecociente.ui.AvisoFlutuante;
 
 /** Coletas do condomínio vindas da ds-calendario-api, da mais recente para a mais antiga. */
 public final class SindicoHistoricoActivity extends AppCompatActivity {
@@ -173,7 +177,9 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
 
     private View criarCartao(LayoutInflater inflater, Solicitacao solicitacao) {
         SindicoCooperativa cooperativa = viewModel.buscar(solicitacao.getCooperativaId());
-        String nome = cooperativa != null ? cooperativa.getNome()
+        String nome = solicitacao.getCooperativaNome() != null && !solicitacao.getCooperativaNome().isEmpty()
+                ? solicitacao.getCooperativaNome()
+                : cooperativa != null ? cooperativa.getNome()
                 : getString(R.string.sindico_cooperativa_numero, solicitacao.getCooperativaId());
 
         View cartao = inflater.inflate(R.layout.item_sindico_historico, lista, false);
@@ -189,7 +195,72 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
         cartao.setOnClickListener(view -> startActivity(SolicitacaoDetalheActivity.criarIntentSindico(
                 this, solicitacao.comNomeCondominio(PerfilApiRepository.condominioNomeOuVazio(this)), nome)));
         Motion.pressFeedback(cartao);
+
+        // Só a coleta realizada se avalia, e uma vez só (a API recusa a repetida).
+        TextView avaliar = cartao.findViewById(R.id.acaoAvaliarHistorico);
+        if (status == StatusAgendamento.REALIZADO) {
+            avaliar.setVisibility(View.VISIBLE);
+            if (viewModel.foiAvaliada(solicitacao.getId())) {
+                avaliar.setText(R.string.sindico_avaliada);
+                avaliar.setEnabled(false);
+            } else {
+                avaliar.setContentDescription(getString(R.string.sindico_avaliar_coleta_de, nome));
+                avaliar.setOnClickListener(view -> abrirAvaliacao(solicitacao, nome));
+            }
+        }
         return cartao;
+    }
+
+    private void abrirAvaliacao(Solicitacao solicitacao, String nomeDaCooperativa) {
+        LinearLayout campos = new LinearLayout(this);
+        campos.setOrientation(LinearLayout.VERTICAL);
+        campos.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
+
+        RatingBar estrelas = new RatingBar(this);
+        estrelas.setNumStars(5);
+        estrelas.setStepSize(1f);
+        estrelas.setRating(0f);
+        estrelas.setContentDescription(getString(R.string.sindico_avaliar_escolha_a_nota));
+        campos.addView(estrelas, new LinearLayout.LayoutParams(-2, -2));
+
+        EditText comentario = new EditText(this);
+        comentario.setHint(R.string.sindico_avaliar_comentario);
+        comentario.setInputType(android.text.InputType.TYPE_CLASS_TEXT
+                | android.text.InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+                | android.text.InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        comentario.setMinLines(2);
+        comentario.setFilters(new android.text.InputFilter[] {new android.text.InputFilter.LengthFilter(500)});
+        campos.addView(comentario, new LinearLayout.LayoutParams(-1, -2));
+
+        new DialogoEco.Builder(this)
+                .titulo(getString(R.string.sindico_avaliar_titulo, nomeDaCooperativa))
+                .conteudo(campos)
+                .botaoValidado(R.string.sindico_avaliar_enviar, DialogoEco.Estilo.PREENCHIDO, () -> {
+                    int nota = Math.round(estrelas.getRating());
+                    if (nota < 1) {
+                        AvisoFlutuante.mostrar(this, R.string.sindico_avaliar_escolha_a_nota);
+                        return false;
+                    }
+                    enviarAvaliacao(solicitacao, nota, comentario.getText().toString());
+                    return true;
+                })
+                .botao(R.string.perfil_cancelar, DialogoEco.Estilo.CONTORNO, null)
+                .mostrar();
+    }
+
+    private void enviarAvaliacao(Solicitacao solicitacao, int nota, String comentario) {
+        new AvaliacaoColetaRepository().avaliar(this, solicitacao.getId(), nota, comentario, resultado -> {
+            if (isFinishing() || isDestroyed()) return;
+
+            if (resultado.isSucesso()) {
+                viewModel.marcarAvaliada(solicitacao.getId());
+                AvisoFlutuante.mostrar(this, R.string.sindico_avaliacao_enviada);
+                mostrarHistorico();
+                return;
+            }
+
+            AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
+        });
     }
 
     private void abrirFiltro() {

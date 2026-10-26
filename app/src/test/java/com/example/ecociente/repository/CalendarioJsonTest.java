@@ -48,4 +48,47 @@ public class CalendarioJsonTest {
         assertEquals(7, solicitacao.getId());
         assertEquals(StatusAgendamento.AGENDADO, solicitacao.getStatus());
     }
+
+    @Test
+    public void leOrigemENomesQuandoAApiInforma() throws Exception {
+        Solicitacao solicitacao = CalendarioJson.solicitacao(new JSONObject(
+                "{\"id\":42,\"condominioId\":3,\"cooperativaId\":4,\"statusAgendamento\":\"AGENDADO\","
+                        + "\"origemSolicitacao\":\"COOPERATIVA\",\"solicitadoPorUsuarioId\":20,"
+                        + "\"cooperativaNome\":\"Coop Sol\",\"condominioNome\":\"Residencial Eco\"}"));
+
+        assertEquals("COOPERATIVA", solicitacao.getOrigemSolicitacao());
+        assertEquals("Coop Sol", solicitacao.getCooperativaNome());
+        assertEquals("Residencial Eco", solicitacao.getNomeCondominio());
+        assertFalse(solicitacao.pediuPeloCondominio());
+    }
+
+    @Test
+    public void pedidoDoCondominioNaoPodeSerRespondidoPeloSindico() throws Exception {
+        Solicitacao solicitacao = CalendarioJson.solicitacao(new JSONObject(
+                "{\"id\":42,\"statusAgendamento\":\"AGENDADO\",\"origemSolicitacao\":\"CONDOMINIO\"}"));
+
+        assertTrue(solicitacao.pediuPeloCondominio());
+    }
+
+    @Test
+    public void semOrigemNaoSeSabeQuemPediu() throws Exception {
+        Solicitacao solicitacao = CalendarioJson.solicitacao(new JSONObject(
+                "{\"id\":42,\"statusAgendamento\":\"AGENDADO\",\"origemSolicitacao\":null,\"cooperativaNome\":null}"));
+
+        assertNull(solicitacao.getOrigemSolicitacao());
+        assertNull(solicitacao.getCooperativaNome());
+        assertFalse(solicitacao.pediuPeloCondominio());
+    }
+
+    @Test
+    public void origemEPedidoSobrevivemAMudancaDeStatusENome() throws Exception {
+        Solicitacao solicitacao = CalendarioJson.solicitacao(new JSONObject(
+                "{\"id\":42,\"statusAgendamento\":\"AGENDADO\",\"origemSolicitacao\":\"CONDOMINIO\","
+                        + "\"cooperativaNome\":\"Coop Sol\"}"))
+                .comStatus(StatusAgendamento.CANCELADO)
+                .comNomeCondominio("Residencial Eco");
+
+        assertEquals("CONDOMINIO", solicitacao.getOrigemSolicitacao());
+        assertEquals("Coop Sol", solicitacao.getCooperativaNome());
+    }
 }

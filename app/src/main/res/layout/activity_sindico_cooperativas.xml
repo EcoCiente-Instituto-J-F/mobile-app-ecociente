@@ -47,6 +47,14 @@
                 android:hint="@string/sindico_buscar_cooperativa"
                 android:importantForAutofill="no" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botaoOrdenarPorDistancia"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/sindico_ordenar_por_distancia" />
+
             <LinearLayout
                 android:id="@+id/listaCooperativas"
                 android:layout_width="match_parent"

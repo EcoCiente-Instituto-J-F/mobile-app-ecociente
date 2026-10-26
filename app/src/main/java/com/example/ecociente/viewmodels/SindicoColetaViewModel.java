@@ -14,6 +14,8 @@ public final class SindicoColetaViewModel extends ViewModel {
     public List<SindicoCooperativa> getCooperativas() { return repositorio.getCooperativas(); }
     public void definirCooperativas(List<SindicoCooperativa> cooperativas) { repositorio.definirCooperativas(cooperativas); }
     public SindicoCooperativa buscar(int id) { return repositorio.buscar(id); }
+    public boolean foiAvaliada(int agendamentoId) { return repositorio.foiAvaliada(agendamentoId); }
+    public void marcarAvaliada(int agendamentoId) { repositorio.marcarAvaliada(agendamentoId); }
     public List<Solicitacao> getSolicitacoes() { return repositorio.getSolicitacoes(); }
     public void definirSolicitacoes(List<Solicitacao> solicitacoes) { repositorio.definirSolicitacoes(solicitacoes); }
     public void adicionarSolicitacao(Solicitacao solicitacao) { repositorio.adicionarSolicitacao(solicitacao); }

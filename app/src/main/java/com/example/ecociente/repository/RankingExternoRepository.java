@@ -96,6 +96,36 @@ public class RankingExternoRepository {
         posicoes.sort((a, b) -> b.getPontos() - a.getPontos());
     }
 
+    // GET /api/v1/rankings/moradores: só quem pontuou no ciclo aparece (a API não lista todos os moradores).
+    public void listarMoradoresNoRanking(
+            @NonNull Context contexto, int condominioId, int limite, @NonNull Retorno retorno) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        EXECUTOR.execute(
+                () -> {
+                    List<SindicoPosicaoRanking> posicoes = null;
+
+                    try {
+                        String corpo =
+                                ApiAutenticada.obter(
+                                        contextoApp,
+                                        URL_BASE + "/api/v1/rankings/moradores?condominioId=" + condominioId
+                                                + "&limit=" + limite);
+
+                        if (corpo != null) {
+                            posicoes = RankingJson.posicoes(new JSONObject(corpo));
+                        }
+                    } catch (Exception erro) {
+                        Log.w(TAG, "Não foi possível carregar os moradores do ranking", erro);
+                    }
+
+                    List<SindicoPosicaoRanking> resultado = posicoes;
+
+                    PRINCIPAL.post(() -> retorno.aoConcluir(resultado));
+                });
+    }
+
     // GET /api/v1/rankings/moradores: ranking semanal dos moradores do condomínio.
     public void listarMoradores(
             @NonNull Context contexto, int condominioId, int limite, @NonNull RetornoMoradores retorno) {

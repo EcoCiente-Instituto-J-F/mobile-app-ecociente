@@ -3,7 +3,6 @@ package com.example.ecociente.repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 import com.example.ecociente.model.SindicoDadosCondominio;
-import com.example.ecociente.model.SindicoApartamento;
 import com.example.ecociente.model.SindicoItemUnidade;
 
 import java.util.ArrayList;
@@ -24,11 +23,8 @@ public final class SindicoUnidadesRepository {
 
     private SindicoDadosCondominio dados = new SindicoDadosCondominio(true, "", "", "", "", "", "", "");
     private String fotoUri;
-    private final List<SindicoItemUnidade> blocos = new ArrayList<>();
     private final List<SindicoItemUnidade> areas = new ArrayList<>();
-    private final List<SindicoApartamento> apartamentos = new ArrayList<>();
     private int proximoId = 1;
-    private int proximoApartamentoId = 1;
 
     private static final String PREFERENCIAS = "sindico_unidades";
 
@@ -65,7 +61,6 @@ public final class SindicoUnidadesRepository {
             JSONObject raiz = new JSONObject();
 
             raiz.put("proximoId", proximoId);
-            raiz.put("proximoApartamentoId", proximoApartamentoId);
             raiz.put("fotoUri", fotoUri == null ? JSONObject.NULL : fotoUri);
             raiz.put("dados", new JSONObject()
                     .put("residencial", dados.isResidencial())
@@ -76,19 +71,7 @@ public final class SindicoUnidadesRepository {
                     .put("cidade", dados.getCidade())
                     .put("estado", dados.getEstado())
                     .put("cep", dados.getCep()));
-            raiz.put("blocos", itensParaJson(blocos));
             raiz.put("areas", itensParaJson(areas));
-
-            JSONArray unidades = new JSONArray();
-            for (SindicoApartamento a : apartamentos) {
-                unidades.put(new JSONObject()
-                        .put("id", a.getId())
-                        .put("blocoId", a.getBlocoId())
-                        .put("numero", a.getNumero())
-                        .put("morador", a.getMorador())
-                        .put("telefone", a.getTelefone()));
-            }
-            raiz.put("apartamentos", unidades);
 
             return raiz.toString();
 
@@ -100,13 +83,10 @@ public final class SindicoUnidadesRepository {
     // Texto vazio ou inválido deixa o repositório vazio, como na primeira vez.
     void deJson(String json) {
 
-        blocos.clear();
         areas.clear();
-        apartamentos.clear();
         dados = new SindicoDadosCondominio(true, "", "", "", "", "", "", "");
         fotoUri = null;
         proximoId = 1;
-        proximoApartamentoId = 1;
 
         if (json == null || json.isEmpty()) {
             return;
@@ -116,7 +96,6 @@ public final class SindicoUnidadesRepository {
             JSONObject raiz = new JSONObject(json);
 
             proximoId = raiz.optInt("proximoId", 1);
-            proximoApartamentoId = raiz.optInt("proximoApartamentoId", 1);
             fotoUri = raiz.isNull("fotoUri") ? null : raiz.optString("fotoUri", null);
 
             JSONObject d = raiz.optJSONObject("dados");
@@ -126,21 +105,10 @@ public final class SindicoUnidadesRepository {
                         d.optString("numero"), d.optString("complemento"), d.optString("cidade"), d.optString("estado"), d.optString("cep"));
             }
 
-            itensDeJson(raiz.optJSONArray("blocos"), blocos);
             itensDeJson(raiz.optJSONArray("areas"), areas);
 
-            JSONArray unidades = raiz.optJSONArray("apartamentos");
-            for (int i = 0; unidades != null && i < unidades.length(); i++) {
-                JSONObject a = unidades.getJSONObject(i);
-                apartamentos.add(new SindicoApartamento(
-                        a.getInt("id"), a.getInt("blocoId"), a.optString("numero"),
-                        a.optString("morador"), a.optString("telefone")));
-            }
-
         } catch (JSONException erro) {
-            blocos.clear();
             areas.clear();
-            apartamentos.clear();
         }
     }
 
@@ -167,89 +135,18 @@ public final class SindicoUnidadesRepository {
     public void salvarDados(SindicoDadosCondominio novosDados) { dados = novosDados; persistir(); }
     // A API manda no que ela sabe (nome, tipo, endereço); o que ela não trouxe fica como estava.
     public void aplicarDadosDaApi(SindicoDadosCondominio api) { dados = dados.comDadosDaApi(api); persistir(); }
-    // Cada torre da API vira um bloco, se ainda não houver um com o mesmo nome. `detalhe` é o texto
-    // da linha (a API não informa quantas unidades a torre tem). Devolve se algo foi acrescentado.
-    public boolean aplicarTorresDaApi(List<SindicoItemUnidade> torres, String detalhe) {
-        boolean acrescentou = false;
-        for (SindicoItemUnidade torre : torres) {
-            boolean existe = false;
-            for (SindicoItemUnidade bloco : blocos) {
-                if (bloco.getNome().trim().equalsIgnoreCase(torre.getNome().trim())) existe = true;
-            }
-            if (!existe) {
-                blocos.add(new SindicoItemUnidade(proximoId++, torre.getNome(), detalhe));
-                acrescentou = true;
-            }
-        }
-        if (acrescentou) persistir();
-        return acrescentou;
-    }
     public String getFotoUri() { return fotoUri; }
     public void salvarFotoUri(String uri) { fotoUri = uri; persistir(); }
-    public List<SindicoItemUnidade> getBlocos() {
-        return Collections.unmodifiableList(new ArrayList<>(blocos));
-    }
     public List<SindicoItemUnidade> getAreas() {
         return Collections.unmodifiableList(new ArrayList<>(areas));
     }
 
-    public SindicoItemUnidade getBloco(int blocoId) {
-        for (SindicoItemUnidade bloco : blocos) {
-            if (bloco.getId() == blocoId) return bloco;
-        }
-        return null;
-    }
 
-    public List<SindicoApartamento> getApartamentos(int blocoId) {
-        List<SindicoApartamento> resultado = new ArrayList<>();
-        for (SindicoApartamento apartamento : apartamentos) {
-            if (apartamento.getBlocoId() == blocoId) resultado.add(apartamento);
-        }
-        return Collections.unmodifiableList(resultado);
-    }
 
-    public SindicoApartamento getApartamento(int apartamentoId) {
-        for (SindicoApartamento apartamento : apartamentos) {
-            if (apartamento.getId() == apartamentoId) return apartamento;
-        }
-        return null;
-    }
 
-    public boolean existeNumero(int blocoId, int apartamentoId, String numero) {
-        for (SindicoApartamento apartamento : apartamentos) {
-            if (apartamento.getBlocoId() == blocoId && apartamento.getId() != apartamentoId
-                    && apartamento.getNumero().equalsIgnoreCase(numero)) return true;
-        }
-        return false;
-    }
 
-    public void salvarApartamento(int apartamentoId, int blocoId, String numero,
-                                 String morador, String telefone) {
-        SindicoApartamento novo = new SindicoApartamento(
-                apartamentoId < 0 ? proximoApartamentoId++ : apartamentoId,
-                blocoId, numero, morador, telefone);
-        if (apartamentoId >= 0) {
-            for (int i = 0; i < apartamentos.size(); i++) {
-                if (apartamentos.get(i).getId() == apartamentoId) {
-                    apartamentos.set(i, novo);
-                    persistir();
-                    return;
-                }
-            }
-            throw new IllegalArgumentException("Unidade não encontrada");
-        }
-        apartamentos.add(novo);
-        persistir();
-    }
 
-    public void excluirApartamento(int apartamentoId) {
-        apartamentos.removeIf(apartamento -> apartamento.getId() == apartamentoId);
-        persistir();
-    }
 
-    public void salvarBloco(int id, String nome, int quantidade) {
-        salvar(blocos, id, nome, quantidade + " unidades");
-    }
 
     public void salvarArea(int id, String nome, String local) {
         salvar(areas, id, nome, local);
@@ -272,11 +169,6 @@ public final class SindicoUnidadesRepository {
         persistir();
     }
 
-    public void excluirBloco(int id) {
-        excluir(blocos, id);
-        apartamentos.removeIf(apartamento -> apartamento.getBlocoId() == id);
-        persistir();
-    }
     public void excluirArea(int id) { excluir(areas, id); }
 
     private void excluir(List<SindicoItemUnidade> itens, int id) {

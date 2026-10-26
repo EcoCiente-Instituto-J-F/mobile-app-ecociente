@@ -18,15 +18,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONObject;
 
-// Não existe API de dashboard: os números saem das últimas postagens do condomínio
-// (GET /api/postagens) e das coletas (GET /api/v1/agendamentos).
+// Materiais, pontos e quizzes vêm de GET /api/condominios/{id}/dashboard (ds-mobile-api, view
+// vw_dashboard_sindico); as coletas por cooperativa, do calendário (GET /api/v1/agendamentos).
 public class DashboardSindicoRepository {
 
     private static final String TAG = "DashboardSindico";
 
-    private static final String URL_POSTAGENS = "https://ds-mobile-api.onrender.com/api/postagens?condominioId=";
-
-    private static final int POR_PAGINA = 100;
+    private static final String URL_BASE = "https://ds-mobile-api.onrender.com/api/condominios/";
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
@@ -37,7 +35,7 @@ public class DashboardSindicoRepository {
         void aoConcluir(@Nullable ResumoDashboard resumo);
     }
 
-    private JSONObject postagens;
+    private JSONObject dashboard;
     private List<Solicitacao> coletas;
     private Map<Integer, String> cooperativas = new HashMap<>();
     private int pendentes;
@@ -46,7 +44,7 @@ public class DashboardSindicoRepository {
 
         Context contextoApp = contexto.getApplicationContext();
 
-        postagens = null;
+        dashboard = null;
         coletas = null;
         pendentes = 3;
 
@@ -55,19 +53,19 @@ public class DashboardSindicoRepository {
                     JSONObject envelope = null;
 
                     try {
-                        String corpo = ApiAutenticada.obter(contextoApp, URL_POSTAGENS + condominioId + "&size=" + POR_PAGINA);
+                        String corpo = ApiAutenticada.obter(contextoApp, URL_BASE + condominioId + "/dashboard");
 
                         if (corpo != null) {
                             envelope = new JSONObject(corpo);
                         }
                     } catch (Exception erro) {
-                        Log.w(TAG, "Não foi possível carregar as postagens", erro);
+                        Log.w(TAG, "Não foi possível carregar o dashboard", erro);
                     }
 
                     JSONObject resultado = envelope;
 
                     PRINCIPAL.post(() -> {
-                        postagens = resultado;
+                        dashboard = resultado;
                         concluir(retorno);
                     });
                 });
@@ -105,8 +103,8 @@ public class DashboardSindicoRepository {
         }
 
         retorno.aoConcluir(
-                postagens == null || coletas == null
+                dashboard == null || coletas == null
                         ? null
-                        : DashboardSindicoJson.resumir(postagens, coletas, cooperativas, System.currentTimeMillis()));
+                        : DashboardSindicoJson.resumir(dashboard, coletas, cooperativas));
     }
 }

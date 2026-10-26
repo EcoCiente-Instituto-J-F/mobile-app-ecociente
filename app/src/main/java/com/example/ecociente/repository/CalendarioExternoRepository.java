@@ -11,7 +11,6 @@ import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
 import com.example.ecociente.ui.FormatoDataApi;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -163,7 +162,7 @@ public class CalendarioExternoRepository {
 
             int codigo = conexao.getResponseCode();
 
-            return new Object[] {codigo, codigo >= 200 && codigo < 300 ? lerFluxo(conexao.getInputStream()) : ""};
+            return new Object[] {codigo, codigo >= 200 && codigo < 300 ? LeituraHttp.texto(conexao.getInputStream()) : ""};
 
         } finally {
             conexao.disconnect();
@@ -382,7 +381,7 @@ public class CalendarioExternoRepository {
         String token = autenticacao.tokenParaUso(contexto);
 
         if (token == null) {
-            return ResultadoSolicitacoes.sessaoExpirada();
+            return semToken(contexto);
         }
 
         ResultadoSolicitacoes resultado = buscar(token, endereco);
@@ -390,16 +389,28 @@ public class CalendarioExternoRepository {
         if (resultado.getTipo() == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
             String novoToken = autenticacao.renovarToken(contexto);
 
-            if (novoToken != null) {
-                resultado = buscar(novoToken, endereco);
+            if (novoToken == null) {
+                return semToken(contexto);
+            }
 
-                if (resultado.getTipo() == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
-                    resultado = ResultadoSolicitacoes.semAcesso();
-                }
+            resultado = buscar(novoToken, endereco);
+
+            if (resultado.getTipo() == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
+                resultado = ResultadoSolicitacoes.semAcesso();
             }
         }
 
         return resultado;
+    }
+
+    // Sessão expirada leva ao login; só vale se não há mais credenciais guardadas. Com elas, o
+    // token falhou por conexão ou servidor fora do ar, e a pessoa só precisa tentar de novo.
+    @NonNull
+    private static ResultadoSolicitacoes semToken(Context contexto) {
+
+        return AutenticacaoExternaRepository.temCredenciaisSalvas(contexto)
+                ? ResultadoSolicitacoes.erro()
+                : ResultadoSolicitacoes.sessaoExpirada();
     }
 
     @NonNull
@@ -432,7 +443,7 @@ public class CalendarioExternoRepository {
                 return ResultadoSolicitacoes.erro();
             }
 
-            return converter(new JSONObject(lerFluxo(conexao.getInputStream())));
+            return converter(new JSONObject(LeituraHttp.texto(conexao.getInputStream())));
 
         } finally {
             conexao.disconnect();
@@ -462,22 +473,5 @@ public class CalendarioExternoRepository {
         }
 
         return ResultadoSolicitacoes.sucesso(itens, resposta.optBoolean("last", true));
-    }
-
-    @NonNull
-    private String lerFluxo(@NonNull InputStream fluxo) throws IOException {
-
-        try (InputStream entrada = fluxo;
-                ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
-
-            byte[] buffer = new byte[1024];
-            int lidos;
-
-            while ((lidos = entrada.read(buffer)) != -1) {
-                saida.write(buffer, 0, lidos);
-            }
-
-            return saida.toString(StandardCharsets.UTF_8.name());
-        }
     }
 }

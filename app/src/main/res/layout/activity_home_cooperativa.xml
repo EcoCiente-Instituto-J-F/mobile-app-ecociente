@@ -252,45 +252,35 @@
                                 android:textColor="@color/cinza_texto_home"
                                 android:textSize="12sp" />
 
-                            <com.google.android.material.card.MaterialCardView
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="12dp"
-                                app:cardBackgroundColor="@color/branco"
-                                app:cardCornerRadius="10dp"
-                                app:cardElevation="0dp"
-                                app:strokeWidth="0dp">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:padding="12dp">
-
-                                    <TextView
-                                        android:id="@+id/textoAvisoDestaqueCooperativa"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:ellipsize="end"
-                                        android:fontFamily="@font/nunito_bold"
-                                        android:maxLines="1"
-                                        android:textColor="@color/verde_escuro_principal"
-                                        android:textSize="13sp" />
-
-                                    <TextView
-                                        android:id="@+id/textoAvisoOrigemCooperativa"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="2dp"
-                                        android:ellipsize="end"
-                                        android:fontFamily="@font/nunito_regular"
-                                        android:maxLines="1"
-                                        android:textColor="@color/cinza_texto_auxiliar"
-                                        android:textSize="11sp" />
-
-                                </LinearLayout>
-
-                            </com.google.android.material.card.MaterialCardView>
+                                android:background="@drawable/fundo_aviso_destaque"
+                                android:orientation="vertical"
+                                android:padding="12dp">
+
+                                <TextView
+                                    android:id="@+id/textoAvisoDestaqueCooperativa"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/nunito_bold"
+                                    android:maxLines="1"
+                                    android:textColor="@color/verde_escuro_principal"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/textoAvisoOrigemCooperativa"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/nunito_regular"
+                                    android:maxLines="1"
+                                    android:textColor="@color/cinza_texto_auxiliar"
+                                    android:textSize="11sp" />
+                            </LinearLayout>
 
                         </LinearLayout>
 

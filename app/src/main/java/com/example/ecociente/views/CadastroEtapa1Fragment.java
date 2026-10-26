@@ -784,9 +784,7 @@ public class CadastroEtapa1Fragment extends Fragment {
             EditText campo,
             String mensagem
     ) {
-        FieldFeedback.error(card, mensagem, motion);
-        FieldFeedback.showErrorSnackbar(requireView(), mensagem);
-        campo.requestFocus();
+        FieldFeedback.errorAndFocus(card, campo, mensagem, requireView(), motion);
     }
 
     private void mostrarMensagem(String mensagem) {
