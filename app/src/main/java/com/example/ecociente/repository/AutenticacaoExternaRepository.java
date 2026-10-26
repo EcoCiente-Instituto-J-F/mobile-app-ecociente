@@ -9,9 +9,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.ecociente.model.SessaoExterna;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -188,6 +186,15 @@ public class AutenticacaoExternaRepository {
 
                 return sessao.getToken();
 
+            } catch (CredenciaisRecusadas erro) {
+                // A API disse que e-mail ou senha não valem mais (senha trocada, conta apagada):
+                // aí sim a sessão acabou, e sem as credenciais guardadas o app volta ao login.
+                Log.w(TAG, "Credenciais guardadas recusadas pela API", erro);
+
+                CredenciaisSeguras.limpar(contextoApp);
+
+                return null;
+
             } catch (Exception erro) {
                 Log.w(TAG, "Não foi possível renovar o token", erro);
 
@@ -199,6 +206,22 @@ public class AutenticacaoExternaRepository {
     public static void atualizarSenhaSalva(
             @NonNull Context contexto, @NonNull String email, @NonNull String novaSenha) {
         CredenciaisSeguras.salvar(contexto, email, novaSenha);
+    }
+
+    // Com e-mail e senha guardados, um token que não veio foi falha de conexão ou do servidor (o
+    // Render pode estar acordando), não sessão encerrada: não é motivo para mandar ao login.
+    public static boolean temCredenciaisSalvas(@NonNull Context contexto) {
+
+        String[] credenciais = CredenciaisSeguras.ler(contexto.getApplicationContext());
+
+        return credenciais != null && credenciais.length >= 2;
+    }
+
+    private static final class CredenciaisRecusadas extends IOException {
+
+        CredenciaisRecusadas(String mensagem) {
+            super(mensagem);
+        }
     }
 
     public static void encerrarSessao(@NonNull Context contexto) {
@@ -275,11 +298,15 @@ public class AutenticacaoExternaRepository {
 
             int codigoResposta = conexao.getResponseCode();
 
+            if (codigoResposta == 400 || codigoResposta == 401 || codigoResposta == 403) {
+                throw new CredenciaisRecusadas("Resposta HTTP " + codigoResposta);
+            }
+
             if (codigoResposta < 200 || codigoResposta >= 300) {
                 throw new IOException("Resposta HTTP " + codigoResposta);
             }
 
-            JSONObject resposta = new JSONObject(lerFluxo(conexao.getInputStream()));
+            JSONObject resposta = new JSONObject(LeituraHttp.texto(conexao.getInputStream()));
 
             return new SessaoExterna(
                     resposta.getString("token"),
@@ -322,22 +349,5 @@ public class AutenticacaoExternaRepository {
 
         // Token de versões antigas (texto puro) ou ilegível: descarta e o app renova com o login.
         return guardado == null ? null : CredenciaisSeguras.decifrar(guardado);
-    }
-
-    @NonNull
-    private String lerFluxo(@NonNull InputStream fluxo) throws IOException {
-
-        try (InputStream entrada = fluxo;
-                ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
-
-            byte[] buffer = new byte[1024];
-            int lidos;
-
-            while ((lidos = entrada.read(buffer)) != -1) {
-                saida.write(buffer, 0, lidos);
-            }
-
-            return saida.toString(StandardCharsets.UTF_8.name());
-        }
     }
 }
