@@ -14,6 +14,7 @@ import com.example.ecociente.views.FeedActivity;
 import com.example.ecociente.views.QuizActivity;
 import com.example.ecociente.views.SolicitacoesActivity;
 import com.example.ecociente.views.TelaListaActivity;
+import com.example.ecociente.views.BibliotecaActivity;
 import androidx.annotation.StringRes;
 import com.example.ecociente.views.SindicoCooperativasActivity;
 import com.example.ecociente.views.SindicoHistoricoActivity;
@@ -117,7 +118,8 @@ public final class Navegacao {
         Intent rota;
 
         if (indice == ItensBarra.SEGUNDO) {
-            rota = TelaListaActivity.criarIntent(de, TipoLista.GUIA, morador);
+            rota = new Intent(de, BibliotecaActivity.class)
+                    .putExtra(BibliotecaActivity.EXTRA_MORADOR, morador);
 
         } else if (indice == ItensBarra.TERCEIRO) {
             rota = new Intent(de, QuizActivity.class).putExtra(QuizActivity.EXTRA_MORADOR, morador);

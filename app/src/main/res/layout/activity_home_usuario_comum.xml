@@ -36,7 +36,7 @@
                 android:clipChildren="false"
                 android:clipToPadding="false"
                 android:orientation="vertical"
-                android:paddingBottom="24dp">
+                android:paddingBottom="12dp">
 
                 <FrameLayout
                     android:id="@+id/cabecalhoHome"
@@ -280,8 +280,8 @@
                 <HorizontalScrollView
                     android:id="@+id/rolagemConteudosHome"
                     android:layout_width="match_parent"
-                    android:layout_height="220dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_height="234dp"
+                    android:layout_marginTop="11dp"
                     android:clipToPadding="false"
                     android:fillViewport="false"
                     android:overScrollMode="never"
@@ -304,35 +304,35 @@
                             android:id="@+id/cardConteudoGuia"
                             layout="@layout/item_conteudo_home_guia"
                             android:layout_width="158dp"
-                            android:layout_height="212dp"
+                            android:layout_height="226dp"
                             android:layout_marginEnd="12dp" />
 
                         <include
                             android:id="@+id/cardConteudoDica"
                             layout="@layout/item_conteudo_home_dica"
                             android:layout_width="158dp"
-                            android:layout_height="212dp"
+                            android:layout_height="226dp"
                             android:layout_marginEnd="12dp" />
 
                         <include
                             android:id="@+id/cardConteudoArtigo"
                             layout="@layout/item_conteudo_home_artigo"
                             android:layout_width="158dp"
-                            android:layout_height="212dp"
+                            android:layout_height="226dp"
                             android:layout_marginEnd="12dp" />
 
                         <include
                             android:id="@+id/cardConteudoGuiaExtra"
                             layout="@layout/item_conteudo_home_guia"
                             android:layout_width="158dp"
-                            android:layout_height="212dp"
+                            android:layout_height="226dp"
                             android:layout_marginEnd="12dp" />
 
                         <include
                             android:id="@+id/cardConteudoDicaExtra"
                             layout="@layout/item_conteudo_home_dica"
                             android:layout_width="158dp"
-                            android:layout_height="212dp" />
+                            android:layout_height="226dp" />
 
                     </LinearLayout>
 
@@ -340,7 +340,7 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="20dp" />
+                    android:layout_height="6dp" />
 
             </LinearLayout>
 

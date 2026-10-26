@@ -626,7 +626,21 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    private void abrirBiblioteca() {
+        startActivity(new Intent(this, BibliotecaActivity.class));
+        overridePendingTransition(0, 0);
+    }
+
     private void configurarMicrointeracoes() {
+
+        int[] entradasBiblioteca = {
+                R.id.acaoVerTodos, R.id.cardConteudoGuia, R.id.cardConteudoDica,
+                R.id.cardConteudoArtigo, R.id.cardConteudoGuiaExtra,
+                R.id.cardConteudoDicaExtra};
+        for (int id : entradasBiblioteca) {
+            View entrada = findViewById(id);
+            if (entrada != null) entrada.setOnClickListener(v -> abrirBiblioteca());
+        }
 
         Motion.pressFeedback(
                 findViewById(

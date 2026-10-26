@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,10 +19,16 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.example.ecociente.R;
 import com.example.ecociente.model.QuizConteudo;
+import com.example.ecociente.model.DadosDemonstracaoEducacao;
+import com.example.ecociente.midias.MidiasEco;
+import com.example.ecociente.midias.CarregadorMidias;
+import com.example.ecociente.ui.AnimacaoEkoFrames;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class InicioQuizActivity extends AppCompatActivity {
@@ -30,7 +37,12 @@ public class InicioQuizActivity extends AppCompatActivity {
     public static final String EXTRA_PERGUNTAS = "perguntasQuiz";
 
     private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
+    private static final int MAX_FRAMES_QUIZ = 30;
+    private static final long TEMPO_POSE_QUIZ_MS = 1500L;
+    private static final long TEMPO_TRANSICAO_QUIZ_MS = 450L;
+
     private final Motion motion = new Motion();
+    private AnimacaoEkoFrames animacaoEkoQuiz;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -49,7 +61,7 @@ public class InicioQuizActivity extends AppCompatActivity {
 
         configurarInsetsDaTela();
 
-        if (autenticacao.getCurrentUser() == null) {
+        if (!DadosDemonstracaoEducacao.ATIVO && autenticacao.getCurrentUser() == null) {
             finish();
             return;
         }
@@ -60,6 +72,7 @@ public class InicioQuizActivity extends AppCompatActivity {
         }
 
         configurarConteudo();
+        configurarAnimacaoEkoQuiz();
         configurarAcoes();
         animarEntrada();
 
@@ -85,10 +98,50 @@ public class InicioQuizActivity extends AppCompatActivity {
 
         int quantidadePerguntas = QuizConteudo.doIntent(getIntent()).size();
 
+        int quizId = QuizConteudo.quizIdDoIntent(getIntent());
+        CarregadorMidias.mostrar(findViewById(R.id.imagemIlustracaoInicioQuiz),
+                MidiasEco.obter(this).capaQuiz(quizId, categoria, categoria),
+                false, R.drawable.quiz_sustentabilidade_inicio);
         textoTitulo.setText(categoria);
         textoPerguntas.setText(
                 getString(R.string.inicio_quiz_perguntas_formatado, quantidadePerguntas)
         );
+    }
+
+    /**
+     * Exibe o Eko em loop, ao lado da capa tematica do quiz.
+     * Usa os PNGs de drawable-nodpi com o padrao frame_N_gif_quiz.
+     * Se nenhum frame existir, exibe o Eko estatico.
+     */
+    private void configurarAnimacaoEkoQuiz() {
+        FrameLayout container = findViewById(R.id.containerAnimacaoEkoQuiz);
+        animacaoEkoQuiz = new AnimacaoEkoFrames(
+                container,
+                encontrarFramesQuiz(),
+                TEMPO_POSE_QUIZ_MS,
+                TEMPO_TRANSICAO_QUIZ_MS
+        );
+    }
+
+    private int[] encontrarFramesQuiz() {
+        List<Integer> encontrados = new ArrayList<>();
+        for (int numero = 1; numero <= MAX_FRAMES_QUIZ; numero++) {
+            String nome = "frame_" + numero + "_gif_quiz";
+            int id = getResources().getIdentifier(nome, "drawable", getPackageName());
+            if (id != 0) {
+                encontrados.add(id);
+            }
+        }
+
+        if (encontrados.isEmpty()) {
+            return new int[]{R.drawable.mascote_eko};
+        }
+
+        int[] resultado = new int[encontrados.size()];
+        for (int indice = 0; indice < encontrados.size(); indice++) {
+            resultado[indice] = encontrados.get(indice);
+        }
+        return resultado;
     }
 
     private void configurarAcoes() {
@@ -117,7 +170,7 @@ public class InicioQuizActivity extends AppCompatActivity {
 
     private void animarEntrada() {
         motion.fadeUp(findViewById(R.id.logoInicioQuiz), 0L);
-        motion.fadeUp(findViewById(R.id.imagemIlustracaoInicioQuiz), 70L);
+        motion.fadeUp(findViewById(R.id.areaIlustracoesInicioQuiz), 70L);
         motion.fadeUp(findViewById(R.id.blocoInformacoesInicioQuiz), 120L);
         motion.fadeUp(findViewById(R.id.botaoIniciarQuiz), 175L);
     }
@@ -166,7 +219,27 @@ public class InicioQuizActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (animacaoEkoQuiz != null) {
+            animacaoEkoQuiz.iniciar();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        if (animacaoEkoQuiz != null) {
+            animacaoEkoQuiz.parar();
+        }
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
+        if (animacaoEkoQuiz != null) {
+            animacaoEkoQuiz.liberar();
+            animacaoEkoQuiz = null;
+        }
         motion.cancelAll();
         super.onDestroy();
     }

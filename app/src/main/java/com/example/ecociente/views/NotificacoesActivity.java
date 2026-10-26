@@ -32,7 +32,11 @@ public class NotificacoesActivity extends AppCompatActivity {
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
 
+        com.example.ecociente.ui.JanelaEdgeToEdge.aplicar(this);
+
         setContentView(R.layout.activity_notificacoes);
+        com.example.ecociente.ui.InsetsSistema.aplicarComoPadding(findViewById(R.id.raizNotificacoes));
+        com.example.ecociente.ui.NavegacaoConfiguracoes.instalar(this);
 
         viewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
 

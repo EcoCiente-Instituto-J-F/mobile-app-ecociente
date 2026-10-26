@@ -26,6 +26,7 @@ import androidx.core.view.WindowInsetsControllerCompat;
 import com.example.ecociente.R;
 import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.ResultadoQuiz;
+import com.example.ecociente.midias.DecoracaoQuizView;
 import com.example.ecociente.repository.TentativaQuizRepository;
 import com.example.ecociente.ui.BotaoCarregando;
 import com.example.ecociente.ui.DialogoEco;
@@ -61,6 +62,8 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     private int quizId;
     private Integer tentativaId;
     private boolean finalizando;
+    private long sementeVisual;
+    private DecoracaoQuizView decoracao;
 
     private MaterialCardView[] cardsOpcoes;
     private TextView[] textosOpcoes;
@@ -97,6 +100,14 @@ public class QuizPerguntasActivity extends AppCompatActivity {
 
         respostas = new int[perguntas.size()];
         Arrays.fill(respostas, -1);
+        sementeVisual = estadoSalvo == null ? new java.util.Random().nextLong()
+                : estadoSalvo.getLong("eco.quiz.semente", 0L);
+        if (estadoSalvo != null) {
+            int[] salvas = estadoSalvo.getIntArray("eco.quiz.respostas");
+            if (salvas != null && salvas.length == respostas.length) respostas = salvas;
+            indiceAtual = Math.max(0, Math.min(perguntas.size() - 1,
+                    estadoSalvo.getInt("eco.quiz.indice", 0)));
+        }
 
         // A API abre a tentativa (e acorda) assim que a tela aparece; se falhar, ela é aberta ao finalizar.
         quizId = QuizConteudo.quizIdDoIntent(getIntent());
@@ -116,6 +127,7 @@ public class QuizPerguntasActivity extends AppCompatActivity {
         cinzaFuturo = Color.parseColor("#D3D3D3");
 
         vincularViews();
+        decoracao = new DecoracaoQuizView(this);
         criarProgresso();
         configurarAcoes();
         exibirPergunta();
@@ -252,6 +264,7 @@ public class QuizPerguntasActivity extends AppCompatActivity {
     }
 
     private void exibirPergunta() {
+        if (decoracao != null) decoracao.mostrar(sementeVisual, indiceAtual);
         QuizConteudo.Pergunta pergunta = perguntas.get(indiceAtual);
 
         textoContador.setText(String.format(
@@ -482,6 +495,14 @@ public class QuizPerguntasActivity extends AppCompatActivity {
 
     private float dp(float valor) {
         return valor * getResources().getDisplayMetrics().density;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle estado) {
+        estado.putLong("eco.quiz.semente", sementeVisual);
+        estado.putInt("eco.quiz.indice", indiceAtual);
+        estado.putIntArray("eco.quiz.respostas", respostas);
+        super.onSaveInstanceState(estado);
     }
 
     @Override

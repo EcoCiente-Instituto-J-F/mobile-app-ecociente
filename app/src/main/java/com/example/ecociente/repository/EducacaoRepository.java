@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.ecociente.model.FiltroGuia;
+import com.example.ecociente.model.CursoEducativo;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.QuizResumo;
@@ -16,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,6 +39,9 @@ public class EducacaoRepository {
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
     private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
+    private volatile String ultimoErro = "";
+
+    @NonNull public String obterUltimoErro() { return ultimoErro; }
 
     private static final long VALIDADE_CACHE_MS = 5 * 60_000L;
     private static final Object CACHE_LOCK = new Object();
@@ -45,6 +50,39 @@ public class EducacaoRepository {
 
     public interface Retorno<T> {
         void aoConcluir(boolean sucesso, @NonNull List<T> itens);
+    }
+
+    /** Cursos e aulas reais para a Biblioteca nativa. Compartilha o cache da equipe. */
+    public void listarCursos(@NonNull Context contexto, @NonNull Retorno<CursoEducativo> retorno) {
+        Context app = contexto.getApplicationContext();
+        EXECUTOR.execute(() -> {
+            List<CursoEducativo> saida = new ArrayList<>();
+            boolean sucesso = false;
+            try {
+                JSONArray itens = carregarCursosComAulas(app);
+                for (int i = 0; i < itens.length(); i++) {
+                    JSONObject cursoJson = itens.getJSONObject(i);
+                    JSONArray aulasJson = cursoJson.optJSONArray("aulas");
+                    List<CursoEducativo.Aula> aulas = new ArrayList<>();
+                    for (int j = 0; aulasJson != null && j < aulasJson.length(); j++) {
+                        JSONObject aula = aulasJson.getJSONObject(j);
+                        aulas.add(new CursoEducativo.Aula(
+                                aula.getInt("id"), aula.optString("titulo"),
+                                aula.optString("conteudo"), aula.optInt("ordem", j + 1)));
+                    }
+                    aulas.sort(Comparator.comparingInt(a -> a.ordem));
+                    saida.add(new CursoEducativo(cursoJson.getInt("id"),
+                            cursoJson.optString("titulo"), cursoJson.optString("descricao"), aulas));
+                }
+                sucesso = true;
+                ultimoErro = "";
+            } catch (Exception erro) {
+                Log.w(TAG, "Não foi possível carregar a Biblioteca", erro);
+                ultimoErro = "Não foi possível carregar os conteúdos. Tente novamente.";
+            }
+            boolean finalSucesso = sucesso;
+            PRINCIPAL.post(() -> retorno.aoConcluir(finalSucesso, saida));
+        });
     }
 
     public void listarQuizzes(@NonNull Context contexto, @NonNull Retorno<QuizResumo> retorno) {

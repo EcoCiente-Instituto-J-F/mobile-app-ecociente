@@ -73,6 +73,17 @@ public final class QuizConteudo {
         private final int id;
         private final int[] idsAlternativas;
 
+        // Compatibilidade com os dados demonstrativos da Biblioteca/Quiz local.
+        public Pergunta(int id, @NonNull String enunciado, @NonNull String[] opcoes,
+                       @NonNull int[] idsAlternativas, int indiceCorreto, @NonNull String explicacao) {
+            this(enunciado, opcoes, indiceCorreto, explicacao, id, idsAlternativas);
+        }
+
+        public Pergunta(@NonNull String enunciado, @NonNull String[] opcoes,
+                       int indiceCorreto, @NonNull String explicacao) {
+            this(enunciado, opcoes, indiceCorreto, explicacao, -1, new int[opcoes.length]);
+        }
+
         public Pergunta(
                 @NonNull String enunciado,
                 @NonNull String[] opcoes,
