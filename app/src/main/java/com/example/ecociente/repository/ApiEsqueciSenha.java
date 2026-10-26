@@ -5,9 +5,7 @@ import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -100,7 +98,7 @@ final class ApiEsqueciSenha {
                 return null;
             }
 
-            return extrairMensagemErro(lerFluxo(conexao.getErrorStream()));
+            return extrairMensagemErro(LeituraHttp.texto(conexao.getErrorStream()));
         } finally {
             conexao.disconnect();
         }
@@ -124,24 +122,5 @@ final class ApiEsqueciSenha {
         }
 
         return MENSAGEM_INDISPONIVEL;
-    }
-
-    @NonNull
-    private static String lerFluxo(@Nullable InputStream fluxo) throws IOException {
-        if (fluxo == null) {
-            return "";
-        }
-
-        try (InputStream entrada = fluxo;
-                ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
-            byte[] buffer = new byte[1024];
-            int lidos;
-
-            while ((lidos = entrada.read(buffer)) != -1) {
-                saida.write(buffer, 0, lidos);
-            }
-
-            return saida.toString(StandardCharsets.UTF_8.name());
-        }
     }
 }

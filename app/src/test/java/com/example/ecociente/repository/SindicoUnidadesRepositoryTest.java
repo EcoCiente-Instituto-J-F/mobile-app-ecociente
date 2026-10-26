@@ -4,11 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import com.example.ecociente.model.SindicoApartamento;
 import com.example.ecociente.model.SindicoDadosCondominio;
 import org.junit.Test;
-import com.example.ecociente.model.SindicoItemUnidade;
-import java.util.Arrays;
 
 public class SindicoUnidadesRepositoryTest {
 
@@ -17,10 +14,7 @@ public class SindicoUnidadesRepositoryTest {
 
         repositorio.salvarDados(new SindicoDadosCondominio(false, "Raio de Luz", "Rua A", "10", "Bloco 2", "Recife", "PE", "50000-000"));
         repositorio.salvarFotoUri("content://foto/1");
-        repositorio.salvarBloco(-1, "Torre A", 12);
-        repositorio.salvarBloco(-1, "Torre B", 8);
         repositorio.salvarArea(-1, "Lixeira central", "Térreo");
-        repositorio.salvarApartamento(-1, 1, "101", "Ana", "81 99999-0000");
 
         return repositorio;
     }
@@ -50,15 +44,7 @@ public class SindicoUnidadesRepositoryTest {
         assertEquals("10", novo.getDados().getNumero());
         assertEquals("Bloco 2", novo.getDados().getComplemento());
         assertEquals("content://foto/1", novo.getFotoUri());
-        assertEquals(2, novo.getBlocos().size());
-        assertEquals("Torre B", novo.getBlocos().get(1).getNome());
-        assertEquals("12 unidades", novo.getBlocos().get(0).getDetalhe());
         assertEquals("Lixeira central", novo.getAreas().get(0).getNome());
-
-        SindicoApartamento apartamento = novo.getApartamentos(1).get(0);
-
-        assertEquals("101", apartamento.getNumero());
-        assertEquals("Ana", apartamento.getMorador());
     }
 
     @Test
@@ -66,10 +52,22 @@ public class SindicoUnidadesRepositoryTest {
         SindicoUnidadesRepository novo = new SindicoUnidadesRepository();
 
         novo.deJson(preenchido().paraJson());
-        novo.salvarBloco(-1, "Torre C", 5);
+        novo.salvarArea(-1, "Caçamba", "Garagem");
 
-        assertEquals(3, novo.getBlocos().size());
-        assertEquals(4, novo.getBlocos().get(2).getId());
+        assertEquals(2, novo.getAreas().size());
+        assertEquals(2, novo.getAreas().get(1).getId());
+    }
+
+    @Test
+    public void dadosAntigosComBlocosEApartamentosSaoIgnorados() {
+        SindicoUnidadesRepository repositorio = new SindicoUnidadesRepository();
+
+        repositorio.deJson("{\"proximoId\":3,\"blocos\":[{\"id\":1,\"nome\":\"Torre A\",\"detalhe\":\"12 unidades\"}],"
+                + "\"areas\":[{\"id\":2,\"nome\":\"Lixeira\",\"detalhe\":\"Térreo\"}],"
+                + "\"apartamentos\":[{\"id\":1,\"blocoId\":1,\"numero\":\"101\",\"morador\":\"Ana\",\"telefone\":\"1\"}]}");
+
+        assertEquals(1, repositorio.getAreas().size());
+        assertEquals("Lixeira", repositorio.getAreas().get(0).getNome());
     }
 
     @Test
@@ -78,7 +76,6 @@ public class SindicoUnidadesRepositoryTest {
 
         repositorio.deJson(null);
 
-        assertTrue(repositorio.getBlocos().isEmpty());
         assertTrue(repositorio.getAreas().isEmpty());
         assertNull(repositorio.getFotoUri());
         assertEquals("", repositorio.getDados().getNome());
@@ -90,40 +87,6 @@ public class SindicoUnidadesRepositoryTest {
 
         repositorio.deJson("{isso nao e json");
 
-        assertTrue(repositorio.getBlocos().isEmpty());
         assertTrue(repositorio.getAreas().isEmpty());
-    }
-
-    @Test
-    public void excluirBlocoTiraAsUnidadesDele() {
-        SindicoUnidadesRepository repositorio = preenchido();
-
-        repositorio.excluirBloco(1);
-
-        assertEquals(1, repositorio.getBlocos().size());
-        assertTrue(repositorio.getApartamentos(1).isEmpty());
-    }
-
-    @Test
-    public void naoPermiteNumeroRepetidoNoMesmoBloco() {
-        SindicoUnidadesRepository repositorio = preenchido();
-
-        assertTrue(repositorio.existeNumero(1, -1, "101"));
-        assertTrue(!repositorio.existeNumero(2, -1, "101"));
-    }
-
-    @Test
-    public void torresDaApiViramBlocosSemDuplicar() {
-        SindicoUnidadesRepository repositorio = preenchido();
-
-        boolean acrescentou = repositorio.aplicarTorresDaApi(Arrays.asList(
-                new SindicoItemUnidade(10, "torre a", ""),
-                new SindicoItemUnidade(11, "Torre C", "")), "Torre do condomínio");
-
-        assertTrue(acrescentou);
-        assertEquals(3, repositorio.getBlocos().size());
-        assertEquals("Torre C", repositorio.getBlocos().get(2).getNome());
-        assertEquals("Torre do condomínio", repositorio.getBlocos().get(2).getDetalhe());
-        assertEquals(false, repositorio.aplicarTorresDaApi(Arrays.asList(new SindicoItemUnidade(11, "Torre C", "")), "x"));
     }
 }

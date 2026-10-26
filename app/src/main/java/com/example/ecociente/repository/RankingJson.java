@@ -18,6 +18,12 @@ final class RankingJson {
 
     @NonNull
     static List<SindicoPosicaoRanking> torres(@NonNull JSONObject resposta) {
+        return posicoes(resposta);
+    }
+
+    // Torres e moradores vêm no mesmo formato: "ranking": [{ nome, pontos, ... }].
+    @NonNull
+    static List<SindicoPosicaoRanking> posicoes(@NonNull JSONObject resposta) {
 
         List<SindicoPosicaoRanking> posicoes = new ArrayList<>();
 

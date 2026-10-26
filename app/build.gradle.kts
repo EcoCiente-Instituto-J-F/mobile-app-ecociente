@@ -15,6 +15,16 @@ if (arquivoEnv.exists()) {
     }
 }
 
+val propriedadesLocais = Properties()
+
+val arquivoLocal = rootProject.file("local.properties")
+
+if (arquivoLocal.exists()) {
+    arquivoLocal.inputStream().use { entrada ->
+        propriedadesLocais.load(entrada)
+    }
+}
+
 fun obterVariavelAmbiente(nome: String): String {
     return System.getenv(nome)
         ?: propriedadesEnv.getProperty(nome)
@@ -40,6 +50,13 @@ android {
 
         testInstrumentationRunner =
             "androidx.test.runner.AndroidJUnitRunner"
+
+        // Chave da Routes API (distância até as cooperativas). Opcional: sem ela o app usa o Geocoder.
+        resValue(
+            "string",
+            "maps_api_key",
+            propriedadesLocais.getProperty("MAPS_API_KEY") ?: ""
+        )
 
         resValue(
             "string",

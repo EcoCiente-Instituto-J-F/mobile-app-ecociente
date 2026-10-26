@@ -38,9 +38,12 @@ import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.repository.AtualizacaoExternaRepository;
 import com.example.ecociente.repository.PerfilApiRepository;
+import java.text.NumberFormat;
 import java.util.Locale;
+import com.example.ecociente.model.SindicoPosicaoRanking;
+import com.example.ecociente.repository.RankingExternoRepository;
 
-/** Aba Unidades: dados do condomínio vêm da API e o endereço volta a ela; blocos e áreas ficam no aparelho. */
+/** Aba do condomínio: dados e torres vêm da API (o endereço volta a ela); áreas ficam no aparelho. */
 public final class SindicoUnidadesActivity extends AppCompatActivity {
     private static final String ESTADO_TIPO = "tipoResidencialSelecionado";
     private SindicoUnidadesViewModel viewModel;
@@ -105,6 +108,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         carregarDadosDaApi(estadoSalvo == null);
         mostrarFoto();
         mostrarListas();
+        carregarMoradores();
 
         findViewById(R.id.tipoResidencialSindico).setOnClickListener(view -> {
             residencial = true;
@@ -120,13 +124,8 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 view -> escolherFoto.launch("image/*"));
         findViewById(R.id.salvarDadosCondominioSindico).setOnClickListener(
                 view -> salvarDados(raiz));
-        findViewById(R.id.adicionarBlocoSindico).setOnClickListener(view -> {
-            List<SindicoItemUnidade> blocos = viewModel.getBlocos();
-            if (blocos.isEmpty()) abrirFormulario(true, null);
-            else abrirBloco(blocos.get(0));
-        });
         findViewById(R.id.adicionarAreaSindico).setOnClickListener(
-                view -> abrirFormulario(false, null));
+                view -> abrirFormulario(null));
 
         BarraNavegacaoView barra = findViewById(R.id.barraInferiorSindico);
         barra.configurar(ItensBarra.sindico());
@@ -158,10 +157,8 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 return;
             }
 
-            if (viewModel.aplicarTorresDaApi(PerfilApiRepository.torresDoCondominio(this),
-                    getString(R.string.sindico_torre_do_condominio))) {
-                mostrarListas();
-            }
+            mostrarListas();
+            carregarMoradores();
             viewModel.aplicarDadosDaApi(api);
             preencherSeVazio(nome, api.getNome());
             preencherSeVazio(endereco, api.getEndereco());
@@ -310,20 +307,25 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
     }
 
     private void mostrarListas() {
-        mostrarItens(true, viewModel.getBlocos(), R.id.listaBlocosSindico,
+        mostrarItens(true, torresDoCondominio(), R.id.listaBlocosSindico,
                 R.id.contagemBlocosSindico);
         mostrarItens(false, viewModel.getAreas(), R.id.listaAreasSindico,
                 R.id.contagemAreasSindico);
     }
 
-    private void mostrarItens(boolean bloco, List<SindicoItemUnidade> itens,
+    private List<SindicoItemUnidade> torresDoCondominio() {
+        return PerfilApiRepository.torresDoCondominio(this);
+    }
+
+    // As torres vêm da API e as áreas são do aparelho: só as áreas podem ser editadas e excluídas.
+    private void mostrarItens(boolean torre, List<SindicoItemUnidade> itens,
                               int idLista, int idContagem) {
         LinearLayout lista = findViewById(idLista);
         lista.removeAllViews();
         ((TextView) findViewById(idContagem)).setText(getResources().getQuantityString(R.plurals.sindico_itens_cadastrados, itens.size(), itens.size()));
         if (itens.isEmpty()) {
             TextView vazio = new TextView(this);
-            vazio.setText(bloco ? R.string.sindico_nenhum_bloco_adicione_o_primeiro_a : R.string.sindico_nenhuma_area_de_descarte_adicione);
+            vazio.setText(torre ? R.string.sindico_nenhuma_torre : R.string.sindico_nenhuma_area_de_descarte_adicione);
             vazio.setTextColor(getColor(R.color.cinza_texto_home));
             vazio.setTextSize(12);
             vazio.setPadding(dp(4), dp(14), dp(4), dp(14));
@@ -335,25 +337,24 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
             SindicoItemUnidade item = itens.get(i);
             View linha = inflater.inflate(R.layout.item_sindico_unidades, lista, false);
             ImageView icone = linha.findViewById(R.id.iconeItemUnidades);
-            icone.setImageResource(bloco ? R.drawable.ic_predio
+            icone.setImageResource(torre ? R.drawable.ic_predio
                     : R.drawable.ic_reciclar);
             icone.setImageTintList(ColorStateList.valueOf(
                     getColor(R.color.verde_escuro_principal)));
             ((TextView) linha.findViewById(R.id.nomeItemUnidades)).setText(item.getNome());
             ((TextView) linha.findViewById(R.id.detalheItemUnidades))
                     .setText(item.getDetalhe());
-            if (bloco) {
-                linha.setClickable(true);
-                linha.setFocusable(true);
-                linha.setContentDescription(getString(R.string.sindico_abrir_unidades_bloco, item.getNome()));
-                linha.setOnClickListener(view -> abrirBloco(item));
-            }
             ImageButton editar = linha.findViewById(R.id.editarItemUnidades);
-            editar.setContentDescription(getString(R.string.sindico_editar_item, item.getNome()));
-            editar.setOnClickListener(view -> abrirFormulario(bloco, item));
             ImageButton excluir = linha.findViewById(R.id.excluirItemUnidades);
-            excluir.setContentDescription(getString(R.string.sindico_excluir_item, item.getNome()));
-            excluir.setOnClickListener(view -> confirmarExclusao(bloco, item));
+            if (torre) {
+                editar.setVisibility(View.GONE);
+                excluir.setVisibility(View.GONE);
+            } else {
+                editar.setContentDescription(getString(R.string.sindico_editar_item, item.getNome()));
+                editar.setOnClickListener(view -> abrirFormulario(item));
+                excluir.setContentDescription(getString(R.string.sindico_excluir_item, item.getNome()));
+                excluir.setOnClickListener(view -> confirmarExclusao(item));
+            }
             lista.addView(linha);
             if (i < itens.size() - 1) {
                 View divisor = new View(this);
@@ -363,13 +364,62 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         }
     }
 
-    private void abrirFormulario(boolean bloco, SindicoItemUnidade item) {
+    // A API não lista todos os moradores: vem o ranking, então só aparece quem pontuou no ciclo.
+    private void carregarMoradores() {
+        new RankingExternoRepository().listarMoradoresNoRanking(
+                this, PerfilApiRepository.condominioId(this), 100, moradores -> {
+                    if (isFinishing() || isDestroyed()) return;
+                    mostrarMoradores(moradores);
+                });
+    }
+
+    private void mostrarMoradores(List<SindicoPosicaoRanking> moradores) {
+        LinearLayout lista = findViewById(R.id.listaMoradoresSindico);
+        lista.removeAllViews();
+
+        if (moradores == null || moradores.isEmpty()) {
+            ((TextView) findViewById(R.id.contagemMoradoresSindico)).setText("");
+            TextView vazio = new TextView(this);
+            vazio.setText(moradores == null ? R.string.ranking_erro : R.string.sindico_moradores_vazio);
+            vazio.setTextColor(getColor(R.color.cinza_texto_home));
+            vazio.setTextSize(12);
+            vazio.setPadding(dp(4), dp(14), dp(4), dp(14));
+            lista.addView(vazio);
+            return;
+        }
+
+        ((TextView) findViewById(R.id.contagemMoradoresSindico)).setText(
+                getResources().getQuantityString(R.plurals.sindico_itens_cadastrados, moradores.size(), moradores.size()));
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        for (int i = 0; i < moradores.size(); i++) {
+            SindicoPosicaoRanking morador = moradores.get(i);
+            View linha = inflater.inflate(R.layout.item_sindico_unidades, lista, false);
+            ImageView icone = linha.findViewById(R.id.iconeItemUnidades);
+            icone.setImageResource(R.drawable.ic_usuario);
+            icone.setImageTintList(ColorStateList.valueOf(getColor(R.color.verde_escuro_principal)));
+            ((TextView) linha.findViewById(R.id.nomeItemUnidades)).setText(morador.getNome());
+            ((TextView) linha.findViewById(R.id.detalheItemUnidades)).setText(
+                    getString(R.string.sindico_morador_pontos,
+                            NumberFormat.getIntegerInstance(new Locale("pt", "BR")).format(morador.getPontos())));
+            linha.findViewById(R.id.editarItemUnidades).setVisibility(View.GONE);
+            linha.findViewById(R.id.excluirItemUnidades).setVisibility(View.GONE);
+            lista.addView(linha);
+            if (i < moradores.size() - 1) {
+                View divisor = new View(this);
+                divisor.setBackgroundColor(getColor(R.color.cinza_borda_clara_home));
+                lista.addView(divisor, new LinearLayout.LayoutParams(-1, dp(1)));
+            }
+        }
+    }
+
+    private void abrirFormulario(SindicoItemUnidade item) {
         LinearLayout campos = new LinearLayout(this);
         campos.setOrientation(LinearLayout.VERTICAL);
         campos.setPadding(0, dp(4), 0, 0);
         EditText campoNome = new EditText(this);
         campoNome.setSingleLine(true);
-        campoNome.setHint(bloco ? R.string.sindico_nome_do_bloco_ou_torre : R.string.sindico_nome_da_area_de_descarte);
+        campoNome.setHint(R.string.sindico_nome_da_area_de_descarte);
         campoNome.setInputType(InputType.TYPE_CLASS_TEXT
                 | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         campoNome.setText(item == null ? "" : item.getNome());
@@ -377,19 +427,15 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
 
         EditText campoDetalhe = new EditText(this);
         campoDetalhe.setSingleLine(true);
-        campoDetalhe.setHint(bloco ? R.string.sindico_quantidade_de_unidades : R.string.localizacao);
-        campoDetalhe.setInputType(bloco ? InputType.TYPE_CLASS_NUMBER
-                : InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        campoDetalhe.setHint(R.string.localizacao);
+        campoDetalhe.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         if (item != null) {
-            campoDetalhe.setText(bloco
-                    ? item.getDetalhe().replaceAll("\\D", "") : item.getDetalhe());
+            campoDetalhe.setText(item.getDetalhe());
         }
         campos.addView(campoDetalhe, new LinearLayout.LayoutParams(-1, dp(54)));
 
-        int titulo = item == null ? (bloco ? R.string.sindico_adicionar_bloco_torre : R.string.sindico_adicionar_area)
-                : (bloco ? R.string.sindico_editar_bloco_torre : R.string.sindico_editar_area);
         new DialogoEco.Builder(this)
-                .titulo(titulo)
+                .titulo(item == null ? R.string.sindico_adicionar_area : R.string.sindico_editar_area)
                 .conteudo(campos)
                 .botaoValidado(R.string.perfil_salvar, DialogoEco.Estilo.PREENCHIDO, () -> {
                     String valorNome = campoNome.getText().toString().trim();
@@ -400,28 +446,11 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                         return false;
                     }
                     if (valorDetalhe.isEmpty()) {
-                        campoDetalhe.setError(getString(bloco ? R.string.sindico_informe_a_quantidade
-                                : R.string.sindico_informe_a_localizacao));
+                        campoDetalhe.setError(getString(R.string.sindico_informe_a_localizacao));
                         campoDetalhe.requestFocus();
                         return false;
                     }
-                    int id = item == null ? -1 : item.getId();
-                    if (bloco) {
-                        int quantidade;
-                        try {
-                            quantidade = Integer.parseInt(valorDetalhe);
-                        } catch (NumberFormatException excecao) {
-                            campoDetalhe.setError(getString(R.string.sindico_informe_uma_quantidade_valida));
-                            return false;
-                        }
-                        if (quantidade < 1) {
-                            campoDetalhe.setError(getString(R.string.sindico_a_quantidade_deve_ser_maior_que_ze));
-                            return false;
-                        }
-                        viewModel.salvarBloco(id, valorNome, quantidade);
-                    } else {
-                        viewModel.salvarArea(id, valorNome, valorDetalhe);
-                    }
+                    viewModel.salvarArea(item == null ? -1 : item.getId(), valorNome, valorDetalhe);
                     mostrarListas();
                     AvisoFlutuante.mostrar(this, R.string.sindico_demo_alteracao_salva);
                     return true;
@@ -430,14 +459,13 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 .mostrar();
     }
 
-    private void confirmarExclusao(boolean bloco, SindicoItemUnidade item) {
+    private void confirmarExclusao(SindicoItemUnidade item) {
         new DialogoEco.Builder(this)
                 .titulo(getString(R.string.sindico_excluir_titulo, item.getNome()))
                 .mensagem(R.string.sindico_a_exclusao_afeta_apenas_os_dados_l)
                 .botao(R.string.perfil_cancelar, DialogoEco.Estilo.PREENCHIDO, null)
                 .botao(R.string.perfil_excluir_confirmar, DialogoEco.Estilo.PERIGO, () -> {
-                    if (bloco) viewModel.excluirBloco(item.getId());
-                    else viewModel.excluirArea(item.getId());
+                    viewModel.excluirArea(item.getId());
                     mostrarListas();
                     AvisoFlutuante.mostrar(this, R.string.sindico_demo_item_removido);
                 })
@@ -449,12 +477,6 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
         finish();
-    }
-
-    private void abrirBloco(SindicoItemUnidade bloco) {
-        Intent intent = new Intent(this, SindicoBlocoActivity.class);
-        intent.putExtra(SindicoBlocoActivity.EXTRA_BLOCO_ID, bloco.getId());
-        startActivity(intent);
     }
 
     private int dp(int valor) {

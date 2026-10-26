@@ -48,6 +48,8 @@ public class CadastroEtapa2Fragment extends Fragment {
     private EditText campoEmailCooperativa;
 
     private AutoCompleteTextView campoEstado;
+    private EditText primeiroErro;
+    private String primeiraMensagem;
 
     private ImageView botaoVoltarEtapa1;
     private ImageView iconeSetaEstado;
@@ -264,6 +266,14 @@ public class CadastroEtapa2Fragment extends Fragment {
 
     private void validarEtapa2() {
 
+        if (!dadosDaEtapa1Completos()) {
+            return;
+        }
+
+        primeiroErro = null;
+
+        primeiraMensagem = null;
+
         String endereco = campoEndereco.getText().toString().trim();
 
         String numero = campoNumero.getText().toString().trim();
@@ -287,62 +297,52 @@ public class CadastroEtapa2Fragment extends Fragment {
         if (cadastroDeCooperativa()) {
 
             if (nomeCooperativa.isEmpty()) {
-                mostrarErroCampo(
-                        containerNomeCooperativa, campoNomeCooperativa, "Digite o nome da cooperativa.");
-                return;
+                marcarErro(containerNomeCooperativa, campoNomeCooperativa, "Digite o nome da cooperativa.");
             }
 
             if (!Patterns.EMAIL_ADDRESS.matcher(emailCooperativa).matches()) {
-                mostrarErroCampo(
-                        containerEmailCooperativa,
-                        campoEmailCooperativa,
-                        "Digite um e-mail válido para a cooperativa.");
-                return;
+                marcarErro(containerEmailCooperativa, campoEmailCooperativa, "Digite um e-mail válido para a cooperativa.");
             }
         }
 
         if (endereco.isEmpty()) {
-            mostrarErroCampo(containerEndereco, campoEndereco, "Digite seu endereço.");
-            return;
+            marcarErro(containerEndereco, campoEndereco, "Digite seu endereço.");
         }
 
         if (numero.isEmpty()) {
-            mostrarErroCampo(containerNumero, campoNumero, "Digite o número do endereço.");
-            return;
+            marcarErro(containerNumero, campoNumero, "Digite o número do endereço.");
         }
 
         if (cep.length() != 9) {
-            mostrarErroCampo(containerCep, campoCep, "Digite um CEP válido.");
-            return;
+            marcarErro(containerCep, campoCep, "Digite um CEP válido.");
         }
 
         if (cidade.isEmpty()) {
-            mostrarErroCampo(containerCidade, campoCidade, "Digite sua cidade.");
-            return;
+            marcarErro(containerCidade, campoCidade, "Digite sua cidade.");
         }
 
         if (estado.isEmpty() || !estadoValido(estado)) {
-            FieldFeedback.error(containerEstado, "Selecione um estado.", motion);
-            FieldFeedback.showErrorSnackbar(requireView(), "Selecione um estado.");
-            campoEstado.requestFocus();
-            campoEstado.showDropDown();
-            return;
+            marcarErro(containerEstado, campoEstado, "Selecione um estado.");
         }
 
         if (TipoDocumento.apenasDigitos(telefone).length() < 10) {
 
-            mostrarMensagem("Digite um telefone válido.");
-
-            campoTelefone.requestFocus();
-
-            return;
+            marcarErro(null, campoTelefone, "Digite um telefone válido.");
         }
 
         if (!tipoDocumento().valido(cpf)) {
 
-            mostrarMensagem(cadastroDeCooperativa() ? "Digite um CNPJ válido." : "Digite um CPF válido.");
+            marcarErro(
+                    null,
+                    campoCpf,
+                    cadastroDeCooperativa() ? "Digite um CNPJ válido." : "Digite um CPF válido.");
+        }
 
-            campoCpf.requestFocus();
+        if (primeiroErro != null) {
+
+            FieldFeedback.showErrorSnackbar(requireView(), primeiraMensagem);
+
+            primeiroErro.requestFocus();
 
             return;
         }
@@ -364,6 +364,42 @@ public class CadastroEtapa2Fragment extends Fragment {
         }
 
         cadastrarUsuarioFirebase();
+    }
+
+    private void marcarErro(MaterialCardView card, EditText campo, String mensagem) {
+
+        if (card != null) {
+            FieldFeedback.error(card, mensagem, motion);
+        }
+
+        if (primeiroErro == null) {
+            primeiroErro = campo;
+            primeiraMensagem = mensagem;
+        }
+    }
+
+    // A senha e os dados pessoais vêm da etapa 1; se faltarem, avisa já e volta pra lá,
+    // em vez de deixar a pessoa preencher a etapa 2 inteira para só então descobrir.
+    private boolean dadosDaEtapa1Completos() {
+
+        Login telaAutenticacao = (Login) requireActivity();
+
+        if (!telaAutenticacao.getNome().isEmpty()
+                && !telaAutenticacao.getEmail().isEmpty()
+                && !telaAutenticacao.getSenha().isEmpty()) {
+            return true;
+        }
+
+        salvarDadosAtuais();
+
+        View conteudo = telaAutenticacao.findViewById(android.R.id.content);
+
+        telaAutenticacao.voltarCadastroEtapa1();
+
+        FieldFeedback.showErrorSnackbar(
+                conteudo, "Faltam dados na primeira etapa. Confira nome, e-mail e senha.");
+
+        return false;
     }
 
     private boolean estadoValido(String estadoInformado) {
@@ -551,9 +587,7 @@ public class CadastroEtapa2Fragment extends Fragment {
             EditText campo,
             String mensagem
     ) {
-        FieldFeedback.error(card, mensagem, motion);
-        FieldFeedback.showErrorSnackbar(requireView(), mensagem);
-        campo.requestFocus();
+        FieldFeedback.errorAndFocus(card, campo, mensagem, requireView(), motion);
     }
 
     private void mostrarMensagem(String mensagem) {

@@ -8,9 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.TipoUsuario;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -176,7 +174,7 @@ public class CadastroExternoRepository {
                 return ResultadoApi.sucesso();
             }
 
-            String corpoErro = lerFluxo(conexao.getErrorStream());
+            String corpoErro = LeituraHttp.texto(conexao.getErrorStream());
 
             return ResultadoApi.erro(extrairMensagemErro(corpoErro));
 
@@ -221,26 +219,5 @@ public class CadastroExternoRepository {
         SimpleDateFormat saida = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
         return saida.format(entrada.parse(dataBr));
-    }
-
-    @NonNull
-    private String lerFluxo(InputStream fluxo) throws IOException {
-
-        if (fluxo == null) {
-            return "";
-        }
-
-        try (InputStream entrada = fluxo;
-                ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
-
-            byte[] buffer = new byte[1024];
-            int lidos;
-
-            while ((lidos = entrada.read(buffer)) != -1) {
-                saida.write(buffer, 0, lidos);
-            }
-
-            return saida.toString(StandardCharsets.UTF_8.name());
-        }
     }
 }
