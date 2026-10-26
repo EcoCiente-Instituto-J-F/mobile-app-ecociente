@@ -28,7 +28,7 @@ public class AutenticacaoExternaRepository {
 
     private static final String TAG = "AuthExternaEcoCiente";
 
-    private static final String URL_LOGIN = "https://ds-autenticacao-api-1.onrender.com/auth/login";
+    private static final String URL_LOGIN = ConfiguracaoServidores.URL_LOGIN;
 
     private static final String PREFERENCIAS = "sessao_externa";
     private static final String CHAVE_TOKEN = "token";
@@ -283,10 +283,8 @@ public class AutenticacaoExternaRepository {
             conexao.setRequestProperty("Accept", "application/json");
             conexao.setDoOutput(true);
             conexao.setUseCaches(false);
-            // Render free tier "dorme" a API após inatividade (cold start de
-            // 70s a 2min medido); roda em segundo plano, não trava o login.
-            conexao.setConnectTimeout(150_000);
-            conexao.setReadTimeout(150_000);
+            conexao.setConnectTimeout(ConfiguracaoServidores.TIMEOUT_CONEXAO_MS);
+            conexao.setReadTimeout(ConfiguracaoServidores.TIMEOUT_RESPOSTA_LOGIN_MS);
 
             JSONObject corpo = new JSONObject();
             corpo.put("email", email.trim().toLowerCase(Locale.ROOT));
