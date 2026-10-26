@@ -1,532 +1,94 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/raizPerfil"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fillViewport="true"
-        android:overScrollMode="never"
-        android:layout_marginBottom="@dimen/espaco_barra_navegacao"
-        app:layout_constraintBottom_toBottomOf="@id/barraNavegacao"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="24dp">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cabecalhoPerfil"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                app:cardBackgroundColor="@color/verde_escuro_principal"
-                app:cardCornerRadius="22dp"
-                app:cardElevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="18dp"
-                    android:paddingBottom="24dp">
-
-                    <TextView
-                        android:id="@+id/tituloGerenciarPerfil"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/nunito_semibold"
-                        android:text="@string/gerenciar_perfil"
-                        android:textColor="@color/branco"
-                        android:textSize="16sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/containerAvatarPerfil"
-                        android:layout_width="72dp"
-                        android:layout_height="72dp"
-                        android:layout_marginTop="22dp"
-                        app:cardBackgroundColor="@color/branco"
-                        android:clickable="true"
-                        android:contentDescription="@string/perfil_foto_alterar"
-                        android:focusable="true"
-                        app:cardCornerRadius="36dp"
-                        app:cardElevation="0dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tituloGerenciarPerfil">
-
-                        <TextView
-                            android:id="@+id/textoIniciaisAvatarPerfil"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:fontFamily="@font/nunito_bold"
-                            android:gravity="center"
-                            android:textColor="@color/verde_escuro_principal"
-                            android:textSize="26sp"
-                            tools:text="J" />
-
-                        <ImageView
-                            android:id="@+id/imagemFotoPerfil"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:contentDescription="@string/foto_perfil"
-                            android:scaleType="centerCrop"
-                            android:visibility="gone" />
-
-                        <ProgressBar
-                            android:id="@+id/indicadorFotoPerfil"
-                            android:layout_width="28dp"
-                            android:layout_height="28dp"
-                            android:layout_gravity="center"
-                            android:indeterminateTint="@color/verde_escuro_principal"
-                            android:visibility="gone" />
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:elevation="2dp"
-                        app:cardBackgroundColor="@color/verde_claro_ecociente"
-                        app:cardCornerRadius="12dp"
-                        app:cardElevation="0dp"
-                        app:layout_constraintBottom_toBottomOf="@id/containerAvatarPerfil"
-                        app:layout_constraintEnd_toEndOf="@id/containerAvatarPerfil"
-                        app:strokeColor="@color/verde_escuro_principal"
-                        app:strokeWidth="1dp">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:contentDescription="@null"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_camera" />
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                    <TextView
-                        android:id="@+id/textoNomePerfil"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
-                        android:fontFamily="@font/nunito_bold"
-                        android:textColor="@color/branco"
-                        android:textSize="16sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/containerAvatarPerfil"
-                        tools:text="Julio Cesar" />
-
-                    <TextView
-                        android:id="@+id/textoEmailPerfil"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:alpha="0.8"
-                        android:fontFamily="@font/nunito_regular"
-                        android:textColor="@color/branco"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/textoNomePerfil"
-                        tools:text="julio.cesar@gmail.com" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:id="@+id/tituloSecaoConta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:fontFamily="@font/nunito_semibold"
-                android:text="@string/secao_conta"
-                android:textColor="@color/cinza_escuro_textos"
-                android:textSize="13sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cabecalhoPerfil" />
-
-            <com.google.android.material.card.MaterialCardView
-        style="@style/CartaoComBorda"
-                android:id="@+id/containerOpcoesConta"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tituloSecaoConta">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/linhaInformacoesPessoais"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_usuario"
-                            app:tint="@color/verde_escuro_principal" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/nunito_medium"
-                            android:text="@string/informacoes_pessoais"
-                            android:textColor="@color/preto_texto_home"
-                            android:textSize="14sp" />
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_seta_direita" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="14dp"
-                        android:layout_marginEnd="14dp"
-                        android:background="@color/cinza_borda_card_perfil" />
-
-                    <LinearLayout
-                        android:id="@+id/linhaGerenciarSenha"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_senha"
-                            app:tint="@color/verde_escuro_principal" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/nunito_medium"
-                            android:text="@string/gerenciar_senha"
-                            android:textColor="@color/preto_texto_home"
-                            android:textSize="14sp" />
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_seta_direita" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="14dp"
-                        android:layout_marginEnd="14dp"
-                        android:background="@color/cinza_borda_card_perfil" />
-
-                    <LinearLayout
-                        android:id="@+id/linhaNotificacoes"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_notificacoes" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/nunito_medium"
-                            android:text="@string/notificacoes"
-                            android:textColor="@color/preto_texto_home"
-                            android:textSize="14sp" />
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_seta_direita" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/blocoLinhasCooperativa"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginStart="14dp"
-                            android:layout_marginEnd="14dp"
-                            android:background="@color/cinza_borda_card_perfil" />
-
-                        <LinearLayout
-                            android:id="@+id/linhaCondominiosAtendidos"
-                            android:layout_width="match_parent"
-                            android:layout_height="56dp"
-                            android:background="?attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingStart="14dp"
-                            android:paddingEnd="14dp">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_perfil_cooperativa" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="12dp"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/nunito_medium"
-                                android:text="@string/condominios_atendidos"
-                                android:textColor="@color/preto_texto_home"
-                                android:textSize="14sp" />
-
-                            <ImageView
-                                android:layout_width="18dp"
-                                android:layout_height="18dp"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_seta_direita" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginStart="14dp"
-                            android:layout_marginEnd="14dp"
-                            android:background="@color/cinza_borda_card_perfil" />
-
-                        <LinearLayout
-                            android:id="@+id/linhaAvaliacoesRecebidas"
-                            android:layout_width="match_parent"
-                            android:layout_height="56dp"
-                            android:background="?attr/selectableItemBackground"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal"
-                            android:paddingStart="14dp"
-                            android:paddingEnd="14dp">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_estrela" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="12dp"
-                                android:layout_weight="1"
-                                android:fontFamily="@font/nunito_medium"
-                                android:text="@string/avaliacoes_recebidas"
-                                android:textColor="@color/preto_texto_home"
-                                android:textSize="14sp" />
-
-                            <ImageView
-                                android:layout_width="18dp"
-                                android:layout_height="18dp"
-                                android:contentDescription="@null"
-                                android:src="@drawable/ic_seta_direita" />
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:id="@+id/tituloSecaoSessao"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:fontFamily="@font/nunito_semibold"
-                android:text="@string/secao_sessao"
-                android:textColor="@color/cinza_escuro_textos"
-                android:textSize="13sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/containerOpcoesConta" />
-
-            <com.google.android.material.card.MaterialCardView
-        style="@style/CartaoComBorda"
-                android:id="@+id/containerOpcoesSessao"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tituloSecaoSessao">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/linhaSairConta"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_sair" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/nunito_medium"
-                            android:text="@string/sair_da_conta"
-                            android:textColor="@color/preto_texto_home"
-                            android:textSize="14sp" />
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_seta_direita" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginStart="14dp"
-                        android:layout_marginEnd="14dp"
-                        android:background="@color/cinza_borda_card_perfil" />
-
-                    <LinearLayout
-                        android:id="@+id/linhaExcluirConta"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="?attr/selectableItemBackground"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp">
-
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_excluir" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/nunito_semibold"
-                            android:text="@string/excluir_conta"
-                            android:textColor="@color/rosa_ecociente"
-                            android:textSize="14sp" />
-
-                        <ImageView
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_seta_direita" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.core.widget.NestedScrollView>
-
-    <com.example.ecociente.ui.BarraNavegacaoView
-        android:id="@+id/barraNavegacao"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
+<?xml version='1.0' encoding='utf-8'?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/raizPerfil" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/branco" android:clipChildren="false" android:clipToPadding="false">
+  <androidx.core.widget.NestedScrollView android:id="@+id/rolagemConfiguracoes" android:layout_width="0dp" android:layout_height="0dp" android:fillViewport="false" android:clipToPadding="false" android:scrollbars="none" app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toTopOf="@id/barraNavegacao" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:paddingBottom="30dp">
+      <com.google.android.material.card.MaterialCardView android:id="@+id/cabecalhoPerfil" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_marginEnd="12dp" android:layout_marginTop="12dp" app:cardBackgroundColor="@color/verde_escuro_principal" app:cardCornerRadius="22dp" app:strokeColor="@color/cinza_borda_card_perfil" app:strokeWidth="0dp" app:cardElevation="0dp">
+        <FrameLayout android:layout_width="match_parent" android:layout_height="219dp">
+          <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:gravity="top|center_horizontal" android:paddingTop="18dp">
+            <TextView android:id="@+id/tituloGerenciarPerfil" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/gerenciar_perfil" android:textSize="17sp" android:fontFamily="@font/nunito_semibold" android:textColor="@color/branco"/>
+            <FrameLayout android:layout_width="94dp" android:layout_height="92dp" android:layout_marginTop="17dp">
+              <com.google.android.material.card.MaterialCardView android:id="@+id/containerAvatarPerfil" android:layout_width="84dp" android:layout_height="84dp" app:cardCornerRadius="42dp" app:cardBackgroundColor="@color/branco" app:cardElevation="2dp" app:strokeColor="@color/branco" app:strokeWidth="2dp">
+                <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+                  <TextView android:id="@+id/textoIniciaisAvatarPerfil" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:text="J" android:textSize="30sp" android:fontFamily="@font/nunito_bold" android:textColor="@color/verde_escuro_principal"/>
+                  <ImageView android:id="@+id/imagemFotoPerfil" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:visibility="gone" android:contentDescription="@string/foto_perfil"/>
+                  <ProgressBar android:id="@+id/indicadorFotoPerfil" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:visibility="gone"/>
+                </FrameLayout>
+              </com.google.android.material.card.MaterialCardView>
+              <ImageView android:layout_width="23dp" android:layout_height="23dp" android:layout_gravity="bottom|end" android:layout_marginBottom="5dp" android:background="@drawable/fundo_icone_perfil_claro" android:padding="4dp" android:src="@android:drawable/ic_menu_camera" app:tint="@color/verde_escuro_principal" android:contentDescription="@string/perfil_foto_alterar"/>
+            </FrameLayout>
+            <TextView android:id="@+id/textoNomePerfil" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="" android:textSize="19sp" android:fontFamily="@font/nunito_bold" android:textColor="@color/branco" android:layout_marginTop="10dp"/>
+            <TextView android:id="@+id/textoEmailPerfil" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="" android:textSize="12sp" android:fontFamily="@font/nunito_regular" android:textColor="@color/branco" android:layout_marginTop="0dp" android:alpha="0.83"/>
+          </LinearLayout>
+          <ImageView android:id="@+id/botaoVoltarPerfil" android:layout_width="35dp" android:layout_height="35dp" android:layout_gravity="top|start" android:layout_marginStart="10dp" android:layout_marginTop="10dp" android:background="@drawable/fundo_icone_perfil_claro" android:padding="10dp" android:src="@drawable/ic_voltar" app:tint="@color/verde_escuro_principal" android:contentDescription="@string/voltar"/>
+        </FrameLayout>
+      </com.google.android.material.card.MaterialCardView>
+      <TextView android:id="@+id/tituloSecaoConta" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/secao_conta" android:textSize="14sp" android:fontFamily="@font/nunito_semibold" android:textColor="@color/cinza_escuro_textos" android:layout_marginTop="36dp" android:layout_marginStart="26dp" android:layout_marginBottom="9dp"/>
+      <com.google.android.material.card.MaterialCardView android:id="@+id/containerOpcoesConta" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_marginEnd="12dp" android:layout_marginTop="0dp" app:cardBackgroundColor="@color/branco" app:cardCornerRadius="14dp" app:cardElevation="2dp" app:strokeColor="@color/cinza_borda_card_perfil" app:strokeWidth="1dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+          <LinearLayout android:id="@+id/linhaInformacoesPessoais" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="14dp" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true">
+            <FrameLayout android:layout_width="28dp" android:layout_height="28dp" android:background="@drawable/fundo_icone_perfil_claro">
+              <ImageView android:layout_width="17dp" android:layout_height="17dp" android:layout_gravity="center" android:src="@drawable/ic_perfil_usuario" app:tint="@color/verde_escuro_principal" android:contentDescription="@null"/>
+            </FrameLayout>
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="13dp" android:layout_weight="1" android:fontFamily="@font/nunito_medium" android:textSize="15sp" android:textColor="@color/preto_texto_home" android:text="@string/informacoes_pessoais"/>
+            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/ic_seta_direita" android:contentDescription="@null" app:tint="@color/cinza_escuro_textos"/>
+          </LinearLayout>
+          <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="14dp" android:layout_marginEnd="14dp" android:background="@color/cinza_borda_card_perfil"/>
+          <LinearLayout android:id="@+id/linhaGerenciarSenha" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="14dp" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true">
+            <FrameLayout android:layout_width="28dp" android:layout_height="28dp" android:background="@drawable/fundo_icone_perfil_claro">
+              <ImageView android:layout_width="17dp" android:layout_height="17dp" android:layout_gravity="center" android:src="@drawable/ic_senha" app:tint="@color/verde_escuro_principal" android:contentDescription="@null"/>
+            </FrameLayout>
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="13dp" android:layout_weight="1" android:fontFamily="@font/nunito_medium" android:textSize="15sp" android:textColor="@color/preto_texto_home" android:text="@string/gerenciar_senha"/>
+            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/ic_seta_direita" android:contentDescription="@null" app:tint="@color/cinza_escuro_textos"/>
+          </LinearLayout>
+          <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="14dp" android:layout_marginEnd="14dp" android:background="@color/cinza_borda_card_perfil"/>
+          <LinearLayout android:id="@+id/linhaNotificacoes" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="14dp" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true">
+            <FrameLayout android:layout_width="28dp" android:layout_height="28dp" android:background="@drawable/fundo_icone_perfil_claro">
+              <ImageView android:layout_width="17dp" android:layout_height="17dp" android:layout_gravity="center" android:src="@drawable/ic_notificacoes" app:tint="@color/verde_escuro_principal" android:contentDescription="@null"/>
+            </FrameLayout>
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="13dp" android:layout_weight="1" android:fontFamily="@font/nunito_medium" android:textSize="15sp" android:textColor="@color/preto_texto_home" android:text="@string/notificacoes"/>
+            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/ic_seta_direita" android:contentDescription="@null" app:tint="@color/cinza_escuro_textos"/>
+          </LinearLayout>
+          <LinearLayout android:id="@+id/blocoLinhasCooperativa" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone">
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="14dp" android:layout_marginEnd="14dp" android:background="@color/cinza_borda_card_perfil"/>
+            <LinearLayout android:id="@+id/linhaCondominiosAtendidos" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="14dp" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true">
+              <FrameLayout android:layout_width="28dp" android:layout_height="28dp" android:background="@drawable/fundo_icone_perfil_claro">
+                <ImageView android:layout_width="17dp" android:layout_height="17dp" android:layout_gravity="center" android:src="@drawable/ic_perfil_cooperativa" app:tint="@color/verde_escuro_principal" android:contentDescription="@null"/>
+              </FrameLayout>
+              <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="13dp" android:layout_weight="1" android:fontFamily="@font/nunito_medium" android:textSize="15sp" android:textColor="@color/preto_texto_home" android:text="@string/condominios_atendidos"/>
+              <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/ic_seta_direita" android:contentDescription="@null" app:tint="@color/cinza_escuro_textos"/>
+            </LinearLayout>
+            <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="14dp" android:layout_marginEnd="14dp" android:background="@color/cinza_borda_card_perfil"/>
+            <LinearLayout android:id="@+id/linhaAvaliacoesRecebidas" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="14dp" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true">
+              <FrameLayout android:layout_width="28dp" android:layout_height="28dp" android:background="@drawable/fundo_icone_perfil_claro">
+                <ImageView android:layout_width="17dp" android:layout_height="17dp" android:layout_gravity="center" android:src="@drawable/ic_perfil_usuario" app:tint="@color/verde_escuro_principal" android:contentDescription="@null"/>
+              </FrameLayout>
+              <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="13dp" android:layout_weight="1" android:fontFamily="@font/nunito_medium" android:textSize="15sp" android:textColor="@color/preto_texto_home" android:text="@string/avaliacoes_recebidas"/>
+              <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/ic_seta_direita" android:contentDescription="@null" app:tint="@color/cinza_escuro_textos"/>
+            </LinearLayout>
+          </LinearLayout>
+        </LinearLayout>
+      </com.google.android.material.card.MaterialCardView>
+      <TextView android:id="@+id/tituloSecaoSessao" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/secao_sessao" android:textSize="14sp" android:fontFamily="@font/nunito_semibold" android:textColor="@color/cinza_escuro_textos" android:layout_marginTop="40dp" android:layout_marginStart="26dp" android:layout_marginBottom="9dp"/>
+      <com.google.android.material.card.MaterialCardView android:id="@+id/containerOpcoesSessao" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_marginEnd="12dp" android:layout_marginTop="0dp" app:cardBackgroundColor="@color/branco" app:cardCornerRadius="14dp" app:cardElevation="2dp" app:strokeColor="@color/cinza_borda_card_perfil" app:strokeWidth="1dp">
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+          <LinearLayout android:id="@+id/linhaSairConta" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="14dp" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true">
+            <FrameLayout android:layout_width="28dp" android:layout_height="28dp" android:background="@drawable/fundo_icone_perfil_claro">
+              <ImageView android:layout_width="17dp" android:layout_height="17dp" android:layout_gravity="center" android:src="@drawable/ic_sair" app:tint="@color/verde_escuro_principal" android:contentDescription="@null"/>
+            </FrameLayout>
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="13dp" android:layout_weight="1" android:fontFamily="@font/nunito_medium" android:textSize="15sp" android:textColor="@color/preto_texto_home" android:text="@string/sair_da_conta"/>
+            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/ic_seta_direita" android:contentDescription="@null" app:tint="@color/cinza_escuro_textos"/>
+          </LinearLayout>
+          <View android:layout_width="match_parent" android:layout_height="1dp" android:layout_marginStart="14dp" android:layout_marginEnd="14dp" android:background="@color/cinza_borda_card_perfil"/>
+          <LinearLayout android:id="@+id/linhaExcluirConta" android:layout_width="match_parent" android:layout_height="60dp" android:orientation="horizontal" android:gravity="center_vertical" android:paddingStart="14dp" android:paddingEnd="14dp" android:background="?attr/selectableItemBackground" android:clickable="true" android:focusable="true">
+            <FrameLayout android:layout_width="28dp" android:layout_height="28dp" android:background="@drawable/fundo_icone_perfil_claro">
+              <ImageView android:layout_width="17dp" android:layout_height="17dp" android:layout_gravity="center" android:src="@drawable/ic_excluir" app:tint="@color/rosa_ecociente" android:contentDescription="@null"/>
+            </FrameLayout>
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="13dp" android:layout_weight="1" android:fontFamily="@font/nunito_medium" android:textSize="15sp" android:textColor="@color/rosa_ecociente" android:text="@string/excluir_conta"/>
+            <ImageView android:layout_width="16dp" android:layout_height="16dp" android:src="@drawable/ic_seta_direita" android:contentDescription="@null" app:tint="@color/cinza_escuro_textos"/>
+          </LinearLayout>
+        </LinearLayout>
+      </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+  </androidx.core.widget.NestedScrollView>
+  <com.example.ecociente.ui.BarraNavegacaoView android:id="@+id/barraNavegacao" android:layout_width="0dp" android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

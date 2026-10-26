@@ -46,7 +46,11 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
 
+        com.example.ecociente.ui.JanelaEdgeToEdge.aplicar(this);
+
         setContentView(R.layout.activity_gerenciar_senha);
+        com.example.ecociente.ui.InsetsSistema.aplicarComoPadding(findViewById(R.id.raizGerenciarSenha));
+        com.example.ecociente.ui.NavegacaoConfiguracoes.instalar(this);
 
         viewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
 

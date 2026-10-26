@@ -2,7 +2,6 @@ package com.example.ecociente.ui;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.PopupMenu;
 import androidx.annotation.NonNull;
 import com.example.ecociente.R;
 
@@ -16,23 +15,8 @@ public final class MenuPerfil {
             @NonNull Runnable aoGerenciarPerfil,
             @NonNull Runnable aoSair) {
 
-        PopupMenu menu = new PopupMenu(contexto, ancora);
-
-        menu.getMenuInflater().inflate(R.menu.menu_perfil_home, menu.getMenu());
-
-        menu.setOnMenuItemClickListener(
-                item -> {
-                    if (item.getItemId() == R.id.menuGerenciarPerfil) {
-                        aoGerenciarPerfil.run();
-
-                    } else if (item.getItemId() == R.id.menuSair) {
-                        aoSair.run();
-                    }
-
-                    return true;
-                });
-
-        menu.show();
+        // A foto é um atalho direto. O logout permanece em Gerenciar perfil.
+        aoGerenciarPerfil.run();
     }
 
     public static void confirmarSaida(@NonNull Context contexto, @NonNull Runnable aoConfirmar) {

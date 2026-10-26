@@ -70,7 +70,7 @@ public final class NotificacaoEcoCiente {
 
         PendingIntent abrirCorpo = criarPendingIntent(
                 context,
-                tipo.possuiCta() ? "home" : destino,
+                destino,
                 dados,
                 proximoCodigo()
         );

@@ -28,6 +28,16 @@ public final class QuizResumo {
         this.notaMinimaAprovacao = notaMinimaAprovacao;
     }
 
+    // Mesmo construtor usado pelo catálogo demonstrativo local.
+    public QuizResumo(int quizId, @NonNull String titulo, @NonNull String categoria,
+                      int pontos, @NonNull List<QuizConteudo.Pergunta> perguntas) {
+        this(titulo, categoria, pontos, perguntas, quizId, 0d);
+    }
+
+    public int getQuizId() {
+        return id;
+    }
+
     @NonNull
     public String getTitulo() {
         return titulo;

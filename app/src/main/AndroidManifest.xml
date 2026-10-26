@@ -102,6 +102,20 @@
             android:exported="false" />
 
         <activity
+            android:name=".views.BibliotecaActivity"
+            android:exported="false" />
+        <!-- Fluxo de educacao: curso > introducao > leitura > celebracao. -->
+        <activity android:name=".views.CursoEducativoActivity"
+            android:exported="false" />
+        <activity android:name=".views.InicioConteudoEducativoActivity"
+            android:exported="false"
+            android:theme="@style/Theme.EcoCiente.QuizIntro" />
+        <activity android:name=".views.LeituraEducativaActivity"
+            android:exported="false" />
+        <activity android:name=".views.ConclusaoEducativaActivity"
+            android:exported="false"
+            android:theme="@style/Theme.EcoCiente.QuizIntro" />
+        <activity
             android:name=".views.TelaListaActivity"
             android:exported="false" />
 

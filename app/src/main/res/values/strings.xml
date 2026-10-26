@@ -557,4 +557,39 @@
     <string name="notificacao_eko">Eko</string>
     <string name="notificacao_fazer_quiz">Fazer quiz</string>
     <string name="sindico_posicao_ordinal">%1$dº</string>
+
+    <!-- Recursos locais preservados da branch de consolidação -->
+    <string name="sindico_condominio_demo">Condomínio Residencial Jardim das Flores</string>
+    <string name="erro_reproduzir_video">
+        Não foi possível reproduzir a animação da logo.
+    </string>
+    <string name="email">
+        E-mail
+    </string>
+    <string name="media_acertos">Média acertos</string>
+    <string name="funcionalidade_em_breve">Esta funcionalidade será disponibilizada em breve.</string>
+    <string name="solicitacoes">Solicitações</string>
+    <string name="chat_eko">Eko</string>
+    <string name="chat_erro_resposta">Não foi possível obter uma resposta válida. Tente novamente.</string>
+    <string name="subtitulo_quizzes">Teste seus conhecimentos sobre sustentabilidade</string>
+    <string name="quizzes_disponiveis_formatado">%1$d quizzes disponíveis</string>
+    <string name="quiz_em_breve">O quiz será disponibilizado em breve.</string>
+    <string name="quiz_restrito_usuario_comum">Esta tela é exclusiva para usuários comuns.</string>
+    <string name="quiz_dialogo_revisar">Revisar</string>
+    <string name="quiz_resultado_finalizar_titulo">Finalizar Quiz</string>
+    <string name="quiz_resultado_finalizar_mensagem">Deseja encerrar este quiz e voltar para a lista de quizzes?</string>
+    <string name="quiz_sua_resposta">Sua resposta: %1$s</string>
+    <string name="progresso_exemplo">75%</string>
+    <string name="proxima_coleta_dias">%1$d dias</string>
+    <string name="horario_inicio">Início</string>
+    <string name="horario_fim">Fim</string>
+    <string name="coleta_recorrente">Coleta recorrente</string>
+    <string name="preencha_todos_os_campos">Preencha todos os campos.</string>
+    <string name="fim_antes_do_inicio">O horário final precisa ser depois do inicial.</string>
+    <string name="coleta_salva_exemplo">Coleta salva (exemplo).</string>
+    <string name="ranking_resumo">Veja sua posição e a do seu condomínio</string>
+    <string name="destinatarios">Destinatários</string>
+    <string name="aviso_enviado_exemplo">Aviso enviado (exemplo).</string>
+    <string name="todos_os_condominios">Todos os meus condomínios</string>
+    <string name="quiz_n_perguntas">%1$d perguntas</string>
 </resources>
