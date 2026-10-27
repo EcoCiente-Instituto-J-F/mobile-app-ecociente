@@ -274,9 +274,29 @@ public class AutenticacaoExternaRepository {
 
     @NonNull
     private SessaoExterna login(@NonNull String email, @NonNull String senha) throws IOException, JSONException {
+        try {
+            return loginNoServidor(ConfiguracaoServidores.URL_LOGIN, email, senha,
+                    ConfiguracaoServidores.TIMEOUT_RESPOSTA_LOGIN_MS, true);
+        } catch (IOException erro) {
+            if (erro instanceof CredenciaisRecusadas
+                    || !PoliticaFallbackLogin.tentarRenderAposErro(erro)) {
+                throw erro;
+            }
+            Log.w(TAG, "AWS indisponivel; tentando o login secundario no Render");
+            return loginNoServidor(ConfiguracaoServidores.URL_LOGIN_RENDER, email, senha,
+                    ConfiguracaoServidores.TIMEOUT_RESPOSTA_RENDER_MS, false);
+        }
+    }
 
-        HttpURLConnection conexao = (HttpURLConnection) new URL(URL_LOGIN).openConnection();
+    @NonNull
+    private SessaoExterna loginNoServidor(
+            @NonNull String endereco,
+            @NonNull String email,
+            @NonNull String senha,
+            int timeoutResposta,
+            boolean principal) throws IOException, JSONException {
 
+        HttpURLConnection conexao = (HttpURLConnection) new URL(endereco).openConnection();
         try {
             conexao.setRequestMethod("POST");
             conexao.setRequestProperty("Content-Type", "application/json");
@@ -284,7 +304,7 @@ public class AutenticacaoExternaRepository {
             conexao.setDoOutput(true);
             conexao.setUseCaches(false);
             conexao.setConnectTimeout(ConfiguracaoServidores.TIMEOUT_CONEXAO_MS);
-            conexao.setReadTimeout(ConfiguracaoServidores.TIMEOUT_RESPOSTA_LOGIN_MS);
+            conexao.setReadTimeout(timeoutResposta);
 
             JSONObject corpo = new JSONObject();
             corpo.put("email", email.trim().toLowerCase(Locale.ROOT));
@@ -296,16 +316,17 @@ public class AutenticacaoExternaRepository {
 
             int codigoResposta = conexao.getResponseCode();
 
+            if (principal && PoliticaFallbackLogin.tentarRenderAposHttp(codigoResposta)) {
+                throw new java.net.SocketException("AWS HTTP " + codigoResposta);
+            }
             if (codigoResposta == 400 || codigoResposta == 401 || codigoResposta == 403) {
                 throw new CredenciaisRecusadas("Resposta HTTP " + codigoResposta);
             }
-
             if (codigoResposta < 200 || codigoResposta >= 300) {
                 throw new IOException("Resposta HTTP " + codigoResposta);
             }
 
             JSONObject resposta = new JSONObject(LeituraHttp.texto(conexao.getInputStream()));
-
             return new SessaoExterna(
                     resposta.getString("token"),
                     resposta.optString("tipoToken", "Bearer"),
