@@ -60,6 +60,47 @@ jobs:
       - name: Verificar Gradle
         run: ./gradlew --version
 
+      - name: Preparar google-services.json para compilacao
+        shell: bash
+        env:
+          GOOGLE_SERVICES_JSON_BASE64: ${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}
+        run: |
+          set -euo pipefail
+          if [ -n "$GOOGLE_SERVICES_JSON_BASE64" ]; then
+            printf '%s' "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > app/google-services.json
+          else
+            echo "::notice::Config Firebase de compilacao (sem credenciais reais): testes de login nao executados na CI."
+            python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          config = {
+              "project_info": {
+                  "project_number": "488554144813",
+                  "project_id": "ecociente-9325f",
+                  "storage_bucket": "ecociente-9325f.firebasestorage.app",
+              },
+              "client": [{
+                  "client_info": {
+                      "mobilesdk_app_id": "1:488554144813:android:e33c599678c438638204a4",
+                      "android_client_info": {"package_name": "com.example.ecociente"},
+                  },
+                  "api_key": [{"current_key": "ci-placeholder-not-a-real-firebase-key"}],
+                  "oauth_client": [{
+                      "client_id": "488554144813-i1bh7l5sipvh33478g6gottprk8mo06q.apps.googleusercontent.com",
+                      "client_type": 3,
+                  }],
+              }],
+              "configuration_version": "1",
+          }
+
+          Path("app/google-services.json").write_text(
+              json.dumps(config), encoding="utf-8"
+          )
+          PY
+          fi
+          python3 -m json.tool app/google-services.json >/dev/null
+
       - name: Executar testes unitários
         run: ./gradlew testDebugUnitTest --no-daemon --stacktrace
 
