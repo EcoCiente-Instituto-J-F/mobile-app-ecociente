@@ -1,6 +1,7 @@
 package com.example.ecociente.repository;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -137,6 +138,62 @@ public class PerfilApiJsonTest {
         assertEquals("", dados.getComplemento());
         assertEquals("SP", dados.getEstado());
         assertEquals(false, dados.isResidencial());
+    }
+
+    @Test
+    public void fotoDoCondominioVemDoCondominioEscolhido() throws Exception {
+        JSONObject json =
+                perfil(
+                        "[{\"id\":1,\"nome\":\"Residencial Eco\",\"ativo\":true,\"sindicoResponsavel\":true,"
+                                + "\"urlFoto\":\"https://res.cloudinary.com/demo/condominio.jpg\"}]");
+
+        assertEquals(
+                "https://res.cloudinary.com/demo/condominio.jpg", PerfilApiJson.fotoDoCondominio(json));
+    }
+
+    @Test
+    public void fotoDoCondominioFicaVaziaSemFotoOuSemCondominio() throws Exception {
+        assertEquals(
+                "",
+                PerfilApiJson.fotoDoCondominio(
+                        perfil(
+                                "[{\"id\":1,\"nome\":\"Residencial Eco\",\"ativo\":true,"
+                                        + "\"sindicoResponsavel\":true,\"urlFoto\":null}]")));
+        assertEquals("", PerfilApiJson.fotoDoCondominio(perfil("[]")));
+    }
+
+    @Test
+    public void corpoDoCondominioEnviaNomeSemEspacosEFotoValida() throws Exception {
+        JSONObject corpo =
+                PerfilApiJson.corpoDoCondominio(
+                        "  Residencial Eco  ", "https://res.cloudinary.com/demo/condominio.jpg");
+
+        assertNotNull(corpo);
+        assertEquals("Residencial Eco", corpo.getString("nome"));
+        assertEquals("https://res.cloudinary.com/demo/condominio.jpg", corpo.getString("urlFoto"));
+    }
+
+    @Test
+    public void corpoDoCondominioEnviaSoOQueFoiInformado() {
+        JSONObject soNome = PerfilApiJson.corpoDoCondominio("Residencial Eco", null);
+        JSONObject soFoto = PerfilApiJson.corpoDoCondominio(null, "http://exemplo.com/a.jpg");
+
+        assertFalse(soNome.has("urlFoto"));
+        assertFalse(soFoto.has("nome"));
+    }
+
+    @Test
+    public void corpoDoCondominioSemCampoValidoFicaNulo() {
+        assertNull(PerfilApiJson.corpoDoCondominio(null, null));
+        assertNull(PerfilApiJson.corpoDoCondominio("   ", ""));
+    }
+
+    @Test
+    public void corpoDoCondominioIgnoraFotoQueAApiRecusaria() {
+        assertNull(PerfilApiJson.corpoDoCondominio(null, "content://media/foto/1"));
+        assertNull(PerfilApiJson.corpoDoCondominio(null, "ftp://exemplo.com/a.jpg"));
+        assertNull(PerfilApiJson.corpoDoCondominio(null, " https://exemplo.com/a.jpg"));
+        assertNull(PerfilApiJson.corpoDoCondominio(null, "https://exemplo.com/" + "a".repeat(500)));
     }
 
     @Test

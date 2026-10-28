@@ -159,6 +159,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
 
             mostrarListas();
             carregarMoradores();
+            mostrarFotoDaApi();
             viewModel.aplicarDadosDaApi(api);
             preencherSeVazio(nome, api.getNome());
             preencherSeVazio(endereco, api.getEndereco());
@@ -220,10 +221,24 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                         viewModel.salvarFotoUri(resultado.getUrl());
                         mostrarFoto();
                         AvisoFlutuante.mostrar(this, R.string.sindico_foto_condominio_salva);
+                        new AtualizacaoExternaRepository().sincronizarCondominio(
+                                getApplicationContext(), PerfilApiRepository.condominioId(this),
+                                null, resultado.getUrl(),
+                                () -> AvisoFlutuante.mostrar(this, R.string.sindico_condominio_sincronizacao_falhou));
                     } else {
                         AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
                     }
                 });
+    }
+
+    // A foto que está no Postgres (via /me) vale mais do que a guardada só no aparelho.
+    private void mostrarFotoDaApi() {
+        String url = PerfilApiRepository.fotoDoCondominio(this);
+
+        if (!url.isEmpty() && !url.equals(viewModel.getFotoUri())) {
+            viewModel.salvarFotoUri(url);
+            mostrarFoto();
+        }
     }
 
     // Foto que o síndico já salvou: vem do documento dele quando a tela abre.
@@ -292,7 +307,11 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 cidade.getText().toString().trim(), uf, codigoPostal));
         AvisoFlutuante.mostrar(this, R.string.sindico_demo_dados_salvos);
 
-        // A API só guarda CEP, número e complemento; nome e tipo ficam neste aparelho.
+        // Endereço (CEP, número e complemento) e nome vão para a API; o tipo ainda fica no aparelho.
+        new AtualizacaoExternaRepository().sincronizarCondominio(
+                getApplicationContext(), PerfilApiRepository.condominioId(this),
+                nome.getText().toString(), null,
+                () -> AvisoFlutuante.mostrar(this, R.string.sindico_condominio_sincronizacao_falhou));
         new AtualizacaoExternaRepository().sincronizarEnderecoDoCondominio(
                 getApplicationContext(), PerfilApiRepository.condominioId(this), codigoPostal,
                 valorNumero, complemento.getText().toString(),
