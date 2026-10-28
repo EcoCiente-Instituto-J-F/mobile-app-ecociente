@@ -166,7 +166,7 @@ public class PerfilApiJsonTest {
     public void corpoDoCondominioEnviaNomeSemEspacosEFotoValida() throws Exception {
         JSONObject corpo =
                 PerfilApiJson.corpoDoCondominio(
-                        "  Residencial Eco  ", "https://res.cloudinary.com/demo/condominio.jpg");
+                        "  Residencial Eco  ", 0, "https://res.cloudinary.com/demo/condominio.jpg");
 
         assertNotNull(corpo);
         assertEquals("Residencial Eco", corpo.getString("nome"));
@@ -175,25 +175,33 @@ public class PerfilApiJsonTest {
 
     @Test
     public void corpoDoCondominioEnviaSoOQueFoiInformado() {
-        JSONObject soNome = PerfilApiJson.corpoDoCondominio("Residencial Eco", null);
-        JSONObject soFoto = PerfilApiJson.corpoDoCondominio(null, "http://exemplo.com/a.jpg");
+        JSONObject soNome = PerfilApiJson.corpoDoCondominio("Residencial Eco", 0, null);
+        JSONObject soFoto = PerfilApiJson.corpoDoCondominio(null, 0, "http://exemplo.com/a.jpg");
 
         assertFalse(soNome.has("urlFoto"));
         assertFalse(soFoto.has("nome"));
     }
 
     @Test
+    public void corpoDoCondominioEnviaOTipoSoQuandoEConhecido() throws Exception {
+        assertEquals(1, PerfilApiJson.corpoDoCondominio(null, 1, null).getInt("tipoCondominioId"));
+        assertEquals(2, PerfilApiJson.corpoDoCondominio("Eco", 2, null).getInt("tipoCondominioId"));
+        assertNull(PerfilApiJson.corpoDoCondominio(null, 0, null));
+        assertNull(PerfilApiJson.corpoDoCondominio(null, 3, null));
+    }
+
+    @Test
     public void corpoDoCondominioSemCampoValidoFicaNulo() {
-        assertNull(PerfilApiJson.corpoDoCondominio(null, null));
-        assertNull(PerfilApiJson.corpoDoCondominio("   ", ""));
+        assertNull(PerfilApiJson.corpoDoCondominio(null, 0, null));
+        assertNull(PerfilApiJson.corpoDoCondominio("   ", 0, ""));
     }
 
     @Test
     public void corpoDoCondominioIgnoraFotoQueAApiRecusaria() {
-        assertNull(PerfilApiJson.corpoDoCondominio(null, "content://media/foto/1"));
-        assertNull(PerfilApiJson.corpoDoCondominio(null, "ftp://exemplo.com/a.jpg"));
-        assertNull(PerfilApiJson.corpoDoCondominio(null, " https://exemplo.com/a.jpg"));
-        assertNull(PerfilApiJson.corpoDoCondominio(null, "https://exemplo.com/" + "a".repeat(500)));
+        assertNull(PerfilApiJson.corpoDoCondominio(null, 0, "content://media/foto/1"));
+        assertNull(PerfilApiJson.corpoDoCondominio(null, 0, "ftp://exemplo.com/a.jpg"));
+        assertNull(PerfilApiJson.corpoDoCondominio(null, 0, " https://exemplo.com/a.jpg"));
+        assertNull(PerfilApiJson.corpoDoCondominio(null, 0, "https://exemplo.com/" + "a".repeat(500)));
     }
 
     @Test

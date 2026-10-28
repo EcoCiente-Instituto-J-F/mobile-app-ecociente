@@ -108,15 +108,24 @@ final class PerfilApiJson {
                 endereco == null ? "" : texto(endereco, "cep"));
     }
 
-    // Corpo do PATCH do condomínio; null quando não há nenhum campo que a API aceitaria.
+    // Ids de tb_lkp_tipos_condominios.
+    static final int TIPO_RESIDENCIAL = 1;
+    static final int TIPO_COMERCIAL = 2;
+
+    // Corpo do PATCH do condomínio; null quando não há nenhum campo que a API aceitaria. Tipo 0 = não
+    // enviar o tipo.
     @Nullable
-    static JSONObject corpoDoCondominio(@Nullable String nome, @Nullable String urlFoto) {
+    static JSONObject corpoDoCondominio(@Nullable String nome, int tipoCondominioId, @Nullable String urlFoto) {
 
         JSONObject corpo = new JSONObject();
 
         try {
             if (nome != null && !nome.trim().isEmpty()) {
                 corpo.put("nome", nome.trim());
+            }
+
+            if (tipoCondominioId == TIPO_RESIDENCIAL || tipoCondominioId == TIPO_COMERCIAL) {
+                corpo.put("tipoCondominioId", tipoCondominioId);
             }
 
             if (urlFoto != null

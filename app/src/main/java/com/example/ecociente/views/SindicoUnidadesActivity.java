@@ -218,7 +218,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                         AvisoFlutuante.mostrar(this, R.string.sindico_foto_condominio_salva);
                         new AtualizacaoExternaRepository().sincronizarCondominio(
                                 getApplicationContext(), PerfilApiRepository.condominioId(this),
-                                null, resultado.getUrl(),
+                                null, 0, resultado.getUrl(),
                                 () -> AvisoFlutuante.mostrar(this, R.string.sindico_condominio_sincronizacao_falhou));
                     } else {
                         AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
@@ -302,10 +302,10 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                 cidade.getText().toString().trim(), uf, codigoPostal));
         AvisoFlutuante.mostrar(this, R.string.sindico_demo_dados_salvos);
 
-        // Endereço (CEP, número e complemento) e nome vão para a API; o tipo ainda fica no aparelho.
+        // Nome, tipo e endereço (CEP, número e complemento) vão para a API.
         new AtualizacaoExternaRepository().sincronizarCondominio(
                 getApplicationContext(), PerfilApiRepository.condominioId(this),
-                nome.getText().toString(), null,
+                nome.getText().toString(), residencial ? 1 : 2, null,
                 () -> AvisoFlutuante.mostrar(this, R.string.sindico_condominio_sincronizacao_falhou));
         new AtualizacaoExternaRepository().sincronizarEnderecoDoCondominio(
                 getApplicationContext(), PerfilApiRepository.condominioId(this), codigoPostal,

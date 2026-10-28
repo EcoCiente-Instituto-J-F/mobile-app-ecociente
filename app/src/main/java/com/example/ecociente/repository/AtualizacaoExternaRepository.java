@@ -134,16 +134,17 @@ public class AtualizacaoExternaRepository {
     }
 
     // PATCH /api/condominios/{id}: só o síndico responsável pode. Envia só o que foi informado: o
-    // nome (não vazio) e a foto (URL http ou https de até 500 caracteres). Sem id nem campo válido,
-    // nada é enviado.
+    // nome (não vazio), o tipo (1 residencial, 2 comercial) e a foto (URL http ou https de até 500
+    // caracteres). Sem id nem campo válido, nada é enviado.
     public void sincronizarCondominio(
             @NonNull Context contexto,
             int condominioId,
             @Nullable String nome,
+            int tipoCondominioId,
             @Nullable String urlFoto,
             @Nullable Runnable aoFalhar) {
 
-        JSONObject corpo = PerfilApiJson.corpoDoCondominio(nome, urlFoto);
+        JSONObject corpo = PerfilApiJson.corpoDoCondominio(nome, tipoCondominioId, urlFoto);
 
         if (condominioId <= 0 || corpo == null) {
             return;
