@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.repository.ConversaRepository;
 import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.DetalheSolicitacao;
 import com.example.ecociente.model.Solicitacao;
@@ -132,12 +133,34 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
         preencherTexto(R.id.tipoCondominioDetalhe, detalhe == null ? null : detalhe.getTipoCondominio());
         preencherTexto(R.id.cidadeCondominioDetalhe, detalhe == null ? null : detalhe.getCidade());
 
-        findViewById(R.id.botaoChatDetalhe)
-                .setOnClickListener(view -> startActivity(ConversaActivity.criarIntent(this, nome)));
+        findViewById(R.id.botaoChatDetalhe).setOnClickListener(view -> abrirConversa(nome, sindico));
 
         montarLinhaDoTempo(nome, detalhe);
 
         montarLinhasDoDetalhe(detalhe);
+    }
+
+    // Abre a conversa deste condomínio com a cooperativa (a API cria se ainda não existir).
+    private void abrirConversa(@NonNull String nome, boolean sindico) {
+
+        new ConversaRepository()
+                .abrir(
+                        this,
+                        solicitacao.getCondominioId(),
+                        solicitacao.getCooperativaId(),
+                        sindico,
+                        conversa -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            if (conversa == null) {
+                                AvisoFlutuante.mostrar(this, R.string.conversa_nao_aberta);
+                                return;
+                            }
+
+                            startActivity(ConversaActivity.criarIntent(this, conversa.id, nome, sindico));
+                        });
     }
 
     private void preencherTexto(int id, String texto) {

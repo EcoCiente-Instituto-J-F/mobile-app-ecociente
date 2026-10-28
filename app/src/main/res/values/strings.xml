@@ -592,4 +592,16 @@
     <string name="todos_os_condominios">Todos os meus condomínios</string>
     <string name="quiz_n_perguntas">%1$d perguntas</string>
     <string name="inicio_quiz_eko_descricao">Eko animado incentivando o quiz</string>
+    <string name="conversas_carregando">Carregando as conversas…</string>
+    <string name="conversas_erro">Não foi possível carregar as conversas.</string>
+    <plurals name="conversa_mensagens_novas">
+        <item quantity="one">%d mensagem nova</item>
+        <item quantity="other">%d mensagens novas</item>
+    </plurals>
+    <string name="conversa_carregando">Carregando as mensagens…</string>
+    <string name="conversa_erro_mensagens">Não foi possível carregar as mensagens.</string>
+    <string name="conversa_sem_mensagens">Nenhuma mensagem ainda.</string>
+    <string name="conversa_aguarde_cooperativa">Aguarde a cooperativa iniciar a conversa.</string>
+    <string name="conversa_hint_mensagem">Escreva uma mensagem…</string>
+    <string name="conversa_nao_aberta">Não foi possível abrir a conversa. Tente de novo.</string>
 </resources>

@@ -21,78 +21,134 @@ import androidx.core.widget.NestedScrollView;
 import com.example.ecociente.R;
 import com.example.ecociente.model.Conversa;
 import com.example.ecociente.model.MensagemConversa;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import com.example.ecociente.ui.Iniciais;
+import com.google.android.material.button.MaterialButton;
+import com.example.ecociente.ui.IndicadorCarregamento;
+import com.example.ecociente.ui.AvisoFlutuante;
+import com.example.ecociente.repository.ConversaRepository;
 
 public class ConversaActivity extends AppCompatActivity {
 
+    private static final String EXTRA_ID = "idConversa";
     private static final String EXTRA_NOME = "nomeConversa";
-    private static final String EXTRA_PREVIA = "previaConversa";
-    private static final String EXTRA_HORA = "horaConversa";
+    private static final String EXTRA_SINDICO = "conversaDoSindico";
 
     private final List<MensagemConversa> mensagens = new ArrayList<>();
-
+    private final ConversaRepository repositorio = new ConversaRepository();
+    private int conversaId;
     private String nome;
+    private String meuLado;
+    private boolean carregou;
     private LinearLayout container;
     private NestedScrollView rolagem;
     private EditText campo;
+    private View botaoEnviar;
 
     @NonNull
-    public static Intent criarIntent(@NonNull Context contexto, @NonNull Conversa conversa) {
-
-        return new Intent(contexto, ConversaActivity.class)
-                .putExtra(EXTRA_NOME, conversa.nome)
-                .putExtra(EXTRA_PREVIA, conversa.ultimaMensagem)
-                .putExtra(EXTRA_HORA, conversa.hora);
+    public static Intent criarIntent(@NonNull Context contexto, @NonNull Conversa conversa, boolean sindico) {
+        return criarIntent(contexto, conversa.id, conversa.nome, sindico);
     }
 
     @NonNull
-    public static Intent criarIntent(@NonNull Context contexto, @NonNull String nome) {
-
+    public static Intent criarIntent(@NonNull Context contexto, int conversaId, @NonNull String nome, boolean sindico) {
         return new Intent(contexto, ConversaActivity.class)
+                .putExtra(EXTRA_ID, conversaId)
                 .putExtra(EXTRA_NOME, nome)
-                .putExtra(EXTRA_PREVIA, "Quando vocês podem passar?")
-                .putExtra(EXTRA_HORA, "08:30");
+                .putExtra(EXTRA_SINDICO, sindico);
     }
 
     @Override
     protected void onCreate(@Nullable Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
-
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
-
         setContentView(R.layout.activity_conversa);
 
+        conversaId = getIntent().getIntExtra(EXTRA_ID, 0);
         nome = getIntent().getStringExtra(EXTRA_NOME);
 
-        if (nome == null) {
+        if (conversaId <= 0 || nome == null) {
             finish();
             return;
         }
+
+        meuLado = getIntent().getBooleanExtra(EXTRA_SINDICO, false)
+                ? ConversaRepository.ladoDoSindico()
+                : ConversaRepository.ladoDaCooperativa();
 
         configurarInsets();
 
         container = findViewById(R.id.containerMensagensConversa);
         rolagem = findViewById(R.id.rolagemConversa);
         campo = findViewById(R.id.campoMensagemConversa);
+        botaoEnviar = findViewById(R.id.botaoEnviarConversa);
 
         ((TextView) findViewById(R.id.tituloConversa)).setText(nome);
+        campo.setHint(R.string.conversa_hint_mensagem);
 
         findViewById(R.id.botaoVoltarConversa).setOnClickListener(view -> finish());
-
-        findViewById(R.id.botaoEnviarConversa).setOnClickListener(view -> enviar());
-
+        botaoEnviar.setOnClickListener(view -> enviar());
         campo.setOnEditorActionListener(
                 (view, acao, evento) -> {
                     enviar();
                     return true;
                 });
 
-        exibirMensagens();
+        carregar();
+    }
+
+    private void carregar() {
+        container.removeAllViews();
+        IndicadorCarregamento.mostrar(container, R.string.conversa_carregando);
+
+        repositorio.mensagens(this, conversaId, meuLado, carregadas -> {
+            if (isFinishing() || isDestroyed()) return;
+
+            if (carregadas == null) {
+                mostrarErro();
+                return;
+            }
+
+            carregou = true;
+            mensagens.clear();
+            mensagens.addAll(carregadas);
+            exibirMensagens();
+            atualizarCampo();
+            repositorio.marcarComoLida(this, conversaId);
+        });
+    }
+
+    private void mostrarErro() {
+        container.removeAllViews();
+
+        TextView mensagem = new TextView(this);
+        mensagem.setText(R.string.conversa_erro_mensagens);
+        mensagem.setTextColor(getColor(R.color.cinza_texto_home));
+        mensagem.setTextSize(14);
+        mensagem.setPadding(32, 112, 32, 24);
+        container.addView(mensagem);
+
+        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, container, false);
+        tentar.setText(R.string.tentar_novamente);
+        tentar.setOnClickListener(view -> carregar());
+        container.addView(tentar);
+
+        atualizarCampo();
+    }
+
+    // O condomínio não abre a conversa: enquanto a cooperativa não escrever, o campo fica travado.
+    private void atualizarCampo() {
+        boolean podeEscrever = carregou && ConversaRepository.podeEscrever(meuLado, mensagens.size());
+
+        campo.setEnabled(podeEscrever);
+        botaoEnviar.setEnabled(podeEscrever);
+
+        if (carregou && !podeEscrever) {
+            campo.setHint(R.string.conversa_aguarde_cooperativa);
+        } else {
+            campo.setHint(R.string.conversa_hint_mensagem);
+        }
     }
 
     private void configurarInsets() {
@@ -124,30 +180,51 @@ public class ConversaActivity extends AppCompatActivity {
     }
 
     private void enviar() {
-
         String texto = campo.getText().toString().trim();
 
-        if (texto.isEmpty()) {
+        if (texto.isEmpty() || !campo.isEnabled()) {
             return;
         }
 
-        campo.setText("");
+        campo.setEnabled(false);
+        botaoEnviar.setEnabled(false);
 
-        InputMethodManager teclado = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        repositorio.enviar(this, conversaId, texto, meuLado, (enviada, erro) -> {
+            if (isFinishing() || isDestroyed()) return;
 
-        if (teclado != null) {
-            teclado.hideSoftInputFromWindow(campo.getWindowToken(), 0);
-        }
+            if (enviada == null) {
+                atualizarCampo();
+                AvisoFlutuante.mostrar(this, erro);
+                return;
+            }
 
-        mensagens.add(
-                new MensagemConversa(texto, new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()), true));
+            campo.setText("");
 
-        exibirMensagens();
+            InputMethodManager teclado = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+
+            if (teclado != null) {
+                teclado.hideSoftInputFromWindow(campo.getWindowToken(), 0);
+            }
+
+            mensagens.add(enviada);
+            exibirMensagens();
+            atualizarCampo();
+        });
     }
 
     private void exibirMensagens() {
 
         container.removeAllViews();
+
+        if (mensagens.isEmpty()) {
+            TextView vazio = new TextView(this);
+            vazio.setText(R.string.conversa_sem_mensagens);
+            vazio.setTextColor(getColor(R.color.cinza_texto_home));
+            vazio.setTextSize(14);
+            vazio.setPadding(32, 112, 32, 24);
+            container.addView(vazio);
+            return;
+        }
 
         LayoutInflater inflador = LayoutInflater.from(this);
 
