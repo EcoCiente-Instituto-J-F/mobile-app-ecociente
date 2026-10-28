@@ -30,15 +30,15 @@ public class EcoCienteFirebaseMessagingService extends FirebaseMessagingService 
         }
         if (dados.isEmpty()) return;
 
-        // Aparelho sem sessão não mostra aviso (o toque abriria uma tela restrita), e quem desligou as
-        // notificações gerais no perfil não recebe push.
+        TipoNotificacaoEcoCiente tipo =
+                TipoNotificacaoEcoCiente.porId(dados.containsKey("tipo") ? dados.get("tipo") : dados.get("type"));
+
+        // Aparelho sem sessão não mostra aviso (o toque abriria uma tela restrita), e o aviso respeita
+        // os interruptores do perfil (gerais e o grupo do tipo).
         PerfilRepository perfil = new PerfilRepository();
         FirebaseUser usuario = perfil.usuarioAtual();
 
-        if (usuario == null || !perfil.notificacoesGeraisAtivas(usuario.getUid())) return;
-
-        TipoNotificacaoEcoCiente tipo =
-                TipoNotificacaoEcoCiente.porId(dados.containsKey("tipo") ? dados.get("tipo") : dados.get("type"));
+        if (usuario == null || !perfil.notificacaoPermitida(usuario.getUid(), tipo.getGrupo())) return;
 
         NotificacaoEcoCiente.exibir(
                 this,

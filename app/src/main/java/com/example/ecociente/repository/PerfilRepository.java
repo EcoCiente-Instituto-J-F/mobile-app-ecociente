@@ -171,9 +171,9 @@ public class PerfilRepository {
         return resultado;
     }
 
-    // Para o serviço de push, que já roda fora da thread principal: se o usuário desligou as
-    // "Notificações gerais". Sem conseguir ler a preferência (sem rede e sem cache), mantém o aviso.
-    public boolean notificacoesGeraisAtivas(@NonNull String uid) {
+    // Para o serviço de push, que já roda fora da thread principal: se as preferências do usuário
+    // permitem este grupo de aviso. Sem conseguir ler a preferência (sem rede e sem cache), mantém o aviso.
+    public boolean notificacaoPermitida(@NonNull String uid, @NonNull PreferenciasNotificacao.Grupo grupo) {
         try {
             DocumentSnapshot documento =
                     Tasks.await(
@@ -188,7 +188,7 @@ public class PerfilRepository {
             PreferenciasNotificacao preferencias =
                     documento.get(CAMPO_PREFERENCIAS, PreferenciasNotificacao.class);
 
-            return preferencias == null || preferencias.isNotificacoesGerais();
+            return (preferencias == null ? new PreferenciasNotificacao() : preferencias).permite(grupo);
 
         } catch (Exception erro) {
             Log.w(TAG, "Não foi possível ler as preferências de notificação", erro);
