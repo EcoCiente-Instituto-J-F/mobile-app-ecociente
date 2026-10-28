@@ -77,6 +77,10 @@ public class EcoCienteApplication extends Application implements Application.Act
             return;
         }
 
+        // Com a escala de tablet, os dp do limite crescem junto: o conteúdo nunca passa da largura real
+        // da tela, senão a raiz fica maior que o aparelho e é cortada dos dois lados.
+        larguraMaxima = Math.min(larguraMaxima, activity.getResources().getDisplayMetrics().widthPixels);
+
         ViewGroup conteudo = activity.findViewById(android.R.id.content);
 
         if (conteudo == null || conteudo.getChildCount() == 0) {
