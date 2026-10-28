@@ -4,8 +4,6 @@ import static com.google.android.libraries.identity.googleid.GoogleIdTokenCreden
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
-import android.os.Handler;
 import android.os.CancellationSignal;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,7 +33,6 @@ import androidx.credentials.exceptions.GetCredentialException;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
-import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.ui.FieldFeedback;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.repository.AutenticacaoExternaRepository;
@@ -60,15 +57,6 @@ public class LoginFragment extends Fragment {
     private EditText campoSenha;
     private MaterialButton botaoLogin;
 
-    // O primeiro login do dia pode levar mais de 1 minuto (o servidor no Render dorme): avisa.
-    private static final long DEMORA_PARA_AVISAR_MS = 10_000L;
-    private final Handler principal = new Handler(Looper.getMainLooper());
-    private final Runnable avisoDeDemora =
-            () -> {
-                if (isAdded()) {
-                    AvisoFlutuante.mostrar(requireActivity(), R.string.login_demora);
-                }
-            };
     private MaterialButton botaoGoogle;
     private MaterialButton botaoFacebook;
     private ImageView iconeOlhoSenha;
@@ -387,12 +375,6 @@ public class LoginFragment extends Fragment {
             return;
         }
 
-        principal.removeCallbacks(avisoDeDemora);
-
-        if (emAndamento) {
-            principal.postDelayed(avisoDeDemora, DEMORA_PARA_AVISAR_MS);
-        }
-
         botaoLogin.setEnabled(!emAndamento);
         botaoGoogle.setEnabled(!emAndamento);
         botaoFacebook.setEnabled(!emAndamento);
@@ -499,7 +481,6 @@ public class LoginFragment extends Fragment {
             ((Login) getActivity()).definirNavegacaoHabilitada(true);
         }
 
-        principal.removeCallbacks(avisoDeDemora);
 
         campoEmail = null;
 

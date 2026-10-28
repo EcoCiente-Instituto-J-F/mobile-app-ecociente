@@ -99,7 +99,7 @@ final class ApiAutenticada {
         String corpo = requisitar(metodo, url, token, json, codigo);
 
         // O JWT dura minutos: o salvo costuma estar vencido.
-        if (codigo[0] == 401 || codigo[0] == 403) {
+        if (codigo[0] == 401 && "GET".equals(metodo)) {
             String renovado = AUTENTICACAO.renovarToken(contexto);
 
             if (renovado != null) {

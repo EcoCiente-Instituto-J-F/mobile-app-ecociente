@@ -249,7 +249,8 @@ public class MainActivity extends AppCompatActivity {
                  * ainda pode estar sendo carregado.
                  */
                 if (
-                        !esperouLoginDaApi
+                        estado.getTipo() != EstadoHome.Tipo.PRONTA
+                                && !esperouLoginDaApi
                                 && AutenticacaoExternaRepository
                                 .loginEmAndamento()
                 ) {
@@ -283,8 +284,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 boolean precisaDoPerfil =
-                        estado.getTipo() == EstadoHome.Tipo.CONDOMINIO
-                                || estado.getTipo() == EstadoHome.Tipo.PRONTA;
+                        estado.getTipo() == EstadoHome.Tipo.CONDOMINIO;
 
                 if (
                         precisaDoPerfil
