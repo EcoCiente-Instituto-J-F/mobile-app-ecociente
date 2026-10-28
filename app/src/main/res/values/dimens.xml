@@ -5,4 +5,25 @@
     <dimen name="espaco_barra_navegacao">72dp</dimen>
     <!-- 0 = sem limite (celular). Em tablet, values-sw600dp limita a largura do conteúdo. -->
     <dimen name="largura_maxima_conteudo">0dp</dimen>
+    <!-- Login. No celular são os valores originais; values-sw600dp aumenta para tablet. -->
+    <dimen name="login_logo_largura">146dp</dimen>
+    <dimen name="login_logo_altura">42dp</dimen>
+    <dimen name="login_logo_margem_topo">18dp</dimen>
+    <dimen name="login_cartao_margem_topo">82dp</dimen>
+    <dimen name="login_cartao_padding_horizontal">34dp</dimen>
+    <dimen name="login_cartao_padding_topo">54dp</dimen>
+    <dimen name="login_seletor_altura">46dp</dimen>
+    <dimen name="login_seletor_texto">12sp</dimen>
+    <dimen name="login_titulo_texto">25sp</dimen>
+    <dimen name="login_campo_altura">48dp</dimen>
+    <dimen name="login_campo_texto">16sp</dimen>
+    <dimen name="login_campo_margem_topo">34dp</dimen>
+    <dimen name="login_link_texto">13sp</dimen>
+    <dimen name="login_erro_texto">12sp</dimen>
+    <dimen name="login_botao_altura">52dp</dimen>
+    <dimen name="login_botao_texto">17sp</dimen>
+    <dimen name="login_botao_margem_topo">38dp</dimen>
+    <dimen name="login_social_altura">50dp</dimen>
+    <dimen name="login_social_texto">13sp</dimen>
+    <dimen name="login_divisor_margem_topo">32dp</dimen>
 </resources>

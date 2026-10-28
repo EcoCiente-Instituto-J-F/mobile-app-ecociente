@@ -52,18 +52,14 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="7dp"
-                app:cardBackgroundColor="@color/cinza_fundo_imagem_home"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
+                style="@style/AvatarCabecalho">
 
                 <ImageView
                     android:id="@+id/imagemPerfilCondominio"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/foto_perfil"
-                    android:padding="5dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_perfil_usuario" />
+                    style="@style/AvatarCabecalho.Imagem" />
 
             </com.google.android.material.card.MaterialCardView>
 

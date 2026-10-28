@@ -116,4 +116,18 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
+
+    <!-- Avatar redondo do cabeçalho das homes e do quiz. Tamanho e margem ficam em cada layout,
+         porque atributos layout_* não valem dentro de estilo. -->
+    <style name="AvatarCabecalho" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/cinza_fundo_imagem_home</item>
+        <item name="cardCornerRadius">20dp</item>
+        <item name="cardElevation">0dp</item>
+    </style>
+
+    <style name="AvatarCabecalho.Imagem" parent="">
+        <item name="android:padding">5dp</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:src">@drawable/ic_perfil_usuario</item>
+    </style>
 </resources>

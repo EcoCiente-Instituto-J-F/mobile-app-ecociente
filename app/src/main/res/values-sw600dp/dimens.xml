@@ -2,4 +2,26 @@
 
 <resources>
     <dimen name="largura_maxima_conteudo">600dp</dimen>
+
+    <!-- Login em tablet: elementos maiores e mais espaço, para o formulário ocupar a tela alta. -->
+    <dimen name="login_logo_largura">210dp</dimen>
+    <dimen name="login_logo_altura">60dp</dimen>
+    <dimen name="login_logo_margem_topo">36dp</dimen>
+    <dimen name="login_cartao_margem_topo">48dp</dimen>
+    <dimen name="login_cartao_padding_horizontal">56dp</dimen>
+    <dimen name="login_cartao_padding_topo">56dp</dimen>
+    <dimen name="login_seletor_altura">58dp</dimen>
+    <dimen name="login_seletor_texto">15sp</dimen>
+    <dimen name="login_titulo_texto">32sp</dimen>
+    <dimen name="login_campo_altura">60dp</dimen>
+    <dimen name="login_campo_texto">19sp</dimen>
+    <dimen name="login_campo_margem_topo">64dp</dimen>
+    <dimen name="login_link_texto">16sp</dimen>
+    <dimen name="login_erro_texto">14sp</dimen>
+    <dimen name="login_botao_altura">64dp</dimen>
+    <dimen name="login_botao_texto">20sp</dimen>
+    <dimen name="login_botao_margem_topo">76dp</dimen>
+    <dimen name="login_social_altura">60dp</dimen>
+    <dimen name="login_social_texto">16sp</dimen>
+    <dimen name="login_divisor_margem_topo">60dp</dimen>
 </resources>

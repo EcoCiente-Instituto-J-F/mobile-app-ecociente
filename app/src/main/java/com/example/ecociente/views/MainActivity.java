@@ -642,139 +642,28 @@ public class MainActivity extends AppCompatActivity {
             if (entrada != null) entrada.setOnClickListener(v -> abrirBiblioteca());
         }
 
-        Motion.pressFeedback(
-                findViewById(
-                        R.id.botaoNotificacoes
-                )
-        );
-
-        Motion.pressFeedback(
-                findViewById(
-                        R.id.imagemPerfilHome
-                )
-        );
-
-        Motion.pressFeedback(
-                findViewById(
-                        R.id.cardAnaliseQuiz
-                )
-        );
-
-        Motion.pressFeedback(
-                findViewById(
-                        R.id.acaoVerTodos
-                )
-        );
-
-        Motion.pressFeedback(
-                findViewById(
-                        R.id.cardConteudoGuia
-                )
-        );
-
-        Motion.pressFeedback(
-                findViewById(
-                        R.id.cardConteudoDica
-                )
-        );
-
-        Motion.pressFeedback(
-                findViewById(
-                        R.id.cardConteudoArtigo
-                )
-        );
-
-        Motion.pressFeedback(
-                findViewById(
-                        R.id.cardConteudoGuiaExtra
-                )
-        );
-
-        Motion.pressFeedback(
-                findViewById(
-                        R.id.cardConteudoDicaExtra
-                )
-        );
+        int[] comFeedbackAoToque = {
+                R.id.botaoNotificacoes, R.id.imagemPerfilHome, R.id.cardAnaliseQuiz,
+                R.id.acaoVerTodos, R.id.cardConteudoGuia, R.id.cardConteudoDica,
+                R.id.cardConteudoArtigo, R.id.cardConteudoGuiaExtra, R.id.cardConteudoDicaExtra};
+        for (int id : comFeedbackAoToque) {
+            Motion.pressFeedback(findViewById(id));
+        }
     }
 
     private void animarEntradaDaHome() {
 
-        motion.fadeUp(
-                findViewById(
-                        R.id.cabecalhoHome
-                ),
-                0L
-        );
+        // Cada item entra com um pequeno atraso em relação ao anterior.
+        int[] itens = {
+                R.id.cabecalhoHome, R.id.textoSaudacao, R.id.textoMensagemMotivacional,
+                R.id.cardAnaliseQuiz, R.id.cabecalhoConteudos, R.id.cardConteudoGuia,
+                R.id.cardConteudoDica, R.id.cardConteudoArtigo, R.id.cardConteudoGuiaExtra,
+                R.id.cardConteudoDicaExtra, R.id.barraNavegacao};
+        long[] atrasosMs = {0L, 45L, 80L, 125L, 185L, 235L, 275L, 315L, 355L, 395L, 145L};
 
-        motion.fadeUp(
-                findViewById(
-                        R.id.textoSaudacao
-                ),
-                45L
-        );
-
-        motion.fadeUp(
-                findViewById(
-                        R.id.textoMensagemMotivacional
-                ),
-                80L
-        );
-
-        motion.fadeUp(
-                findViewById(
-                        R.id.cardAnaliseQuiz
-                ),
-                125L
-        );
-
-        motion.fadeUp(
-                findViewById(
-                        R.id.cabecalhoConteudos
-                ),
-                185L
-        );
-
-        motion.fadeUp(
-                findViewById(
-                        R.id.cardConteudoGuia
-                ),
-                235L
-        );
-
-        motion.fadeUp(
-                findViewById(
-                        R.id.cardConteudoDica
-                ),
-                275L
-        );
-
-        motion.fadeUp(
-                findViewById(
-                        R.id.cardConteudoArtigo
-                ),
-                315L
-        );
-
-        motion.fadeUp(
-                findViewById(
-                        R.id.cardConteudoGuiaExtra
-                ),
-                355L
-        );
-
-        motion.fadeUp(
-                findViewById(
-                        R.id.cardConteudoDicaExtra
-                ),
-                395L
-        );
-
-        motion.fadeUp(
-                findViewById(
-                        R.id.barraNavegacao
-                ),
-                145L
-        );
+        for (int i = 0; i < itens.length; i++) {
+            motion.fadeUp(findViewById(itens[i]), atrasosMs[i]);
+        }
     }
 
     private void observarFoto() {
@@ -863,23 +752,6 @@ public class MainActivity extends AppCompatActivity {
                 .start();
     }
 
-    private void abrirHomeCooperativa() {
-
-        startActivity(
-                new Intent(
-                        this,
-                        CooperativaHomeActivity.class
-                )
-        );
-
-        overridePendingTransition(
-                0,
-                0
-        );
-
-        finish();
-    }
-
     private static PerfilAcesso.DestinoHome destinoDoFirestore(
             @NonNull EstadoHome estado
     ) {
@@ -936,15 +808,15 @@ public class MainActivity extends AppCompatActivity {
         switch (destino) {
 
             case SINDICO:
-                abrirHomeSindico();
+                abrirHome(SindicoHomeActivity.class);
                 break;
 
             case COOPERATIVA:
-                abrirHomeCooperativa();
+                abrirHome(CooperativaHomeActivity.class);
                 break;
 
             case CONDOMINIO:
-                abrirHomeCondominio();
+                abrirHome(CondominioHomeActivity.class);
                 break;
 
             default:
@@ -966,36 +838,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void abrirHomeSindico() {
+    // Abre a home do perfil sem animação de troca e fecha o roteador, para o voltar não retornar a ele.
+    private void abrirHome(@NonNull Class<?> home) {
 
-        startActivity(
-                new Intent(
-                        this,
-                        SindicoHomeActivity.class
-                )
-        );
+        startActivity(new Intent(this, home));
 
-        overridePendingTransition(
-                0,
-                0
-        );
-
-        finish();
-    }
-
-    private void abrirHomeCondominio() {
-
-        startActivity(
-                new Intent(
-                        this,
-                        CondominioHomeActivity.class
-                )
-        );
-
-        overridePendingTransition(
-                0,
-                0
-        );
+        overridePendingTransition(0, 0);
 
         finish();
     }

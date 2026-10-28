@@ -78,18 +78,15 @@
                 android:clickable="true"
                 android:contentDescription="@string/sindico_perfil_do_sindico"
                 android:focusable="true"
-                app:cardBackgroundColor="@color/cinza_fundo_imagem_home"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="0dp">
+                style="@style/AvatarCabecalho">
+
 
                 <ImageView
                     android:id="@+id/imagemPerfilSindico"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/foto_perfil"
-                    android:padding="5dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_perfil_usuario" />
+                    style="@style/AvatarCabecalho.Imagem" />
 
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>

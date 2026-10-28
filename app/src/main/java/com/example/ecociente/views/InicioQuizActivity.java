@@ -20,8 +20,6 @@ import androidx.core.view.WindowInsetsControllerCompat;
 import com.example.ecociente.R;
 import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.DadosDemonstracaoEducacao;
-import com.example.ecociente.midias.MidiasEco;
-import com.example.ecociente.midias.CarregadorMidias;
 import com.example.ecociente.ui.AnimacaoEkoFrames;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
@@ -98,10 +96,6 @@ public class InicioQuizActivity extends AppCompatActivity {
 
         int quantidadePerguntas = QuizConteudo.doIntent(getIntent()).size();
 
-        int quizId = QuizConteudo.quizIdDoIntent(getIntent());
-        CarregadorMidias.mostrar(findViewById(R.id.imagemIlustracaoInicioQuiz),
-                MidiasEco.obter(this).capaQuiz(quizId, categoria, categoria),
-                false, R.drawable.quiz_sustentabilidade_inicio);
         textoTitulo.setText(categoria);
         textoPerguntas.setText(
                 getString(R.string.inicio_quiz_perguntas_formatado, quantidadePerguntas)
