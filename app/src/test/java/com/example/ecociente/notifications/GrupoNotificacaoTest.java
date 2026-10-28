@@ -43,6 +43,15 @@ public class GrupoNotificacaoTest {
     }
 
     @Test
+    public void semPreferenciaSalvaTodosOsGruposVemLigados() {
+        PreferenciasNotificacao preferencias = new PreferenciasNotificacao();
+
+        for (Grupo grupo : Grupo.values()) {
+            assertTrue(grupo.name(), preferencias.permite(grupo));
+        }
+    }
+
+    @Test
     public void cadaGrupoSegueSeuInterruptor() {
         PreferenciasNotificacao preferencias = new PreferenciasNotificacao();
         preferencias.setLembretesAvisos(true);

@@ -34,7 +34,7 @@ public class PreferenciasNotificacao {
     }
 
     public boolean isLembretesAvisos() {
-        return lembretesAvisos != null && lembretesAvisos;
+        return lembretesAvisos == null || lembretesAvisos;
     }
 
     public void setLembretesAvisos(Boolean lembretesAvisos) {

@@ -61,7 +61,7 @@ O CI executa testes unitários, lint e build:
 .
 ├── app/                   # aplicativo Android (Java, MVVM)
 │   └── src/main/java/com/example/ecociente/
-│       ├── model/  repository/  viewmodels/  views/  ui/  notifications/
+│       ├── model/  repository/  viewmodels/  views/  ui/  notifications/  midias/  util/
 ├── backend/               # funções serverless (Node.js 24) para a Vercel
 │   ├── api/               # notificacaoMotivacional.js
 │   └── lib/               # firebaseAdmin.js, postgres.js
@@ -72,6 +72,23 @@ O CI executa testes unitários, lint e build:
 ├── Dockerfile
 └── scripts/pr-bot/        # geração automática da descrição de PR
 ```
+
+### Pacotes do app
+
+O app segue MVVM: a tela (`views`) mostra o estado que o `viewmodels` expõe, e o ViewModel busca e grava os dados pelo `repository`. As dependências vão sempre nesse sentido: nenhum ViewModel ou repositório conhece uma tela.
+
+| Pacote | O que guarda | Função |
+|---|---|---|
+| `model` | Classes de dados: `PerfilUsuario`, `Aviso`, `Conversa`, `PreferenciasNotificacao`, os `Resultado*` | Representam o que o app manipula, com regras simples (por exemplo, `PerfilAcesso` decide a home de cada perfil). Não conhecem a interface. |
+| `repository` | Acesso a dados: Firebase (`PerfilRepository`, `LoginRepository`), APIs HTTP (`ApiAutenticada` e os `*Repository`), armazenamento local (`FavoritosRepository`, `LembretesColeta`, `CredenciaisSeguras`) | Único lugar que fala com rede e armazenamento. A rede roda fora da thread principal e o resultado volta na principal. Os `*Json` só leem e montam JSON, o que permite testá-los sem Android. |
+| `viewmodels` | Um ViewModel por fluxo (`LoginViewModel`, `ChatViewModel`, `SolicitacoesViewModel`...) | Guardam o estado da tela em `LiveData`, chamam os repositórios e sobrevivem à rotação. Não referenciam views. |
+| `views` | As telas (Activities e Fragments) e os adapters que só existem para uma tela | Ligam o layout XML ao ViewModel, tratam cliques e mostram carregamento, sucesso e erro. |
+| `ui` | Componentes e utilitários reutilizáveis: `BarraNavegacaoView`, `CalendarioMensalView`, `DialogoEco`, `AvisoFlutuante`, os gráficos do dashboard e o confete do quiz, `Navegacao`, `Motion`, `MascaraTexto` | Peças visuais e funções de interface, para não repetir código. |
+| `util` | `FormatoDataApi` (formatação de datas da API) e `Iniciais` (iniciais de um nome) | Funções puras, sem Android de tela, usadas por `model`, `repository` e telas. Ficam fora de `ui` para as camadas de dados não dependerem da interface. |
+| `notifications` | `EcoCienteFirebaseMessagingService`, `NotificacaoEcoCiente`, `TipoNotificacaoEcoCiente`, `PermissaoNotificacoes` | Recebem o push do Firebase, criam o canal, pedem a permissão do Android 13 e montam a notificação. Os interruptores do perfil decidem se o aviso aparece. |
+| `midias` | `CatalogoMidias`, `CarregadorMidias`, `MidiasEco` e as views de imagem | Catálogo e carregamento das imagens e mídias do app. |
+
+Na raiz do pacote, `EcoCienteApplication` aplica a escala para tablet e limita a largura do conteúdo.
 
 ## Contribuindo
 
