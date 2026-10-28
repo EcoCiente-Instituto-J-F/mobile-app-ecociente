@@ -190,7 +190,6 @@
 
 
     <string name="inicio_quiz_voltar">Voltar para quizzes</string>
-    <string name="inicio_quiz_ilustracao">Ilustração de sustentabilidade e reciclagem</string>
     <string name="inicio_quiz_titulo_padrao">Sustentabilidade</string>
     <string name="inicio_quiz_descricao">“Teste seus conhecimentos e descubra como fazer a diferença ”</string>
     <string name="inicio_quiz_perguntas_padrao">10 - Perguntas</string>
@@ -204,7 +203,7 @@
     <string name="quiz_proximo">Próximo</string>
     <string name="quiz_finalizar">Finalizar</string>
     <string name="quiz_dialogo_finalizar_titulo">Finalizar quiz?</string>
-    <string name="quiz_dialogo_finalizar_mensagem">Você respondeu às 10 perguntas. Deseja finalizar e ver o seu resultado?</string>
+    <string name="quiz_dialogo_finalizar_mensagem">Você respondeu às perguntas do quiz. Deseja finalizar e ver o seu resultado?</string>
 
     <!-- Quiz - resultado -->
     <string name="quiz_resultado_voltar">Voltar</string>
@@ -592,4 +591,5 @@
     <string name="aviso_enviado_exemplo">Aviso enviado (exemplo).</string>
     <string name="todos_os_condominios">Todos os meus condomínios</string>
     <string name="quiz_n_perguntas">%1$d perguntas</string>
+    <string name="inicio_quiz_eko_descricao">Eko animado incentivando o quiz</string>
 </resources>

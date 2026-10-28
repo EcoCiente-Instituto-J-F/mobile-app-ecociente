@@ -89,34 +89,25 @@ public final class RotasGoogle {
             }
 
             try (OutputStream saida = conexao.getOutputStream()) {
-                saida.write(montarCorpo(origem, lote).toString().getBytes(StandardCharsets.UTF_8));
+                saida.write(montarCorpo(origem.getLatitude(), origem.getLongitude(), lote)
+                        .toString().getBytes(StandardCharsets.UTF_8));
             }
 
             if (conexao.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 throw new IOException("HTTP " + conexao.getResponseCode());
             }
 
-            JSONArray elementos = new JSONArray(LeituraHttp.texto(conexao.getInputStream()));
-
-            for (int i = 0; i < elementos.length(); i++) {
-                JSONObject elemento = elementos.getJSONObject(i);
-                if (!"ROUTE_EXISTS".equals(elemento.optString("condition"))) {
-                    continue;
-                }
-                int indice = elemento.getInt("destinationIndex");
-                distancias.put(lote.get(indice).getId(), (float) elemento.getDouble("distanceMeters"));
-            }
+            distancias.putAll(lerResposta(LeituraHttp.texto(conexao.getInputStream()), lote));
 
         } finally {
             conexao.disconnect();
         }
     }
 
-    private static JSONObject montarCorpo(Location origem, List<SindicoCooperativa> lote)
+    static JSONObject montarCorpo(double latitude, double longitude, List<SindicoCooperativa> lote)
             throws JSONException {
 
-        JSONObject coordenadas =
-                new JSONObject().put("latitude", origem.getLatitude()).put("longitude", origem.getLongitude());
+        JSONObject coordenadas = new JSONObject().put("latitude", latitude).put("longitude", longitude);
         JSONObject ponto = new JSONObject().put("location", new JSONObject().put("latLng", coordenadas));
 
         JSONArray destinos = new JSONArray();
@@ -131,6 +122,30 @@ public final class RotasGoogle {
                 .put("travelMode", "DRIVE");
     }
 
+    // Só entram as rotas que existem; o índice do destino aponta para a cooperativa do mesmo lote.
+    static Map<Integer, Float> lerResposta(String corpo, List<SindicoCooperativa> lote) throws JSONException {
+
+        Map<Integer, Float> distancias = new HashMap<>();
+        JSONArray elementos = new JSONArray(corpo);
+
+        for (int i = 0; i < elementos.length(); i++) {
+            JSONObject elemento = elementos.getJSONObject(i);
+
+            if (!"ROUTE_EXISTS".equals(elemento.optString("condition"))) {
+                continue;
+            }
+
+            int indice = elemento.getInt("destinationIndex");
+
+            if (indice < 0 || indice >= lote.size()) {
+                continue;
+            }
+
+            distancias.put(lote.get(indice).getId(), (float) elemento.getDouble("distanceMeters"));
+        }
+
+        return distancias;
+    }
 
     @SuppressWarnings("deprecation") // GET_SIGNATURES é a única opção antes do Android 9
     private static String assinaturaSha1(Context contexto) {

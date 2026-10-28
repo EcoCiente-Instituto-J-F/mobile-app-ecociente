@@ -94,4 +94,25 @@ public class RankingJsonTest {
         assertEquals("Torre B", torre.getNome());
         assertEquals(12, torre.getPontos());
     }
+
+    @Test
+    public void posicoesLeOsMoradoresNoMesmoFormatoDasTorres() throws Exception {
+        JSONObject resposta =
+                new JSONObject(
+                        "{\"ranking\":[{\"posicao\":1,\"usuarioId\":7,\"nome\":\"Ana Lima\",\"pontos\":90},"
+                                + "{\"posicao\":2,\"usuarioId\":9,\"nome\":\"Bruno\",\"pontos\":40}]}");
+
+        List<SindicoPosicaoRanking> moradores = RankingJson.posicoes(resposta);
+
+        assertEquals(2, moradores.size());
+        assertEquals("Ana Lima", moradores.get(0).getNome());
+        assertEquals("AL", moradores.get(0).getIniciais());
+        assertEquals(90, moradores.get(0).getPontos());
+        assertEquals(40, moradores.get(1).getPontos());
+    }
+
+    @Test
+    public void posicoesSemRankingDevolveListaVazia() throws Exception {
+        assertTrue(RankingJson.posicoes(new JSONObject("{}")).isEmpty());
+    }
 }
