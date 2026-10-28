@@ -29,7 +29,8 @@ public class ChatViewModel extends ViewModel {
     private final MutableLiveData<Boolean> envioEmAndamento =
             new MutableLiveData<>(false);
 
-    private String sessionId;
+    // Escrito pela thread de rede e lido pela principal ao enviar a próxima mensagem.
+    private volatile String sessionId;
 
     public LiveData<List<MensagemChat>> getMensagens() {
         return mensagens;

@@ -4,6 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.ecociente.repository.PerfilRepository;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -27,6 +29,13 @@ public class EcoCienteFirebaseMessagingService extends FirebaseMessagingService 
             }
         }
         if (dados.isEmpty()) return;
+
+        // Aparelho sem sessão não mostra aviso (o toque abriria uma tela restrita), e quem desligou as
+        // notificações gerais no perfil não recebe push.
+        PerfilRepository perfil = new PerfilRepository();
+        FirebaseUser usuario = perfil.usuarioAtual();
+
+        if (usuario == null || !perfil.notificacoesGeraisAtivas(usuario.getUid())) return;
 
         TipoNotificacaoEcoCiente tipo =
                 TipoNotificacaoEcoCiente.porId(dados.containsKey("tipo") ? dados.get("tipo") : dados.get("type"));

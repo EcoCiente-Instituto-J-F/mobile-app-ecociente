@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -53,6 +54,10 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
     private ImageView imagemFoto;
     private View indicadorFoto;
 
+    private static final String ESTADO_URI_FOTO_CAMERA = "uriFotoCamera";
+
+    // A câmera pode fazer o sistema recriar esta tela (pouca memória, rotação); sem guardar a URI a
+    // foto tirada se perderia.
     private Uri uriFotoCamera;
 
     private final ActivityResultLauncher<PickVisualMediaRequest> seletorFoto =
@@ -68,8 +73,21 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
                     });
 
     @Override
+    protected void onSaveInstanceState(@NonNull Bundle saida) {
+        super.onSaveInstanceState(saida);
+
+        if (uriFotoCamera != null) {
+            saida.putString(ESTADO_URI_FOTO_CAMERA, uriFotoCamera.toString());
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
+
+        if (estadoSalvo != null && estadoSalvo.getString(ESTADO_URI_FOTO_CAMERA) != null) {
+            uriFotoCamera = Uri.parse(estadoSalvo.getString(ESTADO_URI_FOTO_CAMERA));
+        }
 
         com.example.ecociente.ui.JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_gerenciar_perfil);

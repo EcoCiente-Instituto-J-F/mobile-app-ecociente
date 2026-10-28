@@ -9,13 +9,16 @@ import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.PreferenciasNotificacao;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.ResultadoPerfil;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.concurrent.TimeUnit;
 
 public class PerfilRepository {
     private static final String TAG = "PerfilEcoCiente";
@@ -166,6 +169,31 @@ public class PerfilRepository {
                         });
 
         return resultado;
+    }
+
+    // Para o serviço de push, que já roda fora da thread principal: se o usuário desligou as
+    // "Notificações gerais". Sem conseguir ler a preferência (sem rede e sem cache), mantém o aviso.
+    public boolean notificacoesGeraisAtivas(@NonNull String uid) {
+        try {
+            DocumentSnapshot documento =
+                    Tasks.await(
+                            bancoFirestore.collection(COLECAO_USUARIOS).document(uid).get(),
+                            10,
+                            TimeUnit.SECONDS);
+
+            if (!documento.contains(CAMPO_PREFERENCIAS)) {
+                return true;
+            }
+
+            PreferenciasNotificacao preferencias =
+                    documento.get(CAMPO_PREFERENCIAS, PreferenciasNotificacao.class);
+
+            return preferencias == null || preferencias.isNotificacoesGerais();
+
+        } catch (Exception erro) {
+            Log.w(TAG, "Não foi possível ler as preferências de notificação", erro);
+            return true;
+        }
     }
 
     @NonNull
