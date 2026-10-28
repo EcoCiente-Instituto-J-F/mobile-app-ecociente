@@ -198,7 +198,7 @@
                             app:strokeColor="@color/cinza_borda_clara_home"
                             app:strokeWidth="1dp">
 
-                            <com.example.ecociente.views.QuizPerformanceView
+                            <com.example.ecociente.ui.QuizPerformanceView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:contentDescription="@string/grafico_desempenho" />

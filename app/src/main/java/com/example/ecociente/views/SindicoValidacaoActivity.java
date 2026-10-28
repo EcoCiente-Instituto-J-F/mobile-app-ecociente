@@ -18,7 +18,7 @@ import com.example.ecociente.repository.PostagemRepository;
 import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.IndicadorCarregamento;
-import com.example.ecociente.ui.Iniciais;
+import com.example.ecociente.util.Iniciais;
 import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.JanelaEdgeToEdge;

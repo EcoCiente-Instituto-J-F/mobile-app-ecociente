@@ -10,7 +10,6 @@ import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
-import com.example.ecociente.ui.FormatoDataApi;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;

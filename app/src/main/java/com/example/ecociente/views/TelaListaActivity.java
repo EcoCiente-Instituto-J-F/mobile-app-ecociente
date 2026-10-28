@@ -3,7 +3,7 @@ package com.example.ecociente.views;
 import com.example.ecociente.model.MovimentacaoPontos;
 import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.repository.PontuacaoRepository;
-import com.example.ecociente.ui.FormatoDataApi;
+import com.example.ecociente.util.FormatoDataApi;
 import com.example.ecociente.ui.Motion;
 import android.content.Context;
 import android.widget.RadioGroup;

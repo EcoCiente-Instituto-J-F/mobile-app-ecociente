@@ -17,7 +17,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 import com.example.ecociente.R;
 import com.example.ecociente.model.Solicitacao;
-import com.example.ecociente.ui.FormatoDataApi;
+import com.example.ecociente.util.FormatoDataApi;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;

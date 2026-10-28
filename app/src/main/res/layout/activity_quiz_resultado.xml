@@ -178,7 +178,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.example.ecociente.views.ConfettiView
+    <com.example.ecociente.ui.ConfettiView
         android:id="@+id/confettiResultadoQuiz"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

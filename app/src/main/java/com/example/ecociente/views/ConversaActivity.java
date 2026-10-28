@@ -23,7 +23,7 @@ import com.example.ecociente.model.Conversa;
 import com.example.ecociente.model.MensagemConversa;
 import java.util.ArrayList;
 import java.util.List;
-import com.example.ecociente.ui.Iniciais;
+import com.example.ecociente.util.Iniciais;
 import com.google.android.material.button.MaterialButton;
 import com.example.ecociente.ui.IndicadorCarregamento;
 import com.example.ecociente.ui.AvisoFlutuante;

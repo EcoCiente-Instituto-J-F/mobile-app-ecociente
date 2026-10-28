@@ -12,6 +12,7 @@ import com.example.ecociente.R;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
 import java.util.Calendar;
+import com.example.ecociente.util.FormatoDataApi;
 
 public class ProximaColetaView extends FrameLayout {
 

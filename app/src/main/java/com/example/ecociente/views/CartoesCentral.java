@@ -14,7 +14,7 @@ import com.example.ecociente.model.Aviso;
 import com.example.ecociente.model.CategoriaAviso;
 import com.example.ecociente.model.Notificacao;
 import com.example.ecociente.model.SindicoAviso;
-import com.example.ecociente.ui.FormatoDataApi;
+import com.example.ecociente.util.FormatoDataApi;
 
 // Cartões da central: notificações e avisos (de qualquer perfil) vivem na mesma lista.
 public final class CartoesCentral {

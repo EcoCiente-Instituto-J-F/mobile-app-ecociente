@@ -259,7 +259,7 @@
                     android:layout_marginTop="12dp"
                     android:orientation="horizontal" />
 
-                <com.example.ecociente.views.SindicoGraficoView
+                <com.example.ecociente.ui.SindicoGraficoView
                     android:id="@+id/sindicoGrafico"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"

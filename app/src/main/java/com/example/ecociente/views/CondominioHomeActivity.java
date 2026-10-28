@@ -29,7 +29,7 @@ import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.firebase.auth.FirebaseUser;
 import com.example.ecociente.repository.RankingExternoRepository;
 import com.example.ecociente.model.ItemLista;
-import com.example.ecociente.ui.Iniciais;
+import com.example.ecociente.util.Iniciais;
 
 public class CondominioHomeActivity extends AppCompatActivity {
 

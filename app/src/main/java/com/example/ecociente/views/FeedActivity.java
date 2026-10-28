@@ -19,7 +19,7 @@ import com.example.ecociente.repository.FeedRepository;
 import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
-import com.example.ecociente.ui.Iniciais;
+import com.example.ecociente.util.Iniciais;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Motion;

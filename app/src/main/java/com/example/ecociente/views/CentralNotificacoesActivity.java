@@ -19,7 +19,7 @@ import com.example.ecociente.model.Notificacao;
 import com.example.ecociente.model.SindicoAviso;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.DialogoEco;
-import com.example.ecociente.ui.FormatoDataApi;
+import com.example.ecociente.util.FormatoDataApi;
 import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
