@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.ui.AvisoFlutuante;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -99,17 +100,22 @@ public class FeedActivity extends AppCompatActivity {
 
                                                 @Override
                                                 public void aoFalhar() {
-                                                    exibirErro();
+                                                    exibirErro(R.string.feed_erro);
+                                                }
+
+                                                @Override
+                                                public void aoNegar() {
+                                                    exibirErro(R.string.feed_sem_aprovacao);
                                                 }
                                             });
                         });
     }
 
-    private void exibirErro() {
+    private void exibirErro(@StringRes int mensagem) {
 
         lista.removeAllViews();
 
-        ((TextView) textoVazio).setText(R.string.feed_erro);
+        ((TextView) textoVazio).setText(mensagem);
         textoVazio.setVisibility(View.VISIBLE);
 
         com.google.android.material.button.MaterialButton tentar =

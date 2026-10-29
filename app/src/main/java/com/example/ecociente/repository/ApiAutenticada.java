@@ -51,6 +51,24 @@ final class ApiAutenticada {
         }
     }
 
+    // GET que devolve também o código HTTP; null só quando não há credenciais.
+    @Nullable
+    static Resposta obterComCodigo(@NonNull Context contexto, @NonNull String url) throws IOException {
+        Resposta resposta = requisitarComRenovacao(contexto, "GET", url, null);
+
+        if (resposta != null && !resposta.sucesso()) {
+            Log.w(TAG, "HTTP " + resposta.codigo + " em GET " + url);
+        }
+
+        return resposta;
+    }
+
+    // DELETE; null só quando não há credenciais.
+    @Nullable
+    static Resposta excluirComCodigo(@NonNull Context contexto, @NonNull String url) throws IOException {
+        return requisitarComRenovacao(contexto, "DELETE", url, null);
+    }
+
     // POST com corpo JSON; null só quando não há credenciais.
     @Nullable
     static Resposta enviarComCodigo(@NonNull Context contexto, @NonNull String url, @NonNull String json)
@@ -98,8 +116,8 @@ final class ApiAutenticada {
         int[] codigo = new int[1];
         String corpo = requisitar(metodo, url, token, json, codigo);
 
-        // O JWT dura minutos: o salvo costuma estar vencido.
-        if (codigo[0] == 401 && "GET".equals(metodo)) {
+        // O JWT dura minutos: o salvo costuma estar vencido. Só GET e DELETE (idempotentes) se repetem.
+        if (codigo[0] == 401 && ("GET".equals(metodo) || "DELETE".equals(metodo))) {
             String renovado = AUTENTICACAO.renovarToken(contexto);
 
             if (renovado != null) {

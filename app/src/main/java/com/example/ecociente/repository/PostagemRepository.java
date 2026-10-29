@@ -37,6 +37,11 @@ public class PostagemRepository {
     public interface RetornoPostagens {
         // null quando a API não respondeu (sem credenciais, 4xx, fora do ar).
         void aoConcluir(@Nullable List<PostagemFeed> postagens);
+
+        // 403: o morador ainda não tem vínculo aprovado com o condomínio.
+        default void aoNegar() {
+            aoConcluir(null);
+        }
     }
 
     public interface RetornoCategorias {
@@ -123,20 +128,31 @@ public class PostagemRepository {
         EXECUTOR.execute(
                 () -> {
                     List<PostagemFeed> postagens = null;
+                    boolean negado = false;
 
                     try {
-                        String corpo = ApiAutenticada.obter(contextoApp, URL_BASE + caminho);
+                        ApiAutenticada.Resposta resposta = ApiAutenticada.obterComCodigo(contextoApp, URL_BASE + caminho);
 
-                        if (corpo != null) {
-                            postagens = PostagemJson.postagens(new JSONObject(corpo), System.currentTimeMillis());
+                        if (resposta != null && resposta.sucesso()) {
+                            postagens = PostagemJson.postagens(new JSONObject(resposta.corpo), System.currentTimeMillis());
+                        } else if (resposta != null) {
+                            negado = resposta.codigo == 403;
                         }
                     } catch (Exception erro) {
                         Log.w(TAG, "Não foi possível carregar as postagens", erro);
                     }
 
                     List<PostagemFeed> resultado = postagens;
+                    boolean negadoFinal = negado;
 
-                    PRINCIPAL.post(() -> retorno.aoConcluir(resultado));
+                    PRINCIPAL.post(
+                            () -> {
+                                if (negadoFinal) {
+                                    retorno.aoNegar();
+                                } else {
+                                    retorno.aoConcluir(resultado);
+                                }
+                            });
                 });
     }
 

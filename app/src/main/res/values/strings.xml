@@ -457,6 +457,7 @@
     <string name="registro_sem_foto">Tire uma foto do descarte.</string>
     <string name="registro_sem_categoria">Escolha o tipo de resíduo.</string>
     <string name="registro_enviado">Descarte enviado! Ele está em análise pela comunidade.</string>
+    <string name="feed_sem_aprovacao">Seu cadastro ainda está aguardando a aprovação do síndico. Quando for aprovado, o feed aparece aqui.</string>
     <string name="feed_erro">Não foi possível carregar o feed. Tente de novo mais tarde.</string>
     <string name="descarte">Descarte</string>
     <string name="meus_descartes_carregando">Carregando seus descartes…</string>
