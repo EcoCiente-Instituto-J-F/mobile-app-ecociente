@@ -34,7 +34,7 @@ public class FotoPerfilRepository {
     private static final String CLOUD_NAME = "ncwfxyfi";
     private static final String UPLOAD_PRESET = "ecociente_perfil";
     // Preset (Unsigned) das fotos de descarte do feed, criado no painel do Cloudinary.
-    private static final String UPLOAD_PRESET_FEED = "feed";
+    private static final String UPLOAD_PRESET_FEED = "ecociente_feed";
     private static final String URL_UPLOAD =
             "https://api.cloudinary.com/v1_1/" + CLOUD_NAME + "/image/upload";
 
