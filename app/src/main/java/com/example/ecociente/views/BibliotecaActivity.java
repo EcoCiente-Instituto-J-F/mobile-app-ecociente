@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -62,6 +64,11 @@ public class BibliotecaActivity extends AppCompatActivity {
     private HorizontalScrollView rolagemDestaques;
     private CursoEducativo selecionado;
     private boolean mostrarTodos = false;
+
+    // Refazer os cards a cada letra trava a tela: a busca só roda quando a digitação para.
+    private static final long ATRASO_BUSCA_MS = 250;
+    private final Handler atrasoBusca = new Handler(Looper.getMainLooper());
+    private final Runnable aplicarBusca = () -> filtrar(pesquisa.getText().toString());
     private boolean morador;
     private SharedPreferences preferencias;
 
@@ -119,7 +126,10 @@ public class BibliotecaActivity extends AppCompatActivity {
         });
         pesquisa.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { filtrar(s.toString()); }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                atrasoBusca.removeCallbacks(aplicarBusca);
+                atrasoBusca.postDelayed(aplicarBusca, ATRASO_BUSCA_MS);
+            }
             @Override public void afterTextChanged(Editable s) {}
         });
         configurarNavegacao();
@@ -490,6 +500,7 @@ public class BibliotecaActivity extends AppCompatActivity {
     private int dp(float valor) { return Math.round(valor * getResources().getDisplayMetrics().density); }
 
     @Override protected void onDestroy() {
+        atrasoBusca.removeCallbacks(aplicarBusca);
         movimento.cancelAll();
         super.onDestroy();
     }
