@@ -412,13 +412,6 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         }
     }
 
-    private void navegar(Class<?> destino) {
-        Intent intent = new Intent(this, destino);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-        finish();
-    }
-
     private int dp(int valor) {
         return Math.round(valor * getResources().getDisplayMetrics().density);
     }

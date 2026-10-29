@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/raizQuizPerguntas" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/branco">
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/cabecalhoQuizPerguntas" android:layout_width="0dp" android:layout_height="56dp" android:layout_marginStart="22dp" android:layout_marginEnd="22dp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
+<FrameLayout android:id="@+id/cabecalhoQuizPerguntas" android:layout_width="0dp" android:layout_height="56dp" android:layout_marginStart="22dp" android:layout_marginEnd="22dp" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
 
         <ImageView android:id="@+id/botaoVoltarPerguntas" android:layout_width="42dp" android:layout_height="42dp" android:layout_gravity="start|center_vertical" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="@string/quiz_perguntas_voltar" android:padding="10dp" android:scaleType="centerInside" android:src="@drawable/ic_voltar" app:tint="@color/verde_escuro_principal"/>
 
@@ -9,7 +9,7 @@
     </FrameLayout>
 
     
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/containerProgressoQuiz" android:layout_width="wrap_content" android:layout_height="28dp" android:layout_marginTop="2dp" android:gravity="center" android:orientation="horizontal" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/cabecalhoQuizPerguntas"/>
+<LinearLayout android:id="@+id/containerProgressoQuiz" android:layout_width="wrap_content" android:layout_height="28dp" android:layout_marginTop="2dp" android:gravity="center" android:orientation="horizontal" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@id/cabecalhoQuizPerguntas"/>
 
     
 <androidx.core.widget.NestedScrollView android:id="@+id/areaPerguntaQuiz" android:layout_width="0dp" android:layout_height="0dp" android:layout_marginStart="18dp" android:layout_marginEnd="18dp" android:layout_marginTop="10dp" android:layout_marginBottom="12dp" android:fillViewport="true" android:clipToPadding="false" android:padding="4dp" android:scrollbars="none" app:layout_constraintTop_toBottomOf="@id/containerProgressoQuiz" app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent">
@@ -24,7 +24,7 @@
    <TextView android:id="@+id/textoCategoriaPergunta" android:layout_width="match_parent" android:layout_height="wrap_content" android:fontFamily="@font/nunito_regular" android:gravity="center" android:textColor="#5A5A5A" android:textSize="16sp"/>
    <TextView android:id="@+id/textoEnunciadoPergunta" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="14dp" android:fontFamily="@font/nunito_semibold" android:gravity="center" android:lineSpacingExtra="2dp" android:textColor="@color/black" android:textSize="18sp"/>
   </LinearLayout>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/containerOpcoesQuiz" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:orientation="vertical">
+<LinearLayout android:id="@+id/containerOpcoesQuiz" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:orientation="vertical">
 
                 <com.google.android.material.card.MaterialCardView android:id="@+id/cardOpcao1" android:layout_width="match_parent" android:layout_height="wrap_content" android:clickable="true" android:focusable="true" android:foreground="?attr/selectableItemBackground" app:cardBackgroundColor="@color/branco" app:cardCornerRadius="16dp" app:cardElevation="0dp" app:strokeColor="@color/verde_escuro_principal" app:strokeWidth="1dp" android:minHeight="58dp">
 

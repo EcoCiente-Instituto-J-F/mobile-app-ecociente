@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Contrato local de navegacao/estado da experiencia educativa.

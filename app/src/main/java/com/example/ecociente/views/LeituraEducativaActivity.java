@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -264,9 +263,6 @@ public class LeituraEducativaActivity extends AppCompatActivity {
         t.setTextColor(Color.parseColor(cor));
         t.setTypeface(ResourcesCompat.getFont(this, destaque ? R.font.nunito_bold : R.font.nunito_regular));
         return t;
-    }
-    private GradientDrawable fundo(String cor, float raio) {
-        GradientDrawable d = new GradientDrawable(); d.setColor(Color.parseColor(cor)); d.setCornerRadius(raio); return d;
     }
     private int dp(float valor) { return Math.round(valor * getResources().getDisplayMetrics().density); }
     @Override protected void onDestroy() {

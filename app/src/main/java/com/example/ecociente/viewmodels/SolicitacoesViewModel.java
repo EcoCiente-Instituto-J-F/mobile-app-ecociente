@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
-import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.repository.CalendarioExternoRepository;
 import java.util.ArrayList;
 import java.util.List;

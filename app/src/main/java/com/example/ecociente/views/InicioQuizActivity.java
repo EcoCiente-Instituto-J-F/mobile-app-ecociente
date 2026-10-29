@@ -27,7 +27,6 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class InicioQuizActivity extends AppCompatActivity {
 
