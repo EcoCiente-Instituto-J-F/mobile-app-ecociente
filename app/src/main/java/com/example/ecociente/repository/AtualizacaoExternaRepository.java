@@ -133,6 +133,31 @@ public class AtualizacaoExternaRepository {
         }
     }
 
+    // DELETE /api/usuarios/me: desativa a conta no Postgres. `retorno` roda na thread principal com true se a
+    // API aceitou, ou se não há sessão na API (conta só do Firebase, sem nada a desativar).
+    public void excluirConta(@NonNull Context contexto, @NonNull java.util.function.Consumer<Boolean> retorno) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        EXECUTOR.execute(
+                () -> {
+                    boolean desativada = false;
+
+                    try {
+                        ApiAutenticada.Resposta resposta = ApiAutenticada.excluirComCodigo(contextoApp, URL_USUARIO);
+
+                        desativada = resposta == null || resposta.sucesso();
+
+                    } catch (Exception erro) {
+                        Log.w(TAG, "Falha ao desativar a conta na API", erro);
+                    }
+
+                    boolean resultado = desativada;
+
+                    PRINCIPAL.post(() -> retorno.accept(resultado));
+                });
+    }
+
     // PATCH /api/condominios/{id}: só o síndico responsável pode. Envia só o que foi informado: o
     // nome (não vazio), o tipo (1 residencial, 2 comercial) e a foto (URL http ou https de até 500
     // caracteres). Sem id nem campo válido, nada é enviado.

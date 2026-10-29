@@ -232,7 +232,7 @@ public class PerfilRepository {
         AuthCredential credencial = EmailAuthProvider.getCredential(usuario.getEmail(), senhaAtual);
 
         usuario.reauthenticate(credencial)
-                .addOnSuccessListener(ignorado -> excluirDocumentoEConta(usuario, uid, resultado))
+                .addOnSuccessListener(ignorado -> desativarNaApi(usuario, uid, resultado))
                 .addOnFailureListener(
                         erro -> {
                             Log.e(TAG, "Erro ao reautenticar para excluir conta", erro);
@@ -246,6 +246,26 @@ public class PerfilRepository {
                         });
 
         return resultado;
+    }
+
+    // A conta do Postgres é desativada antes de apagar o Firebase: se a API falhar, nada é apagado e a
+    // pessoa não fica com o login do Firebase removido e a conta da API ainda ativa.
+    private void desativarNaApi(
+            @NonNull FirebaseUser usuario,
+            @NonNull String uid,
+            @NonNull MutableLiveData<ResultadoApi> resultado) {
+
+        new AtualizacaoExternaRepository()
+                .excluirConta(
+                        FirebaseApp.getInstance().getApplicationContext(),
+                        desativada -> {
+                            if (desativada) {
+                                excluirDocumentoEConta(usuario, uid, resultado);
+                            } else {
+                                resultado.setValue(
+                                        ResultadoApi.erro("Não foi possível excluir sua conta agora. Tente de novo."));
+                            }
+                        });
     }
 
     private void excluirDocumentoEConta(
@@ -268,7 +288,11 @@ public class PerfilRepository {
 
                             usuario.delete()
                                     .addOnSuccessListener(
-                                            ignorado -> resultado.setValue(ResultadoApi.sucesso()))
+                                            ignorado -> {
+                                                AutenticacaoExternaRepository.encerrarSessao(
+                                                        FirebaseApp.getInstance().getApplicationContext());
+                                                resultado.setValue(ResultadoApi.sucesso());
+                                            })
                                     .addOnFailureListener(
                                             erro -> {
                                                 Log.e(TAG, "Erro ao excluir conta", erro);

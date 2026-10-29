@@ -88,6 +88,10 @@ public class AutenticacaoExternaRepository {
                     try {
                         sessao = login(email, senha);
 
+                        if (usuarioIdSalvo(contextoApp) != sessao.getUsuarioId()) {
+                            PerfilApiRepository.limpar(contextoApp);
+                        }
+
                         persistirToken(contextoApp, sessao.getToken());
                         persistirPerfil(contextoApp, sessao.getPerfil());
                         persistirUsuarioId(contextoApp, sessao.getUsuarioId());
@@ -254,7 +258,10 @@ public class AutenticacaoExternaRepository {
                 .edit()
                 .remove(CHAVE_TOKEN)
                 .remove(CHAVE_PERFIL)
+                .remove(CHAVE_USUARIO_ID)
                 .apply();
+
+        PerfilApiRepository.limpar(contexto);
     }
 
     // Perfil que a API devolveu no último login (SINDICO, COOPERATIVA...): é o dado do Postgres,
