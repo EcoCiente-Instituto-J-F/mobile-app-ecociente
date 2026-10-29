@@ -39,13 +39,18 @@ public final class MidiasEco {
     }
 
     private synchronized Midia fixa(String tipo, String entidade, int id, String titulo, String contexto) {
+        return fixa(tipo, entidade, id, titulo, contexto, null);
+    }
+
+    private synchronized Midia fixa(String tipo, String entidade, int id, String titulo, String contexto,
+                                    String evitarId) {
         String chave = tipo + ":" + entidade + ":" + id;
         Midia explicita = regras.porId(catalogo.associacoes.get(chave));
         if (explicita != null && tipo.equals(explicita.tipo)) {
             guardar(chave, explicita);
             return explicita;
         }
-        Midia m = regras.escolherFixa(tipo, regras.tema(titulo, contexto), chave, vinculos);
+        Midia m = regras.escolherFixa(tipo, regras.tema(titulo, contexto), chave, vinculos, evitarId);
         if (m != null && !m.id.equals(vinculos.get(chave))) guardar(chave, m);
         return m;
     }
@@ -70,7 +75,12 @@ public final class MidiasEco {
     public void prepararCursos(List<CursoEducativo> cursos) {
         List<CursoEducativo> ordenados = new ArrayList<>(cursos);
         ordenados.sort(Comparator.comparingInt(c -> c.id));
-        for (CursoEducativo curso : ordenados) iconeCurso(curso);
+        // Cursos vizinhos na lista não repetem a mesma imagem.
+        String anterior = null;
+        for (CursoEducativo curso : ordenados) {
+            Midia m = fixa(Midia.ICONE_CONTEUDO, "curso", curso.id, curso.titulo, curso.descricao, anterior);
+            if (m != null) anterior = m.id;
+        }
     }
 
     public void prepararQuizzes(List<QuizResumo> quizzes) {
