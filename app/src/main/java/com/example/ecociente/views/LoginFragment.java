@@ -35,7 +35,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.ui.FieldFeedback;
 import com.example.ecociente.ui.Motion;
-import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.viewmodels.LoginViewModel;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -212,25 +211,7 @@ public class LoginFragment extends Fragment {
                                 return;
                             }
 
-                            autenticarNaApiExterna(email, senha);
-
                             finalizarLogin();
-                        });
-    }
-
-    // Best-effort: roda em paralelo e nunca bloqueia nem falha o login pelo
-    // Firebase. Contas antigas, sem registro no Postgres, só geram um aviso.
-    private void autenticarNaApiExterna(String email, String senha) {
-
-        new AutenticacaoExternaRepository()
-                .autenticar(
-                        requireContext(),
-                        email,
-                        senha,
-                        sessao -> {
-                            if (sessao == null) {
-                                Log.w(TAG, "Login na API externa não disponível para " + email);
-                            }
                         });
     }
 

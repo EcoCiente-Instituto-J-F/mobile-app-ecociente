@@ -24,6 +24,19 @@ public class PoliticaFallbackLoginTest {
     }
 
     @Test
+    public void recusaSoQuandoAApiDizQueAContaNaoServe() {
+        assertTrue(PoliticaFallbackLogin.credenciaisRecusadas(401, null));
+        assertTrue(PoliticaFallbackLogin.credenciaisRecusadas(400, ""));
+        assertTrue(PoliticaFallbackLogin.credenciaisRecusadas(403, ""));
+        assertTrue(PoliticaFallbackLogin.credenciaisRecusadas(
+                404, "{\"codigoError\":\"RECURSO_NAO_ENCONTRADO\"}"));
+        assertFalse(PoliticaFallbackLogin.credenciaisRecusadas(404, "<html>Not Found</html>"));
+        assertFalse(PoliticaFallbackLogin.credenciaisRecusadas(404, null));
+        assertFalse(PoliticaFallbackLogin.credenciaisRecusadas(500, ""));
+        assertFalse(PoliticaFallbackLogin.credenciaisRecusadas(503, ""));
+    }
+
+    @Test
     public void fazFallbackEmFalhaDeRedeMasNaoEmErroDeCertificado() {
         assertTrue(PoliticaFallbackLogin.tentarRenderAposErro(new ConnectException()));
         assertTrue(PoliticaFallbackLogin.tentarRenderAposErro(new SocketTimeoutException()));

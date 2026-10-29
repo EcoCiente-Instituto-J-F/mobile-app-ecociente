@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import com.example.ecociente.R;
 import com.example.ecociente.model.ResultadoCadastro;
 import com.example.ecociente.model.ResultadoLogin;
 import com.example.ecociente.model.SessaoExterna;
@@ -58,8 +59,7 @@ public class LoginViewModel extends AndroidViewModel {
                     resultado.removeSource(pelaFirebase);
 
                     if (valor.isSucesso()) {
-                        carregando.setValue(false);
-                        resultado.setValue(valor);
+                        confirmarNaApi(email, senha, valor, resultado);
                         return;
                     }
 
@@ -67,6 +67,33 @@ public class LoginViewModel extends AndroidViewModel {
                 });
 
         return resultado;
+    }
+
+    // O Firebase aceitou, mas a conta também precisa existir na API (Postgres): é de lá que vêm o
+    // perfil e o token das outras APIs. Se a API recusar, desfaz o login; se estiver fora do ar,
+    // continua entrando sem token, como antes.
+    private void confirmarNaApi(
+            @NonNull String email,
+            @NonNull String senha,
+            @NonNull ResultadoLogin loginDoFirebase,
+            @NonNull MediatorLiveData<ResultadoLogin> resultado) {
+
+        apiExterna.autenticar(
+                getApplication(),
+                email,
+                senha,
+                (sessao, recusada) -> {
+                    carregando.setValue(false);
+
+                    if (sessao == null && recusada) {
+                        repositorio.sair();
+                        resultado.setValue(
+                                ResultadoLogin.erro(getApplication().getString(R.string.login_conta_nao_confirmada)));
+                        return;
+                    }
+
+                    resultado.setValue(loginDoFirebase);
+                });
     }
 
     private void entrarPelaApi(

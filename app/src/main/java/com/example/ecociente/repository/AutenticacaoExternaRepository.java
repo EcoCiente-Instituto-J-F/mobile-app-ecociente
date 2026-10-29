@@ -53,11 +53,26 @@ public class AutenticacaoExternaRepository {
         void aoConcluir(@Nullable SessaoExterna sessao);
     }
 
+    // `credenciaisRecusadas` é true quando a API respondeu que a conta não serve (senha ou usuário);
+    // sessao nula com false significa API fora do ar ou lenta.
+    public interface RetornoLogin {
+        void aoConcluir(@Nullable SessaoExterna sessao, boolean credenciaisRecusadas);
+    }
+
     public void autenticar(
             @NonNull Context contexto,
             @NonNull String email,
             @NonNull String senha,
             @NonNull Retorno retorno) {
+
+        autenticar(contexto, email, senha, (sessao, recusada) -> retorno.aoConcluir(sessao));
+    }
+
+    public void autenticar(
+            @NonNull Context contexto,
+            @NonNull String email,
+            @NonNull String senha,
+            @NonNull RetornoLogin retorno) {
 
         Context contextoApp = contexto.getApplicationContext();
 
@@ -68,6 +83,7 @@ public class AutenticacaoExternaRepository {
         EXECUTOR.execute(
                 () -> {
                     SessaoExterna sessao = null;
+                    boolean recusada = false;
 
                     try {
                         sessao = login(email, senha);
@@ -77,6 +93,10 @@ public class AutenticacaoExternaRepository {
                         persistirUsuarioId(contextoApp, sessao.getUsuarioId());
 
                         CredenciaisSeguras.salvar(contextoApp, email, senha);
+
+                    } catch (CredenciaisRecusadas erro) {
+                        recusada = true;
+                        Log.w(TAG, "A API externa recusou a conta", erro);
 
                     } catch (Exception erro) {
                         Log.w(TAG, "Não foi possível autenticar na API externa", erro);
@@ -88,8 +108,9 @@ public class AutenticacaoExternaRepository {
                     }
 
                     SessaoExterna sessaoFinal = sessao;
+                    boolean recusadaFinal = recusada;
 
-                    PRINCIPAL.post(() -> retorno.aoConcluir(sessaoFinal));
+                    PRINCIPAL.post(() -> retorno.aoConcluir(sessaoFinal, recusadaFinal));
                 });
     }
 
@@ -319,8 +340,12 @@ public class AutenticacaoExternaRepository {
             if (principal && PoliticaFallbackLogin.tentarRenderAposHttp(codigoResposta)) {
                 throw new java.net.SocketException("AWS HTTP " + codigoResposta);
             }
-            if (codigoResposta == 400 || codigoResposta == 401 || codigoResposta == 403) {
-                throw new CredenciaisRecusadas("Resposta HTTP " + codigoResposta);
+            if (codigoResposta >= 400 && codigoResposta < 500) {
+                String corpoDoErro = LeituraHttp.texto(conexao.getErrorStream());
+
+                if (PoliticaFallbackLogin.credenciaisRecusadas(codigoResposta, corpoDoErro)) {
+                    throw new CredenciaisRecusadas("Resposta HTTP " + codigoResposta);
+                }
             }
             if (codigoResposta < 200 || codigoResposta >= 300) {
                 throw new IOException("Resposta HTTP " + codigoResposta);

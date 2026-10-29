@@ -7,6 +7,7 @@
     </string>
 
 
+    <string name="login_conta_nao_confirmada">Não foi possível confirmar sua conta no EcoCiente. Confira e-mail e senha ou faça o cadastro.</string>
     <string name="login">
         Login
     </string>
