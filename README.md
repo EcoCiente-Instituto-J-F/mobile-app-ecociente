@@ -16,11 +16,17 @@
 
 Repositório do aplicativo mobile do projeto EcoCiente
 
-## Área do síndico (demonstração)
+## Área do síndico
 
-As telas `SindicoHomeActivity` e `SindicoAvisosActivity` estão separadas do login atual. O app usa Firebase Authentication para entrar, mas ainda não possui um papel de síndico validado nem uma API de autorização desse perfil. Na compilação `debug`, há um ícone separado **EcoCiente Síndico (demo)** para abrir a home e revisar o fluxo.
+O síndico entra pelo mesmo login dos outros perfis. O perfil vem da API (`/api/usuarios/me`) e leva o usuário para a `SindicoHomeActivity`. As telas usam dados reais das APIs do projeto:
 
-Os dados do calendário, indicadores, gráfico, ranking e avisos vêm de `SindicoRepository`. A demonstração inclui cinco blocos no ranking e oito avisos. Essa é a camada a substituir por uma API ou consulta autorizada ao banco. O formulário de notificação valida título e mensagem e salva apenas um rascunho em memória, que aparece na lista durante a sessão. Ele não envia avisos a moradores nem grava no servidor.
+- **Dashboard e ranking:** indicadores do condomínio (`/api/condominios/{id}/dashboard`) e ranking por torre e por morador (ds-pontuacao-api).
+- **Descartes:** os descartes dos moradores que esperam decisão são aprovados ou reprovados pelo síndico.
+- **Coletas:** a lista de cooperativas da cidade do condomínio (ordenável por distância pelo GPS), o pedido de coleta, o histórico e a avaliação de coletas realizadas (ds-calendario-api e ds-mobile-api).
+- **Mensagens:** conversas com as cooperativas (`/api/conversas`).
+- **Condomínio:** nome, endereço, torres e foto, vindos do perfil e salvos de volta na API.
+
+Ainda não há API de avisos. O formulário de aviso valida título e mensagem e guarda apenas um rascunho no aparelho: ele não envia avisos aos moradores nem grava no servidor, e a lista de avisos começa vazia.
 
 ## Instalando
 

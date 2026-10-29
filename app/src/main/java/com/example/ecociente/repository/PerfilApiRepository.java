@@ -88,6 +88,26 @@ public class PerfilApiRepository {
         }
     }
 
+    // Foto do condomínio na última consulta; vazia se ainda não veio ou se não há foto.
+    @NonNull
+    public static String fotoDoCondominio(@NonNull Context contexto) {
+
+        String corpo = preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
+
+        if (corpo == null) {
+            return "";
+        }
+
+        try {
+            return PerfilApiJson.fotoDoCondominio(new JSONObject(corpo));
+
+        } catch (JSONException erro) {
+            Log.w(TAG, "Perfil guardado inválido", erro);
+
+            return "";
+        }
+    }
+
     // Torres do condomínio na última consulta; vazio se ainda não vieram.
     @NonNull
     public static List<SindicoItemUnidade> torresDoCondominio(@NonNull Context contexto) {

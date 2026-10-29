@@ -37,8 +37,6 @@
     <string name="sindico_nome_do_condominio">Nome do condomínio</string>
     <string name="sindico_salvar_dados_locais">Salvar</string>
     <string name="sindico_blocos_e_torres">Torres</string>
-    <string name="sindico_areas_de_descarte">Áreas de descarte</string>
-    <string name="sindico_adicionar_area_de_descarte">Adicionar área de descarte</string>
     <string name="sindico_criar_notificacao">Criar notificação</string>
     <string name="sindico_fechar_criacao_de_notificacao">Fechar criação de notificação</string>
     <string name="sindico_digite_seu_titulo">Digite seu título</string>
@@ -57,10 +55,6 @@
     <string name="sindico_escreva_a_mensagem_do_aviso">Escreva a mensagem do aviso.</string>
     <string name="sindico_aviso_detalhe" tools:ignore="Typos">%1$s\n\nDestinatário: %2$s\nAutor: %3$s · %4$s</string>
     <string name="sindico_rascunho_local_ainda_nao_enviado">Rascunho local, ainda não enviado.</string>
-    <string name="sindico_editar_item">Editar %1$s</string>
-    <string name="sindico_excluir_item">Excluir %1$s</string>
-    <string name="sindico_excluir_titulo">Excluir %1$s?</string>
-    <string name="sindico_a_exclusao_afeta_apenas_os_dados_l">Esta ação não pode ser desfeita.</string>
     <string name="sindico_ver_informacoes">Ver informações de %1$s</string>
     <string name="sindico_avaliacao_cooperativa">★ %1$s (%2$d)</string>
     <string name="sindico_sem_avaliacoes">Ainda sem avaliações</string>
@@ -99,14 +93,6 @@
     <string name="sindico_use_o_formato_01234_567" tools:ignore="TypographyDashes">Use o formato 01234-567</string>
     <string name="sindico_demo_dados_salvos">Dados do condomínio salvos.</string>
     <string name="sindico_condominio_sincronizacao_falhou">O endereço foi salvo no aparelho, mas a API não aceitou. Só o síndico responsável pode alterá-lo.</string>
-    <string name="sindico_nenhuma_area_de_descarte_adicione">Nenhuma área de descarte. Adicione a primeira abaixo.</string>
-    <string name="sindico_nome_da_area_de_descarte">Nome da área de descarte</string>
-    <string name="sindico_adicionar_area">Adicionar área</string>
-    <string name="sindico_editar_area">Editar área</string>
-    <string name="sindico_informe_o_nome">Informe o nome</string>
-    <string name="sindico_informe_a_localizacao">Informe a localização</string>
-    <string name="sindico_demo_alteracao_salva">Alteração salva neste aparelho.</string>
-    <string name="sindico_demo_item_removido">Item removido.</string>
     <string name="sindico_enviar_solicitacao">Enviar solicitação</string>
     <string name="sindico_horario_passado">Escolha uma data e um horário futuros.</string>
     <string name="cooperativa_escolhida">Cooperativa escolhida</string>

@@ -12,6 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import com.example.ecociente.R;
 import com.example.ecociente.model.Conversa;
+import com.example.ecociente.repository.ConversaRepository;
+import com.example.ecociente.ui.FormatoDataApi;
+import com.example.ecociente.ui.IndicadorCarregamento;
+import com.google.android.material.button.MaterialButton;
+import java.util.ArrayList;
+import java.util.List;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.ItensBarra;
@@ -35,6 +41,7 @@ public class MensagensActivity extends AppCompatActivity {
     private View textoSemConversas;
     private EditText campoBusca;
     private int abaAtual;
+    private final List<Conversa> conversas = new ArrayList<>();
 
     @NonNull
     public static Intent criarIntentSindico(@NonNull Context contexto) {
@@ -78,6 +85,57 @@ public class MensagensActivity extends AppCompatActivity {
         configurarNavegacao();
     }
 
+    // Recarrega ao voltar de uma conversa, para o contador de não lidas acompanhar o que foi lido.
+    @Override
+    protected void onStart() {
+        super.onStart();
+        carregar();
+    }
+
+    // As conversas ativas vêm primeiro; as arquivadas só complementam a aba "Arquivadas", então
+    // falhar nelas não derruba a tela.
+    private void carregar() {
+        lista.removeAllViews();
+        textoSemConversas.setVisibility(View.GONE);
+        IndicadorCarregamento.mostrar(lista, R.string.conversas_carregando);
+
+        ConversaRepository repositorio = new ConversaRepository();
+
+        repositorio.listar(this, sindico, false, ativas -> {
+            if (isFinishing() || isDestroyed()) return;
+
+            if (ativas == null) {
+                mostrarErro();
+                return;
+            }
+
+            repositorio.listar(this, sindico, true, arquivadas -> {
+                if (isFinishing() || isDestroyed()) return;
+
+                conversas.clear();
+                conversas.addAll(ativas);
+                if (arquivadas != null) conversas.addAll(arquivadas);
+                exibirConversas(abaAtual);
+            });
+        });
+    }
+
+    private void mostrarErro() {
+        lista.removeAllViews();
+
+        TextView mensagem = new TextView(this);
+        mensagem.setText(R.string.conversas_erro);
+        mensagem.setTextColor(ContextCompat.getColor(this, R.color.cinza_texto_home));
+        mensagem.setTextSize(14);
+        mensagem.setPadding(32, 112, 32, 24);
+        lista.addView(mensagem);
+
+        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
+        tentar.setText(R.string.tentar_novamente);
+        tentar.setOnClickListener(view -> carregar());
+        lista.addView(tentar);
+    }
+
     private void selecionarAba(int aba) {
 
         abaAtual = aba;
@@ -104,7 +162,9 @@ public class MensagensActivity extends AppCompatActivity {
 
         LayoutInflater inflador = LayoutInflater.from(this);
 
-        for (Conversa conversa : sindico ? Conversa.listaDoSindico() : Conversa.lista()) {
+        long agora = System.currentTimeMillis();
+
+        for (Conversa conversa : conversas) {
 
             if (!pertence(conversa, aba)) {
                 continue;
@@ -114,15 +174,21 @@ public class MensagensActivity extends AppCompatActivity {
 
             ((TextView) item.findViewById(R.id.textoIniciaisConversa)).setText(Iniciais.de(conversa.nome));
             ((TextView) item.findViewById(R.id.textoNomeConversa)).setText(conversa.nome);
-            ((TextView) item.findViewById(R.id.textoPreviaConversa)).setText(conversa.ultimaMensagem);
-            ((TextView) item.findViewById(R.id.textoHoraConversa)).setText(conversa.hora);
+            // A API não devolve o texto da última mensagem: a linha de baixo resume o que há de novo.
+            TextView previa = item.findViewById(R.id.textoPreviaConversa);
+            previa.setText(conversa.temNaoLidas()
+                    ? getResources().getQuantityString(R.plurals.conversa_mensagens_novas, conversa.naoLidas, conversa.naoLidas)
+                    : "");
+            previa.setVisibility(conversa.temNaoLidas() ? View.VISIBLE : View.GONE);
+            ((TextView) item.findViewById(R.id.textoHoraConversa))
+                    .setText(FormatoDataApi.relativa(conversa.ultimaMensagemEm, agora));
 
             TextView contador = item.findViewById(R.id.textoNaoLidasConversa);
 
             contador.setText(String.valueOf(conversa.naoLidas));
             contador.setVisibility(conversa.temNaoLidas() ? View.VISIBLE : View.INVISIBLE);
 
-            item.setOnClickListener(view -> startActivity(ConversaActivity.criarIntent(this, conversa)));
+            item.setOnClickListener(view -> startActivity(ConversaActivity.criarIntent(this, conversa, sindico)));
 
             lista.addView(item);
         }

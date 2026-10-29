@@ -11,7 +11,7 @@ import java.util.List;
  * Não salva pontuações ou progresso na API, nem compartilha dados com produção.
  */
 public final class DadosDemonstracaoEducacao {
-    public static final boolean ATIVO = true;
+    public static final boolean ATIVO = false;
 
     private DadosDemonstracaoEducacao() { }
 

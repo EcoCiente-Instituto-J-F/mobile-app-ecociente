@@ -3,6 +3,7 @@ package com.example.ecociente.repository;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import com.example.ecociente.model.PerfilDaApi;
 import com.example.ecociente.model.SindicoDadosCondominio;
@@ -105,6 +106,49 @@ final class PerfilApiJson {
                 endereco == null ? "" : texto(endereco, "cidade"),
                 endereco == null ? "" : texto(endereco, "estado"),
                 endereco == null ? "" : texto(endereco, "cep"));
+    }
+
+    // Ids de tb_lkp_tipos_condominios.
+    static final int TIPO_RESIDENCIAL = 1;
+    static final int TIPO_COMERCIAL = 2;
+
+    // Corpo do PATCH do condomínio; null quando não há nenhum campo que a API aceitaria. Tipo 0 = não
+    // enviar o tipo.
+    @Nullable
+    static JSONObject corpoDoCondominio(@Nullable String nome, int tipoCondominioId, @Nullable String urlFoto) {
+
+        JSONObject corpo = new JSONObject();
+
+        try {
+            if (nome != null && !nome.trim().isEmpty()) {
+                corpo.put("nome", nome.trim());
+            }
+
+            if (tipoCondominioId == TIPO_RESIDENCIAL || tipoCondominioId == TIPO_COMERCIAL) {
+                corpo.put("tipoCondominioId", tipoCondominioId);
+            }
+
+            if (urlFoto != null
+                    && (urlFoto.startsWith("http://") || urlFoto.startsWith("https://"))
+                    && urlFoto.trim().equals(urlFoto)
+                    && urlFoto.length() <= 500) {
+                corpo.put("urlFoto", urlFoto);
+            }
+
+        } catch (JSONException erro) {
+            return null;
+        }
+
+        return corpo.length() == 0 ? null : corpo;
+    }
+
+    // Foto do condomínio escolhido (urlFoto do /me); vazia quando não há condomínio ou foto.
+    @NonNull
+    static String fotoDoCondominio(@NonNull JSONObject perfil) {
+
+        JSONObject item = condominioEscolhido(perfil);
+
+        return item == null ? "" : texto(item, "urlFoto");
     }
 
     // Torres do condomínio escolhido (id e nome); vazio quando não há condomínio ou torres.
