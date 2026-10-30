@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
@@ -27,6 +28,7 @@ import com.example.ecociente.model.CursoEducativo;
 import com.example.ecociente.model.DadosDemonstracaoEducacao;
 import com.example.ecociente.repository.EducacaoRepository;
 import com.example.ecociente.ui.BarraNavegacaoView;
+import com.example.ecociente.ui.IndicadorCarregamento;
 import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
@@ -59,6 +61,7 @@ public class BibliotecaActivity extends AppCompatActivity {
     private View secaoAulas;
     private View secaoSalvos;
     private TextView estado;
+    private View carregando;
     private TextView botaoVerTodos;
     private EditText pesquisa;
     private HorizontalScrollView rolagemDestaques;
@@ -153,21 +156,31 @@ public class BibliotecaActivity extends AppCompatActivity {
             mostrarCursos(DadosDemonstracaoEducacao.cursos());
             return;
         }
-        estado.setText("Carregando cursos e aulas...");
-        estado.setVisibility(View.VISIBLE);
+        estado.setVisibility(View.GONE);
+        removerCarregando();
+        carregando = IndicadorCarregamento.mostrar((ViewGroup) estado.getParent(), R.string.biblioteca_carregando);
         findViewById(R.id.botaoRecarregarBiblioteca).setVisibility(View.GONE);
         secaoDestaques.setVisibility(View.GONE);
         secaoAulas.setVisibility(View.GONE);
         secaoSalvos.setVisibility(View.GONE);
         repositorio.listarCursos(this, (sucesso, encontrados) -> {
             if (isFinishing() || isDestroyed()) return;
+            removerCarregando();
             if (!sucesso) {
                 estado.setText(repositorio.obterUltimoErro());
+                estado.setVisibility(View.VISIBLE);
                 findViewById(R.id.botaoRecarregarBiblioteca).setVisibility(View.VISIBLE);
                 return;
             }
             mostrarCursos(encontrados);
         });
+    }
+
+    private void removerCarregando() {
+        if (carregando != null) {
+            ((ViewGroup) carregando.getParent()).removeView(carregando);
+            carregando = null;
+        }
     }
 
     private void mostrarCursos(@NonNull List<CursoEducativo> encontrados) {

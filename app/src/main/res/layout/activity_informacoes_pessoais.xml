@@ -18,7 +18,7 @@
         </FrameLayout>
         <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginStart="10dp">
           <TextView android:id="@+id/tituloInformacoesPessoais" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/informacoes_pessoais" android:textSize="15sp" android:fontFamily="@font/nunito_semibold" android:textColor="@color/verde_escuro_principal"/>
-          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Veja e edite seus dados pessoais" android:textSize="11sp" android:fontFamily="@font/nunito_regular" android:textColor="@color/cinza_escuro_textos"/>
+          <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/informacoes_pessoais_veja_e_edite_seus_dados_pessoais" android:textSize="11sp" android:fontFamily="@font/nunito_regular" android:textColor="@color/cinza_escuro_textos"/>
         </LinearLayout>
       </LinearLayout>
       <com.google.android.material.card.MaterialCardView android:id="@+id/containerCamposPessoais" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginStart="18dp" android:layout_marginEnd="18dp" android:layout_marginTop="12dp" app:cardBackgroundColor="@color/branco" app:cardCornerRadius="14dp" app:cardElevation="2dp" app:strokeColor="@color/cinza_borda_card_perfil" app:strokeWidth="1dp">

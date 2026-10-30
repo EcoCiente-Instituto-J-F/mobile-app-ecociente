@@ -4,7 +4,7 @@
 
         <ImageView android:id="@+id/botaoVoltarPerguntas" android:layout_width="42dp" android:layout_height="42dp" android:layout_gravity="start|center_vertical" android:background="?attr/selectableItemBackgroundBorderless" android:contentDescription="@string/quiz_perguntas_voltar" android:padding="10dp" android:scaleType="centerInside" android:src="@drawable/ic_voltar" app:tint="@color/verde_escuro_principal"/>
 
-        <TextView android:id="@+id/textoContadorPergunta" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:fontFamily="@font/nunito_regular" android:includeFontPadding="false" android:text="01/10" android:textColor="@color/verde_escuro_principal" android:textSize="27sp"/>
+        <TextView android:id="@+id/textoContadorPergunta" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:fontFamily="@font/nunito_regular" android:includeFontPadding="false" android:text="@string/contador_de_pergunta_padrao" android:textColor="@color/verde_escuro_principal" android:textSize="27sp"/>
 
     </FrameLayout>
 

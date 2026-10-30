@@ -9,7 +9,7 @@
             <FrameLayout android:layout_width="94dp" android:layout_height="92dp" android:layout_marginTop="17dp">
               <com.google.android.material.card.MaterialCardView android:id="@+id/containerAvatarPerfil" android:layout_width="84dp" android:layout_height="84dp" app:cardCornerRadius="42dp" app:cardBackgroundColor="@color/branco" app:cardElevation="2dp" app:strokeColor="@color/branco" app:strokeWidth="2dp">
                 <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
-                  <TextView android:id="@+id/textoIniciaisAvatarPerfil" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:text="J" android:textSize="30sp" android:fontFamily="@font/nunito_bold" android:textColor="@color/verde_escuro_principal"/>
+                  <TextView android:id="@+id/textoIniciaisAvatarPerfil" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:text="@string/inicial_padrao_do_avatar" android:textSize="30sp" android:fontFamily="@font/nunito_bold" android:textColor="@color/verde_escuro_principal"/>
                   <ImageView android:id="@+id/imagemFotoPerfil" android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:visibility="gone" android:contentDescription="@string/foto_perfil"/>
                   <ProgressBar android:id="@+id/indicadorFotoPerfil" android:layout_width="24dp" android:layout_height="24dp" android:layout_gravity="center" android:visibility="gone"/>
                 </FrameLayout>
