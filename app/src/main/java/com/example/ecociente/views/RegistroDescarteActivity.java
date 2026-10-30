@@ -1,12 +1,12 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.EstadoTela;
 import android.content.ActivityNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -181,22 +181,7 @@ public class RegistroDescarteActivity extends AppCompatActivity {
     }
 
     private void mostrarErroDeCategorias() {
-
-        TextView mensagem = new TextView(this);
-
-        mensagem.setText(R.string.registro_categorias_erro);
-        mensagem.setTextColor(getColor(R.color.cinza_texto_auxiliar));
-        mensagem.setTextSize(14);
-        mensagem.setPadding(0, 16, 0, 16);
-
-        areaCategorias.addView(mensagem);
-
-        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, areaCategorias, false);
-
-        tentar.setText(R.string.tentar_novamente);
-        tentar.setOnClickListener(view -> carregarCategorias());
-
-        areaCategorias.addView(tentar);
+        EstadoTela.erro(areaCategorias, R.string.registro_categorias_erro, this::carregarCategorias);
     }
 
     private void mostrarCategorias(List<ItemLista> categorias) {

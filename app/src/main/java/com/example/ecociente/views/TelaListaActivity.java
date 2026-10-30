@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.EstadoTela;
 import com.example.ecociente.model.MovimentacaoPontos;
 import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.model.DesempenhoQuiz;
@@ -714,36 +715,17 @@ public class TelaListaActivity extends AppCompatActivity {
 
     // Falha ao carregar: a mensagem e um botão que refaz a consulta da lista inteira.
     private void erroComTentar(LinearLayout lista, int mensagem) {
-
-        textoDeEstado(lista, mensagem);
-
-        com.google.android.material.button.MaterialButton tentar =
-                (com.google.android.material.button.MaterialButton)
-                        getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
-
-        tentar.setText(R.string.tentar_novamente);
-        tentar.setOnClickListener(
-                view -> {
+        EstadoTela.erro(
+                lista,
+                mensagem,
+                () -> {
                     lista.removeAllViews();
                     preencherLista();
                 });
-
-        lista.addView(tentar);
     }
 
-    private TextView textoDeEstado(LinearLayout lista, int mensagem) {
-
-        TextView texto = new TextView(this);
-
-        texto.setText(mensagem);
-        texto.setTextColor(getColor(R.color.cinza_texto_auxiliar));
-        texto.setTextSize(14);
-        texto.setGravity(android.view.Gravity.CENTER);
-        texto.setPadding(48, 96, 48, 0);
-
-        lista.addView(texto);
-
-        return texto;
+    private void textoDeEstado(LinearLayout lista, int mensagem) {
+        EstadoTela.vazio(lista, mensagem);
     }
 
     private void exibirItens(LinearLayout lista, java.util.List<ItemLista> itens) {

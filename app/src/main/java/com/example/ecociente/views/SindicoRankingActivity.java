@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.EstadoTela;
 import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
@@ -146,29 +147,15 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         boolean falhou = (porMorador ? erroNosMoradores : erroNoRanking) && carregadas == null;
 
         if (posicoes.isEmpty()) {
-            TextView vazio = new TextView(this);
-
-            vazio.setText(falhou ? R.string.ranking_erro : R.string.sindico_ranking_vazio);
-            vazio.setTextColor(getColor(R.color.cinza_texto_home));
-            vazio.setTextSize(14);
-            vazio.setPadding(32, 112, 32, falhou ? 24 : 112);
-
-            lista.addView(vazio);
-
             if (falhou) {
-                com.google.android.material.button.MaterialButton tentar =
-                        (com.google.android.material.button.MaterialButton)
-                                getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
-
-                tentar.setText(R.string.tentar_novamente);
-                tentar.setOnClickListener(view -> {
+                EstadoTela.erro(lista, R.string.ranking_erro, () -> {
                     erroNoRanking = false;
                     erroNosMoradores = false;
                     atualizarRanking();
                     carregarRanking();
                 });
-
-                lista.addView(tentar);
+            } else {
+                EstadoTela.vazio(lista, R.string.sindico_ranking_vazio);
             }
         }
 

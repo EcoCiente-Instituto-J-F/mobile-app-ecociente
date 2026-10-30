@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.EstadoTela;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,7 +25,6 @@ import com.example.ecociente.model.MensagemConversa;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.ecociente.util.Iniciais;
-import com.google.android.material.button.MaterialButton;
 import com.example.ecociente.ui.IndicadorCarregamento;
 import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.repository.ConversaRepository;
@@ -122,17 +122,7 @@ public class ConversaActivity extends AppCompatActivity {
     private void mostrarErro() {
         container.removeAllViews();
 
-        TextView mensagem = new TextView(this);
-        mensagem.setText(R.string.conversa_erro_mensagens);
-        mensagem.setTextColor(getColor(R.color.cinza_texto_home));
-        mensagem.setTextSize(14);
-        mensagem.setPadding(32, 112, 32, 24);
-        container.addView(mensagem);
-
-        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, container, false);
-        tentar.setText(R.string.tentar_novamente);
-        tentar.setOnClickListener(view -> carregar());
-        container.addView(tentar);
+        EstadoTela.erro(container, R.string.conversa_erro_mensagens, this::carregar);
 
         atualizarCampo();
     }

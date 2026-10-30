@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.EstadoTela;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -35,7 +36,6 @@ import com.example.ecociente.ui.IndicadorCarregamento;
 public class FeedActivity extends AppCompatActivity {
 
     private LinearLayout lista;
-    private View textoVazio;
 
     private final ActivityResultLauncher<Intent> registro =
             registerForActivityResult(
@@ -58,7 +58,6 @@ public class FeedActivity extends AppCompatActivity {
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizFeed));
 
         lista = findViewById(R.id.listaFeed);
-        textoVazio = findViewById(R.id.textoFeedVazio);
 
         Motion.entrar(this, R.id.tituloFeed, R.id.subtituloFeed, R.id.listaFeed);
 
@@ -80,7 +79,6 @@ public class FeedActivity extends AppCompatActivity {
     private void carregarFeed() {
 
         lista.removeAllViews();
-        textoVazio.setVisibility(View.GONE);
 
         IndicadorCarregamento.mostrar(lista, R.string.feed_carregando);
 
@@ -115,20 +113,9 @@ public class FeedActivity extends AppCompatActivity {
     }
 
     private void exibirErro(@StringRes int mensagem) {
-
         lista.removeAllViews();
 
-        ((TextView) textoVazio).setText(mensagem);
-        textoVazio.setVisibility(View.VISIBLE);
-
-        com.google.android.material.button.MaterialButton tentar =
-                (com.google.android.material.button.MaterialButton)
-                        getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
-
-        tentar.setText(R.string.tentar_novamente);
-        tentar.setOnClickListener(view -> carregarFeed());
-
-        lista.addView(tentar);
+        EstadoTela.erro(lista, mensagem, this::carregarFeed);
     }
 
     private void configurarBarra() {
@@ -215,7 +202,8 @@ public class FeedActivity extends AppCompatActivity {
             lista.addView(cartao);
         }
 
-        ((TextView) textoVazio).setText(R.string.feed_vazio);
-        textoVazio.setVisibility(postagens.isEmpty() ? View.VISIBLE : View.GONE);
+        if (postagens.isEmpty()) {
+            EstadoTela.vazio(lista, R.string.feed_vazio);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.EstadoTela;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -123,31 +124,13 @@ public final class SindicoValidacaoActivity extends AppCompatActivity {
     }
 
     private void mostrarVazio() {
-        TextView vazio = new TextView(this);
-        vazio.setText(R.string.validacao_vazio);
-        vazio.setTextColor(getColor(R.color.cinza_texto_home));
-        vazio.setTextSize(14);
-        vazio.setPadding(dp(26), dp(28), dp(26), dp(28));
-        lista.addView(vazio);
+        EstadoTela.vazio(lista, R.string.validacao_vazio);
     }
 
     private void mostrarErro() {
         lista.removeAllViews();
 
-        TextView mensagem = new TextView(this);
-        mensagem.setText(R.string.validacao_erro);
-        mensagem.setTextColor(getColor(R.color.cinza_texto_home));
-        mensagem.setTextSize(14);
-        mensagem.setPadding(dp(26), dp(28), dp(26), dp(12));
-        lista.addView(mensagem);
-
-        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
-        tentar.setText(R.string.tentar_novamente);
-        tentar.setOnClickListener(view -> carregar());
-        lista.addView(tentar);
+        EstadoTela.erro(lista, R.string.validacao_erro, this::carregar);
     }
 
-    private int dp(int valor) {
-        return Math.round(valor * getResources().getDisplayMetrics().density);
-    }
 }
