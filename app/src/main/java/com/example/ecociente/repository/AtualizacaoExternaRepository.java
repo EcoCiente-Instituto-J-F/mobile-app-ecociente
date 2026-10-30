@@ -171,7 +171,13 @@ public class AtualizacaoExternaRepository {
 
         JSONObject corpo = PerfilApiJson.corpoDoCondominio(nome, tipoCondominioId, urlFoto);
 
-        if (condominioId <= 0 || corpo == null) {
+        if (corpo == null) {
+            return;
+        }
+
+        // Sem o id do condomínio nada vai ao banco: avisa em vez de parecer que foi salvo.
+        if (condominioId <= 0) {
+            falhar(aoFalhar);
             return;
         }
 

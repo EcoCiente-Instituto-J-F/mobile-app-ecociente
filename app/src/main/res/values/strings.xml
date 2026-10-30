@@ -632,4 +632,5 @@
         <item>3</item>
         <item>4</item>
     </integer-array>
+    <string name="solicitacoes_filtro_todas">Todas</string>
 </resources>

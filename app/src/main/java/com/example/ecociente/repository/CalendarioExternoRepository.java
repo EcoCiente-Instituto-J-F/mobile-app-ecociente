@@ -59,11 +59,13 @@ public class CalendarioExternoRepository {
 
     public void listar(
             @NonNull Context contexto,
-            @NonNull StatusAgendamento status,
+            @Nullable StatusAgendamento status,
             int pagina,
             @NonNull Retorno retorno) {
 
-        String consulta = "?status=" + status.name() + "&page=" + pagina + "&size=" + TAMANHO_PAGINA;
+        // Sem status, a API devolve todas as solicitações.
+        String consulta = (status == null ? "?" : "?status=" + status.name() + "&")
+                + "page=" + pagina + "&size=" + TAMANHO_PAGINA;
 
         executar(contexto, URL_AGENDAMENTOS + consulta, retorno);
     }
@@ -426,6 +428,8 @@ public class CalendarioExternoRepository {
 
             int codigo = conexao.getResponseCode();
 
+            Log.d(TAG, "GET " + endereco + " -> HTTP " + codigo);
+
             if (tokenRejeitado(codigo, conexao)) {
                 Log.w(TAG, "Token rejeitado pela API (HTTP " + codigo + ")");
 
@@ -470,6 +474,8 @@ public class CalendarioExternoRepository {
                 itens.add(CalendarioJson.solicitacao(item));
             }
         }
+
+        Log.d(TAG, itens.size() + " agendamentos recebidos");
 
         return ResultadoSolicitacoes.sucesso(itens, resposta.optBoolean("last", true));
     }

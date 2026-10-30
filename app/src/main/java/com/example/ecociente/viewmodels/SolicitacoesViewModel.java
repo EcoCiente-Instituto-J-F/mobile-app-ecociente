@@ -2,6 +2,7 @@ package com.example.ecociente.viewmodels;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,7 +22,8 @@ public class SolicitacoesViewModel extends AndroidViewModel {
     private final MutableLiveData<ResultadoSolicitacoes.Tipo> situacao = new MutableLiveData<>();
     private final MutableLiveData<Boolean> carregando = new MutableLiveData<>(false);
 
-    private StatusAgendamento filtro = StatusAgendamento.AGENDADO;
+    // null = todas as solicitações.
+    private StatusAgendamento filtro = null;
     private int proximaPagina;
     private boolean ultimaPagina;
 
@@ -44,7 +46,7 @@ public class SolicitacoesViewModel extends AndroidViewModel {
         return carregando;
     }
 
-    @NonNull
+    @Nullable
     public StatusAgendamento getFiltro() {
         return filtro;
     }
@@ -53,14 +55,14 @@ public class SolicitacoesViewModel extends AndroidViewModel {
         return situacao.getValue() != null;
     }
 
-    public void definirFiltroInicial(@NonNull StatusAgendamento inicial) {
+    public void definirFiltroInicial(@Nullable StatusAgendamento inicial) {
 
         if (!jaCarregou()) {
             filtro = inicial;
         }
     }
 
-    public void filtrar(@NonNull StatusAgendamento novoFiltro) {
+    public void filtrar(@Nullable StatusAgendamento novoFiltro) {
 
         if (novoFiltro == filtro && jaCarregou()) {
             return;

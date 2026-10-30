@@ -216,10 +216,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
                         viewModel.salvarFotoUri(resultado.getUrl());
                         mostrarFoto();
                         AvisoFlutuante.mostrar(this, R.string.sindico_foto_condominio_salva);
-                        new AtualizacaoExternaRepository().sincronizarCondominio(
-                                getApplicationContext(), PerfilApiRepository.condominioId(this),
-                                null, 0, resultado.getUrl(),
-                                () -> AvisoFlutuante.mostrar(this, R.string.sindico_condominio_sincronizacao_falhou));
+                        sincronizarCondominioComApi(null, 0, resultado.getUrl());
                     } else {
                         AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
                     }
@@ -303,14 +300,25 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
         AvisoFlutuante.mostrar(this, R.string.sindico_demo_dados_salvos);
 
         // Nome, tipo e endereço (CEP, número e complemento) vão para a API.
-        new AtualizacaoExternaRepository().sincronizarCondominio(
-                getApplicationContext(), PerfilApiRepository.condominioId(this),
-                nome.getText().toString(), residencial ? 1 : 2, null,
-                () -> AvisoFlutuante.mostrar(this, R.string.sindico_condominio_sincronizacao_falhou));
+        sincronizarCondominioComApi(nome.getText().toString(), residencial ? 1 : 2, null);
         new AtualizacaoExternaRepository().sincronizarEnderecoDoCondominio(
                 getApplicationContext(), PerfilApiRepository.condominioId(this), codigoPostal,
                 valorNumero, complemento.getText().toString(),
                 () -> AvisoFlutuante.mostrar(this, R.string.sindico_condominio_sincronizacao_falhou));
+    }
+
+    // Se o perfil da API ainda não trouxe o condomínio (id 0), busca de novo antes de enviar.
+    private void sincronizarCondominioComApi(String nome, int tipoCondominioId, String urlFoto) {
+
+        Runnable enviar = () -> new AtualizacaoExternaRepository().sincronizarCondominio(
+                getApplicationContext(), PerfilApiRepository.condominioId(this), nome, tipoCondominioId, urlFoto,
+                () -> AvisoFlutuante.mostrar(this, R.string.sindico_condominio_sincronizacao_falhou));
+
+        if (PerfilApiRepository.condominioId(this) > 0) {
+            enviar.run();
+        } else {
+            new PerfilApiRepository().atualizar(this, enviar);
+        }
     }
 
     private boolean validar(EditText campo, String erro) {
