@@ -217,6 +217,10 @@ public class TelaListaActivity extends AppCompatActivity {
     }
 
     // "Meus descartes": as postagens do próprio usuário na ds-mobile-api.
+    private static final String PREFIXO_DESCARTE = "descarte:";
+
+    private java.util.List<PostagemFeed> descartes;
+
     private void carregarMeusDescartes(LinearLayout lista) {
 
         indicadorDeCarregamento(lista, R.string.meus_descartes_carregando);
@@ -243,14 +247,19 @@ public class TelaListaActivity extends AppCompatActivity {
 
                             java.util.List<ItemLista> itens = new java.util.ArrayList<>();
 
-                            for (PostagemFeed postagem : postagens) {
+                            descartes = postagens;
+
+                            for (int i = 0; i < postagens.size(); i++) {
+                                PostagemFeed postagem = postagens.get(i);
                                 itens.add(
                                         new ItemLista(
+                                                PREFIXO_DESCARTE + i,
                                                 postagem.getCategoria().isEmpty()
                                                         ? getString(R.string.descarte)
                                                         : postagem.getCategoria(),
                                                 postagem.getQuando(),
-                                                postagem.getStatus()));
+                                                postagem.getStatus(),
+                                                null));
                             }
 
                             exibirItens(lista, itens);
@@ -758,6 +767,11 @@ public class TelaListaActivity extends AppCompatActivity {
 
             if (item.detalhes != null) {
                 linha.setOnClickListener(view -> startActivity(DetalheItemActivity.criarIntent(this, item)));
+                Motion.pressFeedback(linha);
+            } else if (tipo == TipoLista.MEUS_DESCARTES && item.chave != null && descartes != null) {
+                int posicao = Integer.parseInt(item.chave.substring(PREFIXO_DESCARTE.length()));
+                linha.setOnClickListener(
+                        view -> startActivity(StatusDescarteActivity.criarIntent(this, descartes.get(posicao))));
                 Motion.pressFeedback(linha);
             }
 

@@ -103,6 +103,14 @@ public class PostagemRepository {
         return PostagemJson.statusLegivel("em_analise").equals(postagem.getStatus());
     }
 
+    public static boolean estaAprovada(@NonNull PostagemFeed postagem) {
+        return PostagemJson.statusLegivel("aprovada").equals(postagem.getStatus());
+    }
+
+    public static boolean estaReprovada(@NonNull PostagemFeed postagem) {
+        return PostagemJson.statusLegivel("reprovada").equals(postagem.getStatus());
+    }
+
     // POST /api/postagens/{id}/votos: o morador aprova ou denuncia (com o id do motivo) um descarte em análise.
     public void votar(
             @NonNull Context contexto,

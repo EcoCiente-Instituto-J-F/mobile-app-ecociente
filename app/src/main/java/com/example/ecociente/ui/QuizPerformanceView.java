@@ -36,8 +36,8 @@ public class QuizPerformanceView extends View {
                     Paint.ANTI_ALIAS_FLAG
             );
 
-    private final Path caminhoLinha =
-            new Path();
+        private final Path caminhoLinha =
+                new Path();
 
     private final Path caminhoArea =
             new Path();

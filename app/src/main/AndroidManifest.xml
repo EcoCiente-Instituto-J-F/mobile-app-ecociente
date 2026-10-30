@@ -134,6 +134,10 @@
             android:exported="false" />
 
         <activity
+            android:name=".views.StatusDescarteActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".views.SolicitacoesActivity"
             android:exported="false" />
 
