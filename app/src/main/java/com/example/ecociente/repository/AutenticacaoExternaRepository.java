@@ -35,6 +35,10 @@ public class AutenticacaoExternaRepository {
     private static final String CHAVE_PERFIL = "perfil";
     private static final String CHAVE_USUARIO_ID = "usuarioId";
 
+    // O Render dorme sem uso e leva de 70 a 150 s para acordar: com menos que isso as duas tentativas de login
+    // estouram, o app entra sem token e nenhuma tela que depende da API carrega.
+    private static final int TEMPO_MAXIMO_RENDER_MS = 180_000;
+
     private static final Object TRAVA = new Object();
 
     // Quem precisa do JWT espera o login em andamento terminar: no primeiro acesso da sessão a Home
@@ -312,7 +316,7 @@ public class AutenticacaoExternaRepository {
             }
             Log.w(TAG, "AWS indisponivel; tentando o login secundario no Render");
             return loginNoServidor(ConfiguracaoServidores.URL_LOGIN_RENDER, email, senha,
-                    ConfiguracaoServidores.TIMEOUT_RESPOSTA_RENDER_MS, false);
+                    TEMPO_MAXIMO_RENDER_MS, false);
         }
     }
 

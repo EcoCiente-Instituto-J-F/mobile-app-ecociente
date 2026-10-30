@@ -36,6 +36,10 @@ public class CadastroExternoRepository {
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
+    // A API dorme sem uso e leva de 70 a 150 s para acordar; com menos que isso o app desiste e a API
+    // conclui o cadastro depois, deixando a pessoa com um erro de uma conta que existe.
+    private static final int TEMPO_MAXIMO_MS = 180_000;
+
     @NonNull
     public LiveData<ResultadoApi> cadastrar(
             @NonNull Map<String, Object> dadosUsuario, @NonNull String senha) {
@@ -48,6 +52,14 @@ public class CadastroExternoRepository {
 
                     try {
                         resposta = enviarCadastro(dadosUsuario, senha);
+
+                    } catch (java.net.SocketTimeoutException erro) {
+                        Log.e(TAG, "Cadastro demorou demais", erro);
+
+                        resposta =
+                                ResultadoApi.erro(
+                                        "O servidor demorou para responder e o cadastro pode ter sido concluído."
+                                                + " Tente entrar pela tela de Login antes de cadastrar de novo.");
 
                     } catch (Exception erro) {
                         Log.e(TAG, "Erro ao cadastrar na API externa", erro);
@@ -160,7 +172,7 @@ public class CadastroExternoRepository {
             conexao.setDoOutput(true);
             conexao.setUseCaches(false);
             conexao.setConnectTimeout(ConfiguracaoServidores.TIMEOUT_CONEXAO_MS);
-            conexao.setReadTimeout(ConfiguracaoServidores.TIMEOUT_RESPOSTA_CADASTRO_MS);
+            conexao.setReadTimeout(TEMPO_MAXIMO_MS);
 
             try (OutputStream saida = conexao.getOutputStream()) {
                 saida.write(corpo.toString().getBytes(StandardCharsets.UTF_8));

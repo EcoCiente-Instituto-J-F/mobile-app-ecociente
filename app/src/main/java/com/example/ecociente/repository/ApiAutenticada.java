@@ -116,8 +116,9 @@ final class ApiAutenticada {
         int[] codigo = new int[1];
         String corpo = requisitar(metodo, url, token, json, codigo);
 
-        // O JWT dura minutos: o salvo costuma estar vencido. Só GET e DELETE (idempotentes) se repetem.
-        if (codigo[0] == 401 && ("GET".equals(metodo) || "DELETE".equals(metodo))) {
+        // O JWT dura minutos: o salvo costuma estar vencido. Um 401 quer dizer que o servidor nem processou o
+        // pedido, então repetir com o token novo é seguro até para POST (o que não se repete é o 403 e o timeout).
+        if (codigo[0] == 401) {
             String renovado = AUTENTICACAO.renovarToken(contexto);
 
             if (renovado != null) {
