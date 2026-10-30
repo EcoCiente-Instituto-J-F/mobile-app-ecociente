@@ -2,7 +2,10 @@ package com.example.ecociente.views;
 
 import com.example.ecociente.model.MovimentacaoPontos;
 import com.example.ecociente.repository.PerfilApiRepository;
+import com.example.ecociente.model.DesempenhoQuiz;
 import com.example.ecociente.repository.PontuacaoRepository;
+import com.example.ecociente.repository.TentativaQuizRepository;
+import com.example.ecociente.util.FormatoDataApi;
 import com.example.ecociente.util.FormatoDataApi;
 import com.example.ecociente.ui.Motion;
 import android.content.Context;
@@ -148,6 +151,11 @@ public class TelaListaActivity extends AppCompatActivity {
 
         if (tipo == TipoLista.PONTOS) {
             carregarPontos(lista);
+            return;
+        }
+
+        if (tipo == TipoLista.ANALISE_QUIZ) {
+            carregarAnaliseQuiz(lista);
             return;
         }
 
@@ -596,7 +604,9 @@ public class TelaListaActivity extends AppCompatActivity {
                                             new ItemLista(
                                                     getString(R.string.pontos_saldo_atual),
                                                     "",
-                                                    formatarPontos(saldo == null ? 0 : saldo)));
+                                                    saldo == null
+                                                            ? getString(R.string.pontos_indisponivel)
+                                                            : formatarPontos(saldo)));
 
                                     if (pagina != null) {
                                         for (MovimentacaoPontos movimentacao : pagina.itens) {
@@ -606,10 +616,56 @@ public class TelaListaActivity extends AppCompatActivity {
 
                                     exibirItens(lista, itens);
 
-                                    if (pagina != null && pagina.itens.isEmpty()) {
+                                    if (pagina == null) {
+                                        erroComTentar(lista, R.string.pontos_erro_historico);
+                                    } else if (pagina.itens.isEmpty()) {
                                         textoDeEstado(lista, R.string.pontos_sem_movimentacao);
                                     }
                                 }));
+    }
+
+    // Quizzes que o usuário concluiu (ds-mobile-api): título, quando terminou e percentual de acertos.
+    private void carregarAnaliseQuiz(LinearLayout lista) {
+
+        indicadorDeCarregamento(lista, R.string.quiz_desempenho_carregando);
+
+        new TentativaQuizRepository()
+                .historico(
+                        this,
+                        historico -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            lista.removeAllViews();
+
+                            if (historico == null) {
+                                erroComTentar(lista, R.string.quiz_desempenho_erro);
+                                return;
+                            }
+
+                            if (historico.isEmpty()) {
+                                textoDeEstado(lista, R.string.quiz_desempenho_vazio);
+                                return;
+                            }
+
+                            java.util.List<ItemLista> itens = new java.util.ArrayList<>();
+
+                            for (DesempenhoQuiz desempenho : historico) {
+                                itens.add(
+                                        new ItemLista(
+                                                desempenho.titulo.isEmpty()
+                                                        ? getString(R.string.analise_quiz_sem_titulo)
+                                                        : desempenho.titulo,
+                                                getString(
+                                                        R.string.analise_quiz_data_hora,
+                                                        FormatoDataApi.data(desempenho.concluidoEm),
+                                                        FormatoDataApi.hora(desempenho.concluidoEm)),
+                                                getString(R.string.analise_quiz_acertos, Math.round(desempenho.nota))));
+                            }
+
+                            exibirItens(lista, itens);
+                        });
     }
 
     private ItemLista itemDaMovimentacao(MovimentacaoPontos movimentacao) {
@@ -721,6 +777,10 @@ public class TelaListaActivity extends AppCompatActivity {
             case GUIA:
                 itens = morador ? ItensBarra.morador() : ItensBarra.usuario();
                 atual = ItensBarra.SEGUNDO;
+                break;
+
+            case ANALISE_QUIZ:
+                itens = morador ? ItensBarra.morador() : ItensBarra.usuario();
                 break;
 
             case FEED:

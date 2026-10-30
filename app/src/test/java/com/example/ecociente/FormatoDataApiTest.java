@@ -11,6 +11,12 @@ import org.junit.Test;
 public class FormatoDataApiTest {
 
     @Test
+    public void diaMesSoMostraDiaEMes() {
+        assertEquals("17/05", FormatoDataApi.diaMes("2026-05-17T08:00:00"));
+        assertEquals("", FormatoDataApi.diaMes(null));
+    }
+
+    @Test
     public void formataDataEHora() {
         assertEquals("17/05/2026", FormatoDataApi.data("2026-05-17T08:00:00"));
         assertEquals("08:00", FormatoDataApi.hora("2026-05-17T08:00:00"));

@@ -21,6 +21,12 @@ public final class FormatoDataApi {
         return formatar(iso, "dd/MM/yyyy");
     }
 
+    // Dia e mês, para o eixo de gráficos.
+    @NonNull
+    public static String diaMes(@Nullable String iso) {
+        return formatar(iso, "dd/MM");
+    }
+
     @NonNull
     public static String dataCompacta(@Nullable String iso) {
         return formatar(iso, "d 'de' MMM 'de' yyyy");

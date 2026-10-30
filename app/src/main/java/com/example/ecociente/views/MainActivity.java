@@ -21,6 +21,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.QuizPerformanceView;
+import com.example.ecociente.repository.TentativaQuizRepository;
+import com.example.ecociente.repository.PontuacaoRepository;
+import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.model.PerfilAcesso;
 import com.example.ecociente.model.EstadoHome;
 import com.example.ecociente.repository.AutenticacaoExternaRepository;
@@ -149,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
             viewModel.atualizarMensagem();
 
             viewModel.recarregarFoto();
+
+            carregarDesempenhoEPontos();
         }
     }
 
@@ -268,6 +274,14 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(
                         R.id.atualizacaoHome
                 );
+
+        findViewById(R.id.cardAnaliseQuiz)
+                .setOnClickListener(view -> startActivity(
+                        TelaListaActivity.criarIntent(this, TipoLista.ANALISE_QUIZ, false)));
+        findViewById(R.id.cardPontos)
+                .setOnClickListener(view -> startActivity(
+                        TelaListaActivity.criarIntent(this, TipoLista.PONTOS, false)));
+        carregarDesempenhoEPontos();
 
         textoMensagemMotivacional =
                 findViewById(
@@ -567,6 +581,49 @@ public class MainActivity extends AppCompatActivity {
         for (int id : comFeedbackAoToque) {
             Motion.pressFeedback(findViewById(id));
         }
+    }
+
+    // Gráfico de quizzes e saldo de pontos vêm da API: a home os atualiza sempre que volta.
+    private void carregarDesempenhoEPontos() {
+
+        QuizPerformanceView grafico = findViewById(R.id.graficoDesempenhoQuiz);
+        android.widget.TextView saldoPontos = findViewById(R.id.textoSaldoPontos);
+
+        grafico.mostrarCarregando();
+        saldoPontos.setText(R.string.pontos_carregando);
+
+        new TentativaQuizRepository()
+                .historico(
+                        this,
+                        historico -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            if (historico == null) {
+                                grafico.mostrarErro();
+                            } else {
+                                grafico.mostrar(historico);
+                            }
+                        });
+
+        new PontuacaoRepository()
+                .saldo(
+                        this,
+                        saldo -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            saldoPontos.setText(
+                                    saldo == null
+                                            ? getString(R.string.pontos_indisponivel)
+                                            : getString(
+                                                    R.string.pontos_saldo,
+                                                    java.text.NumberFormat.getIntegerInstance(
+                                                                    new java.util.Locale("pt", "BR"))
+                                                            .format(saldo)));
+                        });
     }
 
     private void animarEntradaDaHome() {

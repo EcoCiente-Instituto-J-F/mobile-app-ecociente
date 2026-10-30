@@ -601,4 +601,18 @@
     <string name="contador_de_pergunta_padrao">01/10</string>
     <string name="quiz_usuario_comum_filtrar_quizzes">Filtrar quizzes</string>
     <string name="quiz_usuario_comum_pontos_por_completar_o_quiz">Pontos por completar o quiz</string>
+    <string name="quiz_desempenho_descricao">Desempenho nos últimos quizzes</string>
+    <string name="quiz_desempenho_carregando">Carregando seus quizzes…</string>
+    <string name="quiz_desempenho_vazio">Nenhum quiz concluído ainda.</string>
+    <string name="quiz_desempenho_erro">Não foi possível carregar seus quizzes.</string>
+    <string name="analise_quiz_titulo">Análise dos quizzes</string>
+    <string name="analise_quiz_sem_titulo">Quiz</string>
+    <string name="analise_quiz_data_hora">%1$s às %2$s</string>
+    <string name="analise_quiz_acertos">%1$d%% de acertos</string>
+    <string name="pontos_erro_historico">Não foi possível carregar o histórico de pontos.</string>
+    <string name="biblioteca_concluido">✓ Concluído</string>
+    <string name="biblioteca_aulas_concluidas">%1$d/%2$d aulas concluídas</string>
+    <string name="quiz_ja_realizado">✓ Já realizado</string>
+    <string name="quiz_refazer">Refazer</string>
+    <string name="quiz_conclusoes_erro">Não foi possível verificar quais quizzes você já concluiu.</string>
 </resources>
