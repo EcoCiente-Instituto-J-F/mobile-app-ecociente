@@ -615,4 +615,21 @@
     <string name="quiz_ja_realizado">✓ Já realizado</string>
     <string name="quiz_refazer">Refazer</string>
     <string name="quiz_conclusoes_erro">Não foi possível verificar quais quizzes você já concluiu.</string>
+    <string name="feed_denunciar">Denunciar</string>
+    <string name="feed_denunciar_titulo">Qual o motivo da denúncia?</string>
+    <string name="feed_voto_aprovado">Você aprovou este descarte.</string>
+    <string name="feed_voto_denunciado">Denúncia registrada.</string>
+    <!-- Motivos de tb_lkp_motivos_denuncia, na mesma ordem dos ids abaixo. Se mudarem no banco, mude aqui. -->
+    <string-array name="motivos_denuncia">
+        <item>Não é lixo reciclável</item>
+        <item>Foto não corresponde à categoria</item>
+        <item>Foto antiga/reutilizada</item>
+        <item>Spam/abuso</item>
+    </string-array>
+    <integer-array name="motivos_denuncia_ids">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
 </resources>

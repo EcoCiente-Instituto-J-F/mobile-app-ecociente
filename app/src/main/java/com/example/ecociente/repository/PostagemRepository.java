@@ -98,6 +98,52 @@ public class PostagemRepository {
                 });
     }
 
+    // Só descartes em análise (janela de 24 h) aceitam voto.
+    public static boolean estaEmAnalise(@NonNull PostagemFeed postagem) {
+        return PostagemJson.statusLegivel("em_analise").equals(postagem.getStatus());
+    }
+
+    // POST /api/postagens/{id}/votos: o morador aprova ou denuncia (com o id do motivo) um descarte em análise.
+    public void votar(
+            @NonNull Context contexto,
+            int postagemId,
+            boolean aprovar,
+            int motivoDenunciaId,
+            @NonNull RetornoRegistro retorno) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        EXECUTOR.execute(
+                () -> {
+                    ResultadoApi resultado;
+
+                    try {
+                        ApiAutenticada.Resposta resposta =
+                                ApiAutenticada.enviarComCodigo(
+                                        contextoApp,
+                                        URL_BASE + "/api/postagens/" + postagemId + "/votos",
+                                        PostagemJson.corpoVoto(aprovar, motivoDenunciaId));
+
+                        if (resposta == null) {
+                            resultado = ResultadoApi.erro(PostagemJson.mensagemDoVoto(401, null));
+                        } else if (resposta.sucesso()) {
+                            resultado = ResultadoApi.sucesso();
+                        } else {
+                            resultado =
+                                    ResultadoApi.erro(PostagemJson.mensagemDoVoto(resposta.codigo, resposta.corpo));
+                        }
+                    } catch (Exception erro) {
+                        Log.w(TAG, "Não foi possível registrar o voto", erro);
+
+                        resultado = ResultadoApi.erro(PostagemJson.mensagemDoVoto(0, null));
+                    }
+
+                    ResultadoApi resultadoFinal = resultado;
+
+                    PRINCIPAL.post(() -> retorno.aoConcluir(resultadoFinal));
+                });
+    }
+
     public void minhas(@NonNull Context contexto, @NonNull RetornoPostagens retorno) {
         listar(contexto, "/api/postagens/minhas?size=" + POR_PAGINA, retorno);
     }

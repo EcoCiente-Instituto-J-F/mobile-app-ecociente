@@ -119,6 +119,54 @@ final class PostagemJson {
         }
     }
 
+    // Corpo de POST /api/postagens/{id}/votos: "aprovar", ou "denunciar" com o id do motivo (tb_lkp_motivos_denuncia).
+    @NonNull
+    static String corpoVoto(boolean aprovar, int motivoDenunciaId) {
+        return aprovar
+                ? "{\"tipo\":\"aprovar\"}"
+                : "{\"tipo\":\"denunciar\",\"motivoDenunciaId\":" + motivoDenunciaId + "}";
+    }
+
+    // Mensagem para o morador a partir do código de erro da API ({ status, codigo, mensagem }).
+    @NonNull
+    static String mensagemDoVoto(int codigoHttp, @Nullable String corpo) {
+
+        String codigo = "";
+
+        try {
+            if (corpo != null && !corpo.isEmpty()) {
+                codigo = new JSONObject(corpo).optString("codigo", "");
+            }
+        } catch (JSONException erro) {
+            // Resposta fora do formato esperado: cai na mensagem pelo código HTTP.
+        }
+
+        switch (codigo) {
+            case "VOTO_NAO_PERMITIDO":
+                return "Você não pode votar nesta postagem, por exemplo na sua própria.";
+
+            case "VOTO_JA_REGISTRADO":
+                return "Você já votou nesta postagem.";
+
+            case "VOTACAO_ENCERRADA":
+                return "A votação desta postagem já foi encerrada.";
+
+            case "SEM_VINCULO_APROVADO":
+                return "Você ainda não tem vínculo aprovado com o condomínio.";
+
+            case "MOTIVO_DENUNCIA_OBRIGATORIO":
+                return "Escolha o motivo da denúncia.";
+
+            case "POSTAGEM_NAO_ENCONTRADA":
+                return "Este descarte não existe mais.";
+
+            default:
+                return codigoHttp == 401
+                        ? "Sua sessão expirou. Entre novamente."
+                        : "Não foi possível registrar seu voto agora. Tente de novo.";
+        }
+    }
+
     @NonNull
     static String corpoCriar(
             int condominioId,

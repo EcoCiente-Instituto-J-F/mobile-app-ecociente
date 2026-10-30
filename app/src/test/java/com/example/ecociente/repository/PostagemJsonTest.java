@@ -1,6 +1,7 @@
 package com.example.ecociente.repository;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.example.ecociente.model.ItemLista;
@@ -13,7 +14,31 @@ import org.junit.Test;
 public class PostagemJsonTest {
 
     @Test
-    public void leOEnvelopeDoFeed() throws Exception {
+    public void votoDeAprovacaoNaoLevaMotivo() throws Exception {
+        JSONObject corpo = new JSONObject(PostagemJson.corpoVoto(true, 3));
+
+        assertEquals("aprovar", corpo.getString("tipo"));
+        assertFalse(corpo.has("motivoDenunciaId"));
+    }
+
+    @Test
+    public void denunciaLevaOIdDoMotivo() throws Exception {
+        JSONObject corpo = new JSONObject(PostagemJson.corpoVoto(false, 3));
+
+        assertEquals("denunciar", corpo.getString("tipo"));
+        assertEquals(3, corpo.getInt("motivoDenunciaId"));
+    }
+
+    @Test
+    public void mensagemDoVotoDependeDoCodigoDaApi() {
+        assertTrue(PostagemJson.mensagemDoVoto(409, "{\"codigo\":\"VOTO_JA_REGISTRADO\"}").contains("já votou"));
+        assertTrue(PostagemJson.mensagemDoVoto(409, "{\"codigo\":\"VOTACAO_ENCERRADA\"}").contains("encerrada"));
+        assertTrue(PostagemJson.mensagemDoVoto(403, "{\"codigo\":\"VOTO_NAO_PERMITIDO\"}").contains("própria"));
+        assertTrue(PostagemJson.mensagemDoVoto(401, null).contains("sessão"));
+        assertTrue(PostagemJson.mensagemDoVoto(0, "nao e json").contains("Tente de novo"));
+    }
+
+    @Test    public void leOEnvelopeDoFeed() throws Exception {
         JSONObject envelope =
                 new JSONObject(
                         "{\"total\":2,\"pagina\":0,\"tamanho\":20,\"totalPaginas\":1,\"postagens\":["
