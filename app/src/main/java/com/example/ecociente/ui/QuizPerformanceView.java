@@ -33,11 +33,11 @@ public class QuizPerformanceView extends View {
         VAZIO
     }
 
-    private Estado estadoAtual = Estado.DADOS;
+    private Estado estadoAtual = Estado.CARREGANDO;
 
-    private float[] valores = new float[]{70, 50, 80, 90, 70, 70};
+    private float[] valores = new float[0];
 
-    private String[] datas = new String[]{"01/05", "08/05", "15/05", "22/05", "29/05", "05/06"};
+    private String[] datas = new String[0];
 
     private final Paint tinta = new Paint(Paint.ANTI_ALIAS_FLAG);
 
