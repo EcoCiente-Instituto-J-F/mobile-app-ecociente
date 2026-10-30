@@ -26,6 +26,7 @@ import com.example.ecociente.midias.Midia;
 import com.example.ecociente.midias.CarregadorMidias;
 import com.example.ecociente.model.CursoEducativo;
 import com.example.ecociente.model.DadosDemonstracaoEducacao;
+import com.example.ecociente.model.FluxoEducativo;
 import com.example.ecociente.repository.EducacaoRepository;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.IndicadorCarregamento;
@@ -302,7 +303,9 @@ public class BibliotecaActivity extends AppCompatActivity {
         corpo.addView(rodape, rodapeLp);
         String resumo = curso.aulas.isEmpty() ? "Conteudo avulso"
                 : curso.aulas.size() + (curso.aulas.size() == 1 ? " aula" : " aulas");
-        TextView leitura = texto(resumo, 10, R.color.cinza_texto_auxiliar, false);
+        boolean cursoConcluido = FluxoEducativo.cursoConcluido(this, curso);
+        TextView leitura = texto(estadoDoCurso(curso, resumo), 10,
+                cursoConcluido ? R.color.verde_escuro_principal : R.color.cinza_texto_auxiliar, cursoConcluido);
         rodape.addView(leitura);
 
         LinearLayout.LayoutParams espacamento = new LinearLayout.LayoutParams(largura, dp(259));
@@ -350,8 +353,10 @@ public class BibliotecaActivity extends AppCompatActivity {
         LinearLayout descricao = coluna(0);
         TextView titulo = texto(aula.titulo, 14, R.color.preto_texto_home, true);
         descricao.addView(titulo);
-        TextView sub = texto("Aula " + aula.ordem + " · " + curso.titulo, 11,
-                R.color.cinza_texto_auxiliar, false);
+        boolean aulaConcluida = FluxoEducativo.concluido(this, curso, aula);
+        TextView sub = texto("Aula " + aula.ordem + " · " + curso.titulo
+                        + (aulaConcluida ? " · " + getString(R.string.biblioteca_concluido) : ""), 11,
+                aulaConcluida ? R.color.verde_escuro_principal : R.color.cinza_texto_auxiliar, aulaConcluida);
         descricao.addView(sub);
         descricao.setOnClickListener(v -> abrirAula(curso, aula));
         linha.addView(descricao, new LinearLayout.LayoutParams(0, -2, 1));
@@ -393,6 +398,7 @@ public class BibliotecaActivity extends AppCompatActivity {
                 String sub = DadosDemonstracaoEducacao.ATIVO
                         ? DadosDemonstracaoEducacao.tipoConteudo(curso.id)
                         : curso.aulas.isEmpty() ? "Guia" : "Curso · " + curso.aulas.size() + " aulas";
+                sub = estadoDoCurso(curso, sub);
                 listaSalvos.addView(criarLinhaSalva(curso.titulo, sub,
                         MidiasEco.obter(this).iconeCurso(curso),
                         () -> abrirCurso(selecionavel), () -> alternarSalvo("curso:" + curso.id)));
@@ -400,7 +406,9 @@ public class BibliotecaActivity extends AppCompatActivity {
             }
             for (CursoEducativo.Aula aula : curso.aulas) {
                 if (salvos.contains("aula:" + aula.id) && adicionados < limite) {
-                    listaSalvos.addView(criarLinhaSalva(aula.titulo, curso.titulo,
+                    listaSalvos.addView(criarLinhaSalva(aula.titulo, curso.titulo
+                            + (FluxoEducativo.concluido(this, curso, aula)
+                                    ? " · " + getString(R.string.biblioteca_concluido) : ""),
                             MidiasEco.obter(this).iconeCurso(curso),
                             () -> abrirAula(curso, aula), () -> alternarSalvo("aula:" + aula.id)));
                     adicionados++;
@@ -511,6 +519,19 @@ public class BibliotecaActivity extends AppCompatActivity {
     }
 
     private int dp(float valor) { return Math.round(valor * getResources().getDisplayMetrics().density); }
+
+    // "✓ Concluído" quando terminou, "X/Y aulas concluídas" quando já começou, senão o resumo padrão.
+    private String estadoDoCurso(CursoEducativo curso, String padrao) {
+        if (FluxoEducativo.cursoConcluido(this, curso)) return getString(R.string.biblioteca_concluido);
+        int feitas = FluxoEducativo.totalAulasConcluidas(this, curso);
+        return feitas > 0 ? getString(R.string.biblioteca_aulas_concluidas, feitas, curso.aulas.size()) : padrao;
+    }
+
+    // Ao voltar de uma leitura ou de um curso, as marcas de concluído são refeitas.
+    @Override protected void onResume() {
+        super.onResume();
+        if (!cursos.isEmpty()) filtrar(pesquisa.getText().toString());
+    }
 
     @Override protected void onDestroy() {
         atrasoBusca.removeCallbacks(aplicarBusca);

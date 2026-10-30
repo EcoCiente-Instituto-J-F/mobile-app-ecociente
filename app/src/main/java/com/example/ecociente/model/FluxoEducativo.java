@@ -160,6 +160,12 @@ public final class FluxoEducativo {
         return contador;
     }
 
+    // Curso com aulas só está concluído quando todas estão; sem aulas, vale o conteúdo único (guia).
+    public static boolean cursoConcluido(@NonNull Context contexto, @NonNull CursoEducativo curso) {
+        if (curso.aulas.isEmpty()) return concluido(contexto, curso, null);
+        return totalAulasConcluidas(contexto, curso) == curso.aulas.size();
+    }
+
     /** Uma pagina corresponde a uma etapa visivel entre dois cliques em Continuar. */
     public static final class Pagina {
         @NonNull public final String titulo;
