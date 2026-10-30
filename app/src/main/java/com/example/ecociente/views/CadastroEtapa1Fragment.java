@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.AvisoServidorLento;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -43,6 +44,8 @@ import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 public class CadastroEtapa1Fragment extends Fragment {
+
+    private final AvisoServidorLento avisoServidorLento = new AvisoServidorLento();
 
     // Mesma regra exigida pela API de cadastro: maiúscula, minúscula, número,
     // caractere especial e pelo menos 8 caracteres.
@@ -706,6 +709,12 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         campoCodigoCondominio.setEnabled(!carregando && possuiCodigo);
 
+        if (carregando && getActivity() != null) {
+            avisoServidorLento.iniciar(getActivity());
+        } else {
+            avisoServidorLento.parar();
+        }
+
         if (carregando) {
 
             indicadorCarregamento.setVisibility(View.VISIBLE);
@@ -880,6 +889,7 @@ public class CadastroEtapa1Fragment extends Fragment {
             motion = null;
         }
 
+        avisoServidorLento.parar();
         super.onDestroyView();
     }
 }

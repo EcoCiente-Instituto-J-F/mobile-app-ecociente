@@ -648,4 +648,5 @@
     <string name="resultado_validado_texto">Parabéns, seu descarte foi aprovado pela comunidade.</string>
     <string name="resultado_recusado">Descarte recusado</string>
     <string name="resultado_recusado_texto">A comunidade não aprovou este descarte. Registre um novo com uma foto atual.</string>
+    <string name="aviso_servidor_lento">Conectando ao servidor… na primeira vez pode levar até 2 minutos.</string>
 </resources>
