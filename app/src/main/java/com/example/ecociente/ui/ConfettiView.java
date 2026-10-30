@@ -1,4 +1,4 @@
-package com.example.ecociente.views;
+package com.example.ecociente.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

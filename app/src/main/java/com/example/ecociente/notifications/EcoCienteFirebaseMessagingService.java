@@ -4,6 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.example.ecociente.repository.PerfilRepository;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -30,6 +32,13 @@ public class EcoCienteFirebaseMessagingService extends FirebaseMessagingService 
 
         TipoNotificacaoEcoCiente tipo =
                 TipoNotificacaoEcoCiente.porId(dados.containsKey("tipo") ? dados.get("tipo") : dados.get("type"));
+
+        // Aparelho sem sessão não mostra aviso (o toque abriria uma tela restrita), e o aviso respeita
+        // os interruptores do perfil (gerais e o grupo do tipo).
+        PerfilRepository perfil = new PerfilRepository();
+        FirebaseUser usuario = perfil.usuarioAtual();
+
+        if (usuario == null || !perfil.notificacaoPermitida(usuario.getUid(), tipo.getGrupo())) return;
 
         NotificacaoEcoCiente.exibir(
                 this,

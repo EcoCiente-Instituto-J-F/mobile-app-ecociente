@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.StatusAgendamento;
-import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.repository.CalendarioExternoRepository;
 
 public class ResponderSolicitacaoViewModel extends ViewModelComCarregamento {

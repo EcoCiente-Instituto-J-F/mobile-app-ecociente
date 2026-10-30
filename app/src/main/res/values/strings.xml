@@ -7,6 +7,7 @@
     </string>
 
 
+    <string name="login_conta_nao_confirmada">Não foi possível confirmar sua conta no EcoCiente. Confira e-mail e senha ou faça o cadastro.</string>
     <string name="login">
         Login
     </string>
@@ -53,10 +54,6 @@
     <string name="titulo_guia_home">Como separar papel corretamente</string>
     <string name="titulo_dica_home">Como reduzir o uso de plástico</string>
     <string name="titulo_artigo_home">Compostagem caseira</string>
-    <string name="tempo_leitura">Tempo de leitura</string>
-    <string name="quatro_minutos_leitura">4 min</string>
-    <string name="tres_minutos_leitura">3 min</string>
-    <string name="cinco_minutos_leitura">5 min</string>
     <string name="erro_carregar_perfil">Não foi possível confirmar seu perfil agora.</string>
     <string name="tentar_novamente">Tentar novamente</string>
     <string name="voltar">Voltar</string>
@@ -175,13 +172,11 @@
     <string name="seis_quizzes_disponiveis">6 quizzes disponíveis</string>
 
 
-    <string name="filtros">Filtros</string>
 
     <string name="icone_quiz">Ícone do quiz</string>
 
     <string name="quantidade_perguntas">Quantidade de perguntas</string>
 
-    <string name="duracao_quiz">Duração do quiz</string>
 
     <string name="concluido">Concluído</string>
 
@@ -199,7 +194,6 @@
 
     <!-- Quiz - perguntas -->
     <string name="quiz_perguntas_voltar">Voltar</string>
-    <string name="quiz_planeta_ilustracao">Ilustração do planeta</string>
     <string name="quiz_proximo">Próximo</string>
     <string name="quiz_finalizar">Finalizar</string>
     <string name="quiz_dialogo_finalizar_titulo">Finalizar quiz?</string>
@@ -236,7 +230,6 @@
     <string name="salvar_alteracoes_mensagem">Confirme se deseja salvar as alterações realizadas.</string>
     <string name="confirmar">Confirmar</string>
     <string name="conta_excluida_aviso">Sua conta foi excluída</string>
-    <string name="mascara_senha">••••••</string>
     <string name="simbolo_avancar">›</string>
     <string name="simbolo_voltar">‹</string>
     <string name="valor_do_campo">Valor do campo</string>
@@ -273,11 +266,6 @@
     <string name="mostrar_confirmacao_senha">Mostrar confirmação de senha</string>
     <string name="mostrar_senha">Mostrar senha</string>
     <string name="nome_e_sobrenome">Nome e sobrenome</string>
-    <string name="notificacoes_atividades_eventos">Atividades e eventos</string>
-    <string name="notificacoes_descricao">Escolha sobre o que deseja ser notificado</string>
-    <string name="notificacoes_do_app">Notificações do app</string>
-    <string name="notificacoes_sustentabilidade">Sustentabilidade</string>
-    <string name="notificacoes_titulo">Gerencie suas preferências</string>
     <string name="nova_senha">Nova senha</string>
     <string name="nova_senha_descricao">Digite sua nova senha para continuar</string>
     <string name="numero">Número</string>
@@ -456,7 +444,6 @@
     <string name="quiz_resultado_sem_nota">--/--</string>
     <string name="quiz_resultado_sem_gabarito">Respostas registradas. A correção aparece quando o gabarito estiver disponível.</string>
     <string name="perfil_sincronizacao_falhou">Salvamos no app, mas não foi possível atualizar no servidor. Tente de novo mais tarde.</string>
-    <string name="login_demora">O servidor está acordando. O primeiro acesso pode levar até 2 minutos.</string>
     <string name="registro_titulo">Registro de descarte</string>
     <string name="registro_subtitulo">Faça seu descarte sustentável e ajude o meio ambiente!</string>
     <string name="registro_foto_titulo">1. Foto do descarte</string>
@@ -470,6 +457,8 @@
     <string name="registro_sem_foto">Tire uma foto do descarte.</string>
     <string name="registro_sem_categoria">Escolha o tipo de resíduo.</string>
     <string name="registro_enviado">Descarte enviado! Ele está em análise pela comunidade.</string>
+    <string name="feed_sem_aprovacao">Seu cadastro ainda está aguardando a aprovação do síndico. Quando for aprovado, o feed aparece aqui.</string>
+    <string name="biblioteca_carregando">Carregando cursos e aulas…</string>
     <string name="feed_erro">Não foi possível carregar o feed. Tente de novo mais tarde.</string>
     <string name="descarte">Descarte</string>
     <string name="meus_descartes_carregando">Carregando seus descartes…</string>
@@ -558,39 +547,7 @@
     <string name="sindico_posicao_ordinal">%1$dº</string>
 
     <!-- Recursos locais preservados da branch de consolidação -->
-    <string name="sindico_condominio_demo">Condomínio Residencial Jardim das Flores</string>
-    <string name="erro_reproduzir_video">
-        Não foi possível reproduzir a animação da logo.
-    </string>
-    <string name="email">
-        E-mail
-    </string>
-    <string name="media_acertos">Média acertos</string>
-    <string name="funcionalidade_em_breve">Esta funcionalidade será disponibilizada em breve.</string>
-    <string name="solicitacoes">Solicitações</string>
-    <string name="chat_eko">Eko</string>
-    <string name="chat_erro_resposta">Não foi possível obter uma resposta válida. Tente novamente.</string>
     <string name="subtitulo_quizzes">Teste seus conhecimentos sobre sustentabilidade</string>
-    <string name="quizzes_disponiveis_formatado">%1$d quizzes disponíveis</string>
-    <string name="quiz_em_breve">O quiz será disponibilizado em breve.</string>
-    <string name="quiz_restrito_usuario_comum">Esta tela é exclusiva para usuários comuns.</string>
-    <string name="quiz_dialogo_revisar">Revisar</string>
-    <string name="quiz_resultado_finalizar_titulo">Finalizar Quiz</string>
-    <string name="quiz_resultado_finalizar_mensagem">Deseja encerrar este quiz e voltar para a lista de quizzes?</string>
-    <string name="quiz_sua_resposta">Sua resposta: %1$s</string>
-    <string name="progresso_exemplo">75%</string>
-    <string name="proxima_coleta_dias">%1$d dias</string>
-    <string name="horario_inicio">Início</string>
-    <string name="horario_fim">Fim</string>
-    <string name="coleta_recorrente">Coleta recorrente</string>
-    <string name="preencha_todos_os_campos">Preencha todos os campos.</string>
-    <string name="fim_antes_do_inicio">O horário final precisa ser depois do inicial.</string>
-    <string name="coleta_salva_exemplo">Coleta salva (exemplo).</string>
-    <string name="ranking_resumo">Veja sua posição e a do seu condomínio</string>
-    <string name="destinatarios">Destinatários</string>
-    <string name="aviso_enviado_exemplo">Aviso enviado (exemplo).</string>
-    <string name="todos_os_condominios">Todos os meus condomínios</string>
-    <string name="quiz_n_perguntas">%1$d perguntas</string>
     <string name="inicio_quiz_eko_descricao">Eko animado incentivando o quiz</string>
     <string name="conversas_carregando">Carregando as conversas…</string>
     <string name="conversas_erro">Não foi possível carregar as conversas.</string>
@@ -604,4 +561,76 @@
     <string name="conversa_aguarde_cooperativa">Aguarde a cooperativa iniciar a conversa.</string>
     <string name="conversa_hint_mensagem">Escreva uma mensagem…</string>
     <string name="conversa_nao_aberta">Não foi possível abrir a conversa. Tente de novo.</string>
+    <string name="biblioteca_educativa">Biblioteca educativa</string>
+    <string name="biblioteca_aprenda_pratique_e_ajude_a_construir_u">Aprenda, pratique e ajude a construir um futuro sustentável.</string>
+    <string name="biblioteca_carregando_conteudos">Carregando conteúdos...</string>
+    <string name="biblioteca_conteudos_em_destaque">Conteúdos em destaque</string>
+    <string name="biblioteca_aulas_do_curso">Aulas do curso</string>
+    <string name="biblioteca_fechar">Fechar  ✕</string>
+    <string name="conclusao_educativa_logo_ecociente">Logo EcoCiente</string>
+    <string name="conclusao_educativa_missao_cumprida">MISSÃO CUMPRIDA!</string>
+    <string name="conclusao_educativa_eko_comemorando">Eko comemorando</string>
+    <string name="conclusao_educativa_voce_concluiu_a_aula">Você concluiu a aula!</string>
+    <string name="conclusao_educativa_cada_aprendizado_aproxima_a_gente_de_u">Cada aprendizado aproxima a gente de um futuro mais sustentável.</string>
+    <string name="conclusao_educativa_continuar_aprendendo">Continuar aprendendo</string>
+    <string name="curso_educativo_minha_trilha_de_aprendizado">Minha trilha de aprendizado</string>
+    <string name="curso_educativo">CURSO EDUCATIVO</string>
+    <string name="curso_educativo_ilustracao_do_curso">Ilustração do curso</string>
+    <string name="curso_educativo_guia_completo_de_reciclagem">Guia completo de reciclagem</string>
+    <string name="curso_educativo_aprenda_no_seu_ritmo_com_pequenas_aula">Aprenda no seu ritmo, com pequenas aulas.</string>
+    <string name="curso_educativo_2_aulas_no_seu_ritmo">2 aulas  •  No seu ritmo</string>
+    <string name="curso_educativo_0_3_concluidas">0/3 concluídas</string>
+    <string name="curso_educativo_comecar_primeira_aula">Começar primeira aula</string>
+    <string name="inicial_padrao_do_avatar">J</string>
+    <string name="senha_oculta">••••••••</string>
+    <string name="gerenciar_senha_exibir_ou_ocultar_senha">Exibir ou ocultar senha</string>
+    <string name="informacoes_pessoais_veja_e_edite_seus_dados_pessoais">Veja e edite seus dados pessoais</string>
+    <string name="simbolo_fechar">✕</string>
+    <string name="inicio_conteudo_educativo_eko_incentivando_o_aprendizado">Eko incentivando o aprendizado</string>
+    <string name="inicio_conteudo_educativo_aula_01">AULA 01</string>
+    <string name="inicio_conteudo_educativo_pequenas_atitudes_transformam_o_mundo">Pequenas atitudes transformam o mundo</string>
+    <string name="inicio_conteudo_educativo_aprenda_e_coloque_em_pratica_uma_atitu">Aprenda e coloque em prática uma atitude sustentável.</string>
+    <string name="inicio_conteudo_educativo_aprender_e_uma_forma_de_cuidar_do_plan">Aprender é uma forma de cuidar do planeta!</string>
+    <string name="inicio_conteudo_educativo_comecar_aula">Começar aula</string>
+    <string name="leitura_educativa_fechar_leitura">Fechar leitura</string>
+    <string name="leitura_educativa_etapa_1_de_3">Etapa 1 de 3</string>
+    <string name="notificacoes_gerencie_suas_preferencias">Gerencie suas preferências</string>
+    <string name="notificacoes_escolha_sobre_o_que_deseja_ser_notific">Escolha sobre o que deseja ser notificado</string>
+    <string name="notificacoes_do_app">Notificações do app</string>
+    <string name="notificacoes_atividades_e_eventos">Atividades e eventos</string>
+    <string name="contador_de_pergunta_padrao">01/10</string>
+    <string name="quiz_usuario_comum_filtrar_quizzes">Filtrar quizzes</string>
+    <string name="quiz_usuario_comum_pontos_por_completar_o_quiz">Pontos por completar o quiz</string>
+    <string name="quiz_desempenho_descricao">Desempenho nos últimos quizzes</string>
+    <string name="quiz_desempenho_carregando">Carregando seus quizzes…</string>
+    <string name="quiz_desempenho_vazio">Nenhum quiz concluído ainda.</string>
+    <string name="quiz_desempenho_erro">Não foi possível carregar seus quizzes.</string>
+    <string name="analise_quiz_titulo">Análise dos quizzes</string>
+    <string name="analise_quiz_sem_titulo">Quiz</string>
+    <string name="analise_quiz_data_hora">%1$s às %2$s</string>
+    <string name="analise_quiz_acertos">%1$d%% de acertos</string>
+    <string name="pontos_erro_historico">Não foi possível carregar o histórico de pontos.</string>
+    <string name="biblioteca_concluido">✓ Concluído</string>
+    <string name="biblioteca_aulas_concluidas">%1$d/%2$d aulas concluídas</string>
+    <string name="quiz_ja_realizado">✓ Já realizado</string>
+    <string name="quiz_refazer">Refazer</string>
+    <string name="quiz_conclusoes_erro">Não foi possível verificar quais quizzes você já concluiu.</string>
+    <string name="feed_denunciar">Denunciar</string>
+    <string name="feed_denunciar_titulo">Qual o motivo da denúncia?</string>
+    <string name="feed_voto_aprovado">Você aprovou este descarte.</string>
+    <string name="feed_voto_denunciado">Denúncia registrada.</string>
+    <!-- Motivos de tb_lkp_motivos_denuncia, na mesma ordem dos ids abaixo. Se mudarem no banco, mude aqui. -->
+    <string-array name="motivos_denuncia">
+        <item>Não é lixo reciclável</item>
+        <item>Foto não corresponde à categoria</item>
+        <item>Foto antiga/reutilizada</item>
+        <item>Spam/abuso</item>
+    </string-array>
+    <integer-array name="motivos_denuncia_ids">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
+    <string name="solicitacoes_filtro_todas">Todas</string>
 </resources>

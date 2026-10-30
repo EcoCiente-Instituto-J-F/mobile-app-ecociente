@@ -3,7 +3,6 @@ package com.example.ecociente.model;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Collections;
 import java.util.List;

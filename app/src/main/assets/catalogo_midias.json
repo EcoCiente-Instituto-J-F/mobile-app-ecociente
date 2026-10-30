@@ -1,6 +1,6 @@
 {
   "versao_schema": 1,
-  "revisao": "midias-local-20261023",
+  "revisao": "midias-cloudinary-20261030",
   "sinonimos": {
     "papel": [
       "papeis",
@@ -84,7 +84,8 @@
       "descricao": "",
       "tags": [
         "papel"
-      ]
+      ],
+      "ativo": false
     },
     {
       "id": "icones_conteudo_plastico",
@@ -98,7 +99,8 @@
       "descricao": "",
       "tags": [
         "plastico"
-      ]
+      ],
+      "ativo": false
     },
     {
       "id": "icones_conteudo_reciclagem",
@@ -112,7 +114,8 @@
       "descricao": "",
       "tags": [
         "reciclagem"
-      ]
+      ],
+      "ativo": false
     },
     {
       "id": "icones_conteudo_compostagem",
@@ -126,7 +129,8 @@
       "descricao": "",
       "tags": [
         "compostagem"
-      ]
+      ],
+      "ativo": false
     },
     {
       "id": "icones_conteudo_sustentabilidade",
@@ -140,7 +144,8 @@
       "descricao": "",
       "tags": [
         "sustentabilidade"
-      ]
+      ],
+      "ativo": false
     },
     {
       "id": "icones_conteudo_geral",
@@ -154,7 +159,8 @@
       "descricao": "",
       "tags": [
         "geral"
-      ]
+      ],
+      "ativo": false
     },
     {
       "id": "icones_quiz_papel",
@@ -439,6 +445,136 @@
       ],
       "eko": true,
       "neutra": true
+    },
+    {
+      "id": "icones_conteudo_go_green_source_water_protection_1",
+      "tipo": "icones_conteudo",
+      "tema": "geral",
+      "origem": "cloudinary",
+      "caminho": "Go_Green_Source_Water_Protection_1",
+      "formato": "png",
+      "grupo_imagem": "cloudinary_go_green_source_water_protection_1",
+      "versao": 1,
+      "descricao": "",
+      "tags": [],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icones_conteudo_go_green_green_power",
+      "tipo": "icones_conteudo",
+      "tema": "geral",
+      "origem": "cloudinary",
+      "caminho": "Go_Green_Green_Power",
+      "formato": "png",
+      "grupo_imagem": "cloudinary_go_green_green_power",
+      "versao": 1,
+      "descricao": "",
+      "tags": [],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icones_conteudo_go_green_solar_panel_1",
+      "tipo": "icones_conteudo",
+      "tema": "geral",
+      "origem": "cloudinary",
+      "caminho": "Go_Green_Solar_Panel_1",
+      "formato": "png",
+      "grupo_imagem": "cloudinary_go_green_solar_panel_1",
+      "versao": 1,
+      "descricao": "",
+      "tags": [],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icones_conteudo_go_green_open_recycle_container",
+      "tipo": "icones_conteudo",
+      "tema": "geral",
+      "origem": "cloudinary",
+      "caminho": "Go_Green_Open_Recycle_Container",
+      "formato": "png",
+      "grupo_imagem": "cloudinary_go_green_open_recycle_container",
+      "versao": 1,
+      "descricao": "",
+      "tags": [],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icones_conteudo_go_green_daisies",
+      "tipo": "icones_conteudo",
+      "tema": "geral",
+      "origem": "cloudinary",
+      "caminho": "Go_Green_Daisies",
+      "formato": "png",
+      "grupo_imagem": "cloudinary_go_green_daisies",
+      "versao": 1,
+      "descricao": "",
+      "tags": [],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icones_conteudo_go_green_recycle_truck",
+      "tipo": "icones_conteudo",
+      "tema": "geral",
+      "origem": "cloudinary",
+      "caminho": "Go_Green_Recycle_Truck",
+      "formato": "png",
+      "grupo_imagem": "cloudinary_go_green_recycle_truck",
+      "versao": 1,
+      "descricao": "",
+      "tags": [],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icones_conteudo_go_green_skater_long_pants",
+      "tipo": "icones_conteudo",
+      "tema": "geral",
+      "origem": "cloudinary",
+      "caminho": "Go_Green_Skater_Long_Pants",
+      "formato": "png",
+      "grupo_imagem": "cloudinary_go_green_skater_long_pants",
+      "versao": 1,
+      "descricao": "",
+      "tags": [],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icones_conteudo_go_green_grey_recycle_container",
+      "tipo": "icones_conteudo",
+      "tema": "geral",
+      "origem": "cloudinary",
+      "caminho": "Go_Green_Grey_Recycle_Container",
+      "formato": "png",
+      "grupo_imagem": "cloudinary_go_green_grey_recycle_container",
+      "versao": 1,
+      "descricao": "",
+      "tags": [],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icones_conteudo_go_green_electricity_powered_green_car",
+      "tipo": "icones_conteudo",
+      "tema": "geral",
+      "origem": "cloudinary",
+      "caminho": "Go_Green_Electricity_Powered_Green_Car",
+      "formato": "png",
+      "grupo_imagem": "cloudinary_go_green_electricity_powered_green_car",
+      "versao": 1,
+      "descricao": "",
+      "tags": [],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icones_conteudo_go_green_big_tree",
+      "tipo": "icones_conteudo",
+      "tema": "geral",
+      "origem": "cloudinary",
+      "caminho": "Go_Green_Big_Tree",
+      "formato": "png",
+      "grupo_imagem": "cloudinary_go_green_big_tree",
+      "versao": 1,
+      "descricao": "",
+      "tags": [],
+      "cloud_name": "ncwfxyfi"
     }
   ]
 }

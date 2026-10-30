@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.ecociente.model.Conversa;
 import com.example.ecociente.model.MensagemConversa;
-import com.example.ecociente.ui.FormatoDataApi;
+import com.example.ecociente.util.FormatoDataApi;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

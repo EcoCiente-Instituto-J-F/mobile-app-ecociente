@@ -582,14 +582,6 @@ public class CadastroEtapa2Fragment extends Fragment {
         requireActivity().finish();
     }
 
-    private void mostrarErroCampo(
-            MaterialCardView card,
-            EditText campo,
-            String mensagem
-    ) {
-        FieldFeedback.errorAndFocus(card, campo, mensagem, requireView(), motion);
-    }
-
     private void mostrarMensagem(String mensagem) {
 
         if (!isAdded()) {

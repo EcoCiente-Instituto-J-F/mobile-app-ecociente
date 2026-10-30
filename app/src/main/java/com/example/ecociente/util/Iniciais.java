@@ -1,4 +1,4 @@
-package com.example.ecociente.ui;
+package com.example.ecociente.util;
 
 import androidx.annotation.NonNull;
 import java.util.Locale;

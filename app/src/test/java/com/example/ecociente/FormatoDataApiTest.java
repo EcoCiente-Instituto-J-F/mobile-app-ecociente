@@ -4,11 +4,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import com.example.ecociente.ui.FormatoDataApi;
+import com.example.ecociente.util.FormatoDataApi;
 import java.util.Calendar;
 import org.junit.Test;
 
 public class FormatoDataApiTest {
+
+    @Test
+    public void diaMesSoMostraDiaEMes() {
+        assertEquals("17/05", FormatoDataApi.diaMes("2026-05-17T08:00:00"));
+        assertEquals("", FormatoDataApi.diaMes(null));
+    }
 
     @Test
     public void formataDataEHora() {

@@ -76,10 +76,16 @@ public final class RegrasMidias {
 
     /** Distribui as artes disponiveis sem substituir o vinculo de entidades ja existentes. */
     public Midia escolherFixa(String tipo, String tema, String chave, Map<String, String> vinculos) {
+        return escolherFixa(tipo, tema, chave, vinculos, null);
+    }
+
+    /** Com `evitarId`, o item vizinho não recebe a mesma arte, desde que exista outra candidata. */
+    public Midia escolherFixa(String tipo, String tema, String chave, Map<String, String> vinculos, String evitarId) {
         Midia salva = porId(vinculos.get(chave));
         if (salva != null && tipo.equals(salva.tipo)) return salva;
-        List<Midia> candidatas = candidatos(tipo, tema, Collections.emptySet());
+        List<Midia> candidatas = new ArrayList<>(candidatos(tipo, tema, Collections.emptySet()));
         if (candidatas.isEmpty()) return null;
+        if (evitarId != null && candidatas.size() > 1) candidatas.removeIf(m -> m.id.equals(evitarId));
         int menorUso = Integer.MAX_VALUE;
         List<Midia> empatadas = new ArrayList<>();
         for (Midia m : candidatas) {

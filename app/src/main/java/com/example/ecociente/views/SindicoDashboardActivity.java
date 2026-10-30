@@ -18,6 +18,8 @@ import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Navegacao;
+import com.example.ecociente.ui.SindicoDashboardGraficoView;
+import com.example.ecociente.ui.SindicoDashboardRoscaView;
 
 /** Dashboard do síndico: números calculados das postagens e coletas do condomínio. */
 public final class SindicoDashboardActivity extends AppCompatActivity {

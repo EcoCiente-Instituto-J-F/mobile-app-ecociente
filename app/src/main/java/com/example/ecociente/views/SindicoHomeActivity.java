@@ -16,6 +16,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.SindicoGraficoView;
 import com.example.ecociente.viewmodels.CalendarioViewModel;
 import com.example.ecociente.ui.SemanaColetasView;
 import com.example.ecociente.model.ResultadoSolicitacoes;

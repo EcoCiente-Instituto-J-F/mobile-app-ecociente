@@ -21,6 +21,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.ecociente.R;
+import com.example.ecociente.ui.QuizPerformanceView;
+import com.example.ecociente.repository.TentativaQuizRepository;
+import com.example.ecociente.repository.PontuacaoRepository;
+import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.model.PerfilAcesso;
 import com.example.ecociente.model.EstadoHome;
 import com.example.ecociente.repository.AutenticacaoExternaRepository;
@@ -149,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
             viewModel.atualizarMensagem();
 
             viewModel.recarregarFoto();
+
+            carregarDesempenhoEPontos();
         }
     }
 
@@ -189,53 +195,25 @@ public class MainActivity extends AppCompatActivity {
         viewModel.carregar();
     }
 
-    private void renderizar(
-            @NonNull EstadoHome estado
-    ) {
+    private void renderizar(@NonNull EstadoHome estado) {
 
         switch (estado.getTipo()) {
 
             case ERRO_REDE:
-
-                findViewById(
-                        R.id.indicadorCarregamentoHome
-                ).setVisibility(
-                        View.GONE
-                );
-
-                findViewById(
-                        R.id.estadoErroHome
-                ).setVisibility(
-                        View.VISIBLE
-                );
-
+                findViewById(R.id.indicadorCarregamentoHome).setVisibility(View.GONE);
+                findViewById(R.id.estadoErroHome).setVisibility(View.VISIBLE);
                 break;
 
             case SEM_LOGIN:
-
-                abrirLogin(
-                        R.string.home_sem_login,
-                        false
-                );
-
+                abrirLogin(R.string.home_sem_login, false);
                 break;
 
             case CADASTRO_INCOMPLETO:
-
-                abrirLogin(
-                        R.string.home_cadastro_incompleto,
-                        true
-                );
-
+                abrirLogin(R.string.home_cadastro_incompleto, true);
                 break;
 
             case SEM_ACESSO:
-
-                abrirLogin(
-                        R.string.home_sem_acesso,
-                        true
-                );
-
+                abrirLogin(R.string.home_sem_acesso, true);
                 break;
 
             case COOPERATIVA:
@@ -243,93 +221,39 @@ public class MainActivity extends AppCompatActivity {
             case CONDOMINIO:
             case PRONTA:
 
-                /*
-                 * No primeiro acesso da sessão,
-                 * o perfil retornado pela API
-                 * ainda pode estar sendo carregado.
-                 */
-                if (
-                        estado.getTipo() != EstadoHome.Tipo.PRONTA
-                                && !esperouLoginDaApi
-                                && AutenticacaoExternaRepository
-                                .loginEmAndamento()
-                ) {
+                // No primeiro acesso da sessão, o perfil retornado pela API ainda pode estar sendo carregado.
+                if (estado.getTipo() != EstadoHome.Tipo.PRONTA
+                        && !esperouLoginDaApi
+                        && AutenticacaoExternaRepository.loginEmAndamento()) {
 
-                    esperouLoginDaApi =
-                            true;
-
-                    findViewById(
-                            R.id.indicadorCarregamentoHome
-                    ).setVisibility(
-                            View.VISIBLE
-                    );
-
-                    AutenticacaoExternaRepository
-                            .aguardarLogin(
-                                    ESPERA_PERFIL_MS,
-                                    () -> {
-
-                                        if (
-                                                !isFinishing()
-                                                        && !isDestroyed()
-                                        ) {
-                                            renderizar(
-                                                    estado
-                                            );
-                                        }
-                                    }
-                            );
-
+                    esperouLoginDaApi = true;
+                    findViewById(R.id.indicadorCarregamentoHome).setVisibility(View.VISIBLE);
+                    AutenticacaoExternaRepository.aguardarLogin(ESPERA_PERFIL_MS, () -> renderizarSeAberta(estado));
                     break;
                 }
 
-                boolean precisaDoPerfil =
-                        estado.getTipo() == EstadoHome.Tipo.CONDOMINIO;
+                if (estado.getTipo() == EstadoHome.Tipo.CONDOMINIO
+                        && !tentouObterPerfil
+                        && AutenticacaoExternaRepository.perfilSalvo(this) == null) {
 
-                if (
-                        precisaDoPerfil
-                                && !tentouObterPerfil
-                                && AutenticacaoExternaRepository
-                                .perfilSalvo(this)
-                                == null
-                ) {
-
-                    tentouObterPerfil =
-                            true;
-
-                    findViewById(
-                            R.id.indicadorCarregamentoHome
-                    ).setVisibility(
-                            View.VISIBLE
-                    );
-
-                    AutenticacaoExternaRepository
-                            .garantirPerfil(
-                                    this,
-                                    () -> {
-
-                                        if (
-                                                !isFinishing()
-                                                        && !isDestroyed()
-                                        ) {
-                                            renderizar(
-                                                    estado
-                                            );
-                                        }
-                                    }
-                            );
-
+                    tentouObterPerfil = true;
+                    findViewById(R.id.indicadorCarregamentoHome).setVisibility(View.VISIBLE);
+                    AutenticacaoExternaRepository.garantirPerfil(this, () -> renderizarSeAberta(estado));
                     break;
                 }
 
-                abrirHomeDoPerfil(
-                        estado
-                );
-
+                abrirHomeDoPerfil(estado);
                 break;
 
             default:
                 break;
+        }
+    }
+
+    // Os callbacks de login e perfil podem chegar depois de a tela fechar.
+    private void renderizarSeAberta(@NonNull EstadoHome estado) {
+        if (!isFinishing() && !isDestroyed()) {
+            renderizar(estado);
         }
     }
 
@@ -350,6 +274,14 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(
                         R.id.atualizacaoHome
                 );
+
+        findViewById(R.id.cardAnaliseQuiz)
+                .setOnClickListener(view -> startActivity(
+                        TelaListaActivity.criarIntent(this, TipoLista.ANALISE_QUIZ, false)));
+        findViewById(R.id.cardPontos)
+                .setOnClickListener(view -> startActivity(
+                        TelaListaActivity.criarIntent(this, TipoLista.PONTOS, false)));
+        carregarDesempenhoEPontos();
 
         textoMensagemMotivacional =
                 findViewById(
@@ -649,6 +581,49 @@ public class MainActivity extends AppCompatActivity {
         for (int id : comFeedbackAoToque) {
             Motion.pressFeedback(findViewById(id));
         }
+    }
+
+    // Gráfico de quizzes e saldo de pontos vêm da API: a home os atualiza sempre que volta.
+    private void carregarDesempenhoEPontos() {
+
+        QuizPerformanceView grafico = findViewById(R.id.graficoDesempenhoQuiz);
+        android.widget.TextView saldoPontos = findViewById(R.id.textoSaldoPontos);
+
+        grafico.mostrarCarregando();
+        saldoPontos.setText(R.string.pontos_carregando);
+
+        new TentativaQuizRepository()
+                .historico(
+                        this,
+                        historico -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            if (historico == null) {
+                                grafico.mostrarErro();
+                            } else {
+                                grafico.mostrar(historico);
+                            }
+                        });
+
+        new PontuacaoRepository()
+                .saldo(
+                        this,
+                        saldo -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            saldoPontos.setText(
+                                    saldo == null
+                                            ? getString(R.string.pontos_indisponivel)
+                                            : getString(
+                                                    R.string.pontos_saldo,
+                                                    java.text.NumberFormat.getIntegerInstance(
+                                                                    new java.util.Locale("pt", "BR"))
+                                                            .format(saldo)));
+                        });
     }
 
     private void animarEntradaDaHome() {

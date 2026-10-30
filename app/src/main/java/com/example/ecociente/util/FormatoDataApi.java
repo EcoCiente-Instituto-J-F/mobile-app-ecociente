@@ -1,4 +1,4 @@
-package com.example.ecociente.ui;
+package com.example.ecociente.util;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +19,12 @@ public final class FormatoDataApi {
     @NonNull
     public static String data(@Nullable String iso) {
         return formatar(iso, "dd/MM/yyyy");
+    }
+
+    // Dia e mês, para o eixo de gráficos.
+    @NonNull
+    public static String diaMes(@Nullable String iso) {
+        return formatar(iso, "dd/MM");
     }
 
     @NonNull

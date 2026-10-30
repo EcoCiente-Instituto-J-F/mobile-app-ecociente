@@ -2,7 +2,7 @@ package com.example.ecociente;
 
 import static org.junit.Assert.assertEquals;
 
-import com.example.ecociente.ui.Iniciais;
+import com.example.ecociente.util.Iniciais;
 import org.junit.Test;
 
 public class IniciaisTest {

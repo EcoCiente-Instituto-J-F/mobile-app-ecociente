@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.example.ecociente.R;
 import com.example.ecociente.model.CursoEducativo;
 import com.example.ecociente.model.FluxoEducativo;
+import com.example.ecociente.ui.ConfettiView;
 import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Motion;

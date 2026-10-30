@@ -534,6 +534,40 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/containerCpfMorador"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/branco_fundo_campo"
+                app:cardCornerRadius="11dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/containerCodigoCondominio"
+                app:strokeColor="@color/verde_borda_campo"
+                app:strokeWidth="1dp">
+
+                <EditText
+                    android:importantForAutofill="no"
+                    android:id="@+id/campoCpfMorador"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/nunito_medium"
+                    android:hint="@string/cpf"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="14"
+                    android:paddingStart="13dp"
+                    android:paddingEnd="13dp"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textColorHint="@color/cinza_texto_suave"
+                    android:textSize="15sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
             <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="50dp"
@@ -542,7 +576,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/containerCodigoCondominio">
+                app:layout_constraintTop_toBottomOf="@id/containerCpfMorador">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/botaoContinuar"

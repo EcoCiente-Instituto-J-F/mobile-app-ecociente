@@ -7,6 +7,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.example.ecociente.repository.PostagemRepository;
+import com.google.android.material.button.MaterialButton;
+import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.ui.AvisoFlutuante;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -19,7 +23,7 @@ import com.example.ecociente.repository.FeedRepository;
 import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
-import com.example.ecociente.ui.Iniciais;
+import com.example.ecociente.util.Iniciais;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Motion;
@@ -99,17 +103,22 @@ public class FeedActivity extends AppCompatActivity {
 
                                                 @Override
                                                 public void aoFalhar() {
-                                                    exibirErro();
+                                                    exibirErro(R.string.feed_erro);
+                                                }
+
+                                                @Override
+                                                public void aoNegar() {
+                                                    exibirErro(R.string.feed_sem_aprovacao);
                                                 }
                                             });
                         });
     }
 
-    private void exibirErro() {
+    private void exibirErro(@StringRes int mensagem) {
 
         lista.removeAllViews();
 
-        ((TextView) textoVazio).setText(R.string.feed_erro);
+        ((TextView) textoVazio).setText(mensagem);
         textoVazio.setVisibility(View.VISIBLE);
 
         com.google.android.material.button.MaterialButton tentar =
@@ -136,6 +145,47 @@ public class FeedActivity extends AppCompatActivity {
                 indice -> Navegacao.irParaItemDoUsuario(this, indice, ItensBarra.QUARTO, true));
     }
 
+    // Reaproveita a linha de dois botões do cartão (a mesma que o síndico usa): Aprovar e Denunciar.
+    private void configurarVoto(View cartao, PostagemFeed postagem) {
+
+        cartao.findViewById(R.id.acoesValidacaoFeed).setVisibility(View.VISIBLE);
+
+        MaterialButton aprovar = cartao.findViewById(R.id.botaoAprovarFeed);
+        MaterialButton denunciar = cartao.findViewById(R.id.botaoReprovarFeed);
+
+        denunciar.setText(R.string.feed_denunciar);
+
+        aprovar.setOnClickListener(view -> votar(cartao, postagem, true, 0, aprovar, denunciar));
+        denunciar.setOnClickListener(view -> new AlertDialog.Builder(this)
+                .setTitle(R.string.feed_denunciar_titulo)
+                .setItems(R.array.motivos_denuncia, (dialogo, posicao) -> votar(
+                        cartao, postagem, false, getResources().getIntArray(R.array.motivos_denuncia_ids)[posicao],
+                        aprovar, denunciar))
+                .setNegativeButton(R.string.perfil_cancelar, null)
+                .show());
+    }
+
+    private void votar(View cartao, PostagemFeed postagem, boolean aprovar, int motivoDenunciaId,
+                       MaterialButton botaoAprovar, MaterialButton botaoDenunciar) {
+
+        botaoAprovar.setEnabled(false);
+        botaoDenunciar.setEnabled(false);
+
+        new PostagemRepository().votar(this, postagem.getId(), aprovar, motivoDenunciaId, resultado -> {
+            if (isFinishing() || isDestroyed()) return;
+
+            if (!resultado.isSucesso()) {
+                botaoAprovar.setEnabled(true);
+                botaoDenunciar.setEnabled(true);
+                AvisoFlutuante.mostrar(this, resultado.getMensagemErro());
+                return;
+            }
+
+            cartao.findViewById(R.id.acoesValidacaoFeed).setVisibility(View.GONE);
+            AvisoFlutuante.mostrar(this, aprovar ? R.string.feed_voto_aprovado : R.string.feed_voto_denunciado);
+        });
+    }
+
     private void exibir(List<PostagemFeed> postagens) {
 
         lista.removeAllViews();
@@ -156,6 +206,11 @@ public class FeedActivity extends AppCompatActivity {
                     .setVisibility(postagem.getCategoria().isEmpty() ? View.GONE : View.VISIBLE);
 
             Glide.with(this).load(postagem.getFotoUrl()).into((ImageView) cartao.findViewById(R.id.fotoFeed));
+
+            // Só dá para votar enquanto o descarte está em análise (janela de 24 h).
+            if (PostagemRepository.estaEmAnalise(postagem)) {
+                configurarVoto(cartao, postagem);
+            }
 
             lista.addView(cartao);
         }

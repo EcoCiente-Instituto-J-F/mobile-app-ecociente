@@ -107,12 +107,17 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
         ChipGroup grupo = findViewById(R.id.filtrosSolicitacoes);
 
-        for (StatusAgendamento status : StatusAgendamento.values()) {
+        // null = "Todas", o padrão; os demais chips filtram por status.
+        java.util.List<StatusAgendamento> opcoes = new java.util.ArrayList<>();
+        opcoes.add(null);
+        opcoes.addAll(java.util.Arrays.asList(StatusAgendamento.values()));
+
+        for (StatusAgendamento status : opcoes) {
 
             Chip chip = new Chip(this, null, com.google.android.material.R.attr.chipStyle);
 
             chip.setId(View.generateViewId());
-            chip.setText(status.getRotulo());
+            chip.setText(status == null ? R.string.solicitacoes_filtro_todas : status.getRotulo());
             chip.setCheckable(true);
             chip.setCheckedIconVisible(false);
             chip.setTag(status);

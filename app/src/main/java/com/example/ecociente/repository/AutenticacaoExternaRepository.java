@@ -35,6 +35,10 @@ public class AutenticacaoExternaRepository {
     private static final String CHAVE_PERFIL = "perfil";
     private static final String CHAVE_USUARIO_ID = "usuarioId";
 
+    // O Render dorme sem uso e leva de 70 a 150 s para acordar: com menos que isso as duas tentativas de login
+    // estouram, o app entra sem token e nenhuma tela que depende da API carrega.
+    private static final int TEMPO_MAXIMO_RENDER_MS = 180_000;
+
     private static final Object TRAVA = new Object();
 
     // Quem precisa do JWT espera o login em andamento terminar: no primeiro acesso da sessão a Home
@@ -53,11 +57,26 @@ public class AutenticacaoExternaRepository {
         void aoConcluir(@Nullable SessaoExterna sessao);
     }
 
+    // `credenciaisRecusadas` é true quando a API respondeu que a conta não serve (senha ou usuário);
+    // sessao nula com false significa API fora do ar ou lenta.
+    public interface RetornoLogin {
+        void aoConcluir(@Nullable SessaoExterna sessao, boolean credenciaisRecusadas);
+    }
+
     public void autenticar(
             @NonNull Context contexto,
             @NonNull String email,
             @NonNull String senha,
             @NonNull Retorno retorno) {
+
+        autenticar(contexto, email, senha, (sessao, recusada) -> retorno.aoConcluir(sessao));
+    }
+
+    public void autenticar(
+            @NonNull Context contexto,
+            @NonNull String email,
+            @NonNull String senha,
+            @NonNull RetornoLogin retorno) {
 
         Context contextoApp = contexto.getApplicationContext();
 
@@ -68,15 +87,24 @@ public class AutenticacaoExternaRepository {
         EXECUTOR.execute(
                 () -> {
                     SessaoExterna sessao = null;
+                    boolean recusada = false;
 
                     try {
                         sessao = login(email, senha);
+
+                        if (usuarioIdSalvo(contextoApp) != sessao.getUsuarioId()) {
+                            PerfilApiRepository.limpar(contextoApp);
+                        }
 
                         persistirToken(contextoApp, sessao.getToken());
                         persistirPerfil(contextoApp, sessao.getPerfil());
                         persistirUsuarioId(contextoApp, sessao.getUsuarioId());
 
                         CredenciaisSeguras.salvar(contextoApp, email, senha);
+
+                    } catch (CredenciaisRecusadas erro) {
+                        recusada = true;
+                        Log.w(TAG, "A API externa recusou a conta", erro);
 
                     } catch (Exception erro) {
                         Log.w(TAG, "Não foi possível autenticar na API externa", erro);
@@ -88,8 +116,9 @@ public class AutenticacaoExternaRepository {
                     }
 
                     SessaoExterna sessaoFinal = sessao;
+                    boolean recusadaFinal = recusada;
 
-                    PRINCIPAL.post(() -> retorno.aoConcluir(sessaoFinal));
+                    PRINCIPAL.post(() -> retorno.aoConcluir(sessaoFinal, recusadaFinal));
                 });
     }
 
@@ -233,7 +262,10 @@ public class AutenticacaoExternaRepository {
                 .edit()
                 .remove(CHAVE_TOKEN)
                 .remove(CHAVE_PERFIL)
+                .remove(CHAVE_USUARIO_ID)
                 .apply();
+
+        PerfilApiRepository.limpar(contexto);
     }
 
     // Perfil que a API devolveu no último login (SINDICO, COOPERATIVA...): é o dado do Postgres,
@@ -284,7 +316,7 @@ public class AutenticacaoExternaRepository {
             }
             Log.w(TAG, "AWS indisponivel; tentando o login secundario no Render");
             return loginNoServidor(ConfiguracaoServidores.URL_LOGIN_RENDER, email, senha,
-                    ConfiguracaoServidores.TIMEOUT_RESPOSTA_RENDER_MS, false);
+                    TEMPO_MAXIMO_RENDER_MS, false);
         }
     }
 
@@ -319,8 +351,12 @@ public class AutenticacaoExternaRepository {
             if (principal && PoliticaFallbackLogin.tentarRenderAposHttp(codigoResposta)) {
                 throw new java.net.SocketException("AWS HTTP " + codigoResposta);
             }
-            if (codigoResposta == 400 || codigoResposta == 401 || codigoResposta == 403) {
-                throw new CredenciaisRecusadas("Resposta HTTP " + codigoResposta);
+            if (codigoResposta >= 400 && codigoResposta < 500) {
+                String corpoDoErro = LeituraHttp.texto(conexao.getErrorStream());
+
+                if (PoliticaFallbackLogin.credenciaisRecusadas(codigoResposta, corpoDoErro)) {
+                    throw new CredenciaisRecusadas("Resposta HTTP " + codigoResposta);
+                }
             }
             if (codigoResposta < 200 || codigoResposta >= 300) {
                 throw new IOException("Resposta HTTP " + codigoResposta);

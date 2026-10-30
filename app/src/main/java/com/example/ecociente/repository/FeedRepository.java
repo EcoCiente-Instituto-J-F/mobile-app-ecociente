@@ -16,6 +16,11 @@ public class FeedRepository {
         default void aoFalhar() {
             aoConcluir(Collections.emptyList());
         }
+
+        // A API recusou: o morador ainda não tem vínculo aprovado.
+        default void aoNegar() {
+            aoFalhar();
+        }
     }
 
     public void listar(@NonNull Context contexto, @NonNull Retorno retorno) {
@@ -33,11 +38,19 @@ public class FeedRepository {
                 .feed(
                         contextoApp,
                         condominioId,
-                        postagens -> {
-                            if (postagens != null) {
-                                retorno.aoConcluir(postagens);
-                            } else {
-                                retorno.aoFalhar();
+                        new PostagemRepository.RetornoPostagens() {
+                            @Override
+                            public void aoConcluir(List<PostagemFeed> postagens) {
+                                if (postagens != null) {
+                                    retorno.aoConcluir(postagens);
+                                } else {
+                                    retorno.aoFalhar();
+                                }
+                            }
+
+                            @Override
+                            public void aoNegar() {
+                                retorno.aoNegar();
                             }
                         });
     }

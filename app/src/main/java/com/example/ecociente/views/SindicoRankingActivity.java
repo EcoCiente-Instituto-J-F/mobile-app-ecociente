@@ -205,13 +205,6 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         return String.format(Locale.forLanguageTag("pt-BR"), "%,d pts", pontos);
     }
 
-    private void navegar(Class<?> destino) {
-        Intent intent = new Intent(this, destino);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(intent);
-        finish();
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle estado) {
         estado.putBoolean(ESTADO_MORADORES, porMorador);

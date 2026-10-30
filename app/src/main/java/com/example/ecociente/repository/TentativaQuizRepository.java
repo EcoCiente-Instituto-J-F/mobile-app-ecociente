@@ -6,11 +6,14 @@ import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.example.ecociente.model.DesempenhoQuiz;
 import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.ResultadoQuiz;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 // Tentativas de quiz da ds-mobile-api: abrir, finalizar (a API corrige e pontua) e buscar a revisão.
@@ -37,6 +40,48 @@ public class TentativaQuizRepository {
             this.resultado = resultado;
             this.perguntasComGabarito = perguntasComGabarito;
         }
+    }
+
+    private interface Leitor<T> {
+        T ler(String corpo) throws Exception;
+    }
+
+    // Últimas tentativas concluídas do usuário autenticado (GET /api/tentativas-quiz). Lista vazia =
+    // consulta feita sem resultados; null = falha (sem login, API fora do ar ou resposta inválida).
+    public void historico(@NonNull Context contexto, @NonNull Retorno<List<DesempenhoQuiz>> retorno) {
+        consultar(contexto, "/api/tentativas-quiz?limite=20",
+                corpo -> HistoricoQuizJson.desempenhos(new JSONArray(corpo)), retorno);
+    }
+
+    // Ids de todos os quizzes que o usuário já concluiu, aprovado ou não. Mesma convenção do histórico.
+    public void quizzesConcluidos(@NonNull Context contexto, @NonNull Retorno<Set<Integer>> retorno) {
+        consultar(contexto, "/api/tentativas-quiz/quizzes-concluidos",
+                corpo -> QuizzesConcluidosJson.ids(new JSONArray(corpo)), retorno);
+    }
+
+    private <T> void consultar(
+            @NonNull Context contexto, @NonNull String caminho, @NonNull Leitor<T> leitor, @NonNull Retorno<T> retorno) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        EXECUTOR.execute(
+                () -> {
+                    T resultado = null;
+
+                    try {
+                        String corpo = ApiAutenticada.obter(contextoApp, URL_BASE + caminho);
+
+                        if (corpo != null) {
+                            resultado = leitor.ler(corpo);
+                        }
+                    } catch (Exception erro) {
+                        Log.w(TAG, "Não foi possível consultar " + caminho, erro);
+                    }
+
+                    T resposta = resultado;
+
+                    PRINCIPAL.post(() -> retorno.aoConcluir(resposta));
+                });
     }
 
     // Abre a tentativa assim que a tela de perguntas aparece: acorda a API e marca a hora de início.

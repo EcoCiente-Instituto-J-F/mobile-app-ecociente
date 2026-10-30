@@ -365,11 +365,4 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
         }
         return null;
     }
-
-    private void voltarHome() {
-        Intent home = new Intent(this, SindicoHomeActivity.class);
-        home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(home);
-        finish();
-    }
 }

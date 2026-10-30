@@ -3,7 +3,7 @@ package com.example.ecociente.repository;
 import androidx.annotation.NonNull;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.model.SindicoPosicaoRanking;
-import com.example.ecociente.ui.Iniciais;
+import com.example.ecociente.util.Iniciais;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;

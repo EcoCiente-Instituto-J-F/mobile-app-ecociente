@@ -19,6 +19,7 @@ public final class AquecimentoDasApis {
     private static final String TAG = "Aquecimento";
 
     private static final String AUTENTICACAO = "https://ds-autenticacao-api-1.onrender.com/";
+    private static final String CADASTRO = "https://ds-cadastro-api.onrender.com/";
     private static final String CALENDARIO = "https://ds-calendario-api.onrender.com/";
     private static final String PONTUACAO = "https://ds-pontuacao-api.onrender.com/";
     private static final String MOBILE = "https://ds-mobile-api.onrender.com/";
@@ -61,6 +62,8 @@ public final class AquecimentoDasApis {
         List<String> servidores = new ArrayList<>();
 
         servidores.add(AUTENTICACAO);
+        // Cadastro e edição de perfil passam por ela, em qualquer perfil.
+        servidores.add(CADASTRO);
 
         if (perfil == null) {
             return servidores;

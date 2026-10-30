@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 import com.bumptech.glide.Glide;
@@ -39,6 +40,12 @@ public class RegistroDescarteActivity extends AppCompatActivity {
     private LinearLayout areaCategorias;
     private MaterialButton botaoEnviar;
 
+    private static final String ESTADO_URI_FOTO = "uriFoto";
+    private static final String ESTADO_FOTO_TIRADA = "fotoTirada";
+    private static final String ESTADO_CAPTURADA_EM = "capturadaEmMs";
+
+    // A câmera pode fazer o sistema recriar esta tela (pouca memória, rotação): o estado da foto é
+    // guardado em onSaveInstanceState.
     private Uri uriFoto;
     private long capturadaEmMs;
     private boolean fotoTirada;
@@ -55,11 +62,27 @@ public class RegistroDescarteActivity extends AppCompatActivity {
                         fotoTirada = true;
                         capturadaEmMs = System.currentTimeMillis() - FOLGA_DA_CAPTURA_MS;
 
-                        previaFoto.setPadding(0, 0, 0, 0);
-                        previaFoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
-                        Glide.with(this).load(uriFoto).into(previaFoto);
+                        mostrarPrevia();
                     });
+
+    private void mostrarPrevia() {
+        previaFoto.setPadding(0, 0, 0, 0);
+        previaFoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+        Glide.with(this).load(uriFoto).into(previaFoto);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle saida) {
+        super.onSaveInstanceState(saida);
+
+        if (uriFoto != null) {
+            saida.putString(ESTADO_URI_FOTO, uriFoto.toString());
+        }
+
+        saida.putBoolean(ESTADO_FOTO_TIRADA, fotoTirada);
+        saida.putLong(ESTADO_CAPTURADA_EM, capturadaEmMs);
+    }
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -83,6 +106,16 @@ public class RegistroDescarteActivity extends AppCompatActivity {
         previaFoto = findViewById(R.id.previaFotoRegistro);
         areaCategorias = findViewById(R.id.areaCategoriasRegistro);
         botaoEnviar = findViewById(R.id.botaoEnviarRegistro);
+
+        if (estadoSalvo != null && estadoSalvo.getString(ESTADO_URI_FOTO) != null) {
+            uriFoto = Uri.parse(estadoSalvo.getString(ESTADO_URI_FOTO));
+            fotoTirada = estadoSalvo.getBoolean(ESTADO_FOTO_TIRADA);
+            capturadaEmMs = estadoSalvo.getLong(ESTADO_CAPTURADA_EM);
+
+            if (fotoTirada) {
+                mostrarPrevia();
+            }
+        }
 
         View tirarFoto = findViewById(R.id.botaoTirarFotoRegistro);
         tirarFoto.setOnClickListener(view -> abrirCamera());

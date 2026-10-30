@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Contrato local de navegacao/estado da experiencia educativa.
@@ -159,6 +158,12 @@ public final class FluxoEducativo {
             if (concluido(contexto, curso, aula)) contador++;
         }
         return contador;
+    }
+
+    // Curso com aulas só está concluído quando todas estão; sem aulas, vale o conteúdo único (guia).
+    public static boolean cursoConcluido(@NonNull Context contexto, @NonNull CursoEducativo curso) {
+        if (curso.aulas.isEmpty()) return concluido(contexto, curso, null);
+        return totalAulasConcluidas(contexto, curso) == curso.aulas.size();
     }
 
     /** Uma pagina corresponde a uma etapa visivel entre dois cliques em Continuar. */

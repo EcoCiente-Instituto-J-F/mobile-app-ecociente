@@ -1,4 +1,4 @@
-package com.example.ecociente.views;
+package com.example.ecociente.ui;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,30 +12,24 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.example.ecociente.R;
+import com.example.ecociente.model.DesempenhoQuiz;
+import com.example.ecociente.util.FormatoDataApi;
+import java.util.List;
 
 public class QuizPerformanceView extends View {
 
-    private static final int[] VALORES = {
-            70,
-            50,
-            80,
-            90,
-            70,
-            70
-    };
+    private static final int MAXIMO_DE_TENTATIVAS = 6;
 
-    private static final String[] DATAS = {
-            "01/05",
-            "08/05",
-            "15/05",
-            "22/05",
-            "29/05",
-            "05/06"
-    };
+    // Notas de 0 a 100 e rótulos de data, da tentativa mais antiga para a mais recente.
+    private float[] valores = new float[0];
+    private String[] datas = new String[0];
+    private String mensagem = "";
 
     private final Paint tinta =
             new Paint(
@@ -123,15 +117,12 @@ public class QuizPerformanceView extends View {
                 altura
         );
 
-        desenharSerie(
-                canvas,
-                esquerda,
-                direita,
-                topo,
-                base,
-                largura,
-                altura
-        );
+        if (valores.length == 0) {
+            desenharMensagem(canvas, esquerda + largura / 2f, topo + altura / 2f);
+            return;
+        }
+
+        desenharSerie(canvas, esquerda, direita, topo, base, largura, altura);
 
         desenharDatas(
                 canvas,
@@ -253,7 +244,7 @@ public class QuizPerformanceView extends View {
 
         for (
                 int i = 0;
-                i < VALORES.length;
+                i < valores.length;
                 i++
         ) {
 
@@ -269,9 +260,7 @@ public class QuizPerformanceView extends View {
                                     i
                                     /
                                     (
-                                            VALORES.length
-                                                    -
-                                                    1f
+                                            Math.max(valores.length - 1f, 1f)
                                     );
 
             canvas.drawLine(
@@ -344,7 +333,7 @@ public class QuizPerformanceView extends View {
 
         for (
                 int i = 0;
-                i < VALORES.length;
+                i < valores.length;
                 i++
         ) {
 
@@ -356,16 +345,14 @@ public class QuizPerformanceView extends View {
                                     i
                                     /
                                     (
-                                            VALORES.length
-                                                    -
-                                                    1f
+                                            Math.max(valores.length - 1f, 1f)
                                     );
 
             float y =
                     base
                             -
                             (
-                                    VALORES[i]
+                                    valores[i]
                                             /
                                             100f
                                             *
@@ -492,7 +479,7 @@ public class QuizPerformanceView extends View {
 
         for (
                 int i = 0;
-                i < VALORES.length;
+                i < valores.length;
                 i++
         ) {
 
@@ -504,16 +491,14 @@ public class QuizPerformanceView extends View {
                                     i
                                     /
                                     (
-                                            VALORES.length
-                                                    -
-                                                    1f
+                                            Math.max(valores.length - 1f, 1f)
                                     );
 
             float y =
                     base
                             -
                             (
-                                    VALORES[i]
+                                    valores[i]
                                             /
                                             100f
                                             *
@@ -600,19 +585,74 @@ public class QuizPerformanceView extends View {
 
         for (
                 int i = 0;
-                i < DATAS.length;
+                i < datas.length;
                 i++
         ) {
 
-            float x = esquerda + largura * i / (DATAS.length - 1f);
+            float x = esquerda + largura * i / (Math.max(datas.length - 1f, 1f));
 
             canvas.drawText(
-                    DATAS[i],
+                    datas[i],
                     x,
                     base + dp(19),
                     tinta
             );
         }
+    }
+
+    // A API entrega da tentativa mais recente para a mais antiga; o gráfico vai da mais antiga para a mais
+    // recente e mostra só as últimas seis.
+    public void mostrar(@NonNull List<DesempenhoQuiz> resultados) {
+
+        int quantidade = Math.min(resultados.size(), MAXIMO_DE_TENTATIVAS);
+
+        valores = new float[quantidade];
+        datas = new String[quantidade];
+
+        StringBuilder descricao = new StringBuilder(getContext().getString(R.string.quiz_desempenho_descricao));
+
+        for (int i = 0; i < quantidade; i++) {
+            DesempenhoQuiz desempenho = resultados.get(quantidade - 1 - i);
+
+            valores[i] = (float) desempenho.nota;
+            datas[i] = FormatoDataApi.diaMes(desempenho.concluidoEm);
+            descricao.append(i == 0 ? ": " : "; ").append(datas[i]).append(", ").append(Math.round(valores[i])).append("%");
+        }
+
+        mensagem = quantidade == 0 ? getContext().getString(R.string.quiz_desempenho_vazio) : "";
+        setContentDescription(quantidade == 0 ? mensagem : descricao.toString());
+        invalidate();
+    }
+
+    public void mostrarCarregando() {
+        limpar(R.string.quiz_desempenho_carregando);
+    }
+
+    public void mostrarErro() {
+        limpar(R.string.quiz_desempenho_erro);
+    }
+
+    private void limpar(@StringRes int texto) {
+        valores = new float[0];
+        datas = new String[0];
+        mensagem = getContext().getString(texto);
+        setContentDescription(mensagem);
+        invalidate();
+    }
+
+    private void desenharMensagem(Canvas canvas, float x, float y) {
+        tinta.setShader(null);
+        tinta.setPathEffect(null);
+        tinta.setStyle(Paint.Style.FILL);
+        tinta.setColor(Color.rgb(90, 90, 90));
+        tinta.setTextSize(dp(12));
+        tinta.setTextAlign(Paint.Align.CENTER);
+
+        if (fonteRegular != null) {
+            tinta.setTypeface(fonteRegular);
+        }
+
+        canvas.drawText(mensagem, x, y, tinta);
     }
 
     private float dp(float valor) {

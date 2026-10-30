@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.ui.FieldFeedback;
+import com.example.ecociente.model.TipoDocumento;
 import com.example.ecociente.ui.MascaraTexto;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.model.ResultadoCadastro;
@@ -54,6 +55,7 @@ public class CadastroEtapa1Fragment extends Fragment {
     private EditText campoSenha;
     private EditText campoConfirmarSenha;
     private EditText campoCodigoCondominio;
+    private EditText campoCpfMorador;
 
     private ImageView iconeCalendario;
     private ImageView iconeOlhoSenhaCadastro;
@@ -70,6 +72,7 @@ public class CadastroEtapa1Fragment extends Fragment {
     private MaterialCardView containerSenhaCadastro;
     private MaterialCardView containerConfirmarSenha;
     private MaterialCardView containerCodigoCondominio;
+    private MaterialCardView containerCpfMorador;
 
     private MaterialButton botaoContinuar;
 
@@ -112,6 +115,7 @@ public class CadastroEtapa1Fragment extends Fragment {
         viewModel.getCarregando().observe(getViewLifecycleOwner(), this::definirCarregando);
 
         campoDataNascimento.addTextChangedListener(new MascaraTexto(campoDataNascimento, MASCARA_DATA));
+        campoCpfMorador.addTextChangedListener(new MascaraTexto(campoCpfMorador, TipoDocumento.CPF.getMascara()));
 
         configurarCalendario();
 
@@ -154,6 +158,7 @@ public class CadastroEtapa1Fragment extends Fragment {
         campoConfirmarSenha = view.findViewById(R.id.campoConfirmarSenha);
 
         campoCodigoCondominio = view.findViewById(R.id.campoCodigoCondominio);
+        campoCpfMorador = view.findViewById(R.id.campoCpfMorador);
 
         iconeCalendario = view.findViewById(R.id.iconeCalendario);
 
@@ -173,6 +178,7 @@ public class CadastroEtapa1Fragment extends Fragment {
         containerSenhaCadastro = view.findViewById(R.id.containerSenhaCadastro);
         containerConfirmarSenha = view.findViewById(R.id.containerConfirmarSenha);
         containerCodigoCondominio = view.findViewById(R.id.containerCodigoCondominio);
+        containerCpfMorador = view.findViewById(R.id.containerCpfMorador);
 
         botaoContinuar = view.findViewById(R.id.botaoContinuar);
 
@@ -352,6 +358,7 @@ public class CadastroEtapa1Fragment extends Fragment {
         campoSenha.addTextChangedListener(limparErroAoDigitar(containerSenhaCadastro, COR_BORDA_CAMPO));
         campoConfirmarSenha.addTextChangedListener(limparErroAoDigitar(containerConfirmarSenha, COR_BORDA_CAMPO));
         campoCodigoCondominio.addTextChangedListener(limparErroAoDigitar(containerCodigoCondominio, COR_BORDA_CODIGO_ATIVO));
+        campoCpfMorador.addTextChangedListener(limparErroAoDigitar(containerCpfMorador, COR_BORDA_CAMPO));
     }
 
     private TextWatcher limparErroAoDigitar(MaterialCardView card, int normalColor) {
@@ -493,6 +500,9 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         campoCodigoCondominio.setEnabled(possuiCodigo);
 
+        // O morador se cadastra só nesta etapa e a API exige o CPF dele.
+        containerCpfMorador.setVisibility(possuiCodigo ? View.VISIBLE : View.GONE);
+
         if (possuiCodigo) {
 
             containerEtapas.setVisibility(View.GONE);
@@ -573,9 +583,20 @@ public class CadastroEtapa1Fragment extends Fragment {
             return;
         }
 
+        String cpf = campoCpfMorador.getText().toString().trim();
+
+        if (possuiCodigoCondominio && !TipoDocumento.CPF.valido(cpf)) {
+            mostrarErroCampo(containerCpfMorador, campoCpfMorador, "Digite um CPF válido.");
+            return;
+        }
+
         Login telaAutenticacao = (Login) requireActivity();
 
         telaAutenticacao.salvarDadosEtapa1(nome, dataNascimento, email, senha);
+
+        if (possuiCodigoCondominio) {
+            telaAutenticacao.salvarDadosContato(telaAutenticacao.getTelefone(), cpf);
+        }
 
         telaAutenticacao.salvarDadosCodigoCondominio(possuiCodigoCondominio, codigoCondominio);
 
@@ -669,6 +690,8 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         campoConfirmarSenha.setEnabled(!carregando);
 
+        campoCpfMorador.setEnabled(!carregando);
+
         iconeCalendario.setEnabled(!carregando);
 
         iconeOlhoSenhaCadastro.setEnabled(!carregando);
@@ -718,6 +741,8 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         campoCodigoCondominio.setText(telaAutenticacao.getCodigoCondominio());
 
+        campoCpfMorador.setText(telaAutenticacao.getCpf());
+
         checkPossuiCodigoCondominio.setChecked(telaAutenticacao.isPossuiCodigoCondominio());
 
         atualizarModoCodigoCondominio(telaAutenticacao.isPossuiCodigoCondominio());
@@ -746,6 +771,7 @@ public class CadastroEtapa1Fragment extends Fragment {
                 || campoEmail == null
                 || campoSenha == null
                 || checkPossuiCodigoCondominio == null
+                || campoCpfMorador == null
                 || campoCodigoCondominio == null) {
 
             return;
@@ -762,6 +788,11 @@ public class CadastroEtapa1Fragment extends Fragment {
         telaAutenticacao.salvarDadosCodigoCondominio(
                 checkPossuiCodigoCondominio.isChecked(),
                 campoCodigoCondominio.getText().toString().trim());
+
+        if (checkPossuiCodigoCondominio.isChecked()) {
+            telaAutenticacao.salvarDadosContato(
+                    telaAutenticacao.getTelefone(), campoCpfMorador.getText().toString().trim());
+        }
     }
 
     private void entrarNoEcoCiente() {
@@ -818,6 +849,8 @@ public class CadastroEtapa1Fragment extends Fragment {
 
         campoCodigoCondominio = null;
 
+        campoCpfMorador = null;
+
         iconeCalendario = null;
 
         iconeOlhoSenhaCadastro = null;
@@ -836,6 +869,7 @@ public class CadastroEtapa1Fragment extends Fragment {
         containerSenhaCadastro = null;
         containerConfirmarSenha = null;
         containerCodigoCondominio = null;
+        containerCpfMorador = null;
 
         botaoContinuar = null;
 

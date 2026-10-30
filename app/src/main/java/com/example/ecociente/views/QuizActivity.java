@@ -23,6 +23,7 @@ import com.example.ecociente.model.DadosDemonstracaoEducacao;
 import com.example.ecociente.midias.MidiasEco;
 import com.example.ecociente.midias.CarregadorMidias;
 import com.example.ecociente.repository.EducacaoRepository;
+import com.example.ecociente.repository.TentativaQuizRepository;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
@@ -36,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import com.example.ecociente.ui.IndicadorCarregamento;
@@ -56,6 +58,10 @@ public class QuizActivity extends AppCompatActivity {
     private final List<QuizItem> quizzes = new ArrayList<>();
 
     private final EducacaoRepository repositorio = new EducacaoRepository();
+    private final TentativaQuizRepository tentativas = new TentativaQuizRepository();
+    // Vem da API, por usuário: nunca guardado no aparelho nem reaproveitado ao trocar de conta.
+    private final Set<Integer> quizzesConcluidos = new HashSet<>();
+    private String contaDasConclusoes = "";
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -92,6 +98,7 @@ public class QuizActivity extends AppCompatActivity {
 
         configurarCabecalho();
         findViewById(R.id.botaoFiltrosQuiz).setOnClickListener(this::mostrarFiltroCategorias);
+        findViewById(R.id.botaoRecarregarConclusoesQuiz).setOnClickListener(view -> carregarConclusoes());
         configurarBusca();
         configurarNavegacao();
         animarEntradaDaTela();
@@ -222,20 +229,66 @@ public class QuizActivity extends AppCompatActivity {
         textoPerguntasQuiz.setText(quiz.perguntas);
         textoDuracaoQuiz.setText(quiz.duracao);
 
-        if (quiz.resultado != null && !quiz.resultado.trim().isEmpty()) {
+        boolean realizado = quizzesConcluidos.contains(quiz.id);
+
+        if (realizado || (quiz.resultado != null && !quiz.resultado.trim().isEmpty())) {
             boxResultadoQuiz.setVisibility(View.VISIBLE);
-            textoResultadoQuiz.setText(quiz.resultado);
-            botaoComecarQuiz.setVisibility(View.GONE);
+            textoResultadoQuiz.setText(realizado ? getString(R.string.quiz_ja_realizado) : quiz.resultado);
+            botaoComecarQuiz.setVisibility(realizado ? View.VISIBLE : View.GONE);
         } else {
             boxResultadoQuiz.setVisibility(View.GONE);
             botaoComecarQuiz.setVisibility(View.VISIBLE);
         }
+
+        botaoComecarQuiz.setText(realizado ? R.string.quiz_refazer : R.string.comecar);
 
         card.setOnClickListener(view -> abrirInicioQuiz(quiz));
         botaoComecarQuiz.setOnClickListener(view -> abrirInicioQuiz(quiz));
 
         Motion.pressFeedback(card);
         Motion.pressFeedback(botaoComecarQuiz);
+    }
+
+    // O catálogo e as conclusões são consultas independentes: a lista aparece mesmo se as conclusões falharem,
+    // e a falha não é mostrada como "nenhum quiz feito". Volta da tela de um quiz, a lista é atualizada.
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (!DadosDemonstracaoEducacao.ATIVO && autenticacao.getCurrentUser() != null) {
+            carregarConclusoes();
+        }
+    }
+
+    private void carregarConclusoes() {
+
+        String conta = autenticacao.getCurrentUser() == null ? "" : autenticacao.getCurrentUser().getUid();
+
+        if (!conta.equals(contaDasConclusoes)) {
+            quizzesConcluidos.clear();
+            contaDasConclusoes = conta;
+        }
+
+        tentativas.quizzesConcluidos(
+                this,
+                ids -> {
+                    if (isFinishing() || isDestroyed()) {
+                        return;
+                    }
+
+                    findViewById(R.id.avisoConclusoesQuiz).setVisibility(ids == null ? View.VISIBLE : View.GONE);
+
+                    if (ids == null) {
+                        return;
+                    }
+
+                    quizzesConcluidos.clear();
+                    quizzesConcluidos.addAll(ids);
+
+                    if (!quizzes.isEmpty()) {
+                        filtrarQuizzes(((EditText) findViewById(R.id.campoPesquisaQuiz)).getText().toString());
+                    }
+                });
     }
 
     private void abrirInicioQuiz(@NonNull QuizItem quiz) {

@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.ecociente.R;
+import com.example.ecociente.model.PreferenciasNotificacao;
 
 import java.util.Locale;
 
@@ -91,6 +92,36 @@ public enum TipoNotificacaoEcoCiente {
     public String getDestinoPadrao() { return destinoPadrao; }
 
     public boolean possuiCta() { return acaoPadrao != null; }
+
+    @NonNull
+    public PreferenciasNotificacao.Grupo getGrupo() {
+        switch (this) {
+            case COLETA_AMANHA:
+            case COLETA_HOJE:
+            case COLETA_ALTERADA:
+            case CALENDARIO:
+            case AVISO_CONDOMINIO:
+            case MENSAGEM_NOVA:
+            case SOLICITACAO_NOVA:
+            case SOLICITACAO_ACEITA:
+            case SOLICITACAO_RECUSADA:
+                return PreferenciasNotificacao.Grupo.LEMBRETES_AVISOS;
+            case QUIZ:
+            case REVISAO:
+            case CONTEUDOS:
+            case AULAS:
+            case ECOREGISTRO_APROVADO:
+            case RANKING_SUBIU:
+                return PreferenciasNotificacao.Grupo.NOVAS_ATIVIDADES;
+            case DICA:
+            case MOTIVACIONAL:
+            case SAZONAL:
+            case RETORNO:
+                return PreferenciasNotificacao.Grupo.DICAS_SUSTENTAVEIS;
+            default:
+                return PreferenciasNotificacao.Grupo.NENHUM;
+        }
+    }
 
     @DrawableRes
     public int getImagemEko() {

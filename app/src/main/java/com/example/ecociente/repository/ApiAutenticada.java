@@ -51,6 +51,24 @@ final class ApiAutenticada {
         }
     }
 
+    // GET que devolve também o código HTTP; null só quando não há credenciais.
+    @Nullable
+    static Resposta obterComCodigo(@NonNull Context contexto, @NonNull String url) throws IOException {
+        Resposta resposta = requisitarComRenovacao(contexto, "GET", url, null);
+
+        if (resposta != null && !resposta.sucesso()) {
+            Log.w(TAG, "HTTP " + resposta.codigo + " em GET " + url);
+        }
+
+        return resposta;
+    }
+
+    // DELETE; null só quando não há credenciais.
+    @Nullable
+    static Resposta excluirComCodigo(@NonNull Context contexto, @NonNull String url) throws IOException {
+        return requisitarComRenovacao(contexto, "DELETE", url, null);
+    }
+
     // POST com corpo JSON; null só quando não há credenciais.
     @Nullable
     static Resposta enviarComCodigo(@NonNull Context contexto, @NonNull String url, @NonNull String json)
@@ -65,6 +83,12 @@ final class ApiAutenticada {
         return requisitarComRenovacao(contexto, "PATCH", url, json);
     }
 
+    private static String trecho(@NonNull String corpo) {
+        String limpo = corpo.replace((char) 10, (char) 32).trim();
+
+        return limpo.length() > 200 ? limpo.substring(0, 200) : limpo;
+    }
+
     @Nullable
     private static String chamar(
             @NonNull Context contexto, @NonNull String metodo, @NonNull String url, @Nullable String json)
@@ -77,7 +101,8 @@ final class ApiAutenticada {
         }
 
         if (!resposta.sucesso()) {
-            Log.w(TAG, "HTTP " + resposta.codigo + " em " + metodo + " " + url);
+            // O corpo do erro traz o código da regra recusada (ex.: SEM_VINCULO_APROVADO), útil para diagnosticar.
+            Log.w(TAG, "HTTP " + resposta.codigo + " em " + metodo + " " + url + " " + trecho(resposta.corpo));
             return null;
         }
 
@@ -98,8 +123,9 @@ final class ApiAutenticada {
         int[] codigo = new int[1];
         String corpo = requisitar(metodo, url, token, json, codigo);
 
-        // O JWT dura minutos: o salvo costuma estar vencido.
-        if (codigo[0] == 401 && "GET".equals(metodo)) {
+        // O JWT dura minutos: o salvo costuma estar vencido. Um 401 quer dizer que o servidor nem processou o
+        // pedido, então repetir com o token novo é seguro até para POST (o que não se repete é o 403 e o timeout).
+        if (codigo[0] == 401) {
             String renovado = AUTENTICACAO.renovarToken(contexto);
 
             if (renovado != null) {

@@ -10,6 +10,14 @@ public class PreferenciasNotificacao {
     public static final String CHAVE_NOVAS_ATIVIDADES = "novasAtividades";
     public static final String CHAVE_DICAS_SUSTENTAVEIS = "dicasSustentaveis";
 
+    // Grupo de cada tipo de aviso na tela de notificações; NENHUM só depende das "gerais".
+    public enum Grupo {
+        LEMBRETES_AVISOS,
+        NOVAS_ATIVIDADES,
+        DICAS_SUSTENTAVEIS,
+        NENHUM
+    }
+
     private Boolean notificacoesGerais;
     private Boolean lembretesAvisos;
     private Boolean novasAtividades;
@@ -26,7 +34,7 @@ public class PreferenciasNotificacao {
     }
 
     public boolean isLembretesAvisos() {
-        return lembretesAvisos != null && lembretesAvisos;
+        return lembretesAvisos == null || lembretesAvisos;
     }
 
     public void setLembretesAvisos(Boolean lembretesAvisos) {
@@ -47,5 +55,23 @@ public class PreferenciasNotificacao {
 
     public void setDicasSustentaveis(Boolean dicasSustentaveis) {
         this.dicasSustentaveis = dicasSustentaveis;
+    }
+
+    // As "gerais" desligadas silenciam tudo; senão vale o interruptor do grupo.
+    public boolean permite(Grupo grupo) {
+        if (!isNotificacoesGerais()) {
+            return false;
+        }
+
+        switch (grupo) {
+            case LEMBRETES_AVISOS:
+                return isLembretesAvisos();
+            case NOVAS_ATIVIDADES:
+                return isNovasAtividades();
+            case DICAS_SUSTENTAVEIS:
+                return isDicasSustentaveis();
+            default:
+                return true;
+        }
     }
 }

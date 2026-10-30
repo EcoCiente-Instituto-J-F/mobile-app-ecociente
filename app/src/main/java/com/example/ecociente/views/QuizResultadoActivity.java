@@ -28,6 +28,7 @@ import androidx.core.widget.ImageViewCompat;
 import com.example.ecociente.R;
 import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.ResultadoQuiz;
+import com.example.ecociente.ui.ConfettiView;
 import com.example.ecociente.ui.DialogoEco;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;

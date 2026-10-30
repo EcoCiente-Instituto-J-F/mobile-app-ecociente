@@ -185,7 +185,7 @@
                     android:text="@string/sindico_dash_semanas"
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="17sp" />
-                <com.example.ecociente.views.SindicoDashboardGraficoView
+                <com.example.ecociente.ui.SindicoDashboardGraficoView
                     android:id="@+id/graficoQuizzesSindico"
                     android:layout_width="match_parent"
                     android:layout_height="210dp"
@@ -220,7 +220,7 @@
                     android:text="@string/sindico_materiais_reciclados"
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="17sp" />
-                <com.example.ecociente.views.SindicoDashboardRoscaView
+                <com.example.ecociente.ui.SindicoDashboardRoscaView
                     android:id="@+id/roscaMateriaisSindico"
                     android:layout_width="match_parent"
                     android:layout_height="170dp"
@@ -250,7 +250,7 @@
                     android:text="@string/sindico_dash_cooperativas"
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="17sp" />
-                <com.example.ecociente.views.SindicoDashboardGraficoView
+                <com.example.ecociente.ui.SindicoDashboardGraficoView
                     android:id="@+id/graficoCooperativasSindico"
                     android:layout_width="match_parent"
                     android:layout_height="205dp"

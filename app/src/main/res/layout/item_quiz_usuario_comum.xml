@@ -33,7 +33,7 @@
 
             <TextView android:id="@+id/textoPerguntasQuiz" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:fontFamily="@font/nunito_regular" android:includeFontPadding="false" android:textColor="@color/cinza_secundario_home" android:textSize="12.5sp"/>
 
-            <ImageView android:layout_width="14dp" android:layout_height="14dp" android:layout_marginStart="11dp" android:contentDescription="Pontos por completar o quiz" android:src="@drawable/ic_trofeu" app:tint="@color/cinza_secundario_home" android:id="@+id/iconePontosQuiz" android:visibility="gone"/>
+            <ImageView android:layout_width="14dp" android:layout_height="14dp" android:layout_marginStart="11dp" android:contentDescription="@string/quiz_usuario_comum_pontos_por_completar_o_quiz" android:src="@drawable/ic_trofeu" app:tint="@color/cinza_secundario_home" android:id="@+id/iconePontosQuiz" android:visibility="gone"/>
 
             <TextView android:id="@+id/textoDuracaoQuiz" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:fontFamily="@font/nunito_regular" android:includeFontPadding="false" android:textColor="@color/cinza_secundario_home" android:textSize="12.5sp" android:visibility="gone"/>
 
