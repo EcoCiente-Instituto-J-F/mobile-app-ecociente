@@ -112,22 +112,6 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
             ((TextView) findViewById(R.id.tituloContraparteDetalhe)).setText(R.string.cooperativa_escolhida);
         }
 
-        TextView chipCategoria = findViewById(R.id.chipCategoriaDetalhe);
-
-        TextView atualizacao = findViewById(R.id.textoAtualizacaoDetalhe);
-
-        if (detalhe == null || detalhe.getAtualizadaEm() == null) {
-            chipCategoria.setVisibility(View.GONE);
-            atualizacao.setVisibility(View.GONE);
-
-        } else {
-            atualizacao.setText(
-                    getString(
-                            R.string.ultima_atualizacao,
-                            FormatoDataApi.dataCompacta(detalhe.getAtualizadaEm()),
-                            FormatoDataApi.hora(detalhe.getAtualizadaEm())));
-        }
-
         ((TextView) findViewById(R.id.nomeCondominioDetalhe)).setText(nome);
 
         preencherTexto(R.id.tipoCondominioDetalhe, detalhe == null ? null : detalhe.getTipoCondominio());

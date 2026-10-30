@@ -306,8 +306,6 @@
     <string name="etiqueta_concluida">Concluída</string>
     <string name="buscar_unidade">Buscar unidade…</string>
     <string name="detalhe_da_solicitacao">Detalhe da solicitação</string>
-    <string name="categoria_reciclaveis">Recicláveis</string>
-    <string name="ultima_atualizacao">Última atualização: %1$s • %2$s</string>
     <string name="linha_recebida_titulo">Solicitação recebida</string>
     <string name="linha_recebida_texto">Solicitação enviada pelo %1$s.</string>
     <string name="linha_resposta_titulo">Resposta da cooperativa</string>
