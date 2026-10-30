@@ -310,11 +310,12 @@ public class AutenticacaoExternaRepository {
             return loginNoServidor(ConfiguracaoServidores.URL_LOGIN, email, senha,
                     ConfiguracaoServidores.TIMEOUT_RESPOSTA_LOGIN_MS, true);
         } catch (IOException erro) {
-            if (erro instanceof CredenciaisRecusadas
-                    || !PoliticaFallbackLogin.tentarRenderAposErro(erro)) {
+            // Conta só no banco do Render: se a AWS recusa, o Render ainda pode conhecê-la.
+            if (!(erro instanceof CredenciaisRecusadas)
+                    && !PoliticaFallbackLogin.tentarRenderAposErro(erro)) {
                 throw erro;
             }
-            Log.w(TAG, "AWS indisponivel; tentando o login secundario no Render");
+            Log.w(TAG, "AWS indisponivel ou recusou; tentando o login secundario no Render");
             return loginNoServidor(ConfiguracaoServidores.URL_LOGIN_RENDER, email, senha,
                     TEMPO_MAXIMO_RENDER_MS, false);
         }
