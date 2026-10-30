@@ -17,7 +17,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.util.ArrayList;
 
 // Descartes do morador na ds-mobile-api: feed do condomínio, "meus descartes", categorias e registro.
 public class PostagemRepository {
@@ -57,28 +56,10 @@ public class PostagemRepository {
         listar(contexto, "/api/postagens?condominioId=" + condominioId + "&size=" + POR_PAGINA, retorno);
     }
 
-    // Descartes do condomínio que ainda esperam a decisão do síndico (até as 100 postagens mais recentes).
+    // Descartes do condomínio que ainda esperam a decisão do síndico (até as 100 mais recentes). Rota própria
+    // do síndico responsável: o feed dos moradores (GET /api/postagens) exige ser morador do condomínio.
     public void emAnalise(@NonNull Context contexto, int condominioId, @NonNull RetornoPostagens retorno) {
-        listar(
-                contexto,
-                "/api/postagens?condominioId=" + condominioId + "&size=100",
-                postagens -> {
-                    if (postagens == null) {
-                        retorno.aoConcluir(null);
-                        return;
-                    }
-
-                    List<PostagemFeed> pendentes = new ArrayList<>();
-                    String emAnalise = PostagemJson.statusLegivel("em_analise");
-
-                    for (PostagemFeed postagem : postagens) {
-                        if (emAnalise.equals(postagem.getStatus())) {
-                            pendentes.add(postagem);
-                        }
-                    }
-
-                    retorno.aoConcluir(pendentes);
-                });
+        listar(contexto, "/api/condominios/" + condominioId + "/postagens/em-analise?size=100", retorno);
     }
 
     // PATCH /api/v1/postagens/{id}/decisao da ds-pontuacao-api: só o síndico do condomínio (ou admin).
