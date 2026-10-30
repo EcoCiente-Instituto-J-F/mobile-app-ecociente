@@ -83,6 +83,12 @@ final class ApiAutenticada {
         return requisitarComRenovacao(contexto, "PATCH", url, json);
     }
 
+    private static String trecho(@NonNull String corpo) {
+        String limpo = corpo.replace((char) 10, (char) 32).trim();
+
+        return limpo.length() > 200 ? limpo.substring(0, 200) : limpo;
+    }
+
     @Nullable
     private static String chamar(
             @NonNull Context contexto, @NonNull String metodo, @NonNull String url, @Nullable String json)
@@ -95,7 +101,8 @@ final class ApiAutenticada {
         }
 
         if (!resposta.sucesso()) {
-            Log.w(TAG, "HTTP " + resposta.codigo + " em " + metodo + " " + url);
+            // O corpo do erro traz o código da regra recusada (ex.: SEM_VINCULO_APROVADO), útil para diagnosticar.
+            Log.w(TAG, "HTTP " + resposta.codigo + " em " + metodo + " " + url + " " + trecho(resposta.corpo));
             return null;
         }
 
