@@ -11,12 +11,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONObject;
 
-// GET /api/cooperativas/{id}/avaliacoes da ds-mobile-api (exige o JWT da ds-autenticacao-api).
+// GET /api/cooperativas/{id}/avaliacoes da ds-mobile-api (exige o JWT da ds-mobile-api).
 public class AvaliacaoRepository {
 
     private static final String TAG = "AvaliacaoRepository";
 
-    private static final String URL_BASE = "https://ds-mobile-api.onrender.com";
+    private static final String URL_BASE = ConfiguracaoServidores.MOBILE_API;
 
     private static final int POR_PAGINA = 50;
 

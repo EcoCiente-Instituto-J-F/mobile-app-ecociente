@@ -22,9 +22,7 @@ public class SenhaUsuarioRepository {
     private final AutenticacaoExternaRepository autenticacaoExterna = new AutenticacaoExternaRepository();
     private final AlterarSenhaExternaRepository senhaExterna = new AlterarSenhaExternaRepository();
 
-    // A senha precisa mudar no Firebase e no Postgres. O token do login expira em minutos,
-    // então pegamos um novo com a senha atual; contas sem registro no Postgres (ou com a API
-    // fora do ar) trocam só no Firebase.
+    // A senha precisa mudar no Firebase e no Postgres. O token do login expira em minutos, então pegamos um novo com a senha atual; contas sem registro no Postgres (ou com a API fora do ar) trocam só no Firebase.
     @NonNull
     public LiveData<ResultadoApi> alterarSenha(
             @NonNull Context contexto, @NonNull String senhaAtual, @NonNull String novaSenha) {
@@ -87,8 +85,7 @@ public class SenhaUsuarioRepository {
                         });
     }
 
-    // Se o Postgres recusar depois do Firebase já ter mudado, volta o Firebase para a senha
-    // antiga: assim os dois lugares nunca ficam com senhas diferentes.
+    // Se o Postgres recusar depois do Firebase já ter mudado, volta o Firebase para a senha antiga: assim os dois lugares nunca ficam com senhas diferentes.
     private void sincronizarSenhaNoPostgres(
             @NonNull FirebaseUser usuario,
             @NonNull String senhaAtual,

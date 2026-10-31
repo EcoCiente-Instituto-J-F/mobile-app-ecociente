@@ -20,8 +20,7 @@ final class ConversaJson {
 
     private ConversaJson() {}
 
-    // Página de GET /api/conversas. O nome mostrado é o do outro lado: quem é do condomínio vê o nome
-    // da cooperativa, e vice-versa.
+    // Página de GET /api/conversas. O nome mostrado é o do outro lado: quem é do condomínio vê o nome da cooperativa, e vice-versa.
     @NonNull
     static List<Conversa> conversas(@NonNull JSONObject pagina, boolean souCondominio) {
 
@@ -58,8 +57,7 @@ final class ConversaJson {
                 !item.optBoolean("ativa", true));
     }
 
-    // Página de GET /api/conversas/{id}/mensagens. A API devolve da mais nova para a mais antiga; a
-    // lista sai na ordem de leitura (a mais antiga primeiro). `meuLado` marca as mensagens enviadas.
+    // Página de GET /api/conversas/{id}/mensagens. A API devolve da mais nova para a mais antiga; a lista sai na ordem de leitura (a mais antiga primeiro). `meuLado` marca as mensagens enviadas.
     @NonNull
     static List<MensagemConversa> mensagens(@NonNull JSONObject pagina, @NonNull String meuLado) {
 

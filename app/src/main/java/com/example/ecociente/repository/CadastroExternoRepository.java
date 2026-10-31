@@ -23,9 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Fala com a ds-cadastro-api (Java/Postgres, repositório separado deste
-// app). Escolhe o endpoint certo (comum/morador) a partir dos mesmos dados
-// que já vão pro Firestore, pra não duplicar coleta de campos no cadastro.
+// Fala com a ds-mobile-api (Java/Postgres, repositório separado deste app). Escolhe o endpoint certo (comum/morador) a partir dos mesmos dados que já vão pro Firestore, pra não duplicar coleta de campos no cadastro.
 public class CadastroExternoRepository {
 
     private static final String TAG = "CadastroExternaEcoCiente";
@@ -36,8 +34,7 @@ public class CadastroExternoRepository {
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
-    // A API dorme sem uso e leva de 70 a 150 s para acordar; com menos que isso o app desiste e a API
-    // conclui o cadastro depois, deixando a pessoa com um erro de uma conta que existe.
+    // A API dorme sem uso e leva de 70 a 150 s para acordar; com menos que isso o app desiste e a API conclui o cadastro depois, deixando a pessoa com um erro de uma conta que existe.
     private static final int TEMPO_MAXIMO_MS = 180_000;
 
     @NonNull
@@ -197,8 +194,7 @@ public class CadastroExternoRepository {
         }
     }
 
-    // A API devolve { "status", "codigoError", "details": [{ "field", "message" }] }
-    // - mostramos a primeira mensagem de validação, se existir.
+    // A API devolve { "status", "codigoError", "details": [{ "field", "message" }] } - mostramos a primeira mensagem de validação, se existir.
     @NonNull
     private String extrairMensagemErro(String corpoErro) {
 

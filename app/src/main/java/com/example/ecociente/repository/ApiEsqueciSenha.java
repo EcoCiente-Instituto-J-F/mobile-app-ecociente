@@ -16,10 +16,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Cliente HTTP da ds-esqueceusenha-api (Spring/Postgres, repositório separado deste app).
+// Cliente HTTP da ds-mobile-api (Spring/Postgres, repositório separado deste app).
 final class ApiEsqueciSenha {
     private static final String TAG = "EsqueciSenhaApi";
-    private static final String URL_BASE = "https://ds-esqueceusenha-api-1.onrender.com/senhas/";
+    private static final String URL_BASE = ConfiguracaoServidores.URL_SENHAS;
     private static final String MENSAGEM_PADRAO = "Não foi possível conectar ao servidor";
     private static final String MENSAGEM_INDISPONIVEL =
             "O servidor está indisponível no momento. Tente novamente em instantes.";
@@ -84,7 +84,6 @@ final class ApiEsqueciSenha {
             }
 
             conexao.setDoOutput(true);
-            // O Render dorme a API após inatividade; o primeiro pedido chegou a levar 138s.
             conexao.setConnectTimeout(180_000);
             conexao.setReadTimeout(180_000);
 

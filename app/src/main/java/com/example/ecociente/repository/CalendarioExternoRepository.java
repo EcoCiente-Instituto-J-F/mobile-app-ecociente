@@ -27,7 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// ds-calendario-api: lista os agendamentos de acordo com o perfil do JWT (cooperativa, síndico ou morador).
+// ds-mobile-api: lista os agendamentos de acordo com o perfil do JWT (cooperativa, síndico ou morador).
 public class CalendarioExternoRepository {
 
     public interface Retorno {
@@ -46,8 +46,7 @@ public class CalendarioExternoRepository {
     private static final String TAG = "CalendarioApi";
     private static final String MENSAGEM_PADRAO = "Não foi possível conectar ao servidor";
     private static final String MENSAGEM_SESSAO = "Sua sessão expirou. Entre novamente.";
-    private static final String URL_AGENDAMENTOS =
-            "https://ds-calendario-api.onrender.com/api/v1/agendamentos";
+    private static final String URL_AGENDAMENTOS = ConfiguracaoServidores.URL_AGENDAMENTOS;
     private static final int TAMANHO_PAGINA = 10;
     private static final int TAMANHO_PAGINA_MES = 100;
     private static final int TIMEOUT_MS = 180_000;
@@ -276,8 +275,7 @@ public class CalendarioExternoRepository {
         }
     }
 
-    // O Spring responde 403 sem corpo quando o JWT é inválido ou expirou (o 401 do filtro cai
-    // no /error, que exige autenticação). Já o 403 de perfil não autorizado traz um corpo JSON.
+    // O Spring responde 403 sem corpo quando o JWT é inválido ou expirou (o 401 do filtro cai no /error, que exige autenticação). Já o 403 de perfil não autorizado traz um corpo JSON.
     private boolean tokenRejeitado(int codigo, @NonNull HttpURLConnection conexao) throws IOException {
 
         if (codigo == HttpURLConnection.HTTP_UNAUTHORIZED) {
@@ -404,8 +402,7 @@ public class CalendarioExternoRepository {
         return resultado;
     }
 
-    // Sessão expirada leva ao login; só vale se não há mais credenciais guardadas. Com elas, o
-    // token falhou por conexão ou servidor fora do ar, e a pessoa só precisa tentar de novo.
+    // Sessão expirada leva ao login; só vale se não há mais credenciais guardadas. Com elas, o token falhou por conexão ou servidor fora do ar, e a pessoa só precisa tentar de novo.
     @NonNull
     private static ResultadoSolicitacoes semToken(Context contexto) {
 

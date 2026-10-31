@@ -11,12 +11,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-// GET com o JWT da ds-autenticacao-api. Quem chama já está numa thread de rede.
+// GET com o JWT da ds-mobile-api. Quem chama já está numa thread de rede.
 final class ApiAutenticada {
 
     private static final String TAG = "ApiAutenticada";
 
-    // Render dorme as APIs após inatividade (cold start de 70 a 150 s).
     private static final int TIMEOUT_MS = 180_000;
 
     private static final AutenticacaoExternaRepository AUTENTICACAO = new AutenticacaoExternaRepository();
@@ -123,8 +122,7 @@ final class ApiAutenticada {
         int[] codigo = new int[1];
         String corpo = requisitar(metodo, url, token, json, codigo);
 
-        // O JWT dura minutos: o salvo costuma estar vencido. Um 401 quer dizer que o servidor nem processou o
-        // pedido, então repetir com o token novo é seguro até para POST (o que não se repete é o 403 e o timeout).
+        // O JWT dura minutos: o salvo costuma estar vencido. Um 401 quer dizer que o servidor nem processou o pedido, então repetir com o token novo é seguro até para POST (o que não se repete é o 403 e o timeout).
         if (codigo[0] == 401) {
             String renovado = AUTENTICACAO.renovarToken(contexto);
 

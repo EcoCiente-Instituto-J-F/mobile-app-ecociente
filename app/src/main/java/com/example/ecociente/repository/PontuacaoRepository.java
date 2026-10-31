@@ -18,7 +18,7 @@ public class PontuacaoRepository {
 
     private static final String TAG = "Pontuacao";
 
-    private static final String URL_BASE = "https://ds-pontuacao-api.onrender.com";
+    private static final String URL_BASE = ConfiguracaoServidores.PONTUACAO_API;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 

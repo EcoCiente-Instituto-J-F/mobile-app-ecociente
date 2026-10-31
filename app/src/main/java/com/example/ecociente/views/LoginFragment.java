@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.AvisoServidorLento;
 import static com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL;
 
 import android.content.Intent;
@@ -58,6 +59,7 @@ public class LoginFragment extends Fragment {
 
     private MaterialButton botaoGoogle;
     private MaterialButton botaoFacebook;
+    private final AvisoServidorLento avisoServidorLento = new AvisoServidorLento();
     private ImageView iconeOlhoSenha;
     private MaterialCardView containerEmail;
     private MaterialCardView containerSenha;
@@ -364,6 +366,11 @@ public class LoginFragment extends Fragment {
         iconeOlhoSenha.setEnabled(!emAndamento);
 
         indicadorCarregamento.setVisibility(emAndamento ? View.VISIBLE : View.GONE);
+        if (emAndamento && getActivity() != null) {
+            avisoServidorLento.iniciar(getActivity());
+        } else {
+            avisoServidorLento.parar();
+        }
         botaoLogin.setText(emAndamento ? "" : getString(R.string.login));
         botaoGoogle.setAlpha(emAndamento ? 0.55f : 1f);
         botaoFacebook.setAlpha(emAndamento ? 0.55f : 1f);
@@ -482,6 +489,7 @@ public class LoginFragment extends Fragment {
         indicadorCarregamento = null;
         motion = null;
 
+        avisoServidorLento.parar();
         super.onDestroyView();
     }
 }

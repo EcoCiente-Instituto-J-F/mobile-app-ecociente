@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.DialogoEco;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.widget.NestedScrollView;
@@ -237,10 +237,12 @@ public class LeituraEducativaActivity extends AppCompatActivity {
     }
 
     private void confirmarSaida() {
-        new AlertDialog.Builder(this).setTitle("Sair da leitura?")
-                .setMessage("Seu progresso nesta leitura ficar\u00e1 salvo neste aparelho.")
-                .setPositiveButton("Salvar e sair", (d, qual) -> finish())
-                .setNegativeButton("Continuar lendo", null).show();
+        new DialogoEco.Builder(this)
+                .titulo(R.string.leitura_sair_titulo)
+                .mensagem(R.string.leitura_sair_mensagem)
+                .botao(R.string.leitura_sair_salvar, DialogoEco.Estilo.PREENCHIDO, this::finish)
+                .botao(R.string.leitura_sair_continuar, DialogoEco.Estilo.CONTORNO, null)
+                .mostrar();
     }
 
     @Override protected void onSaveInstanceState(@NonNull Bundle estado) {

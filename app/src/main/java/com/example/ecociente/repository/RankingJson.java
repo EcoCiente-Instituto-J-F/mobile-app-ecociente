@@ -46,8 +46,7 @@ final class RankingJson {
         return posicoes;
     }
 
-    // O ranking só traz as torres com pontos no limite pedido; a torre que ficou de fora é
-    // identificada pelo nome.
+    // O ranking só traz as torres com pontos no limite pedido; a torre que ficou de fora é identificada pelo nome.
     static boolean contem(@NonNull List<SindicoPosicaoRanking> ranking, @NonNull String nome) {
 
         for (SindicoPosicaoRanking posicao : ranking) {

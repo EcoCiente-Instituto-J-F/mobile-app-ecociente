@@ -1,5 +1,7 @@
 package com.example.ecociente.views;
 
+import android.widget.LinearLayout;
+import com.example.ecociente.ui.EstadoTela;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +30,6 @@ import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.example.ecociente.viewmodels.SolicitacoesViewModel;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import java.util.ArrayList;
@@ -57,9 +58,8 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout atualizacao;
     private View indicador;
-    private TextView textoEstado;
+    private LinearLayout areaEstado;
     private EditText campoBusca;
-    private MaterialButton botaoEstado;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -80,9 +80,8 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
         atualizacao = findViewById(R.id.atualizacaoSolicitacoes);
         indicador = findViewById(R.id.indicadorSolicitacoes);
-        textoEstado = findViewById(R.id.textoEstadoSolicitacoes);
+        areaEstado = findViewById(R.id.areaEstadoSolicitacoes);
         campoBusca = findViewById(R.id.campoBuscaSolicitacao);
-        botaoEstado = findViewById(R.id.botaoAcaoEstadoSolicitacoes);
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizSolicitacoes));
 
@@ -237,13 +236,13 @@ public class SolicitacoesActivity extends AppCompatActivity {
         }
 
         if (situacao == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
-            mostrarEstado(R.string.solicitacoes_sessao_expirada, R.string.entrar_novamente, view -> sair());
+            mostrarEstado(R.string.solicitacoes_sessao_expirada, R.string.entrar_novamente, this::sair);
 
         } else if (situacao == ResultadoSolicitacoes.Tipo.SEM_ACESSO) {
             mostrarEstado(R.string.solicitacoes_sem_acesso, 0, null);
 
         } else if (situacao == ResultadoSolicitacoes.Tipo.ERRO) {
-            mostrarEstado(R.string.solicitacoes_erro, R.string.tentar_novamente, view -> viewModel.recarregar());
+            mostrarEstado(R.string.solicitacoes_erro, R.string.tentar_novamente, viewModel::recarregar);
 
         } else if (semItens) {
             mostrarEstado(R.string.solicitacoes_vazio, 0, null);
@@ -253,25 +252,19 @@ public class SolicitacoesActivity extends AppCompatActivity {
         }
     }
 
-    private void mostrarEstado(int mensagem, int rotuloBotao, View.OnClickListener acao) {
-
-        textoEstado.setText(mensagem);
-        textoEstado.setVisibility(View.VISIBLE);
+    private void mostrarEstado(int mensagem, int rotuloBotao, Runnable acao) {
+        areaEstado.removeAllViews();
+        areaEstado.setVisibility(View.VISIBLE);
 
         if (rotuloBotao == 0) {
-            botaoEstado.setVisibility(View.GONE);
-            return;
+            EstadoTela.vazio(areaEstado, mensagem);
+        } else {
+            EstadoTela.comAcao(areaEstado, mensagem, rotuloBotao, acao);
         }
-
-        botaoEstado.setText(rotuloBotao);
-        botaoEstado.setOnClickListener(acao);
-        botaoEstado.setVisibility(View.VISIBLE);
     }
 
     private void ocultarEstado() {
-
-        textoEstado.setVisibility(View.GONE);
-        botaoEstado.setVisibility(View.GONE);
+        areaEstado.setVisibility(View.GONE);
     }
 
     private void sair() {

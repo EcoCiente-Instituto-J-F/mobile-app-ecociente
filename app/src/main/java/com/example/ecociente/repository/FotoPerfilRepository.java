@@ -29,8 +29,7 @@ public class FotoPerfilRepository {
 
     private static final String TAG = "FotoPerfilEcoCiente";
 
-    // Upload sem assinatura: o preset "ecociente_perfil" (Unsigned) limita pasta,
-    // formatos e tamanho no painel do Cloudinary. O API secret nunca entra no app.
+    // Upload sem assinatura: o preset "ecociente_perfil" (Unsigned) limita pasta, formatos e tamanho no painel do Cloudinary. O API secret nunca entra no app.
     private static final String CLOUD_NAME = "ncwfxyfi";
     private static final String UPLOAD_PRESET = "ecociente_perfil";
     // Preset (Unsigned) das fotos de descarte do feed, criado no painel do Cloudinary.
@@ -90,8 +89,7 @@ public class FotoPerfilRepository {
         return resultado;
     }
 
-    // Glide já aplica a rotação do EXIF e reduz sem estourar memória; o recorte
-    // quadrado combina com o avatar circular e deixa o upload bem menor.
+    // Glide já aplica a rotação do EXIF e reduz sem estourar memória; o recorte quadrado combina com o avatar circular e deixa o upload bem menor.
     @NonNull
     private byte[] prepararImagem(@NonNull Context contexto, @NonNull Uri imagem, boolean quadrada)
             throws IOException, ExecutionException, InterruptedException {

@@ -55,59 +55,6 @@
                 android:layout_marginTop="0dp">
 
                 <LinearLayout
-                    android:baselineAligned="false"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="14dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/chipCategoriaDetalhe"
-                            style="@style/ChipCategoriaAviso"
-                            android:text="@string/categoria_reciclaveis"
-                            android:textColor="@color/etiqueta_aceito_texto"
-                            android:backgroundTint="@color/etiqueta_aceito_fundo" />
-
-                        <TextView
-                            android:id="@+id/textoAtualizacaoDetalhe"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:fontFamily="@font/nunito_regular"
-                            android:textColor="@color/cinza_texto_auxiliar"
-                            android:textSize="11sp" />
-
-                    </LinearLayout>
-
-                    <FrameLayout
-                        android:layout_width="42dp"
-                        android:layout_height="42dp"
-                        android:layout_marginStart="10dp"
-                        android:background="@drawable/fundo_avatar_iniciais">
-
-                        <ImageView
-                            android:layout_width="22dp"
-                            android:layout_height="22dp"
-                            android:layout_gravity="center"
-                            android:importantForAccessibility="no"
-                            android:src="@drawable/ic_reciclar" />
-
-                    </FrameLayout>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView style="@style/CartaoDetalheSolicitacao">
-
-                <LinearLayout
                     android:id="@+id/linhaDoTempoDetalhe"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

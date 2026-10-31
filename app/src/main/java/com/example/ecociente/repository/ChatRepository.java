@@ -17,14 +17,13 @@ import java.nio.charset.StandardCharsets;
 
 public class ChatRepository {
 
-    private static final String URL_CHAT = "https://ia-eko-1.onrender.com/api/v1/chat";
-    // Render dorme o serviço após inatividade (cold start de 70 a 150 s) e o LLM leva alguns segundos.
+    private static final String URL_CHAT = ConfiguracaoServidores.CHAT_IA;
     private static final int TIMEOUT_CONEXAO_MS = 180_000;
     private static final int TIMEOUT_RESPOSTA_MS = 180_000;
 
     private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
 
-    // A identidade vem do JWT da ds-autenticacao-api: o servidor valida o token e descobre o usuário e o perfil.
+    // A identidade vem do JWT da ds-mobile-api: o servidor valida o token e descobre o usuário e o perfil.
     public RespostaChat enviarMensagem(Context contexto, String mensagem, String sessionId) throws IOException, JSONException {
         String token = autenticacao.tokenParaUso(contexto);
 

@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.EstadoTela;
 import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
@@ -29,7 +30,6 @@ import com.example.ecociente.util.FormatoDataApi;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Navegacao;
-import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,7 +39,7 @@ import android.widget.RatingBar;
 import com.example.ecociente.repository.AvaliacaoColetaRepository;
 import com.example.ecociente.ui.AvisoFlutuante;
 
-/** Coletas do condomínio vindas da ds-calendario-api, da mais recente para a mais antiga. */
+/** Coletas do condomínio vindas da ds-mobile-api, da mais recente para a mais antiga. */
 public final class SindicoHistoricoActivity extends AppCompatActivity {
     private static final String ESTADO_FILTRO = "filtroHistorico";
     private static final int TODAS = 0;
@@ -124,17 +124,7 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
     private void mostrarErro() {
         lista.removeAllViews();
 
-        TextView mensagem = new TextView(this);
-        mensagem.setText(R.string.historico_erro);
-        mensagem.setTextColor(getColor(R.color.cinza_texto_home));
-        mensagem.setTextSize(14);
-        mensagem.setPadding(dp(8), dp(28), dp(8), dp(12));
-        lista.addView(mensagem);
-
-        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
-        tentar.setText(R.string.tentar_novamente);
-        tentar.setOnClickListener(view -> carregar());
-        lista.addView(tentar);
+        EstadoTela.erro(lista, R.string.historico_erro, this::carregar);
     }
 
     private boolean passaNoFiltro(StatusAgendamento status) {

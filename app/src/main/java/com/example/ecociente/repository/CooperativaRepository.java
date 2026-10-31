@@ -17,7 +17,7 @@ public class CooperativaRepository {
 
     private static final String TAG = "CooperativaRepository";
 
-    private static final String URL_COOPERATIVAS = "https://ds-mobile-api.onrender.com/api/cooperativas?size=100";
+    private static final String URL_COOPERATIVAS = ConfiguracaoServidores.MOBILE_API + "/api/cooperativas?size=100";
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 

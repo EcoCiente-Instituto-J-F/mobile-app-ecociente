@@ -714,7 +714,7 @@ public class Login extends AppCompatActivity {
         return dadosUsuario;
     }
 
-    // Mesmos valores que a ds-cadastro-api usa pra identificar o tipo de
+    // Mesmos valores que a ds-mobile-api usa pra identificar o tipo de
     // conta ("comum", "morador", "cooperativa") - a interface do app vai
     // usar esse campo pra decidir qual home mostrar.
     @NonNull

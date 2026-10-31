@@ -306,8 +306,6 @@
     <string name="etiqueta_concluida">Concluída</string>
     <string name="buscar_unidade">Buscar unidade…</string>
     <string name="detalhe_da_solicitacao">Detalhe da solicitação</string>
-    <string name="categoria_reciclaveis">Recicláveis</string>
-    <string name="ultima_atualizacao">Última atualização: %1$s • %2$s</string>
     <string name="linha_recebida_titulo">Solicitação recebida</string>
     <string name="linha_recebida_texto">Solicitação enviada pelo %1$s.</string>
     <string name="linha_resposta_titulo">Resposta da cooperativa</string>
@@ -633,4 +631,26 @@
         <item>4</item>
     </integer-array>
     <string name="solicitacoes_filtro_todas">Todas</string>
+    <string name="status_descarte_titulo">Status do descarte</string>
+    <string name="status_descarte_subtitulo">Acompanhe o andamento do registro do seu descarte</string>
+    <string name="etapa_registrado">Registrado</string>
+    <string name="etapa_registrado_texto">Seu descarte foi enviado com sucesso.</string>
+    <string name="etapa_em_analise">Em análise</string>
+    <string name="etapa_em_analise_andamento">A comunidade está avaliando seu descarte.</string>
+    <string name="etapa_em_analise_feita">A comunidade avaliou seu descarte.</string>
+    <string name="etapa_validado">Validado</string>
+    <string name="etapa_validado_texto">Seu descarte foi aprovado!</string>
+    <string name="etapa_recusado">Recusado</string>
+    <string name="etapa_recusado_texto">Seu descarte não foi aprovado.</string>
+    <string name="etapa_aguardando">Validação</string>
+    <string name="etapa_aguardando_texto">Aguardando validação</string>
+    <string name="resultado_validado">Descarte validado!</string>
+    <string name="resultado_validado_texto">Parabéns, seu descarte foi aprovado pela comunidade.</string>
+    <string name="resultado_recusado">Descarte recusado</string>
+    <string name="resultado_recusado_texto">A comunidade não aprovou este descarte. Registre um novo com uma foto atual.</string>
+    <string name="aviso_servidor_lento">Conectando ao servidor… na primeira vez pode levar até 2 minutos.</string>
+    <string name="leitura_sair_titulo">Sair da leitura?</string>
+    <string name="leitura_sair_mensagem">Seu progresso nesta leitura ficará salvo neste aparelho.</string>
+    <string name="leitura_sair_salvar">Salvar e sair</string>
+    <string name="leitura_sair_continuar">Continuar lendo</string>
 </resources>

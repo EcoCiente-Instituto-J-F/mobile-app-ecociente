@@ -21,7 +21,7 @@ import com.google.android.material.button.MaterialButton;
 
 // Passo 2 do esqueci senha: 4 caixas de dígito com avanço automático de foco.
 // Esta tela NÃO chama a API: só confere que há 4 dígitos, guarda o código no ViewModel e segue
-// para a nova senha. A ds-esqueceusenha-api não tem endpoint de verificação, então o código só é
+// para a nova senha. A ds-mobile-api não tem endpoint de verificação, então o código só é
 // validado no passo seguinte, em POST /senhas/redefinir.
 public class EsqueciSenhaCodigoFragment extends Fragment {
     private EditText digito1;

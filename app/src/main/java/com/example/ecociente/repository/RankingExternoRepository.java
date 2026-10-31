@@ -14,13 +14,13 @@ import java.util.concurrent.Executors;
 import org.json.JSONObject;
 import com.example.ecociente.model.SindicoItemUnidade;
 
-// GET /api/v1/rankings/torres da ds-pontuacao-api (exige o JWT da ds-autenticacao-api).
+// GET /api/v1/rankings/torres da ds-pontuacao-api (exige o JWT da ds-mobile-api).
 public class RankingExternoRepository {
 
     private static final String TAG = "RankingExterno";
 
     // Trocar pela URL do deploy da ds-pontuacao-api.
-    private static final String URL_BASE = "https://ds-pontuacao-api.onrender.com";
+    private static final String URL_BASE = ConfiguracaoServidores.PONTUACAO_API;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
@@ -66,8 +66,7 @@ public class RankingExternoRepository {
                 });
     }
 
-    // Torres que a /me conhece e o ranking não trouxe entram pela posição própria da torre
-    // (GET /rankings/torres/{id}/posicao); se essa consulta falhar, a torre só não aparece.
+    // Torres que a /me conhece e o ranking não trouxe entram pela posição própria da torre (GET /rankings/torres/{id}/posicao); se essa consulta falhar, a torre só não aparece.
     private void completarComTorresDoCondominio(
             @NonNull Context contexto, int condominioId, @NonNull List<SindicoPosicaoRanking> posicoes) {
 

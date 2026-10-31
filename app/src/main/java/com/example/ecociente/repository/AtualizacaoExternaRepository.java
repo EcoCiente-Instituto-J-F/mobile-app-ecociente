@@ -18,17 +18,14 @@ import org.json.JSONObject;
 import android.os.Handler;
 import android.os.Looper;
 
-// PATCH /api/usuarios/me e /api/usuarios/me/endereco da ds-cadastro-api (nome, telefone, foto, endereço). O Firestore continua
-// sendo a fonte do app: aqui só se espelha o que a API sabe guardar, em segundo plano e sem
-// avisar o usuário se falhar (contas sem JWT, como Google/Facebook, simplesmente não sincronizam).
-// E-mail fica de fora de propósito: a API não troca o e-mail no Firebase, e os dois divergiriam.
+// PATCH /api/usuarios/me e /api/usuarios/me/endereco da ds-mobile-api (nome, telefone, foto, endereço). O Firestore continua sendo a fonte do app: aqui só se espelha o que a API sabe guardar, em segundo plano e sem avisar o usuário se falhar (contas sem JWT, como Google/Facebook, simplesmente não sincronizam). E-mail fica de fora de propósito: a API não troca o e-mail no Firebase, e os dois divergiriam.
 public class AtualizacaoExternaRepository {
 
     private static final String TAG = "AtualizacaoExterna";
 
-    private static final String URL_USUARIO = "https://ds-cadastro-api.onrender.com/api/usuarios/me";
+    private static final String URL_USUARIO = ConfiguracaoServidores.URL_USUARIO;
 
-    private static final String URL_CONDOMINIOS = "https://ds-cadastro-api.onrender.com/api/condominios/";
+    private static final String URL_CONDOMINIOS = ConfiguracaoServidores.URL_CONDOMINIOS;
 
     private static final Pattern CEP = Pattern.compile("^\\d{5}-?\\d{3}$");
 
@@ -36,8 +33,7 @@ public class AtualizacaoExternaRepository {
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
-    // Atualizações a caminho da API: enquanto houver, o perfil da API pode estar atrasado em
-    // relação ao que o usuário acabou de editar, e não deve sobrescrever o app.
+    // Atualizações a caminho da API: enquanto houver, o perfil da API pode estar atrasado em relação ao que o usuário acabou de editar, e não deve sobrescrever o app.
     private static final java.util.concurrent.atomic.AtomicInteger EM_ANDAMENTO =
             new java.util.concurrent.atomic.AtomicInteger();
 
@@ -55,8 +51,7 @@ public class AtualizacaoExternaRepository {
         sincronizarCampo(contexto, campo, valor, perfil, null);
     }
 
-    // `perfil` já deve trazer o valor novo, porque o endereço da API exige CEP e número juntos.
-    // `aoFalhar` roda na thread principal se a API não aceitou (sem credenciais, erro HTTP ou rede).
+    // `perfil` já deve trazer o valor novo, porque o endereço da API exige CEP e número juntos. `aoFalhar` roda na thread principal se a API não aceitou (sem credenciais, erro HTTP ou rede).
     public void sincronizarCampo(
             @NonNull Context contexto,
             @NonNull String campo,
@@ -104,8 +99,7 @@ public class AtualizacaoExternaRepository {
         }
     }
 
-    // PATCH /api/condominios/{id}/endereco: só o síndico responsável pode, e a API exige CEP e número.
-    // `aoFalhar` roda na thread principal se a API não aceitou; sem id, CEP ou número, nada é enviado.
+    // PATCH /api/condominios/{id}/endereco: só o síndico responsável pode, e a API exige CEP e número. `aoFalhar` roda na thread principal se a API não aceitou; sem id, CEP ou número, nada é enviado.
     public void sincronizarEnderecoDoCondominio(
             @NonNull Context contexto,
             int condominioId,
@@ -133,8 +127,7 @@ public class AtualizacaoExternaRepository {
         }
     }
 
-    // DELETE /api/usuarios/me: desativa a conta no Postgres. `retorno` roda na thread principal com true se a
-    // API aceitou, ou se não há sessão na API (conta só do Firebase, sem nada a desativar).
+    // DELETE /api/usuarios/me: desativa a conta no Postgres. `retorno` roda na thread principal com true se a API aceitou, ou se não há sessão na API (conta só do Firebase, sem nada a desativar).
     public void excluirConta(@NonNull Context contexto, @NonNull java.util.function.Consumer<Boolean> retorno) {
 
         Context contextoApp = contexto.getApplicationContext();
@@ -158,9 +151,7 @@ public class AtualizacaoExternaRepository {
                 });
     }
 
-    // PATCH /api/condominios/{id}: só o síndico responsável pode. Envia só o que foi informado: o
-    // nome (não vazio), o tipo (1 residencial, 2 comercial) e a foto (URL http ou https de até 500
-    // caracteres). Sem id nem campo válido, nada é enviado.
+    // PATCH /api/condominios/{id}: só o síndico responsável pode. Envia só o que foi informado: o nome (não vazio), o tipo (1 residencial, 2 comercial) e a foto (URL http ou https de até 500 caracteres). Sem id nem campo válido, nada é enviado.
     public void sincronizarCondominio(
             @NonNull Context contexto,
             int condominioId,
@@ -275,7 +266,6 @@ public class AtualizacaoExternaRepository {
             conexao.setRequestProperty("Authorization", "Bearer " + token);
             conexao.setDoOutput(true);
             conexao.setUseCaches(false);
-            // Render dorme a API após inatividade (cold start de 70 a 150 s).
             conexao.setConnectTimeout(180_000);
             conexao.setReadTimeout(180_000);
 

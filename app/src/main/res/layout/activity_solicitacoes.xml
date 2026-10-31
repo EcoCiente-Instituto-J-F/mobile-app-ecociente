@@ -78,33 +78,18 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <TextView
-        android:id="@+id/textoEstadoSolicitacoes"
+    <LinearLayout
+        android:id="@+id/areaEstadoSolicitacoes"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:fontFamily="@font/nunito_regular"
-        android:gravity="center"
-        android:textColor="@color/cinza_texto_auxiliar"
-        android:textSize="14sp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/atualizacaoSolicitacoes"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/atualizacaoSolicitacoes"
-        app:layout_constraintVertical_bias="0.4" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/botaoAcaoEstadoSolicitacoes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:visibility="gone"
-        app:backgroundTint="@color/verde_escuro_principal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textoEstadoSolicitacoes" />
+        app:layout_constraintVertical_bias="0.3" />
 
     <ProgressBar
         android:id="@+id/indicadorSolicitacoes"

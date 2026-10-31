@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.EstadoTela;
 import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.Motion;
 import android.Manifest;
@@ -272,17 +273,7 @@ public final class SindicoCooperativasActivity extends AppCompatActivity {
     private void mostrarErroDeCooperativas() {
         lista.removeAllViews();
 
-        TextView mensagem = new TextView(this);
-        mensagem.setText(R.string.cooperativas_erro);
-        mensagem.setTextColor(getColor(R.color.cinza_texto_home));
-        mensagem.setTextSize(14);
-        mensagem.setPadding(8, 28, 8, 12);
-        lista.addView(mensagem);
-
-        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
-        tentar.setText(R.string.tentar_novamente);
-        tentar.setOnClickListener(view -> carregarCooperativas());
-        lista.addView(tentar);
+        EstadoTela.erro(lista, R.string.cooperativas_erro, this::carregarCooperativas);
     }
 
     private void mostrarCooperativas(String filtro) {

@@ -95,9 +95,7 @@ public class CadastroRepository {
                         });
     }
 
-    // Se o Firestore falhar depois que a conta já foi criada no Auth, não
-    // deixamos uma conta "pela metade" - apaga a conta e reporta erro, pra
-    // manter Firebase, Firestore e o Postgres da API externa consistentes.
+    // Se o Firestore falhar depois que a conta já foi criada no Auth, não deixamos uma conta "pela metade" - apaga a conta e reporta erro, pra manter Firebase, Firestore e o Postgres da API externa consistentes.
     private void desfazerContaCriada(@NonNull MutableLiveData<ResultadoCadastro> resultado) {
 
         FirebaseUser usuario = autenticacao.getCurrentUser();

@@ -12,8 +12,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-// Monta o resumo do dashboard: a resposta de GET /api/condominios/{id}/dashboard (ds-mobile-api)
-// mais as coletas realizadas do calendário, que a view não traz.
+// Monta o resumo do dashboard: a resposta de GET /api/condominios/{id}/dashboard (ds-mobile-api) mais as coletas realizadas do calendário, que a view não traz.
 final class DashboardSindicoJson {
 
     private static final int MAXIMO_DE_ITENS = 4;

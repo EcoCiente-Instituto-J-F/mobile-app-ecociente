@@ -21,7 +21,7 @@ public class TentativaQuizRepository {
 
     private static final String TAG = "TentativaQuiz";
 
-    private static final String URL_BASE = "https://ds-mobile-api.onrender.com";
+    private static final String URL_BASE = ConfiguracaoServidores.MOBILE_API;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
@@ -46,8 +46,7 @@ public class TentativaQuizRepository {
         T ler(String corpo) throws Exception;
     }
 
-    // Últimas tentativas concluídas do usuário autenticado (GET /api/tentativas-quiz). Lista vazia =
-    // consulta feita sem resultados; null = falha (sem login, API fora do ar ou resposta inválida).
+    // Últimas tentativas concluídas do usuário autenticado (GET /api/tentativas-quiz). Lista vazia = consulta feita sem resultados; null = falha (sem login, API fora do ar ou resposta inválida).
     public void historico(@NonNull Context contexto, @NonNull Retorno<List<DesempenhoQuiz>> retorno) {
         consultar(contexto, "/api/tentativas-quiz?limite=20",
                 corpo -> HistoricoQuizJson.desempenhos(new JSONArray(corpo)), retorno);

@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.EstadoTela;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +16,6 @@ import com.example.ecociente.model.Conversa;
 import com.example.ecociente.repository.ConversaRepository;
 import com.example.ecociente.util.FormatoDataApi;
 import com.example.ecociente.ui.IndicadorCarregamento;
-import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.ecociente.ui.BarraNavegacaoView;
@@ -123,17 +123,7 @@ public class MensagensActivity extends AppCompatActivity {
     private void mostrarErro() {
         lista.removeAllViews();
 
-        TextView mensagem = new TextView(this);
-        mensagem.setText(R.string.conversas_erro);
-        mensagem.setTextColor(ContextCompat.getColor(this, R.color.cinza_texto_home));
-        mensagem.setTextSize(14);
-        mensagem.setPadding(32, 112, 32, 24);
-        lista.addView(mensagem);
-
-        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
-        tentar.setText(R.string.tentar_novamente);
-        tentar.setOnClickListener(view -> carregar());
-        lista.addView(tentar);
+        EstadoTela.erro(lista, R.string.conversas_erro, this::carregar);
     }
 
     private void selecionarAba(int aba) {
