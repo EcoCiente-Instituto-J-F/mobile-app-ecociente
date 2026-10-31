@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.PreferenciasNotificacao;
+import com.example.ecociente.repository.PushRegistroRepository;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
@@ -165,7 +166,9 @@ public class NotificacoesActivity extends AppCompatActivity {
     private void tratarResultadoPreferencia(
             SwitchMaterial botao, boolean valorTentado, ResultadoApi resultado) {
 
-        if (resultado == null || resultado.isSucesso()) {
+        if (resultado == null) return;
+        if (resultado.isSucesso()) {
+            PushRegistroRepository.sincronizarPreferencias(getApplicationContext());
             return;
         }
 
