@@ -6,7 +6,7 @@ import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
 import org.json.JSONObject;
 
-// Lê um agendamento da ds-calendario-api: a listagem manda "statusAgendamento" e a criação, "status".
+// Lê um agendamento da ds-mobile-api: a listagem manda "statusAgendamento" e a criação, "status".
 final class CalendarioJson {
 
     private CalendarioJson() {}

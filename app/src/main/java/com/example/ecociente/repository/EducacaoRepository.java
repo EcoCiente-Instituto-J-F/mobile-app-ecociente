@@ -23,7 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Cursos, aulas e quizzes da ds-mobile-api (só leitura, exige o JWT da ds-autenticacao-api).
+// Cursos, aulas e quizzes da ds-mobile-api (só leitura, exige o JWT da ds-mobile-api).
 // O guia mostra as aulas; cada aula com quiz vira um quiz da lista.
 public class EducacaoRepository {
 

@@ -13,8 +13,6 @@ public final class ConfiguracaoServidores {
     public static final String CHAT_IA = "https://ia-eko-1.onrender.com/api/v1/chat";
 
     public static final String URL_LOGIN = MOBILE_API + "/auth/login";
-    // Servico de login antigo: so responde se o unificado estiver fora do ar.
-    public static final String URL_LOGIN_RENDER = "https://ds-autenticacao-api-1.onrender.com/auth/login";
     public static final String URL_CADASTRO = MOBILE_API + "/api/cadastro";
     public static final String URL_SENHAS = MOBILE_API + "/senhas/";
     public static final String URL_USUARIO = MOBILE_API + "/api/usuarios/me";

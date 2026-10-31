@@ -23,7 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Fala com a ds-cadastro-api (Java/Postgres, repositório separado deste
+// Fala com a ds-mobile-api (Java/Postgres, repositório separado deste
 // app). Escolhe o endpoint certo (comum/morador) a partir dos mesmos dados
 // que já vão pro Firestore, pra não duplicar coleta de campos no cadastro.
 public class CadastroExternoRepository {

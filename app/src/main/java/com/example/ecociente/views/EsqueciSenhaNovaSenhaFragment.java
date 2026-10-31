@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 // Passo 3: define a nova senha.
 public class EsqueciSenhaNovaSenhaFragment extends Fragment {
-    // Mesma regra da ds-esqueceusenha-api.
+    // Mesma regra da ds-mobile-api.
     private static final Pattern PADRAO_SENHA_VALIDA =
             Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^A-Za-z0-9])\\S{8,100}$");
 

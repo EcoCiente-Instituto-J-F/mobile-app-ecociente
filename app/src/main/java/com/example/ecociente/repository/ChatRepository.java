@@ -24,7 +24,7 @@ public class ChatRepository {
 
     private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
 
-    // A identidade vem do JWT da ds-autenticacao-api: o servidor valida o token e descobre o usuário e o perfil.
+    // A identidade vem do JWT da ds-mobile-api: o servidor valida o token e descobre o usuário e o perfil.
     public RespostaChat enviarMensagem(Context contexto, String mensagem, String sessionId) throws IOException, JSONException {
         String token = autenticacao.tokenParaUso(contexto);
 

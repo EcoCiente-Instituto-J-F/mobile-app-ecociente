@@ -20,10 +20,10 @@ import java.util.concurrent.Executors;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Fala com a ds-autenticacao-api (Java/Postgres, repositório separado deste
-// app), hoje só com POST /auth/login implementado lá. Chamada em paralelo ao
-// login do Firebase, sem travar o app se essa API estiver fora do ar. Contas
-// criadas antes do cadastro integrado não existem no Postgres e falham aqui.
+// Fala com a ds-mobile-api (Java/Postgres, repositório separado deste app),
+// POST /auth/login. Chamada em paralelo ao login do Firebase, sem travar o
+// app se essa API estiver fora do ar. Contas criadas antes do cadastro
+// integrado não existem no Postgres e falham aqui.
 public class AutenticacaoExternaRepository {
 
     private static final String TAG = "AuthExternaEcoCiente";
@@ -34,10 +34,6 @@ public class AutenticacaoExternaRepository {
     private static final String CHAVE_TOKEN = "token";
     private static final String CHAVE_PERFIL = "perfil";
     private static final String CHAVE_USUARIO_ID = "usuarioId";
-
-    // O Render dorme sem uso e leva de 70 a 150 s para acordar: com menos que isso as duas tentativas de login
-    // estouram, o app entra sem token e nenhuma tela que depende da API carrega.
-    private static final int TEMPO_MAXIMO_RENDER_MS = 180_000;
 
     private static final Object TRAVA = new Object();
 
@@ -306,19 +302,8 @@ public class AutenticacaoExternaRepository {
 
     @NonNull
     private SessaoExterna login(@NonNull String email, @NonNull String senha) throws IOException, JSONException {
-        try {
-            return loginNoServidor(ConfiguracaoServidores.URL_LOGIN, email, senha,
-                    ConfiguracaoServidores.TIMEOUT_RESPOSTA_LOGIN_MS, true);
-        } catch (IOException erro) {
-            // Conta só no banco do Render: se a AWS recusa, o Render ainda pode conhecê-la.
-            if (!(erro instanceof CredenciaisRecusadas)
-                    && !PoliticaFallbackLogin.tentarRenderAposErro(erro)) {
-                throw erro;
-            }
-            Log.w(TAG, "AWS indisponivel ou recusou; tentando o login secundario no Render");
-            return loginNoServidor(ConfiguracaoServidores.URL_LOGIN_RENDER, email, senha,
-                    TEMPO_MAXIMO_RENDER_MS, false);
-        }
+        return loginNoServidor(ConfiguracaoServidores.URL_LOGIN, email, senha,
+                ConfiguracaoServidores.TIMEOUT_RESPOSTA_LOGIN_MS);
     }
 
     @NonNull
@@ -326,8 +311,7 @@ public class AutenticacaoExternaRepository {
             @NonNull String endereco,
             @NonNull String email,
             @NonNull String senha,
-            int timeoutResposta,
-            boolean principal) throws IOException, JSONException {
+            int timeoutResposta) throws IOException, JSONException {
 
         HttpURLConnection conexao = (HttpURLConnection) new URL(endereco).openConnection();
         try {
@@ -349,13 +333,10 @@ public class AutenticacaoExternaRepository {
 
             int codigoResposta = conexao.getResponseCode();
 
-            if (principal && PoliticaFallbackLogin.tentarRenderAposHttp(codigoResposta)) {
-                throw new java.net.SocketException("AWS HTTP " + codigoResposta);
-            }
             if (codigoResposta >= 400 && codigoResposta < 500) {
                 String corpoDoErro = LeituraHttp.texto(conexao.getErrorStream());
 
-                if (PoliticaFallbackLogin.credenciaisRecusadas(codigoResposta, corpoDoErro)) {
+                if (PoliticaErroLogin.credenciaisRecusadas(codigoResposta, corpoDoErro)) {
                     throw new CredenciaisRecusadas("Resposta HTTP " + codigoResposta);
                 }
             }

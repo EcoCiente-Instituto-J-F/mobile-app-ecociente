@@ -18,7 +18,7 @@ import org.json.JSONObject;
 import android.os.Handler;
 import android.os.Looper;
 
-// PATCH /api/usuarios/me e /api/usuarios/me/endereco da ds-cadastro-api (nome, telefone, foto, endereço). O Firestore continua
+// PATCH /api/usuarios/me e /api/usuarios/me/endereco da ds-mobile-api (nome, telefone, foto, endereço). O Firestore continua
 // sendo a fonte do app: aqui só se espelha o que a API sabe guardar, em segundo plano e sem
 // avisar o usuário se falhar (contas sem JWT, como Google/Facebook, simplesmente não sincronizam).
 // E-mail fica de fora de propósito: a API não troca o e-mail no Firebase, e os dois divergiriam.

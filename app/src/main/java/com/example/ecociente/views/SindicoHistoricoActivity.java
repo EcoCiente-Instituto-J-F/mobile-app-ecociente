@@ -39,7 +39,7 @@ import android.widget.RatingBar;
 import com.example.ecociente.repository.AvaliacaoColetaRepository;
 import com.example.ecociente.ui.AvisoFlutuante;
 
-/** Coletas do condomínio vindas da ds-calendario-api, da mais recente para a mais antiga. */
+/** Coletas do condomínio vindas da ds-mobile-api, da mais recente para a mais antiga. */
 public final class SindicoHistoricoActivity extends AppCompatActivity {
     private static final String ESTADO_FILTRO = "filtroHistorico";
     private static final int TODAS = 0;

@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONObject;
 
-// GET /api/cooperativas/{id}/avaliacoes da ds-mobile-api (exige o JWT da ds-autenticacao-api).
+// GET /api/cooperativas/{id}/avaliacoes da ds-mobile-api (exige o JWT da ds-mobile-api).
 public class AvaliacaoRepository {
 
     private static final String TAG = "AvaliacaoRepository";
