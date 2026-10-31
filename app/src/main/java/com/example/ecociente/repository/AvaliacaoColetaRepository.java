@@ -15,7 +15,7 @@ public class AvaliacaoColetaRepository {
 
     private static final String TAG = "AvaliacaoColeta";
 
-    private static final String URL_BASE = "https://ds-mobile-api.onrender.com";
+    private static final String URL_BASE = ConfiguracaoServidores.MOBILE_API;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 

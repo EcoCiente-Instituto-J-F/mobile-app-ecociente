@@ -24,7 +24,7 @@ public class DashboardSindicoRepository {
 
     private static final String TAG = "DashboardSindico";
 
-    private static final String URL_BASE = "https://ds-mobile-api.onrender.com/api/condominios/";
+    private static final String URL_BASE = ConfiguracaoServidores.MOBILE_API + "/api/condominios/";
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 

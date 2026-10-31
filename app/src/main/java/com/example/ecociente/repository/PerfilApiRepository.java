@@ -24,7 +24,7 @@ public class PerfilApiRepository {
 
     private static final String TAG = "PerfilApi";
 
-    private static final String URL_PERFIL = "https://ds-mobile-api.onrender.com/api/usuarios/me";
+    private static final String URL_PERFIL = ConfiguracaoServidores.URL_USUARIO;
 
     private static final String PREFERENCIAS = "perfil_api";
     private static final String CHAVE_CONDOMINIO_ID = "condominioId";

@@ -23,9 +23,9 @@ public class PostagemRepository {
 
     private static final String TAG = "PostagemRepository";
 
-    private static final String URL_BASE = "https://ds-mobile-api.onrender.com";
+    private static final String URL_BASE = ConfiguracaoServidores.MOBILE_API;
 
-    private static final String URL_PONTUACAO = "https://ds-pontuacao-api.onrender.com";
+    private static final String URL_PONTUACAO = ConfiguracaoServidores.PONTUACAO_API;
 
     private static final int POR_PAGINA = 20;
 

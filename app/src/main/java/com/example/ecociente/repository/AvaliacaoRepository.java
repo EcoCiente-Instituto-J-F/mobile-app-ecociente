@@ -16,7 +16,7 @@ public class AvaliacaoRepository {
 
     private static final String TAG = "AvaliacaoRepository";
 
-    private static final String URL_BASE = "https://ds-mobile-api.onrender.com";
+    private static final String URL_BASE = ConfiguracaoServidores.MOBILE_API;
 
     private static final int POR_PAGINA = 50;
 

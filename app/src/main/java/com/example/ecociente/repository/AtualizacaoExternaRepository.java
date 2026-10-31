@@ -26,9 +26,9 @@ public class AtualizacaoExternaRepository {
 
     private static final String TAG = "AtualizacaoExterna";
 
-    private static final String URL_USUARIO = "https://ds-cadastro-api.onrender.com/api/usuarios/me";
+    private static final String URL_USUARIO = ConfiguracaoServidores.URL_USUARIO;
 
-    private static final String URL_CONDOMINIOS = "https://ds-cadastro-api.onrender.com/api/condominios/";
+    private static final String URL_CONDOMINIOS = ConfiguracaoServidores.URL_CONDOMINIOS;
 
     private static final Pattern CEP = Pattern.compile("^\\d{5}-?\\d{3}$");
 

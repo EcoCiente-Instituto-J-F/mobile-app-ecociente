@@ -46,8 +46,7 @@ public class CalendarioExternoRepository {
     private static final String TAG = "CalendarioApi";
     private static final String MENSAGEM_PADRAO = "Não foi possível conectar ao servidor";
     private static final String MENSAGEM_SESSAO = "Sua sessão expirou. Entre novamente.";
-    private static final String URL_AGENDAMENTOS =
-            "https://ds-calendario-api.onrender.com/api/v1/agendamentos";
+    private static final String URL_AGENDAMENTOS = ConfiguracaoServidores.URL_AGENDAMENTOS;
     private static final int TAMANHO_PAGINA = 10;
     private static final int TAMANHO_PAGINA_MES = 100;
     private static final int TIMEOUT_MS = 180_000;

@@ -20,7 +20,7 @@ public class RankingExternoRepository {
     private static final String TAG = "RankingExterno";
 
     // Trocar pela URL do deploy da ds-pontuacao-api.
-    private static final String URL_BASE = "https://ds-pontuacao-api.onrender.com";
+    private static final String URL_BASE = ConfiguracaoServidores.PONTUACAO_API;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
