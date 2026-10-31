@@ -145,23 +145,20 @@ public class HomeViewModel extends ViewModel {
             return EstadoHome.de(EstadoHome.Tipo.CADASTRO_INCOMPLETO);
         }
 
-        switch (PerfilAcesso.destinoDaHome(perfil)) {
-            case COOPERATIVA:
-                return EstadoHome.de(EstadoHome.Tipo.COOPERATIVA);
+        PerfilAcesso.DestinoHome destino = PerfilAcesso.destinoDaHome(perfil);
 
-            case SINDICO:
-                return EstadoHome.de(EstadoHome.Tipo.SINDICO);
+        if (destino == PerfilAcesso.DestinoHome.COOPERATIVA) {
+            return EstadoHome.de(EstadoHome.Tipo.COOPERATIVA);
+        } else if (destino == PerfilAcesso.DestinoHome.SINDICO) {
+            return EstadoHome.de(EstadoHome.Tipo.SINDICO);
+        } else if (destino == PerfilAcesso.DestinoHome.CONDOMINIO) {
+            return EstadoHome.de(EstadoHome.Tipo.CONDOMINIO);
+        } else if (destino == PerfilAcesso.DestinoHome.USUARIO_COMUM) {
+            fotoUrl.setValue(perfil.getFotoUrl());
 
-            case CONDOMINIO:
-                return EstadoHome.de(EstadoHome.Tipo.CONDOMINIO);
-
-            case USUARIO_COMUM:
-                fotoUrl.setValue(perfil.getFotoUrl());
-
-                return EstadoHome.pronta(PerfilUsuario.nomeExibicao(perfil, usuario));
-
-            default:
-                return EstadoHome.de(EstadoHome.Tipo.SEM_ACESSO);
+            return EstadoHome.pronta(PerfilUsuario.nomeExibicao(perfil, usuario));
+        } else {
+            return EstadoHome.de(EstadoHome.Tipo.SEM_ACESSO);
         }
     }
 }
