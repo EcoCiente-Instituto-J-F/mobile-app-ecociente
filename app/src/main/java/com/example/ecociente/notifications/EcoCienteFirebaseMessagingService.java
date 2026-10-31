@@ -5,6 +5,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.ecociente.repository.PerfilRepository;
+import com.example.ecociente.repository.AutenticacaoExternaRepository;
+import com.example.ecociente.repository.PushRegistroRepository;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -39,6 +41,9 @@ public class EcoCienteFirebaseMessagingService extends FirebaseMessagingService 
         FirebaseUser usuario = perfil.usuarioAtual();
 
         if (usuario == null || !perfil.notificacaoPermitida(usuario.getUid(), tipo.getGrupo())) return;
+        String destinatario = dados.get("usuarioId");
+        if (destinatario != null && !destinatario.equals(
+                String.valueOf(AutenticacaoExternaRepository.usuarioIdSalvo(this)))) return;
 
         NotificacaoEcoCiente.exibir(
                 this,
@@ -51,7 +56,8 @@ public class EcoCienteFirebaseMessagingService extends FirebaseMessagingService 
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
 
-        Log.d(TAG, "Token FCM atualizado com sucesso (valor não exibido no log)");
+        Log.d(TAG, "Token FCM atualizado");
+        PushRegistroRepository.registrarToken(getApplicationContext(), token);
     }
 
 }

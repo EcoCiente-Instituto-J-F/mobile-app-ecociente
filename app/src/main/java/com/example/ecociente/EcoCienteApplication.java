@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.ecociente.views.SplashScreen;
+import com.example.ecociente.repository.PushRegistroRepository;
 
 // As telas foram desenhadas para celular. Em tablet (largura mínima de 600 dp ou mais) duas coisas
 // mantêm o app proporcional: a escala de tudo (textos, botões, margens) cresce até a tela parecer
@@ -114,7 +115,9 @@ public class EcoCienteApplication extends Application implements Application.Act
     }
 
     @Override
-    public void onActivityResumed(@NonNull Activity activity) {}
+    public void onActivityResumed(@NonNull Activity activity) {
+        PushRegistroRepository.sincronizar(activity.getApplicationContext());
+    }
 
     @Override
     public void onActivityPaused(@NonNull Activity activity) {}

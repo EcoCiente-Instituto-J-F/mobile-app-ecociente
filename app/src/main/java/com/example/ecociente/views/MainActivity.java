@@ -449,10 +449,7 @@ public class MainActivity extends AppCompatActivity {
                                 return;
                             }
 
-                            Log.d(
-                                    TAG_FCM,
-                                    "Token FCM obtido (valor não exibido no log)"
-                            );
+                            Log.d(TAG_FCM, "Token FCM obtido");
                         }
                 );
     }
