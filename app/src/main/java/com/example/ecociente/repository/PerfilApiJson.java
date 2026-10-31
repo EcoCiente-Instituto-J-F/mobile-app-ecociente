@@ -74,8 +74,7 @@ final class PerfilApiJson {
         return cooperativa == null ? 0 : cooperativa.optInt("id", 0);
     }
 
-    // O síndico fica com o condomínio em que é responsável; o morador, com o primeiro vínculo
-    // aprovado e ativo. Sem nenhum dos dois, null.
+    // O síndico fica com o condomínio em que é responsável; o morador, com o primeiro vínculo aprovado e ativo. Sem nenhum dos dois, null.
     @Nullable
     static Condominio condominio(@NonNull JSONObject perfil) {
 
@@ -112,8 +111,7 @@ final class PerfilApiJson {
     static final int TIPO_RESIDENCIAL = 1;
     static final int TIPO_COMERCIAL = 2;
 
-    // Corpo do PATCH do condomínio; null quando não há nenhum campo que a API aceitaria. Tipo 0 = não
-    // enviar o tipo.
+    // Corpo do PATCH do condomínio; null quando não há nenhum campo que a API aceitaria. Tipo 0 = não enviar o tipo.
     @Nullable
     static JSONObject corpoDoCondominio(@Nullable String nome, int tipoCondominioId, @Nullable String urlFoto) {
 

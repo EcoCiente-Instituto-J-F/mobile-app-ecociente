@@ -11,9 +11,7 @@ import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-// As APIs ficam em hospedagem gratuita e dormem sem uso: a primeira chamada leva de 70 a 150 s.
-// Um GET qualquer acorda o serviço, então o app faz isso na abertura, antes de o usuário precisar dos dados.
-// Os endereços vêm da ConfiguracaoServidores.
+// As APIs ficam em hospedagem gratuita e dormem sem uso: a primeira chamada leva de 70 a 150 s. Um GET qualquer acorda o serviço, então o app faz isso na abertura, antes de o usuário precisar dos dados. Os endereços vêm da ConfiguracaoServidores.
 public final class AquecimentoDasApis {
 
     private static final String TAG = "Aquecimento";

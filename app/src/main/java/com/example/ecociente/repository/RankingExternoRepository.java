@@ -66,8 +66,7 @@ public class RankingExternoRepository {
                 });
     }
 
-    // Torres que a /me conhece e o ranking não trouxe entram pela posição própria da torre
-    // (GET /rankings/torres/{id}/posicao); se essa consulta falhar, a torre só não aparece.
+    // Torres que a /me conhece e o ranking não trouxe entram pela posição própria da torre (GET /rankings/torres/{id}/posicao); se essa consulta falhar, a torre só não aparece.
     private void completarComTorresDoCondominio(
             @NonNull Context contexto, int condominioId, @NonNull List<SindicoPosicaoRanking> posicoes) {
 

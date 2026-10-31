@@ -20,10 +20,7 @@ import java.util.concurrent.Executors;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Fala com a ds-mobile-api (Java/Postgres, repositório separado deste app),
-// POST /auth/login. Chamada em paralelo ao login do Firebase, sem travar o
-// app se essa API estiver fora do ar. Contas criadas antes do cadastro
-// integrado não existem no Postgres e falham aqui.
+// Fala com a ds-mobile-api (Java/Postgres, repositório separado deste app), POST /auth/login. Chamada em paralelo ao login do Firebase, sem travar o app se essa API estiver fora do ar. Contas criadas antes do cadastro integrado não existem no Postgres e falham aqui.
 public class AutenticacaoExternaRepository {
 
     private static final String TAG = "AuthExternaEcoCiente";
@@ -37,8 +34,6 @@ public class AutenticacaoExternaRepository {
 
     private static final Object TRAVA = new Object();
 
-    // Quem precisa do JWT espera o login em andamento terminar: no primeiro acesso da sessão a Home
-    // pede a agenda antes de a API responder (cold start do Render leva de 70 a 150 s).
     private static final Object ESPERA = new Object();
     private static final long ESPERA_MAXIMA_MS = 180_000;
     private static int loginsEmAndamento = 0;
@@ -53,8 +48,7 @@ public class AutenticacaoExternaRepository {
         void aoConcluir(@Nullable SessaoExterna sessao);
     }
 
-    // `credenciaisRecusadas` é true quando a API respondeu que a conta não serve (senha ou usuário);
-    // sessao nula com false significa API fora do ar ou lenta.
+    // `credenciaisRecusadas` é true quando a API respondeu que a conta não serve (senha ou usuário); sessao nula com false significa API fora do ar ou lenta.
     public interface RetornoLogin {
         void aoConcluir(@Nullable SessaoExterna sessao, boolean credenciaisRecusadas);
     }
@@ -129,7 +123,6 @@ public class AutenticacaoExternaRepository {
         return salvo != null ? salvo : renovarToken(contexto);
     }
 
-    // Login por e-mail e senha ainda falando com a API (o Render pode levar mais de 1 min a acordar).
     public static boolean loginEmAndamento() {
 
         synchronized (ESPERA) {
@@ -137,8 +130,7 @@ public class AutenticacaoExternaRepository {
         }
     }
 
-    // Sessão antiga do Firebase (app aberto sem passar pelo login): ainda não há perfil da API
-    // guardado. Se há credenciais guardadas, refaz o login em segundo plano para obtê-lo.
+    // Sessão antiga do Firebase (app aberto sem passar pelo login): ainda não há perfil da API guardado. Se há credenciais guardadas, refaz o login em segundo plano para obtê-lo.
     public static void garantirPerfil(@NonNull Context contexto, @NonNull Runnable aoConcluir) {
 
         Context contextoApp = contexto.getApplicationContext();
@@ -212,8 +204,7 @@ public class AutenticacaoExternaRepository {
                 return sessao.getToken();
 
             } catch (CredenciaisRecusadas erro) {
-                // A API disse que e-mail ou senha não valem mais (senha trocada, conta apagada):
-                // aí sim a sessão acabou, e sem as credenciais guardadas o app volta ao login.
+                // A API disse que e-mail ou senha não valem mais (senha trocada, conta apagada): aí sim a sessão acabou, e sem as credenciais guardadas o app volta ao login.
                 Log.w(TAG, "Credenciais guardadas recusadas pela API", erro);
 
                 CredenciaisSeguras.limpar(contextoApp);
@@ -233,8 +224,6 @@ public class AutenticacaoExternaRepository {
         CredenciaisSeguras.salvar(contexto, email, novaSenha);
     }
 
-    // Com e-mail e senha guardados, um token que não veio foi falha de conexão ou do servidor (o
-    // Render pode estar acordando), não sessão encerrada: não é motivo para mandar ao login.
     public static boolean temCredenciaisSalvas(@NonNull Context contexto) {
 
         String[] credenciais = CredenciaisSeguras.ler(contexto.getApplicationContext());
@@ -264,8 +253,7 @@ public class AutenticacaoExternaRepository {
         PerfilApiRepository.limpar(contexto);
     }
 
-    // Perfil que a API devolveu no último login (SINDICO, COOPERATIVA...): é o dado do Postgres,
-    // usado para escolher a home quando o Firestore está com outro tipoPerfil.
+    // Perfil que a API devolveu no último login (SINDICO, COOPERATIVA...): é o dado do Postgres, usado para escolher a home quando o Firestore está com outro tipoPerfil.
     @Nullable
     public static String perfilSalvo(@NonNull Context contexto) {
 

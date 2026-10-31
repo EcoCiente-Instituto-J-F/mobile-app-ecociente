@@ -23,8 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Cursos, aulas e quizzes da ds-mobile-api (só leitura, exige o JWT da ds-mobile-api).
-// O guia mostra as aulas; cada aula com quiz vira um quiz da lista.
+// Cursos, aulas e quizzes da ds-mobile-api (só leitura, exige o JWT da ds-mobile-api). O guia mostra as aulas; cada aula com quiz vira um quiz da lista.
 public class EducacaoRepository {
 
     private static final String TAG = "EducacaoRepository";
@@ -177,8 +176,6 @@ public class EducacaoRepository {
                 });
     }
 
-    // Cursos com as aulas ordenadas, buscados uma vez e reaproveitados por alguns minutos: o guia
-    // e a lista de quizzes pedem a mesma árvore, e cada pedido pode acordar o Render.
     @NonNull
     private JSONArray carregarCursosComAulas(@NonNull Context contexto) throws IOException, JSONException {
 
@@ -257,7 +254,6 @@ public class EducacaoRepository {
             conexao.setRequestProperty("Accept", "application/json");
             conexao.setRequestProperty("Authorization", "Bearer " + token);
             conexao.setUseCaches(false);
-            // Render dorme a API após inatividade (cold start de 70 a 150 s).
             conexao.setConnectTimeout(180_000);
             conexao.setReadTimeout(180_000);
 

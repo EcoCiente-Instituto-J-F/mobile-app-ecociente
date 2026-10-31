@@ -84,7 +84,6 @@ final class ApiEsqueciSenha {
             }
 
             conexao.setDoOutput(true);
-            // O Render dorme a API após inatividade; o primeiro pedido chegou a levar 138s.
             conexao.setConnectTimeout(180_000);
             conexao.setReadTimeout(180_000);
 

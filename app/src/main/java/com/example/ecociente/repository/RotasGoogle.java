@@ -24,9 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Distância de carro, da localização do aparelho até o endereço de cada cooperativa, pela Routes API
-// do Google (computeRouteMatrix). A chave vem de MAPS_API_KEY no local.properties; sem ela, ou se a
-// chamada falhar, devolve um mapa vazio e quem chamou usa outra forma de calcular.
+// Distância de carro, da localização do aparelho até o endereço de cada cooperativa, pela Routes API do Google (computeRouteMatrix). A chave vem de MAPS_API_KEY no local.properties; sem ela, ou se a chamada falhar, devolve um mapa vazio e quem chamou usa outra forma de calcular.
 public final class RotasGoogle {
     private static final String TAG = "RotasGoogle";
     private static final String URL_MATRIZ =

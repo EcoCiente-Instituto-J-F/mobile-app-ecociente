@@ -104,9 +104,7 @@ public class PerfilRepository {
         return resultado;
     }
 
-    // O que a API (Postgres) informou na última consulta vale mais que o Firestore: aplica por cima
-    // e ajusta o documento para ficar igual. Usa o que já está guardado, sem pedir nada à rede.
-    // Edição ainda a caminho da API: o app tem o dado mais novo e fica como está.
+    // O que a API (Postgres) informou na última consulta vale mais que o Firestore: aplica por cima e ajusta o documento para ficar igual. Usa o que já está guardado, sem pedir nada à rede. Edição ainda a caminho da API: o app tem o dado mais novo e fica como está.
     @Nullable
     private PerfilUsuario comDadosDaApi(@NonNull String uid, @Nullable PerfilUsuario perfil) {
 
@@ -171,8 +169,7 @@ public class PerfilRepository {
         return resultado;
     }
 
-    // Para o serviço de push, que já roda fora da thread principal: se as preferências do usuário
-    // permitem este grupo de aviso. Sem conseguir ler a preferência (sem rede e sem cache), mantém o aviso.
+    // Para o serviço de push, que já roda fora da thread principal: se as preferências do usuário permitem este grupo de aviso. Sem conseguir ler a preferência (sem rede e sem cache), mantém o aviso.
     public boolean notificacaoPermitida(@NonNull String uid, @NonNull PreferenciasNotificacao.Grupo grupo) {
         try {
             DocumentSnapshot documento =
@@ -248,8 +245,7 @@ public class PerfilRepository {
         return resultado;
     }
 
-    // A conta do Postgres é desativada antes de apagar o Firebase: se a API falhar, nada é apagado e a
-    // pessoa não fica com o login do Firebase removido e a conta da API ainda ativa.
+    // A conta do Postgres é desativada antes de apagar o Firebase: se a API falhar, nada é apagado e a pessoa não fica com o login do Firebase removido e a conta da API ainda ativa.
     private void desativarNaApi(
             @NonNull FirebaseUser usuario,
             @NonNull String uid,

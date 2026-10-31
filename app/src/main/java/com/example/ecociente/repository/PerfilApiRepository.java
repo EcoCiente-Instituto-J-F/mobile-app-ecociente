@@ -17,9 +17,7 @@ import com.example.ecociente.model.SindicoItemUnidade;
 import java.util.Collections;
 import java.util.List;
 
-// GET /api/usuarios/me da ds-mobile-api: de onde o app descobre o condomínio do usuário.
-// O resultado fica guardado para as telas lerem na hora; enquanto a API não responder
-// (ou o usuário não tiver vínculo), o id fica 0.
+// GET /api/usuarios/me da ds-mobile-api: de onde o app descobre o condomínio do usuário. O resultado fica guardado para as telas lerem na hora; enquanto a API não responder (ou o usuário não tiver vínculo), o id fica 0.
 public class PerfilApiRepository {
 
     private static final String TAG = "PerfilApi";
@@ -154,8 +152,7 @@ public class PerfilApiRepository {
         atualizarSeNecessario(contexto, null);
     }
 
-    // `aoConcluir` roda na thread principal quando a consulta termina, com sucesso ou não,
-    // e na hora se o que está guardado ainda vale.
+    // `aoConcluir` roda na thread principal quando a consulta termina, com sucesso ou não, e na hora se o que está guardado ainda vale.
     public void atualizarSeNecessario(@NonNull Context contexto, @Nullable Runnable aoConcluir) {
 
         Context contextoApp = contexto.getApplicationContext();
