@@ -19,7 +19,6 @@ import java.util.concurrent.Executors;
 public final class PushRegistroRepository {
 
     private static final String TAG = "PushEcoCiente";
-    private static final String BASE = "https://ds-mobile-api.onrender.com";
     private static final String PREFS = "push_ecociente";
     private static final String INSTALACAO = "instalacao";
     private static final String ULTIMO_UID = "ultimo_uid";
@@ -29,6 +28,10 @@ public final class PushRegistroRepository {
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
     private PushRegistroRepository() {}
+
+    private static String base(Context context) {
+        return context.getString(com.example.ecociente.R.string.educacao_api_base_url).replaceAll("/+$", "");
+    }
 
     @NonNull
     private static SharedPreferences prefs(Context context) {
@@ -89,7 +92,7 @@ public final class PushRegistroRepository {
                             corpo.put("token", token);
                             corpo.put("preferencias", preferencias);
                             ApiAutenticada.Resposta resposta = ApiAutenticada.enviarComCodigo(
-                                    app, BASE + "/api/notificacoes/dispositivos", corpo.toString());
+                                    app, base(app) + "/api/notificacoes/dispositivos", corpo.toString());
                             if (resposta != null && resposta.sucesso()) {
                                 p.edit().putString(ULTIMO_UID, uid).putString(ULTIMO_TOKEN, token)
                                         .putLong(ULTIMA_SINCRONIZACAO, System.currentTimeMillis()).apply();
@@ -113,7 +116,7 @@ public final class PushRegistroRepository {
         prefs(app).edit().remove(ULTIMO_UID).remove(ULTIMO_TOKEN).remove(ULTIMA_SINCRONIZACAO).apply();
         EXECUTOR.execute(() -> {
             try {
-                ApiAutenticada.excluirComCodigo(app, BASE + "/api/notificacoes/dispositivos/" + instalacao(app));
+                ApiAutenticada.excluirComCodigo(app, base(app) + "/api/notificacoes/dispositivos/" + instalacao(app));
             } catch (Exception erro) {
                 Log.w(TAG, "Não foi possível desativar o dispositivo", erro);
             }
