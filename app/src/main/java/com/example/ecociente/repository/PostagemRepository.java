@@ -56,8 +56,7 @@ public class PostagemRepository {
         listar(contexto, "/api/postagens?condominioId=" + condominioId + "&size=" + POR_PAGINA, retorno);
     }
 
-    // Descartes do condomínio que ainda esperam a decisão do síndico (até as 100 mais recentes). Rota própria
-    // do síndico responsável: o feed dos moradores (GET /api/postagens) exige ser morador do condomínio.
+    // Descartes do condomínio que ainda esperam a decisão do síndico (até as 100 mais recentes). Rota própria do síndico responsável: o feed dos moradores (GET /api/postagens) exige ser morador do condomínio.
     public void emAnalise(@NonNull Context contexto, int condominioId, @NonNull RetornoPostagens retorno) {
         listar(contexto, "/api/condominios/" + condominioId + "/postagens/em-analise?size=100", retorno);
     }
@@ -215,8 +214,7 @@ public class PostagemRepository {
                 });
     }
 
-    // Calcula o hash, sobe a foto ao Cloudinary e registra a postagem. `capturadaEmMs` é o
-    // momento em que a câmera entregou a foto.
+    // Calcula o hash, sobe a foto ao Cloudinary e registra a postagem. `capturadaEmMs` é o momento em que a câmera entregou a foto.
     public void registrar(
             @NonNull Context contexto,
             @NonNull Uri foto,

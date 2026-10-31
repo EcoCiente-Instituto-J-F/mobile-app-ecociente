@@ -13,8 +13,7 @@ import java.util.concurrent.Executors;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Consulta pública de CEP (ViaCEP). Serve para manter cidade e estado do perfil iguais ao que a
-// ds-mobile-api grava quando o CEP muda, já que ela só responde 204 e não devolve o endereço.
+// Consulta pública de CEP (ViaCEP). Serve para manter cidade e estado do perfil iguais ao que a ds-mobile-api grava quando o CEP muda, já que ela só responde 204 e não devolve o endereço.
 public class ConsultaCepRepository {
 
     private static final String TAG = "ConsultaCep";

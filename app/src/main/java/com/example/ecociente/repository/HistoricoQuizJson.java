@@ -8,8 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Array de GET /api/tentativas-quiz: da tentativa mais recente para a mais antiga. Item inválido
-// derruba a leitura toda, para uma resposta quebrada não virar um histórico "vazio" ou com nota zero.
+// Array de GET /api/tentativas-quiz: da tentativa mais recente para a mais antiga. Item inválido derruba a leitura toda, para uma resposta quebrada não virar um histórico "vazio" ou com nota zero.
 final class HistoricoQuizJson {
 
     private HistoricoQuizJson() {}

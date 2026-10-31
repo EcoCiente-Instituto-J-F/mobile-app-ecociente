@@ -18,8 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONObject;
 
-// Materiais, pontos e quizzes vêm de GET /api/condominios/{id}/dashboard (ds-mobile-api, view
-// vw_dashboard_sindico); as coletas por cooperativa, do calendário (GET /api/v1/agendamentos).
+// Materiais, pontos e quizzes vêm de GET /api/condominios/{id}/dashboard (ds-mobile-api, view vw_dashboard_sindico); as coletas por cooperativa, do calendário (GET /api/v1/agendamentos).
 public class DashboardSindicoRepository {
 
     private static final String TAG = "DashboardSindico";

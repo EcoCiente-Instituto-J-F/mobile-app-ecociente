@@ -18,7 +18,6 @@ import java.nio.charset.StandardCharsets;
 public class ChatRepository {
 
     private static final String URL_CHAT = ConfiguracaoServidores.CHAT_IA;
-    // Render dorme o serviço após inatividade (cold start de 70 a 150 s) e o LLM leva alguns segundos.
     private static final int TIMEOUT_CONEXAO_MS = 180_000;
     private static final int TIMEOUT_RESPOSTA_MS = 180_000;
 

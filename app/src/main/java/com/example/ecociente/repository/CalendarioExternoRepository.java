@@ -275,8 +275,7 @@ public class CalendarioExternoRepository {
         }
     }
 
-    // O Spring responde 403 sem corpo quando o JWT é inválido ou expirou (o 401 do filtro cai
-    // no /error, que exige autenticação). Já o 403 de perfil não autorizado traz um corpo JSON.
+    // O Spring responde 403 sem corpo quando o JWT é inválido ou expirou (o 401 do filtro cai no /error, que exige autenticação). Já o 403 de perfil não autorizado traz um corpo JSON.
     private boolean tokenRejeitado(int codigo, @NonNull HttpURLConnection conexao) throws IOException {
 
         if (codigo == HttpURLConnection.HTTP_UNAUTHORIZED) {
@@ -403,8 +402,7 @@ public class CalendarioExternoRepository {
         return resultado;
     }
 
-    // Sessão expirada leva ao login; só vale se não há mais credenciais guardadas. Com elas, o
-    // token falhou por conexão ou servidor fora do ar, e a pessoa só precisa tentar de novo.
+    // Sessão expirada leva ao login; só vale se não há mais credenciais guardadas. Com elas, o token falhou por conexão ou servidor fora do ar, e a pessoa só precisa tentar de novo.
     @NonNull
     private static ResultadoSolicitacoes semToken(Context contexto) {
 

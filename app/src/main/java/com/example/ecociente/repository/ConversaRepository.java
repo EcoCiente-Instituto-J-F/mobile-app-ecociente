@@ -13,9 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONObject;
 
-// Conversas entre condomínio e cooperativa, vindas de /api/conversas da ds-mobile-api. O lado de quem
-// usa o app ("CONDOMINIO" para o síndico, "COOPERATIVA" para a cooperativa) decide qual nome aparece e
-// quais mensagens são "enviadas".
+// Conversas entre condomínio e cooperativa, vindas de /api/conversas da ds-mobile-api. O lado de quem usa o app ("CONDOMINIO" para o síndico, "COOPERATIVA" para a cooperativa) decide qual nome aparece e quais mensagens são "enviadas".
 public class ConversaRepository {
 
     private static final String TAG = "ConversaRepository";
@@ -152,7 +150,6 @@ public class ConversaRepository {
                 });
     }
 
-    // POST /api/conversas/{id}/mensagens.
     public void enviar(
             @NonNull Context contexto,
             int conversaId,
@@ -194,8 +191,7 @@ public class ConversaRepository {
                 });
     }
 
-    // PATCH /api/conversas/{id}/leitura: marca como lidas as mensagens do outro lado. Se falhar, as
-    // mensagens só continuam como não lidas.
+    // PATCH /api/conversas/{id}/leitura: marca como lidas as mensagens do outro lado. Se falhar, as mensagens só continuam como não lidas.
     public void marcarComoLida(@NonNull Context contexto, int conversaId) {
 
         Context contextoApp = contexto.getApplicationContext();
