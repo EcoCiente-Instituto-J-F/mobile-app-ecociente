@@ -18,7 +18,7 @@ import org.json.JSONObject;
 import android.os.Handler;
 import android.os.Looper;
 
-// PATCH /api/usuarios/me e /api/usuarios/me/endereco da ds-cadastro-api (nome, telefone, foto, endereço). O Firestore continua
+// PATCH /api/usuarios/me e /api/usuarios/me/endereco da ds-mobile-api (nome, telefone, foto, endereço). O Firestore continua
 // sendo a fonte do app: aqui só se espelha o que a API sabe guardar, em segundo plano e sem
 // avisar o usuário se falhar (contas sem JWT, como Google/Facebook, simplesmente não sincronizam).
 // E-mail fica de fora de propósito: a API não troca o e-mail no Firebase, e os dois divergiriam.
@@ -26,9 +26,9 @@ public class AtualizacaoExternaRepository {
 
     private static final String TAG = "AtualizacaoExterna";
 
-    private static final String URL_USUARIO = "https://ds-cadastro-api.onrender.com/api/usuarios/me";
+    private static final String URL_USUARIO = ConfiguracaoServidores.URL_USUARIO;
 
-    private static final String URL_CONDOMINIOS = "https://ds-cadastro-api.onrender.com/api/condominios/";
+    private static final String URL_CONDOMINIOS = ConfiguracaoServidores.URL_CONDOMINIOS;
 
     private static final Pattern CEP = Pattern.compile("^\\d{5}-?\\d{3}$");
 

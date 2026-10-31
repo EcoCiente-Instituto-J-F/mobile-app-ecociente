@@ -1,10 +1,10 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.EstadoTela;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.widget.PopupMenu;
 import android.view.View;
@@ -160,26 +160,11 @@ public class QuizActivity extends AppCompatActivity {
 
         lista.removeAllViews();
 
-        TextView mensagem = new TextView(this);
-
-        mensagem.setText(erro ? R.string.quizzes_erro : R.string.quizzes_vazio);
-        mensagem.setTextColor(getColor(R.color.cinza_texto_auxiliar));
-        mensagem.setTextSize(14);
-        mensagem.setGravity(Gravity.CENTER);
-        mensagem.setPadding(48, 64, 48, 24);
-
-        lista.addView(mensagem);
-
-        if (!erro) {
-            return;
+        if (erro) {
+            EstadoTela.erro(lista, R.string.quizzes_erro, this::carregarQuizzes);
+        } else {
+            EstadoTela.vazio(lista, R.string.quizzes_vazio);
         }
-
-        MaterialButton tentar = (MaterialButton) getLayoutInflater().inflate(R.layout.botao_dialogo, lista, false);
-
-        tentar.setText(R.string.tentar_novamente);
-        tentar.setOnClickListener(view -> carregarQuizzes());
-
-        lista.addView(tentar);
     }
 
     private void configurarCabecalho() {

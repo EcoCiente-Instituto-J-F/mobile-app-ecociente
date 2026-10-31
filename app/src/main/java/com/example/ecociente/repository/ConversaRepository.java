@@ -20,7 +20,7 @@ public class ConversaRepository {
 
     private static final String TAG = "ConversaRepository";
 
-    private static final String URL_CONVERSAS = "https://ds-mobile-api.onrender.com/api/conversas";
+    private static final String URL_CONVERSAS = ConfiguracaoServidores.MOBILE_API + "/api/conversas";
 
     private static final int TAMANHO_DA_PAGINA = 100;
 

@@ -23,14 +23,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Cursos, aulas e quizzes da ds-mobile-api (só leitura, exige o JWT da ds-autenticacao-api).
+// Cursos, aulas e quizzes da ds-mobile-api (só leitura, exige o JWT da ds-mobile-api).
 // O guia mostra as aulas; cada aula com quiz vira um quiz da lista.
 public class EducacaoRepository {
 
     private static final String TAG = "EducacaoRepository";
 
     // Trocar quando o deploy do ds-mobile-api estiver no ar.
-    private static final String URL_BASE = "https://ds-mobile-api.onrender.com";
+    private static final String URL_BASE = ConfiguracaoServidores.MOBILE_API;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 

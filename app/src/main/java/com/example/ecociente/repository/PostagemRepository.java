@@ -23,9 +23,9 @@ public class PostagemRepository {
 
     private static final String TAG = "PostagemRepository";
 
-    private static final String URL_BASE = "https://ds-mobile-api.onrender.com";
+    private static final String URL_BASE = ConfiguracaoServidores.MOBILE_API;
 
-    private static final String URL_PONTUACAO = "https://ds-pontuacao-api.onrender.com";
+    private static final String URL_PONTUACAO = ConfiguracaoServidores.PONTUACAO_API;
 
     private static final int POR_PAGINA = 20;
 
@@ -101,6 +101,14 @@ public class PostagemRepository {
     // Só descartes em análise (janela de 24 h) aceitam voto.
     public static boolean estaEmAnalise(@NonNull PostagemFeed postagem) {
         return PostagemJson.statusLegivel("em_analise").equals(postagem.getStatus());
+    }
+
+    public static boolean estaAprovada(@NonNull PostagemFeed postagem) {
+        return PostagemJson.statusLegivel("aprovada").equals(postagem.getStatus());
+    }
+
+    public static boolean estaReprovada(@NonNull PostagemFeed postagem) {
+        return PostagemJson.statusLegivel("reprovada").equals(postagem.getStatus());
     }
 
     // POST /api/postagens/{id}/votos: o morador aprova ou denuncia (com o id do motivo) um descarte em análise.

@@ -64,6 +64,21 @@
             android:paddingEnd="26dp"
             android:paddingBottom="16dp">
 
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/branco"
+                app:cardCornerRadius="@dimen/raio_card"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/cinza_borda_clara_home"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -117,10 +132,29 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cardBackgroundColor="@color/branco"
+                app:cardCornerRadius="@dimen/raio_card"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/cinza_borda_clara_home"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
                 android:fontFamily="@font/nunito_bold"
                 android:text="@string/registro_tipo_titulo"
                 android:textColor="@color/verde_escuro_principal"
@@ -132,6 +166,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 

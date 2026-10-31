@@ -275,7 +275,7 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
         definirValor(linha, valor);
 
-        // Cidade e estado vêm do CEP na ds-cadastro-api; editar à mão só criaria divergência.
+        // Cidade e estado vêm do CEP na ds-mobile-api; editar à mão só criaria divergência.
         if (editavel) {
             linha.setOnClickListener(view -> abrirEdicao(campo, rotulo, linha));
         } else {

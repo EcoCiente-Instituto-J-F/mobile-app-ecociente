@@ -5,7 +5,7 @@ import com.example.ecociente.model.ResultadoApi;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// POST /senhas/alterar da ds-esqueceusenha-api: exige o JWT da ds-autenticacao-api e
+// POST /senhas/alterar da ds-mobile-api: exige o JWT da ds-mobile-api e
 // identifica o usuário pelo token, por isso não recebe o e-mail.
 public class AlterarSenhaExternaRepository {
 

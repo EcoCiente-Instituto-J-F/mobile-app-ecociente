@@ -78,20 +78,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
-            <TextView
-                android:id="@+id/textoFeedVazio"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
-                android:fontFamily="@font/nunito_regular"
-                android:gravity="center"
-                android:paddingStart="32dp"
-                android:paddingEnd="32dp"
-                android:text="@string/feed_vazio"
-                android:textColor="@color/cinza_texto_auxiliar"
-                android:textSize="14sp"
-                android:visibility="gone" />
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

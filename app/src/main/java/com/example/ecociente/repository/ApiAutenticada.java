@@ -11,7 +11,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-// GET com o JWT da ds-autenticacao-api. Quem chama já está numa thread de rede.
+// GET com o JWT da ds-mobile-api. Quem chama já está numa thread de rede.
 final class ApiAutenticada {
 
     private static final String TAG = "ApiAutenticada";

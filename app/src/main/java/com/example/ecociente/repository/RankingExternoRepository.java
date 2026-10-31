@@ -14,13 +14,13 @@ import java.util.concurrent.Executors;
 import org.json.JSONObject;
 import com.example.ecociente.model.SindicoItemUnidade;
 
-// GET /api/v1/rankings/torres da ds-pontuacao-api (exige o JWT da ds-autenticacao-api).
+// GET /api/v1/rankings/torres da ds-pontuacao-api (exige o JWT da ds-mobile-api).
 public class RankingExternoRepository {
 
     private static final String TAG = "RankingExterno";
 
     // Trocar pela URL do deploy da ds-pontuacao-api.
-    private static final String URL_BASE = "https://ds-pontuacao-api.onrender.com";
+    private static final String URL_BASE = ConfiguracaoServidores.PONTUACAO_API;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
