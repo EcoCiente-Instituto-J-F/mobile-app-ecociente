@@ -55,7 +55,7 @@
             android:layout_gravity="center"
             android:contentDescription="@string/assistente"
             android:scaleType="centerInside"
-            android:src="@drawable/mascote_eko" />
+            android:src="@drawable/ic_chatbot_logo" />
 
     </com.google.android.material.card.MaterialCardView>
 
