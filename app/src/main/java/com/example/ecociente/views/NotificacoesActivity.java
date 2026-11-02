@@ -10,7 +10,6 @@ import com.example.ecociente.R;
 import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.PreferenciasNotificacao;
 import com.example.ecociente.repository.PushRegistroRepository;
-import com.example.ecociente.notifications.PermissaoNotificacoes;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
@@ -20,7 +19,6 @@ import com.google.firebase.auth.FirebaseUser;
 public class NotificacoesActivity extends AppCompatActivity {
 
     private PerfilViewModel viewModel;
-    private PermissaoNotificacoes permissaoNotificacoes;
 
     private final Motion motion = new Motion();
 
@@ -34,8 +32,6 @@ public class NotificacoesActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
-
-        permissaoNotificacoes = new PermissaoNotificacoes(this);
 
         com.example.ecociente.ui.JanelaEdgeToEdge.aplicar(this);
 
@@ -60,8 +56,6 @@ public class NotificacoesActivity extends AppCompatActivity {
                 findViewById(R.id.containerSecaoAtividades),
                 findViewById(R.id.tituloSecaoSustentabilidade),
                 findViewById(R.id.containerSecaoSustentabilidade));
-
-        permissaoNotificacoes.pedirSeNecessario();
     }
 
     @Override
