@@ -75,9 +75,13 @@ public final class PushRegistroRepository {
         }
         FirestoreProvider.obterInstancia().collection("usuarios").document(uid).get()
                 .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful() || task.getResult() == null
-                            || !task.getResult().exists()) {
-                        Log.w(TAG, "Preferencias remotas indisponiveis; registro suspenso");
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "Firestore indisponivel para ler preferencias; registro suspenso",
+                                task.getException());
+                        return;
+                    }
+                    if (task.getResult() == null || !task.getResult().exists()) {
+                        Log.w(TAG, "Perfil ausente no Firestore; registro suspenso");
                         return;
                     }
                     DocumentSnapshot doc = task.getResult();
@@ -119,8 +123,11 @@ public final class PushRegistroRepository {
                             if (resposta != null && resposta.sucesso()) {
                                 p.edit().putString(ULTIMO_UID, uid).putString(ULTIMO_TOKEN, token)
                                         .putLong(ULTIMA_SINCRONIZACAO, System.currentTimeMillis()).apply();
+                                Log.i(TAG, "Dispositivo FCM registrado na API (HTTP " + resposta.codigo + ")");
+                            } else if (resposta == null) {
+                                Log.w(TAG, "Sem JWT da API mobile para registrar dispositivo; verifique login na API");
                             } else {
-                                Log.w(TAG, "Registro de dispositivo ainda indisponível");
+                                Log.w(TAG, "Falha HTTP ao registrar dispositivo: " + resposta.codigo);
                             }
                         } catch (Exception erro) {
                             Log.w(TAG, "Falha ao registrar dispositivo", erro);
