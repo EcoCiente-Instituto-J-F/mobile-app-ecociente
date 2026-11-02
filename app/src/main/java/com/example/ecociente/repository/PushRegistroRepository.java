@@ -3,6 +3,9 @@ package com.example.ecociente.repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.IOException;
 
 import androidx.annotation.NonNull;
 
@@ -22,6 +25,8 @@ public final class PushRegistroRepository {
     private static final String PREFS = "push_ecociente";
     private static final String INSTALACAO = "instalacao";
     private static final String ULTIMO_UID = "ultimo_uid";
+    private static final String PREFERENCIAS_UID = "preferencias_uid";
+    private static final String PREFERENCIAS_JSON = "preferencias_json";
     private static final String ULTIMO_TOKEN = "ultimo_token";
     private static final String ULTIMA_SINCRONIZACAO = "ultima_sincronizacao";
     private static final long INTERVALO = 6L * 60L * 60L * 1000L;
@@ -70,19 +75,37 @@ public final class PushRegistroRepository {
         }
         FirestoreProvider.obterInstancia().collection("usuarios").document(uid).get()
                 .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful() || task.getResult() == null
+                            || !task.getResult().exists()) {
+                        Log.w(TAG, "Preferencias remotas indisponiveis; registro suspenso");
+                        return;
+                    }
+                    DocumentSnapshot doc = task.getResult();
+                    Object valor = doc.get("preferenciasNotificacao");
+                    java.util.Map<?, ?> mapa = valor instanceof java.util.Map
+                            ? (java.util.Map<?, ?>) valor : null;
+                    if (mapa == null && doc.contains("preferenciasNotificacao")) {
+                        Log.w(TAG, "Preferencias remotas invalidas");
+                        return;
+                    }
                     JSONObject preferencias = new JSONObject();
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        DocumentSnapshot doc = task.getResult();
-                        Object valor = doc.get("preferenciasNotificacao");
-                        if (valor instanceof java.util.Map) {
-                            java.util.Map<?, ?> mapa = (java.util.Map<?, ?>) valor;
-                            for (String chave : new String[]{"notificacoesGerais", "lembretesAvisos", "novasAtividades", "dicasSustentaveis"}) {
-                                if (mapa.get(chave) instanceof Boolean) {
-                                    try { preferencias.put(chave, mapa.get(chave)); } catch (Exception ignored) {}
-                                }
-                            }
+                    for (String chave : new String[]{"notificacoesGerais", "lembretesAvisos",
+                            "novasAtividades", "dicasSustentaveis"}) {
+                        Object campo = mapa == null ? Boolean.TRUE : mapa.get(chave);
+                        if (campo == null) campo = Boolean.TRUE;
+                        if (!(campo instanceof Boolean)) {
+                            Log.w(TAG, "Preferencia remota invalida: " + chave);
+                            return;
+                        }
+                        try {
+                            preferencias.put(chave, campo);
+                        } catch (Exception erro) {
+                            Log.w(TAG, "Nao foi possivel preparar preferencias", erro);
+                            return;
                         }
                     }
+                    p.edit().putString(PREFERENCIAS_UID, uid)
+                            .putString(PREFERENCIAS_JSON, preferencias.toString()).apply();
                     EXECUTOR.execute(() -> {
                         if (FirebaseAuth.getInstance().getCurrentUser() == null
                                 || !uid.equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) return;
@@ -111,14 +134,47 @@ public final class PushRegistroRepository {
         sincronizar(contexto);
     }
 
+    public static boolean notificacaoPermitida(@NonNull Context contexto,
+            @NonNull String uid, @NonNull String grupo) {
+        SharedPreferences p = prefs(contexto);
+        if (!uid.equals(p.getString(PREFERENCIAS_UID, ""))) return false;
+        try {
+            JSONObject preferencias = new JSONObject(p.getString(PREFERENCIAS_JSON, ""));
+            return preferencias.optBoolean("notificacoesGerais", false)
+                    && preferencias.optBoolean(grupo, false);
+        } catch (Exception erro) {
+            return false;
+        }
+    }
+
     public static void encerrarSessao(@NonNull Context contexto) {
         Context app = contexto.getApplicationContext();
-        prefs(app).edit().remove(ULTIMO_UID).remove(ULTIMO_TOKEN).remove(ULTIMA_SINCRONIZACAO).apply();
+        String jwt = AutenticacaoExternaRepository.obterTokenSalvo(app);
+        String idInstalacao = instalacao(app);
+        prefs(app).edit().remove(ULTIMO_UID).remove(ULTIMO_TOKEN)
+                .remove(ULTIMA_SINCRONIZACAO).remove(PREFERENCIAS_UID)
+                .remove(PREFERENCIAS_JSON).apply();
+        if (jwt == null || jwt.isBlank()) {
+            Log.w(TAG, "Sem JWT para desativar token no logout");
+            return;
+        }
         EXECUTOR.execute(() -> {
+            HttpURLConnection conexao = null;
             try {
-                ApiAutenticada.excluirComCodigo(app, base(app) + "/api/notificacoes/dispositivos/" + instalacao(app));
-            } catch (Exception erro) {
-                Log.w(TAG, "Não foi possível desativar o dispositivo", erro);
+                conexao = (HttpURLConnection) new URL(base(app)
+                        + "/api/notificacoes/dispositivos/" + idInstalacao).openConnection();
+                conexao.setRequestMethod("DELETE");
+                conexao.setRequestProperty("Authorization", "Bearer " + jwt);
+                conexao.setConnectTimeout(10000);
+                conexao.setReadTimeout(10000);
+                int codigo = conexao.getResponseCode();
+                if (codigo < 200 || codigo >= 300) {
+                    Log.w(TAG, "Falha HTTP ao desativar dispositivo: " + codigo);
+                }
+            } catch (IOException erro) {
+                Log.w(TAG, "Nao foi possivel desativar dispositivo", erro);
+            } finally {
+                if (conexao != null) conexao.disconnect();
             }
         });
     }

@@ -67,6 +67,13 @@ public final class NotificacaoEcoCiente {
                 : null;
 
         int idNotificacao = proximoCodigo();
+        String idRecebido = dados.get("idNotificacao");
+        if (idRecebido != null) {
+            try {
+                int valor = Integer.parseInt(idRecebido);
+                if (valor > 0) idNotificacao = valor;
+            } catch (NumberFormatException ignorado) {}
+        }
 
         PendingIntent abrirCorpo = criarPendingIntent(
                 context,
@@ -152,7 +159,7 @@ public final class NotificacaoEcoCiente {
                                 NotificationCompat.CATEGORY_REMINDER
                         )
                         .setVisibility(
-                                NotificationCompat.VISIBILITY_PUBLIC
+                                NotificationCompat.VISIBILITY_PRIVATE
                         );
 
         NotificationManagerCompat
