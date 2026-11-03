@@ -1,6 +1,7 @@
 package com.example.ecociente.repository;
 
 import android.content.Context;
+import com.example.ecociente.R;
 import com.example.ecociente.model.RespostaChat;
 
 import java.io.IOException;
@@ -17,7 +18,6 @@ import java.nio.charset.StandardCharsets;
 
 public class ChatRepository {
 
-    private static final String URL_CHAT = ConfiguracaoServidores.CHAT_IA;
     private static final int TIMEOUT_CONEXAO_MS = 180_000;
     private static final int TIMEOUT_RESPOSTA_MS = 180_000;
 
@@ -37,15 +37,16 @@ public class ChatRepository {
             corpo.put("session_id", sessionId);
         }
 
+        String endereco = contexto.getString(R.string.eko_chat_url).trim();
         int[] codigo = new int[1];
-        String respostaJson = enviar(corpo, token, codigo);
+        String respostaJson = enviar(endereco, corpo, token, codigo);
 
         // O JWT dura minutos: se o servidor recusar, renova e tenta uma vez.
         if (codigo[0] == 401) {
             String renovado = autenticacao.renovarToken(contexto);
 
             if (renovado != null) {
-                respostaJson = enviar(corpo, renovado, codigo);
+                respostaJson = enviar(endereco, corpo, renovado, codigo);
             }
         }
 
@@ -64,11 +65,11 @@ public class ChatRepository {
         return new RespostaChat(resposta, novaSessao);
     }
 
-    private String enviar(JSONObject corpo, String token, int[] codigo) throws IOException {
+    private String enviar(String endereco, JSONObject corpo, String token, int[] codigo) throws IOException {
         HttpURLConnection conexao = null;
 
         try {
-            conexao = (HttpURLConnection) new URL(URL_CHAT).openConnection();
+            conexao = (HttpURLConnection) new URL(endereco).openConnection();
             conexao.setRequestMethod("POST");
             conexao.setConnectTimeout(TIMEOUT_CONEXAO_MS);
             conexao.setReadTimeout(TIMEOUT_RESPOSTA_MS);

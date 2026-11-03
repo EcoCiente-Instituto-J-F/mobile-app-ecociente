@@ -57,6 +57,16 @@ android {
                 ?: "https://ds-mobile-api.onrender.com").trimEnd('/')
         )
 
+        val ekoChatUrl = (System.getenv("ECOCIENTE_EKO_CHAT_URL")
+            ?: propriedadesEnv.getProperty("ECOCIENTE_EKO_CHAT_URL")
+            ?: "https://api.52.71.117.143.sslip.io/api/v1/chat").trim()
+
+        require(ekoChatUrl.startsWith("https://")) {
+            "ECOCIENTE_EKO_CHAT_URL deve usar HTTPS"
+        }
+
+        resValue("string", "eko_chat_url", ekoChatUrl)
+
         testInstrumentationRunner =
             "androidx.test.runner.AndroidJUnitRunner"
 
