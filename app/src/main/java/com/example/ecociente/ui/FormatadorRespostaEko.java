@@ -19,7 +19,7 @@ public final class FormatadorRespostaEko {
         try {
             JSONObject dados = new JSONObject(json);
             String dominio = dados.optString("dominio", "").trim();
-            if (!dominio.isEmpty() && !"educador".equalsIgnoreCase(dominio)
+            if (!"educador".equalsIgnoreCase(dominio)
                     && !"faq".equalsIgnoreCase(dominio)) {
                 return original;
             }
