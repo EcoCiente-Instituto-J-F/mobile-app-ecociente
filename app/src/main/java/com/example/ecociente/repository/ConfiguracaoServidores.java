@@ -10,7 +10,8 @@ public final class ConfiguracaoServidores {
 
     public static final String MOBILE_API = "https://ds-mobile-api.onrender.com";
     public static final String PONTUACAO_API = "https://ds-pontuacao-api.onrender.com";
-    public static final String CHAT_IA = "https://ia-eko-1.onrender.com/api/v1/chat";
+    public static final String CHAT_IA_RENDER = "https://ia-eko-1.onrender.com/api/v1/chat";
+    public static final String CHAT_IA = CHAT_IA_RENDER;
 
     public static final String URL_LOGIN = MOBILE_API + "/auth/login";
     public static final String URL_CADASTRO = MOBILE_API + "/api/cadastro";
