@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.ecociente.model.MensagemChat;
 import com.example.ecociente.model.RespostaChat;
 import com.example.ecociente.repository.ChatRepository;
+import com.example.ecociente.ui.FormatadorRespostaEko;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +62,7 @@ public class ChatViewModel extends ViewModel {
                             sessionId = resposta.getSessionId();
                         }
 
-                        adicionarMensagem(MensagemChat.doEko(resposta.getResposta()));
+                        adicionarMensagem(MensagemChat.doEko(FormatadorRespostaEko.paraExibicao(resposta.getResposta())));
                     } catch (Exception erro) {
                         Log.e(TAG, "Falha ao chamar a API", erro);
                         adicionarMensagem(MensagemChat.erroDeConexao());
