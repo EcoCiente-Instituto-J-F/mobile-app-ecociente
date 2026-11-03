@@ -1,6 +1,7 @@
 package com.example.ecociente.views;
 
 import com.example.ecociente.repository.AquecimentoDasApis;
+import com.example.ecociente.notifications.PermissaoNotificacoes;
 import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
@@ -57,6 +58,8 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         super.onCreate(estadoSalvo);
         JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_sindico_home);
+
+        new PermissaoNotificacoes(this).pedirSeNecessario();
 
 
         Motion.entrar(

@@ -5,6 +5,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.example.ecociente.repository.PerfilRepository;
+import com.example.ecociente.model.PreferenciasNotificacao;
+import com.example.ecociente.repository.AutenticacaoExternaRepository;
+import com.example.ecociente.repository.PushRegistroRepository;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -38,7 +41,19 @@ public class EcoCienteFirebaseMessagingService extends FirebaseMessagingService 
         PerfilRepository perfil = new PerfilRepository();
         FirebaseUser usuario = perfil.usuarioAtual();
 
-        if (usuario == null || !perfil.notificacaoPermitida(usuario.getUid(), tipo.getGrupo())) return;
+        if (usuario == null || tipo == TipoNotificacaoEcoCiente.DESCONHECIDA) return;
+        String destinatario = dados.get("usuarioId");
+        int usuarioId = AutenticacaoExternaRepository.usuarioIdSalvo(this);
+        if (destinatario == null || usuarioId <= 0
+                || !destinatario.equals(String.valueOf(usuarioId))) return;
+        String grupo;
+        switch (tipo.getGrupo()) {
+            case LEMBRETES_AVISOS: grupo = "lembretesAvisos"; break;
+            case NOVAS_ATIVIDADES: grupo = "novasAtividades"; break;
+            case DICAS_SUSTENTAVEIS: grupo = "dicasSustentaveis"; break;
+            default: return;
+        }
+        if (!PushRegistroRepository.notificacaoPermitida(this, usuario.getUid(), grupo)) return;
 
         NotificacaoEcoCiente.exibir(
                 this,
@@ -51,7 +66,8 @@ public class EcoCienteFirebaseMessagingService extends FirebaseMessagingService 
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
 
-        Log.d(TAG, "Token FCM atualizado com sucesso (valor não exibido no log)");
+        Log.d(TAG, "Token FCM atualizado");
+        PushRegistroRepository.registrarToken(getApplicationContext(), token);
     }
 
 }

@@ -15,6 +15,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONException;
@@ -31,6 +35,7 @@ public class AutenticacaoExternaRepository {
     private static final String CHAVE_TOKEN = "token";
     private static final String CHAVE_PERFIL = "perfil";
     private static final String CHAVE_USUARIO_ID = "usuarioId";
+    private static final String CHAVE_FIREBASE_UID = "firebaseUid";
 
     private static final Object TRAVA = new Object();
 
@@ -119,8 +124,11 @@ public class AutenticacaoExternaRepository {
         aguardarLoginEmAndamento();
 
         String salvo = obterTokenSalvo(contexto);
-
-        return salvo != null ? salvo : renovarToken(contexto);
+        FirebaseUser atual = FirebaseAuth.getInstance().getCurrentUser();
+        if (salvo != null && atual != null && atual.getUid().equals(uidSalvo(contexto))) {
+            return salvo;
+        }
+        return renovarToken(contexto);
     }
 
     public static boolean loginEmAndamento() {
@@ -191,7 +199,7 @@ public class AutenticacaoExternaRepository {
             String[] credenciais = CredenciaisSeguras.ler(contextoApp);
 
             if (credenciais == null || credenciais.length < 2) {
-                return null;
+                return renovarPeloFirebase(contextoApp);
             }
 
             try {
@@ -209,12 +217,11 @@ public class AutenticacaoExternaRepository {
 
                 CredenciaisSeguras.limpar(contextoApp);
 
-                return null;
+                return renovarPeloFirebase(contextoApp);
 
             } catch (Exception erro) {
                 Log.w(TAG, "Não foi possível renovar o token", erro);
-
-                return null;
+                return renovarPeloFirebase(contextoApp);
             }
         }
     }
@@ -248,6 +255,7 @@ public class AutenticacaoExternaRepository {
                 .remove(CHAVE_TOKEN)
                 .remove(CHAVE_PERFIL)
                 .remove(CHAVE_USUARIO_ID)
+                .remove(CHAVE_FIREBASE_UID)
                 .apply();
 
         PerfilApiRepository.limpar(contexto);
@@ -347,18 +355,85 @@ public class AutenticacaoExternaRepository {
         }
     }
 
+    @Nullable
+    private String renovarPeloFirebase(@NonNull Context contextoApp) {
+        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        if (usuario == null) {
+            Log.w(TAG, "Sessao Firebase ausente");
+            return null;
+        }
+        try {
+            String idToken = Tasks.await(usuario.getIdToken(false), 15, TimeUnit.SECONDS).getToken();
+            if (idToken == null || idToken.isBlank()) {
+                Log.w(TAG, "Firebase ID token nao disponivel");
+                return null;
+            }
+            HttpURLConnection conexao = (HttpURLConnection) new URL(
+                    ConfiguracaoServidores.MOBILE_API + "/auth/firebase").openConnection();
+            try {
+                conexao.setRequestMethod("POST");
+                conexao.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+                conexao.setRequestProperty("Accept", "application/json");
+                conexao.setConnectTimeout(ConfiguracaoServidores.TIMEOUT_CONEXAO_MS);
+                conexao.setReadTimeout(ConfiguracaoServidores.TIMEOUT_RESPOSTA_LOGIN_MS);
+                conexao.setDoOutput(true);
+                JSONObject corpo = new JSONObject();
+                corpo.put("idToken", idToken);
+                try (OutputStream saida = conexao.getOutputStream()) {
+                    saida.write(corpo.toString().getBytes(StandardCharsets.UTF_8));
+                }
+                int codigo = conexao.getResponseCode();
+                if (codigo < 200 || codigo >= 300) {
+                    Log.w(TAG, "Troca de sessao Firebase recusada (HTTP " + codigo + ")");
+                    return null;
+                }
+                JSONObject resposta = new JSONObject(LeituraHttp.texto(conexao.getInputStream()));
+                String jwt = resposta.getString("token");
+                String perfil = resposta.optString("perfil", "");
+                int usuarioId = resposta.optInt("usuarioId", 0);
+                if (jwt.isBlank() || usuarioId <= 0 || perfil.isBlank()) {
+                    Log.w(TAG, "Sessao da API incompleta");
+                    return null;
+                }
+                if (FirebaseAuth.getInstance().getCurrentUser() == null
+                        || !usuario.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                    return null;
+                }
+                persistirToken(contextoApp, jwt);
+                persistirPerfil(contextoApp, perfil);
+                persistirUsuarioId(contextoApp, usuarioId);
+                Log.i(TAG, "JWT da API renovado via Firebase (HTTP " + codigo + ")");
+                return jwt;
+            } finally {
+                conexao.disconnect();
+            }
+        } catch (Exception erro) {
+            Log.w(TAG, "Nao foi possivel obter JWT via sessao Firebase", erro);
+            return null;
+        }
+    }
+
+    @Nullable
+    private static String uidSalvo(@NonNull Context contexto) {
+        return contexto.getApplicationContext().getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
+                .getString(CHAVE_FIREBASE_UID, null);
+    }
+
     private void persistirToken(@NonNull Context contextoApp, @NonNull String token) {
 
         SharedPreferences preferencias =
                 contextoApp.getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
 
         String cifrado = CredenciaisSeguras.cifrar(token);
+        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = usuario == null ? null : usuario.getUid();
 
         // Sem Keystore não há como guardar com segurança: o token fica só na memória do login.
         if (cifrado != null) {
-            preferencias.edit().putString(CHAVE_TOKEN, cifrado).apply();
+            preferencias.edit().putString(CHAVE_TOKEN, cifrado)
+                    .putString(CHAVE_FIREBASE_UID, uid).apply();
         } else {
-            preferencias.edit().remove(CHAVE_TOKEN).apply();
+            preferencias.edit().remove(CHAVE_TOKEN).remove(CHAVE_FIREBASE_UID).apply();
         }
     }
 
@@ -370,6 +445,11 @@ public class AutenticacaoExternaRepository {
                         .getApplicationContext()
                         .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
 
+        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        String uid = preferencias.getString(CHAVE_FIREBASE_UID, null);
+        if (usuario == null || !usuario.getUid().equals(uid)) {
+            return null;
+        }
         String guardado = preferencias.getString(CHAVE_TOKEN, null);
 
         // Token de versões antigas (texto puro) ou ilegível: descarta e o app renova com o login.

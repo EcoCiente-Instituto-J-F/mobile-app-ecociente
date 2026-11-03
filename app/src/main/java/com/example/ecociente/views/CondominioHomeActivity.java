@@ -13,6 +13,7 @@ import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.repository.AquecimentoDasApis;
+import com.example.ecociente.notifications.PermissaoNotificacoes;
 import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.repository.PontuacaoRepository;
 import com.example.ecociente.ui.AvatarPerfil;
@@ -50,6 +51,8 @@ public class CondominioHomeActivity extends AppCompatActivity {
         JanelaEdgeToEdge.aplicar(this);
 
         setContentView(R.layout.activity_home_condominio);
+
+        new PermissaoNotificacoes(this).pedirSeNecessario();
 
         AquecimentoDasApis.aquecer(this);
         new PerfilApiRepository().atualizarSeNecessario(this);

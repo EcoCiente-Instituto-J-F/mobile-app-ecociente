@@ -48,6 +48,7 @@ public class PerfilRepository {
     }
 
     public void encerrarSessao() {
+        PushRegistroRepository.encerrarSessao(FirebaseApp.getInstance().getApplicationContext());
         autenticacao.signOut();
 
         AutenticacaoExternaRepository.encerrarSessao(
