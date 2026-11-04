@@ -1,5 +1,7 @@
 package com.example.ecociente.repository;
 
+import com.example.ecociente.BuildConfig;
+
 /**
  * Enderecos dos servicos HTTP consumidos pelo app. Mudou um servidor? Mude so aqui.
  *
@@ -8,7 +10,8 @@ package com.example.ecociente.repository;
  */
 public final class ConfiguracaoServidores {
 
-    public static final String MOBILE_API = "https://ds-mobile-api.onrender.com";
+    public static final String MOBILE_API_RENDER = "https://ds-mobile-api.onrender.com";
+    public static final String MOBILE_API = BuildConfig.ECOCIENTE_MOBILE_API_BASE_URL;
     public static final String PONTUACAO_API = "https://ds-pontuacao-api.onrender.com";
     public static final String CHAT_IA_RENDER = "https://ia-eko-1.onrender.com/api/v1/chat";
     public static final String CHAT_IA = CHAT_IA_RENDER;
@@ -20,8 +23,8 @@ public final class ConfiguracaoServidores {
     public static final String URL_CONDOMINIOS = MOBILE_API + "/api/condominios/";
     public static final String URL_AGENDAMENTOS = MOBILE_API + "/api/v1/agendamentos";
 
-    public static final int TIMEOUT_CONEXAO_MS = 10_000;
-    public static final int TIMEOUT_RESPOSTA_LOGIN_MS = 25_000;
+    public static final int TIMEOUT_CONEXAO_MS = 8_000;
+    public static final int TIMEOUT_RESPOSTA_LOGIN_MS = 12_000;
     public static final int TIMEOUT_RESPOSTA_CADASTRO_MS = 40_000;
     public static final int TIMEOUT_RESPOSTA_RENDER_MS = 20_000;
 
