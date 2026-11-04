@@ -12,8 +12,11 @@ public final class EnderecoMidia {
             throw new IllegalArgumentException("Origem Cloudinary invalida");
         if (midia.caminho.startsWith("/") || midia.caminho.contains("..") || midia.caminho.contains(":"))
             throw new IllegalArgumentException("Public ID invalido");
+        // O catalogo pode guardar o nome com extensao (ex.: imagem.png), mas
+        // o public_id do Cloudinary nao deve receber essa extensao duplicada.
+        String caminhoPublico = removerExtensao(midia.caminho);
         StringBuilder id = new StringBuilder();
-        for (String parte : midia.caminho.split("/")) {
+        for (String parte : caminhoPublico.split("/")) {
             if (parte.isEmpty()) throw new IllegalArgumentException("Public ID invalido");
             if (id.length() > 0) id.append('/');
             try { id.append(URLEncoder.encode(parte, StandardCharsets.UTF_8.name()).replace("+", "%20")); }
@@ -26,5 +29,19 @@ public final class EnderecoMidia {
         String versao = midia.versao > 1 ? "v" + midia.versao + "/" : "";
         return "https://res.cloudinary.com/" + midia.cloudName + "/image/upload/"
                 + transformacao + "/" + versao + id + extensao;
+    }
+
+    /** Remove apenas a extensao final conhecida, preservando pastas e pontos no nome. */
+    private static String removerExtensao(String caminho) {
+        int ultimaBarra = caminho.lastIndexOf('/');
+        int ultimoPonto = caminho.lastIndexOf('.');
+        if (ultimoPonto <= ultimaBarra) return caminho;
+
+        String extensao = caminho.substring(ultimoPonto + 1).toLowerCase(java.util.Locale.ROOT);
+        if ("png".equals(extensao) || "jpg".equals(extensao) || "jpeg".equals(extensao)
+                || "webp".equals(extensao) || "gif".equals(extensao)) {
+            return caminho.substring(0, ultimoPonto);
+        }
+        return caminho;
     }
 }
