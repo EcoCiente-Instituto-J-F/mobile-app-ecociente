@@ -36,6 +36,7 @@ public class AutenticacaoExternaRepository {
     private static final String CHAVE_PERFIL = "perfil";
     private static final String CHAVE_USUARIO_ID = "usuarioId";
     private static final String CHAVE_FIREBASE_UID = "firebaseUid";
+    private static final String CHAVE_TOKEN_EXPIRA_EM_MS = "tokenExpiraEmMs";
 
     private static final Object TRAVA = new Object();
 
@@ -91,7 +92,7 @@ public class AutenticacaoExternaRepository {
                             PerfilApiRepository.limpar(contextoApp);
                         }
 
-                        persistirToken(contextoApp, sessao.getToken());
+                        persistirToken(contextoApp, sessao.getToken(), sessao.getExpiraEmSegundos());
                         persistirPerfil(contextoApp, sessao.getPerfil());
                         persistirUsuarioId(contextoApp, sessao.getUsuarioId());
 
@@ -129,6 +130,25 @@ public class AutenticacaoExternaRepository {
             return salvo;
         }
         return renovarToken(contexto);
+    }
+
+    public static void prepararSessaoRestaurada(@NonNull Context contexto) {
+        Context contextoApp = contexto.getApplicationContext();
+        EXECUTOR_ESPERA.execute(() -> {
+            if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                return;
+            }
+            try {
+                String token = new AutenticacaoExternaRepository().tokenParaUso(contextoApp);
+                if (token == null) {
+                    Log.w(TAG, "Sessao da API indisponivel na abertura automatica");
+                } else {
+                    Log.i(TAG, "Sessao da API pronta apos abertura automatica");
+                }
+            } catch (Exception erro) {
+                Log.w(TAG, "Falha ao preparar sessao da API na abertura automatica", erro);
+            }
+        });
     }
 
     public static boolean loginEmAndamento() {
@@ -205,7 +225,7 @@ public class AutenticacaoExternaRepository {
             try {
                 SessaoExterna sessao = login(credenciais[0], credenciais[1]);
 
-                persistirToken(contextoApp, sessao.getToken());
+                persistirToken(contextoApp, sessao.getToken(), sessao.getExpiraEmSegundos());
                 persistirPerfil(contextoApp, sessao.getPerfil());
                         persistirUsuarioId(contextoApp, sessao.getUsuarioId());
 
@@ -256,6 +276,7 @@ public class AutenticacaoExternaRepository {
                 .remove(CHAVE_PERFIL)
                 .remove(CHAVE_USUARIO_ID)
                 .remove(CHAVE_FIREBASE_UID)
+                .remove(CHAVE_TOKEN_EXPIRA_EM_MS)
                 .apply();
 
         PerfilApiRepository.limpar(contexto);
@@ -399,7 +420,7 @@ public class AutenticacaoExternaRepository {
                         || !usuario.getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                     return null;
                 }
-                persistirToken(contextoApp, jwt);
+                persistirToken(contextoApp, jwt, resposta.optLong("expiraEmSegundos", 0));
                 persistirPerfil(contextoApp, perfil);
                 persistirUsuarioId(contextoApp, usuarioId);
                 Log.i(TAG, "JWT da API renovado via Firebase (HTTP " + codigo + ")");
@@ -419,7 +440,7 @@ public class AutenticacaoExternaRepository {
                 .getString(CHAVE_FIREBASE_UID, null);
     }
 
-    private void persistirToken(@NonNull Context contextoApp, @NonNull String token) {
+    private void persistirToken(@NonNull Context contextoApp, @NonNull String token, long expiraEmSegundos) {
 
         SharedPreferences preferencias =
                 contextoApp.getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
@@ -430,10 +451,16 @@ public class AutenticacaoExternaRepository {
 
         // Sem Keystore não há como guardar com segurança: o token fica só na memória do login.
         if (cifrado != null) {
+            long prazoMs = ValidadeTokenApi.calcularVencimento(System.currentTimeMillis(), expiraEmSegundos);
             preferencias.edit().putString(CHAVE_TOKEN, cifrado)
-                    .putString(CHAVE_FIREBASE_UID, uid).apply();
+                    .putString(CHAVE_FIREBASE_UID, uid)
+                    .putLong(CHAVE_TOKEN_EXPIRA_EM_MS, prazoMs)
+                    .apply();
         } else {
-            preferencias.edit().remove(CHAVE_TOKEN).remove(CHAVE_FIREBASE_UID).apply();
+            preferencias.edit().remove(CHAVE_TOKEN)
+                    .remove(CHAVE_FIREBASE_UID)
+                    .remove(CHAVE_TOKEN_EXPIRA_EM_MS)
+                    .apply();
         }
     }
 
@@ -448,6 +475,10 @@ public class AutenticacaoExternaRepository {
         FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
         String uid = preferencias.getString(CHAVE_FIREBASE_UID, null);
         if (usuario == null || !usuario.getUid().equals(uid)) {
+            return null;
+        }
+        long expiraEmMs = preferencias.getLong(CHAVE_TOKEN_EXPIRA_EM_MS, 0L);
+        if (ValidadeTokenApi.deveRenovar(expiraEmMs, System.currentTimeMillis())) {
             return null;
         }
         String guardado = preferencias.getString(CHAVE_TOKEN, null);
