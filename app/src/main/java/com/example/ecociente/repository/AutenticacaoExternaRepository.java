@@ -39,6 +39,8 @@ public class AutenticacaoExternaRepository {
     private static final String CHAVE_TOKEN_EXPIRA_EM_MS = "tokenExpiraEmMs";
 
     private static final Object TRAVA = new Object();
+    private static final long INTERVALO_APOS_FALHA_MS = 10_000L;
+    private static volatile long novaTentativaPermitidaEmMs;
 
     private static final Object ESPERA = new Object();
     private static final long ESPERA_MAXIMA_MS = 180_000;
@@ -97,6 +99,7 @@ public class AutenticacaoExternaRepository {
                         persistirUsuarioId(contextoApp, sessao.getUsuarioId());
 
                         CredenciaisSeguras.salvar(contextoApp, email, senha);
+                        novaTentativaPermitidaEmMs = 0L;
 
                     } catch (CredenciaisRecusadas erro) {
                         recusada = true;
@@ -125,11 +128,10 @@ public class AutenticacaoExternaRepository {
         aguardarLoginEmAndamento();
 
         String salvo = obterTokenSalvo(contexto);
-        FirebaseUser atual = FirebaseAuth.getInstance().getCurrentUser();
-        if (salvo != null && atual != null && atual.getUid().equals(uidSalvo(contexto))) {
+        if (salvo != null) {
             return salvo;
         }
-        return renovarToken(contexto);
+        return renovarTokenInterno(contexto, false);
     }
 
     public static void prepararSessaoRestaurada(@NonNull Context contexto) {
@@ -212,14 +214,36 @@ public class AutenticacaoExternaRepository {
 
     @Nullable
     public String renovarToken(@NonNull Context contexto) {
+        return renovarTokenInterno(contexto, true);
+    }
 
+    @Nullable
+    private String renovarTokenInterno(@NonNull Context contexto, boolean forcarRenovacao) {
         Context contextoApp = contexto.getApplicationContext();
 
         synchronized (TRAVA) {
+            if (!forcarRenovacao) {
+                String tokenAtual = obterTokenSalvo(contextoApp);
+                if (tokenAtual != null) {
+                    return tokenAtual;
+                }
+            }
+
+            if (SystemClock.elapsedRealtime() < novaTentativaPermitidaEmMs) {
+                Log.w(TAG, "Renovacao JWT temporariamente suspensa apos falha de conexao");
+                return null;
+            }
+
             String[] credenciais = CredenciaisSeguras.ler(contextoApp);
 
             if (credenciais == null || credenciais.length < 2) {
-                return renovarPeloFirebase(contextoApp);
+                String token = renovarPeloFirebase(contextoApp);
+                if (token == null) {
+                    registrarFalhaDeRenovacao();
+                } else {
+                    novaTentativaPermitidaEmMs = 0L;
+                }
+                return token;
             }
 
             try {
@@ -227,23 +251,33 @@ public class AutenticacaoExternaRepository {
 
                 persistirToken(contextoApp, sessao.getToken(), sessao.getExpiraEmSegundos());
                 persistirPerfil(contextoApp, sessao.getPerfil());
-                        persistirUsuarioId(contextoApp, sessao.getUsuarioId());
+                persistirUsuarioId(contextoApp, sessao.getUsuarioId());
 
+                novaTentativaPermitidaEmMs = 0L;
+                Log.i(TAG, "JWT renovado pela API Mobile");
                 return sessao.getToken();
 
             } catch (CredenciaisRecusadas erro) {
-                // A API disse que e-mail ou senha não valem mais (senha trocada, conta apagada): aí sim a sessão acabou, e sem as credenciais guardadas o app volta ao login.
-                Log.w(TAG, "Credenciais guardadas recusadas pela API", erro);
-
+                Log.w(TAG, "Credenciais guardadas recusadas; tentando troca via Firebase");
                 CredenciaisSeguras.limpar(contextoApp);
-
-                return renovarPeloFirebase(contextoApp);
+                String token = renovarPeloFirebase(contextoApp);
+                if (token == null) {
+                    registrarFalhaDeRenovacao();
+                } else {
+                    novaTentativaPermitidaEmMs = 0L;
+                }
+                return token;
 
             } catch (Exception erro) {
-                Log.w(TAG, "Não foi possível renovar o token", erro);
-                return renovarPeloFirebase(contextoApp);
+                Log.w(TAG, "Nao foi possivel renovar o JWT na API Mobile", erro);
+                registrarFalhaDeRenovacao();
+                return null;
             }
         }
+    }
+
+    private static void registrarFalhaDeRenovacao() {
+        novaTentativaPermitidaEmMs = SystemClock.elapsedRealtime() + INTERVALO_APOS_FALHA_MS;
     }
 
     public static void atualizarSenhaSalva(
@@ -267,6 +301,7 @@ public class AutenticacaoExternaRepository {
 
     public static void encerrarSessao(@NonNull Context contexto) {
 
+        novaTentativaPermitidaEmMs = 0L;
         CredenciaisSeguras.limpar(contexto);
 
         contexto.getApplicationContext()
