@@ -26,6 +26,7 @@ public class SolicitacoesViewModel extends AndroidViewModel {
     private StatusAgendamento filtro = null;
     private int proximaPagina;
     private boolean ultimaPagina;
+    private boolean ocultarRealizadas;
 
     public SolicitacoesViewModel(@NonNull Application aplicacao) {
         super(aplicacao);
@@ -53,6 +54,10 @@ public class SolicitacoesViewModel extends AndroidViewModel {
 
     public boolean jaCarregou() {
         return situacao.getValue() != null;
+    }
+
+    public void definirOcultarRealizadas(boolean ocultar) {
+        ocultarRealizadas = ocultar;
     }
 
     public void definirFiltroInicial(@Nullable StatusAgendamento inicial) {
@@ -116,13 +121,26 @@ public class SolicitacoesViewModel extends AndroidViewModel {
 
                         List<Solicitacao> acumulado = new ArrayList<>(itens.getValue());
 
-                        acumulado.addAll(resultado.getItens());
+                        for (Solicitacao solicitacao : resultado.getItens()) {
+                            if (!ocultarRealizadas
+                                    || solicitacao.getStatus() != StatusAgendamento.REALIZADO) {
+                                acumulado.add(solicitacao);
+                            }
+                        }
 
                         itens.setValue(acumulado);
 
                         ultimaPagina = resultado.ehUltimaPagina();
 
                         proximaPagina++;
+
+                        // A aba Coletas não exibe itens concluídos. Se uma página trouxer
+                        // somente coletas realizadas, busca a próxima página real da API.
+                        if (ocultarRealizadas && acumulado.isEmpty() && !ultimaPagina) {
+                            situacao.setValue(resultado.getTipo());
+                            carregarPagina();
+                            return;
+                        }
                     }
 
                     situacao.setValue(resultado.getTipo());

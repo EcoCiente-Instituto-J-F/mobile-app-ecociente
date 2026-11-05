@@ -77,6 +77,7 @@ public class SolicitacoesActivity extends AppCompatActivity {
                 R.id.listaSolicitacoes);
 
         viewModel = new ViewModelProvider(this).get(SolicitacoesViewModel.class);
+        viewModel.definirOcultarRealizadas(indiceAtual() == ItensBarra.SEGUNDO);
 
         atualizacao = findViewById(R.id.atualizacaoSolicitacoes);
         indicador = findViewById(R.id.indicadorSolicitacoes);
@@ -112,6 +113,10 @@ public class SolicitacoesActivity extends AppCompatActivity {
         opcoes.addAll(java.util.Arrays.asList(StatusAgendamento.values()));
 
         for (StatusAgendamento status : opcoes) {
+
+            if (indiceAtual() == ItensBarra.SEGUNDO && status == StatusAgendamento.REALIZADO) {
+                continue;
+            }
 
             Chip chip = new Chip(this, null, com.google.android.material.R.attr.chipStyle);
 
