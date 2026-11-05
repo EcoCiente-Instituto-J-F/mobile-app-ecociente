@@ -21,7 +21,6 @@ import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.QuizResumo;
 import com.example.ecociente.model.DadosDemonstracaoEducacao;
 import com.example.ecociente.midias.MidiasEco;
-import com.example.ecociente.midias.CarregadorMidias;
 import com.example.ecociente.repository.EducacaoRepository;
 import com.example.ecociente.repository.TentativaQuizRepository;
 import com.example.ecociente.ui.Navegacao;
@@ -206,9 +205,9 @@ public class QuizActivity extends AppCompatActivity {
         TextView textoResultadoQuiz = card.findViewById(R.id.textoResultadoQuiz);
         MaterialButton botaoComecarQuiz = card.findViewById(R.id.botaoComecarQuiz);
 
-        CarregadorMidias.mostrar(card.findViewById(R.id.imagemIconeQuiz),
-                MidiasEco.obter(this).iconeQuiz(quiz.id, quiz.titulo, quiz.categoria),
-                false, R.drawable.quiz_planeta_pergunta);
+        MidiasEco.obter(this).mostrarIconeQuiz(
+                card.findViewById(R.id.imagemIconeQuiz),
+                quiz.id, quiz.titulo, quiz.categoria);
         textoTituloQuiz.setText(quiz.titulo);
         textoCategoriaQuiz.setText(quiz.categoria);
         textoPerguntasQuiz.setText(quiz.perguntas);
