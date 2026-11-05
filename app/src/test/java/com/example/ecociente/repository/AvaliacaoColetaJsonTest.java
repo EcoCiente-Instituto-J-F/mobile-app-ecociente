@@ -34,9 +34,9 @@ public class AvaliacaoColetaJsonTest {
 
     @Test
     public void conflitoPorAvaliacaoExistenteEhReconhecidoComoJaRegistrado() {
-        String resposta = "{\\"status\\":409,\\"codigo\\":\\"AVALIACAO_JA_REGISTRADA\\",\\"mensagem\\":\\"Esta coleta já foi avaliada\\"}";
+        String resposta = "{\"status\":409,\"codigo\":\"AVALIACAO_JA_REGISTRADA\",\"mensagem\":\"Esta coleta já foi avaliada\"}";
         assertTrue(AvaliacaoColetaJson.jaRegistrada(409, resposta));
-        assertFalse(AvaliacaoColetaJson.jaRegistrada(409, "{\\"codigo\\":\\"COLETA_NAO_REALIZADA\\"}"));
+        assertFalse(AvaliacaoColetaJson.jaRegistrada(409, "{\"codigo\":\"COLETA_NAO_REALIZADA\"}"));
         assertFalse(AvaliacaoColetaJson.jaRegistrada(403, resposta));
         assertFalse(AvaliacaoColetaJson.jaRegistrada(409, null));
     }
