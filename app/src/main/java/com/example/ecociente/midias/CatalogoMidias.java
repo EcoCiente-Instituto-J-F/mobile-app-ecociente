@@ -83,7 +83,13 @@ public final class CatalogoMidias {
     private static Midia lerItem(JSONObject j) throws Exception {
         String id = j.getString("id").trim(), caminho = j.getString("caminho").trim();
         if (id.isEmpty() || caminho.isEmpty()) throw new IllegalArgumentException("ID/caminho ausente");
-        return new Midia(id, j.getString("tipo"), j.optString("tema", "geral"),
+        String tipo = j.getString("tipo").trim();
+        // Compatibilidade com versões anteriores do catálogo: "cursos" identifica
+        // as imagens usadas como ícones/capas dos cursos na Biblioteca.
+        if ("cursos".equalsIgnoreCase(tipo) || "curso".equalsIgnoreCase(tipo)) {
+            tipo = Midia.ICONE_CONTEUDO;
+        }
+        return new Midia(id, tipo, j.optString("tema", "geral"),
                 j.getString("origem"), caminho, j.optString("formato", "png"),
                 j.optString("grupo_imagem", ""), j.optString("descricao", ""),
                 j.optString("cloud_name", ConfiguracaoMidias.CLOUD_NAME), j.optLong("versao", 1),

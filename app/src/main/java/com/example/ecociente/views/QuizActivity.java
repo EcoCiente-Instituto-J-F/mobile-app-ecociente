@@ -21,7 +21,6 @@ import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.QuizResumo;
 import com.example.ecociente.model.DadosDemonstracaoEducacao;
 import com.example.ecociente.midias.MidiasEco;
-import com.example.ecociente.midias.CarregadorMidias;
 import com.example.ecociente.repository.EducacaoRepository;
 import com.example.ecociente.repository.TentativaQuizRepository;
 import com.example.ecociente.ui.Navegacao;
@@ -206,9 +205,9 @@ public class QuizActivity extends AppCompatActivity {
         TextView textoResultadoQuiz = card.findViewById(R.id.textoResultadoQuiz);
         MaterialButton botaoComecarQuiz = card.findViewById(R.id.botaoComecarQuiz);
 
-        CarregadorMidias.mostrar(card.findViewById(R.id.imagemIconeQuiz),
-                MidiasEco.obter(this).iconeQuiz(quiz.id, quiz.titulo, quiz.categoria),
-                false, R.drawable.quiz_planeta_pergunta);
+        MidiasEco.obter(this).mostrarIconeQuiz(
+                card.findViewById(R.id.imagemIconeQuiz),
+                quiz.id, quiz.titulo, quiz.categoria);
         textoTituloQuiz.setText(quiz.titulo);
         textoCategoriaQuiz.setText(quiz.categoria);
         textoPerguntasQuiz.setText(quiz.perguntas);
@@ -326,6 +325,8 @@ public class QuizActivity extends AppCompatActivity {
     private void filtrarQuizzes(@NonNull String filtro) {
         String filtroNormalizado = filtro.trim().toLowerCase(Locale.ROOT);
         int quantidadeVisivel = 0;
+        String imagemAnterior = null;
+        MidiasEco midias = MidiasEco.obter(this);
 
         for (CardQuizView cardQuizView : cardsQuizzes) {
             boolean mostrar =
@@ -345,6 +346,17 @@ public class QuizActivity extends AppCompatActivity {
                             .setDuration(Motion.STATE_MS)
                             .start();
                 }
+
+                // A filtragem pode aproximar cards que antes estavam separados.
+                // Redistribui os ícones na ordem visível para evitar duas imagens iguais lado a lado.
+                QuizItem quiz = cardQuizView.quiz;
+                com.example.ecociente.midias.Midia escolhida = midias.prepararIconeQuiz(
+                        quiz.id, quiz.titulo, quiz.categoria, imagemAnterior);
+                if (escolhida != null) imagemAnterior = escolhida.id;
+                midias.mostrarIconeQuiz(
+                        cardQuizView.card.findViewById(R.id.imagemIconeQuiz),
+                        quiz.id, quiz.titulo, quiz.categoria);
+
                 quantidadeVisivel++;
             } else {
                 cardQuizView.card.setVisibility(View.GONE);

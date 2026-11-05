@@ -5,7 +5,7 @@
 
         <com.google.android.material.card.MaterialCardView android:id="@+id/fundoIconeQuiz" android:layout_width="58dp" android:layout_height="58dp" app:cardBackgroundColor="@color/verde_selo_home" app:cardCornerRadius="29dp" app:cardElevation="0dp" app:strokeColor="@android:color/transparent" app:strokeWidth="0dp" app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView android:id="@+id/imagemIconeQuiz" android:layout_width="match_parent" android:layout_height="match_parent" android:contentDescription="@string/icone_quiz" android:padding="7dp" android:scaleType="fitCenter" android:src="@drawable/ic_reciclar"/>
+            <ImageView android:id="@+id/imagemIconeQuiz" android:layout_width="match_parent" android:layout_height="match_parent" android:contentDescription="@string/icone_quiz" android:padding="7dp" android:scaleType="fitCenter"/>
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -25,13 +25,13 @@
 
         <TextView android:id="@+id/textoTituloQuiz" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_marginEnd="8dp" android:ellipsize="end" android:fontFamily="@font/nunito_bold" android:includeFontPadding="false" android:maxLines="2" android:textColor="@color/verde_escuro_principal" android:textSize="16sp" app:layout_constraintEnd_toStartOf="@id/areaAcaoQuiz" app:layout_constraintStart_toEndOf="@id/fundoIconeQuiz" app:layout_constraintTop_toTopOf="parent"/>
 
-        <TextView android:id="@+id/textoCategoriaQuiz" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:background="@drawable/fundo_selo_conteudo_home" android:fontFamily="@font/nunito_bold" android:includeFontPadding="false" android:paddingStart="7dp" android:paddingTop="3dp" android:paddingEnd="7dp" android:paddingBottom="3dp" android:textColor="@color/verde_escuro_principal" android:textSize="11.5sp" app:layout_constraintStart_toStartOf="@id/textoTituloQuiz" app:layout_constraintTop_toBottomOf="@id/textoTituloQuiz"/>
+        <TextView android:id="@+id/textoCategoriaQuiz" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="6dp" android:layout_marginEnd="8dp" android:ellipsize="end" android:maxLines="1" android:background="@drawable/fundo_selo_conteudo_home" android:fontFamily="@font/nunito_bold" android:includeFontPadding="false" android:paddingStart="7dp" android:paddingTop="3dp" android:paddingEnd="7dp" android:paddingBottom="3dp" android:textColor="@color/verde_escuro_principal" android:textSize="11.5sp" app:layout_constraintStart_toStartOf="@id/textoTituloQuiz" app:layout_constraintEnd_toStartOf="@id/areaAcaoQuiz" app:layout_constraintTop_toBottomOf="@id/textoTituloQuiz"/>
 
-        <LinearLayout android:id="@+id/metadadosQuiz" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="9dp" android:gravity="center_vertical" android:orientation="horizontal" app:layout_constraintStart_toStartOf="@id/textoTituloQuiz" app:layout_constraintTop_toBottomOf="@id/textoCategoriaQuiz">
+        <LinearLayout android:id="@+id/metadadosQuiz" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginTop="9dp" android:layout_marginEnd="8dp" android:gravity="center_vertical" android:orientation="horizontal" app:layout_constraintStart_toStartOf="@id/textoTituloQuiz" app:layout_constraintEnd_toStartOf="@id/areaAcaoQuiz" app:layout_constraintTop_toBottomOf="@id/textoCategoriaQuiz">
 
             <ImageView android:layout_width="14dp" android:layout_height="14dp" android:contentDescription="@string/quantidade_perguntas" android:src="@android:drawable/ic_menu_edit" app:tint="@color/cinza_secundario_home"/>
 
-            <TextView android:id="@+id/textoPerguntasQuiz" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:fontFamily="@font/nunito_regular" android:includeFontPadding="false" android:textColor="@color/cinza_secundario_home" android:textSize="12.5sp"/>
+            <TextView android:id="@+id/textoPerguntasQuiz" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="4dp" android:ellipsize="end" android:maxLines="1" android:fontFamily="@font/nunito_regular" android:includeFontPadding="false" android:textColor="@color/cinza_secundario_home" android:textSize="12.5sp"/>
 
             <ImageView android:layout_width="14dp" android:layout_height="14dp" android:layout_marginStart="11dp" android:contentDescription="@string/quiz_usuario_comum_pontos_por_completar_o_quiz" android:src="@drawable/ic_trofeu" app:tint="@color/cinza_secundario_home" android:id="@+id/iconePontosQuiz" android:visibility="gone"/>
 

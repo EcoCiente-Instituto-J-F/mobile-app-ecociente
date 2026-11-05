@@ -2,6 +2,7 @@ package com.example.ecociente.midias;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.ImageView;
 import com.example.ecociente.model.CursoEducativo;
 import com.example.ecociente.model.FluxoEducativo;
 import com.example.ecociente.model.QuizResumo;
@@ -55,6 +56,22 @@ public final class MidiasEco {
         return m;
     }
 
+    private synchronized Midia fixaDiversificada(String tipo, String entidade, int id,
+                                                   String titulo, String contexto, String evitarId) {
+        String chave = tipo + ":" + entidade + ":" + id;
+        Midia explicita = regras.porId(catalogo.associacoes.get(chave));
+        Midia anterior = regras.porId(evitarId);
+        if (explicita != null && tipo.equals(explicita.tipo)
+                && (anterior == null || !explicita.grupoImagem.equals(anterior.grupoImagem))) {
+            guardar(chave, explicita);
+            return explicita;
+        }
+        Midia m = regras.escolherFixaDiversificada(
+                tipo, regras.tema(titulo, contexto), chave, vinculos, evitarId);
+        if (m != null && !m.id.equals(vinculos.get(chave))) guardar(chave, m);
+        return m;
+    }
+
     private void guardar(String chave, Midia m) {
         vinculos.put(chave, m.id);
         preferencias.edit().putString(chave, m.id).apply();
@@ -64,8 +81,92 @@ public final class MidiasEco {
         return fixa(Midia.ICONE_CONTEUDO, "curso", curso.id, curso.titulo, curso.descricao);
     }
 
+    /**
+     * Exibe a imagem do curso e, se a URL remota falhar, tenta outra arte do catálogo.
+     * As alternativas locais têm prioridade para não depender da conexão com a internet.
+     */
+    public void mostrarIconeCurso(ImageView view, CursoEducativo curso) {
+        Set<String> tentadas = new HashSet<>();
+        tentarMostrarIconeCurso(view, curso, iconeCurso(curso), tentadas);
+    }
+
+    private void tentarMostrarIconeCurso(ImageView view, CursoEducativo curso,
+                                         Midia midia, Set<String> tentadas) {
+        Midia atual = midia;
+        if (atual == null || tentadas.contains(atual.id)) {
+            atual = escolherAlternativaCurso(curso, tentadas);
+        }
+        if (atual == null || !tentadas.add(atual.id)) {
+            view.setImageDrawable(null);
+            return;
+        }
+
+        Midia tentativa = atual;
+        CarregadorMidias.mostrar(view, tentativa, false, 0, false, () -> {
+            Midia alternativa = escolherAlternativaCurso(curso, tentadas);
+            if (alternativa == null) {
+                view.setImageDrawable(null);
+                return;
+            }
+            tentarMostrarIconeCurso(view, curso, alternativa, tentadas);
+        });
+    }
+
+    private synchronized Midia escolherAlternativaCurso(CursoEducativo curso,
+                                                          Set<String> idsTentados) {
+        Midia alternativa = regras.escolherAlternativaLocal(
+                Midia.ICONE_CONTEUDO, idsTentados, System.nanoTime());
+        if (alternativa != null) {
+            String chave = Midia.ICONE_CONTEUDO + ":curso:" + curso.id;
+            guardar(chave, alternativa);
+        }
+        return alternativa;
+    }
+
     public Midia iconeQuiz(int id, String titulo, String categoria) {
         return fixa(Midia.ICONE_QUIZ, "quiz", id, titulo, categoria);
+    }
+
+    /** Reorganiza os ícones segundo a ordem atualmente visível na tela de quizzes. */
+    public Midia prepararIconeQuiz(int id, String titulo, String categoria, String evitarId) {
+        return fixaDiversificada(Midia.ICONE_QUIZ, "quiz", id, titulo, categoria, evitarId);
+    }
+
+    /** Exibe o ícone do quiz e troca por outra arte local caso a imagem principal falhe. */
+    public void mostrarIconeQuiz(ImageView view, int id, String titulo, String categoria) {
+        Set<String> tentadas = new HashSet<>();
+        tentarMostrarIconeQuiz(view, id, titulo, categoria, iconeQuiz(id, titulo, categoria), tentadas);
+    }
+
+    private void tentarMostrarIconeQuiz(ImageView view, int id, String titulo, String categoria,
+                                        Midia midia, Set<String> tentadas) {
+        Midia atual = midia;
+        if (atual == null || tentadas.contains(atual.id)) {
+            atual = escolherAlternativaQuiz(id, tentadas);
+        }
+        if (atual == null || !tentadas.add(atual.id)) {
+            view.setImageDrawable(null);
+            return;
+        }
+
+        Midia tentativa = atual;
+        CarregadorMidias.mostrar(view, tentativa, false, 0, false, () -> {
+            Midia alternativa = escolherAlternativaQuiz(id, tentadas);
+            if (alternativa == null) {
+                view.setImageDrawable(null);
+                return;
+            }
+            tentarMostrarIconeQuiz(view, id, titulo, categoria, alternativa, tentadas);
+        });
+    }
+
+    private synchronized Midia escolherAlternativaQuiz(int id, Set<String> idsTentados) {
+        Midia alternativa = regras.escolherAlternativaLocal(
+                Midia.ICONE_QUIZ, idsTentados, System.nanoTime());
+        if (alternativa != null) {
+            guardar(Midia.ICONE_QUIZ + ":quiz:" + id, alternativa);
+        }
+        return alternativa;
     }
 
     public Midia capaQuiz(int id, String titulo, String categoria) {
@@ -84,10 +185,12 @@ public final class MidiasEco {
     }
 
     public void prepararQuizzes(List<QuizResumo> quizzes) {
-        List<QuizResumo> ordenados = new ArrayList<>(quizzes);
-        ordenados.sort(Comparator.comparingInt(QuizResumo::getQuizId));
-        for (QuizResumo q : ordenados) {
-            iconeQuiz(q.getQuizId(), q.getTitulo(), q.getCategoria());
+        // Mantém a ordem usada na tela para que dois cards vizinhos não recebam a mesma arte.
+        String anterior = null;
+        for (QuizResumo q : quizzes) {
+            Midia icone = fixaDiversificada(Midia.ICONE_QUIZ, "quiz",
+                    q.getQuizId(), q.getTitulo(), q.getCategoria(), anterior);
+            if (icone != null) anterior = icone.id;
             capaQuiz(q.getQuizId(), q.getTitulo(), q.getCategoria());
         }
     }

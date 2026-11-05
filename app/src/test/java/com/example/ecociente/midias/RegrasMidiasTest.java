@@ -100,6 +100,51 @@ public class RegrasMidiasTest {
     }
 
     @Test
+    public void falhaDeImagemRemotaPriorizaUmaAlternativaLocal() {
+        List<Midia> midias = new ArrayList<>();
+        midias.add(icone("remota_1", "geral"));
+        midias.add(new Midia("local_1", Midia.ICONE_CONTEUDO, "geral", "drawable",
+                "img_greenpapers", "png", "local_1", "", "", 1,
+                false, false, false, new ArrayList<>()));
+        RegrasMidias regras = new RegrasMidias(midias, new LinkedHashMap<>());
+        java.util.Set<String> tentadas = new java.util.HashSet<>();
+        tentadas.add("remota_1");
+
+        Midia alternativa = regras.escolherAlternativaLocal(
+                Midia.ICONE_CONTEUDO, tentadas, 123L);
+
+        assertNotNull(alternativa);
+        assertEquals("local_1", alternativa.id);
+    }
+
+    @Test
+    public void quizzesVizinhosNaoRepetemNemMesmoGrupoDeImagem() {
+        List<Midia> midias = new ArrayList<>();
+        midias.add(new Midia("quiz_folha_a", Midia.ICONE_QUIZ, "sustentabilidade",
+                "drawable", "ic_folha_sustentabilidade", "png", "grupo_folha", "",
+                "", 1, false, false, false, new ArrayList<>()));
+        midias.add(new Midia("quiz_folha_b", Midia.ICONE_QUIZ, "sustentabilidade",
+                "drawable", "ic_folha_sustentabilidade", "png", "grupo_folha", "",
+                "", 1, false, false, false, new ArrayList<>()));
+        midias.add(new Midia("quiz_reciclagem", Midia.ICONE_QUIZ, "reciclagem",
+                "drawable", "ic_reciclar", "png", "grupo_reciclagem", "",
+                "", 1, false, false, false, new ArrayList<>()));
+
+        RegrasMidias regras = new RegrasMidias(midias, new LinkedHashMap<>());
+        Map<String, String> vinculos = new HashMap<>();
+        Midia primeira = regras.escolherFixaDiversificada(
+                Midia.ICONE_QUIZ, "sustentabilidade", "icones_quiz:quiz:1", vinculos, null);
+        vinculos.put("icones_quiz:quiz:1", primeira.id);
+
+        Midia segunda = regras.escolherFixaDiversificada(
+                Midia.ICONE_QUIZ, "sustentabilidade", "icones_quiz:quiz:2", vinculos, primeira.id);
+
+        assertNotNull(primeira);
+        assertNotNull(segunda);
+        assertNotEquals(primeira.grupoImagem, segunda.grupoImagem);
+    }
+
+    @Test
     public void aEscolhaEhRepetivel() {
         List<String> a = distribuir(regrasComIcones(15, "geral"), 40, new HashMap<>());
         List<String> b = distribuir(regrasComIcones(15, "geral"), 40, new HashMap<>());
