@@ -260,6 +260,18 @@
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="16sp" />
 
+                <TextView
+                    android:id="@+id/textoSemColetasCooperativasDashboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:fontFamily="@font/nunito_regular"
+                    android:text="@string/sindico_sem_coletas_realizadas"
+                    android:textColor="@color/cinza_texto_home"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+
                 <com.example.ecociente.ui.SindicoDashboardGraficoView
                     android:id="@+id/graficoCooperativasSindico"
                     android:layout_width="match_parent"
@@ -282,6 +294,18 @@
                     android:text="@string/sindico_dash_semanas"
                     android:textColor="@color/verde_escuro_principal"
                     android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/textoSemQuizzesDashboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="18dp"
+                    android:paddingBottom="18dp"
+                    android:fontFamily="@font/nunito_regular"
+                    android:text="@string/sindico_sem_quizzes"
+                    android:textColor="@color/cinza_texto_home"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
 
                 <com.example.ecociente.ui.SindicoDashboardGraficoView
                     android:id="@+id/graficoQuizzesSindico"
