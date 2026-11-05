@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingStart="20dp"
-            android:paddingTop="12dp"
+            android:paddingTop="10dp"
             android:paddingEnd="20dp"
             android:paddingBottom="28dp">
 
@@ -76,26 +76,35 @@
                 android:fontFamily="@font/nunito_bold"
                 android:text="@string/sindico_dashboard_visao_geral"
                 android:textColor="@color/verde_escuro_principal"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="3dp"
                 android:fontFamily="@font/nunito_regular"
                 android:text="@string/sindico_dashboard_subtitulo"
                 android:textColor="@color/cinza_texto_home"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/sindico_dash_indicadores"
+                android:textColor="@color/verde_escuro_principal"
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="104dp"
+                    android:layout_height="100dp"
                     android:layout_weight="1"
                     android:background="@drawable/fundo_cartao_borda"
                     android:orientation="vertical"
@@ -107,13 +116,13 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunito_bold"
                         android:textColor="@color/verde_escuro_principal"
-                        android:textSize="26sp"
+                        android:textSize="27sp"
                         tools:text="80" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="3dp"
                         android:fontFamily="@font/nunito_regular"
                         android:text="@string/sindico_dash_descartes"
                         android:textColor="@color/cinza_texto_home"
@@ -122,7 +131,7 @@
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="104dp"
+                    android:layout_height="100dp"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/fundo_cartao_borda"
@@ -135,13 +144,13 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunito_bold"
                         android:textColor="@color/verde_escuro_principal"
-                        android:textSize="26sp"
+                        android:textSize="27sp"
                         tools:text="120" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="3dp"
                         android:fontFamily="@font/nunito_regular"
                         android:text="@string/sindico_dash_moradores"
                         android:textColor="@color/cinza_texto_home"
@@ -157,7 +166,7 @@
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="104dp"
+                    android:layout_height="100dp"
                     android:layout_weight="1"
                     android:background="@drawable/fundo_cartao_borda"
                     android:orientation="vertical"
@@ -169,13 +178,13 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunito_bold"
                         android:textColor="@color/verde_escuro_principal"
-                        android:textSize="26sp"
+                        android:textSize="27sp"
                         tools:text="18" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="3dp"
                         android:fontFamily="@font/nunito_regular"
                         android:text="@string/sindico_dash_coletas"
                         android:textColor="@color/cinza_texto_home"
@@ -184,7 +193,7 @@
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="104dp"
+                    android:layout_height="100dp"
                     android:layout_marginStart="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/fundo_cartao_borda"
@@ -197,13 +206,13 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunito_bold"
                         android:textColor="@color/verde_escuro_principal"
-                        android:textSize="26sp"
+                        android:textSize="27sp"
                         tools:text="300" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
+                        android:layout_marginTop="3dp"
                         android:fontFamily="@font/nunito_regular"
                         android:text="@string/sindico_dash_pontos"
                         android:textColor="@color/cinza_texto_home"
@@ -211,54 +220,31 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="22dp"
-                android:background="@drawable/fundo_cartao_borda"
-                android:orientation="vertical"
-                android:padding="14dp">
+                android:layout_marginTop="26dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/sindico_dash_cooperativas"
+                android:textColor="@color/verde_escuro_principal"
+                android:textSize="18sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunito_bold"
-                    android:text="@string/sindico_materiais_reciclados"
-                    android:textColor="@color/verde_escuro_principal"
-                    android:textSize="16sp" />
-
-                <com.example.ecociente.ui.SindicoDashboardRoscaView
-                    android:id="@+id/roscaMateriaisSindico"
-                    android:layout_width="match_parent"
-                    android:layout_height="190dp"
-                    android:layout_marginTop="8dp" />
-
-                <TextView
-                    android:id="@+id/textoMateriaisPercentuais"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunito_regular"
-                    android:gravity="center"
-                    android:textColor="@color/cinza_texto_home"
-                    android:textSize="12sp"
-                    tools:text="Papel 25% · Plástico 50% · Vidro 8%" />
-            </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/nunito_regular"
+                android:text="@string/sindico_dash_cooperativas_subtitulo"
+                android:textColor="@color/cinza_texto_home"
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/fundo_cartao_borda"
                 android:orientation="vertical"
                 android:padding="14dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunito_bold"
-                    android:text="@string/sindico_dash_cooperativas"
-                    android:textColor="@color/verde_escuro_principal"
-                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/textoSemColetasCooperativasDashboard"
@@ -275,25 +261,35 @@
                 <com.example.ecociente.ui.SindicoDashboardGraficoView
                     android:id="@+id/graficoCooperativasSindico"
                     android:layout_width="match_parent"
-                    android:layout_height="220dp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_height="230dp"
+                    android:layout_marginTop="4dp" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/sindico_dash_semanas"
+                android:textColor="@color/verde_escuro_principal"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/nunito_regular"
+                android:text="@string/sindico_dash_quizzes_subtitulo"
+                android:textColor="@color/cinza_texto_home"
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/fundo_cartao_borda"
                 android:orientation="vertical"
                 android:padding="14dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunito_bold"
-                    android:text="@string/sindico_dash_semanas"
-                    android:textColor="@color/verde_escuro_principal"
-                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/textoSemQuizzesDashboard"
@@ -310,8 +306,42 @@
                 <com.example.ecociente.ui.SindicoDashboardGraficoView
                     android:id="@+id/graficoQuizzesSindico"
                     android:layout_width="match_parent"
-                    android:layout_height="210dp"
-                    android:layout_marginTop="8dp" />
+                    android:layout_height="220dp"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/sindico_materiais_reciclados"
+                android:textColor="@color/verde_escuro_principal"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/fundo_cartao_borda"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <com.example.ecociente.ui.SindicoDashboardRoscaView
+                    android:id="@+id/roscaMateriaisSindico"
+                    android:layout_width="match_parent"
+                    android:layout_height="190dp"
+                    android:layout_marginTop="2dp" />
+
+                <TextView
+                    android:id="@+id/textoMateriaisPercentuais"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_regular"
+                    android:gravity="center"
+                    android:textColor="@color/cinza_texto_home"
+                    android:textSize="12sp"
+                    tools:text="Papel 25% · Plástico 50% · Vidro 8%" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
