@@ -64,13 +64,15 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
         int condominioId = PerfilApiRepository.condominioId(this);
 
         if (condominioId <= 0) {
+            exibirSemDados();
+            findViewById(R.id.botaoTentarDashboard).setVisibility(View.VISIBLE);
             AvisoFlutuante.mostrar(this, R.string.sindico_coleta_sem_condominio);
             return;
         }
 
         findViewById(R.id.botaoTentarDashboard).setVisibility(View.GONE);
 
-        for (int id : new int[]{R.id.valorAulasConcluidas, R.id.valorMoradoresNoApp}) {
+        for (int id : new int[]{R.id.valorAulasConcluidas, R.id.valorMoradoresNoApp, R.id.valorPontosDoMes, R.id.valorColetasRealizadas}) {
             ((TextView) findViewById(id)).setText(R.string.sindico_carregando_dado);
         }
 
@@ -85,12 +87,15 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
             }
 
             exibir(resumo);
+            findViewById(R.id.botaoTentarDashboard).setVisibility(View.GONE);
         });
     }
 
     private void exibir(ResumoDashboard resumo) {
         ((TextView) findViewById(R.id.valorAulasConcluidas)).setText(String.valueOf(resumo.getReciclados()));
         ((TextView) findViewById(R.id.valorMoradoresNoApp)).setText(String.valueOf(resumo.getMoradores()));
+        ((TextView) findViewById(R.id.valorPontosDoMes)).setText(String.valueOf(resumo.getPontosDoMes()));
+        ((TextView) findViewById(R.id.valorColetasRealizadas)).setText(String.valueOf(resumo.getColetasRealizadas()));
 
         String[] quizzes = resumo.getQuizzes();
         int[] notas = resumo.getNotasDosQuizzes();
@@ -147,7 +152,7 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
 
     private void exibirSemDados() {
         for (int id : new int[]{R.id.valorAulasConcluidas, R.id.valorMoradoresNoApp,
-                R.id.textoMateriaisPercentuais}) {
+                R.id.valorPontosDoMes, R.id.valorColetasRealizadas, R.id.textoMateriaisPercentuais}) {
             ((TextView) findViewById(id)).setText(R.string.sindico_sem_dado);
         }
 
