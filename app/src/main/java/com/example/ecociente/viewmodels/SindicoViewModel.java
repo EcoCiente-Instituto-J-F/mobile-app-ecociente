@@ -1,6 +1,7 @@
 package com.example.ecociente.viewmodels;
 
 import android.app.Application;
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -16,23 +17,62 @@ import com.example.ecociente.repository.SindicoRepository;
 import java.util.List;
 
 public final class SindicoViewModel extends AndroidViewModel {
+    private static final String TAG = "SindicoViewModel";
+
     private final SindicoRepository repositorio = SindicoRepository.getInstance();
     private final MutableLiveData<List<SindicoPosicaoRanking>> rankingTorres = new MutableLiveData<>();
+    private boolean carregandoRankingTorres;
 
     public SindicoViewModel(@NonNull Application aplicacao) {
         super(aplicacao);
     }
 
-    // Só emite depois da consulta; null quando a API não respondeu (sem JWT, 403, fora do ar).
+    // null quando a API falha ou quando o perfil não possui condomínio válido.
     public LiveData<List<SindicoPosicaoRanking>> getRankingTorres() { return rankingTorres; }
 
     public void carregarRankingTorres(int limite) {
-        new RankingExternoRepository()
-                .listarTorres(
-                        getApplication(),
-                        PerfilApiRepository.condominioId(getApplication()),
-                        limite,
-                        rankingTorres::setValue);
+        if (limite <= 0 || carregandoRankingTorres) return;
+
+        int condominioId = PerfilApiRepository.condominioId(getApplication());
+        if (condominioId > 0) {
+            consultarRankingTorres(condominioId, limite);
+            return;
+        }
+
+        // O perfil é carregado em segundo plano. Não consultar o ranking com condominioId=0:
+        // aguardar /api/usuarios/me e só então disparar a chamada à API de pontuação.
+        carregandoRankingTorres = true;
+        Log.i(TAG, "Aguardando perfil para obter o condominioId antes de carregar o ranking");
+        new PerfilApiRepository().atualizar(getApplication(), () -> {
+            int idAtualizado = PerfilApiRepository.condominioId(getApplication());
+            if (idAtualizado <= 0) {
+                carregandoRankingTorres = false;
+                Log.w(TAG, "Ranking não consultado: perfil não retornou um condominioId válido");
+                rankingTorres.setValue(null);
+                return;
+            }
+            consultarRankingTorres(idAtualizado, limite);
+        });
+    }
+
+    private void consultarRankingTorres(int condominioId, int limite) {
+        if (condominioId <= 0) {
+            carregandoRankingTorres = false;
+            Log.w(TAG, "Ranking não consultado: condominioId inválido (" + condominioId + ")");
+            rankingTorres.setValue(null);
+            return;
+        }
+
+        carregandoRankingTorres = true;
+        Log.i(TAG, "Consultando ranking de torres do condomínio " + condominioId);
+        new RankingExternoRepository().listarTorres(
+                getApplication(),
+                condominioId,
+                limite,
+                resultado -> {
+                    carregandoRankingTorres = false;
+                    rankingTorres.setValue(resultado);
+                });
     }
 
     public SindicoDashboard getDashboard() { return repositorio.getDashboard(); }
