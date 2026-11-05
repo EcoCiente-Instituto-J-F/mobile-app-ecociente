@@ -180,12 +180,9 @@ public final class MidiasEco {
     }
 
     public void prepararQuizzes(List<QuizResumo> quizzes) {
-        List<QuizResumo> ordenados = new ArrayList<>(quizzes);
-        ordenados.sort(Comparator.comparingInt(QuizResumo::getQuizId));
-        // Evita repetir a mesma arte em quizzes consecutivos, inclusive IDs diferentes
-        // que apontam para o mesmo drawable (como os dois ícones de folha).
+        // Mantém a ordem usada na tela para que dois cards vizinhos não recebam a mesma arte.
         String anterior = null;
-        for (QuizResumo q : ordenados) {
+        for (QuizResumo q : quizzes) {
             Midia icone = fixaDiversificada(Midia.ICONE_QUIZ, "quiz",
                     q.getQuizId(), q.getTitulo(), q.getCategoria(), anterior);
             if (icone != null) anterior = icone.id;
