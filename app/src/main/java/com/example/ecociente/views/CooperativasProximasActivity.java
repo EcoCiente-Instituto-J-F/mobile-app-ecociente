@@ -18,6 +18,7 @@ import androidx.core.content.res.ResourcesCompat;
 import com.example.ecociente.R;
 import com.example.ecociente.model.CooperativaProxima;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
+import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.viewmodels.CooperativasProximasViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -36,6 +37,7 @@ public final class CooperativasProximasActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         JanelaEdgeToEdge.aplicar(this);
         setContentView(R.layout.activity_cooperativas_proximas);
+        InsetsSistema.aplicarComoPadding(findViewById(R.id.raizCooperativasProximas));
 
         lista = findViewById(R.id.listaCooperativas);
         progresso = findViewById(R.id.progressoCooperativas);
