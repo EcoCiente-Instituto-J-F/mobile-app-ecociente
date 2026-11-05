@@ -96,14 +96,9 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
 
     private void configurarPorDestino(View raiz) {
 
-        View botaoNovo = findViewById(R.id.botaoNovaNotificacaoCentral);
-
         if (destino != Destino.SINDICO) {
             return;
         }
-
-        botaoNovo.setVisibility(View.VISIBLE);
-        botaoNovo.setOnClickListener(view -> abrirFormularioDoSindico());
 
         SindicoViewModel viewModel = new ViewModelProvider(this).get(SindicoViewModel.class);
 
@@ -132,14 +127,6 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
                         this,
                         (chave, resultado) ->
                                 AvisoFlutuante.mostrar(this, R.string.sindico_rascunho_salvo));
-    }
-
-    private void abrirFormularioDoSindico() {
-
-        if (getSupportFragmentManager().findFragmentByTag("criarAvisoSindico") == null) {
-            new SindicoCriarAvisoDialogFragment()
-                    .show(getSupportFragmentManager(), "criarAvisoSindico");
-        }
     }
 
     private void exibir() {
