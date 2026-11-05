@@ -100,6 +100,24 @@ public class RegrasMidiasTest {
     }
 
     @Test
+    public void falhaDeImagemRemotaPriorizaUmaAlternativaLocal() {
+        List<Midia> midias = new ArrayList<>();
+        midias.add(icone("remota_1", "geral"));
+        midias.add(new Midia("local_1", Midia.ICONE_CONTEUDO, "geral", "drawable",
+                "img_greenpapers", "png", "local_1", "", "", 1,
+                false, false, false, new ArrayList<>()));
+        RegrasMidias regras = new RegrasMidias(midias, new LinkedHashMap<>());
+        java.util.Set<String> tentadas = new java.util.HashSet<>();
+        tentadas.add("remota_1");
+
+        Midia alternativa = regras.escolherAlternativaLocal(
+                Midia.ICONE_CONTEUDO, tentadas, 123L);
+
+        assertNotNull(alternativa);
+        assertEquals("local_1", alternativa.id);
+    }
+
+    @Test
     public void aEscolhaEhRepetivel() {
         List<String> a = distribuir(regrasComIcones(15, "geral"), 40, new HashMap<>());
         List<String> b = distribuir(regrasComIcones(15, "geral"), 40, new HashMap<>());
