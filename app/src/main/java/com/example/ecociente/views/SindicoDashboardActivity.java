@@ -70,8 +70,7 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
 
         findViewById(R.id.botaoTentarDashboard).setVisibility(View.GONE);
 
-        for (int id : new int[]{R.id.valorAulasConcluidas, R.id.valorMoradoresNoApp, R.id.valorPontosDoMes,
-                R.id.valorPontosNoMesDashboard}) {
+        for (int id : new int[]{R.id.valorAulasConcluidas, R.id.valorMoradoresNoApp}) {
             ((TextView) findViewById(id)).setText(R.string.sindico_carregando_dado);
         }
 
@@ -92,8 +91,6 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
     private void exibir(ResumoDashboard resumo) {
         ((TextView) findViewById(R.id.valorAulasConcluidas)).setText(String.valueOf(resumo.getReciclados()));
         ((TextView) findViewById(R.id.valorMoradoresNoApp)).setText(String.valueOf(resumo.getMoradores()));
-        ((TextView) findViewById(R.id.valorPontosDoMes)).setText(String.valueOf(resumo.getColetasRealizadas()));
-        ((TextView) findViewById(R.id.valorPontosNoMesDashboard)).setText(String.valueOf(resumo.getPontosDoMes()));
 
         String[] quizzes = resumo.getQuizzes();
         int[] notas = resumo.getNotasDosQuizzes();
@@ -150,7 +147,7 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
 
     private void exibirSemDados() {
         for (int id : new int[]{R.id.valorAulasConcluidas, R.id.valorMoradoresNoApp,
-                R.id.valorPontosDoMes, R.id.textoMateriaisPercentuais}) {
+                R.id.textoMateriaisPercentuais}) {
             ((TextView) findViewById(id)).setText(R.string.sindico_sem_dado);
         }
 
