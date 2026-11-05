@@ -42,6 +42,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".views.CooperativasProximasActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".views.CondominioHomeActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
