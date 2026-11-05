@@ -64,6 +64,24 @@ public final class RegrasMidias {
         return null;
     }
 
+    /**
+     * Escolhe uma imagem alternativa para falha de carregamento.
+     * Prioriza recursos locais para que a alternativa funcione mesmo sem internet.
+     */
+    public Midia escolherAlternativaLocal(String tipo, Set<String> idsExcluidos, long semente) {
+        List<Midia> locais = new ArrayList<>(), todas = new ArrayList<>();
+        for (Midia midia : catalogo) {
+            if (!tipo.equals(midia.tipo) || idsExcluidos.contains(midia.id)) continue;
+            todas.add(midia);
+            if ("drawable".equals(midia.origem) || "asset".equals(midia.origem)) {
+                locais.add(midia);
+            }
+        }
+        List<Midia> candidatas = locais.isEmpty() ? todas : locais;
+        return candidatas.isEmpty() ? null
+                : candidatas.get(new Random(semente).nextInt(candidatas.size()));
+    }
+
     private List<Midia> candidatos(String tipo, String tema, Set<String> excluirGrupos) {
         List<Midia> exatos = new ArrayList<>(), neutros = new ArrayList<>();
         for (Midia m : catalogo) {
