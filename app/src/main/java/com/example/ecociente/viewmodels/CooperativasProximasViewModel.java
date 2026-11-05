@@ -19,6 +19,7 @@ public final class CooperativasProximasViewModel extends AndroidViewModel {
     private final MutableLiveData<String> erro = new MutableLiveData<>();
     private final MutableLiveData<Boolean> vazio = new MutableLiveData<>(false);
     private List<CooperativaProxima> original = new ArrayList<>();
+    private String buscaAtual = "";
 
     public CooperativasProximasViewModel(@NonNull Application application) { super(application); }
     public LiveData<List<CooperativaProxima>> getLista() { return lista; }
@@ -38,12 +39,13 @@ public final class CooperativasProximasViewModel extends AndroidViewModel {
                 return;
             }
             original = new ArrayList<>(resultado.cooperativas);
-            lista.setValue(new ArrayList<>(original));
-            vazio.setValue(original.isEmpty());
+            pesquisar(buscaAtual);
+            vazio.setValue(lista.getValue() == null || lista.getValue().isEmpty());
         });
     }
 
     public void pesquisar(@NonNull String consulta) {
+        buscaAtual = consulta;
         String termo = consulta.trim().toLowerCase(Locale.ROOT);
         List<CooperativaProxima> filtradas = new ArrayList<>();
         for (CooperativaProxima item : original) {
