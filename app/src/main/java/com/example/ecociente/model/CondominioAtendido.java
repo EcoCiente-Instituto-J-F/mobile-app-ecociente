@@ -2,6 +2,8 @@ package com.example.ecociente.model;
 
 import androidx.annotation.NonNull;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /** Condomínio com atendimento confirmado ou realizado pela cooperativa autenticada. */
 public final class CondominioAtendido {
@@ -17,7 +19,7 @@ public final class CondominioAtendido {
         this.nome = nome;
         this.endereco = endereco;
         this.totalTorres = totalTorres;
-        this.diasColeta = List.copyOf(diasColeta);
+        this.diasColeta = Collections.unmodifiableList(new ArrayList<>(diasColeta));
     }
 
     public int getId() { return id; }
