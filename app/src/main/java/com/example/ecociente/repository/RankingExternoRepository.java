@@ -39,10 +39,17 @@ public class RankingExternoRepository {
     public void listarTorres(
             @NonNull Context contexto, int condominioId, int limite, @NonNull Retorno retorno) {
 
+        if (condominioId <= 0) {
+            Log.w(TAG, "Consulta de ranking cancelada: condominioId inválido (" + condominioId + ")");
+            PRINCIPAL.post(() -> retorno.aoConcluir(null));
+            return;
+        }
+
         Context contextoApp = contexto.getApplicationContext();
 
         EXECUTOR.execute(
                 () -> {
+                    Log.i(TAG, "Buscando ranking de torres: condominioId=" + condominioId + ", limit=" + limite);
                     List<SindicoPosicaoRanking> posicoes = null;
 
                     try {
