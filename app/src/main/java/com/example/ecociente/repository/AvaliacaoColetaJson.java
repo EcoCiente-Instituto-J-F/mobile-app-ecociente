@@ -10,6 +10,18 @@ final class AvaliacaoColetaJson {
 
     private AvaliacaoColetaJson() {}
 
+    static boolean jaRegistrada(int codigoHttp, @Nullable String corpo) {
+        if (codigoHttp != 409 || corpo == null || corpo.isEmpty()) {
+            return false;
+        }
+        try {
+            return "AVALIACAO_JA_REGISTRADA".equals(
+                    new JSONObject(corpo).optString("codigo", ""));
+        } catch (JSONException ignorado) {
+            return false;
+        }
+    }
+
     // O comentário vai só quando o síndico escreveu algo.
     @NonNull
     static String corpo(int nota, @Nullable String comentario) {
