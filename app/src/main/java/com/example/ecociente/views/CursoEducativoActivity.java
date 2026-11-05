@@ -18,7 +18,6 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.example.ecociente.R;
 import com.example.ecociente.midias.MidiasEco;
-import com.example.ecociente.midias.CarregadorMidias;
 import com.example.ecociente.model.CursoEducativo;
 import com.example.ecociente.model.FluxoEducativo;
 import com.example.ecociente.ui.InsetsSistema;
@@ -53,8 +52,8 @@ public class CursoEducativoActivity extends AppCompatActivity {
         findViewById(R.id.voltarCursoEducativo).setOnClickListener(v -> finish());
         ((TextView) findViewById(R.id.tituloCursoEducativo)).setText(curso.titulo);
         ((TextView) findViewById(R.id.descricaoCursoEducativo)).setText(curso.descricao);
-        CarregadorMidias.mostrar(findViewById(R.id.imagemCursoEducativo),
-                MidiasEco.obter(this).iconeCurso(curso), false, R.drawable.ic_guia_verde);
+        MidiasEco.obter(this).mostrarIconeCurso(
+                findViewById(R.id.imagemCursoEducativo), curso);
         ((TextView) findViewById(R.id.indicadoresCursoEducativo)).setText(
                 curso.aulas.size() + (curso.aulas.size() == 1 ? " aula" : " aulas")
                         + "   \u2022   No seu ritmo");
