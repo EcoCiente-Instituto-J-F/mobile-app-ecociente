@@ -496,6 +496,17 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
     private void responder(@NonNull StatusAgendamento resposta) {
 
+        // Protege contra clique em ação desatualizada: a API só aceita REALIZADO
+        // depois que a cooperativa confirmou a coleta.
+        if (resposta == StatusAgendamento.REALIZADO
+                && solicitacao.getStatus() != StatusAgendamento.CONFIRMADO) {
+            Toast.makeText(
+                    this,
+                    "Confirme a coleta antes de marcá-la como realizada.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
         viewModel
                 .responder(this, solicitacao.getId(), resposta)
                 .observe(
