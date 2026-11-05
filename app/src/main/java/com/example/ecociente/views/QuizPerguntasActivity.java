@@ -338,14 +338,14 @@ public class QuizPerguntasActivity extends AppCompatActivity {
 
         for (int i = 0; i < perguntas.size(); i++) {
             View ponto = new View(this);
-            LinearLayout.LayoutParams pontoParams = new LinearLayout.LayoutParams(dpInt(14), dpInt(14));
+            LinearLayout.LayoutParams pontoParams = new LinearLayout.LayoutParams(dpInt(7), dpInt(7));
             ponto.setLayoutParams(pontoParams);
             containerProgresso.addView(ponto);
             pontosProgresso.add(ponto);
 
             if (i < perguntas.size() - 1) {
                 View conector = new View(this);
-                LinearLayout.LayoutParams conectorParams = new LinearLayout.LayoutParams(dpInt(12), dpInt(2));
+                LinearLayout.LayoutParams conectorParams = new LinearLayout.LayoutParams(0, dpInt(2), 1f);
                 conector.setLayoutParams(conectorParams);
                 containerProgresso.addView(conector);
                 conectoresProgresso.add(conector);
@@ -369,8 +369,8 @@ public class QuizPerguntasActivity extends AppCompatActivity {
         atual.setScaleX(.8f);
         atual.setScaleY(.8f);
         atual.animate()
-                .scaleX(1.16f)
-                .scaleY(1.16f)
+                .scaleX(1.08f)
+                .scaleY(1.08f)
                 .setDuration(130L)
                 .withEndAction(() -> atual.animate()
                         .scaleX(1f)
