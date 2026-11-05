@@ -93,10 +93,10 @@ public final class MidiasEco {
     private void tentarMostrarIconeCurso(ImageView view, CursoEducativo curso,
                                          Midia midia, Set<String> tentadas) {
         Midia atual = midia;
-        if (atual == null || !tentadas.add(atual.id)) {
+        if (atual == null || tentadas.contains(atual.id)) {
             atual = escolherAlternativaCurso(curso, tentadas);
         }
-        if (atual == null) {
+        if (atual == null || !tentadas.add(atual.id)) {
             view.setImageDrawable(null);
             return;
         }
@@ -136,10 +136,10 @@ public final class MidiasEco {
     private void tentarMostrarIconeQuiz(ImageView view, int id, String titulo, String categoria,
                                         Midia midia, Set<String> tentadas) {
         Midia atual = midia;
-        if (atual == null || !tentadas.add(atual.id)) {
+        if (atual == null || tentadas.contains(atual.id)) {
             atual = escolherAlternativaQuiz(id, tentadas);
         }
-        if (atual == null) {
+        if (atual == null || !tentadas.add(atual.id)) {
             view.setImageDrawable(null);
             return;
         }
