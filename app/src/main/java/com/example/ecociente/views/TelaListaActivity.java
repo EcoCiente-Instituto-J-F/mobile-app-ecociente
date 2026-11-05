@@ -301,7 +301,7 @@ public class TelaListaActivity extends AppCompatActivity {
     // Condomínios atendidos pela cooperativa autenticada na ds-mobile-api.
     private void carregarCondominios(LinearLayout lista) {
 
-        indicadorDeCarregamento(lista, R.string.avaliacoes_carregando);
+        indicadorDeCarregamento(lista, R.string.condominios_carregando);
 
         if (PerfilApiRepository.cooperativaId(this) > 0) {
             buscarCondominios(lista);
@@ -322,7 +322,7 @@ public class TelaListaActivity extends AppCompatActivity {
                             }
 
                             lista.removeAllViews();
-                            erroComTentar(lista, R.string.avaliacoes_erro);
+                            erroComTentar(lista, R.string.condominios_erro);
                         });
     }
 
@@ -340,12 +340,12 @@ public class TelaListaActivity extends AppCompatActivity {
                             lista.removeAllViews();
 
                             if (condominios == null) {
-                                erroComTentar(lista, R.string.avaliacoes_erro);
+                                erroComTentar(lista, R.string.condominios_erro);
                                 return;
                             }
 
                             if (condominios.isEmpty()) {
-                                textoDeEstado(lista, R.string.lista_vazia);
+                                textoDeEstado(lista, R.string.condominios_vazio);
                                 return;
                             }
 
