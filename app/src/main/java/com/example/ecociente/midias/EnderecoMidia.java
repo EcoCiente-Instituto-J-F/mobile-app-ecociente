@@ -12,9 +12,11 @@ public final class EnderecoMidia {
             throw new IllegalArgumentException("Origem Cloudinary invalida");
         if (midia.caminho.startsWith("/") || midia.caminho.contains("..") || midia.caminho.contains(":"))
             throw new IllegalArgumentException("Public ID invalido");
-        // O catalogo pode guardar o nome com extensao (ex.: imagem.png), mas
-        // o public_id do Cloudinary nao deve receber essa extensao duplicada.
-        String caminhoPublico = removerExtensao(midia.caminho);
+        // O Public ID pode conter pontos e extensoes como parte literal do identificador.
+        // No Cloudinary, se o Public ID for "imagem.png", a URL de entrega será
+        // "imagem.png.png" quando o formato de entrega também for PNG.
+        // Portanto, preservamos exatamente o valor cadastrado no catálogo.
+        String caminhoPublico = midia.caminho;
         StringBuilder id = new StringBuilder();
         for (String parte : caminhoPublico.split("/")) {
             if (parte.isEmpty()) throw new IllegalArgumentException("Public ID invalido");
