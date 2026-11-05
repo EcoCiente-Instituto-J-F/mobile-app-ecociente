@@ -107,6 +107,9 @@ public class CondominioHomeActivity extends AppCompatActivity {
                                 () -> startActivity(new Intent(this, GerenciarPerfilActivity.class)),
                                 this::confirmarSaida));
 
+        findViewById(R.id.botaoCooperativasProximas)
+                .setOnClickListener(view -> startActivity(new Intent(this, CooperativasProximasActivity.class)));
+
         findViewById(R.id.botaoVerCalendarioCompleto)
                 .setOnClickListener(view -> startActivity(new Intent(this, CalendarioColetasActivity.class)));
 
