@@ -343,6 +343,10 @@
     <string name="recusar_titulo">Recusar solicitação</string>
     <string name="recusar_mensagem">Tem certeza que deseja recusar esta solicitação?</string>
     <string name="solicitacao_aceita">Solicitação aceita.</string>
+    <string name="marcar_coleta_realizada">Marcar como realizada</string>
+    <string name="marcar_coleta_realizada_titulo">Confirmar coleta realizada</string>
+    <string name="marcar_coleta_realizada_mensagem">Confirma que a coleta foi concluída? Depois dessa confirmação, o síndico poderá avaliar o serviço.</string>
+    <string name="coleta_marcada_realizada">Coleta marcada como realizada.</string>
     <string name="solicitacao_recusada">Solicitação recusada.</string>
     <string name="recusar">Recusar</string>
 
