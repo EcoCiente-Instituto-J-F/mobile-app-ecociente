@@ -47,7 +47,7 @@ final class CondominiosAtendidosJson {
         adicionar(partes, e.optString("cidade", ""));
         adicionar(partes, e.optString("estado", ""));
         adicionar(partes, e.optString("cep", ""));
-        return String.join(", ", partes);
+        return android.text.TextUtils.join(", ", partes);
     }
 
     private static void adicionar(List<String> partes, String valor) {
