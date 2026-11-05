@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.text.TextUtils;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
@@ -145,7 +146,7 @@ public class CooperativaHomeActivity extends AppCompatActivity {
                 conteudo.addView(textoLista(condominio.getTotalTorres() + " torres cadastradas", 12, false));
                 conteudo.addView(textoLista(condominio.getDiasColeta().isEmpty()
                         ? "Sem recorrência de coleta confirmada."
-                        : "Dias de coleta: " + String.join(", ", condominio.getDiasColeta()), 12, false));
+                        : "Dias de coleta: " + TextUtils.join(", ", condominio.getDiasColeta()), 12, false));
                 card.addView(conteudo);
                 listaCondominios.addView(card);
             }
