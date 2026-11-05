@@ -10,7 +10,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.core.content.res.ResourcesCompat;
@@ -149,13 +148,6 @@ public final class CooperativasProximasActivity extends AppCompatActivity {
         }
     }
 
-    private void mostrarLimiteSolicitacao() {
-        new AlertDialog.Builder(this)
-                .setTitle("Solicitação de coleta")
-                .setMessage("A API exige o identificador do condomínio para criar a solicitação. Esse identificador ainda não está disponível de forma confiável no fluxo atual do aplicativo. Nenhuma solicitação foi enviada.")
-                .setPositiveButton("Entendi", null)
-                .show();
-    }
 
     private TextView texto(String valor, int tamanho, boolean negrito) {
         TextView view = new TextView(this);
