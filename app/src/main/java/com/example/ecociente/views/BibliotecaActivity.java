@@ -22,7 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
 import com.example.ecociente.midias.MidiasEco;
-import com.example.ecociente.midias.Midia;
 import com.example.ecociente.midias.CarregadorMidias;
 import com.example.ecociente.model.CursoEducativo;
 import com.example.ecociente.model.DadosDemonstracaoEducacao;
