@@ -69,9 +69,15 @@ public final class RegrasMidias {
      * Prioriza recursos locais para que a alternativa funcione mesmo sem internet.
      */
     public Midia escolherAlternativaLocal(String tipo, Set<String> idsExcluidos, long semente) {
+        Set<String> gruposExcluidos = new HashSet<>();
+        for (String id : idsExcluidos) {
+            Midia tentada = porId(id);
+            if (tentada != null) gruposExcluidos.add(tentada.grupoImagem);
+        }
         List<Midia> locais = new ArrayList<>(), todas = new ArrayList<>();
         for (Midia midia : catalogo) {
-            if (!tipo.equals(midia.tipo) || idsExcluidos.contains(midia.id)) continue;
+            if (!tipo.equals(midia.tipo) || idsExcluidos.contains(midia.id)
+                    || gruposExcluidos.contains(midia.grupoImagem)) continue;
             todas.add(midia);
             if ("drawable".equals(midia.origem) || "asset".equals(midia.origem)) {
                 locais.add(midia);
@@ -121,6 +127,50 @@ public final class RegrasMidias {
             int uso = 0;
             for (Map.Entry<String, String> vinculo : vinculos.entrySet()) {
                 if (vinculo.getKey().startsWith(tipo + ":") && m.id.equals(vinculo.getValue())) uso++;
+            }
+            if (uso < menorUso) { menorUso = uso; empatadas.clear(); }
+            if (uso == menorUso) empatadas.add(m);
+        }
+        return empatadas.get(Math.floorMod(chave.hashCode(), empatadas.size()));
+    }
+
+    /**
+     * Distribui ícones de quizzes sem repetir a mesma arte em itens vizinhos.
+     * Quando o tema só possui uma imagem, recorre a qualquer outra arte do mesmo tipo.
+     */
+    public Midia escolherFixaDiversificada(String tipo, String tema, String chave,
+                                            Map<String, String> vinculos, String evitarId) {
+        Midia anterior = porId(evitarId);
+        Midia salva = porId(vinculos.get(chave));
+        if (salva != null && tipo.equals(salva.tipo)
+                && (anterior == null || !salva.grupoImagem.equals(anterior.grupoImagem))) {
+            return salva;
+        }
+
+        List<Midia> candidatas = new ArrayList<>(candidatos(tipo, tema, Collections.emptySet()));
+        if (anterior != null) {
+            candidatas.removeIf(m -> m.grupoImagem.equals(anterior.grupoImagem));
+        }
+        if (candidatas.isEmpty() && anterior != null) {
+            for (Midia m : catalogo) {
+                if (tipo.equals(m.tipo) && !m.grupoImagem.equals(anterior.grupoImagem)) {
+                    candidatas.add(m);
+                }
+            }
+        }
+        if (candidatas.isEmpty()) {
+            candidatas.addAll(candidatos(tipo, tema, Collections.emptySet()));
+        }
+        if (candidatas.isEmpty()) return null;
+
+        int menorUso = Integer.MAX_VALUE;
+        List<Midia> empatadas = new ArrayList<>();
+        for (Midia m : candidatas) {
+            int uso = 0;
+            for (Map.Entry<String, String> vinculo : vinculos.entrySet()) {
+                Midia usada = porId(vinculo.getValue());
+                if (vinculo.getKey().startsWith(tipo + ":") && usada != null
+                        && m.grupoImagem.equals(usada.grupoImagem)) uso++;
             }
             if (uso < menorUso) { menorUso = uso; empatadas.clear(); }
             if (uso == menorUso) empatadas.add(m);
