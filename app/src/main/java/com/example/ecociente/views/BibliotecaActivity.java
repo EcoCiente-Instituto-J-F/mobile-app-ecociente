@@ -261,7 +261,7 @@ public class BibliotecaActivity extends AppCompatActivity {
         FrameLayout imagemTopo = new FrameLayout(this);
         corpo.addView(imagemTopo, new LinearLayout.LayoutParams(-1, dp(112)));
         ImageView ilustra = new ImageView(this);
-        CarregadorMidias.mostrar(ilustra, MidiasEco.obter(this).iconeCurso(curso), false, R.drawable.ic_guia_verde);
+        MidiasEco.obter(this).mostrarIconeCurso(ilustra, curso);
         ilustra.setScaleType(ImageView.ScaleType.FIT_CENTER);
         ilustra.setContentDescription("Ilustração do conteúdo de sustentabilidade");
         FrameLayout.LayoutParams lpImagem = new FrameLayout.LayoutParams(-1, dp(91), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
@@ -399,8 +399,7 @@ public class BibliotecaActivity extends AppCompatActivity {
                         ? DadosDemonstracaoEducacao.tipoConteudo(curso.id)
                         : curso.aulas.isEmpty() ? "Guia" : "Curso · " + curso.aulas.size() + " aulas";
                 sub = estadoDoCurso(curso, sub);
-                listaSalvos.addView(criarLinhaSalva(curso.titulo, sub,
-                        MidiasEco.obter(this).iconeCurso(curso),
+                listaSalvos.addView(criarLinhaSalva(curso.titulo, sub, curso,
                         () -> abrirCurso(selecionavel), () -> alternarSalvo("curso:" + curso.id)));
                 adicionados++;
             }
@@ -409,8 +408,7 @@ public class BibliotecaActivity extends AppCompatActivity {
                     listaSalvos.addView(criarLinhaSalva(aula.titulo, curso.titulo
                             + (FluxoEducativo.concluido(this, curso, aula)
                                     ? " · " + getString(R.string.biblioteca_concluido) : ""),
-                            MidiasEco.obter(this).iconeCurso(curso),
-                            () -> abrirAula(curso, aula), () -> alternarSalvo("aula:" + aula.id)));
+                            curso, () -> abrirAula(curso, aula), () -> alternarSalvo("aula:" + aula.id)));
                     adicionados++;
                 }
             }
@@ -423,13 +421,13 @@ public class BibliotecaActivity extends AppCompatActivity {
         }
     }
 
-    private View criarLinhaSalva(String titulo, String subtitulo, Midia imagem,
+    private View criarLinhaSalva(String titulo, String subtitulo, CursoEducativo curso,
                                 Runnable abrir, Runnable excluir) {
         LinearLayout linha = new LinearLayout(this);
         linha.setGravity(Gravity.CENTER_VERTICAL);
         linha.setMinimumHeight(dp(82));
         ImageView ilustra = new ImageView(this);
-        CarregadorMidias.mostrar(ilustra, imagem, false, R.drawable.ic_guia_verde);
+        MidiasEco.obter(this).mostrarIconeCurso(ilustra, curso);
         ilustra.setScaleType(ImageView.ScaleType.FIT_CENTER);
         ilustra.setContentDescription(null);
         ilustra.setPadding(dp(2), dp(5), dp(9), dp(5));
