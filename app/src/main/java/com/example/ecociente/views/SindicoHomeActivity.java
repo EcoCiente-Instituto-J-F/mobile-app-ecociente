@@ -109,7 +109,6 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             textoErroSemana.setVisibility(sucesso ? View.GONE : View.VISIBLE);
         });
         calendarioViewModel.carregarSemana();
-        montarMetricas(dados);
         carregarMetricasDashboard();
         montarRanking(dados);
         findViewById(R.id.sindicoValidarDescartes).setOnClickListener(
