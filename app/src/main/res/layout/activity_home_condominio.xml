@@ -136,6 +136,21 @@
 
             </LinearLayout>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/botaoCooperativasProximas"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="18dp"
+                android:contentDescription="Encontrar cooperativas próximas"
+                android:text="Encontrar cooperativas próximas"
+                android:textAllCaps="false"
+                android:fontFamily="@font/nunito_bold"
+                app:icon="@drawable/ic_busca"
+                app:iconTint="@color/branco"
+                app:cornerRadius="14dp" />
+
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardSemanaColetas"
                 android:layout_width="match_parent"
