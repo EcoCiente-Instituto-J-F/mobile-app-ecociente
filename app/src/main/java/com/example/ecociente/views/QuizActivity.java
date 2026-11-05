@@ -325,6 +325,8 @@ public class QuizActivity extends AppCompatActivity {
     private void filtrarQuizzes(@NonNull String filtro) {
         String filtroNormalizado = filtro.trim().toLowerCase(Locale.ROOT);
         int quantidadeVisivel = 0;
+        String imagemAnterior = null;
+        MidiasEco midias = MidiasEco.obter(this);
 
         for (CardQuizView cardQuizView : cardsQuizzes) {
             boolean mostrar =
@@ -344,6 +346,17 @@ public class QuizActivity extends AppCompatActivity {
                             .setDuration(Motion.STATE_MS)
                             .start();
                 }
+
+                // A filtragem pode aproximar cards que antes estavam separados.
+                // Redistribui os ícones na ordem visível para evitar duas imagens iguais lado a lado.
+                QuizItem quiz = cardQuizView.quiz;
+                com.example.ecociente.midias.Midia escolhida = midias.prepararIconeQuiz(
+                        quiz.id, quiz.titulo, quiz.categoria, imagemAnterior);
+                if (escolhida != null) imagemAnterior = escolhida.id;
+                midias.mostrarIconeQuiz(
+                        cardQuizView.card.findViewById(R.id.imagemIconeQuiz),
+                        quiz.id, quiz.titulo, quiz.categoria);
+
                 quantidadeVisivel++;
             } else {
                 cardQuizView.card.setVisibility(View.GONE);
