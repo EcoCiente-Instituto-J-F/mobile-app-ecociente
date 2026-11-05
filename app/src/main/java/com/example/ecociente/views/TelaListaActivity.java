@@ -28,6 +28,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.example.ecociente.R;
 import com.example.ecociente.model.ItemLista;
+import com.example.ecociente.model.CondominioAtendido;
+import com.example.ecociente.repository.CondominiosAtendidosRepository;
 import com.example.ecociente.model.PostagemFeed;
 import com.example.ecociente.repository.EducacaoRepository;
 import com.example.ecociente.repository.PostagemRepository;
@@ -137,6 +139,11 @@ public class TelaListaActivity extends AppCompatActivity {
 
         if (tipo == TipoLista.SALVOS) {
             carregarSalvos(lista);
+            return;
+        }
+
+        if (tipo == TipoLista.CONDOMINIOS) {
+            carregarCondominios(lista);
             return;
         }
 
@@ -288,6 +295,80 @@ public class TelaListaActivity extends AppCompatActivity {
                             guiaCompleto = itens;
 
                             mostrarSalvos();
+                        });
+    }
+
+    // Condomínios atendidos pela cooperativa autenticada na ds-mobile-api.
+    private void carregarCondominios(LinearLayout lista) {
+
+        indicadorDeCarregamento(lista, R.string.avaliacoes_carregando);
+
+        if (PerfilApiRepository.cooperativaId(this) > 0) {
+            buscarCondominios(lista);
+            return;
+        }
+
+        new PerfilApiRepository()
+                .atualizar(
+                        this,
+                        () -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            if (PerfilApiRepository.cooperativaId(this) > 0) {
+                                buscarCondominios(lista);
+                                return;
+                            }
+
+                            lista.removeAllViews();
+                            erroComTentar(lista, R.string.avaliacoes_erro);
+                        });
+    }
+
+    private void buscarCondominios(LinearLayout lista) {
+
+        new CondominiosAtendidosRepository()
+                .listar(
+                        this,
+                        PerfilApiRepository.cooperativaId(this),
+                        condominios -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            lista.removeAllViews();
+
+                            if (condominios == null) {
+                                erroComTentar(lista, R.string.avaliacoes_erro);
+                                return;
+                            }
+
+                            if (condominios.isEmpty()) {
+                                textoDeEstado(lista, R.string.lista_vazia);
+                                return;
+                            }
+
+                            java.util.List<ItemLista> itens = new java.util.ArrayList<>();
+                            for (CondominioAtendido condominio : condominios) {
+                                String subtitulo = condominio.getEndereco();
+                                StringBuilder destaque = new StringBuilder();
+                                if (condominio.getTotalTorres() > 0) {
+                                    destaque.append(condominio.getTotalTorres()).append(" torres");
+                                }
+                                if (!condominio.getDiasColeta().isEmpty()) {
+                                    if (destaque.length() > 0) destaque.append(" · ");
+                                    destaque.append("Coletas: ")
+                                            .append(android.text.TextUtils.join(", ", condominio.getDiasColeta()));
+                                }
+                                itens.add(new ItemLista(
+                                        condominio.getNome().isEmpty()
+                                                ? getString(R.string.condominios_atendidos)
+                                                : condominio.getNome(),
+                                        subtitulo,
+                                        destaque.toString()));
+                            }
+                            exibirItens(lista, itens);
                         });
     }
 
