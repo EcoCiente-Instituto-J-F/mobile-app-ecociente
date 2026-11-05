@@ -190,7 +190,7 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
         TextView avaliar = cartao.findViewById(R.id.acaoAvaliarHistorico);
         if (status == StatusAgendamento.REALIZADO) {
             avaliar.setVisibility(View.VISIBLE);
-            if (viewModel.foiAvaliada(solicitacao.getId())) {
+            if (viewModel.foiAvaliada(this, solicitacao.getId())) {
                 avaliar.setText(R.string.sindico_avaliada);
                 avaliar.setEnabled(false);
             } else {
@@ -243,7 +243,7 @@ public final class SindicoHistoricoActivity extends AppCompatActivity {
             if (isFinishing() || isDestroyed()) return;
 
             if (resultado.isSucesso()) {
-                viewModel.marcarAvaliada(solicitacao.getId());
+                viewModel.marcarAvaliada(this, solicitacao.getId());
                 AvisoFlutuante.mostrar(this, R.string.sindico_avaliacao_enviada);
                 mostrarHistorico();
                 return;
