@@ -5,18 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.text.TextUtils;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.model.Aviso;
 import com.example.ecociente.model.Coletas;
-import com.example.ecociente.model.CondominioAtendido;
-import com.example.ecociente.repository.CondominiosAtendidosRepository;
-import com.google.android.material.card.MaterialCardView;
-import android.widget.LinearLayout;
-import android.view.ViewGroup;
-import android.graphics.Typeface;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
@@ -50,7 +43,6 @@ public class CooperativaHomeActivity extends AppCompatActivity {
     private TextView textoSaudacao;
     private TextView textoNomeCooperativa;
     private ImageView imagemPerfil;
-    private LinearLayout listaCondominios;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -68,7 +60,6 @@ public class CooperativaHomeActivity extends AppCompatActivity {
         textoSaudacao = findViewById(R.id.textoSaudacaoCooperativa);
         textoNomeCooperativa = findViewById(R.id.textoNomeCooperativa);
         imagemPerfil = findViewById(R.id.imagemPerfilCooperativa);
-        listaCondominios = findViewById(R.id.listaCondominiosAtendidos);
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizHomeCooperativa));
 
@@ -108,59 +99,6 @@ public class CooperativaHomeActivity extends AppCompatActivity {
 
         findViewById(R.id.cardChatbotCooperativa)
                 .setOnClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
-    }
-
-
-    private void carregarCondominiosAtendidos() {
-        if (isFinishing() || isDestroyed() || listaCondominios == null) return;
-        listaCondominios.removeAllViews();
-        listaCondominios.addView(textoLista("Carregando condomínios atendidos…", 14, false));
-        int cooperativaId = PerfilApiRepository.cooperativaId(this);
-        new CondominiosAtendidosRepository().listar(this, cooperativaId, resultado -> {
-            if (isFinishing() || isDestroyed()) return;
-            listaCondominios.removeAllViews();
-            if (resultado == null) {
-                listaCondominios.addView(textoLista("Não foi possível carregar os condomínios. Verifique a conexão e tente novamente.", 14, false));
-                return;
-            }
-            if (resultado.isEmpty()) {
-                listaCondominios.addView(textoLista("Ainda não há condomínios com coletas confirmadas ou realizadas para esta cooperativa.", 14, false));
-                return;
-            }
-            for (CondominioAtendido condominio : resultado) {
-                MaterialCardView card = new MaterialCardView(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.bottomMargin = Math.round(10 * getResources().getDisplayMetrics().density);
-                card.setLayoutParams(params);
-                card.setRadius(14 * getResources().getDisplayMetrics().density);
-                card.setCardElevation(getResources().getDisplayMetrics().density);
-                card.setStrokeWidth(Math.round(getResources().getDisplayMetrics().density));
-                card.setStrokeColor(getColor(R.color.cinza_borda_clara_home));
-                LinearLayout conteudo = new LinearLayout(this);
-                conteudo.setOrientation(LinearLayout.VERTICAL);
-                int padding = Math.round(14 * getResources().getDisplayMetrics().density);
-                conteudo.setPadding(padding, padding, padding, padding);
-                conteudo.addView(textoLista(condominio.getNome(), 16, true));
-                if (!condominio.getEndereco().isEmpty()) conteudo.addView(textoLista(condominio.getEndereco(), 12, false));
-                conteudo.addView(textoLista(condominio.getTotalTorres() + " torres cadastradas", 12, false));
-                conteudo.addView(textoLista(condominio.getDiasColeta().isEmpty()
-                        ? "Sem recorrência de coleta confirmada."
-                        : "Dias de coleta: " + TextUtils.join(", ", condominio.getDiasColeta()), 12, false));
-                card.addView(conteudo);
-                listaCondominios.addView(card);
-            }
-        });
-    }
-
-    private TextView textoLista(String valor, int tamanhoSp, boolean destaque) {
-        TextView texto = new TextView(this);
-        texto.setText(valor);
-        texto.setTextSize(tamanhoSp);
-        texto.setTextColor(getColor(destaque ? R.color.verde_escuro_principal : R.color.cinza_texto_home));
-        texto.setTypeface(null, destaque ? Typeface.BOLD : Typeface.NORMAL);
-        if (!destaque) texto.setPadding(0, Math.round(4 * getResources().getDisplayMetrics().density), 0, 0);
-        return texto;
     }
 
     private void configurarCalendario() {
@@ -227,7 +165,6 @@ public class CooperativaHomeActivity extends AppCompatActivity {
         super.onStart();
 
         carregarPerfil();
-        new PerfilApiRepository().atualizarSeNecessario(this, this::carregarCondominiosAtendidos);
 
         TextView avisoDestaque = findViewById(R.id.textoAvisoDestaqueCooperativa);
         TextView avisoOrigem = findViewById(R.id.textoAvisoOrigemCooperativa);
