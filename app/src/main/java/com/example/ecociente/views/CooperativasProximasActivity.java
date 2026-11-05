@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.ecociente.R;
 import com.example.ecociente.model.CooperativaProxima;
@@ -126,11 +127,20 @@ public final class CooperativasProximasActivity extends AppCompatActivity {
 
             MaterialButton solicitar = new MaterialButton(this);
             solicitar.setText("Solicitar coleta");
-            solicitar.setContentDescription("Solicitar coleta com " + cooperativa.getNome());
+            solicitar.setEnabled(false);
+            solicitar.setContentDescription(
+                    "Solicitação indisponível. O aplicativo ainda não identificou o condomínio vinculado.");
             LinearLayout.LayoutParams botaoParams = new LinearLayout.LayoutParams(-1, dp(48));
             botaoParams.topMargin = dp(12);
             conteudo.addView(solicitar, botaoParams);
-            solicitar.setOnClickListener(v -> mostrarLimiteSolicitacao());
+
+            TextView indisponivel = texto(
+                    "Não é possível enviar a solicitação até identificar o condomínio vinculado à sua conta.",
+                    12, false);
+            indisponivel.setTextColor(getColor(R.color.cinza_texto_auxiliar));
+            LinearLayout.LayoutParams avisoParams = new LinearLayout.LayoutParams(-1, -2);
+            avisoParams.topMargin = dp(5);
+            conteudo.addView(indisponivel, avisoParams);
 
             card.addView(conteudo);
             lista.addView(card);
@@ -150,7 +160,7 @@ public final class CooperativasProximasActivity extends AppCompatActivity {
         view.setText(valor);
         view.setTextSize(tamanho);
         view.setFontFeatureSettings("kern");
-        view.setTypeface(getResources().getFont(negrito
+        view.setTypeface(ResourcesCompat.getFont(this, negrito
                 ? R.font.nunito_bold : R.font.nunito_regular));
         return view;
     }
