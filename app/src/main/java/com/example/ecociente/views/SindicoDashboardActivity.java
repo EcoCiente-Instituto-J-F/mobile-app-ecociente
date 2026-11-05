@@ -101,6 +101,9 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
         int[] notas = resumo.getNotasDosQuizzes();
         SindicoDashboardGraficoView graficoQuizzes = findViewById(R.id.graficoQuizzesSindico);
         graficoQuizzes.setDados(quizzes, notas, repetirCor(R.color.verde_escuro_principal, quizzes.length), 100);
+        findViewById(R.id.textoSemQuizzesDashboard).setVisibility(
+                quizzes.length == 0 ? View.VISIBLE : View.GONE);
+        graficoQuizzes.setVisibility(quizzes.length == 0 ? View.GONE : View.VISIBLE);
         StringBuilder notasTexto = new StringBuilder();
         for (int i = 0; i < quizzes.length; i++) {
             if (i > 0) notasTexto.append(", ");
@@ -128,6 +131,9 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
         for (int i = 0; i < cores.length; i++) cores[i] = CORES[i % CORES.length];
         SindicoDashboardGraficoView graficoCooperativas = findViewById(R.id.graficoCooperativasSindico);
         graficoCooperativas.setDados(cooperativas, coletas, cores, maximo(coletas));
+        findViewById(R.id.textoSemColetasCooperativasDashboard).setVisibility(
+                cooperativas.length == 0 ? View.VISIBLE : View.GONE);
+        graficoCooperativas.setVisibility(cooperativas.length == 0 ? View.GONE : View.VISIBLE);
         StringBuilder coletasTexto = new StringBuilder();
         for (int i = 0; i < cooperativas.length; i++) {
             if (i > 0) coletasTexto.append(", ");
@@ -161,5 +167,9 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
         ((SindicoDashboardGraficoView) findViewById(R.id.graficoCooperativasSindico))
                 .setDados(new String[0], new int[0], new int[0], 1);
         ((SindicoDashboardRoscaView) findViewById(R.id.roscaMateriaisSindico)).setPercentuais(new int[0]);
+        findViewById(R.id.textoSemQuizzesDashboard).setVisibility(View.VISIBLE);
+        findViewById(R.id.textoSemColetasCooperativasDashboard).setVisibility(View.VISIBLE);
+        findViewById(R.id.graficoQuizzesSindico).setVisibility(View.GONE);
+        findViewById(R.id.graficoCooperativasSindico).setVisibility(View.GONE);
     }
 }
