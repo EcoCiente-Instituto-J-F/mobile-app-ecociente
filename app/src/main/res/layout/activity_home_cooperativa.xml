@@ -134,6 +134,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="Condomínios atendidos"
+                android:textColor="@color/verde_escuro_principal"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:id="@+id/listaCondominiosAtendidos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
             <LinearLayout
                 android:id="@+id/cardCalendarioColetas"
                 android:layout_width="match_parent"
@@ -254,27 +271,27 @@
                                 android:layout_marginTop="12dp"
                                 android:background="@drawable/fundo_aviso_destaque"
                                 android:orientation="vertical"
-                                android:padding="12dp">
-
-                                <TextView
-                                    android:id="@+id/textoAvisoDestaqueCooperativa"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:ellipsize="end"
-                                    android:fontFamily="@font/nunito_bold"
-                                    android:maxLines="1"
-                                    android:textColor="@color/verde_escuro_principal"
-                                    android:textSize="13sp" />
-
-                                <TextView
-                                    android:id="@+id/textoAvisoOrigemCooperativa"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="2dp"
-                                    android:ellipsize="end"
-                                    android:fontFamily="@font/nunito_regular"
-                                    android:maxLines="1"
-                                    android:textColor="@color/cinza_texto_auxiliar"
+                                android:padding="12dp">
+
+                                <TextView
+                                    android:id="@+id/textoAvisoDestaqueCooperativa"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/nunito_bold"
+                                    android:maxLines="1"
+                                    android:textColor="@color/verde_escuro_principal"
+                                    android:textSize="13sp" />
+
+                                <TextView
+                                    android:id="@+id/textoAvisoOrigemCooperativa"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="2dp"
+                                    android:ellipsize="end"
+                                    android:fontFamily="@font/nunito_regular"
+                                    android:maxLines="1"
+                                    android:textColor="@color/cinza_texto_auxiliar"
                                     android:textSize="11sp" />
                             </LinearLayout>
 
