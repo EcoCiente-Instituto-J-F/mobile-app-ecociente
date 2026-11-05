@@ -23,6 +23,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -248,30 +254,28 @@ public class CalendarioExternoRepository {
 
     private int enviarStatus(String token, int id, StatusAgendamento status) throws IOException, JSONException {
 
-        HttpURLConnection conexao =
-                (HttpURLConnection) new URL(URL_AGENDAMENTOS + "/" + id + "/status").openConnection();
+        // HttpURLConnection não oferece suporte portátil ao método PATCH no Android.
+        // OkHttp envia PATCH nativamente, sem alterar o contrato já utilizado pela API.
+        MediaType json = MediaType.get("application/json; charset=utf-8");
+        RequestBody corpo = RequestBody.create(
+                json,
+                new JSONObject().put("status", status.name()).toString());
 
-        try {
-            conexao.setRequestMethod("PATCH");
-            conexao.setRequestProperty("Content-Type", "application/json");
-            conexao.setRequestProperty("Accept", "application/json");
-            conexao.setRequestProperty("Authorization", "Bearer " + token);
-            conexao.setDoOutput(true);
-            conexao.setConnectTimeout(TIMEOUT_MS);
-            conexao.setReadTimeout(TIMEOUT_MS);
+        OkHttpClient cliente = new OkHttpClient.Builder()
+                .connectTimeout(TIMEOUT_MS, TimeUnit.MILLISECONDS)
+                .readTimeout(TIMEOUT_MS, TimeUnit.MILLISECONDS)
+                .writeTimeout(TIMEOUT_MS, TimeUnit.MILLISECONDS)
+                .build();
 
-            try (OutputStream saida = conexao.getOutputStream()) {
-                saida.write(
-                        new JSONObject()
-                                .put("status", status.name())
-                                .toString()
-                                .getBytes(StandardCharsets.UTF_8));
-            }
+        Request requisicao = new Request.Builder()
+                .url(URL_AGENDAMENTOS + "/" + id + "/status")
+                .patch(corpo)
+                .header("Accept", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .build();
 
-            return conexao.getResponseCode();
-
-        } finally {
-            conexao.disconnect();
+        try (Response resposta = cliente.newCall(requisicao).execute()) {
+            return resposta.code();
         }
     }
 

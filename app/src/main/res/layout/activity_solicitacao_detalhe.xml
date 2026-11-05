@@ -258,6 +258,17 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.button.MaterialButton
+                            android:id="@+id/botaoMarcarRealizada"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:fontFamily="@font/nunito_bold"
+                            android:text="@string/marcar_coleta_realizada"
+                            android:textAllCaps="false"
+                            android:visibility="gone"
+                            app:backgroundTint="@color/verde_escuro_principal"
+                            app:cornerRadius="10dp" />
+
+                        <com.google.android.material.button.MaterialButton
                             android:id="@+id/botaoAceitar"
                             android:layout_width="0dp"
                             android:layout_height="48dp"

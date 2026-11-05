@@ -183,7 +183,7 @@ public class SolicitacoesActivity extends AppCompatActivity {
         String busca = campoBusca.getText().toString().trim().toLowerCase(Locale.ROOT);
 
         if (busca.isEmpty()) {
-            adaptador.submitList(itens);
+            adaptador.submitList(itens, this::atualizarEstado);
 
         } else {
             List<Solicitacao> filtrados = new ArrayList<>();
@@ -196,10 +196,11 @@ public class SolicitacoesActivity extends AppCompatActivity {
                 }
             }
 
-            adaptador.submitList(filtrados);
+            adaptador.submitList(filtrados, this::atualizarEstado);
         }
 
-        atualizarEstado();
+        // ListAdapter aplica a nova lista de forma assíncrona; o estado vazio é
+        // recalculado no callback de submitList, quando getCurrentList() já está atualizado.
     }
 
     private void configurarBusca() {

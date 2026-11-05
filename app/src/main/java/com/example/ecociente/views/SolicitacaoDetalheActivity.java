@@ -50,6 +50,7 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
     private MaterialButton botaoAceitar;
     private MaterialButton botaoRecusar;
+    private MaterialButton botaoMarcarRealizada;
 
     @NonNull
     public static Intent criarIntent(@NonNull Context contexto, @NonNull Solicitacao solicitacao) {
@@ -385,6 +386,28 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
             configurarCancelamento();
         }
 
+        // Na tela da cooperativa, uma coleta confirmada pode ser marcada como realizada.
+        // A tela de histórico do síndico usa EXTRA_COOPERATIVA e nunca recebe esta ação.
+        if (cooperativaDoSindico == null
+                && solicitacao.getStatus() == StatusAgendamento.CONFIRMADO) {
+            botaoAceitar = findViewById(R.id.botaoAceitar);
+            botaoRecusar = findViewById(R.id.botaoRecusar);
+            botaoMarcarRealizada = findViewById(R.id.botaoMarcarRealizada);
+
+            botaoAceitar.setVisibility(View.GONE);
+            botaoRecusar.setVisibility(View.GONE);
+            botaoMarcarRealizada.setVisibility(View.VISIBLE);
+            botaoMarcarRealizada.setOnClickListener(
+                    view -> confirmar(
+                            R.string.marcar_coleta_realizada_titulo,
+                            getString(R.string.marcar_coleta_realizada_mensagem),
+                            R.string.marcar_coleta_realizada,
+                            StatusAgendamento.REALIZADO));
+
+            viewModel.getCarregando().observe(this, this::definirCarregando);
+            return;
+        }
+
         if (pedidoDoProprioSindico || solicitacao.getStatus() != StatusAgendamento.AGENDADO) {
             acoes.setVisibility(View.GONE);
             return;
@@ -473,6 +496,17 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
     private void responder(@NonNull StatusAgendamento resposta) {
 
+        // Protege contra clique em ação desatualizada: a API só aceita REALIZADO
+        // depois que a cooperativa confirmou a coleta.
+        if (resposta == StatusAgendamento.REALIZADO
+                && solicitacao.getStatus() != StatusAgendamento.CONFIRMADO) {
+            Toast.makeText(
+                    this,
+                    "Confirme a coleta antes de marcá-la como realizada.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
         viewModel
                 .responder(this, solicitacao.getId(), resposta)
                 .observe(
@@ -484,15 +518,14 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
                             }
 
                             // A tela fecha em seguida, então o aviso precisa sobreviver a ela: continua Toast.
-                            Toast.makeText(
-                                            this,
-                                            resposta == StatusAgendamento.CONFIRMADO
-                                                    ? R.string.solicitacao_aceita
-                                                    : resposta == StatusAgendamento.CANCELADO
-                                                            ? R.string.solicitacao_cancelada
-                                                            : R.string.solicitacao_recusada,
-                                            Toast.LENGTH_SHORT)
-                                    .show();
+                            int mensagem = resposta == StatusAgendamento.REALIZADO
+                                    ? R.string.coleta_marcada_realizada
+                                    : resposta == StatusAgendamento.CONFIRMADO
+                                            ? R.string.solicitacao_aceita
+                                            : resposta == StatusAgendamento.CANCELADO
+                                                    ? R.string.solicitacao_cancelada
+                                                    : R.string.solicitacao_recusada;
+                            Toast.makeText(this, mensagem, Toast.LENGTH_SHORT).show();
 
                             setResult(RESULT_OK);
 
@@ -502,8 +535,18 @@ public class SolicitacaoDetalheActivity extends AppCompatActivity {
 
     private void definirCarregando(boolean carregando) {
 
-        BotaoCarregando.definir(botaoAceitar, carregando, R.string.aceitar, R.string.enviando);
-
-        botaoRecusar.setEnabled(!carregando);
+        if (botaoAceitar != null) {
+            BotaoCarregando.definir(botaoAceitar, carregando, R.string.aceitar, R.string.enviando);
+        }
+        if (botaoRecusar != null) {
+            botaoRecusar.setEnabled(!carregando);
+        }
+        if (botaoMarcarRealizada != null) {
+            BotaoCarregando.definir(
+                    botaoMarcarRealizada,
+                    carregando,
+                    R.string.marcar_coleta_realizada,
+                    R.string.enviando);
+        }
     }
 }

@@ -118,6 +118,9 @@ android {
 }
 
 dependencies {
+    // Cliente HTTP com suporte nativo ao método PATCH usado pela API de agendamentos.
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
