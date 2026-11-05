@@ -22,6 +22,8 @@ import com.example.ecociente.viewmodels.CalendarioViewModel;
 import com.example.ecociente.ui.SemanaColetasView;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.SindicoDashboard;
+import com.example.ecociente.model.ResumoDashboard;
+import com.example.ecociente.repository.DashboardSindicoRepository;
 import com.example.ecociente.model.SindicoPosicaoRanking;
 import com.example.ecociente.viewmodels.SindicoViewModel;
 
@@ -107,7 +109,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             textoErroSemana.setVisibility(sucesso ? View.GONE : View.VISIBLE);
         });
         calendarioViewModel.carregarSemana();
-        montarMetricas(dados);
+        carregarMetricasDashboard();
         montarRanking(dados);
         findViewById(R.id.sindicoValidarDescartes).setOnClickListener(
                 view -> startActivity(new Intent(this, SindicoValidacaoActivity.class)));
@@ -156,20 +158,32 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         });
     }
 
-    private void montarMetricas(SindicoDashboard dados) {
+    private void carregarMetricasDashboard() {
+        int condominioId = PerfilApiRepository.condominioId(this);
+        if (condominioId <= 0) return;
+
+        new DashboardSindicoRepository().carregar(this, condominioId, resumo -> {
+            if (isFinishing() || isDestroyed() || resumo == null) return;
+            montarMetricas(resumo);
+        });
+    }
+
+    // Os cartões usam contagens confirmadas pela API; não exibem percentuais estimados.
+    private void montarMetricas(ResumoDashboard resumo) {
+        String[] nomes = {
+                "Moradores cadastrados",
+                "Descartes registrados",
+                "Coletas realizadas"
+        };
+        String[] valores = {
+                String.valueOf(resumo.getMoradores()),
+                String.valueOf(resumo.getReciclados()),
+                String.valueOf(resumo.getColetasRealizadas())
+        };
+        int[] icones = {R.drawable.ic_grupo, R.drawable.ic_reciclar, R.drawable.sindico_check};
+
         LinearLayout painel = findViewById(R.id.sindicoMetricas);
-        String[] nomes = {getString(R.string.sindico_participacao_dos_moradores), getString(R.string.sindico_descartes_registrados_no_mes),
-                getString(R.string.sindico_taxa_de_adesao_a_coleta_seletiva)};
-        boolean semDados = dados.semDados();
-        String semValor = getString(R.string.sindico_sem_dado);
-        String[] valores = semDados
-                ? new String[] {semValor, semValor, semValor}
-                : new String[] {dados.getParticipacao() + "%", String.valueOf(dados.getDescartes()),
-                        dados.getAdesao() + "%"};
-        int[] variacoes = {dados.getVariacaoParticipacao(), dados.getVariacaoDescartes(),
-                dados.getVariacaoAdesao()};
-        int[] icones = {R.drawable.ic_grupo, R.drawable.ic_reciclar,
-                R.drawable.sindico_check};
+        painel.removeAllViews();
 
         for (int i = 0; i < nomes.length; i++) {
             LinearLayout card = new LinearLayout(this);
@@ -180,7 +194,6 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             if (i > 0) parametros.leftMargin = dp(6);
             painel.addView(card, parametros);
 
-            // ícone dentro de um círculo verde-claro, como no design
             android.widget.FrameLayout circulo = new android.widget.FrameLayout(this);
             circulo.setBackgroundResource(R.drawable.sindico_icone_circulo);
             card.addView(circulo, new LinearLayout.LayoutParams(dp(30), dp(30)));
@@ -194,27 +207,11 @@ public final class SindicoHomeActivity extends AppCompatActivity {
             TextView nome = adicionarTexto(card, nomes[i], 11, R.color.cinza_texto_home, false);
             nome.setMaxLines(2);
             nome.setMinLines(2);
-            ((LinearLayout.LayoutParams) nome.getLayoutParams()).topMargin = dp(8);
-            nome.setLayoutParams(nome.getLayoutParams());
+            LinearLayout.LayoutParams nomeParams = (LinearLayout.LayoutParams) nome.getLayoutParams();
+            nomeParams.topMargin = dp(8);
+            nome.setLayoutParams(nomeParams);
 
             adicionarTexto(card, valores[i], 22, R.color.verde_escuro_principal, true);
-
-            // Sem API de dashboard não há mês anterior para comparar.
-            if (semDados) {
-                continue;
-            }
-
-            LinearLayout linha = new LinearLayout(this);
-            linha.setGravity(Gravity.CENTER_VERTICAL);
-            card.addView(linha, new LinearLayout.LayoutParams(-1, -2));
-
-            boolean queda = variacoes[i] < 0;
-            int cor = queda ? R.color.rosa_ecociente : R.color.verde_escuro_principal;
-            TextView variacao = adicionarTexto(linha,
-                    (queda ? "↓ " : "↑ ") + Math.abs(variacoes[i]) + "%", 12, cor, true);
-            variacao.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1));
-            adicionarTexto(linha, getString(R.string.sindico_vs_mes_anterior), 8,
-                    R.color.cinza_texto_auxiliar, false);
         }
     }
 

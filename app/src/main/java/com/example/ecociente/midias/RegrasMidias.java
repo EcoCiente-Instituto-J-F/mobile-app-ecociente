@@ -71,7 +71,18 @@ public final class RegrasMidias {
             if (tema.equals(m.tema)) exatos.add(m);
             else if ("geral".equals(m.tema)) neutros.add(m);
         }
-        return exatos.isEmpty() ? neutros : exatos;
+        if (!exatos.isEmpty()) return exatos;
+        if (!neutros.isEmpty()) return neutros;
+
+        // Sem arte específica para o tema? Usa qualquer imagem ativa do mesmo tipo.
+        // Assim um curso novo não cai direto no livrinho verde só por não ter tema mapeado.
+        List<Midia> alternativas = new ArrayList<>();
+        for (Midia m : catalogo) {
+            if (tipo.equals(m.tipo) && !excluirGrupos.contains(m.grupoImagem)) {
+                alternativas.add(m);
+            }
+        }
+        return alternativas;
     }
 
     /** Distribui as artes disponiveis sem substituir o vinculo de entidades ja existentes. */

@@ -83,6 +83,23 @@ public class RegrasMidiasTest {
     }
 
     @Test
+    public void temaSemImagemEspecificaUsaOutraImagemDisponivel() {
+        List<Midia> midias = new ArrayList<>();
+        midias.add(icone("icone_agua", "agua"));
+        midias.add(icone("icone_energia", "energia"));
+        midias.add(icone("icone_reciclagem", "reciclagem"));
+        RegrasMidias regras = new RegrasMidias(midias, new LinkedHashMap<>());
+
+        Midia escolhida = regras.escolherFixa(
+                Midia.ICONE_CONTEUDO, "tema_sem_cadastro", "curso:novo", new HashMap<>());
+
+        assertNotNull(escolhida);
+        assertTrue("icone_agua".equals(escolhida.id)
+                || "icone_energia".equals(escolhida.id)
+                || "icone_reciclagem".equals(escolhida.id));
+    }
+
+    @Test
     public void aEscolhaEhRepetivel() {
         List<String> a = distribuir(regrasComIcones(15, "geral"), 40, new HashMap<>());
         List<String> b = distribuir(regrasComIcones(15, "geral"), 40, new HashMap<>());

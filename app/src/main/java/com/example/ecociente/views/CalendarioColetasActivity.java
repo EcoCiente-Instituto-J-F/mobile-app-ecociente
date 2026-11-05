@@ -30,6 +30,9 @@ import com.example.ecociente.viewmodels.CalendarioViewModel;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.android.material.materialswitch.MaterialSwitch;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Calendar;
 import java.util.List;
 import com.example.ecociente.ui.IndicadorCarregamento;
 
@@ -103,8 +106,10 @@ public class CalendarioColetasActivity extends AppCompatActivity {
                 .getProxima()
                 .observe(
                         this,
-                        resultado ->
-                                proximaColeta.exibir(resultado, viewModel::carregar, this::sair));
+                        resultado -> {
+                            proximaColeta.exibir(resultado, viewModel::carregar, this::sair);
+                            atualizar();
+                        });
 
         viewModel.getColetasDoMes().observe(this, resultado -> atualizar());
 
@@ -120,7 +125,20 @@ public class CalendarioColetasActivity extends AppCompatActivity {
         List<Solicitacao> coletas =
                 resultado == null ? Collections.emptyList() : resultado.getItens();
 
-        calendarioMensal.exibir(mes[0], mes[1], Coletas.diasDoMes(coletas, mes[0], mes[1]));
+        Set<Integer> diasComColeta = new HashSet<>(Coletas.diasDoMes(coletas, mes[0], mes[1]));
+        ResultadoSolicitacoes proxima = viewModel.getProxima().getValue();
+        if (proxima != null && proxima.getTipo() == ResultadoSolicitacoes.Tipo.SUCESSO) {
+            for (Solicitacao coleta : proxima.getItens()) {
+                if (!Coletas.estaAtiva(coleta)) continue;
+                Calendar data = FormatoDataApi.calendario(coleta.getDataInicio());
+                if (data != null
+                        && data.get(Calendar.YEAR) == mes[0]
+                        && data.get(Calendar.MONTH) == mes[1]) {
+                    diasComColeta.add(data.get(Calendar.DAY_OF_MONTH));
+                }
+            }
+        }
+        calendarioMensal.exibir(mes[0], mes[1], diasComColeta);
 
         // Antes da primeira resposta: o indicador no lugar da lista.
         if (resultado == null) {
