@@ -40,6 +40,13 @@
             android:text="Cooperativas próximas"
             android:textColor="@color/verde_escuro_principal"
             android:textSize="22sp" />
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="Caminhão de coleta seletiva"
+            android:importantForAccessibility="yes"
+            android:src="@drawable/ic_caminhao_coleta" />
     </LinearLayout>
 
     <EditText
