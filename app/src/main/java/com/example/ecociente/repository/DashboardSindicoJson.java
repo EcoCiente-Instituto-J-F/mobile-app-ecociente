@@ -58,7 +58,8 @@ final class DashboardSindicoJson {
             nomesMateriais[i] = i < mostradas ? categorias.optJSONObject(i).optString("categoria", "") : "Outros";
             long quantidade = i < mostradas ? quantidades[i] : resto;
             // O último ocupa o que sobrou para a soma fechar em 100.
-            percentuais[i] = ultimo ? 100 - somados : Math.round(quantidade * 100f / soma);
+            percentuais[i] = soma <= 0 ? 0
+                    : ultimo ? 100 - somados : Math.round(quantidade * 100f / soma);
             somados += percentuais[i];
         }
 

@@ -45,9 +45,15 @@ public class AvaliacaoColetaRepository {
                                         URL_BASE + "/api/agendamentos/" + agendamentoId + "/avaliacao",
                                         AvaliacaoColetaJson.corpo(nota, comentario));
 
-                        if (resposta != null && resposta.sucesso()) {
+                        if (resposta != null && (resposta.sucesso()
+                                || AvaliacaoColetaJson.jaRegistrada(resposta.codigo, resposta.corpo))) {
+                            // POST idempotente no app: se a API já registrou, a tela também passa a mostrar "Avaliada".
                             resultado = ResultadoApi.sucesso();
                         } else {
+                            if (resposta != null) {
+                                Log.w(TAG, "Falha ao avaliar coleta: HTTP " + resposta.codigo
+                                        + " - " + resposta.corpo);
+                            }
                             resultado =
                                     ResultadoApi.erro(
                                             AvaliacaoColetaJson.mensagemDoErro(

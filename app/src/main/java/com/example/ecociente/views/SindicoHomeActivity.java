@@ -35,7 +35,6 @@ import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.ItensBarra;
-import com.example.ecociente.model.SindicoAviso;
 import android.widget.ImageView;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.ui.AvatarPerfil;
@@ -126,23 +125,10 @@ public final class SindicoHomeActivity extends AppCompatActivity {
                 view -> startActivity(new Intent(this, ChatActivity.class)));
         barra.setOnItemClickListener(
                 indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.HOME));
-        findViewById(R.id.botaoAvisosSindico).setOnClickListener(
-                view -> startActivity(CentralNotificacoesActivity.criarIntent(
-                        this, CentralNotificacoesActivity.Destino.SINDICO)));
         findViewById(R.id.botaoMensagensSindico).setOnClickListener(
                 view -> startActivity(MensagensActivity.criarIntentSindico(this)));
         findViewById(R.id.linkCalendarioCompleto).setOnClickListener(
                 view -> startActivity(new Intent(this, CalendarioColetasActivity.class)));
-        View pontoAvisos = findViewById(R.id.pontoAvisosSindico);
-        viewModel.getAvisos().observe(this, avisos -> {
-            boolean haNovos = false;
-            if (avisos != null) {
-                for (SindicoAviso aviso : avisos) {
-                    haNovos = haNovos || aviso.isNovo();
-                }
-            }
-            pontoAvisos.setVisibility(haNovos ? View.VISIBLE : View.GONE);
-        });
         findViewById(R.id.botaoPerfilSindico).setOnClickListener(
                 ancora -> MenuPerfil.mostrar(
                         this,
