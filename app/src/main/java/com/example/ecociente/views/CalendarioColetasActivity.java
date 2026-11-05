@@ -106,8 +106,10 @@ public class CalendarioColetasActivity extends AppCompatActivity {
                 .getProxima()
                 .observe(
                         this,
-                        resultado ->
-                                proximaColeta.exibir(resultado, viewModel::carregar, this::sair));
+                        resultado -> {
+                            proximaColeta.exibir(resultado, viewModel::carregar, this::sair);
+                            atualizar();
+                        });
 
         viewModel.getColetasDoMes().observe(this, resultado -> atualizar());
 
