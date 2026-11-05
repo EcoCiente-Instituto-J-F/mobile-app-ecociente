@@ -2,6 +2,7 @@ package com.example.ecociente.midias;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.widget.ImageView;
 import com.example.ecociente.model.CursoEducativo;
 import com.example.ecociente.model.FluxoEducativo;
 import com.example.ecociente.model.QuizResumo;
@@ -62,6 +63,48 @@ public final class MidiasEco {
 
     public Midia iconeCurso(CursoEducativo curso) {
         return fixa(Midia.ICONE_CONTEUDO, "curso", curso.id, curso.titulo, curso.descricao);
+    }
+
+    /**
+     * Exibe a imagem do curso e, se a URL remota falhar, tenta outra arte do catálogo.
+     * As alternativas locais têm prioridade para não depender da conexão com a internet.
+     */
+    public void mostrarIconeCurso(ImageView view, CursoEducativo curso) {
+        Set<String> tentadas = new HashSet<>();
+        tentarMostrarIconeCurso(view, curso, iconeCurso(curso), tentadas);
+    }
+
+    private void tentarMostrarIconeCurso(ImageView view, CursoEducativo curso,
+                                         Midia midia, Set<String> tentadas) {
+        Midia atual = midia;
+        if (atual == null || !tentadas.add(atual.id)) {
+            atual = escolherAlternativaCurso(curso, tentadas);
+        }
+        if (atual == null) {
+            view.setImageDrawable(null);
+            return;
+        }
+
+        Midia tentativa = atual;
+        CarregadorMidias.mostrar(view, tentativa, false, 0, false, () -> {
+            Midia alternativa = escolherAlternativaCurso(curso, tentadas);
+            if (alternativa == null) {
+                view.setImageDrawable(null);
+                return;
+            }
+            tentarMostrarIconeCurso(view, curso, alternativa, tentadas);
+        });
+    }
+
+    private synchronized Midia escolherAlternativaCurso(CursoEducativo curso,
+                                                          Set<String> idsTentados) {
+        Midia alternativa = regras.escolherAlternativaLocal(
+                Midia.ICONE_CONTEUDO, idsTentados, System.nanoTime());
+        if (alternativa != null) {
+            String chave = Midia.ICONE_CONTEUDO + ":curso:" + curso.id;
+            guardar(chave, alternativa);
+        }
+        return alternativa;
     }
 
     public Midia iconeQuiz(int id, String titulo, String categoria) {
