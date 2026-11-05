@@ -33,17 +33,4 @@ public final class EnderecoMidia {
                 + transformacao + "/" + versao + id + extensao;
     }
 
-    /** Remove apenas a extensao final conhecida, preservando pastas e pontos no nome. */
-    private static String removerExtensao(String caminho) {
-        int ultimaBarra = caminho.lastIndexOf('/');
-        int ultimoPonto = caminho.lastIndexOf('.');
-        if (ultimoPonto <= ultimaBarra) return caminho;
-
-        String extensao = caminho.substring(ultimoPonto + 1).toLowerCase(java.util.Locale.ROOT);
-        if ("png".equals(extensao) || "jpg".equals(extensao) || "jpeg".equals(extensao)
-                || "webp".equals(extensao) || "gif".equals(extensao) || "svg".equals(extensao)) {
-            return caminho.substring(0, ultimoPonto);
-        }
-        return caminho;
-    }
 }
