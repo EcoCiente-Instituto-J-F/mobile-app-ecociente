@@ -127,6 +127,11 @@ public final class MidiasEco {
         return fixa(Midia.ICONE_QUIZ, "quiz", id, titulo, categoria);
     }
 
+    /** Reorganiza os ícones segundo a ordem atualmente visível na tela de quizzes. */
+    public Midia prepararIconeQuiz(int id, String titulo, String categoria, String evitarId) {
+        return fixaDiversificada(Midia.ICONE_QUIZ, "quiz", id, titulo, categoria, evitarId);
+    }
+
     /** Exibe o ícone do quiz e troca por outra arte local caso a imagem principal falhe. */
     public void mostrarIconeQuiz(ImageView view, int id, String titulo, String categoria) {
         Set<String> tentadas = new HashSet<>();
