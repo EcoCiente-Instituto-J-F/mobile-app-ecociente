@@ -56,6 +56,22 @@ public final class MidiasEco {
         return m;
     }
 
+    private synchronized Midia fixaDiversificada(String tipo, String entidade, int id,
+                                                   String titulo, String contexto, String evitarId) {
+        String chave = tipo + ":" + entidade + ":" + id;
+        Midia explicita = regras.porId(catalogo.associacoes.get(chave));
+        Midia anterior = regras.porId(evitarId);
+        if (explicita != null && tipo.equals(explicita.tipo)
+                && (anterior == null || !explicita.grupoImagem.equals(anterior.grupoImagem))) {
+            guardar(chave, explicita);
+            return explicita;
+        }
+        Midia m = regras.escolherFixaDiversificada(
+                tipo, regras.tema(titulo, contexto), chave, vinculos, evitarId);
+        if (m != null && !m.id.equals(vinculos.get(chave))) guardar(chave, m);
+        return m;
+    }
+
     private void guardar(String chave, Midia m) {
         vinculos.put(chave, m.id);
         preferencias.edit().putString(chave, m.id).apply();
@@ -111,6 +127,43 @@ public final class MidiasEco {
         return fixa(Midia.ICONE_QUIZ, "quiz", id, titulo, categoria);
     }
 
+    /** Exibe o ícone do quiz e troca por outra arte local caso a imagem principal falhe. */
+    public void mostrarIconeQuiz(ImageView view, int id, String titulo, String categoria) {
+        Set<String> tentadas = new HashSet<>();
+        tentarMostrarIconeQuiz(view, id, titulo, categoria, iconeQuiz(id, titulo, categoria), tentadas);
+    }
+
+    private void tentarMostrarIconeQuiz(ImageView view, int id, String titulo, String categoria,
+                                        Midia midia, Set<String> tentadas) {
+        Midia atual = midia;
+        if (atual == null || !tentadas.add(atual.id)) {
+            atual = escolherAlternativaQuiz(id, tentadas);
+        }
+        if (atual == null) {
+            view.setImageDrawable(null);
+            return;
+        }
+
+        Midia tentativa = atual;
+        CarregadorMidias.mostrar(view, tentativa, false, 0, false, () -> {
+            Midia alternativa = escolherAlternativaQuiz(id, tentadas);
+            if (alternativa == null) {
+                view.setImageDrawable(null);
+                return;
+            }
+            tentarMostrarIconeQuiz(view, id, titulo, categoria, alternativa, tentadas);
+        });
+    }
+
+    private synchronized Midia escolherAlternativaQuiz(int id, Set<String> idsTentados) {
+        Midia alternativa = regras.escolherAlternativaLocal(
+                Midia.ICONE_QUIZ, idsTentados, System.nanoTime());
+        if (alternativa != null) {
+            guardar(Midia.ICONE_QUIZ + ":quiz:" + id, alternativa);
+        }
+        return alternativa;
+    }
+
     public Midia capaQuiz(int id, String titulo, String categoria) {
         return fixa(Midia.CAPA_QUIZ, "quiz", id, titulo, categoria);
     }
@@ -129,8 +182,13 @@ public final class MidiasEco {
     public void prepararQuizzes(List<QuizResumo> quizzes) {
         List<QuizResumo> ordenados = new ArrayList<>(quizzes);
         ordenados.sort(Comparator.comparingInt(QuizResumo::getQuizId));
+        // Evita repetir a mesma arte em quizzes consecutivos, inclusive IDs diferentes
+        // que apontam para o mesmo drawable (como os dois ícones de folha).
+        String anterior = null;
         for (QuizResumo q : ordenados) {
-            iconeQuiz(q.getQuizId(), q.getTitulo(), q.getCategoria());
+            Midia icone = fixaDiversificada(Midia.ICONE_QUIZ, "quiz",
+                    q.getQuizId(), q.getTitulo(), q.getCategoria(), anterior);
+            if (icone != null) anterior = icone.id;
             capaQuiz(q.getQuizId(), q.getTitulo(), q.getCategoria());
         }
     }
