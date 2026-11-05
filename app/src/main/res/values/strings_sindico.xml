@@ -149,6 +149,8 @@
     <string name="sindico_avaliar_enviar">Enviar avaliação</string>
     <string name="sindico_avaliacao_enviada">Avaliação enviada.</string>
     <string name="sindico_dash_pontos">Pontos no mês</string>
+    <string name="sindico_dashboard_visao_geral">Visão geral do condomínio</string>
+    <string name="sindico_dashboard_subtitulo">Acompanhe os resultados da coleta seletiva</string>
     <string name="sindico_sem_quizzes">Nenhum quiz concluído ainda</string>
     <string name="sindico_notas_dos_quizzes">Notas médias dos quizzes: %1$s</string>
     <string name="sindico_ordenar_por_distancia">Ordenar por distância</string>
