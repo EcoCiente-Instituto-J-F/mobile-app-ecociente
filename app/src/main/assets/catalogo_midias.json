@@ -1,73 +1,236 @@
 {
   "versao_schema": 1,
-  "revisao": "midias-cloudinary-20261030",
+  "revisao": "midias-cloudinary-20261104",
   "sinonimos": {
     "papel": [
+      "papel",
       "papeis",
+      "papel reciclavel",
+      "folha de papel",
+      "folhas de papel",
+      "jornal",
+      "jornais",
+      "revista",
+      "revistas",
+      "papel sulfite",
+      "papelão ondulado",
       "paper",
-      "papel"
+      "papers"
     ],
     "papelao": [
       "papelao",
+      "papeloes",
+      "caixa de papelao",
+      "caixas de papelao",
+      "embalagem de papelao",
+      "embalagens de papelao",
       "cardboard"
     ],
     "nao_reciclavel": [
+      "nao reciclavel",
+      "nao reciclaveis",
+      "rejeito",
+      "rejeitos",
+      "lixo comum",
+      "residuo comum",
+      "residuos comuns",
       "papel higienico",
-      "guardanapo sujo"
+      "guardanapo sujo",
+      "papel engordurado",
+      "fralda",
+      "fraldas",
+      "absorvente",
+      "absorventes",
+      "material contaminado",
+      "residuo contaminado"
     ],
     "plastico": [
-      "plastic",
+      "plastico",
       "plasticos",
-      "pet"
+      "plastic",
+      "plastics",
+      "pet",
+      "garrafa pet",
+      "garrafas pet",
+      "embalagem plastica",
+      "embalagens plasticas",
+      "sacola plastica",
+      "sacolas plasticas",
+      "polimero",
+      "polimeros",
+      "microplastico",
+      "microplasticos"
     ],
     "vidro": [
+      "vidro",
       "vidros",
-      "glass"
+      "glass",
+      "garrafa de vidro",
+      "garrafas de vidro",
+      "pote de vidro",
+      "potes de vidro",
+      "embalagem de vidro",
+      "caco de vidro",
+      "cacos de vidro"
     ],
     "metal": [
+      "metal",
       "metais",
       "aluminio",
       "aluminum",
-      "metal"
+      "aco",
+      "ferro",
+      "lata",
+      "latas",
+      "latinha",
+      "latinhas",
+      "sucata metalica",
+      "embalagem metalica",
+      "embalagens metalicas"
     ],
     "compostagem": [
       "compostagem",
       "compost",
       "composting",
+      "organico",
       "organicos",
+      "residuo organico",
+      "residuos organicos",
+      "restos de alimentos",
+      "restos de comida",
+      "cascas de frutas",
+      "casca de fruta",
       "adubo",
-      "composteira"
+      "composteira",
+      "composteiras",
+      "minhocario",
+      "minhocarios",
+      "vermicompostagem",
+      "aproveitamento integral dos alimentos"
     ],
     "agua": [
       "agua",
       "water",
-      "hidrico"
+      "hidrico",
+      "recursos hidricos",
+      "economia de agua",
+      "consumo de agua",
+      "preservacao da agua",
+      "preservacao dos rios",
+      "rio",
+      "rios",
+      "oceano",
+      "oceanos",
+      "mar",
+      "mares",
+      "saneamento",
+      "torneira",
+      "bacia hidrografica",
+      "corais",
+      "vida marinha",
+      "microplasticos no oceano"
     ],
     "energia": [
       "energia",
       "energy",
-      "solar"
+      "energia eletrica",
+      "eletricidade",
+      "consumo de energia",
+      "eficiencia energetica",
+      "energia solar",
+      "solar",
+      "painel solar",
+      "paineis solares",
+      "energia eolica",
+      "eolica",
+      "turbina eolica",
+      "turbinas eolicas",
+      "lampada led",
+      "lampadas led",
+      "led",
+      "economia de energia",
+      "mobilidade eletrica",
+      "onibus eletrico",
+      "veiculo eletrico"
     ],
     "reciclagem": [
       "reciclar",
+      "reciclavel",
       "reciclaveis",
       "recycle",
       "recycling",
       "reciclagem",
       "separacao correta",
-      "coleta seletiva"
+      "separacao de residuos",
+      "coleta seletiva",
+      "triagem",
+      "residuo",
+      "residuos",
+      "descarte correto",
+      "descarte de residuos",
+      "lixeira",
+      "lixeiras",
+      "catadores",
+      "cooperativa de reciclagem",
+      "logistica reversa",
+      "residuos eletronicos",
+      "lixo eletronico",
+      "eletronicos",
+      "economia circular",
+      "reutilizacao",
+      "reaproveitamento de materiais",
+      "ecoponto"
     ],
     "sustentabilidade": [
       "sustentabilidade",
       "sustentavel",
       "sustentaveis",
+      "sustainability",
+      "desenvolvimento sustentavel",
       "consumo consciente",
-      "habitos"
+      "habitos sustentaveis",
+      "cinco rs",
+      "5 rs",
+      "cinco erres",
+      "pegada de carbono",
+      "carbono",
+      "mudancas climaticas",
+      "mudanca climatica",
+      "clima",
+      "aquecimento global",
+      "efeito estufa",
+      "poluicao",
+      "poluicao do ar",
+      "qualidade do ar",
+      "biodiversidade",
+      "biomas",
+      "bioma",
+      "floresta",
+      "florestas",
+      "desmatamento",
+      "queimadas",
+      "camada de ozonio",
+      "greenwashing",
+      "cidade sustentavel",
+      "cidades sustentaveis",
+      "bairro verde",
+      "casa sustentavel",
+      "tecnologia sustentavel",
+      "solo",
+      "raizes",
+      "muda",
+      "plantio"
     ],
     "geral": [
       "ambiental",
       "ambiente",
-      "sustainability"
+      "meio ambiente",
+      "educacao ambiental",
+      "ecologia",
+      "planeta",
+      "natureza",
+      "preservacao ambiental",
+      "conscientizacao ambiental"
     ]
   },
   "associacoes": {},
@@ -85,7 +248,7 @@
       "tags": [
         "papel"
       ],
-      "ativo": false
+      "ativo": true
     },
     {
       "id": "icones_conteudo_plastico",
@@ -100,7 +263,7 @@
       "tags": [
         "plastico"
       ],
-      "ativo": false
+      "ativo": true
     },
     {
       "id": "icones_conteudo_reciclagem",
@@ -115,7 +278,7 @@
       "tags": [
         "reciclagem"
       ],
-      "ativo": false
+      "ativo": true
     },
     {
       "id": "icones_conteudo_compostagem",
@@ -130,7 +293,7 @@
       "tags": [
         "compostagem"
       ],
-      "ativo": false
+      "ativo": true
     },
     {
       "id": "icones_conteudo_sustentabilidade",
@@ -145,7 +308,7 @@
       "tags": [
         "sustentabilidade"
       ],
-      "ativo": false
+      "ativo": true
     },
     {
       "id": "icones_conteudo_geral",
@@ -160,7 +323,7 @@
       "tags": [
         "geral"
       ],
-      "ativo": false
+      "ativo": true
     },
     {
       "id": "icones_quiz_papel",
@@ -446,45 +609,630 @@
       "eko": true,
       "neutra": true
     },
-    {"id":"icone_c33_onibus_eletrico_bicicleta","tipo":"icones_conteudo","tema":"energia","origem":"cloudinary","caminho":"c33_onibus-eletrico-bicicleta.png","formato":"png","grupo_imagem":"c33_onibus_eletrico_bicicleta","versao":1793581827,"descricao":"Ônibus elétrico e bicicleta","tags":["mobilidade","energia"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c13_gota_rio_preservacao","tipo":"icones_conteudo","tema":"agua","origem":"cloudinary","caminho":"c13_gota-rio-preservacao.png","formato":"png","grupo_imagem":"c13_gota_rio_preservacao","versao":1793581826,"descricao":"Gota e rio preservado","tags":["agua"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c28_mapa_biomas_brasileiros","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c28_mapa-biomas-brasileiros.png","formato":"png","grupo_imagem":"c28_mapa_biomas_brasileiros","versao":1793581826,"descricao":"Mapa dos biomas brasileiros","tags":["biomas","biodiversidade"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c18_painel_solar_turbina_eolica","tipo":"icones_conteudo","tema":"energia","origem":"cloudinary","caminho":"c18_painel-solar-turbina-eolica.png","formato":"png","grupo_imagem":"c18_painel_solar_turbina_eolica","versao":1793581825,"descricao":"Painel solar e turbina eólica","tags":["energia","solar"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c05_maos_separando_residuos","tipo":"icones_conteudo","tema":"reciclagem","origem":"cloudinary","caminho":"c05_maos-separando-residuos.png","formato":"png","grupo_imagem":"c05_maos_separando_residuos","versao":1793426955,"descricao":"Mãos separando resíduos","tags":["reciclagem","residuos"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c06_quatro_materiais_reciclaveis","tipo":"icones_conteudo","tema":"reciclagem","origem":"cloudinary","caminho":"c06_quatro-materiais-reciclaveis.png","formato":"png","grupo_imagem":"c06_quatro_materiais_reciclaveis","versao":1793426953,"descricao":"Quatro materiais recicláveis","tags":["reciclagem","materiais"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c07_alerta_erros_reciclagem","tipo":"icones_conteudo","tema":"reciclagem","origem":"cloudinary","caminho":"c07_alerta-erros-reciclagem.png","formato":"png","grupo_imagem":"c07_alerta_erros_reciclagem","versao":1793426952,"descricao":"Alerta sobre erros de reciclagem","tags":["reciclagem"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c04_lixeiras_coleta_seletiva","tipo":"icones_conteudo","tema":"reciclagem","origem":"cloudinary","caminho":"c04_lixeiras-coleta-seletiva.png","formato":"png","grupo_imagem":"c04_lixeiras_coleta_seletiva","versao":1793426950,"descricao":"Lixeiras de coleta seletiva","tags":["reciclagem","coleta seletiva"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c08_kit_residuos_especiais","tipo":"icones_conteudo","tema":"reciclagem","origem":"cloudinary","caminho":"c08_kit-residuos-especiais.png","formato":"png","grupo_imagem":"c08_kit_residuos_especiais","versao":1793426942,"descricao":"Kit de resíduos especiais","tags":["reciclagem","residuos"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c03_caminhao_jornada_residuos","tipo":"icones_conteudo","tema":"reciclagem","origem":"cloudinary","caminho":"c03_caminhao-jornada-residuos.png","formato":"png","grupo_imagem":"c03_caminhao_jornada_residuos","versao":1793426942,"descricao":"Caminhão e jornada dos resíduos","tags":["reciclagem","coleta seletiva"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c12_frutas_aproveitamento_integral","tipo":"icones_conteudo","tema":"compostagem","origem":"cloudinary","caminho":"c12_frutas-aproveitamento-integral.png","formato":"png","grupo_imagem":"c12_frutas_aproveitamento_integral","versao":1793426942,"descricao":"Aproveitamento integral dos alimentos","tags":["compostagem","organicos"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c02_sacola_cinco_rs","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c02_sacola-cinco-rs.png","formato":"png","grupo_imagem":"c02_sacola_cinco_rs","versao":1793426941,"descricao":"Cinco Rs da sustentabilidade","tags":["sustentabilidade","consumo consciente"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c01_planeta_folhas_pessoas","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c01_planeta-folhas-pessoas.png","formato":"png","grupo_imagem":"c01_planeta_folhas_pessoas","versao":1793426940,"descricao":"Planeta, folhas e pessoas","tags":["sustentabilidade"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c23_cidade_poluicao_ar","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c23_cidade-poluicao-ar.png","formato":"png","grupo_imagem":"c23_cidade_poluicao_ar","versao":1793426939,"descricao":"Cidade e poluição do ar","tags":["poluicao","clima"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c10_composteira_broto","tipo":"icones_conteudo","tema":"compostagem","origem":"cloudinary","caminho":"c10_composteira-com-broto.png","formato":"png","grupo_imagem":"c10_composteira_broto","versao":1793426939,"descricao":"Composteira com broto","tags":["compostagem"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c11_minhocario_domestico","tipo":"icones_conteudo","tema":"compostagem","origem":"cloudinary","caminho":"c11_minhocario-domestico.png","formato":"png","grupo_imagem":"c11_minhocario_domestico","versao":1793426938,"descricao":"Minhocário doméstico","tags":["compostagem"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c09_eletronicos_logistica_reversa","tipo":"icones_conteudo","tema":"reciclagem","origem":"cloudinary","caminho":"c09_eletronicos-logistica-reversa.png","formato":"png","grupo_imagem":"c09_eletronicos_logistica_reversa","versao":1793426936,"descricao":"Eletrônicos e logística reversa","tags":["reciclagem","eletronicos"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c14_torneira_economia_agua","tipo":"icones_conteudo","tema":"agua","origem":"cloudinary","caminho":"c14_torneira-economia-agua.png","formato":"png","grupo_imagem":"c14_torneira_economia_agua","versao":1793426934,"descricao":"Torneira e economia de água","tags":["agua"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c15_rio_oceano_protecao","tipo":"icones_conteudo","tema":"agua","origem":"cloudinary","caminho":"c15_rio-oceano-protecao.png","formato":"png","grupo_imagem":"c15_rio_oceano_protecao","versao":1793426932,"descricao":"Proteção de rio e oceano","tags":["agua","oceano"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c17_tomada_folha_energia","tipo":"icones_conteudo","tema":"energia","origem":"cloudinary","caminho":"c17_tomada-folha-energia.png","formato":"png","grupo_imagem":"c17_tomada_folha_energia","versao":1793426932,"descricao":"Tomada e folha de energia","tags":["energia"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c16_lupa_microplasticos","tipo":"icones_conteudo","tema":"reciclagem","origem":"cloudinary","caminho":"c16_lupa-microplasticos.png","formato":"png","grupo_imagem":"c16_lupa_microplasticos","versao":1793426930,"descricao":"Lupa e microplásticos","tags":["reciclagem","plastico"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c20_planeta_termometro_clima","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c20_planeta-termometro-clima.png","formato":"png","grupo_imagem":"c20_planeta_termometro_clima","versao":1793426929,"descricao":"Planeta e termômetro climático","tags":["clima"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c24_sol_tempestade_extremos","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c24_sol-tempestade-extremos.png","formato":"png","grupo_imagem":"c24_sol_tempestade_extremos","versao":1793426928,"descricao":"Sol, tempestade e extremos","tags":["clima"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c19_lampada_led_economia","tipo":"icones_conteudo","tema":"energia","origem":"cloudinary","caminho":"c19_lampada-led-economia.png","formato":"png","grupo_imagem":"c19_lampada_led_economia","versao":1793426927,"descricao":"Lâmpada LED e economia","tags":["energia"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c25_pegada_planeta_carbono","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c25_pegada-planeta-carbono.png","formato":"png","grupo_imagem":"c25_pegada_planeta_carbono","versao":1793426927,"descricao":"Pegada de carbono","tags":["clima","carbono"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c31_condominio_verde","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c31_condominio-verde.png","formato":"png","grupo_imagem":"c31_condominio_verde","versao":1793426924,"descricao":"Condomínio verde","tags":["sustentabilidade","condominio"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c22_escudo_camada_ozonio","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c22_escudo-camada-ozonio.png","formato":"png","grupo_imagem":"c22_escudo_camada_ozonio","versao":1793426922,"descricao":"Escudo da camada de ozônio","tags":["clima"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c21_planeta_camada_estufa","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c21_planeta-camada-estufa.png","formato":"png","grupo_imagem":"c21_planeta_camada_estufa","versao":1793426921,"descricao":"Planeta e camada de efeito estufa","tags":["clima"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c29_muda_solo_raizes","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c29_muda-solo-raizes.png","formato":"png","grupo_imagem":"c29_muda_solo_raizes","versao":1793426919,"descricao":"Muda, solo e raízes","tags":["solo","sustentabilidade"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c36_camiseta_embalagem_sustentavel","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c36_camiseta-embalagem-sustentavel.png","formato":"png","grupo_imagem":"c36_camiseta_embalagem_sustentavel","versao":1793426917,"descricao":"Camiseta e embalagem sustentável","tags":["consumo consciente"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c30_casa_sustentavel","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c30_casa-sustentavel.png","formato":"png","grupo_imagem":"c30_casa_sustentavel","versao":1793426916,"descricao":"Casa sustentável","tags":["sustentabilidade"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c27_floresta_protecao_fogo","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c27_floresta-protecao-fogo.png","formato":"png","grupo_imagem":"c27_floresta_protecao_fogo","versao":1793426915,"descricao":"Floresta e proteção contra fogo","tags":["floresta","sustentabilidade"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c39_coral_tartaruga_oceano","tipo":"icones_conteudo","tema":"agua","origem":"cloudinary","caminho":"c39_coral-tartaruga-oceano.png","formato":"png","grupo_imagem":"c39_coral_tartaruga_oceano","versao":1793426915,"descricao":"Coral e tartaruga no oceano","tags":["agua","oceano"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c37_cooperativa_triagem_pessoas","tipo":"icones_conteudo","tema":"reciclagem","origem":"cloudinary","caminho":"c37_cooperativa-triagem-pessoas.png","formato":"png","grupo_imagem":"c37_cooperativa_triagem_pessoas","versao":1793426915,"descricao":"Cooperativa e triagem","tags":["reciclagem","cooperativa"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c26_borboleta_flor_biodiversidade","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c26_borboleta-flor-biodiversidade.png","formato":"png","grupo_imagem":"c26_borboleta_flor_biodiversidade","versao":1793426914,"descricao":"Borboleta, flor e biodiversidade","tags":["biodiversidade"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c40_futuro_cidade_sustentavel","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c40_futuro-cidade-sustentavel.png","formato":"png","grupo_imagem":"c40_futuro_cidade_sustentavel","versao":1793426912,"descricao":"Futuro e cidade sustentável","tags":["sustentabilidade","cidade"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c34_microchip_folha_sensor","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c34_microchip-folha-sensor.png","formato":"png","grupo_imagem":"c34_microchip_folha_sensor","versao":1793426910,"descricao":"Microchip, folha e sensor","tags":["tecnologia","sustentabilidade"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c32_bairro_cidade_verde","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c32_bairro-cidade-verde.png","formato":"png","grupo_imagem":"c32_bairro_cidade_verde","versao":1793426909,"descricao":"Bairro e cidade verde","tags":["cidade","sustentabilidade"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c35_produto_setas_economia_circular","tipo":"icones_conteudo","tema":"reciclagem","origem":"cloudinary","caminho":"c35_produto-setas-economia-circular.png","formato":"png","grupo_imagem":"c35_produto_setas_economia_circular","versao":1793426906,"descricao":"Produto e economia circular","tags":["reciclagem","economia circular"],"cloud_name":"ncwfxyfi"},
-    {"id":"icone_c38_lupa_selo_greenwashing","tipo":"icones_conteudo","tema":"sustentabilidade","origem":"cloudinary","caminho":"c38_lupa-selo-greenwashing.png","formato":"png","grupo_imagem":"c38_lupa_selo_greenwashing","versao":1793426905,"descricao":"Lupa e selo de greenwashing","tags":["consumo consciente","sustentabilidade"],"cloud_name":"ncwfxyfi"}
+    {
+      "id": "icone_c33_onibus_eletrico_bicicleta",
+      "tipo": "icones_conteudo",
+      "tema": "energia",
+      "origem": "cloudinary",
+      "caminho": "c33_onibus-eletrico-bicicleta.png",
+      "formato": "png",
+      "grupo_imagem": "c33_onibus_eletrico_bicicleta",
+      "versao": 1793581827,
+      "descricao": "Ônibus elétrico e bicicleta",
+      "tags": [
+        "mobilidade",
+        "energia"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c13_gota_rio_preservacao",
+      "tipo": "icones_conteudo",
+      "tema": "agua",
+      "origem": "cloudinary",
+      "caminho": "c13_gota-rio-preservacao.png",
+      "formato": "png",
+      "grupo_imagem": "c13_gota_rio_preservacao",
+      "versao": 1793581826,
+      "descricao": "Gota e rio preservado",
+      "tags": [
+        "agua"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c28_mapa_biomas_brasileiros",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c28_mapa-biomas-brasileiros.png",
+      "formato": "png",
+      "grupo_imagem": "c28_mapa_biomas_brasileiros",
+      "versao": 1793581826,
+      "descricao": "Mapa dos biomas brasileiros",
+      "tags": [
+        "biomas",
+        "biodiversidade"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c18_painel_solar_turbina_eolica",
+      "tipo": "icones_conteudo",
+      "tema": "energia",
+      "origem": "cloudinary",
+      "caminho": "c18_painel-solar-turbina-eolica.png",
+      "formato": "png",
+      "grupo_imagem": "c18_painel_solar_turbina_eolica",
+      "versao": 1793581825,
+      "descricao": "Painel solar e turbina eólica",
+      "tags": [
+        "energia",
+        "solar"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c05_maos_separando_residuos",
+      "tipo": "icones_conteudo",
+      "tema": "reciclagem",
+      "origem": "cloudinary",
+      "caminho": "c05_maos-separando-residuos.png",
+      "formato": "png",
+      "grupo_imagem": "c05_maos_separando_residuos",
+      "versao": 1793426955,
+      "descricao": "Mãos separando resíduos",
+      "tags": [
+        "reciclagem",
+        "residuos"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c06_quatro_materiais_reciclaveis",
+      "tipo": "icones_conteudo",
+      "tema": "reciclagem",
+      "origem": "cloudinary",
+      "caminho": "c06_quatro-materiais-reciclaveis.png",
+      "formato": "png",
+      "grupo_imagem": "c06_quatro_materiais_reciclaveis",
+      "versao": 1793426953,
+      "descricao": "Quatro materiais recicláveis",
+      "tags": [
+        "reciclagem",
+        "materiais"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c07_alerta_erros_reciclagem",
+      "tipo": "icones_conteudo",
+      "tema": "reciclagem",
+      "origem": "cloudinary",
+      "caminho": "c07_alerta-erros-reciclagem.png",
+      "formato": "png",
+      "grupo_imagem": "c07_alerta_erros_reciclagem",
+      "versao": 1793426952,
+      "descricao": "Alerta sobre erros de reciclagem",
+      "tags": [
+        "reciclagem"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c04_lixeiras_coleta_seletiva",
+      "tipo": "icones_conteudo",
+      "tema": "reciclagem",
+      "origem": "cloudinary",
+      "caminho": "c04_lixeiras-coleta-seletiva.png",
+      "formato": "png",
+      "grupo_imagem": "c04_lixeiras_coleta_seletiva",
+      "versao": 1793426950,
+      "descricao": "Lixeiras de coleta seletiva",
+      "tags": [
+        "reciclagem",
+        "coleta seletiva"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c08_kit_residuos_especiais",
+      "tipo": "icones_conteudo",
+      "tema": "reciclagem",
+      "origem": "cloudinary",
+      "caminho": "c08_kit-residuos-especiais.png",
+      "formato": "png",
+      "grupo_imagem": "c08_kit_residuos_especiais",
+      "versao": 1793426942,
+      "descricao": "Kit de resíduos especiais",
+      "tags": [
+        "reciclagem",
+        "residuos"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c03_caminhao_jornada_residuos",
+      "tipo": "icones_conteudo",
+      "tema": "reciclagem",
+      "origem": "cloudinary",
+      "caminho": "c03_caminhao-jornada-residuos.png",
+      "formato": "png",
+      "grupo_imagem": "c03_caminhao_jornada_residuos",
+      "versao": 1793426942,
+      "descricao": "Caminhão e jornada dos resíduos",
+      "tags": [
+        "reciclagem",
+        "coleta seletiva"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c12_frutas_aproveitamento_integral",
+      "tipo": "icones_conteudo",
+      "tema": "compostagem",
+      "origem": "cloudinary",
+      "caminho": "c12_frutas-aproveitamento-integral.png",
+      "formato": "png",
+      "grupo_imagem": "c12_frutas_aproveitamento_integral",
+      "versao": 1793426942,
+      "descricao": "Aproveitamento integral dos alimentos",
+      "tags": [
+        "compostagem",
+        "organicos"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c02_sacola_cinco_rs",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c02_sacola-cinco-rs.png",
+      "formato": "png",
+      "grupo_imagem": "c02_sacola_cinco_rs",
+      "versao": 1793426941,
+      "descricao": "Cinco Rs da sustentabilidade",
+      "tags": [
+        "sustentabilidade",
+        "consumo consciente"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c01_planeta_folhas_pessoas",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c01_planeta-folhas-pessoas.png",
+      "formato": "png",
+      "grupo_imagem": "c01_planeta_folhas_pessoas",
+      "versao": 1793426940,
+      "descricao": "Planeta, folhas e pessoas",
+      "tags": [
+        "sustentabilidade"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c23_cidade_poluicao_ar",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c23_cidade-poluicao-ar.png",
+      "formato": "png",
+      "grupo_imagem": "c23_cidade_poluicao_ar",
+      "versao": 1793426939,
+      "descricao": "Cidade e poluição do ar",
+      "tags": [
+        "poluicao",
+        "clima"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c10_composteira_broto",
+      "tipo": "icones_conteudo",
+      "tema": "compostagem",
+      "origem": "cloudinary",
+      "caminho": "c10_composteira-com-broto.png",
+      "formato": "png",
+      "grupo_imagem": "c10_composteira_broto",
+      "versao": 1793426939,
+      "descricao": "Composteira com broto",
+      "tags": [
+        "compostagem"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c11_minhocario_domestico",
+      "tipo": "icones_conteudo",
+      "tema": "compostagem",
+      "origem": "cloudinary",
+      "caminho": "c11_minhocario-domestico.png",
+      "formato": "png",
+      "grupo_imagem": "c11_minhocario_domestico",
+      "versao": 1793426938,
+      "descricao": "Minhocário doméstico",
+      "tags": [
+        "compostagem"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c09_eletronicos_logistica_reversa",
+      "tipo": "icones_conteudo",
+      "tema": "reciclagem",
+      "origem": "cloudinary",
+      "caminho": "c09_eletronicos-logistica-reversa.png",
+      "formato": "png",
+      "grupo_imagem": "c09_eletronicos_logistica_reversa",
+      "versao": 1793426936,
+      "descricao": "Eletrônicos e logística reversa",
+      "tags": [
+        "reciclagem",
+        "eletronicos"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c14_torneira_economia_agua",
+      "tipo": "icones_conteudo",
+      "tema": "agua",
+      "origem": "cloudinary",
+      "caminho": "c14_torneira-economia-agua.png",
+      "formato": "png",
+      "grupo_imagem": "c14_torneira_economia_agua",
+      "versao": 1793426934,
+      "descricao": "Torneira e economia de água",
+      "tags": [
+        "agua"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c15_rio_oceano_protecao",
+      "tipo": "icones_conteudo",
+      "tema": "agua",
+      "origem": "cloudinary",
+      "caminho": "c15_rio-oceano-protecao.png",
+      "formato": "png",
+      "grupo_imagem": "c15_rio_oceano_protecao",
+      "versao": 1793426932,
+      "descricao": "Proteção de rio e oceano",
+      "tags": [
+        "agua",
+        "oceano"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c17_tomada_folha_energia",
+      "tipo": "icones_conteudo",
+      "tema": "energia",
+      "origem": "cloudinary",
+      "caminho": "c17_tomada-folha-energia.png",
+      "formato": "png",
+      "grupo_imagem": "c17_tomada_folha_energia",
+      "versao": 1793426932,
+      "descricao": "Tomada e folha de energia",
+      "tags": [
+        "energia"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c16_lupa_microplasticos",
+      "tipo": "icones_conteudo",
+      "tema": "reciclagem",
+      "origem": "cloudinary",
+      "caminho": "c16_lupa-microplasticos.png",
+      "formato": "png",
+      "grupo_imagem": "c16_lupa_microplasticos",
+      "versao": 1793426930,
+      "descricao": "Lupa e microplásticos",
+      "tags": [
+        "reciclagem",
+        "plastico"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c20_planeta_termometro_clima",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c20_planeta-termometro-clima.png",
+      "formato": "png",
+      "grupo_imagem": "c20_planeta_termometro_clima",
+      "versao": 1793426929,
+      "descricao": "Planeta e termômetro climático",
+      "tags": [
+        "clima"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c24_sol_tempestade_extremos",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c24_sol-tempestade-extremos.png",
+      "formato": "png",
+      "grupo_imagem": "c24_sol_tempestade_extremos",
+      "versao": 1793426928,
+      "descricao": "Sol, tempestade e extremos",
+      "tags": [
+        "clima"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c19_lampada_led_economia",
+      "tipo": "icones_conteudo",
+      "tema": "energia",
+      "origem": "cloudinary",
+      "caminho": "c19_lampada-led-economia.png",
+      "formato": "png",
+      "grupo_imagem": "c19_lampada_led_economia",
+      "versao": 1793426927,
+      "descricao": "Lâmpada LED e economia",
+      "tags": [
+        "energia"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c25_pegada_planeta_carbono",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c25_pegada-planeta-carbono.png",
+      "formato": "png",
+      "grupo_imagem": "c25_pegada_planeta_carbono",
+      "versao": 1793426927,
+      "descricao": "Pegada de carbono",
+      "tags": [
+        "clima",
+        "carbono"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c31_condominio_verde",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c31_condominio-verde.png",
+      "formato": "png",
+      "grupo_imagem": "c31_condominio_verde",
+      "versao": 1793426924,
+      "descricao": "Condomínio verde",
+      "tags": [
+        "sustentabilidade",
+        "condominio"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c22_escudo_camada_ozonio",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c22_escudo-camada-ozonio.png",
+      "formato": "png",
+      "grupo_imagem": "c22_escudo_camada_ozonio",
+      "versao": 1793426922,
+      "descricao": "Escudo da camada de ozônio",
+      "tags": [
+        "clima"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c21_planeta_camada_estufa",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c21_planeta-camada-estufa.png",
+      "formato": "png",
+      "grupo_imagem": "c21_planeta_camada_estufa",
+      "versao": 1793426921,
+      "descricao": "Planeta e camada de efeito estufa",
+      "tags": [
+        "clima"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c29_muda_solo_raizes",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c29_muda-solo-raizes.png",
+      "formato": "png",
+      "grupo_imagem": "c29_muda_solo_raizes",
+      "versao": 1793426919,
+      "descricao": "Muda, solo e raízes",
+      "tags": [
+        "solo",
+        "sustentabilidade"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c36_camiseta_embalagem_sustentavel",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c36_camiseta-embalagem-sustentavel.png",
+      "formato": "png",
+      "grupo_imagem": "c36_camiseta_embalagem_sustentavel",
+      "versao": 1793426917,
+      "descricao": "Camiseta e embalagem sustentável",
+      "tags": [
+        "consumo consciente"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c30_casa_sustentavel",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c30_casa-sustentavel.png",
+      "formato": "png",
+      "grupo_imagem": "c30_casa_sustentavel",
+      "versao": 1793426916,
+      "descricao": "Casa sustentável",
+      "tags": [
+        "sustentabilidade"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c27_floresta_protecao_fogo",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c27_floresta-protecao-fogo.png",
+      "formato": "png",
+      "grupo_imagem": "c27_floresta_protecao_fogo",
+      "versao": 1793426915,
+      "descricao": "Floresta e proteção contra fogo",
+      "tags": [
+        "floresta",
+        "sustentabilidade"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c39_coral_tartaruga_oceano",
+      "tipo": "icones_conteudo",
+      "tema": "agua",
+      "origem": "cloudinary",
+      "caminho": "c39_coral-tartaruga-oceano.png",
+      "formato": "png",
+      "grupo_imagem": "c39_coral_tartaruga_oceano",
+      "versao": 1793426915,
+      "descricao": "Coral e tartaruga no oceano",
+      "tags": [
+        "agua",
+        "oceano"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c37_cooperativa_triagem_pessoas",
+      "tipo": "icones_conteudo",
+      "tema": "reciclagem",
+      "origem": "cloudinary",
+      "caminho": "c37_cooperativa-triagem-pessoas.png",
+      "formato": "png",
+      "grupo_imagem": "c37_cooperativa_triagem_pessoas",
+      "versao": 1793426915,
+      "descricao": "Cooperativa e triagem",
+      "tags": [
+        "reciclagem",
+        "cooperativa"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c26_borboleta_flor_biodiversidade",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c26_borboleta-flor-biodiversidade.png",
+      "formato": "png",
+      "grupo_imagem": "c26_borboleta_flor_biodiversidade",
+      "versao": 1793426914,
+      "descricao": "Borboleta, flor e biodiversidade",
+      "tags": [
+        "biodiversidade"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c40_futuro_cidade_sustentavel",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c40_futuro-cidade-sustentavel.png",
+      "formato": "png",
+      "grupo_imagem": "c40_futuro_cidade_sustentavel",
+      "versao": 1793426912,
+      "descricao": "Futuro e cidade sustentável",
+      "tags": [
+        "sustentabilidade",
+        "cidade"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c34_microchip_folha_sensor",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c34_microchip-folha-sensor.png",
+      "formato": "png",
+      "grupo_imagem": "c34_microchip_folha_sensor",
+      "versao": 1793426910,
+      "descricao": "Microchip, folha e sensor",
+      "tags": [
+        "tecnologia",
+        "sustentabilidade"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c32_bairro_cidade_verde",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c32_bairro-cidade-verde.png",
+      "formato": "png",
+      "grupo_imagem": "c32_bairro_cidade_verde",
+      "versao": 1793426909,
+      "descricao": "Bairro e cidade verde",
+      "tags": [
+        "cidade",
+        "sustentabilidade"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c35_produto_setas_economia_circular",
+      "tipo": "icones_conteudo",
+      "tema": "reciclagem",
+      "origem": "cloudinary",
+      "caminho": "c35_produto-setas-economia-circular.png",
+      "formato": "png",
+      "grupo_imagem": "c35_produto_setas_economia_circular",
+      "versao": 1793426906,
+      "descricao": "Produto e economia circular",
+      "tags": [
+        "reciclagem",
+        "economia circular"
+      ],
+      "cloud_name": "ncwfxyfi"
+    },
+    {
+      "id": "icone_c38_lupa_selo_greenwashing",
+      "tipo": "icones_conteudo",
+      "tema": "sustentabilidade",
+      "origem": "cloudinary",
+      "caminho": "c38_lupa-selo-greenwashing.png",
+      "formato": "png",
+      "grupo_imagem": "c38_lupa_selo_greenwashing",
+      "versao": 1793426905,
+      "descricao": "Lupa e selo de greenwashing",
+      "tags": [
+        "consumo consciente",
+        "sustentabilidade"
+      ],
+      "cloud_name": "ncwfxyfi"
+    }
   ]
 }

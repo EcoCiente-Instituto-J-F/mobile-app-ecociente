@@ -21,7 +21,7 @@ public final class ConfiguracaoServidores {
     public static final String URL_AGENDAMENTOS = MOBILE_API + "/api/v1/agendamentos";
 
     public static final int TIMEOUT_CONEXAO_MS = 10_000;
-    public static final int TIMEOUT_RESPOSTA_LOGIN_MS = 25_000;
+    public static final int TIMEOUT_RESPOSTA_LOGIN_MS = 60_000;
     public static final int TIMEOUT_RESPOSTA_CADASTRO_MS = 40_000;
     public static final int TIMEOUT_RESPOSTA_RENDER_MS = 20_000;
 
