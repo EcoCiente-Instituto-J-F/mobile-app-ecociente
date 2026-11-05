@@ -23,7 +23,7 @@
         android:layout_marginStart="6dp"
         android:layout_marginEnd="12dp"
         android:fontFamily="@font/nunito_bold"
-        android:text="@string/detalhe_da_solicitacao"
+        android:text="Solicitações de coleta"
         android:textColor="@color/verde_escuro_principal"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/botaoVoltarDetalhe"
@@ -49,123 +49,6 @@
             android:paddingTop="4dp"
             android:paddingEnd="16dp"
             android:paddingBottom="24dp">
-
-            <com.google.android.material.card.MaterialCardView
-                style="@style/CartaoDetalheSolicitacao"
-                android:layout_marginTop="0dp">
-
-                <LinearLayout
-                    android:id="@+id/linhaDoTempoDetalhe"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="18dp" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView style="@style/CartaoDetalheSolicitacao">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="14dp">
-
-                    <TextView
-                        android:id="@+id/tituloContraparteDetalhe"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/nunito_bold"
-                        android:text="@string/condominio_solicitante"
-                        android:textColor="@color/verde_escuro_principal"
-                        android:textSize="17sp"
-                        android:gravity="center_vertical"
-                        android:drawablePadding="8dp"
-                        app:drawableStartCompat="@drawable/ic_grupo" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <FrameLayout
-                            android:layout_width="64dp"
-                            android:layout_height="64dp"
-                            android:background="@drawable/fundo_avatar_iniciais">
-
-                            <ImageView
-                                android:layout_width="34dp"
-                                android:layout_height="34dp"
-                                android:layout_gravity="center"
-                                android:importantForAccessibility="no"
-                                android:src="@drawable/ic_predio" />
-
-                        </FrameLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/nomeCondominioDetalhe"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/nunito_bold"
-                                android:textColor="@color/verde_escuro_principal"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:id="@+id/tipoCondominioDetalhe"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/nunito_regular"
-                                android:textColor="@color/cinza_texto_home"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:id="@+id/cidadeCondominioDetalhe"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/nunito_regular"
-                                android:textColor="@color/cinza_texto_home"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/botaoChatDetalhe"
-                            android:layout_width="wrap_content"
-                            android:layout_height="36dp"
-                            android:layout_marginStart="8dp"
-                            android:fontFamily="@font/nunito_bold"
-                            android:insetTop="0dp"
-                            android:insetBottom="0dp"
-                            android:minWidth="0dp"
-                            android:paddingStart="12dp"
-                            android:paddingTop="0dp"
-                            android:paddingEnd="14dp"
-                            android:paddingBottom="0dp"
-                            android:text="@string/chat"
-                            android:textAllCaps="false"
-                            android:textColor="@color/verde_escuro_principal"
-                            android:textSize="13sp"
-                            app:backgroundTint="@color/verde_claro_ecociente"
-                            app:cornerRadius="10dp"
-                            app:icon="@drawable/ic_nav_mensagens_cinza"
-                            app:iconPadding="6dp"
-                            app:iconSize="16dp"
-                            app:iconTint="@color/verde_escuro_principal" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView style="@style/CartaoDetalheSolicitacao">
 
@@ -294,6 +177,123 @@
                             app:backgroundTint="@color/rosa_fundo_recusar"
                             app:cornerRadius="10dp"
                             app:strokeColor="@color/rosa_ecociente" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/CartaoDetalheSolicitacao"
+                android:layout_marginTop="0dp">
+
+                <LinearLayout
+                    android:id="@+id/linhaDoTempoDetalhe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView style="@style/CartaoDetalheSolicitacao">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="14dp">
+
+                    <TextView
+                        android:id="@+id/tituloContraparteDetalhe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nunito_bold"
+                        android:text="@string/condominio_solicitante"
+                        android:textColor="@color/verde_escuro_principal"
+                        android:textSize="17sp"
+                        android:gravity="center_vertical"
+                        android:drawablePadding="8dp"
+                        app:drawableStartCompat="@drawable/ic_grupo" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:background="@drawable/fundo_avatar_iniciais">
+
+                            <ImageView
+                                android:layout_width="34dp"
+                                android:layout_height="34dp"
+                                android:layout_gravity="center"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/ic_predio" />
+
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/nomeCondominioDetalhe"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/nunito_bold"
+                                android:textColor="@color/verde_escuro_principal"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tipoCondominioDetalhe"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/nunito_regular"
+                                android:textColor="@color/cinza_texto_home"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:id="@+id/cidadeCondominioDetalhe"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/nunito_regular"
+                                android:textColor="@color/cinza_texto_home"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/botaoChatDetalhe"
+                            android:layout_width="wrap_content"
+                            android:layout_height="36dp"
+                            android:layout_marginStart="8dp"
+                            android:fontFamily="@font/nunito_bold"
+                            android:insetTop="0dp"
+                            android:insetBottom="0dp"
+                            android:minWidth="0dp"
+                            android:paddingStart="12dp"
+                            android:paddingTop="0dp"
+                            android:paddingEnd="14dp"
+                            android:paddingBottom="0dp"
+                            android:text="@string/chat"
+                            android:textAllCaps="false"
+                            android:textColor="@color/verde_escuro_principal"
+                            android:textSize="13sp"
+                            app:backgroundTint="@color/verde_claro_ecociente"
+                            app:cornerRadius="10dp"
+                            app:icon="@drawable/ic_nav_mensagens_cinza"
+                            app:iconPadding="6dp"
+                            app:iconSize="16dp"
+                            app:iconTint="@color/verde_escuro_principal" />
 
                     </LinearLayout>
 
