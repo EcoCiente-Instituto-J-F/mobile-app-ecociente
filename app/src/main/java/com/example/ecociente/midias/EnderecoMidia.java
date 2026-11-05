@@ -39,7 +39,7 @@ public final class EnderecoMidia {
 
         String extensao = caminho.substring(ultimoPonto + 1).toLowerCase(java.util.Locale.ROOT);
         if ("png".equals(extensao) || "jpg".equals(extensao) || "jpeg".equals(extensao)
-                || "webp".equals(extensao) || "gif".equals(extensao)) {
+                || "webp".equals(extensao) || "gif".equals(extensao) || "svg".equals(extensao)) {
             return caminho.substring(0, ultimoPonto);
         }
         return caminho;
