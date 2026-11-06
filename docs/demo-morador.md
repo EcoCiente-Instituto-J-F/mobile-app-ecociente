@@ -52,7 +52,7 @@ limpe os dados do aplicativo EcoCiente Demo nas configuracoes do Android.
 
 ## Limites
 
-Esta versao nao usa OAuth real, nao faz cadastro de novas contas, nao envia notificacao push real,
+Esta versao nao usa OAuth real, faz cadastro apenas local de contas ficticias, nao envia notificacao push real,
 sincronizacao entre dispositivos nem mapas/rotas reais. Respostas sem rota
 ainda devem ser identificadas no log `EcoCienteDemo`. Nao usar credenciais
 de producao nesta versao. O APK precisa ser validado em um aparelho.
@@ -64,3 +64,5 @@ Ao abrir o aplicativo no celular, Android > Configuracoes > Apps deve mostrar o 
 No perfil Morador, os dados iniciais incluem 320 pontos, cinco participantes no ranking e coletas agendadas, todos predefinidos. O acesso por email e senha dos quatro perfis e local; nao e necessario cadastrar usuario. Para ver o estado inicial novamente, limpe os dados do pacote `.demo` nas configuracoes do Android.
 
 Para conferir a ausencia de rede, ative modo aviao antes do login. O build debug/demo remove `android.permission.INTERNET` e nao deve tentar autenticar no Firebase ou AWS.
+
+O fluxo de cadastro do aplicativo agora tambem cria novas contas ficticias apenas no dispositivo, sem Firebase/Neon/Render. As quatro contas prontas continuam disponiveis mesmo sem cadastro.

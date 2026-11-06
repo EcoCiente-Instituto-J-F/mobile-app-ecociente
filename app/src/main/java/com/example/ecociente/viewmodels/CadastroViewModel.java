@@ -31,6 +31,12 @@ public class CadastroViewModel extends ViewModel {
             @NonNull String email,
             @NonNull String senha,
             @NonNull Map<String, Object> dadosUsuario) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) {
+            MutableLiveData<ResultadoCadastro> local = new MutableLiveData<>();
+            local.setValue(com.example.ecociente.repository.DadosDemo.cadastrar(nome, email, senha, dadosUsuario));
+            return local;
+        }
+
         carregando.setValue(true);
 
         MediatorLiveData<ResultadoCadastro> resultado = new MediatorLiveData<>();

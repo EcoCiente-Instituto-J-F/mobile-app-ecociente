@@ -59,6 +59,11 @@ public class EcoCienteDemoApplication extends EcoCienteApplication {
         com.example.ecociente.repository.DadosDemo.instalarContexto(this);
         com.example.ecociente.repository.DadosDemo.instalar(
                 new com.example.ecociente.repository.DadosDemo.Fonte() {
+                    @Override public com.example.ecociente.model.ResultadoCadastro cadastrar(
+                            String nome, String email, String senha,
+                            java.util.Map<String, Object> dados) {
+                        return estado.cadastrar(nome, email, senha, dados);
+                    }
                     @Override public String token() {
                         synchronized (estado) {
                             return ContaDemo.conta(estado.raiz()).optString("token", "");

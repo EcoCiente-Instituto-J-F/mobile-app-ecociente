@@ -58,6 +58,62 @@ public final class EstadoDemo {
             throw new IllegalStateException(e);
         }
     }
+
+    @NonNull
+    public synchronized com.example.ecociente.model.ResultadoCadastro cadastrar(
+            @NonNull String nome, @NonNull String email, @NonNull String senha,
+            @NonNull java.util.Map<String, Object> dados) {
+        String chave = ContaDemo.normalizarEmail(email);
+        if (chave.isEmpty() || !chave.contains("@") || senha.length() < 6 || nome.trim().isEmpty()) {
+            return com.example.ecociente.model.ResultadoCadastro.erro("Informe nome, e-mail e senha valida.");
+        }
+        JSONObject perfis = raiz.optJSONObject("perfisDemo");
+        if (perfis == null) return com.example.ecociente.model.ResultadoCadastro.erro("Demo nao inicializada.");
+        if (perfis.has(chave)) {
+            return com.example.ecociente.model.ResultadoCadastro.contaJaExistente("Este e-mail ja esta cadastrado.");
+        }
+        try {
+            String tipo = String.valueOf(dados.getOrDefault("tipoUsuario", "comum")).toLowerCase(java.util.Locale.ROOT);
+            boolean cooperativa = "cooperativa".equals(tipo);
+            boolean morador = "morador".equals(tipo);
+            int novoId = 100 + perfis.length();
+            JSONObject base = perfis.getJSONObject(UsuariosMultiperfilDemo.MORADOR);
+            JSONObject novo = new JSONObject(base.toString());
+            JSONObject conta = novo.getJSONObject("conta");
+            conta.put("email", chave).put("senha", senha).put("uid", "demo-" + novoId)
+                    .put("logado", false).put("token", "");
+            JSONObject me = novo.getJSONObject("me");
+            me.put("id", novoId).put("nome", nome.trim()).put("email", chave)
+                    .put("perfil", cooperativa ? "COOPERATIVA" : morador ? "MORADOR" : "USUARIO_COMUM")
+                    .put("cpf", String.valueOf(dados.getOrDefault("cpf", "")));
+            if (cooperativa || !morador) me.put("condominios", new org.json.JSONArray());
+            if (cooperativa) {
+                me.put("cooperativa", new JSONObject()
+                        .put("id", novoId).put("nome", String.valueOf(dados.getOrDefault("nomeCooperativa", "Cooperativa Demo")))
+                        .put("email", chave));
+            } else {
+                me.remove("cooperativa");
+            }
+            JSONObject endereco = me.optJSONObject("endereco");
+            if (endereco != null) {
+                for (String k : new String[]{"cep", "numero", "complemento", "logradouro", "cidade", "estado"}) {
+                    if (dados.containsKey(k)) endereco.put(k, String.valueOf(dados.get(k)));
+                }
+            }
+            JSONObject pontos = novo.getJSONObject("pontuacao");
+            org.json.JSONArray participantes = pontos.optJSONArray("participantes");
+            for (int i = 0; participantes != null && i < participantes.length(); i++) {
+                JSONObject item = participantes.getJSONObject(i);
+                if (item.optInt("usuarioId") == SementeDemo.USUARIO_ID) item.put("usuarioId", novoId);
+            }
+            perfis.put(chave, novo);
+            salvar();
+            return com.example.ecociente.model.ResultadoCadastro.sucesso("demo-" + novoId);
+        } catch (org.json.JSONException erro) {
+            return com.example.ecociente.model.ResultadoCadastro.erro("Nao foi possivel cadastrar o usuario de demonstracao.");
+        }
+    }
+
     public synchronized void encerrarSessao() {
         try {
             ContaDemo.conta(raiz).put("logado", false).put("token", "");

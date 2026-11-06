@@ -13,12 +13,21 @@ public final class DadosDemo {
         int cooperativaId();
         String perfil();
         JSONObject perfilCompleto();
+        com.example.ecociente.model.ResultadoCadastro cadastrar(String nome, String email, String senha, java.util.Map<String, Object> dados);
     }
     @Nullable private static android.content.Context contexto;
     public static void instalarContexto(@NonNull android.content.Context app) { contexto = app.getApplicationContext(); }
     @NonNull public static android.content.Context contexto() {
         if (contexto == null) throw new IllegalStateException("Contexto demo ainda nao instalado");
         return contexto;
+    }
+    @NonNull public static com.example.ecociente.model.ResultadoCadastro cadastrar(
+            @NonNull String nome, @NonNull String email, @NonNull String senha,
+            @NonNull java.util.Map<String, Object> dados) {
+        Fonte f = fonte;
+        return f == null
+                ? com.example.ecociente.model.ResultadoCadastro.erro("Demo indisponivel")
+                : f.cadastrar(nome, email, senha, dados);
     }
     private static volatile Fonte fonte;
     private DadosDemo() {}
