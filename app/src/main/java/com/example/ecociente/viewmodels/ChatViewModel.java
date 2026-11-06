@@ -1,7 +1,8 @@
 package com.example.ecociente.viewmodels;
 
-import android.util.Log;
+import android.content.Context;
 import android.os.Looper;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.ecociente.model.MensagemChat;
 import com.example.ecociente.model.RespostaChat;
 import com.example.ecociente.repository.ChatRepository;
+import com.example.ecociente.ui.FormatadorRespostaEko;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +30,8 @@ public class ChatViewModel extends ViewModel {
     private final MutableLiveData<Boolean> envioEmAndamento =
             new MutableLiveData<>(false);
 
-    private String sessionId;
+    // Escrito pela thread de rede e lido pela principal ao enviar a próxima mensagem.
+    private volatile String sessionId;
 
     public LiveData<List<MensagemChat>> getMensagens() {
         return mensagens;
@@ -38,13 +41,14 @@ public class ChatViewModel extends ViewModel {
         return envioEmAndamento;
     }
 
-    public void enviarMensagem(String mensagem) {
+    public void enviarMensagem(Context contexto, String mensagem) {
         if (mensagem == null || mensagem.trim().isEmpty()
                 || Boolean.TRUE.equals(envioEmAndamento.getValue())) {
             return;
         }
 
         String mensagemNormalizada = mensagem.trim();
+        Context contextoApp = contexto.getApplicationContext();
         adicionarMensagem(MensagemChat.doUsuario(mensagemNormalizada));
         envioEmAndamento.setValue(true);
 
@@ -52,13 +56,13 @@ public class ChatViewModel extends ViewModel {
                 () -> {
                     try {
                         RespostaChat resposta =
-                                repositorio.enviarMensagem(mensagemNormalizada, sessionId);
+                                repositorio.enviarMensagem(contextoApp, mensagemNormalizada, sessionId);
 
                         if (!resposta.getSessionId().isEmpty()) {
                             sessionId = resposta.getSessionId();
                         }
 
-                        adicionarMensagem(MensagemChat.doEko(resposta.getResposta()));
+                        adicionarMensagem(MensagemChat.doEko(FormatadorRespostaEko.paraExibicao(resposta.getResposta())));
                     } catch (Exception erro) {
                         Log.e(TAG, "Falha ao chamar a API", erro);
                         adicionarMensagem(MensagemChat.erroDeConexao());
@@ -84,6 +88,5 @@ public class ChatViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         executorRede.shutdownNow();
-        super.onCleared();
     }
 }

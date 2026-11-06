@@ -18,7 +18,7 @@ public class ResponderSolicitacaoViewModel extends ViewModelComCarregamento {
 
         MutableLiveData<ResultadoApi> resultado = new MutableLiveData<>();
 
-        repositorio.alterarStatus(contexto, id, resposta, resultado::setValue);
+        repositorio.alterarStatus(contexto.getApplicationContext(), id, resposta, resultado::setValue);
 
         return executar(resultado);
     }

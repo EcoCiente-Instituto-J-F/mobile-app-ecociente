@@ -12,6 +12,7 @@ import com.example.ecociente.R;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
 import java.util.Calendar;
+import com.example.ecociente.util.FormatoDataApi;
 
 public class ProximaColetaView extends FrameLayout {
 
@@ -21,7 +22,6 @@ public class ProximaColetaView extends FrameLayout {
     private final TextView horario;
     private final TextView rotuloFaltam;
     private final TextView valorFaltam;
-    private final View linhaHorario;
     private final View tipo;
     private final View caixaFaltam;
     private final View cartao;
@@ -38,7 +38,6 @@ public class ProximaColetaView extends FrameLayout {
         horario = findViewById(R.id.textoHorarioProximaColeta);
         rotuloFaltam = findViewById(R.id.textoRotuloFaltam);
         valorFaltam = findViewById(R.id.textoValorFaltam);
-        linhaHorario = findViewById(R.id.linhaHorarioProximaColeta);
         tipo = findViewById(R.id.textoTipoColeta);
         caixaFaltam = findViewById(R.id.caixaFaltamDias);
         cartao = findViewById(R.id.cartaoProximaColeta);
@@ -49,7 +48,7 @@ public class ProximaColetaView extends FrameLayout {
             @NonNull Runnable aoTentarNovamente,
             @NonNull Runnable aoReautenticar) {
 
-        linhaHorario.setVisibility(GONE);
+        horario.setVisibility(GONE);
         tipo.setVisibility(GONE);
         caixaFaltam.setVisibility(GONE);
         cartao.setOnClickListener(null);
@@ -58,6 +57,11 @@ public class ProximaColetaView extends FrameLayout {
         if (resultado.getTipo() == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
             data.setText(R.string.proxima_coleta_sessao);
             cartao.setOnClickListener(view -> aoReautenticar.run());
+            return;
+        }
+
+        if (resultado.getTipo() == ResultadoSolicitacoes.Tipo.SEM_ACESSO) {
+            data.setText(R.string.proxima_coleta_sem_acesso);
             return;
         }
 
@@ -76,17 +80,17 @@ public class ProximaColetaView extends FrameLayout {
 
         tipo.setVisibility(VISIBLE);
 
-        data.setText(FormatoDataApi.dataExtensa(coleta.getDataInicio()));
+        data.setText(FormatoDataApi.dataExtensaSemAnoCorrente(coleta.getDataInicio()));
 
         String inicio = FormatoDataApi.horaCurta(coleta.getDataInicio());
         String fim = FormatoDataApi.horaCurta(coleta.getDataFim());
 
         if (!inicio.isEmpty()) {
             horario.setText(
-                    fim.isEmpty()
+                    fim.isEmpty() || fim.equals(inicio)
                             ? getContext().getString(R.string.proxima_coleta_horario_inicio, inicio)
                             : getContext().getString(R.string.proxima_coleta_horario, inicio, fim));
-            linhaHorario.setVisibility(VISIBLE);
+            horario.setVisibility(VISIBLE);
         }
 
         exibirFaltam(FormatoDataApi.calendario(coleta.getDataInicio()));
@@ -113,7 +117,7 @@ public class ProximaColetaView extends FrameLayout {
 
         } else {
             rotuloFaltam.setText(R.string.proxima_coleta_rotulo_faltam);
-            valorFaltam.setText(getContext().getString(R.string.proxima_coleta_dias, (int) dias));
+            valorFaltam.setText(getResources().getQuantityString(R.plurals.proxima_coleta_dias, (int) dias, (int) dias));
         }
 
         caixaFaltam.setVisibility(VISIBLE);

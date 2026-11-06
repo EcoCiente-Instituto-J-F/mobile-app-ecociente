@@ -1,5 +1,6 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.AvisoServidorLento;
 import static com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL;
 
 import android.content.Intent;
@@ -35,7 +36,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
 import com.example.ecociente.ui.FieldFeedback;
 import com.example.ecociente.ui.Motion;
-import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.viewmodels.LoginViewModel;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -49,14 +49,17 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
 import java.util.Arrays;
+import androidx.credentials.exceptions.NoCredentialException;
 
 public class LoginFragment extends Fragment {
     private static final String TAG = "LoginEcoCiente";
     private EditText campoEmail;
     private EditText campoSenha;
     private MaterialButton botaoLogin;
+
     private MaterialButton botaoGoogle;
     private MaterialButton botaoFacebook;
+    private final AvisoServidorLento avisoServidorLento = new AvisoServidorLento();
     private ImageView iconeOlhoSenha;
     private MaterialCardView containerEmail;
     private MaterialCardView containerSenha;
@@ -210,25 +213,7 @@ public class LoginFragment extends Fragment {
                                 return;
                             }
 
-                            autenticarNaApiExterna(email, senha);
-
                             finalizarLogin();
-                        });
-    }
-
-    // Best-effort: roda em paralelo e nunca bloqueia nem falha o login pelo
-    // Firebase. Contas antigas, sem registro no Postgres, só geram um aviso.
-    private void autenticarNaApiExterna(String email, String senha) {
-
-        new AutenticacaoExternaRepository()
-                .autenticar(
-                        requireContext(),
-                        email,
-                        senha,
-                        sessao -> {
-                            if (sessao == null) {
-                                Log.w(TAG, "Login na API externa não disponível para " + email);
-                            }
                         });
     }
 
@@ -272,6 +257,11 @@ public class LoginFragment extends Fragment {
                             return;
                         }
 
+                        if (erro instanceof NoCredentialException) {
+                            mostrarMensagem("Nenhuma conta Google encontrada neste aparelho");
+                            return;
+                        }
+
                         mostrarMensagem("Não foi possível entrar com o Google");
                     }
                 });
@@ -306,7 +296,7 @@ public class LoginFragment extends Fragment {
                                 finalizarLogin();
                             });
 
-        } catch (Exception erro) {
+        } catch (RuntimeException erro) {
             Log.e(TAG, "Erro ao interpretar token Google", erro);
 
             mostrarMensagem("Não foi possível validar a conta Google");
@@ -376,6 +366,11 @@ public class LoginFragment extends Fragment {
         iconeOlhoSenha.setEnabled(!emAndamento);
 
         indicadorCarregamento.setVisibility(emAndamento ? View.VISIBLE : View.GONE);
+        if (emAndamento && getActivity() != null) {
+            avisoServidorLento.iniciar(getActivity());
+        } else {
+            avisoServidorLento.parar();
+        }
         botaoLogin.setText(emAndamento ? "" : getString(R.string.login));
         botaoGoogle.setAlpha(emAndamento ? 0.55f : 1f);
         botaoFacebook.setAlpha(emAndamento ? 0.55f : 1f);
@@ -474,6 +469,7 @@ public class LoginFragment extends Fragment {
             ((Login) getActivity()).definirNavegacaoHabilitada(true);
         }
 
+
         campoEmail = null;
 
         campoSenha = null;
@@ -493,6 +489,7 @@ public class LoginFragment extends Fragment {
         indicadorCarregamento = null;
         motion = null;
 
+        avisoServidorLento.parar();
         super.onDestroyView();
     }
 }

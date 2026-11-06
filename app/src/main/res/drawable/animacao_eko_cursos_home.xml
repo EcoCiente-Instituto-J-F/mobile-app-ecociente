@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item android:drawable="@drawable/frame_1_gif_estudar" android:duration="520" />
+    <item android:drawable="@drawable/frame_2_gif_estudar" android:duration="520" />
+    <item android:drawable="@drawable/frame_3_gif_estudar" android:duration="520" />
+    <item android:drawable="@drawable/frame_4_gif_estudar" android:duration="520" />
+    <item android:drawable="@drawable/frame_5_gif_estudar" android:duration="520" />
+</animation-list>

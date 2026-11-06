@@ -20,15 +20,15 @@
             android:fontFamily="@font/nunito_semibold"
             android:text="@string/login"
             android:textColor="@color/verde_escuro_principal"
-            android:textSize="25sp"
+            android:textSize="@dimen/login_titulo_texto"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/containerEmail"
             android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="34dp"
+            android:layout_height="@dimen/login_campo_altura"
+            android:layout_marginTop="@dimen/login_campo_margem_topo"
             app:cardBackgroundColor="@color/branco"
             app:cardCornerRadius="12dp"
             app:cardElevation="0dp"
@@ -47,7 +47,6 @@
                 android:paddingEnd="12dp">
 
                 <ImageView
-                    android:id="@+id/iconeEmail"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:contentDescription="@string/icone_email"
@@ -69,7 +68,7 @@
                     android:padding="0dp"
                     android:textColor="@color/verde_escuro_principal"
                     android:textColorHint="@color/cinza_escuro_textos"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/login_campo_texto" />
 
             </LinearLayout>
 
@@ -82,7 +81,7 @@
             android:layout_marginTop="4dp"
             android:fontFamily="@font/nunito_medium"
             android:textColor="@color/rosa_ecociente"
-            android:textSize="12sp"
+            android:textSize="@dimen/login_erro_texto"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -91,7 +90,7 @@
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/containerSenha"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="@dimen/login_campo_altura"
             android:layout_marginTop="12dp"
             app:cardBackgroundColor="@color/branco"
             app:cardCornerRadius="12dp"
@@ -116,7 +115,6 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/iconeSenha"
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:contentDescription="@string/icone_senha"
@@ -138,7 +136,7 @@
                         android:padding="0dp"
                         android:textColor="@color/verde_escuro_principal"
                         android:textColorHint="@color/cinza_escuro_textos"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/login_campo_texto" />
 
                 </LinearLayout>
 
@@ -167,7 +165,7 @@
             android:layout_marginTop="4dp"
             android:fontFamily="@font/nunito_medium"
             android:textColor="@color/rosa_ecociente"
-            android:textSize="12sp"
+            android:textSize="@dimen/login_erro_texto"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -183,15 +181,15 @@
             android:fontFamily="@font/nunito_medium"
             android:text="@string/esqueceu_senha"
             android:textColor="@color/verde_escuro_principal"
-            android:textSize="13sp"
+            android:textSize="@dimen/login_link_texto"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/erroSenhaLogin" />
 
         <FrameLayout
             android:id="@+id/containerBotaoLogin"
             android:layout_width="0dp"
-            android:layout_height="52dp"
-            android:layout_marginTop="38dp"
+            android:layout_height="@dimen/login_botao_altura"
+            android:layout_marginTop="@dimen/login_botao_margem_topo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textoEsqueceuSenha">
@@ -204,7 +202,7 @@
                 android:text="@string/login"
                 android:textAllCaps="false"
                 android:textColor="@color/branco"
-                android:textSize="17sp"
+                android:textSize="@dimen/login_botao_texto"
                 app:backgroundTint="@color/verde_escuro_principal"
                 app:cornerRadius="12dp"
                 app:elevation="0dp" />
@@ -223,7 +221,7 @@
             android:id="@+id/divisorOu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/login_divisor_margem_topo"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -244,7 +242,7 @@
                 android:fontFamily="@font/nunito_medium"
                 android:text="@string/separador_ou"
                 android:textColor="@color/cinza_escuro_textos"
-                android:textSize="10sp" />
+                android:textSize="11sp" />
 
             <View
                 android:layout_width="0dp"
@@ -257,17 +255,17 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/botaoGoogle"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/login_social_altura"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/nunito_semibold"
             android:text="@string/continuar_com_google"
             android:textAllCaps="false"
             android:textColor="@color/verde_escuro_principal"
-            android:textSize="13sp"
+            android:textSize="@dimen/login_social_texto"
             app:backgroundTint="@color/branco"
             app:cornerRadius="12dp"
             app:elevation="0dp"
-            app:icon="@drawable/icon_google"
+            app:icon="@drawable/ic_google"
             app:iconGravity="textStart"
             app:iconPadding="12dp"
             app:iconSize="20dp"
@@ -281,17 +279,17 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/botaoFacebook"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/login_social_altura"
             android:layout_marginTop="6dp"
             android:fontFamily="@font/nunito_semibold"
             android:text="@string/continuar_com_facebook"
             android:textAllCaps="false"
             android:textColor="@color/branco"
-            android:textSize="13sp"
+            android:textSize="@dimen/login_social_texto"
             app:backgroundTint="@color/azul_facebook"
             app:cornerRadius="12dp"
             app:elevation="0dp"
-            app:icon="@drawable/icon_facebook"
+            app:icon="@drawable/ic_facebook"
             app:iconGravity="textStart"
             app:iconPadding="12dp"
             app:iconSize="20dp"

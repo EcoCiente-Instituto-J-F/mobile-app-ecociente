@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="128dp"
+    android:height="128dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+
+    <!-- Leaves & Stem -->
+    <path
+        android:fillColor="#0B513F"
+        android:pathData="M 256,168 C 220,135 130,120 115,68 C 170,58 225,100 256,168 Z" />
+    <path
+        android:fillColor="#0B513F"
+        android:pathData="M 256,168 C 292,135 382,120 397,68 C 342,58 287,100 256,168 Z" />
+    <path
+        android:fillColor="#0B513F"
+        android:pathData="M 242,165 C 242,148 270,148 270,165 C 270,182 242,182 242,165 Z" />
+
+    <!-- Head / TV Outer Frame -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#0B513F"
+        android:strokeWidth="32"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M 160,180 L 352,180 C 420,180 440,200 440,268 L 440,372 C 440,440 420,460 352,460 L 160,460 C 92,460 72,440 72,372 L 72,268 C 72,200 92,180 160,180 Z" />
+
+    <!-- Left Eye -->
+    <path
+        android:fillColor="#0B513F"
+        android:pathData="M 192,290 C 205,290 215,306 215,326 C 215,346 205,362 192,362 C 179,362 169,346 169,326 C 169,306 179,290 192,290 Z" />
+
+    <!-- Right Eye -->
+    <path
+        android:fillColor="#0B513F"
+        android:pathData="M 320,290 C 333,290 343,306 343,326 C 343,346 333,362 320,362 C 307,362 297,346 297,326 C 297,306 307,290 320,290 Z" />
+
+    <!-- Left Pupil Highlight (White) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 192,296 C 197,296 201,300 201,305 C 201,310 197,314 192,314 C 187,314 183,310 183,305 C 183,300 187,296 192,296 Z" />
+
+    <!-- Right Pupil Highlight (White) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M 320,296 C 325,296 329,300 329,305 C 329,310 325,314 320,314 C 315,314 311,310 311,305 C 311,300 315,296 320,296 Z" />
+
+    <!-- Left Cheek -->
+    <path
+        android:fillColor="#0B513F"
+        android:pathData="M 148,368 C 158,368 166,373 166,379 C 166,385 158,390 148,390 C 138,390 130,385 130,379 C 130,373 138,368 148,368 Z" />
+
+    <!-- Right Cheek -->
+    <path
+        android:fillColor="#0B513F"
+        android:pathData="M 364,368 C 374,368 382,373 382,379 C 382,385 374,390 364,390 C 354,390 346,385 346,379 C 346,373 354,368 364,368 Z" />
+
+</vector>

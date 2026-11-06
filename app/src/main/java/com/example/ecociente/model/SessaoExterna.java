@@ -2,7 +2,7 @@ package com.example.ecociente.model;
 
 import androidx.annotation.NonNull;
 
-// Resposta de POST /auth/login da API de autenticação (ds-autenticacao-api).
+// Resposta de POST /auth/login da API de autenticação (ds-mobile-api).
 public final class SessaoExterna {
     private final String token;
     private final String tipoToken;

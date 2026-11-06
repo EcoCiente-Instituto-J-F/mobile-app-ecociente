@@ -6,10 +6,10 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
@@ -17,10 +17,11 @@ import com.example.ecociente.viewmodels.SenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseUser;
 import java.util.regex.Pattern;
+import com.example.ecociente.ui.DialogoEco;
 
 public class GerenciarSenhaActivity extends AppCompatActivity {
 
-    // Mesma regra da ds-esqueceusenha-api.
+    // Mesma regra da ds-mobile-api.
     private static final Pattern PADRAO_SENHA_VALIDA =
             Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^A-Za-z0-9])\\S{8,100}$");
 
@@ -45,7 +46,11 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
     protected void onCreate(Bundle estadoSalvo) {
         super.onCreate(estadoSalvo);
 
+        com.example.ecociente.ui.JanelaEdgeToEdge.aplicar(this);
+
         setContentView(R.layout.activity_gerenciar_senha);
+        com.example.ecociente.ui.InsetsSistema.aplicarComoPadding(findViewById(R.id.raizGerenciarSenha));
+        com.example.ecociente.ui.NavegacaoConfiguracoes.instalar(this);
 
         viewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
 
@@ -189,6 +194,19 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
             return;
         }
 
+        new DialogoEco.Builder(this)
+                .titulo(R.string.salvar_alteracoes_titulo)
+                .mensagem(R.string.salvar_alteracoes_mensagem)
+                .botao(
+                        R.string.confirmar,
+                        DialogoEco.Estilo.PREENCHIDO,
+                        () -> alterarSenha(senhaAtual, senhaNova))
+                .botao(R.string.perfil_cancelar, DialogoEco.Estilo.CONTORNO, null)
+                .mostrar();
+    }
+
+    private void alterarSenha(String senhaAtual, String senhaNova) {
+
         senhaViewModel
                 .alterarSenha(getApplicationContext(), senhaAtual, senhaNova)
                 .observe(
@@ -228,6 +246,6 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
 
     private void mostrarMensagem(String mensagem) {
 
-        Toast.makeText(this, mensagem, Toast.LENGTH_SHORT).show();
+        AvisoFlutuante.mostrar(this, mensagem);
     }
 }

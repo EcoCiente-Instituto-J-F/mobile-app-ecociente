@@ -1,9 +1,13 @@
 <resources>
+    <string name="sindico_saudacao_demo">Olá, Júlio!</string>
+    <string name="sindico_rascunho_salvo">Rascunho salvo nesta sessão. O envio aos moradores estará disponível após a integração com a API.</string>
 
     <string name="app_name">
         EcoCiente
     </string>
 
+
+    <string name="login_conta_nao_confirmada">Não foi possível confirmar sua conta no EcoCiente. Confira e-mail e senha ou faça o cadastro.</string>
     <string name="login">
         Login
     </string>
@@ -11,6 +15,7 @@
     <string name="cadastrar_se">
         Cadastrar-se
     </string>
+
 
     <string name="senha">
         Senha
@@ -32,7 +37,6 @@
     <string name="icone_analise_quiz">Ícone da análise do quiz</string>
     <string name="analise_quiz">Análise do seu quiz</string>
     <string name="acompanhe_quizzes">Acompanhe seu desempenho nos últimos quizzes</string>
-    <string name="media_acertos">Média acertos</string>
     <string name="grafico_desempenho">Gráfico de desempenho nos últimos quizzes</string>
     <string name="icone_conteudos">Ícone de conteúdos</string>
     <string name="conteudos_para_voce">Conteúdos para você</string>
@@ -50,10 +54,6 @@
     <string name="titulo_guia_home">Como separar papel corretamente</string>
     <string name="titulo_dica_home">Como reduzir o uso de plástico</string>
     <string name="titulo_artigo_home">Compostagem caseira</string>
-    <string name="tempo_leitura">Tempo de leitura</string>
-    <string name="quatro_minutos_leitura">4 min de leitura</string>
-    <string name="tres_minutos_leitura">3 min de leitura</string>
-    <string name="cinco_minutos_leitura">5 min de leitura</string>
     <string name="erro_carregar_perfil">Não foi possível confirmar seu perfil agora.</string>
     <string name="tentar_novamente">Tentar novamente</string>
     <string name="voltar">Voltar</string>
@@ -64,6 +64,13 @@
     <string name="perfil_rotulo_telefone">Telefone</string>
     <string name="perfil_rotulo_endereco">Endereço</string>
     <string name="perfil_rotulo_cpf">CPF</string>
+    <string name="informacoes_basicas">Informações básicas</string>
+    <string name="rotulo_numero">Número</string>
+    <string name="rotulo_complemento">Complemento</string>
+    <string name="rotulo_cidade">Cidade</string>
+    <string name="rotulo_estado">Estado</string>
+    <string name="rotulo_cep">CEP</string>
+    <string name="perfil_rotulo_email_cooperativa">E-mail da cooperativa</string>
     <string name="perfil_valor_nao_informado">Não informado</string>
     <string name="perfil_salvar">Salvar</string>
     <string name="perfil_cancelar">Cancelar</string>
@@ -71,10 +78,11 @@
     <string name="perfil_sair_mensagem">Tem certeza que deseja sair?</string>
     <string name="perfil_sair_confirmar">Sair</string>
     <string name="sessao_encerrada">Você saiu da conta.</string>
+
+    <!-- Recursos compartilhados: perfis, cooperativa e síndico -->
     <string name="home_sem_login">Entre na sua conta para continuar.</string>
     <string name="home_cadastro_incompleto">Complete seu cadastro antes de acessar a home.</string>
     <string name="home_sem_acesso">Não foi possível identificar o seu perfil de acesso.</string>
-    <string name="solicitacoes">Solicitações</string>
     <string name="solicitacao">Solicitação</string>
     <string name="coletas">Coletas</string>
     <string name="mensagens">Mensagens</string>
@@ -94,7 +102,6 @@
     <string name="perfil_excluir_confirmar">Excluir</string>
     <string name="perfil_excluir_aviso">Essa ação é permanente e não pode ser desfeita. Digite sua senha para confirmar.</string>
     <string name="perfil_excluir_senha_vazia">Digite sua senha.</string>
-    <string name="perfil_excluir_sucesso">Conta excluída.</string>
     <string name="perfil_senha_atual_vazia">Digite sua senha atual.</string>
     <string name="perfil_senha_nova_curta">A nova senha precisa ter de 8 a 100 caracteres, com maiúscula, minúscula, número e caractere especial, sem espaços.</string>
     <string name="perfil_senhas_diferentes">As senhas não são iguais.</string>
@@ -145,7 +152,7 @@
     <string name="chat_opcao_cooperativa">Encontrar cooperativa</string>
     <string name="chat_titulo_conversa">Eko</string>
     <string name="chat_voltar">Voltar</string>
-    <string name="chat_hint_mensagem">Digite sua pergunta...</string>
+    <string name="chat_hint_mensagem">Digite sua pergunta…</string>
     <string name="chat_enviar">Enviar mensagem</string>
     <string name="chat_avatar_eko">Avatar do Eko</string>
     <string name="chat_avatar_usuario">Avatar do usuário</string>
@@ -157,27 +164,54 @@
 
     <string name="quizzes">Quizzes</string>
 
-    <string name="subtitulo_quizzes">Teste seus conhecimentos sobre sustentabilidade</string>
 
     <string name="buscar">Buscar quizzes</string>
 
-    <string name="pesquise">pesquise...</string>
+    <string name="pesquise">Pesquise…</string>
 
     <string name="seis_quizzes_disponiveis">6 quizzes disponíveis</string>
 
-    <string name="quizzes_disponiveis_formatado">%1$d quizzes disponíveis</string>
 
-    <string name="filtros">Filtros</string>
 
     <string name="icone_quiz">Ícone do quiz</string>
 
     <string name="quantidade_perguntas">Quantidade de perguntas</string>
 
-    <string name="duracao_quiz">Duração do quiz</string>
 
     <string name="concluido">Concluído</string>
 
     <string name="comecar">Começar</string>
+
+
+
+    <string name="inicio_quiz_voltar">Voltar para quizzes</string>
+    <string name="inicio_quiz_titulo_padrao">Sustentabilidade</string>
+    <string name="inicio_quiz_descricao">“Teste seus conhecimentos e descubra como fazer a diferença ”</string>
+    <string name="inicio_quiz_perguntas_padrao">10 - Perguntas</string>
+    <string name="inicio_quiz_perguntas_formatado">%1$d - Perguntas</string>
+    <string name="inicio_quiz_pontos">0 / 100 - Pontos</string>
+    <string name="inicio_quiz_botao">Iniciar quiz</string>
+
+    <!-- Quiz - perguntas -->
+    <string name="quiz_perguntas_voltar">Voltar</string>
+    <string name="quiz_proximo">Próximo</string>
+    <string name="quiz_finalizar">Finalizar</string>
+    <string name="quiz_dialogo_finalizar_titulo">Finalizar quiz?</string>
+    <string name="quiz_dialogo_finalizar_mensagem">Você respondeu às perguntas do quiz. Deseja finalizar e ver o seu resultado?</string>
+
+    <!-- Quiz - resultado -->
+    <string name="quiz_resultado_voltar">Voltar</string>
+    <string name="quiz_sua_pontuacao">Sua pontuação</string>
+    <string name="quiz_resultado_mensagem_perfeita">Perfeito! Você dominou o assunto!</string>
+    <string name="quiz_resultado_mensagem_boa">Você já domina grande parte do assunto!</string>
+    <string name="quiz_resultado_mensagem_media">Muito bem! Você está no caminho certo!</string>
+    <string name="quiz_resultado_mensagem_praticar">Continue praticando — cada resposta ensina algo novo!</string>
+    <string name="quiz_repetir">Repetir quiz</string>
+    <string name="quiz_sem_resposta">Sem resposta</string>
+    <string name="quiz_resposta_correta">Resposta correta: %1$s</string>
+    <string name="quiz_questao_numero">Questão %1$d</string>
+    <string name="quiz_dialogo_fechar">Fechar</string>
+    <string name="cancelar">Cancelar</string>
 
     <string name="abrir_calendario">Abrir calendário</string>
     <string name="abrir_lista_estados">Abrir lista de estados</string>
@@ -192,6 +226,17 @@
     <string name="condominio">Condomínio</string>
     <string name="confirmar_senha">Confirmar senha</string>
     <string name="continuar">Continuar</string>
+    <string name="salvar_alteracoes_titulo">Salvar as alterações?</string>
+    <string name="salvar_alteracoes_mensagem">Confirme se deseja salvar as alterações realizadas.</string>
+    <string name="confirmar">Confirmar</string>
+    <string name="conta_excluida_aviso">Sua conta foi excluída</string>
+    <string name="simbolo_avancar">›</string>
+    <string name="simbolo_voltar">‹</string>
+    <string name="valor_do_campo">Valor do campo</string>
+    <string name="digito_codigo_1">Primeiro dígito do código</string>
+    <string name="digito_codigo_2">Segundo dígito do código</string>
+    <string name="digito_codigo_3">Terceiro dígito do código</string>
+    <string name="digito_codigo_4">Quarto dígito do código</string>
     <string name="continuar_com_facebook">Continuar com Facebook</string>
     <string name="continuar_com_google">Continuar com Google</string>
     <string name="cooperativa_nao_selecionada">Cooperativa não selecionada</string>
@@ -221,11 +266,6 @@
     <string name="mostrar_confirmacao_senha">Mostrar confirmação de senha</string>
     <string name="mostrar_senha">Mostrar senha</string>
     <string name="nome_e_sobrenome">Nome e sobrenome</string>
-    <string name="notificacoes_atividades_eventos">Atividades e eventos</string>
-    <string name="notificacoes_descricao">Escolha sobre o que deseja ser notificado</string>
-    <string name="notificacoes_do_app">Notificações do app</string>
-    <string name="notificacoes_sustentabilidade">Sustentabilidade</string>
-    <string name="notificacoes_titulo">Gerencie suas preferências</string>
     <string name="nova_senha">Nova senha</string>
     <string name="nova_senha_descricao">Digite sua nova senha para continuar</string>
     <string name="numero">Número</string>
@@ -246,24 +286,56 @@
     <string name="usuario_selecionado">Usuário selecionado</string>
     <string name="verificar">Verificar</string>
 
+    <string name="quiz_revisao_voltar">Voltar para o resultado</string>
+    <string name="quiz_revisao_subtitulo">Revisão</string>
+    <string name="quiz_revisao_numero_formatado">Questão %1$02d</string>
+    <string name="quiz_revisao_sua_resposta">Sua resposta:</string>
+    <string name="quiz_revisao_resposta_correta">Resposta correta:</string>
+    <string name="quiz_revisao_explicacao">Explicação:</string>
+
     <!-- Solicitações -->
     <string name="status_agendado">Pendentes</string>
     <string name="status_confirmado">Confirmadas</string>
     <string name="status_recusado">Recusadas</string>
     <string name="status_cancelado">Canceladas</string>
     <string name="status_realizado">Realizadas</string>
+    <string name="etiqueta_pendente">Pendente</string>
+    <string name="etiqueta_aceito">Aceito</string>
+    <string name="etiqueta_recusado">Recusado</string>
+    <string name="etiqueta_cancelado">Cancelado</string>
+    <string name="etiqueta_concluida">Concluída</string>
+    <string name="buscar_unidade">Buscar unidade…</string>
+    <string name="detalhe_da_solicitacao">Detalhe da solicitação</string>
+    <string name="linha_recebida_titulo">Solicitação recebida</string>
+    <string name="linha_recebida_texto">Solicitação enviada pelo %1$s.</string>
+    <string name="linha_resposta_titulo">Resposta da cooperativa</string>
+    <string name="linha_resposta_aguardando">Aguardando sua resposta.</string>
+    <string name="linha_resposta_aceita">Solicitação aceita.</string>
+    <string name="linha_resposta_recusada">Solicitação recusada.</string>
+    <string name="linha_coleta_titulo">Coleta agendada/concluída</string>
+    <string name="linha_coleta_aguardando">Aguardando agendamento.</string>
+    <string name="linha_coleta_agendada">Coleta agendada para %1$s às %2$s.</string>
+    <string name="linha_coleta_concluida">Coleta concluída.</string>
+    <string name="linha_coleta_sem_coleta">Sem coleta agendada.</string>
+    <string name="linha_coleta_cancelada">Coleta cancelada.</string>
+    <string name="condominio_solicitante">Condomínio solicitante</string>
+    <string name="chat">Chat</string>
+    <string name="rotulo_materiais">Tipo(s) de material</string>
+    <string name="rotulo_volume">Volume estimado</string>
+    <string name="rotulo_data_desejada">Data desejada</string>
+    <string name="rotulo_horario">Horário</string>
+    <string name="rotulo_recorrencia">Recorrência</string>
+    <string name="rotulo_observacoes">Observações</string>
     <string name="solicitacao_condominio">Condomínio %1$d</string>
     <string name="solicitacao_data_horario">%1$s às %2$s</string>
     <string name="solicitacao_recorrente">Coleta recorrente</string>
-    <string name="solicitacao_rotulo_status">Situação</string>
-    <string name="solicitacao_rotulo_data">Data</string>
-    <string name="solicitacao_rotulo_horario">Horário</string>
-    <string name="solicitacao_rotulo_recorrencia">Recorrência</string>
     <string name="solicitacao_recorrencia_sim">Coleta recorrente</string>
     <string name="solicitacao_recorrencia_nao">Coleta única</string>
     <string name="solicitacoes_vazio">Nenhuma solicitação nesta situação.</string>
     <string name="solicitacoes_erro">Não foi possível carregar as solicitações agora.</string>
     <string name="solicitacoes_sessao_expirada">Sua sessão expirou. Entre novamente para ver as solicitações.</string>
+    <string name="solicitacoes_sem_acesso">Seu perfil não tem acesso às solicitações.</string>
+    <string name="proxima_coleta_sem_acesso">Seu perfil não tem acesso ao calendário.</string>
     <string name="entrar_novamente">Entrar novamente</string>
     <string name="aceitar">Aceitar</string>
     <string name="aceitar_titulo">Aceitar solicitação</string>
@@ -271,6 +343,10 @@
     <string name="recusar_titulo">Recusar solicitação</string>
     <string name="recusar_mensagem">Tem certeza que deseja recusar esta solicitação?</string>
     <string name="solicitacao_aceita">Solicitação aceita.</string>
+    <string name="marcar_coleta_realizada">Marcar como realizada</string>
+    <string name="marcar_coleta_realizada_titulo">Confirmar coleta realizada</string>
+    <string name="marcar_coleta_realizada_mensagem">Confirma que a coleta foi concluída? Depois dessa confirmação, o síndico poderá avaliar o serviço.</string>
+    <string name="coleta_marcada_realizada">Coleta marcada como realizada.</string>
     <string name="solicitacao_recusada">Solicitação recusada.</string>
     <string name="recusar">Recusar</string>
 
@@ -299,7 +375,6 @@
     <string name="proxima_coleta_hoje">Hoje</string>
     <string name="proxima_coleta_rotulo_faltam">Faltam</string>
     <string name="proxima_coleta_rotulo_coleta">Coleta</string>
-    <string name="proxima_coleta_dias">%1$d dias</string>
     <string name="tipo_coleta_reciclaveis">Recicláveis</string>
     <string name="enviando">Enviando…</string>
     <string name="verificando">Verificando…</string>
@@ -310,6 +385,7 @@
     <string name="proxima_coleta_nenhuma">Nenhuma coleta agendada.</string>
     <string name="proxima_coleta_erro">Não foi possível carregar. Toque para tentar de novo.</string>
     <string name="proxima_coleta_sessao">Sessão expirada. Toque para entrar novamente.</string>
+
     <string-array name="dias_semana_abreviados">
         <item>Seg</item>
         <item>Ter</item>
@@ -326,4 +402,289 @@
     <string name="aba_nao_lidos">Não lidos</string>
     <string name="aba_arquivadas">Arquivadas</string>
     <string name="sem_conversas">Nenhuma conversa aqui.</string>
+    <string name="buscar_conversa">Buscar condomínio</string>
+
+    <!-- Telas complementares -->
+    <string name="condominios_atendidos">Condomínios atendidos</string>
+    <string name="avaliacoes_recebidas">Avaliações recebidas</string>
+    <string name="ranking_do_morador">Ranking do morador</string>
+    <string name="solicitacao_de_coleta">Solicitação de coleta</string>
+    <string name="data">Data</string>
+    <string name="lembrete_de_coleta">Lembrete de coleta</string>
+    <string name="canal_lembretes_coleta">Lembretes de coleta</string>
+    <string name="lembrete_amanha">Coleta amanhã, %1$s, às %2$s.</string>
+    <string name="lembrete_hoje">Coleta hoje, %1$s, às %2$s.</string>
+    <string name="lembrete_coleta_proxima">Essa coleta já está muito próxima para agendar um lembrete.</string>
+    <string name="lembrete_sem_permissao">Permita as notificações para receber os lembretes.</string>
+
+    <!-- Avisos -->
+    <string name="avisos">Avisos</string>
+    <string name="grupo_hoje">Hoje</string>
+    <string name="central_sem_itens">Nenhuma notificação ou aviso por enquanto.</string>
+    <string name="sem_avisos">Nenhum aviso por aqui.</string>
+    <string name="grupo_ontem">Ontem</string>
+    <string name="grupo_anteriores">Anteriores</string>
+    <string name="nova_notificacao">Nova notificação</string>
+    <string name="titulo_aviso">Título</string>
+    <string name="mensagem">Mensagem</string>
+    <string name="aviso_origem">%1$s · %2$s</string>
+    <string name="categoria_coleta">Coleta</string>
+    <string name="categoria_orientacao">Orientação</string>
+    <string name="categoria_manutencao">Manutenção</string>
+    <string name="categoria_campanha">Campanha</string>
+    <string name="categoria_aviso_geral">Aviso geral</string>
+    <string name="categoria_seguranca">Segurança</string>
+    <string name="chatbot_card_titulo">Venha testar nosso chatbot</string>
+    <string name="chatbot_card_texto">Teste nosso chatbot e tire dúvidas sobre seus agendamentos e funcionalidades do app.</string>
+    <string name="avisos_do_condominio">Avisos do condomínio</string>
+    <string name="avisos_card_subtitulo">Informações do seu condomínio</string>
+    <string name="quizzes_carregando">Carregando quizzes…</string>
+    <string name="quizzes_vazio">Nenhum quiz disponível por enquanto.</string>
+    <string name="coletas_do_mes_erro">Não foi possível carregar as coletas do mês. Toque para tentar de novo.</string>
+    <string name="quizzes_erro">Não foi possível carregar os quizzes. Entre com e-mail e senha e tente de novo.</string>
+    <string name="quiz_pontos_recompensa">+%1$d pts</string>
+    <string name="quiz_resultado_sem_nota">--/--</string>
+    <string name="quiz_resultado_sem_gabarito">Respostas registradas. A correção aparece quando o gabarito estiver disponível.</string>
+    <string name="perfil_sincronizacao_falhou">Salvamos no app, mas não foi possível atualizar no servidor. Tente de novo mais tarde.</string>
+    <string name="registro_titulo">Registro de descarte</string>
+    <string name="registro_subtitulo">Faça seu descarte sustentável e ajude o meio ambiente!</string>
+    <string name="registro_foto_titulo">1. Foto do descarte</string>
+    <string name="registro_previa_foto">Foto do descarte</string>
+    <string name="registro_tirar_foto">Tirar foto</string>
+    <string name="registro_tipo_titulo">2. Tipo de resíduo</string>
+    <string name="registro_categorias_carregando">Carregando os tipos de resíduo…</string>
+    <string name="registro_categorias_erro">Não foi possível carregar os tipos de resíduo.</string>
+    <string name="registro_enviar">Enviar descarte</string>
+    <string name="registro_enviando">Enviando…</string>
+    <string name="registro_sem_foto">Tire uma foto do descarte.</string>
+    <string name="registro_sem_categoria">Escolha o tipo de resíduo.</string>
+    <string name="registro_enviado">Descarte enviado! Ele está em análise pela comunidade.</string>
+    <string name="feed_sem_aprovacao">Seu cadastro ainda está aguardando a aprovação do síndico. Quando for aprovado, o feed aparece aqui.</string>
+    <string name="biblioteca_carregando">Carregando cursos e aulas…</string>
+    <string name="feed_erro">Não foi possível carregar o feed. Tente de novo mais tarde.</string>
+    <string name="descarte">Descarte</string>
+    <string name="meus_descartes_carregando">Carregando seus descartes…</string>
+    <string name="meus_descartes_erro">Não foi possível carregar seus descartes. Tente de novo mais tarde.</string>
+    <string name="feed_registrar_descarte">Registrar descarte</string>
+    <string name="feed_meus_descartes">Meus descartes</string>
+    <string name="meus_descartes_vazio">Você ainda não registrou nenhum descarte.</string>
+    <string name="feed_carregando">Carregando o feed…</string>
+    <string name="avaliacoes_carregando">Carregando as avaliações…</string>
+    <string name="avaliacoes_erro">Não foi possível carregar as avaliações. Tente de novo mais tarde.</string>
+    <string name="avaliacoes_vazio">Nenhum condomínio avaliou a cooperativa ainda.</string>
+    <string name="avaliacoes_media_titulo">Média geral</string>
+    <plurals name="avaliacoes_total">
+        <item quantity="one">%1$d avaliação</item>
+        <item quantity="other">%1$d avaliações</item>
+    </plurals>
+    <string name="conteudos_salvos">Conteúdos salvos</string>
+    <string name="salvar_conteudo">Salvar conteúdo</string>
+    <string name="remover_salvo">Remover dos salvos</string>
+    <string name="ver_salvos">Ver conteúdos salvos</string>
+    <string name="salvos_vazio">Você ainda não salvou nenhum conteúdo. Toque no marcador de um conteúdo do guia para guardá-lo aqui.</string>
+    <string name="guia_minutos">%1$d min</string>
+    <string name="guia_filtro_vazio">Nenhum conteúdo com esses filtros.</string>
+    <string name="filtrar_conteudos">Filtrar conteúdos</string>
+    <string name="filtro_categoria">Categoria</string>
+    <string name="filtro_ordenar">Ordenar por</string>
+    <string name="filtro_ordem_curso">Ordem do curso</string>
+    <string name="filtro_ordem_az">A–Z</string>
+    <string name="filtro_tempo">Tempo de leitura</string>
+    <string name="filtro_tempo_ate3">Até 3 min</string>
+    <string name="filtro_tempo_3a6">3 a 6 min</string>
+    <string name="filtro_tempo_mais6">Mais de 6 min</string>
+    <string name="filtro_limpar">Limpar filtros</string>
+    <string name="filtro_aplicar">Aplicar</string>
+    <string name="guia_carregando">Carregando o guia…</string>
+    <string name="guia_erro">Não foi possível carregar o guia. Entre com e-mail e senha e tente de novo.</string>
+    <string name="guia_vazio">Nenhum conteúdo por enquanto.</string>
+    <string name="meus_pontos">Meus pontos</string>
+    <string name="pontos_carregando">Seus pontos</string>
+    <string name="pontos_saldo">%1$s pontos</string>
+    <string name="pontos_ver_historico">Toque para ver o histórico</string>
+    <string name="pontos_indisponivel">Seus pontos não carregaram agora</string>
+    <string name="pontos_saldo_atual">Saldo atual</string>
+    <string name="pontos_sem_movimentacao">Você ainda não tem pontos. Registre um descarte ou faça um quiz.</string>
+    <string name="pontos_erro">Não foi possível carregar seus pontos. Entre com e-mail e senha e tente de novo.</string>
+    <string name="pontos_carregando_historico">Carregando seus pontos…</string>
+    <string name="pontos_origem_descarte">Descarte aprovado</string>
+    <string name="pontos_origem_quiz">Quiz concluído</string>
+    <string name="pontos_origem_outra">Pontos recebidos</string>
+    <string name="pontos_estorno">Pontos estornados</string>
+    <string name="pontos_restauracao">Pontos restaurados</string>
+    <string name="pontos_valor_positivo">+%1$s pts</string>
+    <string name="pontos_valor_negativo">-%1$s pts</string>
+    <string name="sua_posicao_titulo">Você</string>
+    <string name="sua_posicao_valor">%1$dº de %2$d</string>
+    <string name="sua_posicao_fora">Você ainda não pontuou neste ciclo</string>
+    <string name="home_saudacao_sem_nome">Olá!</string>
+    <string name="quiz_corrigindo">Corrigindo…</string>
+    <string name="ranking_home_indisponivel">Não foi possível carregar o ranking agora.</string>
+    <string name="ranking_erro">Não foi possível carregar o ranking. Tente de novo mais tarde.</string>
+    <string name="registro_sem_condominio">Não encontramos o seu condomínio. Atualize o perfil e tente de novo.</string>
+    <string name="ranking_carregando">Carregando o ranking…</string>
+    <string name="ranking_sem_pontuacao">Ninguém pontuou nesta semana ainda.</string>
+    <string name="lista_vazia">Nada por aqui ainda.</string>
+    <string name="feed_subtitulo">Fotos de descarte do seu condomínio</string>
+    <string name="feed_vazio">Ainda não há fotos por aqui. Quando os moradores registrarem descartes, elas aparecem neste feed.</string>
+    <string name="feed_foto_descarte">Foto de descarte</string>
+    <plurals name="quizzes_disponiveis_formatado">
+        <item quantity="one">%1$d quiz disponível</item>
+        <item quantity="other">%1$d quizzes disponíveis</item>
+    </plurals>
+    <plurals name="proxima_coleta_dias">
+        <item quantity="one">%1$d dia</item>
+        <item quantity="other">%1$d dias</item>
+    </plurals>
+    <plurals name="quiz_n_perguntas">
+        <item quantity="one">%1$d pergunta</item>
+        <item quantity="other">%1$d perguntas</item>
+    </plurals>
+    <plurals name="quiz_resultado_pontos">
+        <item quantity="one">Você ganhou %1$d ponto!</item>
+        <item quantity="other">Você ganhou %1$d pontos!</item>
+    </plurals>
+    <string name="notificacao_eko">Eko</string>
+    <string name="notificacao_fazer_quiz">Fazer quiz</string>
+    <string name="sindico_posicao_ordinal">%1$dº</string>
+
+    <!-- Recursos locais preservados da branch de consolidação -->
+    <string name="subtitulo_quizzes">Teste seus conhecimentos sobre sustentabilidade</string>
+    <string name="inicio_quiz_eko_descricao">Eko animado incentivando o quiz</string>
+    <string name="conversas_carregando">Carregando as conversas…</string>
+    <string name="conversas_erro">Não foi possível carregar as conversas.</string>
+    <plurals name="conversa_mensagens_novas">
+        <item quantity="one">%d mensagem nova</item>
+        <item quantity="other">%d mensagens novas</item>
+    </plurals>
+    <string name="conversa_carregando">Carregando as mensagens…</string>
+    <string name="conversa_erro_mensagens">Não foi possível carregar as mensagens.</string>
+    <string name="conversa_sem_mensagens">Nenhuma mensagem ainda.</string>
+    <string name="conversa_aguarde_cooperativa">Aguarde a cooperativa iniciar a conversa.</string>
+    <string name="conversa_hint_mensagem">Escreva uma mensagem…</string>
+    <string name="conversa_nao_aberta">Não foi possível abrir a conversa. Tente de novo.</string>
+    <string name="biblioteca_educativa">Biblioteca educativa</string>
+    <string name="biblioteca_aprenda_pratique_e_ajude_a_construir_u">Aprenda, pratique e ajude a construir um futuro sustentável.</string>
+    <string name="biblioteca_carregando_conteudos">Carregando conteúdos...</string>
+    <string name="biblioteca_conteudos_em_destaque">Conteúdos em destaque</string>
+    <string name="biblioteca_aulas_do_curso">Aulas do curso</string>
+    <string name="biblioteca_fechar">Fechar  ✕</string>
+    <string name="conclusao_educativa_logo_ecociente">Logo EcoCiente</string>
+    <string name="conclusao_educativa_missao_cumprida">MISSÃO CUMPRIDA!</string>
+    <string name="conclusao_educativa_eko_comemorando">Eko comemorando</string>
+    <string name="conclusao_educativa_voce_concluiu_a_aula">Você concluiu a aula!</string>
+    <string name="conclusao_educativa_cada_aprendizado_aproxima_a_gente_de_u">Cada aprendizado aproxima a gente de um futuro mais sustentável.</string>
+    <string name="conclusao_educativa_continuar_aprendendo">Continuar aprendendo</string>
+    <string name="curso_educativo_minha_trilha_de_aprendizado">Minha trilha de aprendizado</string>
+    <string name="curso_educativo">CURSO EDUCATIVO</string>
+    <string name="curso_educativo_ilustracao_do_curso">Ilustração do curso</string>
+    <string name="curso_educativo_guia_completo_de_reciclagem">Guia completo de reciclagem</string>
+    <string name="curso_educativo_aprenda_no_seu_ritmo_com_pequenas_aula">Aprenda no seu ritmo, com pequenas aulas.</string>
+    <string name="curso_educativo_2_aulas_no_seu_ritmo">2 aulas  •  No seu ritmo</string>
+    <string name="curso_educativo_0_3_concluidas">0/3 concluídas</string>
+    <string name="curso_educativo_comecar_primeira_aula">Começar primeira aula</string>
+    <string name="inicial_padrao_do_avatar">J</string>
+    <string name="senha_oculta">••••••••</string>
+    <string name="gerenciar_senha_exibir_ou_ocultar_senha">Exibir ou ocultar senha</string>
+    <string name="informacoes_pessoais_veja_e_edite_seus_dados_pessoais">Veja e edite seus dados pessoais</string>
+    <string name="simbolo_fechar">✕</string>
+    <string name="inicio_conteudo_educativo_eko_incentivando_o_aprendizado">Eko incentivando o aprendizado</string>
+    <string name="inicio_conteudo_educativo_aula_01">AULA 01</string>
+    <string name="inicio_conteudo_educativo_pequenas_atitudes_transformam_o_mundo">Pequenas atitudes transformam o mundo</string>
+    <string name="inicio_conteudo_educativo_aprenda_e_coloque_em_pratica_uma_atitu">Aprenda e coloque em prática uma atitude sustentável.</string>
+    <string name="inicio_conteudo_educativo_aprender_e_uma_forma_de_cuidar_do_plan">Aprender é uma forma de cuidar do planeta!</string>
+    <string name="inicio_conteudo_educativo_comecar_aula">Começar aula</string>
+    <string name="leitura_educativa_fechar_leitura">Fechar leitura</string>
+    <string name="leitura_educativa_etapa_1_de_3">Etapa 1 de 3</string>
+    <string name="notificacoes_gerencie_suas_preferencias">Gerencie suas preferências</string>
+    <string name="notificacoes_escolha_sobre_o_que_deseja_ser_notific">Escolha sobre o que deseja ser notificado</string>
+    <string name="notificacoes_do_app">Notificações do app</string>
+    <string name="notificacoes_atividades_e_eventos">Atividades e eventos</string>
+    <string name="contador_de_pergunta_padrao">01/10</string>
+    <string name="quiz_usuario_comum_filtrar_quizzes">Filtrar quizzes</string>
+    <string name="quiz_usuario_comum_pontos_por_completar_o_quiz">Pontos por completar o quiz</string>
+    <string name="quiz_desempenho_descricao">Desempenho nos últimos quizzes</string>
+    <string name="quiz_desempenho_carregando">Carregando seus quizzes…</string>
+    <string name="quiz_desempenho_vazio">Nenhum quiz concluído ainda.</string>
+    <string name="quiz_desempenho_erro">Não foi possível carregar seus quizzes.</string>
+    <string name="analise_quiz_titulo">Análise dos quizzes</string>
+    <string name="analise_quiz_sem_titulo">Quiz</string>
+    <string name="analise_quiz_data_hora">%1$s às %2$s</string>
+    <string name="analise_quiz_acertos">%1$d%% de acertos</string>
+    <string name="pontos_erro_historico">Não foi possível carregar o histórico de pontos.</string>
+    <string name="biblioteca_concluido">✓ Concluído</string>
+    <string name="biblioteca_aulas_concluidas">%1$d/%2$d aulas concluídas</string>
+    <string name="quiz_ja_realizado">✓ Já realizado</string>
+    <string name="quiz_refazer">Refazer</string>
+    <string name="quiz_conclusoes_erro">Não foi possível verificar quais quizzes você já concluiu.</string>
+    <string name="feed_denunciar">Denunciar</string>
+    <string name="feed_denunciar_titulo">Qual o motivo da denúncia?</string>
+    <string name="feed_voto_aprovado">Você aprovou este descarte.</string>
+    <string name="feed_voto_denunciado">Denúncia registrada.</string>
+    <!-- Motivos de tb_lkp_motivos_denuncia, na mesma ordem dos ids abaixo. Se mudarem no banco, mude aqui. -->
+    <string-array name="motivos_denuncia">
+        <item>Não é lixo reciclável</item>
+        <item>Foto não corresponde à categoria</item>
+        <item>Foto antiga/reutilizada</item>
+        <item>Spam/abuso</item>
+    </string-array>
+    <integer-array name="motivos_denuncia_ids">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </integer-array>
+    <string name="solicitacoes_filtro_todas">Todas</string>
+    <string name="status_descarte_titulo">Status do descarte</string>
+    <string name="status_descarte_subtitulo">Acompanhe o andamento do registro do seu descarte</string>
+    <string name="etapa_registrado">Registrado</string>
+    <string name="etapa_registrado_texto">Seu descarte foi enviado com sucesso.</string>
+    <string name="etapa_em_analise">Em análise</string>
+    <string name="etapa_em_analise_andamento">A comunidade está avaliando seu descarte.</string>
+    <string name="etapa_em_analise_feita">A comunidade avaliou seu descarte.</string>
+    <string name="etapa_validado">Validado</string>
+    <string name="etapa_validado_texto">Seu descarte foi aprovado!</string>
+    <string name="etapa_recusado">Recusado</string>
+    <string name="etapa_recusado_texto">Seu descarte não foi aprovado.</string>
+    <string name="etapa_aguardando">Validação</string>
+    <string name="etapa_aguardando_texto">Aguardando validação</string>
+    <string name="resultado_validado">Descarte validado!</string>
+    <string name="resultado_validado_texto">Parabéns, seu descarte foi aprovado pela comunidade.</string>
+    <string name="resultado_recusado">Descarte recusado</string>
+    <string name="resultado_recusado_texto">A comunidade não aprovou este descarte. Registre um novo com uma foto atual.</string>
+    <string name="aviso_servidor_lento">Conectando ao servidor… na primeira vez pode levar até 2 minutos.</string>
+    <string name="leitura_sair_titulo">Sair da leitura?</string>
+    <string name="leitura_sair_mensagem">Seu progresso nesta leitura ficará salvo neste aparelho.</string>
+    <string name="leitura_sair_salvar">Salvar e sair</string>
+    <string name="leitura_sair_continuar">Continuar lendo</string>
+    <string name="condominios_carregando">Carregando condomínios atendidos…</string>
+    <string name="condominios_erro">Não foi possível carregar os condomínios atendidos. Verifique a conexão e tente novamente.</string>
+    <string name="condominios_vazio">Esta cooperativa ainda não possui condomínios atendidos confirmados.</string>
+
+    <!-- Recursos da tela de cooperativas próximas -->
+<string name="cooperativas_titulo">Cooperativas da sua região</string>
+<string name="cooperativas_icone">Caminhão de coleta seletiva</string>
+<string name="cooperativas_subtitulo">Opções que atendem à cidade e ao estado do seu condomínio.</string>
+<string name="cooperativas_busca_hint">Buscar por nome, endereço ou cidade</string>
+<string name="cooperativas_contagem">%1$d cooperativas encontradas</string>
+<string name="cooperativas_vazio">Não encontramos cooperativas disponíveis para a região do seu condomínio.</string>
+<string name="cooperativas_busca_sem_resultado">Nenhuma cooperativa corresponde à sua busca. Tente outro termo.</string>
+<string name="cooperativa_endereco_indisponivel">Endereço não informado</string>
+<string name="cooperativa_avaliacao_formato">Nota média: %1$.1f · %2$d avaliações</string>
+<string name="cooperativa_sem_avaliacoes">Ainda sem avaliações</string>
+<string name="cooperativa_atende_regiao">Atendimento listado para a região do condomínio. Distância exata não disponível.</string>
+<string name="cooperativa_ligar">Ligar</string>
+<string name="cooperativa_email">E-mail</string>
+<string name="cooperativa_ver_mapa">Ver endereço</string>
+<string name="cooperativa_contato_indisponivel">Contato não informado pela cooperativa.</string>
+<string name="cooperativa_acao_indisponivel">Não há aplicativo disponível para esta ação.</string>
+<string name="cooperativa_solicitar_coleta">Solicitar coleta</string>
+<string name="cooperativa_condominio_indisponivel">Não foi possível identificar o condomínio da sua sessão. Atualize a tela ou entre novamente.</string>
+<string name="cooperativa_data_deve_ser_futura">Escolha uma data e um horário futuros.</string>
+<string name="cooperativa_confirmar_solicitacao_titulo">Confirmar solicitação</string>
+<string name="cooperativa_confirmar_solicitacao_mensagem">Enviar pedido de coleta para %1$s em %2$s? A solicitação ficará pendente até a cooperativa responder.</string>
+<string name="cooperativa_confirmar_solicitacao">Enviar pedido</string>
+<string name="cooperativa_solicitacao_enviada">Solicitação enviada</string>
+<string name="cooperativa_solicitacao_enviada_mensagem">Pedido enviado. A cooperativa precisa aprovar a solicitação.</string>
+<string name="cooperativa_erro_solicitacao_titulo">Não foi possível solicitar</string>
 </resources>

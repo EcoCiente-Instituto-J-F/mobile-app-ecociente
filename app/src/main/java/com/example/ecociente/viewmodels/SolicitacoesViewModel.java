@@ -2,6 +2,7 @@ package com.example.ecociente.viewmodels;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,9 +22,11 @@ public class SolicitacoesViewModel extends AndroidViewModel {
     private final MutableLiveData<ResultadoSolicitacoes.Tipo> situacao = new MutableLiveData<>();
     private final MutableLiveData<Boolean> carregando = new MutableLiveData<>(false);
 
-    private StatusAgendamento filtro = StatusAgendamento.AGENDADO;
+    // null = todas as solicitações.
+    private StatusAgendamento filtro = null;
     private int proximaPagina;
     private boolean ultimaPagina;
+    private boolean ocultarRealizadas;
 
     public SolicitacoesViewModel(@NonNull Application aplicacao) {
         super(aplicacao);
@@ -44,7 +47,7 @@ public class SolicitacoesViewModel extends AndroidViewModel {
         return carregando;
     }
 
-    @NonNull
+    @Nullable
     public StatusAgendamento getFiltro() {
         return filtro;
     }
@@ -53,14 +56,18 @@ public class SolicitacoesViewModel extends AndroidViewModel {
         return situacao.getValue() != null;
     }
 
-    public void definirFiltroInicial(@NonNull StatusAgendamento inicial) {
+    public void definirOcultarRealizadas(boolean ocultar) {
+        ocultarRealizadas = ocultar;
+    }
+
+    public void definirFiltroInicial(@Nullable StatusAgendamento inicial) {
 
         if (!jaCarregou()) {
             filtro = inicial;
         }
     }
 
-    public void filtrar(@NonNull StatusAgendamento novoFiltro) {
+    public void filtrar(@Nullable StatusAgendamento novoFiltro) {
 
         if (novoFiltro == filtro && jaCarregou()) {
             return;
@@ -114,13 +121,26 @@ public class SolicitacoesViewModel extends AndroidViewModel {
 
                         List<Solicitacao> acumulado = new ArrayList<>(itens.getValue());
 
-                        acumulado.addAll(resultado.getItens());
+                        for (Solicitacao solicitacao : resultado.getItens()) {
+                            if (!ocultarRealizadas
+                                    || solicitacao.getStatus() != StatusAgendamento.REALIZADO) {
+                                acumulado.add(solicitacao);
+                            }
+                        }
 
                         itens.setValue(acumulado);
 
                         ultimaPagina = resultado.ehUltimaPagina();
 
                         proximaPagina++;
+
+                        // A aba Coletas não exibe itens concluídos. Se uma página trouxer
+                        // somente coletas realizadas, busca a próxima página real da API.
+                        if (ocultarRealizadas && acumulado.isEmpty() && !ultimaPagina) {
+                            situacao.setValue(resultado.getTipo());
+                            carregarPagina();
+                            return;
+                        }
                     }
 
                     situacao.setValue(resultado.getTipo());

@@ -1,35 +1,37 @@
 package com.example.ecociente.model;
 
 import androidx.annotation.NonNull;
-import java.util.Arrays;
-import java.util.List;
 
+// Conversa entre um condomínio e uma cooperativa (ds-mobile-api, /api/conversas). `nome` é o do
+// outro lado; a API não devolve o texto da última mensagem, só quando ela foi enviada.
 public final class Conversa {
 
+    public final int id;
+    public final int condominioId;
+    public final int cooperativaId;
     public final String nome;
-    public final String ultimaMensagem;
-    public final String hora;
-    public final boolean naoLida;
+    public final String ultimaMensagemEm;
+    public final int naoLidas;
     public final boolean arquivada;
 
-    private Conversa(String nome, String ultimaMensagem, String hora, boolean naoLida, boolean arquivada) {
+    public Conversa(
+            int id,
+            int condominioId,
+            int cooperativaId,
+            @NonNull String nome,
+            @NonNull String ultimaMensagemEm,
+            int naoLidas,
+            boolean arquivada) {
+        this.id = id;
+        this.condominioId = condominioId;
+        this.cooperativaId = cooperativaId;
         this.nome = nome;
-        this.ultimaMensagem = ultimaMensagem;
-        this.hora = hora;
-        this.naoLida = naoLida;
+        this.ultimaMensagemEm = ultimaMensagemEm;
+        this.naoLidas = naoLidas;
         this.arquivada = arquivada;
     }
 
-    @NonNull
-    public static List<Conversa> exemplos() {
-        return Arrays.asList(
-                new Conversa("Condomínio Raio de Luz", "Quando vão passar?", "08:30", true, false),
-                new Conversa("Residencial Jardim das Flores", "Podem confirmar a coleta de amanhã?", "08:05", true, false),
-                new Conversa("Condomínio Vila Verde", "Obrigado pela coleta de hoje!", "Ontem", false, false),
-                new Conversa("Edifício Solar", "Temos 12 sacos de recicláveis para amanhã.", "Ontem", false, false),
-                new Conversa("Residencial Aurora", "Vocês aceitam vidro também?", "Seg", true, false),
-                new Conversa("Condomínio Parque das Árvores", "Podemos mudar o horário para 10h?", "Seg", false, false),
-                new Conversa("Condomínio Bela Vista", "Combinado, até quinta.", "05/10", false, true),
-                new Conversa("Residencial Primavera", "Muito obrigada pelo atendimento.", "02/10", false, true));
+    public boolean temNaoLidas() {
+        return naoLidas > 0;
     }
 }

@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import com.example.ecociente.model.TipoUsuario;
+import com.example.ecociente.model.TipoPerfil;
 import com.example.ecociente.model.EstadoHome;
 import com.example.ecociente.model.PerfilAcesso;
 import com.example.ecociente.model.PerfilUsuario;
@@ -41,6 +43,32 @@ public class HomeViewModel extends ViewModel {
     @NonNull
     public LiveData<Boolean> getAtualizandoMensagem() {
         return atualizandoMensagem;
+    }
+
+    // Deixa o documento do usuário igual ao perfil que a API confirmou, para as outras telas.
+    public void sincronizarPerfil(@NonNull PerfilAcesso.DestinoHome destino) {
+
+        FirebaseUser usuario = perfilRepositorio.usuarioAtual();
+
+        if (usuario == null) {
+            return;
+        }
+
+        boolean sindico = destino == PerfilAcesso.DestinoHome.SINDICO;
+        boolean cooperativa = destino == PerfilAcesso.DestinoHome.COOPERATIVA;
+        boolean morador = destino == PerfilAcesso.DestinoHome.CONDOMINIO;
+
+        perfilRepositorio.atualizarCampo(
+                usuario.getUid(),
+                "tipoPerfil",
+                cooperativa ? TipoPerfil.COOPERATIVA : sindico ? TipoPerfil.SINDICO : TipoPerfil.USUARIO);
+        perfilRepositorio.atualizarCampo(
+                usuario.getUid(),
+                "tipoUsuario",
+                cooperativa
+                        ? TipoUsuario.COOPERATIVA
+                        : sindico ? TipoPerfil.SINDICO : morador ? TipoUsuario.MORADOR : TipoUsuario.COMUM);
+        perfilRepositorio.atualizarCampo(usuario.getUid(), "possuiCodigoCondominio", morador || sindico);
     }
 
     public void encerrarSessao() {
@@ -117,20 +145,20 @@ public class HomeViewModel extends ViewModel {
             return EstadoHome.de(EstadoHome.Tipo.CADASTRO_INCOMPLETO);
         }
 
-        switch (PerfilAcesso.destinoDaHome(perfil)) {
-            case COOPERATIVA:
-                return EstadoHome.de(EstadoHome.Tipo.COOPERATIVA);
+        PerfilAcesso.DestinoHome destino = PerfilAcesso.destinoDaHome(perfil);
 
-            case CONDOMINIO:
-                return EstadoHome.de(EstadoHome.Tipo.CONDOMINIO);
+        if (destino == PerfilAcesso.DestinoHome.COOPERATIVA) {
+            return EstadoHome.de(EstadoHome.Tipo.COOPERATIVA);
+        } else if (destino == PerfilAcesso.DestinoHome.SINDICO) {
+            return EstadoHome.de(EstadoHome.Tipo.SINDICO);
+        } else if (destino == PerfilAcesso.DestinoHome.CONDOMINIO) {
+            return EstadoHome.de(EstadoHome.Tipo.CONDOMINIO);
+        } else if (destino == PerfilAcesso.DestinoHome.USUARIO_COMUM) {
+            fotoUrl.setValue(perfil.getFotoUrl());
 
-            case USUARIO_COMUM:
-                fotoUrl.setValue(perfil.getFotoUrl());
-
-                return EstadoHome.pronta(PerfilUsuario.nomeExibicao(perfil, usuario));
-
-            default:
-                return EstadoHome.de(EstadoHome.Tipo.SEM_ACESSO);
+            return EstadoHome.pronta(PerfilUsuario.nomeExibicao(perfil, usuario));
+        } else {
+            return EstadoHome.de(EstadoHome.Tipo.SEM_ACESSO);
         }
     }
 }

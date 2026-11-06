@@ -1,0 +1,48 @@
+package com.example.ecociente.model;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import com.example.ecociente.R;
+import java.util.Collections;
+import java.util.List;
+
+public enum TipoLista {
+    GUIA(R.string.guia, R.drawable.ic_guia_verde),
+    FEED(R.string.feed, R.drawable.ic_nav_feed_verde),
+    CONDOMINIOS(R.string.condominios_atendidos, R.drawable.ic_perfil_cooperativa),
+    AVALIACOES(R.string.avaliacoes_recebidas, R.drawable.ic_estrela),
+    RANKING(R.string.ranking_do_morador, R.drawable.ic_trofeu),
+    PONTOS(R.string.meus_pontos, R.drawable.ic_trofeu),
+    ANALISE_QUIZ(R.string.analise_quiz_titulo, R.drawable.ic_trofeu),
+    SALVOS(R.string.conteudos_salvos, R.drawable.ic_guia_verde),
+    MEUS_DESCARTES(R.string.feed_meus_descartes, R.drawable.ic_nav_feed_verde);
+
+    @StringRes public final int titulo;
+    @DrawableRes public final int icone;
+
+    TipoLista(@StringRes int titulo, @DrawableRes int icone) {
+        this.titulo = titulo;
+        this.icone = icone;
+    }
+
+    @NonNull
+    public List<ItemLista> itens() {
+
+        switch (this) {
+            case GUIA:
+            case SALVOS:
+            case MEUS_DESCARTES:
+            case AVALIACOES:
+            case CONDOMINIOS:
+            case PONTOS:
+                return Collections.emptyList();
+
+            case FEED:
+                return Collections.emptyList();
+
+            default:
+                return Collections.emptyList();
+        }
+    }
+}
