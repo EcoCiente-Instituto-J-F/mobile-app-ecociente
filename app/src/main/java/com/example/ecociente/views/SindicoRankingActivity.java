@@ -165,6 +165,14 @@ public final class SindicoRankingActivity extends AppCompatActivity {
 
         LinearLayout lista = findViewById(R.id.listaSindicoRankingCompleta);
         lista.removeAllViews();
+        if (!posicoes.isEmpty() && posicoes.get(0).getNome().startsWith("DEMONSTRAÇÃO")) {
+            TextView avisoDemonstracao = new TextView(this);
+            avisoDemonstracao.setText(
+                    "MODO DEMONSTRAÇÃO — posições e pontos fictícios, sem vínculo com o ranking oficial.");
+            avisoDemonstracao.setTextSize(13f);
+            avisoDemonstracao.setPadding(12, 14, 12, 14);
+            lista.addView(avisoDemonstracao);
+        }
 
         boolean falhou = (porMorador ? erroNosMoradores : erroNoRanking) && carregadas == null;
 
