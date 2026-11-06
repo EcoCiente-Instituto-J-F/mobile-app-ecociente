@@ -164,7 +164,8 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         String[] valores = {
                 String.valueOf(resumo.getMoradores()),
                 String.valueOf(resumo.getReciclados()),
-                String.valueOf(resumo.getColetasRealizadas())
+                resumo.isColetasDisponiveis() ? String.valueOf(resumo.getColetasRealizadas())
+                        : getString(R.string.sindico_sem_dado)
         };
         int[] icones = {R.drawable.ic_grupo, R.drawable.ic_reciclar, R.drawable.sindico_check};
 
@@ -207,6 +208,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         TextView texto = findViewById(R.id.sindicoCondominio);
 
         String nome = PerfilApiRepository.condominioNome(this);
+        boolean perfilPendente = PerfilApiRepository.condominioId(this) <= 0;
 
         texto.setText(nome != null ? nome : getString(R.string.sindico_condominio_carregando));
 
@@ -222,6 +224,9 @@ public final class SindicoHomeActivity extends AppCompatActivity {
 
                             texto.setText(recebido != null ? recebido : "");
                             texto.setVisibility(recebido != null ? View.VISIBLE : View.GONE);
+                            if (perfilPendente && PerfilApiRepository.condominioId(this) > 0) {
+                                carregarMetricasDashboard();
+                            }
                         });
     }
 

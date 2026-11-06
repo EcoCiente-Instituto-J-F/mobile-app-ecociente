@@ -11,6 +11,7 @@ public final class ResumoDashboard {
     private final long moradores;
     private final long pontosDoMes;
     private final int coletasRealizadas;
+    private final boolean coletasDisponiveis;
     private final String[] quizzes;
     private final int[] notasDosQuizzes;
     private final String[] materiais;
@@ -22,6 +23,16 @@ public final class ResumoDashboard {
                            @NonNull String[] quizzes, @NonNull int[] notasDosQuizzes,
                            @NonNull String[] materiais, @NonNull int[] percentuais,
                            @NonNull String[] cooperativas, @NonNull int[] coletasPorCooperativa) {
+        this(reciclados, moradores, pontosDoMes, coletasRealizadas, quizzes, notasDosQuizzes,
+                materiais, percentuais, cooperativas, coletasPorCooperativa, true);
+    }
+
+    public ResumoDashboard(long reciclados, long moradores, long pontosDoMes, int coletasRealizadas,
+                           @NonNull String[] quizzes, @NonNull int[] notasDosQuizzes,
+                           @NonNull String[] materiais, @NonNull int[] percentuais,
+                           @NonNull String[] cooperativas, @NonNull int[] coletasPorCooperativa,
+                           boolean coletasDisponiveis) {
+        this.coletasDisponiveis = coletasDisponiveis;
         this.reciclados = reciclados;
         this.moradores = moradores;
         this.pontosDoMes = pontosDoMes;
@@ -39,6 +50,7 @@ public final class ResumoDashboard {
     public long getMoradores() { return moradores; }
     public long getPontosDoMes() { return pontosDoMes; }
     public int getColetasRealizadas() { return coletasRealizadas; }
+    public boolean isColetasDisponiveis() { return coletasDisponiveis; }
     public String[] getQuizzes() { return quizzes; }
     // Nota média de cada quiz, de 0 a 100, na mesma ordem de `quizzes`.
     public int[] getNotasDosQuizzes() { return notasDosQuizzes; }

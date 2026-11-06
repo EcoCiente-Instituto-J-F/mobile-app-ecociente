@@ -102,8 +102,12 @@ public class DashboardSindicoRepository {
         }
 
         retorno.aoConcluir(
-                dashboard == null || coletas == null
+                dashboard == null
                         ? null
-                        : DashboardSindicoJson.resumir(dashboard, coletas, cooperativas));
+                        : DashboardSindicoJson.resumir(
+                                dashboard,
+                                coletas == null ? java.util.Collections.emptyList() : coletas,
+                                cooperativas,
+                                coletas != null));
     }
 }
