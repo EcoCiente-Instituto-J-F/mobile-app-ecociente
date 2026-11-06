@@ -55,6 +55,7 @@ public class CalendarioExternoRepository {
     private static final String URL_AGENDAMENTOS = ConfiguracaoServidores.URL_AGENDAMENTOS;
     private static final int TAMANHO_PAGINA = 10;
     private static final int TAMANHO_PAGINA_MES = 100;
+    private static final int MAXIMO_PAGINAS = 20;
     private static final int TIMEOUT_MS = 180_000;
 
     private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
@@ -72,13 +73,66 @@ public class CalendarioExternoRepository {
         String consulta = (status == null ? "?" : "?status=" + status.name() + "&")
                 + "page=" + pagina + "&size=" + TAMANHO_PAGINA;
 
-        executar(contexto, URL_AGENDAMENTOS + consulta, retorno);
+        executar(contexto, URL_AGENDAMENTOS + consulta + "&" + parametrosPeriodoAmplo(), retorno);
     }
 
     // Agendamentos dos condomínios do síndico (ou da cooperativa), do mais recente ao mais antigo.
     public void listarTodos(@NonNull Context contexto, @NonNull Retorno retorno) {
+        Context contextoApp = contexto.getApplicationContext();
+        String enderecoBase = URL_AGENDAMENTOS + "?" + parametrosPeriodoAmplo()
+                + "&size=" + TAMANHO_PAGINA_MES;
 
-        executar(contexto, URL_AGENDAMENTOS + "?size=" + TAMANHO_PAGINA_MES, retorno);
+        EXECUTOR.execute(() -> {
+            ResultadoSolicitacoes resultado = ResultadoSolicitacoes.erro();
+            List<Solicitacao> todos = new ArrayList<>();
+
+            try {
+                for (int pagina = 0; pagina < MAXIMO_PAGINAS; pagina++) {
+                    ResultadoSolicitacoes resposta = buscarComRenovacao(
+                            contextoApp, enderecoBase + "&page=" + pagina);
+
+                    if (resposta.getTipo() != ResultadoSolicitacoes.Tipo.SUCESSO) {
+                        resultado = resposta;
+                        break;
+                    }
+
+                    todos.addAll(resposta.getItens());
+
+                    if (resposta.ehUltimaPagina()) {
+                        resultado = ResultadoSolicitacoes.sucesso(todos, true);
+                        break;
+                    }
+                }
+            } catch (Exception erro) {
+                Log.e(TAG, "Falha ao carregar historico de agendamentos", erro);
+                resultado = ResultadoSolicitacoes.erro();
+            }
+
+            ResultadoSolicitacoes respostaFinal = resultado;
+            PRINCIPAL.post(() -> retorno.aoConcluir(respostaFinal));
+        });
+    }
+
+    private static String parametrosPeriodoAmplo() {
+        Calendar inicio = Calendar.getInstance();
+        inicio.add(Calendar.YEAR, -10);
+        inicio.set(Calendar.MONTH, Calendar.JANUARY);
+        inicio.set(Calendar.DAY_OF_MONTH, 1);
+        inicio.set(Calendar.HOUR_OF_DAY, 0);
+        inicio.set(Calendar.MINUTE, 0);
+        inicio.set(Calendar.SECOND, 0);
+
+        Calendar fim = Calendar.getInstance();
+        fim.add(Calendar.YEAR, 10);
+        fim.set(Calendar.MONTH, Calendar.DECEMBER);
+        fim.set(Calendar.DAY_OF_MONTH, 31);
+        fim.set(Calendar.HOUR_OF_DAY, 23);
+        fim.set(Calendar.MINUTE, 59);
+        fim.set(Calendar.SECOND, 59);
+
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US);
+        return "dataInicio=" + formato.format(inicio.getTime())
+                + "&dataFim=" + formato.format(fim.getTime());
     }
 
     // POST /api/v1/agendamentos: o síndico responsável pede a coleta a uma cooperativa.
@@ -318,7 +372,7 @@ public class CalendarioExternoRepository {
 
     public void proxima(@NonNull Context contexto, @NonNull Retorno retorno) {
 
-        executar(contexto, URL_AGENDAMENTOS + "/proxima", retorno);
+        executar(contexto, URL_AGENDAMENTOS + "/proxima?" + parametrosPeriodoAmplo(), retorno);
     }
 
     public void doMes(@NonNull Context contexto, int ano, int mes, @NonNull Retorno retorno) {
