@@ -113,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
                 R.layout.activity_main
         );
 
+        AutenticacaoExternaRepository.garantirPerfil(this, () -> {});
+
         viewModel =
                 new ViewModelProvider(this)
                         .get(HomeViewModel.class);
