@@ -365,16 +365,4 @@
     <string name="home_curso_ver_detalhes">Ver detalhes ›</string>
     <string name="home_curso_fechar">Fechar</string>
     <string name="home_eko_estudando">Eko animado incentivando o aprendizado</string>
-
-
-    <!-- Aba de cursos do morador -->
-    <string name="cursos">Cursos</string>
-    <string name="cursos_aba_titulo">Cursos para aprender</string>
-    <string name="cursos_aba_subtitulo">Explore os conteúdos disponíveis e continue aprendendo.</string>
-    <string name="cursos_aba_carregando">Carregando cursos...</string>
-    <string name="cursos_aba_erro">Não foi possível carregar os cursos. Toque aqui para tentar novamente.</string>
-    <string name="cursos_aba_vazio">Nenhum curso disponível no momento.</string>
-    <string name="cursos_aba_ver_detalhes">Ver detalhes</string>
-    <string name="cursos_aba_fechar">Fechar</string>
-
 </resources>
