@@ -304,11 +304,11 @@ public final class CooperativasProximasActivity extends AppCompatActivity {
     }
 
     private void abrirTelefone(String telefone) {
-        abrirIntent(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + Uri.encode(telefone))));
+        abrirIntent(new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", telefone, null)));
     }
 
     private void abrirEmail(String email) {
-        abrirIntent(new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:" + Uri.encode(email))));
+        abrirIntent(new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", email, null)));
     }
 
     private void abrirMapa(String endereco) {
