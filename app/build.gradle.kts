@@ -51,7 +51,7 @@ android {
         // URL pública configurável, sem exigir um .env novo nos builds existentes.
         val mobileApiBaseUrl = (System.getenv("ECOCIENTE_MOBILE_API_BASE_URL")
             ?: propriedadesEnv.getProperty("ECOCIENTE_MOBILE_API_BASE_URL")
-            ?: "https://ds-mobile-api.onrender.com").trim().trimEnd('/')
+            ?: "https://mobile.52.71.117.143.sslip.io").trim().trimEnd('/')
 
         require(mobileApiBaseUrl.startsWith("https://")) {
             "ECOCIENTE_MOBILE_API_BASE_URL deve usar HTTPS"
@@ -62,7 +62,7 @@ android {
 
         val pontuacaoLeituraBaseUrl = (System.getenv("ECOCIENTE_PONTUACAO_CONSULTAS_API_BASE_URL")
             ?: propriedadesEnv.getProperty("ECOCIENTE_PONTUACAO_CONSULTAS_API_BASE_URL")
-            ?: "https://ds-pontuacao-api.onrender.com").trim().trimEnd('/')
+            ?: mobileApiBaseUrl).trim().trimEnd('/')
 
         require(pontuacaoLeituraBaseUrl.startsWith("https://")) {
             "ECOCIENTE_PONTUACAO_CONSULTAS_API_BASE_URL deve usar HTTPS"
