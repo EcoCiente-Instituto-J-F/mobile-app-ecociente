@@ -5,7 +5,6 @@
     android:id="@+id/raizChat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/verde_escuro_principal"
     android:clipToPadding="false"
     tools:context=".views.ChatActivity">
 
@@ -48,7 +47,7 @@
                     android:layout_gravity="center"
                     android:contentDescription="@string/chat_avatar_eko"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/eko_avatar" />
+                    android:src="@drawable/ic_chatbot_logo" />
             </FrameLayout>
 
             <TextView
@@ -102,6 +101,7 @@
                         android:paddingEnd="10dp">
 
                         <ImageView
+                            android:importantForAccessibility="no"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/fundo_icone_chat"
@@ -119,6 +119,7 @@
                             android:textSize="14sp" />
 
                         <ImageView
+                            android:importantForAccessibility="no"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:src="@drawable/ic_seta_chat" />
@@ -148,6 +149,7 @@
                         android:paddingEnd="10dp">
 
                         <ImageView
+                            android:importantForAccessibility="no"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/fundo_icone_chat"
@@ -165,6 +167,7 @@
                             android:textSize="14sp" />
 
                         <ImageView
+                            android:importantForAccessibility="no"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:src="@drawable/ic_seta_chat" />
@@ -194,6 +197,7 @@
                         android:paddingEnd="10dp">
 
                         <ImageView
+                            android:importantForAccessibility="no"
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:background="@drawable/fundo_icone_chat"
@@ -211,6 +215,7 @@
                             android:textSize="14sp" />
 
                         <ImageView
+                            android:importantForAccessibility="no"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:src="@drawable/ic_seta_chat" />
@@ -243,7 +248,7 @@
         tools:visibility="gone">
 
         <ImageView
-            android:id="@+id/fundoCabecalhoChat"
+            android:importantForAccessibility="no"
             android:layout_width="0dp"
             android:layout_height="108dp"
             android:elevation="4dp"
@@ -268,7 +273,6 @@
             app:tint="@color/branco" />
 
         <TextView
-            android:id="@+id/tituloCabecalhoChat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
@@ -305,7 +309,6 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/painelEntradaChat"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_gravity="bottom"
@@ -323,6 +326,7 @@
             android:paddingEnd="10dp">
 
             <EditText
+                android:importantForAutofill="no"
                 android:id="@+id/campoMensagemChat"
                 android:layout_width="0dp"
                 android:layout_height="34dp"
@@ -354,7 +358,8 @@
                 android:src="@drawable/ic_enviar_chat"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+        android:scaleType="centerInside" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

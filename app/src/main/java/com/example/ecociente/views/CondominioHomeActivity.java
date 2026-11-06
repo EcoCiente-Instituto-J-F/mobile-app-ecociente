@@ -1,25 +1,21 @@
 package com.example.ecociente.views;
 
 import android.content.Intent;
-import android.content.ActivityNotFoundException;
-import android.widget.Toast;
-import android.graphics.drawable.AnimationDrawable;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
-import com.example.ecociente.model.CursoResumoHome;
 import com.example.ecociente.model.PerfilUsuario;
+import com.example.ecociente.model.TipoLista;
 import com.example.ecociente.model.ResultadoSolicitacoes;
-import com.example.ecociente.repository.CursosHomeRepository;
+import com.example.ecociente.repository.AquecimentoDasApis;
+import com.example.ecociente.notifications.PermissaoNotificacoes;
+import com.example.ecociente.repository.PerfilApiRepository;
+import com.example.ecociente.repository.PontuacaoRepository;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
@@ -32,12 +28,11 @@ import com.example.ecociente.ui.SemanaColetasView;
 import com.example.ecociente.viewmodels.CalendarioViewModel;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.android.material.card.MaterialCardView;
-import androidx.core.content.res.ResourcesCompat;
+import com.example.ecociente.repository.RankingExternoRepository;
+import com.example.ecociente.model.ItemLista;
+import com.example.ecociente.util.Iniciais;
 
 public class CondominioHomeActivity extends AppCompatActivity {
-
-    private final CursosHomeRepository cursosRepository = new CursosHomeRepository();
 
     private PerfilViewModel perfilViewModel;
     private CalendarioViewModel calendarioViewModel;
@@ -48,9 +43,6 @@ public class CondominioHomeActivity extends AppCompatActivity {
     private ImageView imagemPerfil;
     private SemanaColetasView semana;
     private View textoErroSemana;
-    private LinearLayout listaCursosCondominio;
-    private TextView textoEstadoCursos;
-    private ImageView imagemAnimacaoEkoCursos;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -60,6 +52,12 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_home_condominio);
 
+        new PermissaoNotificacoes(this).pedirSeNecessario();
+
+        AquecimentoDasApis.aquecer(this);
+        new PerfilApiRepository().atualizarSeNecessario(this);
+        carregarPontosNoCard(true);
+
         perfilViewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
 
         calendarioViewModel = new ViewModelProvider(this).get(CalendarioViewModel.class);
@@ -68,9 +66,6 @@ public class CondominioHomeActivity extends AppCompatActivity {
         imagemPerfil = findViewById(R.id.imagemPerfilCondominio);
         semana = findViewById(R.id.semanaColetas);
         textoErroSemana = findViewById(R.id.textoErroSemana);
-        listaCursosCondominio = findViewById(R.id.listaCursosCondominio);
-        textoEstadoCursos = findViewById(R.id.textoEstadoCursosCondominio);
-        imagemAnimacaoEkoCursos = findViewById(R.id.animacaoEkoCursosHome);
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizHomeCondominio));
 
@@ -81,15 +76,100 @@ public class CondominioHomeActivity extends AppCompatActivity {
         calendarioViewModel.getColetasDaSemana().observe(this, this::exibirSemana);
 
         calendarioViewModel.carregarSemana();
-        configurarCursosHome();
-        carregarCursosHome();
+
+        carregarPodio();
 
         motion.staggerIn(
                 findViewById(R.id.cabecalhoHomeCondominio),
                 findViewById(R.id.blocoSaudacaoCondominio),
                 findViewById(R.id.cardSemanaColetas),
-                findViewById(R.id.cabecalhoConteudosCondominio),
-                findViewById(R.id.secaoCursosCondominio));
+                findViewById(R.id.cardRanking),
+                findViewById(R.id.cabecalhoConteudosCondominio));
+    }
+
+    private void carregarPontosNoCard(boolean morador) {
+
+        android.widget.TextView texto = findViewById(R.id.textoSaldoPontos);
+
+        findViewById(R.id.cardPontos)
+                .setOnClickListener(
+                        view -> startActivity(TelaListaActivity.criarIntent(this, TipoLista.PONTOS, morador)));
+
+        new PontuacaoRepository()
+                .saldo(
+                        this,
+                        saldo -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            texto.setText(
+                                    saldo == null
+                                            ? getString(R.string.pontos_indisponivel)
+                                            : getString(
+                                                    R.string.pontos_saldo,
+                                                    java.text.NumberFormat.getIntegerInstance(
+                                                                    new java.util.Locale("pt", "BR"))
+                                                            .format(saldo)));
+                        });
+    }
+
+    // Os três primeiros do ranking dos moradores, direto no cartão da home.
+    private void carregarPodio() {
+
+        new RankingExternoRepository()
+                .listarMoradores(
+                        this,
+                        PerfilApiRepository.condominioId(this),
+                        3,
+                        moradores -> {
+                            if (isFinishing() || isDestroyed()) {
+                                return;
+                            }
+
+                            android.widget.TextView estado = findViewById(R.id.textoEstadoRankingHome);
+                            View podio = findViewById(R.id.podioHome);
+
+                            if (moradores == null || moradores.isEmpty()) {
+                                podio.setVisibility(View.GONE);
+                                estado.setVisibility(View.VISIBLE);
+                                estado.setText(
+                                        moradores == null
+                                                ? R.string.ranking_home_indisponivel
+                                                : R.string.ranking_sem_pontuacao);
+                                return;
+                            }
+
+                            estado.setVisibility(View.GONE);
+                            podio.setVisibility(View.VISIBLE);
+
+                            preencherPodio(moradores, 0, R.id.avatarPrimeiroHome, R.id.pontosPrimeiroHome);
+                            preencherPodio(moradores, 1, R.id.avatarSegundoHome, R.id.pontosSegundoHome);
+                            preencherPodio(moradores, 2, R.id.avatarTerceiroHome, R.id.pontosTerceiroHome);
+                        });
+    }
+
+    private void preencherPodio(
+            java.util.List<ItemLista> moradores, int posicao, int idAvatar, int idPontos) {
+
+        android.widget.TextView avatar = findViewById(idAvatar);
+        android.widget.TextView pontos = findViewById(idPontos);
+
+        if (posicao >= moradores.size()) {
+            avatar.setText("");
+            avatar.setContentDescription(null);
+            pontos.setText("");
+            return;
+        }
+
+        ItemLista morador = moradores.get(posicao);
+
+        // O título vem como "1º  Nome".
+        String nome = morador.titulo.replaceFirst("^\\d+º\\s*", "");
+
+        avatar.setText(Iniciais.de(nome));
+        avatar.setContentDescription(nome + ", " + morador.destaque);
+        pontos.setText(morador.destaque);
     }
 
     @Override
@@ -101,14 +181,6 @@ public class CondominioHomeActivity extends AppCompatActivity {
         if (calendarioViewModel.getColetasDaSemana().getValue() != null) {
             calendarioViewModel.carregarSemana();
         }
-
-        iniciarAnimacaoEkoCursos();
-    }
-
-    @Override
-    protected void onStop() {
-        pararAnimacaoEkoCursos();
-        super.onStop();
     }
 
     @Override
@@ -127,141 +199,6 @@ public class CondominioHomeActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void configurarCursosHome() {
-        textoEstadoCursos.setOnClickListener(view -> carregarCursosHome());
-    }
-
-    private void carregarCursosHome() {
-        textoEstadoCursos.setText(R.string.home_cursos_carregando);
-        textoEstadoCursos.setVisibility(View.VISIBLE);
-        listaCursosCondominio.removeAllViews();
-
-        cursosRepository.listar(this, (sucesso, cursos) -> {
-            if (isFinishing() || isDestroyed()) {
-                return;
-            }
-
-            listaCursosCondominio.removeAllViews();
-
-            if (!sucesso) {
-                textoEstadoCursos.setText(R.string.home_cursos_erro);
-                textoEstadoCursos.setVisibility(View.VISIBLE);
-                return;
-            }
-
-            if (cursos.isEmpty()) {
-                textoEstadoCursos.setText(R.string.home_cursos_vazio);
-                textoEstadoCursos.setVisibility(View.VISIBLE);
-                return;
-            }
-
-            textoEstadoCursos.setVisibility(View.GONE);
-            for (CursoResumoHome curso : cursos) {
-                listaCursosCondominio.addView(criarCardCursoHome(curso));
-            }
-        });
-    }
-
-    private View criarCardCursoHome(CursoResumoHome curso) {
-        MaterialCardView card = new MaterialCardView(this);
-        card.setCardBackgroundColor(getColor(R.color.verde_fundo_card_claro));
-        card.setStrokeColor(getColor(R.color.cinza_borda_clara_home));
-        card.setStrokeWidth(dp(1));
-        card.setRadius(dp(15));
-        card.setCardElevation(dp(1));
-        card.setClickable(true);
-        card.setFocusable(true);
-
-        LinearLayout.LayoutParams cardParams =
-                new LinearLayout.LayoutParams(dp(246), dp(174));
-        cardParams.setMarginEnd(dp(12));
-        card.setLayoutParams(cardParams);
-
-        LinearLayout conteudo = new LinearLayout(this);
-        conteudo.setOrientation(LinearLayout.VERTICAL);
-        conteudo.setPadding(dp(15), dp(14), dp(15), dp(12));
-        card.addView(conteudo);
-
-        TextView etiqueta = textoCursoHome(
-                getString(R.string.home_curso_etiqueta),
-                10,
-                getColor(R.color.verde_escuro_principal),
-                R.font.nunito_bold);
-        etiqueta.setBackgroundResource(R.drawable.fundo_selo_conteudo_home);
-        etiqueta.setPadding(dp(9), dp(4), dp(9), dp(4));
-        conteudo.addView(etiqueta, new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
-        TextView titulo = textoCursoHome(
-                curso.titulo,
-                16,
-                getColor(R.color.verde_escuro_principal),
-                R.font.nunito_bold);
-        titulo.setMaxLines(2);
-        titulo.setEllipsize(TextUtils.TruncateAt.END);
-        LinearLayout.LayoutParams tituloParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        tituloParams.topMargin = dp(10);
-        conteudo.addView(titulo, tituloParams);
-
-        String descricao = curso.descricao.isEmpty()
-                ? getString(R.string.home_curso_sem_descricao)
-                : curso.descricao;
-        TextView resumo = textoCursoHome(
-                descricao,
-                12,
-                getColor(R.color.cinza_texto_home),
-                R.font.nunito_regular);
-        resumo.setMaxLines(3);
-        resumo.setEllipsize(TextUtils.TruncateAt.END);
-        LinearLayout.LayoutParams resumoParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        resumoParams.topMargin = dp(6);
-        conteudo.addView(resumo, resumoParams);
-
-        TextView acao = textoCursoHome(
-                getString(R.string.home_curso_ver_detalhes),
-                11,
-                getColor(R.color.verde_escuro_principal),
-                R.font.nunito_bold);
-        LinearLayout.LayoutParams acaoParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
-        acaoParams.topMargin = dp(7);
-        acao.setGravity(Gravity.BOTTOM | Gravity.START);
-        conteudo.addView(acao, acaoParams);
-
-        card.setContentDescription(curso.titulo + ". Abrir aba Guia");
-        card.setOnClickListener(view -> abrirAbaGuia());
-        return card;
-    }
-
-    private TextView textoCursoHome(String valor, float tamanho, int cor, int fonte) {
-        TextView texto = new TextView(this);
-        texto.setText(valor);
-        texto.setTextSize(tamanho);
-        texto.setTextColor(cor);
-        texto.setTypeface(ResourcesCompat.getFont(this, fonte));
-        return texto;
-    }
-
-    private int dp(float valor) {
-        return Math.round(valor * getResources().getDisplayMetrics().density);
-    }
-
-    private void iniciarAnimacaoEkoCursos() {
-        if (imagemAnimacaoEkoCursos != null
-                && imagemAnimacaoEkoCursos.getDrawable() instanceof AnimationDrawable) {
-            ((AnimationDrawable) imagemAnimacaoEkoCursos.getDrawable()).start();
-        }
-    }
-
-    private void pararAnimacaoEkoCursos() {
-        if (imagemAnimacaoEkoCursos != null
-                && imagemAnimacaoEkoCursos.getDrawable() instanceof AnimationDrawable) {
-            ((AnimationDrawable) imagemAnimacaoEkoCursos.getDrawable()).stop();
-        }
-    }
-
     private void configurarCliques() {
 
         imagemPerfil.setOnClickListener(
@@ -272,8 +209,16 @@ public class CondominioHomeActivity extends AppCompatActivity {
                                 () -> startActivity(new Intent(this, GerenciarPerfilActivity.class)),
                                 this::confirmarSaida));
 
-        findViewById(R.id.botaoCooperativasProximas)
-                .setOnClickListener(view -> startActivity(new Intent(this, CooperativasProximasActivity.class)));
+        findViewById(R.id.botaoNotificacoesCondominio)
+                .setOnClickListener(
+                        view ->
+                                startActivity(
+                                        CentralNotificacoesActivity.criarIntent(
+                                                this, CentralNotificacoesActivity.Destino.CONDOMINIO)));
+
+        findViewById(R.id.cardRanking)
+                .setOnClickListener(
+                        view -> startActivity(TelaListaActivity.criarIntent(this, TipoLista.RANKING, true)));
 
         findViewById(R.id.botaoVerCalendarioCompleto)
                 .setOnClickListener(view -> startActivity(new Intent(this, CalendarioColetasActivity.class)));
@@ -298,13 +243,7 @@ public class CondominioHomeActivity extends AppCompatActivity {
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
         barra.setOnItemClickListener(
-                indice -> {
-                    if (indice == ItensBarra.SEGUNDO) {
-                        abrirAbaGuia();
-                    } else if (indice == ItensBarra.TERCEIRO) {
-                        abrirQuizzes();
-                    }
-                });
+                indice -> Navegacao.irParaItemDoUsuario(this, indice, ItensBarra.HOME, true));
     }
 
     private void carregarPerfil() {
@@ -343,27 +282,6 @@ public class CondominioHomeActivity extends AppCompatActivity {
         semana.exibir(sucesso ? resultado.getItens() : null);
 
         textoErroSemana.setVisibility(sucesso ? View.GONE : View.VISIBLE);
-    }
-
-    private void abrirAbaGuia() {
-        Intent rota = new Intent().setClassName(
-                this, "com.example.ecociente.views.BibliotecaActivity");
-        rota.putExtra("bibliotecaMorador", true);
-        try {
-            Navegacao.abrirPelaBarra(this, rota, ItensBarra.HOME);
-        } catch (ActivityNotFoundException erro) {
-            Toast.makeText(this,
-                    "A aba Guia ainda não está disponível nesta versão do aplicativo.",
-                    Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private void abrirQuizzes() {
-
-        Navegacao.abrirPelaBarra(
-                this,
-                new Intent(this, QuizActivity.class).putExtra(QuizActivity.EXTRA_MORADOR, true),
-                ItensBarra.HOME);
     }
 
     private void confirmarSaida() {

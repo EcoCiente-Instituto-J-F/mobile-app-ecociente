@@ -5,9 +5,7 @@ import android.os.Looper;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -15,13 +13,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-// Cliente HTTP da ds-esqueceusenha-api (Spring/Postgres, repositório separado deste app).
+// Cliente HTTP da ds-mobile-api (Spring/Postgres, repositório separado deste app).
 final class ApiEsqueciSenha {
     private static final String TAG = "EsqueciSenhaApi";
-    private static final String URL_BASE = "https://ds-esqueceusenha-api-1.onrender.com/senhas/";
+    private static final String URL_BASE = ConfiguracaoServidores.URL_SENHAS;
     private static final String MENSAGEM_PADRAO = "Não foi possível conectar ao servidor";
+    private static final String MENSAGEM_INDISPONIVEL =
+            "O servidor está indisponível no momento. Tente novamente em instantes.";
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
@@ -83,7 +84,6 @@ final class ApiEsqueciSenha {
             }
 
             conexao.setDoOutput(true);
-            // O Render dorme a API após inatividade; o primeiro pedido chegou a levar 138s.
             conexao.setConnectTimeout(180_000);
             conexao.setReadTimeout(180_000);
 
@@ -97,7 +97,7 @@ final class ApiEsqueciSenha {
                 return null;
             }
 
-            return extrairMensagemErro(lerFluxo(conexao.getErrorStream()));
+            return extrairMensagemErro(LeituraHttp.texto(conexao.getErrorStream()));
         } finally {
             conexao.disconnect();
         }
@@ -116,29 +116,10 @@ final class ApiEsqueciSenha {
                     return mensagem;
                 }
             }
-        } catch (Exception erro) {
+        } catch (JSONException erro) {
             Log.w(TAG, "Resposta de erro fora do formato esperado", erro);
         }
 
-        return MENSAGEM_PADRAO;
-    }
-
-    @NonNull
-    private static String lerFluxo(@Nullable InputStream fluxo) throws IOException {
-        if (fluxo == null) {
-            return "";
-        }
-
-        try (InputStream entrada = fluxo;
-                ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
-            byte[] buffer = new byte[1024];
-            int lidos;
-
-            while ((lidos = entrada.read(buffer)) != -1) {
-                saida.write(buffer, 0, lidos);
-            }
-
-            return saida.toString(StandardCharsets.UTF_8.name());
-        }
+        return MENSAGEM_INDISPONIVEL;
     }
 }

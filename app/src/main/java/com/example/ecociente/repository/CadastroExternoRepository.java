@@ -8,9 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.TipoUsuario;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -22,20 +20,22 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-// Fala com a ds-cadastro-api (Java/Postgres, repositório separado deste
-// app). Escolhe o endpoint certo (comum/morador) a partir dos mesmos dados
-// que já vão pro Firestore, pra não duplicar coleta de campos no cadastro.
+// Fala com a ds-mobile-api (Java/Postgres, repositório separado deste app). Escolhe o endpoint certo (comum/morador) a partir dos mesmos dados que já vão pro Firestore, pra não duplicar coleta de campos no cadastro.
 public class CadastroExternoRepository {
 
     private static final String TAG = "CadastroExternaEcoCiente";
 
-    private static final String URL_BASE = "https://ds-cadastro-api.onrender.com/api/cadastro";
+    private static final String URL_BASE = ConfiguracaoServidores.URL_CADASTRO;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
+
+    // A API dorme sem uso e leva de 70 a 150 s para acordar; com menos que isso o app desiste e a API conclui o cadastro depois, deixando a pessoa com um erro de uma conta que existe.
+    private static final int TEMPO_MAXIMO_MS = 180_000;
 
     @NonNull
     public LiveData<ResultadoApi> cadastrar(
@@ -49,6 +49,14 @@ public class CadastroExternoRepository {
 
                     try {
                         resposta = enviarCadastro(dadosUsuario, senha);
+
+                    } catch (java.net.SocketTimeoutException erro) {
+                        Log.e(TAG, "Cadastro demorou demais", erro);
+
+                        resposta =
+                                ResultadoApi.erro(
+                                        "O servidor demorou para responder e o cadastro pode ter sido concluído."
+                                                + " Tente entrar pela tela de Login antes de cadastrar de novo.");
 
                     } catch (Exception erro) {
                         Log.e(TAG, "Erro ao cadastrar na API externa", erro);
@@ -68,7 +76,7 @@ public class CadastroExternoRepository {
 
     @NonNull
     private ResultadoApi enviarCadastro(
-            @NonNull Map<String, Object> dadosUsuario, @NonNull String senha) throws Exception {
+            @NonNull Map<String, Object> dadosUsuario, @NonNull String senha) throws IOException, JSONException, ParseException {
 
         switch (texto(dadosUsuario, "tipoUsuario", TipoUsuario.COMUM)) {
             case TipoUsuario.COOPERATIVA:
@@ -84,7 +92,7 @@ public class CadastroExternoRepository {
 
     @NonNull
     private JSONObject corpoBasePessoa(
-            @NonNull Map<String, Object> dados, @NonNull String senha) throws Exception {
+            @NonNull Map<String, Object> dados, @NonNull String senha) throws IOException, JSONException, ParseException {
 
         return new JSONObject()
                 .put("nomeUsuario", texto(dados, "nome"))
@@ -96,7 +104,7 @@ public class CadastroExternoRepository {
 
     @NonNull
     private JSONObject corpoComum(
-            @NonNull Map<String, Object> dados, @NonNull String senha) throws Exception {
+            @NonNull Map<String, Object> dados, @NonNull String senha) throws IOException, JSONException, ParseException {
 
         return corpoBasePessoa(dados, senha)
                 .put("cep", texto(dados, "cep"))
@@ -106,14 +114,14 @@ public class CadastroExternoRepository {
 
     @NonNull
     private JSONObject corpoMorador(
-            @NonNull Map<String, Object> dados, @NonNull String senha) throws Exception {
+            @NonNull Map<String, Object> dados, @NonNull String senha) throws IOException, JSONException, ParseException {
 
         return corpoBasePessoa(dados, senha).put("codigoCondominio", texto(dados, "codigoCondominio"));
     }
 
     @NonNull
     private JSONObject corpoCooperativa(
-            @NonNull Map<String, Object> dados, @NonNull String senha) throws Exception {
+            @NonNull Map<String, Object> dados, @NonNull String senha) throws IOException, JSONException, ParseException {
 
         return new JSONObject()
                 .put("nomeResponsavel", texto(dados, "nome"))
@@ -150,7 +158,7 @@ public class CadastroExternoRepository {
     }
 
     @NonNull
-    private ResultadoApi enviar(@NonNull String endpoint, @NonNull JSONObject corpo) throws Exception {
+    private ResultadoApi enviar(@NonNull String endpoint, @NonNull JSONObject corpo) throws IOException {
 
         HttpURLConnection conexao = (HttpURLConnection) new URL(endpoint).openConnection();
 
@@ -160,10 +168,8 @@ public class CadastroExternoRepository {
             conexao.setRequestProperty("Accept", "application/json");
             conexao.setDoOutput(true);
             conexao.setUseCaches(false);
-            // Render free tier "dorme" a API após inatividade; medido de 72s
-            // a 148s para o primeiro request acordar o serviço.
-            conexao.setConnectTimeout(180_000);
-            conexao.setReadTimeout(180_000);
+            conexao.setConnectTimeout(ConfiguracaoServidores.TIMEOUT_CONEXAO_MS);
+            conexao.setReadTimeout(TEMPO_MAXIMO_MS);
 
             try (OutputStream saida = conexao.getOutputStream()) {
                 saida.write(corpo.toString().getBytes(StandardCharsets.UTF_8));
@@ -175,17 +181,20 @@ public class CadastroExternoRepository {
                 return ResultadoApi.sucesso();
             }
 
-            String corpoErro = lerFluxo(conexao.getErrorStream());
+            String corpoErro = LeituraHttp.texto(conexao.getErrorStream());
 
-            return ResultadoApi.erro(extrairMensagemErro(corpoErro));
+            String mensagem = extrairMensagemErro(corpoErro);
+            if (codigoResposta == 404 && corpoErro.contains("EMAIL_ALREADY_EXISTS")) {
+                mensagem = "Este e-mail ja existe no PostgreSQL. Entre pela tela de Login para sincronizar o Firebase. Nao repita o cadastro.";
+            }
+            return ResultadoApi.erro(mensagem);
 
         } finally {
             conexao.disconnect();
         }
     }
 
-    // A API devolve { "status", "codigoError", "details": [{ "field", "message" }] }
-    // - mostramos a primeira mensagem de validação, se existir.
+    // A API devolve { "status", "codigoError", "details": [{ "field", "message" }] } - mostramos a primeira mensagem de validação, se existir.
     @NonNull
     private String extrairMensagemErro(String corpoErro) {
 
@@ -203,7 +212,7 @@ public class CadastroExternoRepository {
                 }
             }
 
-        } catch (Exception erro) {
+        } catch (JSONException erro) {
             Log.w(TAG, "Não foi possível interpretar o erro da API de cadastro", erro);
         }
 
@@ -220,26 +229,5 @@ public class CadastroExternoRepository {
         SimpleDateFormat saida = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
         return saida.format(entrada.parse(dataBr));
-    }
-
-    @NonNull
-    private String lerFluxo(InputStream fluxo) throws IOException {
-
-        if (fluxo == null) {
-            return "";
-        }
-
-        try (InputStream entrada = fluxo;
-                ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
-
-            byte[] buffer = new byte[1024];
-            int lidos;
-
-            while ((lidos = entrada.read(buffer)) != -1) {
-                saida.write(buffer, 0, lidos);
-            }
-
-            return saida.toString(StandardCharsets.UTF_8.name());
-        }
     }
 }

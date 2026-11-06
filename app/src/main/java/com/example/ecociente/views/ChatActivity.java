@@ -1,5 +1,7 @@
 package com.example.ecociente.views;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,7 @@ public class ChatActivity extends AppCompatActivity {
     private LinearLayout containerMensagensChat;
     private NestedScrollView rolagemMensagensChat;
     private ChatViewModel viewModel;
+    private ObjectAnimator animacaoDigitacao;
     private boolean conversaIniciada;
 
     @Override
@@ -140,6 +143,10 @@ public class ChatActivity extends AppCompatActivity {
                     boolean enviando = Boolean.TRUE.equals(emAndamento);
                     botaoEnviarChat.setEnabled(!enviando);
                     botaoEnviarChat.setAlpha(enviando ? 0.55f : 1f);
+                    List<MensagemChat> mensagensAtuais = viewModel.getMensagens().getValue();
+                    if (mensagensAtuais != null) {
+                        renderizarMensagens(mensagensAtuais);
+                    }
                 });
     }
 
@@ -160,10 +167,14 @@ public class ChatActivity extends AppCompatActivity {
             transicionarParaConversa();
         }
 
-        viewModel.enviarMensagem(mensagem);
+        viewModel.enviarMensagem(this, mensagem);
     }
 
     private void renderizarMensagens(List<MensagemChat> mensagens) {
+        if (animacaoDigitacao != null) {
+            animacaoDigitacao.cancel();
+            animacaoDigitacao = null;
+        }
         containerMensagensChat.removeAllViews();
 
         for (MensagemChat mensagem : mensagens) {
@@ -177,8 +188,35 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
 
+        boolean aguardandoResposta = Boolean.TRUE.equals(viewModel.getEnvioEmAndamento().getValue());
+        boolean ultimaMensagemDoUsuario = !mensagens.isEmpty()
+                && mensagens.get(mensagens.size() - 1).getAutor() == MensagemChat.Autor.USUARIO;
+        if (aguardandoResposta && ultimaMensagemDoUsuario) {
+            adicionarIndicadorDigitacaoEko();
+        }
+
         rolagemMensagensChat.post(
                 () -> rolagemMensagensChat.fullScroll(View.FOCUS_DOWN));
+    }
+
+    private void adicionarIndicadorDigitacaoEko() {
+        View linhaMensagem = LayoutInflater.from(this)
+                .inflate(R.layout.item_mensagem_eko, containerMensagensChat, false);
+        TextView textoMensagem = linhaMensagem.findViewById(R.id.textoMensagemEko);
+        textoMensagem.setText("...");
+        textoMensagem.setTextSize(16);
+        textoMensagem.setTextColor(getColor(R.color.verde_botao_enviar_chat));
+        textoMensagem.setLetterSpacing(0.18f);
+        textoMensagem.setContentDescription("Eko está digitando");
+
+        containerMensagensChat.addView(linhaMensagem);
+
+        animacaoDigitacao = ObjectAnimator.ofFloat(
+                textoMensagem, View.ALPHA, 0.35f, 1f);
+        animacaoDigitacao.setDuration(650);
+        animacaoDigitacao.setRepeatCount(ValueAnimator.INFINITE);
+        animacaoDigitacao.setRepeatMode(ValueAnimator.REVERSE);
+        animacaoDigitacao.start();
     }
 
     private void adicionarMensagemUsuarioNaTela(String mensagem) {

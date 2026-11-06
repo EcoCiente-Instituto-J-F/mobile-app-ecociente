@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="82dp"
+    android:background="@drawable/fundo_cartao_borda"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
+    android:paddingTop="7dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="7dp">
+
+    <ImageView
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:background="@drawable/sindico_nav_mascote_fundo"
+        android:contentDescription="@null"
+        android:padding="9dp"
+        android:src="@drawable/ic_reciclar" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/nomeHistorico"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/nunito_bold"
+            android:maxLines="1"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/dataHistorico"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/nunito_regular"
+            android:textColor="@color/cinza_texto_home"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="82dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/etiquetaHistorico"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="20dp"
+            android:background="@drawable/sindico_status_concluida"
+            android:fontFamily="@font/nunito_regular"
+            android:gravity="center"
+            android:text="@string/etiqueta_concluida"
+            android:textColor="@color/branco"
+            android:textSize="11sp" />
+        <TextView
+            android:id="@+id/acaoAvaliarHistorico"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/nunito_bold"
+            android:gravity="center"
+            android:minHeight="36dp"
+            android:text="@string/sindico_avaliar"
+            android:textColor="@color/verde_escuro_principal"
+            android:textSize="12sp"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

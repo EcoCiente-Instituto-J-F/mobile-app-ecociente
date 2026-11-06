@@ -10,27 +10,30 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.ecociente.model.ResultadoUploadFoto;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class FotoPerfilRepository {
 
     private static final String TAG = "FotoPerfilEcoCiente";
 
-    // Upload sem assinatura: o preset "ecociente_perfil" (Unsigned) limita pasta,
-    // formatos e tamanho no painel do Cloudinary. O API secret nunca entra no app.
+    // Upload sem assinatura: o preset "ecociente_perfil" (Unsigned) limita pasta, formatos e tamanho no painel do Cloudinary. O API secret nunca entra no app.
     private static final String CLOUD_NAME = "ncwfxyfi";
     private static final String UPLOAD_PRESET = "ecociente_perfil";
+    // Preset (Unsigned) das fotos de descarte do feed, criado no painel do Cloudinary.
+    private static final String UPLOAD_PRESET_FEED = "ecociente_feed";
     private static final String URL_UPLOAD =
             "https://api.cloudinary.com/v1_1/" + CLOUD_NAME + "/image/upload";
 
@@ -43,6 +46,19 @@ public class FotoPerfilRepository {
 
     @NonNull
     public LiveData<ResultadoUploadFoto> enviar(@NonNull Context contexto, @NonNull Uri imagem) {
+        return enviar(contexto, imagem, UPLOAD_PRESET, true);
+    }
+
+    // Sobe a foto do feed e devolve a URL; só chamar fora da thread principal.
+    @NonNull
+    String urlDaFotoDoFeed(@NonNull Context contexto, @NonNull Uri imagem) throws Exception {
+        return enviarParaCloudinary(
+                prepararImagem(contexto.getApplicationContext(), imagem, false), UPLOAD_PRESET_FEED);
+    }
+
+    @NonNull
+    private LiveData<ResultadoUploadFoto> enviar(
+            @NonNull Context contexto, @NonNull Uri imagem, @NonNull String preset, boolean quadrada) {
 
         MutableLiveData<ResultadoUploadFoto> resultado = new MutableLiveData<>();
 
@@ -53,12 +69,12 @@ public class FotoPerfilRepository {
                     ResultadoUploadFoto resposta;
 
                     try {
-                        byte[] jpeg = prepararImagem(contextoApp, imagem);
+                        byte[] jpeg = prepararImagem(contextoApp, imagem, quadrada);
 
-                        resposta = ResultadoUploadFoto.sucesso(enviarParaCloudinary(jpeg));
+                        resposta = ResultadoUploadFoto.sucesso(enviarParaCloudinary(jpeg, preset));
 
                     } catch (Exception erro) {
-                        Log.e(TAG, "Erro ao enviar foto de perfil", erro);
+                        Log.e(TAG, "Erro ao enviar foto", erro);
 
                         resposta =
                                 ResultadoUploadFoto.erro(
@@ -73,17 +89,16 @@ public class FotoPerfilRepository {
         return resultado;
     }
 
-    // Glide já aplica a rotação do EXIF e reduz sem estourar memória; o recorte
-    // quadrado combina com o avatar circular e deixa o upload bem menor.
+    // Glide já aplica a rotação do EXIF e reduz sem estourar memória; o recorte quadrado combina com o avatar circular e deixa o upload bem menor.
     @NonNull
-    private byte[] prepararImagem(@NonNull Context contexto, @NonNull Uri imagem) throws Exception {
+    private byte[] prepararImagem(@NonNull Context contexto, @NonNull Uri imagem, boolean quadrada)
+            throws IOException, ExecutionException, InterruptedException {
+
+        RequestBuilder<Bitmap> pedido =
+                Glide.with(contexto).asBitmap().load(imagem).override(LADO_MAXIMO_PX, LADO_MAXIMO_PX);
 
         Bitmap bitmap =
-                Glide.with(contexto)
-                        .asBitmap()
-                        .load(imagem)
-                        .override(LADO_MAXIMO_PX, LADO_MAXIMO_PX)
-                        .centerCrop()
+                (quadrada ? pedido.centerCrop() : pedido.fitCenter())
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .submit()
@@ -97,7 +112,8 @@ public class FotoPerfilRepository {
     }
 
     @NonNull
-    private String enviarParaCloudinary(@NonNull byte[] jpeg) throws Exception {
+    private String enviarParaCloudinary(@NonNull byte[] jpeg, @NonNull String preset)
+            throws IOException, JSONException {
 
         String limite = "EcoCiente" + System.currentTimeMillis();
 
@@ -118,12 +134,12 @@ public class FotoPerfilRepository {
                         saida,
                         "--" + limite + "\r\n"
                                 + "Content-Disposition: form-data; name=\"upload_preset\"\r\n\r\n"
-                                + UPLOAD_PRESET + "\r\n");
+                                + preset + "\r\n");
 
                 escrever(
                         saida,
                         "--" + limite + "\r\n"
-                                + "Content-Disposition: form-data; name=\"file\"; filename=\"perfil.jpg\"\r\n"
+                                + "Content-Disposition: form-data; name=\"file\"; filename=\"foto.jpg\"\r\n"
                                 + "Content-Type: image/jpeg\r\n\r\n");
 
                 saida.write(jpeg);
@@ -135,7 +151,7 @@ public class FotoPerfilRepository {
 
             boolean deuCerto = codigoResposta >= 200 && codigoResposta < 300;
 
-            String corpo = lerFluxo(deuCerto ? conexao.getInputStream() : conexao.getErrorStream());
+            String corpo = LeituraHttp.texto(deuCerto ? conexao.getInputStream() : conexao.getErrorStream());
 
             if (!deuCerto) {
                 throw new IOException("Cloudinary respondeu " + codigoResposta + ": " + corpo);
@@ -150,26 +166,5 @@ public class FotoPerfilRepository {
 
     private void escrever(@NonNull OutputStream saida, @NonNull String texto) throws IOException {
         saida.write(texto.getBytes(StandardCharsets.UTF_8));
-    }
-
-    @NonNull
-    private String lerFluxo(InputStream fluxo) throws IOException {
-
-        if (fluxo == null) {
-            return "";
-        }
-
-        try (InputStream entrada = fluxo;
-                ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
-
-            byte[] buffer = new byte[1024];
-            int lidos;
-
-            while ((lidos = entrada.read(buffer)) != -1) {
-                saida.write(buffer, 0, lidos);
-            }
-
-            return saida.toString(StandardCharsets.UTF_8.name());
-        }
     }
 }

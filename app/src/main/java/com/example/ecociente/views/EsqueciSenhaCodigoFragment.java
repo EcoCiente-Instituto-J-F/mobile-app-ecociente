@@ -8,18 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.ui.BotaoCarregando;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
 import com.google.android.material.button.MaterialButton;
 
-// Passo 2: 4 caixas de dígito com avanço automático de foco.
+// Passo 2 do esqueci senha: 4 caixas de dígito com avanço automático de foco.
+// Esta tela NÃO chama a API: só confere que há 4 dígitos, guarda o código no ViewModel e segue
+// para a nova senha. A ds-mobile-api não tem endpoint de verificação, então o código só é
+// validado no passo seguinte, em POST /senhas/redefinir.
 public class EsqueciSenhaCodigoFragment extends Fragment {
     private EditText digito1;
     private EditText digito2;
@@ -55,7 +58,7 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
         configurarAvancoAutomatico(digito3, digito2, digito4);
         configurarAvancoAutomatico(digito4, digito3, null);
 
-        botaoVerificar.setOnClickListener(clique -> verificarCodigo());
+        botaoVerificar.setOnClickListener(clique -> guardarCodigoEAvancar());
     }
 
     // Ao digitar um dígito, pula pro próximo campo; ao apagar num campo vazio, volta pro anterior.
@@ -97,7 +100,7 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
                 });
     }
 
-    private void verificarCodigo() {
+    private void guardarCodigoEAvancar() {
         String codigo =
                 digito1.getText().toString()
                         + digito2.getText().toString()
@@ -119,6 +122,6 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
     }
 
     private void mostrarMensagem(@NonNull String mensagem) {
-        Toast.makeText(requireContext(), mensagem, Toast.LENGTH_SHORT).show();
+        AvisoFlutuante.mostrar(requireActivity(), mensagem);
     }
 }

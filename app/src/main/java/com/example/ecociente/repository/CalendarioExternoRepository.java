@@ -10,7 +10,6 @@ import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.model.StatusAgendamento;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -24,14 +23,26 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-// ds-calendario-api: lista, cria e atualiza agendamentos conforme o perfil do JWT.
+// ds-mobile-api: lista os agendamentos de acordo com o perfil do JWT (cooperativa, síndico ou morador).
 public class CalendarioExternoRepository {
 
     public interface Retorno {
         void aoConcluir(@NonNull ResultadoSolicitacoes resultado);
+    }
+
+    public interface RetornoCriacao {
+        // `criada` é null quando a API não aceitou; aí `mensagemErro` diz o motivo.
+        void aoConcluir(@Nullable Solicitacao criada, @NonNull String mensagemErro);
     }
 
     public interface RetornoStatus {
@@ -41,8 +52,7 @@ public class CalendarioExternoRepository {
     private static final String TAG = "CalendarioApi";
     private static final String MENSAGEM_PADRAO = "Não foi possível conectar ao servidor";
     private static final String MENSAGEM_SESSAO = "Sua sessão expirou. Entre novamente.";
-    private static final String URL_AGENDAMENTOS =
-            "https://ds-calendario-api.onrender.com/api/v1/agendamentos";
+    private static final String URL_AGENDAMENTOS = ConfiguracaoServidores.URL_AGENDAMENTOS;
     private static final int TAMANHO_PAGINA = 10;
     private static final int TAMANHO_PAGINA_MES = 100;
     private static final int TIMEOUT_MS = 180_000;
@@ -54,105 +64,112 @@ public class CalendarioExternoRepository {
 
     public void listar(
             @NonNull Context contexto,
-            @NonNull StatusAgendamento status,
+            @Nullable StatusAgendamento status,
             int pagina,
             @NonNull Retorno retorno) {
 
-        String consulta = "?status=" + status.name() + "&page=" + pagina + "&size=" + TAMANHO_PAGINA;
+        // Sem status, a API devolve todas as solicitações.
+        String consulta = (status == null ? "?" : "?status=" + status.name() + "&")
+                + "page=" + pagina + "&size=" + TAMANHO_PAGINA;
 
         executar(contexto, URL_AGENDAMENTOS + consulta, retorno);
     }
 
-    public void criar(
+    // Agendamentos dos condomínios do síndico (ou da cooperativa), do mais recente ao mais antigo.
+    public void listarTodos(@NonNull Context contexto, @NonNull Retorno retorno) {
+
+        executar(contexto, URL_AGENDAMENTOS + "?size=" + TAMANHO_PAGINA_MES, retorno);
+    }
+
+    // POST /api/v1/agendamentos: o síndico responsável pede a coleta a uma cooperativa.
+    public void solicitar(
             @NonNull Context contexto,
             int condominioId,
             int cooperativaId,
-            @NonNull String dataInicio,
-            @NonNull RetornoStatus retorno) {
-        JSONObject corpo = new JSONObject();
-        try {
-            corpo.put("condominioId", condominioId)
-                    .put("cooperativaId", cooperativaId)
-                    .put("dataInicio", dataInicio);
-        } catch (Exception erro) {
-            retorno.aoConcluir(ResultadoApi.erro(MENSAGEM_PADRAO));
-            return;
-        }
-        executarAcao(contexto, "POST", URL_AGENDAMENTOS, corpo, retorno, true);
-    }
+            long inicioMs,
+            @NonNull RetornoCriacao retorno) {
 
-    public void alterarStatus(
-            @NonNull Context contexto,
-            int id,
-            @NonNull StatusAgendamento status,
-            @NonNull RetornoStatus retorno) {
-        JSONObject corpo = new JSONObject();
-        try {
-            corpo.put("status", status.name());
-        } catch (Exception erro) {
-            retorno.aoConcluir(ResultadoApi.erro(MENSAGEM_PADRAO));
-            return;
-        }
-        executarAcao(contexto, "PATCH", URL_AGENDAMENTOS + "/" + id + "/status",
-                corpo, retorno, false);
-    }
+        Context contextoApp = contexto.getApplicationContext();
 
-    private void executarAcao(
-            Context contexto,
-            String metodo,
-            String endereco,
-            JSONObject corpo,
-            RetornoStatus retorno,
-            boolean criacao) {
-        Context app = contexto.getApplicationContext();
-        EXECUTOR.execute(() -> {
-            ResultadoApi resultado;
-            try {
-                String token = autenticacao.tokenParaUso(app);
-                if (token == null) {
-                    resultado = ResultadoApi.erro(MENSAGEM_SESSAO);
-                } else {
-                    int codigo = enviarJson(metodo, endereco, token, corpo);
-                    if (codigo == HttpURLConnection.HTTP_UNAUTHORIZED
-                            || codigo == HttpURLConnection.HTTP_FORBIDDEN) {
-                        String renovado = autenticacao.renovarToken(app);
-                        if (renovado != null) {
-                            codigo = enviarJson(metodo, endereco, renovado, corpo);
+        EXECUTOR.execute(
+                () -> {
+                    Solicitacao criada = null;
+                    String erro = MENSAGEM_PADRAO;
+
+                    try {
+                        String token = autenticacao.tokenParaUso(contextoApp);
+
+                        if (token == null) {
+                            erro = MENSAGEM_SESSAO;
+
+                        } else {
+                            String corpo =
+                                    new JSONObject()
+                                            .put("condominioId", condominioId)
+                                            .put("cooperativaId", cooperativaId)
+                                            .put(
+                                                    "dataInicio",
+                                                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.US)
+                                                            .format(new java.util.Date(inicioMs)))
+                                            .toString();
+
+                            Object[] resposta = criar(token, corpo);
+
+                            if ((int) resposta[0] == HttpURLConnection.HTTP_UNAUTHORIZED
+                                    || (int) resposta[0] == HttpURLConnection.HTTP_FORBIDDEN) {
+                                String novoToken = autenticacao.renovarToken(contextoApp);
+
+                                if (novoToken != null) {
+                                    resposta = criar(novoToken, corpo);
+                                }
+                            }
+
+                            int codigo = (int) resposta[0];
+
+                            if (codigo >= 200 && codigo < 300) {
+                                criada = CalendarioJson.solicitacao(new JSONObject((String) resposta[1]));
+
+                            } else {
+                                Log.w(TAG, "Resposta HTTP " + codigo + " ao criar a coleta");
+
+                                erro = mensagemDaCriacao(codigo);
+                            }
                         }
+
+                    } catch (Exception falha) {
+                        Log.e(TAG, "Falha ao criar a coleta", falha);
                     }
-                    resultado = codigo >= 200 && codigo < 300
-                            ? ResultadoApi.sucesso()
-                            : ResultadoApi.erro(criacao
-                                    ? mensagemDaCriacao(codigo) : mensagemDoCodigo(codigo));
-                    if (codigo < 200 || codigo >= 300) {
-                        Log.w(TAG, metodo + " agendamento respondeu HTTP " + codigo);
-                    }
-                }
-            } catch (Exception erro) {
-                Log.e(TAG, "Falha ao " + (criacao ? "criar solicitação" : "alterar status"), erro);
-                resultado = ResultadoApi.erro(MENSAGEM_PADRAO);
-            }
-            ResultadoApi finalResultado = resultado;
-            PRINCIPAL.post(() -> retorno.aoConcluir(finalResultado));
-        });
+
+                    Solicitacao criadaFinal = criada;
+                    String erroFinal = erro;
+
+                    PRINCIPAL.post(() -> retorno.aoConcluir(criadaFinal, erroFinal));
+                });
     }
 
-    private int enviarJson(String metodo, String endereco, String token, JSONObject corpo)
-            throws Exception {
-        HttpURLConnection conexao =
-                (HttpURLConnection) new URL(endereco).openConnection();
+    // [código HTTP, corpo da resposta (vazio se não houve)]
+    @NonNull
+    private Object[] criar(@NonNull String token, @NonNull String corpo) throws IOException {
+
+        HttpURLConnection conexao = (HttpURLConnection) new URL(URL_AGENDAMENTOS).openConnection();
+
         try {
-            conexao.setRequestMethod(metodo);
+            conexao.setRequestMethod("POST");
             conexao.setRequestProperty("Content-Type", "application/json");
             conexao.setRequestProperty("Accept", "application/json");
             conexao.setRequestProperty("Authorization", "Bearer " + token);
             conexao.setDoOutput(true);
             conexao.setConnectTimeout(TIMEOUT_MS);
             conexao.setReadTimeout(TIMEOUT_MS);
+
             try (OutputStream saida = conexao.getOutputStream()) {
-                saida.write(corpo.toString().getBytes(StandardCharsets.UTF_8));
+                saida.write(corpo.getBytes(StandardCharsets.UTF_8));
             }
-            return conexao.getResponseCode();
+
+            int codigo = conexao.getResponseCode();
+
+            return new Object[] {codigo, codigo >= 200 && codigo < 300 ? LeituraHttp.texto(conexao.getInputStream()) : ""};
+
         } finally {
             conexao.disconnect();
         }
@@ -160,24 +177,109 @@ public class CalendarioExternoRepository {
 
     @NonNull
     private String mensagemDaCriacao(int codigo) {
+
         switch (codigo) {
+            case HttpURLConnection.HTTP_BAD_REQUEST:
+                return "Confira a data e o horário: eles precisam estar no futuro.";
+
             case HttpURLConnection.HTTP_UNAUTHORIZED:
                 return MENSAGEM_SESSAO;
+
             case HttpURLConnection.HTTP_FORBIDDEN:
-                return "Sua conta não tem permissão para solicitar coleta para este condomínio.";
-            case HttpURLConnection.HTTP_BAD_REQUEST:
-                return "Confira a data e o horário escolhidos e tente novamente.";
+                return "Só o síndico responsável pelo condomínio pode solicitar uma coleta.";
+
             case HttpURLConnection.HTTP_NOT_FOUND:
-                return "O condomínio ou a cooperativa não foi encontrado.";
-            case HttpURLConnection.HTTP_CONFLICT:
-                return "Não foi possível registrar esta solicitação porque há um conflito de agendamento.";
+                return "Condomínio ou cooperativa não encontrados.";
+
             default:
-                return "Não foi possível enviar a solicitação (HTTP " + codigo + ").";
+                return MENSAGEM_PADRAO;
         }
     }
 
-    // O Spring responde 403 sem corpo quando o JWT é inválido ou expirou (o 401 do filtro cai
-    // no /error, que exige autenticação). Já o 403 de perfil não autorizado traz um corpo JSON.
+    public void alterarStatus(
+            @NonNull Context contexto,
+            int id,
+            @NonNull StatusAgendamento status,
+            @NonNull RetornoStatus retorno) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        EXECUTOR.execute(
+                () -> {
+                    ResultadoApi resultado;
+
+                    try {
+                        resultado = alterarComRenovacao(contextoApp, id, status);
+
+                    } catch (Exception erro) {
+                        Log.e(TAG, "Falha ao alterar o status do agendamento", erro);
+
+                        resultado = ResultadoApi.erro(MENSAGEM_PADRAO);
+                    }
+
+                    ResultadoApi resultadoFinal = resultado;
+
+                    PRINCIPAL.post(() -> retorno.aoConcluir(resultadoFinal));
+                });
+    }
+
+    @NonNull
+    private ResultadoApi alterarComRenovacao(Context contexto, int id, StatusAgendamento status)
+            throws IOException, JSONException {
+
+        String token = autenticacao.tokenParaUso(contexto);
+
+        if (token == null) {
+            return ResultadoApi.erro(MENSAGEM_SESSAO);
+        }
+
+        int codigo = enviarStatus(token, id, status);
+
+        if (codigo == HttpURLConnection.HTTP_UNAUTHORIZED || codigo == HttpURLConnection.HTTP_FORBIDDEN) {
+            String novoToken = autenticacao.renovarToken(contexto);
+
+            if (novoToken != null) {
+                codigo = enviarStatus(novoToken, id, status);
+            }
+        }
+
+        if (codigo >= 200 && codigo < 300) {
+            return ResultadoApi.sucesso();
+        }
+
+        Log.w(TAG, "Resposta HTTP " + codigo);
+
+        return ResultadoApi.erro(mensagemDoCodigo(codigo));
+    }
+
+    private int enviarStatus(String token, int id, StatusAgendamento status) throws IOException, JSONException {
+
+        // HttpURLConnection não oferece suporte portátil ao método PATCH no Android.
+        // OkHttp envia PATCH nativamente, sem alterar o contrato já utilizado pela API.
+        MediaType json = MediaType.get("application/json; charset=utf-8");
+        RequestBody corpo = RequestBody.create(
+                json,
+                new JSONObject().put("status", status.name()).toString());
+
+        OkHttpClient cliente = new OkHttpClient.Builder()
+                .connectTimeout(TIMEOUT_MS, TimeUnit.MILLISECONDS)
+                .readTimeout(TIMEOUT_MS, TimeUnit.MILLISECONDS)
+                .writeTimeout(TIMEOUT_MS, TimeUnit.MILLISECONDS)
+                .build();
+
+        Request requisicao = new Request.Builder()
+                .url(URL_AGENDAMENTOS + "/" + id + "/status")
+                .patch(corpo)
+                .header("Accept", "application/json")
+                .header("Authorization", "Bearer " + token)
+                .build();
+
+        try (Response resposta = cliente.newCall(requisicao).execute()) {
+            return resposta.code();
+        }
+    }
+
+    // O Spring responde 403 sem corpo quando o JWT é inválido ou expirou (o 401 do filtro cai no /error, que exige autenticação). Já o 403 de perfil não autorizado traz um corpo JSON.
     private boolean tokenRejeitado(int codigo, @NonNull HttpURLConnection conexao) throws IOException {
 
         if (codigo == HttpURLConnection.HTTP_UNAUTHORIZED) {
@@ -201,7 +303,7 @@ public class CalendarioExternoRepository {
                 return MENSAGEM_SESSAO;
 
             case HttpURLConnection.HTTP_FORBIDDEN:
-                return "Você não pode responder esta solicitação.";
+                return "Você não pode alterar esta solicitação: quem a criou não pode respondê-la nem cancelá-la.";
 
             case HttpURLConnection.HTTP_NOT_FOUND:
                 return "Solicitação não encontrada.";
@@ -277,12 +379,12 @@ public class CalendarioExternoRepository {
 
     @NonNull
     private ResultadoSolicitacoes buscarComRenovacao(Context contexto, String endereco)
-            throws Exception {
+            throws IOException, JSONException {
 
         String token = autenticacao.tokenParaUso(contexto);
 
         if (token == null) {
-            return ResultadoSolicitacoes.sessaoExpirada();
+            return semToken(contexto);
         }
 
         ResultadoSolicitacoes resultado = buscar(token, endereco);
@@ -290,16 +392,31 @@ public class CalendarioExternoRepository {
         if (resultado.getTipo() == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
             String novoToken = autenticacao.renovarToken(contexto);
 
-            if (novoToken != null) {
-                resultado = buscar(novoToken, endereco);
+            if (novoToken == null) {
+                return semToken(contexto);
+            }
+
+            resultado = buscar(novoToken, endereco);
+
+            if (resultado.getTipo() == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
+                resultado = ResultadoSolicitacoes.semAcesso();
             }
         }
 
         return resultado;
     }
 
+    // Sessão expirada leva ao login; só vale se não há mais credenciais guardadas. Com elas, o token falhou por conexão ou servidor fora do ar, e a pessoa só precisa tentar de novo.
     @NonNull
-    private ResultadoSolicitacoes buscar(String token, String endereco) throws Exception {
+    private static ResultadoSolicitacoes semToken(Context contexto) {
+
+        return AutenticacaoExternaRepository.temCredenciaisSalvas(contexto)
+                ? ResultadoSolicitacoes.erro()
+                : ResultadoSolicitacoes.sessaoExpirada();
+    }
+
+    @NonNull
+    private ResultadoSolicitacoes buscar(String token, String endereco) throws IOException, JSONException {
 
         HttpURLConnection conexao = (HttpURLConnection) new URL(endereco).openConnection();
 
@@ -311,6 +428,8 @@ public class CalendarioExternoRepository {
             conexao.setReadTimeout(TIMEOUT_MS);
 
             int codigo = conexao.getResponseCode();
+
+            Log.d(TAG, "GET " + endereco + " -> HTTP " + codigo);
 
             if (tokenRejeitado(codigo, conexao)) {
                 Log.w(TAG, "Token rejeitado pela API (HTTP " + codigo + ")");
@@ -328,7 +447,7 @@ public class CalendarioExternoRepository {
                 return ResultadoSolicitacoes.erro();
             }
 
-            return converter(new JSONObject(lerFluxo(conexao.getInputStream())));
+            return converter(new JSONObject(LeituraHttp.texto(conexao.getInputStream())));
 
         } finally {
             conexao.disconnect();
@@ -343,7 +462,7 @@ public class CalendarioExternoRepository {
         JSONArray conteudo = resposta.optJSONArray("content");
 
         if (conteudo == null) {
-            itens.add(solicitacao(resposta));
+            itens.add(CalendarioJson.solicitacao(resposta));
 
             return ResultadoSolicitacoes.sucesso(itens, true);
         }
@@ -353,45 +472,12 @@ public class CalendarioExternoRepository {
             JSONObject item = conteudo.optJSONObject(i);
 
             if (item != null) {
-                itens.add(solicitacao(item));
+                itens.add(CalendarioJson.solicitacao(item));
             }
         }
+
+        Log.d(TAG, itens.size() + " agendamentos recebidos");
 
         return ResultadoSolicitacoes.sucesso(itens, resposta.optBoolean("last", true));
-    }
-
-    @NonNull
-    private Solicitacao solicitacao(@NonNull JSONObject item) {
-
-        return new Solicitacao(
-                item.optInt("id"),
-                item.optInt("condominioId"),
-                item.optInt("cooperativaId"),
-                texto(item, "dataInicio"),
-                texto(item, "dataFim"),
-                StatusAgendamento.daApi(item.optString("statusAgendamento")),
-                item.optBoolean("possuiRecorrencia"));
-    }
-
-    @Nullable
-    private String texto(@NonNull JSONObject item, @NonNull String campo) {
-        return item.isNull(campo) ? null : item.optString(campo);
-    }
-
-    @NonNull
-    private String lerFluxo(@NonNull InputStream fluxo) throws IOException {
-
-        try (InputStream entrada = fluxo;
-                ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
-
-            byte[] buffer = new byte[1024];
-            int lidos;
-
-            while ((lidos = entrada.read(buffer)) != -1) {
-                saida.write(buffer, 0, lidos);
-            }
-
-            return saida.toString(StandardCharsets.UTF_8.name());
-        }
     }
 }

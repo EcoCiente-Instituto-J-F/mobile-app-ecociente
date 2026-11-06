@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.constraintlayout.widget.ConstraintLayout
+    tools:ignore="Overdraw"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -58,7 +59,10 @@
             app:strokeWidth="1dp">
 
             <EditText
+                android:importantForAutofill="no"
                 android:id="@+id/digito1"
+                android:hint="@string/digito_codigo_1"
+                android:textColorHint="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
@@ -83,7 +87,10 @@
             app:strokeWidth="1dp">
 
             <EditText
+                android:importantForAutofill="no"
                 android:id="@+id/digito2"
+                android:hint="@string/digito_codigo_2"
+                android:textColorHint="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
@@ -108,7 +115,10 @@
             app:strokeWidth="1dp">
 
             <EditText
+                android:importantForAutofill="no"
                 android:id="@+id/digito3"
+                android:hint="@string/digito_codigo_3"
+                android:textColorHint="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
@@ -133,7 +143,10 @@
             app:strokeWidth="1dp">
 
             <EditText
+                android:importantForAutofill="no"
                 android:id="@+id/digito4"
+                android:hint="@string/digito_codigo_4"
+                android:textColorHint="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"

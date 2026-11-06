@@ -1,34 +1,57 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.Motion;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.model.Coletas;
 import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.model.Solicitacao;
 import com.example.ecociente.ui.CalendarioMensalView;
-import com.example.ecociente.ui.FormatoDataApi;
+import com.example.ecociente.util.FormatoDataApi;
 import com.example.ecociente.ui.InsetsSistema;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.ui.ProximaColetaView;
+import com.example.ecociente.repository.LembretesColeta;
 import com.example.ecociente.viewmodels.CalendarioViewModel;
 import com.example.ecociente.viewmodels.PerfilViewModel;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Calendar;
 import java.util.List;
+import com.example.ecociente.ui.IndicadorCarregamento;
 
 public class CalendarioColetasActivity extends AppCompatActivity {
+
+    private final ActivityResultLauncher<String> pedirPermissao =
+            registerForActivityResult(
+                    new ActivityResultContracts.RequestPermission(),
+                    permitido -> {
+                        if (!permitido) {
+                            AvisoFlutuante.mostrar(this, R.string.lembrete_sem_permissao);
+                        }
+                    });
 
     private CalendarioViewModel viewModel;
 
     private CalendarioMensalView calendarioMensal;
     private LinearLayout listaColetas;
-    private View textoSemColetas;
+    private TextView textoSemColetas;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -37,6 +60,13 @@ public class CalendarioColetasActivity extends AppCompatActivity {
         JanelaEdgeToEdge.aplicar(this);
 
         setContentView(R.layout.activity_calendario_coletas);
+
+        Motion.entrar(
+                this,
+                R.id.tituloCalendarioColetas,
+                R.id.subtituloCalendarioColetas,
+                R.id.proximaColeta,
+                R.id.calendarioMensal);
 
         viewModel = new ViewModelProvider(this).get(CalendarioViewModel.class);
 
@@ -76,8 +106,10 @@ public class CalendarioColetasActivity extends AppCompatActivity {
                 .getProxima()
                 .observe(
                         this,
-                        resultado ->
-                                proximaColeta.exibir(resultado, viewModel::carregar, this::sair));
+                        resultado -> {
+                            proximaColeta.exibir(resultado, viewModel::carregar, this::sair);
+                            atualizar();
+                        });
 
         viewModel.getColetasDoMes().observe(this, resultado -> atualizar());
 
@@ -93,9 +125,43 @@ public class CalendarioColetasActivity extends AppCompatActivity {
         List<Solicitacao> coletas =
                 resultado == null ? Collections.emptyList() : resultado.getItens();
 
-        calendarioMensal.exibir(mes[0], mes[1], Coletas.diasDoMes(coletas, mes[0], mes[1]));
+        Set<Integer> diasComColeta = new HashSet<>(Coletas.diasDoMes(coletas, mes[0], mes[1]));
+        ResultadoSolicitacoes proxima = viewModel.getProxima().getValue();
+        if (proxima != null && proxima.getTipo() == ResultadoSolicitacoes.Tipo.SUCESSO) {
+            for (Solicitacao coleta : proxima.getItens()) {
+                if (!Coletas.estaAtiva(coleta)) continue;
+                Calendar data = FormatoDataApi.calendario(coleta.getDataInicio());
+                if (data != null
+                        && data.get(Calendar.YEAR) == mes[0]
+                        && data.get(Calendar.MONTH) == mes[1]) {
+                    diasComColeta.add(data.get(Calendar.DAY_OF_MONTH));
+                }
+            }
+        }
+        calendarioMensal.exibir(mes[0], mes[1], diasComColeta);
+
+        // Antes da primeira resposta: o indicador no lugar da lista.
+        if (resultado == null) {
+            listaColetas.removeAllViews();
+            textoSemColetas.setVisibility(View.GONE);
+            IndicadorCarregamento.mostrar(listaColetas, R.string.carregando);
+            return;
+        }
 
         exibirLista(Coletas.ativasDoMes(coletas, mes[0], mes[1]));
+
+        boolean falhou = resultado != null && resultado.getTipo() != ResultadoSolicitacoes.Tipo.SUCESSO;
+
+        if (falhou) {
+            textoSemColetas.setText(R.string.coletas_do_mes_erro);
+            textoSemColetas.setVisibility(View.VISIBLE);
+            textoSemColetas.setOnClickListener(view -> viewModel.carregar());
+
+        } else {
+            textoSemColetas.setText(R.string.nenhuma_coleta_no_mes);
+            textoSemColetas.setOnClickListener(null);
+            textoSemColetas.setClickable(false);
+        }
     }
 
     private void exibirLista(List<Solicitacao> coletas) {
@@ -125,8 +191,47 @@ public class CalendarioColetasActivity extends AppCompatActivity {
                                     FormatoDataApi.dataExtensa(coleta.getDataInicio()),
                                     horario));
 
+            configurarLembrete(item.findViewById(R.id.switchLembrete), coleta);
+
             listaColetas.addView(item);
         }
+    }
+
+    private void configurarLembrete(MaterialSwitch interruptor, Solicitacao coleta) {
+
+        interruptor.setChecked(LembretesColeta.ativado(this, coleta.getId()));
+
+        interruptor.setOnCheckedChangeListener(
+                (botao, marcado) -> {
+                    if (!botao.isPressed()) {
+                        return;
+                    }
+
+                    if (!marcado) {
+                        LembretesColeta.desativar(this, coleta.getId());
+                        return;
+                    }
+
+                    if (!notificacoesPermitidas()) {
+                        botao.setChecked(false);
+
+                        pedirPermissao.launch(Manifest.permission.POST_NOTIFICATIONS);
+                        return;
+                    }
+
+                    if (!LembretesColeta.ativar(this, coleta)) {
+                        botao.setChecked(false);
+
+                        AvisoFlutuante.mostrar(this, R.string.lembrete_coleta_proxima);
+                    }
+                });
+    }
+
+    private boolean notificacoesPermitidas() {
+
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                        == PackageManager.PERMISSION_GRANTED;
     }
 
     private void sair() {

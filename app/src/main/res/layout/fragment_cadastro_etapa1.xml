@@ -28,7 +28,6 @@
         app:layout_constraintTop_toBottomOf="@id/tituloCadastro">
 
         <TextView
-            android:id="@+id/textoPassoCadastro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_semibold"
@@ -51,7 +50,6 @@
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/scrollCadastroEtapa1"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
@@ -164,6 +162,7 @@
                         android:src="@drawable/ic_calendario" />
 
                     <EditText
+                        android:importantForAutofill="no"
                         android:id="@+id/campoDataNascimento"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -468,7 +467,7 @@
                             android:fontFamily="@font/nunito_semibold"
                             android:text="@string/possui_codigo_condominio"
                             android:textColor="@color/cinza_texto_opcao"
-                            android:textSize="10sp" />
+                            android:textSize="11sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -477,7 +476,7 @@
                             android:fontFamily="@font/nunito_regular"
                             android:text="@string/codigo_condominio_descricao"
                             android:textColor="@color/cinza_texto_auxiliar"
-                            android:textSize="8sp" />
+                            android:textSize="11sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -514,6 +513,7 @@
                         android:src="@drawable/ic_senha"/>
 
                     <EditText
+                        android:importantForAutofill="no"
                         android:id="@+id/campoCodigoCondominio"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
@@ -534,8 +534,41 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/containerCpfMorador"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/branco_fundo_campo"
+                app:cardCornerRadius="11dp"
+                app:cardElevation="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/containerCodigoCondominio"
+                app:strokeColor="@color/verde_borda_campo"
+                app:strokeWidth="1dp">
+
+                <EditText
+                    android:importantForAutofill="no"
+                    android:id="@+id/campoCpfMorador"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@android:color/transparent"
+                    android:fontFamily="@font/nunito_medium"
+                    android:hint="@string/cpf"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
+                    android:maxLength="14"
+                    android:paddingStart="13dp"
+                    android:paddingEnd="13dp"
+                    android:textColor="@color/verde_escuro_principal"
+                    android:textColorHint="@color/cinza_texto_suave"
+                    android:textSize="15sp" />
+
+            </com.google.android.material.card.MaterialCardView>
+
             <FrameLayout
-                android:id="@+id/containerBotaoContinuar"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="14dp"
@@ -543,7 +576,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/containerCodigoCondominio">
+                app:layout_constraintTop_toBottomOf="@id/containerCpfMorador">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/botaoContinuar"

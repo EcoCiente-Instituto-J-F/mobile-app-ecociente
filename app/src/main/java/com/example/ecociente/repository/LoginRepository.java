@@ -68,6 +68,10 @@ public class LoginRepository {
         return resultado;
     }
 
+    public void sair() {
+        autenticacao.signOut();
+    }
+
     @NonNull
     private ResultadoLogin confirmarUsuarioLogado() {
         if (autenticacao.getCurrentUser() == null) {

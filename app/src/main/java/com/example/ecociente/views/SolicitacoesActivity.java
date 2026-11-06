@@ -1,8 +1,12 @@
 package com.example.ecociente.views;
 
+import android.widget.LinearLayout;
+import com.example.ecociente.ui.EstadoTela;
+import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import android.app.Activity;
@@ -26,14 +30,16 @@ import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.example.ecociente.viewmodels.SolicitacoesViewModel;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import java.util.ArrayList;
 import java.util.List;
+import com.example.ecociente.ui.AoDigitar;
+import java.util.Locale;
 
 public class SolicitacoesActivity extends AppCompatActivity {
 
-    public static final String EXTRA_HISTORICO = "historico";
+    public static final String EXTRA_INDICE_BARRA = "indiceBarra";
 
     private static final int FALTAM_PARA_CARREGAR_MAIS = 3;
 
@@ -50,12 +56,10 @@ public class SolicitacoesActivity extends AppCompatActivity {
                         }
                     });
 
-    private boolean historico;
-
     private SwipeRefreshLayout atualizacao;
     private View indicador;
-    private TextView textoEstado;
-    private MaterialButton botaoEstado;
+    private LinearLayout areaEstado;
+    private EditText campoBusca;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -65,26 +69,28 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_solicitacoes);
 
+        Motion.entrar(
+                this,
+                R.id.tituloSolicitacoes,
+                R.id.campoBuscaSolicitacao,
+                R.id.rolagemFiltros,
+                R.id.listaSolicitacoes);
+
         viewModel = new ViewModelProvider(this).get(SolicitacoesViewModel.class);
-
-        historico = getIntent().getBooleanExtra(EXTRA_HISTORICO, false);
-
-        if (historico) {
-            viewModel.definirFiltroInicial(StatusAgendamento.REALIZADO);
-
-            ((TextView) findViewById(R.id.tituloSolicitacoes)).setText(R.string.historico);
-        }
+        viewModel.definirOcultarRealizadas(indiceAtual() == ItensBarra.SEGUNDO);
 
         atualizacao = findViewById(R.id.atualizacaoSolicitacoes);
         indicador = findViewById(R.id.indicadorSolicitacoes);
-        textoEstado = findViewById(R.id.textoEstadoSolicitacoes);
-        botaoEstado = findViewById(R.id.botaoAcaoEstadoSolicitacoes);
+        areaEstado = findViewById(R.id.areaEstadoSolicitacoes);
+        campoBusca = findViewById(R.id.campoBuscaSolicitacao);
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizSolicitacoes));
 
         configurarFiltros();
 
         configurarLista();
+
+        configurarBusca();
 
         configurarNavegacao();
 
@@ -101,12 +107,21 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
         ChipGroup grupo = findViewById(R.id.filtrosSolicitacoes);
 
-        for (StatusAgendamento status : StatusAgendamento.values()) {
+        // null = "Todas", o padrão; os demais chips filtram por status.
+        java.util.List<StatusAgendamento> opcoes = new java.util.ArrayList<>();
+        opcoes.add(null);
+        opcoes.addAll(java.util.Arrays.asList(StatusAgendamento.values()));
+
+        for (StatusAgendamento status : opcoes) {
+
+            if (indiceAtual() == ItensBarra.SEGUNDO && status == StatusAgendamento.REALIZADO) {
+                continue;
+            }
 
             Chip chip = new Chip(this, null, com.google.android.material.R.attr.chipStyle);
 
             chip.setId(View.generateViewId());
-            chip.setText(status.getRotulo());
+            chip.setText(status == null ? R.string.solicitacoes_filtro_todas : status.getRotulo());
             chip.setCheckable(true);
             chip.setCheckedIconVisible(false);
             chip.setTag(status);
@@ -170,9 +185,41 @@ public class SolicitacoesActivity extends AppCompatActivity {
 
     private void exibirItens(@NonNull List<Solicitacao> itens) {
 
-        adaptador.submitList(itens);
+        String busca = campoBusca.getText().toString().trim().toLowerCase(Locale.ROOT);
 
-        atualizarEstado();
+        if (busca.isEmpty()) {
+            adaptador.submitList(itens, this::atualizarEstado);
+
+        } else {
+            List<Solicitacao> filtrados = new ArrayList<>();
+
+            for (Solicitacao solicitacao : itens) {
+                String nome = SolicitacaoAdapter.nomeExibido(this, solicitacao);
+
+                if (nome.toLowerCase(Locale.ROOT).contains(busca)) {
+                    filtrados.add(solicitacao);
+                }
+            }
+
+            adaptador.submitList(filtrados, this::atualizarEstado);
+        }
+
+        // ListAdapter aplica a nova lista de forma assíncrona; o estado vazio é
+        // recalculado no callback de submitList, quando getCurrentList() já está atualizado.
+    }
+
+    private void configurarBusca() {
+
+        AoDigitar.em(
+                campoBusca,
+                () -> {
+                    List<Solicitacao> itens = viewModel.getItens().getValue();
+
+                    if (itens != null) {
+                        exibirItens(itens);
+                    }
+                });
+
     }
 
     private void atualizarEstado() {
@@ -195,10 +242,13 @@ public class SolicitacoesActivity extends AppCompatActivity {
         }
 
         if (situacao == ResultadoSolicitacoes.Tipo.SESSAO_EXPIRADA) {
-            mostrarEstado(R.string.solicitacoes_sessao_expirada, R.string.entrar_novamente, view -> sair());
+            mostrarEstado(R.string.solicitacoes_sessao_expirada, R.string.entrar_novamente, this::sair);
+
+        } else if (situacao == ResultadoSolicitacoes.Tipo.SEM_ACESSO) {
+            mostrarEstado(R.string.solicitacoes_sem_acesso, 0, null);
 
         } else if (situacao == ResultadoSolicitacoes.Tipo.ERRO) {
-            mostrarEstado(R.string.solicitacoes_erro, R.string.tentar_novamente, view -> viewModel.recarregar());
+            mostrarEstado(R.string.solicitacoes_erro, R.string.tentar_novamente, viewModel::recarregar);
 
         } else if (semItens) {
             mostrarEstado(R.string.solicitacoes_vazio, 0, null);
@@ -208,25 +258,19 @@ public class SolicitacoesActivity extends AppCompatActivity {
         }
     }
 
-    private void mostrarEstado(int mensagem, int rotuloBotao, View.OnClickListener acao) {
-
-        textoEstado.setText(mensagem);
-        textoEstado.setVisibility(View.VISIBLE);
+    private void mostrarEstado(int mensagem, int rotuloBotao, Runnable acao) {
+        areaEstado.removeAllViews();
+        areaEstado.setVisibility(View.VISIBLE);
 
         if (rotuloBotao == 0) {
-            botaoEstado.setVisibility(View.GONE);
-            return;
+            EstadoTela.vazio(areaEstado, mensagem);
+        } else {
+            EstadoTela.comAcao(areaEstado, mensagem, rotuloBotao, acao);
         }
-
-        botaoEstado.setText(rotuloBotao);
-        botaoEstado.setOnClickListener(acao);
-        botaoEstado.setVisibility(View.VISIBLE);
     }
 
     private void ocultarEstado() {
-
-        textoEstado.setVisibility(View.GONE);
-        botaoEstado.setVisibility(View.GONE);
+        areaEstado.setVisibility(View.GONE);
     }
 
     private void sair() {
@@ -237,6 +281,9 @@ public class SolicitacoesActivity extends AppCompatActivity {
     }
 
     private void configurarNavegacao() {
+
+        ((android.widget.TextView) findViewById(R.id.tituloSolicitacoes))
+                .setText(indiceAtual() == ItensBarra.SEGUNDO ? R.string.coletas : R.string.historico);
 
         BarraNavegacaoView barra = findViewById(R.id.barraNavegacao);
 
@@ -251,6 +298,6 @@ public class SolicitacoesActivity extends AppCompatActivity {
     }
 
     private int indiceAtual() {
-        return historico ? ItensBarra.QUARTO : ItensBarra.SEGUNDO;
+        return getIntent().getIntExtra(EXTRA_INDICE_BARRA, ItensBarra.SEGUNDO);
     }
 }

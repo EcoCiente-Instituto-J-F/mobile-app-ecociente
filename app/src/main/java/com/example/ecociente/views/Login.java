@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
@@ -31,6 +33,7 @@ import com.example.ecociente.model.TipoUsuario;
 import com.google.android.material.card.MaterialCardView;
 import java.util.HashMap;
 import java.util.Map;
+import com.example.ecociente.ui.AvisoFlutuante;
 
 public class Login extends AppCompatActivity {
 
@@ -46,6 +49,8 @@ public class Login extends AppCompatActivity {
     private static final String CHAVE_TELEFONE = "telefone";
     private static final String CHAVE_CPF = "cpf";
     private static final String CHAVE_NOME_COOPERATIVA = "nomeCooperativa";
+    public static final String EXTRA_AVISO = "avisoLogin";
+
     private static final String CHAVE_CNPJ = "cnpj";
     private static final String CHAVE_EMAIL_COOPERATIVA = "emailCooperativa";
 
@@ -129,9 +134,23 @@ public class Login extends AppCompatActivity {
 
         configurarBotaoVoltar();
 
+        if (estadoSalvo != null) {
+
+            Fragment restaurado =
+                    getSupportFragmentManager().findFragmentById(R.id.containerFragmentAutenticacao);
+
+            ajustarAlturaDoCartao(restaurado instanceof CadastroEtapa1Fragment || restaurado instanceof CadastroEtapa2Fragment);
+        }
+
         if (estadoSalvo == null) {
 
             abrirLogin(false);
+
+            int aviso = getIntent().getIntExtra(EXTRA_AVISO, 0);
+
+            if (aviso != 0) {
+                findViewById(android.R.id.content).post(() -> AvisoFlutuante.mostrar(this, aviso));
+            }
 
         } else {
 
@@ -398,7 +417,73 @@ public class Login extends AppCompatActivity {
         atualizarVisualAba(true, false);
     }
 
+    // Um elemento inflado com wrap_content e constrainedHeight volta a "wrap" se só se troca a altura
+    // para 0 (o ConstraintLayout reverte); por isso os dois atributos mudam juntos.
+    private static void definirAltura(ConstraintLayout.LayoutParams parametros, boolean ocuparEspacoTodo) {
+
+        if (ocuparEspacoTodo) {
+            parametros.constrainedHeight = false;
+            parametros.matchConstraintDefaultHeight = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
+            parametros.height = 0;
+
+        } else {
+            parametros.constrainedHeight = true;
+            parametros.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        }
+    }
+
+    // Só em tablet (o layout de celular não tem o cartão com id). No login o cartão tem a altura do
+    // conteúdo e fica centralizado; o cadastro tem uma área de rolagem de altura definida pela tela,
+    // que colapsaria dentro de um cartão assim, então nele o cartão ocupa o espaço disponível.
+    private void ajustarAlturaDoCartao(boolean ocuparEspacoTodo) {
+
+        View cartao = findViewById(R.id.cartaoLogin);
+
+        if (cartao == null) {
+            return;
+        }
+
+        View painel = findViewById(R.id.conteudoPainelLogin);
+
+        View container = findViewById(R.id.containerFragmentAutenticacao);
+
+        View logo = findViewById(R.id.logoLogin);
+
+        ConstraintLayout.LayoutParams doCartao = (ConstraintLayout.LayoutParams) cartao.getLayoutParams();
+
+        ConstraintLayout.LayoutParams doContainer = (ConstraintLayout.LayoutParams) container.getLayoutParams();
+
+        boolean jaOcupaEspacoTodo = doCartao.height == 0;
+
+        if (jaOcupaEspacoTodo == ocuparEspacoTodo) {
+            return;
+        }
+
+        definirAltura(doCartao, ocuparEspacoTodo);
+
+        // Numa corrente "packed" o 0dp não se expande; na "spread" o cartão ocupa o que sobra.
+        ConstraintLayout.LayoutParams doLogo = (ConstraintLayout.LayoutParams) logo.getLayoutParams();
+
+        doLogo.verticalChainStyle =
+                ocuparEspacoTodo ? ConstraintLayout.LayoutParams.CHAIN_SPREAD : ConstraintLayout.LayoutParams.CHAIN_PACKED;
+
+        logo.setLayoutParams(doLogo);
+
+        definirAltura(doContainer, ocuparEspacoTodo);
+
+        painel.getLayoutParams().height =
+                ocuparEspacoTodo ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT;
+
+        cartao.setLayoutParams(doCartao);
+
+        container.setLayoutParams(doContainer);
+
+        painel.requestLayout();
+    }
+
     private void atualizarVisualAba(boolean cadastroSelecionado, boolean animar) {
+
+        ajustarAlturaDoCartao(cadastroSelecionado);
 
         seletorLoginCadastro.post(
                 () -> {
@@ -629,7 +714,7 @@ public class Login extends AppCompatActivity {
         return dadosUsuario;
     }
 
-    // Mesmos valores que a ds-cadastro-api usa pra identificar o tipo de
+    // Mesmos valores que a ds-mobile-api usa pra identificar o tipo de
     // conta ("comum", "morador", "cooperativa") - a interface do app vai
     // usar esse campo pra decidir qual home mostrar.
     @NonNull

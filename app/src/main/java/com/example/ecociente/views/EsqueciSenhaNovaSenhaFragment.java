@@ -8,13 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.ui.BotaoCarregando;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.EsqueciSenhaViewModel;
@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 // Passo 3: define a nova senha.
 public class EsqueciSenhaNovaSenhaFragment extends Fragment {
-    // Mesma regra da ds-esqueceusenha-api.
+    // Mesma regra da ds-mobile-api.
     private static final Pattern PADRAO_SENHA_VALIDA =
             Pattern.compile("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[^A-Za-z0-9])\\S{8,100}$");
 
@@ -129,6 +129,6 @@ public class EsqueciSenhaNovaSenhaFragment extends Fragment {
     }
 
     private void mostrarMensagem(@NonNull String mensagem) {
-        Toast.makeText(requireContext(), mensagem, Toast.LENGTH_SHORT).show();
+        AvisoFlutuante.mostrar(requireActivity(), mensagem);
     }
 }

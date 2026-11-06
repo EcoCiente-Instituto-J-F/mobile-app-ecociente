@@ -1,10 +1,12 @@
 package com.example.ecociente.views;
 
+import com.example.ecociente.ui.EstadoTela;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.widget.PopupMenu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -15,6 +17,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ecociente.R;
+import com.example.ecociente.model.QuizConteudo;
+import com.example.ecociente.model.QuizResumo;
+import com.example.ecociente.model.DadosDemonstracaoEducacao;
+import com.example.ecociente.midias.MidiasEco;
+import com.example.ecociente.repository.EducacaoRepository;
+import com.example.ecociente.repository.TentativaQuizRepository;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
@@ -26,8 +34,12 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import com.example.ecociente.ui.IndicadorCarregamento;
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -38,81 +50,17 @@ public class QuizActivity extends AppCompatActivity {
     private final Motion motion = new Motion();
 
     private TextView textoQuantidadeQuizzes;
+    private String categoriaSelecionada = "";
 
     private BarraNavegacaoView barra;
 
-    private static final QuizItem[] QUIZZES = {
-            new QuizItem(
-                    "Tipos de plástico e reciclagem",
-                    "Plástico",
-                    "10 perguntas",
-                    "6 min",
-                    "80% de acerto"
-            ),
-            new QuizItem(
-                    "Impacto do lixo no meio ambiente",
-                    "Sustentabilidade",
-                    "8 perguntas",
-                    "4 min",
-                    "75% de acerto"
-            ),
-            new QuizItem(
-                    "Descarte correto de eletrônicos",
-                    "Eletrônicos",
-                    "10 perguntas",
-                    "6 min",
-                    null
-            ),
-            new QuizItem(
-                    "Como fazer compostagem em casa",
-                    "Compostagem",
-                    "7 perguntas",
-                    "4 min",
-                    "90% de acerto"
-            ),
-            new QuizItem(
-                    "Descarte de papel e papelão",
-                    "Papel",
-                    "9 perguntas",
-                    "5 min",
-                    null
-            ),
-            new QuizItem(
-                    "Pegada de carbono no dia a dia",
-                    "Sustentabilidade",
-                    "10 perguntas",
-                    "6 min",
-                    null
-            ),
-            new QuizItem(
-                    "Economia de água em casa",
-                    "Água",
-                    "8 perguntas",
-                    "5 min",
-                    null
-            ),
-            new QuizItem(
-                    "Coleta seletiva sem erros",
-                    "Reciclagem",
-                    "12 perguntas",
-                    "7 min",
-                    "85% de acerto"
-            ),
-            new QuizItem(
-                    "Consumo consciente no cotidiano",
-                    "Consumo",
-                    "9 perguntas",
-                    "5 min",
-                    null
-            ),
-            new QuizItem(
-                    "Reciclagem de vidro e metal",
-                    "Materiais",
-                    "11 perguntas",
-                    "6 min",
-                    null
-            )
-    };
+    private final List<QuizItem> quizzes = new ArrayList<>();
+
+    private final EducacaoRepository repositorio = new EducacaoRepository();
+    private final TentativaQuizRepository tentativas = new TentativaQuizRepository();
+    // Vem da API, por usuário: nunca guardado no aparelho nem reaproveitado ao trocar de conta.
+    private final Set<Integer> quizzesConcluidos = new HashSet<>();
+    private String contaDasConclusoes = "";
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -124,7 +72,7 @@ public class QuizActivity extends AppCompatActivity {
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizQuizUsuarioComum));
 
-        if (autenticacao.getCurrentUser() == null) {
+        if (!DadosDemonstracaoEducacao.ATIVO && autenticacao.getCurrentUser() == null) {
             finish();
             return;
         }
@@ -148,16 +96,81 @@ public class QuizActivity extends AppCompatActivity {
         barra = findViewById(R.id.barraNavegacao);
 
         configurarCabecalho();
-        preencherListaQuizzes();
+        findViewById(R.id.botaoFiltrosQuiz).setOnClickListener(this::mostrarFiltroCategorias);
+        findViewById(R.id.botaoRecarregarConclusoesQuiz).setOnClickListener(view -> carregarConclusoes());
         configurarBusca();
         configurarNavegacao();
-        atualizarQuantidadeQuizzes(QUIZZES.length);
         animarEntradaDaTela();
         mostrarBarra();
+        carregarQuizzes();
+    }
+
+    private void carregarQuizzes() {
+        if (DadosDemonstracaoEducacao.ATIVO) {
+            mostrarListaCarregada(DadosDemonstracaoEducacao.quizzes());
+            return;
+        }
+        textoQuantidadeQuizzes.setText("");
+
+        LinearLayout listaCarregando = findViewById(R.id.listaQuizzes);
+
+        listaCarregando.removeAllViews();
+
+        IndicadorCarregamento.mostrar(listaCarregando, R.string.quizzes_carregando);
+
+        repositorio.listarQuizzes(
+                this,
+                (sucesso, itens) -> {
+                    if (isFinishing() || isDestroyed()) {
+                        return;
+                    }
+
+                    if (!sucesso) {
+                        textoQuantidadeQuizzes.setText(R.string.quizzes_erro);
+                        mostrarEstadoDosQuizzes(true);
+                        return;
+                    }
+
+                    mostrarListaCarregada(itens);
+                });
+    }
+
+    private void mostrarListaCarregada(@NonNull List<QuizResumo> itens) {
+        MidiasEco.obter(this).prepararQuizzes(itens);
+        quizzes.clear();
+        for (QuizResumo quiz : itens) {
+            quizzes.add(new QuizItem(
+                    quiz.getId(), quiz.getTitulo(), quiz.getCategoria(),
+                    getResources().getQuantityString(R.plurals.quiz_n_perguntas,
+                            quiz.getPerguntas().size(), quiz.getPerguntas().size()),
+                    quiz.getPontos() > 0 ? getString(R.string.quiz_pontos_recompensa, quiz.getPontos()) : "",
+                    null, quiz.getPerguntas()));
+        }
+        preencherListaQuizzes();
+        atualizarQuantidadeQuizzes(quizzes.size());
+        if (!categoriaSelecionada.isEmpty())
+            filtrarQuizzes(((EditText) findViewById(R.id.campoPesquisaQuiz)).getText().toString());
+        if (quizzes.isEmpty()) mostrarEstadoDosQuizzes(false);
+    }
+
+    // Lista vazia (sem quizzes) e erro de carregamento são coisas diferentes: só o erro oferece tentar de novo.
+    private void mostrarEstadoDosQuizzes(boolean erro) {
+        LinearLayout lista = findViewById(R.id.listaQuizzes);
+
+        lista.removeAllViews();
+
+        if (erro) {
+            EstadoTela.erro(lista, R.string.quizzes_erro, this::carregarQuizzes);
+        } else {
+            EstadoTela.vazio(lista, R.string.quizzes_vazio);
+        }
     }
 
     private void configurarCabecalho() {
         Motion.pressFeedback(findViewById(R.id.botaoNotificacoesQuiz));
+
+        findViewById(R.id.botaoNotificacoesQuiz)
+                .setOnClickListener(view -> startActivity(CentralNotificacoesActivity.criarIntent(this, CentralNotificacoesActivity.Destino.CONDOMINIO)));
     }
 
     private void preencherListaQuizzes() {
@@ -169,7 +182,7 @@ public class QuizActivity extends AppCompatActivity {
 
         int indice = 0;
 
-        for (QuizItem quiz : QUIZZES) {
+        for (QuizItem quiz : quizzes) {
             MaterialCardView card = (MaterialCardView)
                     inflater.inflate(R.layout.item_quiz_usuario_comum, listaQuizzes, false);
 
@@ -192,22 +205,86 @@ public class QuizActivity extends AppCompatActivity {
         TextView textoResultadoQuiz = card.findViewById(R.id.textoResultadoQuiz);
         MaterialButton botaoComecarQuiz = card.findViewById(R.id.botaoComecarQuiz);
 
+        MidiasEco.obter(this).mostrarIconeQuiz(
+                card.findViewById(R.id.imagemIconeQuiz),
+                quiz.id, quiz.titulo, quiz.categoria);
         textoTituloQuiz.setText(quiz.titulo);
         textoCategoriaQuiz.setText(quiz.categoria);
         textoPerguntasQuiz.setText(quiz.perguntas);
         textoDuracaoQuiz.setText(quiz.duracao);
 
-        if (quiz.resultado != null && !quiz.resultado.trim().isEmpty()) {
+        boolean realizado = quizzesConcluidos.contains(quiz.id);
+
+        if (realizado || (quiz.resultado != null && !quiz.resultado.trim().isEmpty())) {
             boxResultadoQuiz.setVisibility(View.VISIBLE);
-            textoResultadoQuiz.setText(quiz.resultado);
-            botaoComecarQuiz.setVisibility(View.GONE);
+            textoResultadoQuiz.setText(realizado ? getString(R.string.quiz_ja_realizado) : quiz.resultado);
+            botaoComecarQuiz.setVisibility(realizado ? View.VISIBLE : View.GONE);
         } else {
             boxResultadoQuiz.setVisibility(View.GONE);
             botaoComecarQuiz.setVisibility(View.VISIBLE);
         }
 
+        botaoComecarQuiz.setText(realizado ? R.string.quiz_refazer : R.string.comecar);
+
+        card.setOnClickListener(view -> abrirInicioQuiz(quiz));
+        botaoComecarQuiz.setOnClickListener(view -> abrirInicioQuiz(quiz));
+
         Motion.pressFeedback(card);
         Motion.pressFeedback(botaoComecarQuiz);
+    }
+
+    // O catálogo e as conclusões são consultas independentes: a lista aparece mesmo se as conclusões falharem,
+    // e a falha não é mostrada como "nenhum quiz feito". Volta da tela de um quiz, a lista é atualizada.
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (!DadosDemonstracaoEducacao.ATIVO && autenticacao.getCurrentUser() != null) {
+            carregarConclusoes();
+        }
+    }
+
+    private void carregarConclusoes() {
+
+        String conta = autenticacao.getCurrentUser() == null ? "" : autenticacao.getCurrentUser().getUid();
+
+        if (!conta.equals(contaDasConclusoes)) {
+            quizzesConcluidos.clear();
+            contaDasConclusoes = conta;
+        }
+
+        tentativas.quizzesConcluidos(
+                this,
+                ids -> {
+                    if (isFinishing() || isDestroyed()) {
+                        return;
+                    }
+
+                    findViewById(R.id.avisoConclusoesQuiz).setVisibility(ids == null ? View.VISIBLE : View.GONE);
+
+                    if (ids == null) {
+                        return;
+                    }
+
+                    quizzesConcluidos.clear();
+                    quizzesConcluidos.addAll(ids);
+
+                    if (!quizzes.isEmpty()) {
+                        filtrarQuizzes(((EditText) findViewById(R.id.campoPesquisaQuiz)).getText().toString());
+                    }
+                });
+    }
+
+    private void abrirInicioQuiz(@NonNull QuizItem quiz) {
+        Intent rota = new Intent(this, InicioQuizActivity.class);
+
+        rota.putExtra(InicioQuizActivity.EXTRA_CATEGORIA, quiz.categoria);
+        QuizConteudo.anexar(rota, quiz.listaPerguntas);
+        QuizConteudo.anexarQuizId(rota, quiz.id);
+        rota.putExtra(InicioQuizActivity.EXTRA_PERGUNTAS, quiz.perguntas);
+
+        startActivity(rota);
+        overridePendingTransition(0, 0);
     }
 
     private void configurarBusca() {
@@ -229,15 +306,36 @@ public class QuizActivity extends AppCompatActivity {
         });
     }
 
+    private void mostrarFiltroCategorias(@NonNull View ancora) {
+        PopupMenu popup = new PopupMenu(this, ancora);
+        popup.getMenu().add(0, 0, 0, "Todas as categorias");
+        Set<String> categorias = new LinkedHashSet<>();
+        for (QuizItem quiz : quizzes) categorias.add(quiz.categoria);
+        int id = 1;
+        for (String categoria : categorias) popup.getMenu().add(0, id++, id, categoria);
+        popup.setOnMenuItemClickListener(item -> {
+            categoriaSelecionada = item.getItemId() == 0 ? "" : item.getTitle().toString();
+            EditText busca = findViewById(R.id.campoPesquisaQuiz);
+            filtrarQuizzes(busca.getText().toString());
+            return true;
+        });
+        popup.show();
+    }
+
     private void filtrarQuizzes(@NonNull String filtro) {
         String filtroNormalizado = filtro.trim().toLowerCase(Locale.ROOT);
         int quantidadeVisivel = 0;
+        String imagemAnterior = null;
+        MidiasEco midias = MidiasEco.obter(this);
 
         for (CardQuizView cardQuizView : cardsQuizzes) {
             boolean mostrar =
                     filtroNormalizado.isEmpty()
                             || cardQuizView.quiz.titulo.toLowerCase(Locale.ROOT).contains(filtroNormalizado)
                             || cardQuizView.quiz.categoria.toLowerCase(Locale.ROOT).contains(filtroNormalizado);
+
+            mostrar = mostrar && (categoriaSelecionada.isEmpty()
+                    || cardQuizView.quiz.categoria.equals(categoriaSelecionada));
 
             if (mostrar) {
                 if (cardQuizView.card.getVisibility() != View.VISIBLE) {
@@ -248,6 +346,17 @@ public class QuizActivity extends AppCompatActivity {
                             .setDuration(Motion.STATE_MS)
                             .start();
                 }
+
+                // A filtragem pode aproximar cards que antes estavam separados.
+                // Redistribui os ícones na ordem visível para evitar duas imagens iguais lado a lado.
+                QuizItem quiz = cardQuizView.quiz;
+                com.example.ecociente.midias.Midia escolhida = midias.prepararIconeQuiz(
+                        quiz.id, quiz.titulo, quiz.categoria, imagemAnterior);
+                if (escolhida != null) imagemAnterior = escolhida.id;
+                midias.mostrarIconeQuiz(
+                        cardQuizView.card.findViewById(R.id.imagemIconeQuiz),
+                        quiz.id, quiz.titulo, quiz.categoria);
+
                 quantidadeVisivel++;
             } else {
                 cardQuizView.card.setVisibility(View.GONE);
@@ -259,7 +368,7 @@ public class QuizActivity extends AppCompatActivity {
 
     private void atualizarQuantidadeQuizzes(int quantidade) {
         textoQuantidadeQuizzes.setText(
-                getString(R.string.quizzes_disponiveis_formatado, quantidade)
+                getResources().getQuantityString(R.plurals.quizzes_disponiveis_formatado, quantidade, quantidade)
         );
     }
 
@@ -271,25 +380,7 @@ public class QuizActivity extends AppCompatActivity {
         barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
 
         barra.setOnItemClickListener(
-                indice -> {
-                    if (indice == ItensBarra.HOME) {
-                        Navegacao.abrirHomePelaBarra(
-                                this,
-                                morador ? CondominioHomeActivity.class : MainActivity.class,
-                                ItensBarra.TERCEIRO);
-
-                    } else if (indice == ItensBarra.QUARTO && !morador) {
-                        abrirPerfil();
-                    }
-                });
-    }
-
-    private void abrirPerfil() {
-
-        Navegacao.abrirPelaBarra(
-                this, new Intent(this, GerenciarPerfilActivity.class), ItensBarra.TERCEIRO);
-
-        finish();
+                indice -> Navegacao.irParaItemDoUsuario(this, indice, ItensBarra.TERCEIRO, morador));
     }
 
     private void animarEntradaDaTela() {
@@ -325,13 +416,24 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private static final class QuizItem {
+        private final int id;
         private final String titulo;
         private final String categoria;
         private final String perguntas;
         private final String duracao;
         private final String resultado;
+        private final List<QuizConteudo.Pergunta> listaPerguntas;
 
-        private QuizItem(String titulo, String categoria, String perguntas, String duracao, String resultado) {
+        private QuizItem(
+                int id,
+                String titulo,
+                String categoria,
+                String perguntas,
+                String duracao,
+                String resultado,
+                List<QuizConteudo.Pergunta> listaPerguntas) {
+            this.id = id;
+            this.listaPerguntas = listaPerguntas;
             this.titulo = titulo;
             this.categoria = categoria;
             this.perguntas = perguntas;

@@ -30,9 +30,9 @@
                         android:paddingBottom="14dp">
 
                         <ImageView
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:layout_gravity="bottom"
+                            android:layout_width="52dp"
+                            android:layout_height="58dp"
+                            android:layout_gravity="center_vertical"
                             android:importantForAccessibility="no"
                             android:scaleType="fitCenter"
                             android:src="@drawable/ilustracao_coleta_reciclavel" />
@@ -40,7 +40,7 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
+                            android:layout_marginStart="12dp"
                             android:layout_weight="1"
                             android:orientation="vertical">
 
@@ -68,56 +68,31 @@
                                 android:textSize="12sp"
                                 android:visibility="gone" />
 
-                            <LinearLayout
+                            <TextView
+                                android:id="@+id/textoDataProximaColeta"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
+                                android:fontFamily="@font/nunito_regular"
+                                android:text="@string/carregando"
+                                android:textColor="@color/cinza_texto_home"
+                                android:textSize="12sp"
                                 android:gravity="center_vertical"
-                                android:orientation="horizontal">
+                                android:drawablePadding="6dp"
+                                app:drawableStartCompat="@drawable/ic_calendario_14dp" />
 
-                                <ImageView
-                                    android:layout_width="14dp"
-                                    android:layout_height="14dp"
-                                    android:importantForAccessibility="no"
-                                    android:src="@drawable/ic_calendario" />
-
-                                <TextView
-                                    android:id="@+id/textoDataProximaColeta"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="6dp"
-                                    android:fontFamily="@font/nunito_regular"
-                                    android:text="@string/carregando"
-                                    android:textColor="@color/cinza_texto_home"
-                                    android:textSize="12sp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/linhaHorarioProximaColeta"
+                            <TextView
+                                android:id="@+id/textoHorarioProximaColeta"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
+                                android:visibility="gone"
+                                android:fontFamily="@font/nunito_regular"
+                                android:textColor="@color/cinza_texto_home"
+                                android:textSize="12sp"
                                 android:gravity="center_vertical"
-                                android:orientation="horizontal"
-                                android:visibility="gone">
-
-                                <ImageView
-                                    android:layout_width="14dp"
-                                    android:layout_height="14dp"
-                                    android:importantForAccessibility="no"
-                                    android:src="@drawable/ic_relogio" />
-
-                                <TextView
-                                    android:id="@+id/textoHorarioProximaColeta"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="6dp"
-                                    android:fontFamily="@font/nunito_regular"
-                                    android:textColor="@color/cinza_texto_home"
-                                    android:textSize="12sp" />
-
-                            </LinearLayout>
+                                android:drawablePadding="6dp"
+                                app:drawableStartCompat="@drawable/ic_relogio_14dp" />
 
                         </LinearLayout>
 
@@ -129,17 +104,17 @@
                             android:background="@drawable/fundo_caixa_faltam_dias"
                             android:gravity="center_vertical"
                             android:orientation="horizontal"
-                            android:paddingStart="10dp"
-                            android:paddingTop="8dp"
-                            android:paddingEnd="12dp"
-                            android:paddingBottom="8dp"
+                            android:paddingStart="8dp"
+                            android:paddingTop="6dp"
+                            android:paddingEnd="10dp"
+                            android:paddingBottom="6dp"
                             android:visibility="gone">
 
                             <ImageView
                                 android:layout_width="22dp"
                                 android:layout_height="22dp"
                                 android:importantForAccessibility="no"
-                                android:src="@drawable/ic_relogio_verde" />
+                                android:src="@drawable/ic_relogio" app:tint="@color/verde_escuro_principal" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -153,7 +128,7 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="@font/nunito_regular"
                                     android:textColor="@color/verde_escuro_principal"
-                                    android:textSize="10sp" />
+                                    android:textSize="11sp" />
 
                                 <TextView
                                     android:id="@+id/textoValorFaltam"

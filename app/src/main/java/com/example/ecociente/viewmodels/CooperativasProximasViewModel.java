@@ -104,15 +104,31 @@ public final class CooperativasProximasViewModel extends AndroidViewModel {
         }
 
         enviandoSolicitacao.setValue(true);
-        calendarioRepository.criar(
-                getApplication(),
-                idCondominio,
-                cooperativaId,
-                dataInicio,
-                resultado -> {
-                    enviandoSolicitacao.setValue(false);
-                    retorno.aoConcluir(resultado);
-                });
+        try {
+            java.text.SimpleDateFormat formato =
+                    new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", java.util.Locale.US);
+            java.util.Date data = formato.parse(dataInicio);
+            if (data == null) {
+                throw new java.text.ParseException("Data inválida", 0);
+            }
+
+            calendarioRepository.solicitar(
+                    getApplication(),
+                    idCondominio,
+                    cooperativaId,
+                    data.getTime(),
+                    (criada, mensagemErro) -> {
+                        enviandoSolicitacao.setValue(false);
+                        ResultadoApi resultado = criada != null
+                                ? ResultadoApi.sucesso()
+                                : ResultadoApi.erro(mensagemErro);
+                        retorno.aoConcluir(resultado);
+                    });
+        } catch (java.text.ParseException erro) {
+            enviandoSolicitacao.setValue(false);
+            retorno.aoConcluir(ResultadoApi.erro(
+                    "Não foi possível interpretar a data escolhida."));
+        }
     }
 
     @NonNull

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ic_calendario com 14dp de lado, para servir de ícone dentro de um TextView -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="14dp"
+        android:height="14dp"
+        android:drawable="@drawable/ic_calendario" />
+</layer-list>
