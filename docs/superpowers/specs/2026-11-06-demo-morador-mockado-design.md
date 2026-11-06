@@ -34,7 +34,7 @@ branch separada (fica defasada com os merges diários da equipe).
 Tela → ViewModel → Repository → HttpURLConnection ──► ConexaoDemo ──► ApiDemo ──► EstadoDemo (JSON em disco)
                        │                                                ▲
                        └──► ContaAtual ──► ProvedorContaDemo ───────────┘
-                               (em produção: ProvedorContaFirebase)
+                               (em produção: sem provedor, segue o código Firebase atual)
 ```
 
 ### 3.1 Build
@@ -46,8 +46,8 @@ Tela → ViewModel → Repository → HttpURLConnection ──► ConexaoDemo �
   nome do app para "EcoCiente Demo".
 - `google-services.json` do demo só registra o pacote `.demo`, porque o plugin exige um client para o
   `applicationId`. Não precisa de chave real: o Firebase não é chamado por nenhum fluxo do demo.
-- `buildConfig = true` e o campo `BuildConfig.MODO_DEMO` (`false` no `defaultConfig`, `true` no `demo`), usado só
-  no login. O CI gera `app/google-services.json`, mas o do demo é versionado com valores fictícios.
+- `buildConfig = true` e os campos `MODO_DEMO`, `DEMO_EMAIL` e `DEMO_SENHA` (`false` e vazios no `defaultConfig`,
+  preenchidos no `demo`), usados só no login. O CI gera `app/google-services.json`, mas o do demo é versionado com valores fictícios.
 
 ### 3.2 Transporte (`app/src/demo`)
 
@@ -90,7 +90,8 @@ Rotas sem handler devolvem 404, e isso gera log com a rota, para achar lacunas a
 - Guarda: conta e senha, saldo e movimentações, moradores do ranking, postagens, votos, hashes de foto,
   tentativas de quiz, agendamentos e dados do perfil.
 - `SementeDemo` monta o estado inicial, com datas calculadas a partir de "hoje".
-- `resetar()` apaga o arquivo e as fotos e recria a semente.
+- `resetar()` apaga o arquivo e as fotos e recria a semente. O demo também limpa todas as `SharedPreferences` do app
+  (favoritos, progresso de leitura, credenciais) e cancela os lembretes de coleta.
 
 ### 3.5 Costura do Firebase (`main`)
 
@@ -99,9 +100,11 @@ essa parte exige uma mudança em `main`, sem efeito no comportamento de produç�
 
 - `model/UsuarioLogado`: `uid`, `email`, `nome`. Substitui `FirebaseUser` nas telas e ViewModels de morador e em
   `PerfilUsuario.nomeExibicao`/`emailExibicao`.
-- `repository/ContaAtual`: fachada estática com `usuario()` e `usar(Provedor)`, e a interface `Provedor`.
-- `repository/ProvedorContaFirebase`: implementação padrão, com o código que hoje está em `LoginRepository`,
-  `PerfilRepository` e `SenhaUsuarioRepository`.
+- `repository/ContaAtual`: fachada estática com `usuario()`, `usar(Provedor)` e a interface `Provedor`. Sem provedor
+  registrado, que é o caso de produção, `usuario()` lê o `FirebaseAuth`.
+- `LoginRepository`, `PerfilRepository` e `SenhaUsuarioRepository` ganham, no início de cada método público coberto,
+  um desvio para o provedor quando há um. O código Firebase fica onde está, sem ser movido, para reduzir o diff e
+  os conflitos.
 
 A interface cobre: usuário atual, login com e-mail e senha, sair, buscar e carregar perfil, atualizar campo,
 preferências de notificação, alterar senha e excluir conta. Telas de síndico e cooperativa passam a usar
@@ -113,13 +116,13 @@ Essa costura vai em **PR próprio**, antes do demo, para a equipe revisar isolad
 
 ### 3.6 Avisos
 
-`Aviso.lista()` e `Notificacao.lista()` hoje devolvem listas vazias fixas. Ganham uma fonte substituível
-(`Aviso.definirFonte(...)`), que o demo preenche com avisos fictícios. Em produção continuam vazias.
+`Aviso.lista()` hoje devolve uma lista vazia fixa. Ganha uma fonte substituível (`Aviso.definirFonte(...)`), que o
+demo preenche com avisos fictícios. Em produção continua vazia. `Notificacao.lista()` não muda.
 
 ### 3.7 Login
 
-`LoginFragment`, se `BuildConfig.MODO_DEMO`: preenche e-mail e senha a partir de strings que só têm valor em
-`src/demo/res`, e mostra "Versão de demonstração, dados fictícios". Google, Facebook, aba de cadastro e "esqueci a
+`LoginFragment`, se `BuildConfig.MODO_DEMO`: preenche e-mail e senha a partir de `BuildConfig` (a regra 37 proíbe
+senha em `strings.xml`), e mostra "Versão de demonstração, dados fictícios". Google, Facebook, aba de cadastro e "esqueci a
 senha" mostram "Indisponível na demonstração" com `AvisoFlutuante`.
 
 Credenciais erradas passam pelo fluxo real e dão o erro normal de login.
@@ -174,7 +177,7 @@ Todos os nomes e dados são fictícios, conforme o `CONTRIBUTING.md`.
 |---|---|
 | `URL.setURLStreamHandlerFactory` só pode ser chamado uma vez, e o comportamento só é validado no aparelho | Primeira etapa do plano é um esqueleto com login e home; falha cedo, antes de escrever os outros endpoints |
 | Endpoint esquecido | 404 com log da rota, e checklist manual |
-| Costura altera produção sem querer | PR próprio, sem mudança de lógica, e `ProvedorContaFirebase` com o código movido como está |
+| Costura altera produção sem querer | PR próprio, sem mudança de lógica; o código Firebase não é movido e o desvio só existe com provedor registrado |
 | Conflito com merges da `main` | Costura pequena, por PR próprio e rápido; o demo só adiciona arquivos novos |
 | Fotos do Cloudinary sem internet | Fallback já existente; visual um pouco mais simples |
 | Firebase em segundo plano tenta rede (Installations, FCM) | Recebe `IOException` do handler e só registra log |
