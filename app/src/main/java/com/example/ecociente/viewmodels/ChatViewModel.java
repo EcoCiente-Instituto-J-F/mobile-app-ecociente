@@ -14,6 +14,7 @@ import com.example.ecociente.model.RespostaChat;
 import com.example.ecociente.repository.ChatRepository;
 import com.example.ecociente.repository.EkoRespostaLocal;
 import com.example.ecociente.ui.FormatadorRespostaEko;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -100,8 +101,12 @@ public class ChatViewModel extends ViewModel {
                     adicionarMensagem(MensagemChat.doEko(
                             "Sua sessao precisa ser renovada. Entre novamente na conta para conversar com o Eko."));
                 } else if (causa instanceof IllegalStateException) {
-                    adicionarMensagem(MensagemChat.doEko(
-                            "É necessário entrar na sua conta para conversar com o Eko."));
+                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                        adicionarMensagem(MensagemChat.doEko(EkoRespostaLocal.responder(mensagemNormalizada)));
+                    } else {
+                        adicionarMensagem(MensagemChat.doEko(
+                                "É necessário entrar na sua conta para conversar com o Eko."));
+                    }
                 } else {
                     adicionarMensagem(MensagemChat.doEko(EkoRespostaLocal.responder(mensagemNormalizada)));
                 }
