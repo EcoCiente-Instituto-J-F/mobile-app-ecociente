@@ -17,6 +17,9 @@ public final class EstadoDemo {
 
     private JSONObject raiz;
 
+    // Sobe a cada resetar(): quem guarda cópia do estado fora dele (avisos) sabe que a cópia ficou velha.
+    private int geracao;
+
     // Carrega do armazém; ausente, corrompido ou de outra versão, começa da semente.
     public EstadoDemo(@NonNull ArmazemDemo armazem, @NonNull LongSupplier relogio) {
         this.armazem = armazem;
@@ -27,6 +30,10 @@ public final class EstadoDemo {
     @NonNull
     public synchronized JSONObject raiz() {
         return raiz;
+    }
+
+    public synchronized int geracao() {
+        return geracao;
     }
 
     public synchronized void salvar() {
@@ -64,6 +71,7 @@ public final class EstadoDemo {
     public synchronized void resetar() {
         armazem.apagarTudo();
         raiz = SementeDemo.criar(relogio.getAsLong());
+        geracao++;
         salvar();
     }
 

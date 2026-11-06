@@ -135,22 +135,15 @@ final class RotasDiversas implements RotasDemo {
             return RespostaDemo.erro(400, "REQUISICAO_INVALIDA");
         }
 
-        JSONObject conta = ContaDemo.conta(estado.raiz());
-        String nova = corpo.optString("novaSenha", "");
+        String erro =
+                ContaDemo.trocarSenha(
+                        ContaDemo.conta(estado.raiz()),
+                        corpo.optString("senhaAtual", ""),
+                        corpo.optString("novaSenha", ""),
+                        corpo.optString("confirmacaoSenha", corpo.optString("novaSenha", "")));
 
-        if (!corpo.optString("senhaAtual", "").equals(conta.optString("senha", ""))) {
-            return erroComMensagem(400, "SENHA_INVALIDA", "Senha atual incorreta.");
-        }
-
-        if (nova.isEmpty() || !nova.equals(corpo.optString("confirmacaoSenha", nova))) {
-            return erroComMensagem(400, "SENHA_INVALIDA", "Não foi possível atualizar a senha.");
-        }
-
-        try {
-            conta.put("senha", nova);
-
-        } catch (JSONException erro) {
-            throw new IllegalStateException(erro);
+        if (erro != null) {
+            return erroComMensagem(400, "SENHA_INVALIDA", erro);
         }
 
         estado.salvar();

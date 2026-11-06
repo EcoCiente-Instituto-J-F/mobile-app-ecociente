@@ -16,7 +16,7 @@ import org.json.JSONObject;
 public final class SementeDemo {
 
     // Muda quando o formato do estado muda: um arquivo de outra versão é descartado e a semente volta.
-    static final int VERSAO = 5;
+    static final int VERSAO = 6;
 
     // Têm de ser iguais aos DEMO_EMAIL e DEMO_SENHA do build type `demo` em app/build.gradle.kts, que a tela de login preenche.
     public static final String EMAIL = "morador@ecociente.demo";
@@ -40,6 +40,7 @@ public final class SementeDemo {
             raiz.put("conta", conta());
             raiz.put("me", me());
             raiz.put("preferencias", new JSONObject());
+            raiz.put("avisosLidos", new JSONArray());
             raiz.put("pontuacao", PontuacaoDemo.semente(agora));
             raiz.put("feed", FeedDemo.semente(agora));
             raiz.put("educacao", RotasQuiz.semente());

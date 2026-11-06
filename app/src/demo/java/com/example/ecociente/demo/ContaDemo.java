@@ -162,4 +162,27 @@ final class ContaDemo {
 
         return endereco;
     }
+
+    // Regras da troca de senha, comuns ao ProvedorContaDemo e à rota /senhas/alterar. Devolve a mensagem de erro, ou null quando trocou (o chamador salva). `confirmacao` null não é conferida.
+    @Nullable
+    static String trocarSenha(
+            @NonNull JSONObject conta, @Nullable String atual, @Nullable String nova, @Nullable String confirmacao) {
+
+        if (atual == null || !atual.equals(conta.optString("senha", ""))) {
+            return "Senha atual incorreta.";
+        }
+
+        if (nova == null || nova.isEmpty() || (confirmacao != null && !nova.equals(confirmacao))) {
+            return "Não foi possível atualizar a senha.";
+        }
+
+        try {
+            conta.put("senha", nova);
+
+        } catch (JSONException erro) {
+            throw new IllegalStateException(erro);
+        }
+
+        return null;
+    }
 }

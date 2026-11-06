@@ -207,21 +207,10 @@ public final class ProvedorContaDemo implements ContaAtual.Provedor {
                 return ResultadoApi.erro("Não foi possível identificar o usuário.");
             }
 
-            JSONObject conta = ContaDemo.conta(raiz);
+            String erro = ContaDemo.trocarSenha(ContaDemo.conta(raiz), senhaAtual, novaSenha, null);
 
-            if (!senhaAtual.equals(conta.optString("senha", ""))) {
-                return ResultadoApi.erro("Senha atual incorreta.");
-            }
-
-            if (novaSenha.isEmpty()) {
-                return ResultadoApi.erro("Não foi possível atualizar a senha.");
-            }
-
-            try {
-                conta.put("senha", novaSenha);
-
-            } catch (JSONException erro) {
-                throw new IllegalStateException(erro);
+            if (erro != null) {
+                return ResultadoApi.erro(erro);
             }
 
             estado.salvar();

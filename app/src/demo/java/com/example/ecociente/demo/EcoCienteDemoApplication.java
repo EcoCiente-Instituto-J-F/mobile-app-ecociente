@@ -41,8 +41,8 @@ public class EcoCienteDemoApplication extends EcoCienteApplication {
 
         instalarTransporte(api);
 
-        // Uma lista só, para marcarComoLida valer enquanto o processo viver.
-        Aviso.definirFonte(AvisosDemo::lista);
+        // A lista de avisos guarda os lidos no estado: Sair e Excluir conta a recomeçam.
+        Aviso.definirFonte(new AvisosDemo(estado)::lista);
 
         ContaAtual.usar(new ProvedorContaDemo(estado, () -> limparTudoMenosOEstado(estado)));
 
