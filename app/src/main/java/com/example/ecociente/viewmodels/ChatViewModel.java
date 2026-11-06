@@ -99,6 +99,9 @@ public class ChatViewModel extends ViewModel {
                         || causa.getMessage().contains("HTTP 403"))) {
                     adicionarMensagem(MensagemChat.doEko(
                             "Sua sessao precisa ser renovada. Entre novamente na conta para conversar com o Eko."));
+                } else if (causa instanceof IllegalStateException) {
+                    adicionarMensagem(MensagemChat.doEko(
+                            "É necessário entrar na sua conta para conversar com o Eko."));
                 } else {
                     adicionarMensagem(MensagemChat.doEko(EkoRespostaLocal.responder(mensagemNormalizada)));
                 }
