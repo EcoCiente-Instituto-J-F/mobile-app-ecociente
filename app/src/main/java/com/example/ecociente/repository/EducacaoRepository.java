@@ -19,6 +19,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +34,7 @@ public class EducacaoRepository {
     private static final String URL_BASE = ConfiguracaoServidores.MOBILE_API;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
+    private static final ExecutorService EXECUTOR_CONSULTAS = Executors.newFixedThreadPool(3);
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
@@ -94,27 +97,35 @@ public class EducacaoRepository {
                     try {
                         JSONArray cursos = carregarCursosComAulas(contextoApp);
 
-                        for (int i = 0; i < cursos.length(); i++) {
-                            JSONObject curso = cursos.getJSONObject(i);
+                        List<Future<QuizResumo>> pendentes = new ArrayList<>();
 
-                            JSONArray aulas = curso.getJSONArray("aulas");
+                        try {
+                            for (int i = 0; i < cursos.length(); i++) {
+                                JSONObject curso = cursos.getJSONObject(i);
+                                JSONArray aulas = curso.getJSONArray("aulas");
+                                String tituloCurso = curso.optString("titulo");
 
-                            for (int j = 0; j < aulas.length(); j++) {
-                                JSONObject aula = aulas.getJSONObject(j);
+                                for (int j = 0; j < aulas.length(); j++) {
+                                    JSONObject aula = aulas.getJSONObject(j);
+                                    int aulaId = aula.getInt("id");
+                                    String tituloAula = aula.optString("titulo");
 
-                                String corpo =
-                                        obter(contextoApp, "/api/aulas/" + aula.getInt("id") + "/quiz");
-
-                                if (corpo == null) {
-                                    continue;
+                                    pendentes.add(EXECUTOR_CONSULTAS.submit(() -> {
+                                        String corpo = obter(contextoApp, "/api/aulas/" + aulaId + "/quiz");
+                                        return corpo == null ? null : QuizJson.montar(
+                                                tituloCurso, tituloAula, new JSONObject(corpo));
+                                    }));
                                 }
-
-                                quizzes.add(
-                                        QuizJson.montar(
-                                                curso.optString("titulo"),
-                                                aula.optString("titulo"),
-                                                new JSONObject(corpo)));
                             }
+
+                            for (Future<QuizResumo> pendente : pendentes) {
+                                QuizResumo quiz = aguardar(pendente);
+                                if (quiz != null) {
+                                    quizzes.add(quiz);
+                                }
+                            }
+                        } finally {
+                            cancelarPendentes(pendentes);
                         }
 
                         sucesso = true;
@@ -187,13 +198,20 @@ public class EducacaoRepository {
 
         JSONArray cursos = obterArray(contexto, "/api/cursos");
 
-        for (int i = 0; i < cursos.length(); i++) {
-            JSONObject curso = cursos.getJSONObject(i);
+        List<Future<JSONArray>> pendentes = new ArrayList<>();
 
-            curso.put(
-                    "aulas",
-                    QuizJson.ordenarPorOrdem(
-                            obterArray(contexto, "/api/cursos/" + curso.getInt("id") + "/aulas")));
+        try {
+            for (int i = 0; i < cursos.length(); i++) {
+                int cursoId = cursos.getJSONObject(i).getInt("id");
+                pendentes.add(EXECUTOR_CONSULTAS.submit(
+                        () -> obterArray(contexto, "/api/cursos/" + cursoId + "/aulas")));
+            }
+
+            for (int i = 0; i < cursos.length(); i++) {
+                cursos.getJSONObject(i).put("aulas", QuizJson.ordenarPorOrdem(aguardar(pendentes.get(i))));
+            }
+        } finally {
+            cancelarPendentes(pendentes);
         }
 
         synchronized (CACHE_LOCK) {
@@ -202,6 +220,25 @@ public class EducacaoRepository {
         }
 
         return cursos;
+    }
+
+    private static <T> T aguardar(@NonNull Future<T> pendente) throws IOException {
+        try {
+            return pendente.get();
+        } catch (InterruptedException erro) {
+            Thread.currentThread().interrupt();
+            throw new IOException("Consulta interrompida", erro);
+        } catch (ExecutionException erro) {
+            throw new IOException("Falha na consulta", erro.getCause());
+        }
+    }
+
+    private static void cancelarPendentes(@NonNull List<? extends Future<?>> pendentes) {
+        for (Future<?> pendente : pendentes) {
+            if (!pendente.isDone()) {
+                pendente.cancel(true);
+            }
+        }
     }
 
     @NonNull
