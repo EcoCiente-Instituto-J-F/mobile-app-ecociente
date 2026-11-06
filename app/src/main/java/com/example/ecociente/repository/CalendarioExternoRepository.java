@@ -69,88 +69,90 @@ public class CalendarioExternoRepository {
             int cooperativaId,
             @NonNull String dataInicio,
             @NonNull RetornoStatus retorno) {
-
-        Context contextoApp = contexto.getApplicationContext();
-
-        EXECUTOR.execute(
-                () -> {
-                    ResultadoApi resultado;
-
-                    try {
-                        resultado = criarComRenovacao(
-                                contextoApp, condominioId, cooperativaId, dataInicio);
-
-                    } catch (Exception erro) {
-                        Log.e(TAG, "Falha ao criar solicitação de coleta", erro);
-                        resultado = ResultadoApi.erro(MENSAGEM_PADRAO);
-                    }
-
-                    ResultadoApi resultadoFinal = resultado;
-                    PRINCIPAL.post(() -> retorno.aoConcluir(resultadoFinal));
-                });
-    }
-
-    @NonNull
-    private ResultadoApi criarComRenovacao(
-            Context contexto,
-            int condominioId,
-            int cooperativaId,
-            String dataInicio) throws Exception {
-
-        String token = autenticacao.tokenParaUso(contexto);
-
-        if (token == null) {
-            return ResultadoApi.erro(MENSAGEM_SESSAO);
-        }
-
-        int codigo = enviarCriacao(token, condominioId, cooperativaId, dataInicio);
-
-        if (codigo == HttpURLConnection.HTTP_UNAUTHORIZED
-                || codigo == HttpURLConnection.HTTP_FORBIDDEN) {
-            String novoToken = autenticacao.renovarToken(contexto);
-
-            if (novoToken != null) {
-                codigo = enviarCriacao(novoToken, condominioId, cooperativaId, dataInicio);
-            }
-        }
-
-        if (codigo >= 200 && codigo < 300) {
-            return ResultadoApi.sucesso();
-        }
-
-        Log.w(TAG, "POST agendamento respondeu HTTP " + codigo);
-        return ResultadoApi.erro(mensagemDaCriacao(codigo));
-    }
-
-    private int enviarCriacao(
-            String token,
-            int condominioId,
-            int cooperativaId,
-            String dataInicio) throws Exception {
-
-        HttpURLConnection conexao =
-                (HttpURLConnection) new URL(URL_AGENDAMENTOS).openConnection();
-
+        JSONObject corpo = new JSONObject();
         try {
-            conexao.setRequestMethod("POST");
+            corpo.put("condominioId", condominioId)
+                    .put("cooperativaId", cooperativaId)
+                    .put("dataInicio", dataInicio);
+        } catch (Exception erro) {
+            retorno.aoConcluir(ResultadoApi.erro(MENSAGEM_PADRAO));
+            return;
+        }
+        executarAcao(contexto, "POST", URL_AGENDAMENTOS, corpo, retorno, true);
+    }
+
+    public void alterarStatus(
+            @NonNull Context contexto,
+            int id,
+            @NonNull StatusAgendamento status,
+            @NonNull RetornoStatus retorno) {
+        JSONObject corpo = new JSONObject();
+        try {
+            corpo.put("status", status.name());
+        } catch (Exception erro) {
+            retorno.aoConcluir(ResultadoApi.erro(MENSAGEM_PADRAO));
+            return;
+        }
+        executarAcao(contexto, "PATCH", URL_AGENDAMENTOS + "/" + id + "/status",
+                corpo, retorno, false);
+    }
+
+    private void executarAcao(
+            Context contexto,
+            String metodo,
+            String endereco,
+            JSONObject corpo,
+            RetornoStatus retorno,
+            boolean criacao) {
+        Context app = contexto.getApplicationContext();
+        EXECUTOR.execute(() -> {
+            ResultadoApi resultado;
+            try {
+                String token = autenticacao.tokenParaUso(app);
+                if (token == null) {
+                    resultado = ResultadoApi.erro(MENSAGEM_SESSAO);
+                } else {
+                    int codigo = enviarJson(metodo, endereco, token, corpo);
+                    if (codigo == HttpURLConnection.HTTP_UNAUTHORIZED
+                            || codigo == HttpURLConnection.HTTP_FORBIDDEN) {
+                        String renovado = autenticacao.renovarToken(app);
+                        if (renovado != null) {
+                            codigo = enviarJson(metodo, endereco, renovado, corpo);
+                        }
+                    }
+                    resultado = codigo >= 200 && codigo < 300
+                            ? ResultadoApi.sucesso()
+                            : ResultadoApi.erro(criacao
+                                    ? mensagemDaCriacao(codigo) : mensagemDoCodigo(codigo));
+                    if (codigo < 200 || codigo >= 300) {
+                        Log.w(TAG, metodo + " agendamento respondeu HTTP " + codigo);
+                    }
+                }
+            } catch (Exception erro) {
+                Log.e(TAG, "Falha ao " + (criacao ? "criar solicitação" : "alterar status"), erro);
+                resultado = ResultadoApi.erro(MENSAGEM_PADRAO);
+            }
+            ResultadoApi finalResultado = resultado;
+            PRINCIPAL.post(() -> retorno.aoConcluir(finalResultado));
+        });
+    }
+
+    private int enviarJson(String metodo, String endereco, String token, JSONObject corpo)
+            throws Exception {
+        HttpURLConnection conexao =
+                (HttpURLConnection) new URL(endereco).openConnection();
+        try {
+            conexao.setRequestMethod(metodo);
             conexao.setRequestProperty("Content-Type", "application/json");
             conexao.setRequestProperty("Accept", "application/json");
             conexao.setRequestProperty("Authorization", "Bearer " + token);
             conexao.setDoOutput(true);
             conexao.setConnectTimeout(TIMEOUT_MS);
             conexao.setReadTimeout(TIMEOUT_MS);
-
-            JSONObject corpo = new JSONObject()
-                    .put("condominioId", condominioId)
-                    .put("cooperativaId", cooperativaId)
-                    .put("dataInicio", dataInicio);
-
             try (OutputStream saida = conexao.getOutputStream()) {
                 saida.write(corpo.toString().getBytes(StandardCharsets.UTF_8));
             }
-
             return conexao.getResponseCode();
-
         } finally {
             conexao.disconnect();
         }
@@ -171,91 +173,6 @@ public class CalendarioExternoRepository {
                 return "Não foi possível registrar esta solicitação porque há um conflito de agendamento.";
             default:
                 return "Não foi possível enviar a solicitação (HTTP " + codigo + ").";
-        }
-    }
-
-    public void alterarStatus(
-            @NonNull Context contexto,
-            int id,
-            @NonNull StatusAgendamento status,
-            @NonNull RetornoStatus retorno) {
-
-        Context contextoApp = contexto.getApplicationContext();
-
-        EXECUTOR.execute(
-                () -> {
-                    ResultadoApi resultado;
-
-                    try {
-                        resultado = alterarComRenovacao(contextoApp, id, status);
-
-                    } catch (Exception erro) {
-                        Log.e(TAG, "Falha ao alterar o status do agendamento", erro);
-
-                        resultado = ResultadoApi.erro(MENSAGEM_PADRAO);
-                    }
-
-                    ResultadoApi resultadoFinal = resultado;
-
-                    PRINCIPAL.post(() -> retorno.aoConcluir(resultadoFinal));
-                });
-    }
-
-    @NonNull
-    private ResultadoApi alterarComRenovacao(Context contexto, int id, StatusAgendamento status)
-            throws Exception {
-
-        String token = autenticacao.tokenParaUso(contexto);
-
-        if (token == null) {
-            return ResultadoApi.erro(MENSAGEM_SESSAO);
-        }
-
-        int codigo = enviarStatus(token, id, status);
-
-        if (codigo == HttpURLConnection.HTTP_UNAUTHORIZED || codigo == HttpURLConnection.HTTP_FORBIDDEN) {
-            String novoToken = autenticacao.renovarToken(contexto);
-
-            if (novoToken != null) {
-                codigo = enviarStatus(novoToken, id, status);
-            }
-        }
-
-        if (codigo >= 200 && codigo < 300) {
-            return ResultadoApi.sucesso();
-        }
-
-        Log.w(TAG, "Resposta HTTP " + codigo);
-
-        return ResultadoApi.erro(mensagemDoCodigo(codigo));
-    }
-
-    private int enviarStatus(String token, int id, StatusAgendamento status) throws Exception {
-
-        HttpURLConnection conexao =
-                (HttpURLConnection) new URL(URL_AGENDAMENTOS + "/" + id + "/status").openConnection();
-
-        try {
-            conexao.setRequestMethod("PATCH");
-            conexao.setRequestProperty("Content-Type", "application/json");
-            conexao.setRequestProperty("Accept", "application/json");
-            conexao.setRequestProperty("Authorization", "Bearer " + token);
-            conexao.setDoOutput(true);
-            conexao.setConnectTimeout(TIMEOUT_MS);
-            conexao.setReadTimeout(TIMEOUT_MS);
-
-            try (OutputStream saida = conexao.getOutputStream()) {
-                saida.write(
-                        new JSONObject()
-                                .put("status", status.name())
-                                .toString()
-                                .getBytes(StandardCharsets.UTF_8));
-            }
-
-            return conexao.getResponseCode();
-
-        } finally {
-            conexao.disconnect();
         }
     }
 
