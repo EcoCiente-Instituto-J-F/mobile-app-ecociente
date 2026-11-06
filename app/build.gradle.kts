@@ -131,6 +131,11 @@ android {
             buildConfigField("boolean", "MODO_DEMO", "true")
             buildConfigField("String", "DEMO_EMAIL", "\"morador@ecociente.demo\"")
             buildConfigField("String", "DEMO_SENHA", "\"demo1234\"")
+
+            // Hosts fixos: um env var ou .env de quem compila não pode levar a demo a um host que a FabricaConexoesDemo recusa.
+            buildConfigField("String", "ECOCIENTE_MOBILE_API_BASE_URL", "\"https://ds-mobile-api.onrender.com\"")
+            resValue("string", "educacao_api_base_url", "https://ds-mobile-api.onrender.com")
+            resValue("string", "eko_chat_url", "https://api.52.71.117.143.sslip.io/api/v1/chat")
         }
     }
 
