@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/fundo_extrato_pontos"
+        android:gravity="center"
+        android:minHeight="188dp"
+        android:orientation="vertical"
+        android:paddingStart="22dp"
+        android:paddingTop="28dp"
+        android:paddingEnd="22dp"
+        android:paddingBottom="28dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_semibold"
+            android:text="@string/pontos_saldo_atual"
+            android:textColor="@color/verde_claro_ecociente"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/valorSaldoExtrato"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/nunito_bold"
+            android:gravity="center"
+            android:text="—"
+            android:textColor="@color/branco"
+            android:textSize="48sp" />
+
+        <TextView
+            android:id="@+id/descricaoSaldoExtrato"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/nunito_regular"
+            android:gravity="center"
+            android:text="@string/pontos_acumulados"
+            android:textColor="@color/branco"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="10dp"
+        android:fontFamily="@font/nunito_bold"
+        android:text="@string/pontos_extrato_atividades"
+        android:textColor="@color/verde_escuro_principal"
+        android:textSize="19sp" />
+
+    <LinearLayout
+        android:id="@+id/listaMovimentacoesExtrato"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+</LinearLayout>
