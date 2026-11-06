@@ -3,6 +3,7 @@ package com.example.ecociente.views;
 import com.example.ecociente.repository.AquecimentoDasApis;
 import com.example.ecociente.notifications.PermissaoNotificacoes;
 import com.example.ecociente.repository.PerfilApiRepository;
+import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
@@ -110,6 +111,17 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         calendarioViewModel.carregarSemana();
         carregarMetricasDashboard();
         montarRanking(dados);
+        AutenticacaoExternaRepository.garantirPerfilComResultado(this, pronta -> {
+            if (!pronta || isFinishing() || isDestroyed()) {
+                return;
+            }
+            new PerfilApiRepository().atualizar(this, () -> {
+                if (!isFinishing() && !isDestroyed()) {
+                    viewModel.carregarRankingTorres(5);
+                    carregarMetricasDashboard();
+                }
+            });
+        });
         findViewById(R.id.sindicoValidarDescartes).setOnClickListener(
                 view -> startActivity(new Intent(this, SindicoValidacaoActivity.class)));
         findViewById(R.id.sindicoDashboardResumo).setOnClickListener(view -> startActivity(

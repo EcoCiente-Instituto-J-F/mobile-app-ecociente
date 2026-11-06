@@ -15,6 +15,8 @@ import com.example.ecociente.model.ResultadoSolicitacoes;
 import com.example.ecociente.repository.AquecimentoDasApis;
 import com.example.ecociente.notifications.PermissaoNotificacoes;
 import com.example.ecociente.repository.PerfilApiRepository;
+import com.example.ecociente.repository.AutenticacaoExternaRepository;
+import com.example.ecociente.repository.PoliticaPreparacaoApi;
 import com.example.ecociente.repository.PontuacaoRepository;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.BarraNavegacaoView;
@@ -43,6 +45,11 @@ public class CondominioHomeActivity extends AppCompatActivity {
     private ImageView imagemPerfil;
     private SemanaColetasView semana;
     private View textoErroSemana;
+    private final android.os.Handler reconexao = new android.os.Handler(android.os.Looper.getMainLooper());
+    private final Runnable tentarNovamenteDados = this::prepararPontosERanking;
+    private boolean preparandoDados;
+    private boolean telaVisivel;
+    private int tentativasPreparacao;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -55,21 +62,8 @@ public class CondominioHomeActivity extends AppCompatActivity {
         new PermissaoNotificacoes(this).pedirSeNecessario();
 
         AquecimentoDasApis.aquecer(this);
-        new PerfilApiRepository().atualizarSeNecessario(this, () -> {
-            if (isFinishing() || isDestroyed()) {
-                return;
-            }
-            if (PerfilApiRepository.condominioId(this) > 0) {
-                carregarPodio();
-            } else {
-                new PerfilApiRepository().atualizar(this, () -> {
-                    if (!isFinishing() && !isDestroyed()) {
-                        carregarPodio();
-                    }
-                });
-            }
-        });
-        carregarPontosNoCard(true);
+        findViewById(R.id.cardPontos).setOnClickListener(
+                view -> startActivity(TelaListaActivity.criarIntent(this, TipoLista.PONTOS, true)));
 
         perfilViewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
 
@@ -102,9 +96,7 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
         android.widget.TextView texto = findViewById(R.id.textoSaldoPontos);
 
-        findViewById(R.id.cardPontos)
-                .setOnClickListener(
-                        view -> startActivity(TelaListaActivity.criarIntent(this, TipoLista.PONTOS, morador)));
+        texto.setText(R.string.pontos_carregando);
 
         new PontuacaoRepository()
                 .saldo(
@@ -123,6 +115,59 @@ public class CondominioHomeActivity extends AppCompatActivity {
                                                                     new java.util.Locale("pt", "BR"))
                                                             .format(saldo)));
                         });
+    }
+
+    private void prepararPontosERanking() {
+        if (!telaVisivel || preparandoDados || isFinishing() || isDestroyed()) {
+            return;
+        }
+
+        preparandoDados = true;
+        tentativasPreparacao++;
+        AutenticacaoExternaRepository.garantirPerfilComResultado(this, pronta -> {
+            if (isFinishing() || isDestroyed()) {
+                preparandoDados = false;
+                return;
+            }
+            if (!telaVisivel) {
+                preparandoDados = false;
+                return;
+            }
+            if (!pronta) {
+                preparandoDados = false;
+                findViewById(R.id.textoSaldoPontos).setVisibility(View.VISIBLE);
+                ((android.widget.TextView) findViewById(R.id.textoSaldoPontos))
+                        .setText(R.string.pontos_indisponivel);
+                findViewById(R.id.podioHome).setVisibility(View.GONE);
+                android.widget.TextView estado = findViewById(R.id.textoEstadoRankingHome);
+                estado.setVisibility(View.VISIBLE);
+                estado.setText(R.string.ranking_home_indisponivel);
+                if (PoliticaPreparacaoApi.deveRepetir(tentativasPreparacao, 8)) {
+                    reconexao.postDelayed(tentarNovamenteDados, Math.min(45_000L, 15_000L * tentativasPreparacao));
+                }
+                return;
+            }
+
+            carregarPontosNoCard(true);
+            new PerfilApiRepository().atualizarSeNecessario(this, () -> {
+                if (isFinishing() || isDestroyed() || !telaVisivel) {
+                    preparandoDados = false;
+                    return;
+                }
+
+                if (PerfilApiRepository.condominioId(this) > 0) {
+                    preparandoDados = false;
+                    carregarPodio();
+                } else {
+                    new PerfilApiRepository().atualizar(this, () -> {
+                        preparandoDados = false;
+                        if (!isFinishing() && !isDestroyed() && telaVisivel) {
+                            carregarPodio();
+                        }
+                    });
+                }
+            });
+        });
     }
 
     // Os três primeiros do ranking dos moradores, direto no cartão da home.
@@ -186,6 +231,9 @@ public class CondominioHomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        telaVisivel = true;
+        tentativasPreparacao = 0;
+        prepararPontosERanking();
 
         carregarPerfil();
 
@@ -204,7 +252,15 @@ public class CondominioHomeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        telaVisivel = false;
+        reconexao.removeCallbacks(tentarNovamenteDados);
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
+        reconexao.removeCallbacks(tentarNovamenteDados);
         motion.cancelAll();
 
         super.onDestroy();

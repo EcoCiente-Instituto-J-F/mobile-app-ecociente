@@ -41,12 +41,9 @@ public class PontuacaoRepository {
 
     public void saldo(@NonNull Context contexto, @NonNull Retorno<Long> retorno) {
 
-        int usuarioId = AutenticacaoExternaRepository.usuarioIdSalvo(contexto);
-
         executar(
                 contexto,
-                usuarioId,
-                "/api/v1/pontuacoes/usuarios/" + usuarioId + "/saldo",
+                usuarioId -> "/api/v1/pontuacoes/usuarios/" + usuarioId + "/saldo",
                 corpo -> PontuacaoJson.saldo(new JSONObject(corpo)),
                 retorno);
     }
@@ -57,12 +54,9 @@ public class PontuacaoRepository {
             int tamanho,
             @NonNull Retorno<PaginaDeMovimentacoes> retorno) {
 
-        int usuarioId = AutenticacaoExternaRepository.usuarioIdSalvo(contexto);
-
         executar(
                 contexto,
-                usuarioId,
-                "/api/v1/pontuacoes/usuarios/" + usuarioId + "/movimentacoes?pagina=" + pagina
+                usuarioId -> "/api/v1/pontuacoes/usuarios/" + usuarioId + "/movimentacoes?pagina=" + pagina
                         + "&tamanho=" + tamanho,
                 corpo -> {
                     JSONObject json = new JSONObject(corpo);
@@ -75,19 +69,14 @@ public class PontuacaoRepository {
 
     public void posicaoNoRanking(@NonNull Context contexto, @NonNull Retorno<PosicaoNoRanking> retorno) {
 
-        int usuarioId = AutenticacaoExternaRepository.usuarioIdSalvo(contexto);
-        int condominioId = PerfilApiRepository.condominioId(contexto);
-
-        if (usuarioId <= 0 || condominioId <= 0) {
-            PRINCIPAL.post(() -> retorno.aoConcluir(null));
-            return;
-        }
-
         executar(
                 contexto,
-                usuarioId,
-                "/api/v1/rankings/moradores/" + usuarioId + "/posicao?condominioId="
-                        + condominioId,
+                usuarioId -> {
+                    int condominioId = PerfilApiRepository.condominioId(contexto);
+                    return condominioId > 0
+                            ? "/api/v1/rankings/moradores/" + usuarioId + "/posicao?condominioId=" + condominioId
+                            : null;
+                },
                 corpo -> PontuacaoJson.posicao(new JSONObject(corpo)),
                 retorno);
     }
@@ -96,10 +85,13 @@ public class PontuacaoRepository {
         T converter(@NonNull String corpo) throws Exception;
     }
 
+    private interface CaminhoDoUsuario {
+        @Nullable String obter(int usuarioId);
+    }
+
     private <T> void executar(
             @NonNull Context contexto,
-            int usuarioId,
-            @NonNull String caminho,
+            @NonNull CaminhoDoUsuario caminho,
             @NonNull Conversor<T> conversor,
             @NonNull Retorno<T> retorno) {
 
@@ -110,14 +102,17 @@ public class PontuacaoRepository {
                     T resultado = null;
 
                     try {
-                        // Sem o id do usuário (login ainda não feito na API), não há o que consultar.
-                        String corpo = usuarioId > 0 ? ApiAutenticada.obter(contextoApp, URL_BASE + caminho) : null;
+                        String token = new AutenticacaoExternaRepository().tokenParaUso(contextoApp);
+                        int usuarioId = token == null ? 0 : AutenticacaoExternaRepository.usuarioIdSalvo(contextoApp);
+                        String caminhoResolvido = usuarioId > 0 ? caminho.obter(usuarioId) : null;
+                        String corpo = caminhoResolvido == null
+                                ? null : ApiAutenticada.obter(contextoApp, URL_BASE + caminhoResolvido);
 
                         if (corpo != null) {
                             resultado = conversor.converter(corpo);
                         }
                     } catch (Exception erro) {
-                        Log.w(TAG, "Não foi possível consultar " + caminho, erro);
+                        Log.w(TAG, "Não foi possível consultar pontuação do usuário autenticado", erro);
                     }
 
                     T resultadoFinal = resultado;

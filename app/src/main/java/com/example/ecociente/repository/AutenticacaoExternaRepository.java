@@ -59,6 +59,10 @@ public class AutenticacaoExternaRepository {
         void aoConcluir(@Nullable SessaoExterna sessao, boolean credenciaisRecusadas);
     }
 
+    public interface RetornoPreparacao {
+        void aoConcluir(boolean pronta);
+    }
+
     public void autenticar(
             @NonNull Context contexto,
             @NonNull String email,
@@ -146,19 +150,21 @@ public class AutenticacaoExternaRepository {
 
     // Sessão antiga do Firebase (app aberto sem passar pelo login): ainda não há perfil da API guardado. Se há credenciais guardadas, refaz o login em segundo plano para obtê-lo.
     public static void garantirPerfil(@NonNull Context contexto, @NonNull Runnable aoConcluir) {
+        garantirPerfilComResultado(contexto, pronta -> aoConcluir.run());
+    }
+
+    public static void garantirPerfilComResultado(
+            @NonNull Context contexto, @NonNull RetornoPreparacao retorno) {
 
         Context contextoApp = contexto.getApplicationContext();
 
         EXECUTOR_ESPERA.execute(
                 () -> {
-                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                        new AutenticacaoExternaRepository().tokenParaUso(contextoApp);
-                        if (perfilSalvo(contextoApp) == null) {
-                            new AutenticacaoExternaRepository().renovarToken(contextoApp);
-                        }
-                    }
-
-                    PRINCIPAL.post(aoConcluir);
+                    String token = FirebaseAuth.getInstance().getCurrentUser() == null
+                            ? null : new AutenticacaoExternaRepository().tokenParaUso(contextoApp);
+                    boolean pronta = PoliticaPreparacaoApi.credenciaisProntas(
+                            token, usuarioIdSalvo(contextoApp));
+                    PRINCIPAL.post(() -> retorno.aoConcluir(pronta));
                 });
     }
 
