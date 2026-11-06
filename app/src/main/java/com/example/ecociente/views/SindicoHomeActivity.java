@@ -164,7 +164,8 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         String[] valores = {
                 String.valueOf(resumo.getMoradores()),
                 String.valueOf(resumo.getReciclados()),
-                String.valueOf(resumo.getColetasRealizadas())
+                resumo.isColetasDisponiveis() ? String.valueOf(resumo.getColetasRealizadas())
+                        : getString(R.string.sindico_sem_dado)
         };
         int[] icones = {R.drawable.ic_grupo, R.drawable.ic_reciclar, R.drawable.sindico_check};
 
