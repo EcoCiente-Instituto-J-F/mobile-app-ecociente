@@ -354,4 +354,16 @@
     <string name="cooperativa_solicitacao_enviada_mensagem">Pedido enviado. A cooperativa precisa aprovar a solicitação.</string>
     <string name="cooperativa_erro_solicitacao_titulo">Não foi possível solicitar</string>
 
+
+    <!-- Cursos reais na home do condomínio -->
+    <string name="home_cursos_titulo">Cursos para aprender</string>
+    <string name="home_cursos_carregando">Carregando cursos...</string>
+    <string name="home_cursos_erro">Não foi possível carregar os cursos. Toque para tentar novamente.</string>
+    <string name="home_cursos_vazio">Nenhum curso disponível no momento.</string>
+    <string name="home_curso_etiqueta">CURSO</string>
+    <string name="home_curso_sem_descricao">Conteúdo educativo da EcoCiente.</string>
+    <string name="home_curso_ver_detalhes">Ver detalhes ›</string>
+    <string name="home_curso_fechar">Fechar</string>
+    <string name="home_eko_estudando">Eko animado incentivando o aprendizado</string>
+
 </resources>

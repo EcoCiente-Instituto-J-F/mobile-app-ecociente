@@ -1,16 +1,25 @@
 package com.example.ecociente.views;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
+import android.text.TextUtils;
+import android.view.Gravity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
+import com.example.ecociente.model.CursoResumoHome;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.ResultadoSolicitacoes;
+import com.example.ecociente.repository.CursosHomeRepository;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.InsetsSistema;
@@ -23,8 +32,12 @@ import com.example.ecociente.ui.SemanaColetasView;
 import com.example.ecociente.viewmodels.CalendarioViewModel;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.android.material.card.MaterialCardView;
+import androidx.core.content.res.ResourcesCompat;
 
 public class CondominioHomeActivity extends AppCompatActivity {
+
+    private final CursosHomeRepository cursosRepository = new CursosHomeRepository();
 
     private PerfilViewModel perfilViewModel;
     private CalendarioViewModel calendarioViewModel;
@@ -35,6 +48,9 @@ public class CondominioHomeActivity extends AppCompatActivity {
     private ImageView imagemPerfil;
     private SemanaColetasView semana;
     private View textoErroSemana;
+    private LinearLayout listaCursosCondominio;
+    private TextView textoEstadoCursos;
+    private ImageView imagemAnimacaoEkoCursos;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -52,6 +68,9 @@ public class CondominioHomeActivity extends AppCompatActivity {
         imagemPerfil = findViewById(R.id.imagemPerfilCondominio);
         semana = findViewById(R.id.semanaColetas);
         textoErroSemana = findViewById(R.id.textoErroSemana);
+        listaCursosCondominio = findViewById(R.id.listaCursosCondominio);
+        textoEstadoCursos = findViewById(R.id.textoEstadoCursosCondominio);
+        imagemAnimacaoEkoCursos = findViewById(R.id.animacaoEkoCursosHome);
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizHomeCondominio));
 
@@ -62,12 +81,15 @@ public class CondominioHomeActivity extends AppCompatActivity {
         calendarioViewModel.getColetasDaSemana().observe(this, this::exibirSemana);
 
         calendarioViewModel.carregarSemana();
+        configurarCursosHome();
+        carregarCursosHome();
 
         motion.staggerIn(
                 findViewById(R.id.cabecalhoHomeCondominio),
                 findViewById(R.id.blocoSaudacaoCondominio),
                 findViewById(R.id.cardSemanaColetas),
-                findViewById(R.id.cabecalhoConteudosCondominio));
+                findViewById(R.id.cabecalhoConteudosCondominio),
+                findViewById(R.id.secaoCursosCondominio));
     }
 
     @Override
@@ -79,6 +101,18 @@ public class CondominioHomeActivity extends AppCompatActivity {
         if (calendarioViewModel.getColetasDaSemana().getValue() != null) {
             calendarioViewModel.carregarSemana();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        iniciarAnimacaoEkoCursos();
+    }
+
+    @Override
+    protected void onStop() {
+        pararAnimacaoEkoCursos();
+        super.onStop();
     }
 
     @Override
@@ -95,6 +129,145 @@ public class CondominioHomeActivity extends AppCompatActivity {
         motion.cancelAll();
 
         super.onDestroy();
+    }
+
+    private void configurarCursosHome() {
+        textoEstadoCursos.setOnClickListener(view -> carregarCursosHome());
+    }
+
+    private void carregarCursosHome() {
+        textoEstadoCursos.setText(R.string.home_cursos_carregando);
+        textoEstadoCursos.setVisibility(View.VISIBLE);
+        listaCursosCondominio.removeAllViews();
+
+        cursosRepository.listar(this, (sucesso, cursos) -> {
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+
+            listaCursosCondominio.removeAllViews();
+
+            if (!sucesso) {
+                textoEstadoCursos.setText(R.string.home_cursos_erro);
+                textoEstadoCursos.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            if (cursos.isEmpty()) {
+                textoEstadoCursos.setText(R.string.home_cursos_vazio);
+                textoEstadoCursos.setVisibility(View.VISIBLE);
+                return;
+            }
+
+            textoEstadoCursos.setVisibility(View.GONE);
+            for (CursoResumoHome curso : cursos) {
+                listaCursosCondominio.addView(criarCardCursoHome(curso));
+            }
+        });
+    }
+
+    private View criarCardCursoHome(CursoResumoHome curso) {
+        MaterialCardView card = new MaterialCardView(this);
+        card.setCardBackgroundColor(getColor(R.color.verde_fundo_card_claro));
+        card.setStrokeColor(getColor(R.color.cinza_borda_clara_home));
+        card.setStrokeWidth(dp(1));
+        card.setRadius(dp(15));
+        card.setCardElevation(dp(1));
+        card.setClickable(true);
+        card.setFocusable(true);
+
+        LinearLayout.LayoutParams cardParams =
+                new LinearLayout.LayoutParams(dp(246), dp(174));
+        cardParams.setMarginEnd(dp(12));
+        card.setLayoutParams(cardParams);
+
+        LinearLayout conteudo = new LinearLayout(this);
+        conteudo.setOrientation(LinearLayout.VERTICAL);
+        conteudo.setPadding(dp(15), dp(14), dp(15), dp(12));
+        card.addView(conteudo);
+
+        TextView etiqueta = textoCursoHome(
+                getString(R.string.home_curso_etiqueta),
+                10,
+                getColor(R.color.verde_escuro_principal),
+                R.font.nunito_bold);
+        etiqueta.setBackgroundResource(R.drawable.fundo_selo_conteudo_home);
+        etiqueta.setPadding(dp(9), dp(4), dp(9), dp(4));
+        conteudo.addView(etiqueta, new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        TextView titulo = textoCursoHome(
+                curso.titulo,
+                16,
+                getColor(R.color.verde_escuro_principal),
+                R.font.nunito_bold);
+        titulo.setMaxLines(2);
+        titulo.setEllipsize(TextUtils.TruncateAt.END);
+        LinearLayout.LayoutParams tituloParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        tituloParams.topMargin = dp(10);
+        conteudo.addView(titulo, tituloParams);
+
+        String descricao = curso.descricao.isEmpty()
+                ? getString(R.string.home_curso_sem_descricao)
+                : curso.descricao;
+        TextView resumo = textoCursoHome(
+                descricao,
+                12,
+                getColor(R.color.cinza_texto_home),
+                R.font.nunito_regular);
+        resumo.setMaxLines(3);
+        resumo.setEllipsize(TextUtils.TruncateAt.END);
+        LinearLayout.LayoutParams resumoParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        resumoParams.topMargin = dp(6);
+        conteudo.addView(resumo, resumoParams);
+
+        TextView acao = textoCursoHome(
+                getString(R.string.home_curso_ver_detalhes),
+                11,
+                getColor(R.color.verde_escuro_principal),
+                R.font.nunito_bold);
+        LinearLayout.LayoutParams acaoParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
+        acaoParams.topMargin = dp(7);
+        acao.setGravity(Gravity.BOTTOM | Gravity.START);
+        conteudo.addView(acao, acaoParams);
+
+        card.setContentDescription(curso.titulo);
+        card.setOnClickListener(view -> new AlertDialog.Builder(this)
+                .setTitle(curso.titulo)
+                .setMessage(descricao)
+                .setPositiveButton(R.string.home_curso_fechar, null)
+                .show());
+        return card;
+    }
+
+    private TextView textoCursoHome(String valor, float tamanho, int cor, int fonte) {
+        TextView texto = new TextView(this);
+        texto.setText(valor);
+        texto.setTextSize(tamanho);
+        texto.setTextColor(cor);
+        texto.setTypeface(ResourcesCompat.getFont(this, fonte));
+        return texto;
+    }
+
+    private int dp(float valor) {
+        return Math.round(valor * getResources().getDisplayMetrics().density);
+    }
+
+    private void iniciarAnimacaoEkoCursos() {
+        if (imagemAnimacaoEkoCursos != null
+                && imagemAnimacaoEkoCursos.getDrawable() instanceof AnimationDrawable) {
+            ((AnimationDrawable) imagemAnimacaoEkoCursos.getDrawable()).start();
+        }
+    }
+
+    private void pararAnimacaoEkoCursos() {
+        if (imagemAnimacaoEkoCursos != null
+                && imagemAnimacaoEkoCursos.getDrawable() instanceof AnimationDrawable) {
+            ((AnimationDrawable) imagemAnimacaoEkoCursos.getDrawable()).stop();
+        }
     }
 
     private void configurarCliques() {
