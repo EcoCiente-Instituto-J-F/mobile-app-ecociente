@@ -3,8 +3,10 @@ package com.example.ecociente.demo;
 import androidx.annotation.NonNull;
 import com.example.ecociente.model.SemanaDeColetas;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,6 +42,7 @@ public final class SementeDemo {
             raiz.put("preferencias", new JSONObject());
             raiz.put("pontuacao", PontuacaoDemo.semente(agora));
             raiz.put("agendamentos", agendamentos(agora));
+            raiz.put("agendamentosSemana", semanaDe(agora));
 
             return raiz;
 
@@ -57,42 +60,65 @@ public final class SementeDemo {
     private static final int COOPERATIVA_ID = 3;
     private static final String COOPERATIVA_NOME = "Cooperativa Folha Nova";
 
-    // Tudo relativo a `agora`. A semana é a do card da home (segunda a sexta; sábado e domingo ainda contam para a que termina): cada dia da semana que ainda vem tem uma coleta, e a segunda-feira passada garante ao menos uma na semana. São 4 realizadas (a da segunda desta semana mais as das duas semanas anteriores) e 3 nas semanas seguintes, sempre no futuro.
+    // Segunda-feira (texto) da semana do relógio: marca de qual semana o bloco `agendamentos` foi gerado.
+    @NonNull
+    static String semanaDe(long agora) {
+        Calendar hoje = Calendar.getInstance();
+        hoje.setTimeInMillis(agora);
+
+        return formatarData(SemanaDeColetas.segundaDe(hoje).getTimeInMillis());
+    }
+
+    // Refaz só os agendamentos a partir do relógio, quando o estado guardado é de outra semana. Os ids seguem a posição (1, 2, 3...), então continuam os mesmos.
+    static void renovarAgendamentos(@NonNull JSONObject raiz, long agora) {
+        try {
+            raiz.put("agendamentos", agendamentos(agora));
+            raiz.put("agendamentosSemana", semanaDe(agora));
+
+        } catch (JSONException erro) {
+            throw new IllegalStateException(erro);
+        }
+    }
+
+    // Tudo relativo a `agora`. A semana é a do card da home (segunda a sexta; sábado e domingo ainda contam para a que termina). Cada dia útil dela vira uma coleta: as que já passaram (às 9h) são REALIZADAS, as que ainda vêm ficam AGENDADA/CONFIRMADA. Ficam 4 REALIZADAS no total (as mais recentes da semana, completadas com as das semanas anteriores) e 3 nas semanas seguintes, a primeira na terça seguinte, sempre no futuro.
     @NonNull
     private static JSONArray agendamentos(long agora) throws JSONException {
         Calendar hoje = Calendar.getInstance();
         hoje.setTimeInMillis(agora);
 
-        Calendar inicioDeHoje = (Calendar) hoje.clone();
-        inicioDeHoje.set(Calendar.HOUR_OF_DAY, 0);
-        inicioDeHoje.set(Calendar.MINUTE, 0);
-        inicioDeHoje.set(Calendar.SECOND, 0);
-        inicioDeHoje.set(Calendar.MILLISECOND, 0);
-
         Calendar segunda = SemanaDeColetas.segundaDe(hoje);
         JSONArray lista = new JSONArray();
 
-        // Passadas: [semanas antes, dias depois da segunda].
-        int[][] passadas = {{0, 0}, {-1, 2}, {-1, 4}, {-2, 1}, {-2, 3}};
-        int realizadas = 0;
+        List<Calendar> realizadas = new ArrayList<>();
+        List<Calendar> vindouras = new ArrayList<>();
 
-        for (int i = 0; i < passadas.length && realizadas < 4; i++) {
-            Calendar dia = diaDa(segunda, passadas[i][0] * 7 + passadas[i][1]);
+        for (int d = 0; d < SemanaDeColetas.DIAS_UTEIS; d++) {
+            Calendar dia = diaDa(segunda, d);
 
-            // Só entra o que já passou; com hoje na segunda, a quinta posição completa as quatro.
-            if (dia.before(inicioDeHoje)) {
-                lista.put(agendamento(lista.length() + 1, dia, "REALIZADO"));
-                realizadas++;
+            if (dia.getTimeInMillis() > agora) {
+                vindouras.add(dia);
+            } else {
+                realizadas.add(dia);
             }
         }
 
-        // Dias da semana que ainda vêm.
-        for (int d = 1; d < SemanaDeColetas.DIAS_UTEIS; d++) {
-            Calendar dia = diaDa(segunda, d);
+        // Só as 4 mais recentes da semana; as demais vagas vêm das semanas anteriores (da mais próxima para a mais antiga).
+        while (realizadas.size() > 4) {
+            realizadas.remove(0);
+        }
 
-            if (dia.after(inicioDeHoje)) {
-                lista.put(agendamento(lista.length() + 1, dia, d % 2 == 0 ? "AGENDADO" : "CONFIRMADO"));
-            }
+        int[] anteriores = {-7 + 4, -7 + 2, -14 + 3, -14 + 1};
+
+        for (int i = 0; realizadas.size() < 4 && i < anteriores.length; i++) {
+            realizadas.add(0, diaDa(segunda, anteriores[i]));
+        }
+
+        for (Calendar dia : realizadas) {
+            lista.put(agendamento(lista.length() + 1, dia, "REALIZADO"));
+        }
+
+        for (int i = 0; i < vindouras.size(); i++) {
+            lista.put(agendamento(lista.length() + 1, vindouras.get(i), i % 2 == 0 ? "CONFIRMADO" : "AGENDADO"));
         }
 
         // Semanas seguintes (a partir da segunda da semana do card, então são sempre futuras).

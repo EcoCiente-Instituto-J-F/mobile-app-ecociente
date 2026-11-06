@@ -65,6 +65,14 @@ public final class EstadoDemo {
                 JSONObject lido = new JSONObject(json);
 
                 if (lido.optInt("versao", 0) == SementeDemo.VERSAO) {
+                    // A semente de agendamentos é relativa à semana em que nasceu: abrindo o app em outra semana, só ela é refeita.
+                    long agora = relogio.getAsLong();
+
+                    if (!SementeDemo.semanaDe(agora).equals(lido.optString("agendamentosSemana", ""))) {
+                        SementeDemo.renovarAgendamentos(lido, agora);
+                        armazem.salvar(lido.toString());
+                    }
+
                     return lido;
                 }
 

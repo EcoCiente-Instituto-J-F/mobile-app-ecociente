@@ -82,6 +82,10 @@ public class DemoCalendarioContratoTest {
     }
 
     private void verificarSemana(long agora) throws Exception {
+        verificarSemana(agora, 1);
+    }
+
+    private void verificarSemana(long agora, int minimo) throws Exception {
         Cenario c = new Cenario(agora);
 
         Calendar hoje = Calendar.getInstance();
@@ -94,7 +98,7 @@ public class DemoCalendarioContratoTest {
         JSONObject json = new JSONObject(r.texto());
         JSONArray conteudo = json.getJSONArray("content");
 
-        assertTrue("semana vazia em " + formatar(hoje), conteudo.length() >= 1);
+        assertTrue("semana quase vazia em " + formatar(hoje), conteudo.length() >= minimo);
         assertTrue(json.getBoolean("last"));
 
         for (int i = 0; i < conteudo.length(); i++) {
@@ -109,8 +113,118 @@ public class DemoCalendarioContratoTest {
     }
 
     @Test
-    public void semana_emDomingo_temItem() throws Exception {
-        verificarSemana(em(2026, 11, 8, 10));
+    public void semana_emFimDeSemana_temAoMenosDoisItens() throws Exception {
+        verificarSemana(em(2026, 11, 8, 10), 2);
+        verificarSemana(em(2026, 11, 7, 10), 2);
+    }
+
+    @Test
+    public void proxima_emFimDeSemana_ficaAAteQuatroDias() throws Exception {
+        long[] relogios = {em(2026, 11, 7, 10), em(2026, 11, 8, 10)};
+
+        for (long agora : relogios) {
+            Cenario c = new Cenario(agora);
+            Solicitacao s = CalendarioJson.solicitacao(new JSONObject(c.obter(AGENDAMENTOS + "/proxima").texto()));
+            Calendar inicio = Calendar.getInstance();
+            inicio.setTime(new SimpleDateFormat(FORMATO, Locale.US).parse(s.getDataInicio()));
+
+            long dias = (inicio.getTimeInMillis() - agora) / (24L * 3600 * 1000);
+
+            assertTrue("proxima a " + dias + " dias", dias <= 4);
+        }
+    }
+
+    @Test
+    public void coletaDeHojeJaPassada_viraRealizada() throws Exception {
+        // Quarta 11/11, 18h: a das 9h de hoje já aconteceu.
+        Cenario c = new Cenario(em(2026, 11, 11, 18));
+        JSONArray conteudo =
+                new JSONObject(c.obter(AGENDAMENTOS + "?dataInicio=2026-11-11T00:00:00&dataFim=2026-11-11T23:59:59").texto())
+                        .getJSONArray("content");
+
+        assertEquals(1, conteudo.length());
+        assertEquals("REALIZADO", conteudo.getJSONObject(0).getString("statusAgendamento"));
+    }
+
+    @Test
+    public void coletaDeHojeQueAindaVem_ficaAgendada() throws Exception {
+        Cenario c = new Cenario(em(2026, 11, 11, 8));
+        JSONArray conteudo =
+                new JSONObject(c.obter(AGENDAMENTOS + "?dataInicio=2026-11-11T00:00:00&dataFim=2026-11-11T23:59:59").texto())
+                        .getJSONArray("content");
+
+        assertEquals(1, conteudo.length());
+        assertFalse("REALIZADO".equals(conteudo.getJSONObject(0).getString("statusAgendamento")));
+    }
+
+    private static final class Reaberturas {
+        final ArmazemEmMemoria armazem = new ArmazemEmMemoria();
+        final long[] agora;
+
+        Reaberturas(long inicio) {
+            agora = new long[] {inicio};
+        }
+
+        EstadoDemo abrir(long quando) {
+            agora[0] = quando;
+            return new EstadoDemo(armazem, () -> agora[0]);
+        }
+    }
+
+    @Test
+    public void reabrirDepoisDeDiasOuSemanas_renovaAsColetas_eMantemORestante() throws Exception {
+        long[] depois = {em(2026, 11, 21, 10), em(2026, 12, 11, 10)};
+
+        for (long quando : depois) {
+            Reaberturas r = new Reaberturas(em(2026, 11, 11, 10));
+            EstadoDemo primeiro = r.abrir(em(2026, 11, 11, 10));
+            primeiro.creditar("QUIZ", 30);
+
+            EstadoDemo reaberto = r.abrir(quando);
+            ApiDemo api = new ApiDemo(reaberto, () -> r.agora[0]);
+            String corpo = new JSONObject().put("email", SementeDemo.EMAIL).put("senha", SementeDemo.SENHA).toString();
+            String token =
+                    "Bearer "
+                            + new JSONObject(
+                                            api.tratar("POST", MOBILE + "/auth/login", null, corpo.getBytes(StandardCharsets.UTF_8))
+                                                    .texto())
+                                    .getString("token");
+
+            assertEquals(350, reaberto.saldo());
+            assertEquals(200, api.tratar("GET", AGENDAMENTOS + "/proxima", token, new byte[0]).codigo);
+
+            Calendar hoje = Calendar.getInstance();
+            hoje.setTimeInMillis(quando);
+            JSONArray semana =
+                    new JSONObject(
+                                    api.tratar(
+                                                    "GET",
+                                                    consultaPeriodo(SemanaDeColetas.segundaDe(hoje), SemanaDeColetas.fimDe(hoje)),
+                                                    token,
+                                                    new byte[0])
+                                            .texto())
+                            .getJSONArray("content");
+
+            assertTrue(semana.length() >= 1);
+
+            JSONArray lista = reaberto.raiz().getJSONArray("agendamentos");
+
+            for (int i = 0; i < lista.length(); i++) {
+                assertEquals(i + 1, lista.getJSONObject(i).getInt("id"));
+            }
+
+            // O que foi salvo na reabertura é o que a próxima abertura lê.
+            assertEquals(
+                    lista.toString(), r.abrir(quando).raiz().getJSONArray("agendamentos").toString());
+        }
+    }
+
+    @Test
+    public void reabrirNaMesmaSemana_mantemAsDatas() throws Exception {
+        Reaberturas r = new Reaberturas(em(2026, 11, 9, 8));
+        String antes = r.abrir(em(2026, 11, 9, 8)).raiz().getJSONArray("agendamentos").toString();
+
+        assertEquals(antes, r.abrir(em(2026, 11, 13, 20)).raiz().getJSONArray("agendamentos").toString());
     }
 
     @Test
