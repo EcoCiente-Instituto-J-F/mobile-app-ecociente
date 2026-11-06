@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.ecociente.R;
@@ -229,12 +228,8 @@ public class CondominioHomeActivity extends AppCompatActivity {
         acao.setGravity(Gravity.BOTTOM | Gravity.START);
         conteudo.addView(acao, acaoParams);
 
-        card.setContentDescription(curso.titulo);
-        card.setOnClickListener(view -> new AlertDialog.Builder(this)
-                .setTitle(curso.titulo)
-                .setMessage(descricao)
-                .setPositiveButton(R.string.home_curso_fechar, null)
-                .show());
+        card.setContentDescription(curso.titulo + ". Abrir aba de cursos");
+        card.setOnClickListener(view -> abrirCursos(curso.id));
         return card;
     }
 
@@ -302,7 +297,9 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
         barra.setOnItemClickListener(
                 indice -> {
-                    if (indice == ItensBarra.TERCEIRO) {
+                    if (indice == ItensBarra.SEGUNDO) {
+                        abrirCursos(0);
+                    } else if (indice == ItensBarra.TERCEIRO) {
                         abrirQuizzes();
                     }
                 });
@@ -344,6 +341,14 @@ public class CondominioHomeActivity extends AppCompatActivity {
         semana.exibir(sucesso ? resultado.getItens() : null);
 
         textoErroSemana.setVisibility(sucesso ? View.GONE : View.VISIBLE);
+    }
+
+    private void abrirCursos(int cursoId) {
+        Intent rota = new Intent(this, CursosActivity.class);
+        if (cursoId > 0) {
+            rota.putExtra(CursosActivity.EXTRA_CURSO_ID, cursoId);
+        }
+        Navegacao.abrirPelaBarra(this, rota, ItensBarra.HOME);
     }
 
     private void abrirQuizzes() {
