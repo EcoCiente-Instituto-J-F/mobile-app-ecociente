@@ -728,8 +728,13 @@ public class TelaListaActivity extends AppCompatActivity {
             if (pagina == 0) movimentos.removeAllViews();
 
             if (resultado == null) {
-                EstadoTela.erro(movimentos, R.string.pontos_erro_historico,
-                        () -> carregarPaginaExtrato(movimentos, pagina));
+                LinearLayout areaErro = new LinearLayout(this);
+                areaErro.setOrientation(LinearLayout.VERTICAL);
+                movimentos.addView(areaErro);
+                EstadoTela.erro(areaErro, R.string.pontos_erro_historico, () -> {
+                    movimentos.removeView(areaErro);
+                    carregarPaginaExtrato(movimentos, pagina);
+                });
                 return;
             }
 
