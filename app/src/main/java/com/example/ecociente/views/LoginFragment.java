@@ -67,7 +67,6 @@ public class LoginFragment extends Fragment {
     private MaterialCardView containerSenha;
     private TextView erroEmail;
     private TextView erroSenha;
-    private TextView textoAvisoDemo;
     private ProgressBar indicadorCarregamento;
     private Motion motion;
     private CredentialManager gerenciadorCredenciais;
@@ -110,7 +109,6 @@ public class LoginFragment extends Fragment {
         containerSenha = view.findViewById(R.id.containerSenha);
         erroEmail = view.findViewById(R.id.erroEmailLogin);
         erroSenha = view.findViewById(R.id.erroSenhaLogin);
-        textoAvisoDemo = view.findViewById(R.id.textoAvisoDemo);
         indicadorCarregamento = view.findViewById(R.id.indicadorCarregamentoLogin);
         motion = new Motion();
     }
@@ -186,7 +184,6 @@ public class LoginFragment extends Fragment {
         campoEmail.setText(BuildConfig.DEMO_EMAIL);
         campoSenha.setText(BuildConfig.DEMO_SENHA);
 
-        textoAvisoDemo.setVisibility(View.VISIBLE);
 
         View.OnClickListener indisponivel =
                 clique -> AvisoFlutuante.mostrar(requireActivity(), R.string.demo_indisponivel);
@@ -511,7 +508,6 @@ public class LoginFragment extends Fragment {
         containerSenha = null;
         erroEmail = null;
         erroSenha = null;
-        textoAvisoDemo = null;
         indicadorCarregamento = null;
         motion = null;
 

@@ -297,20 +297,5 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/botaoGoogle"/>
-
-        <TextView
-            android:id="@+id/textoAvisoDemo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/nunito_medium"
-            android:gravity="center"
-            android:text="@string/demo_aviso_login"
-            android:textColor="@color/cinza_escuro_textos"
-            android:textSize="@dimen/login_link_texto"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/botaoFacebook" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

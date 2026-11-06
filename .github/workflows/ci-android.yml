@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+      - feat/demo-morador-mockado
 
   workflow_dispatch:
 
@@ -109,3 +110,6 @@ jobs:
 
       - name: Compilar aplicativo Android
         run: ./gradlew assembleDebug --no-daemon --stacktrace
+
+      - name: Validar e compilar demonstracao offline
+        run: ./gradlew testDemoUnitTest assembleDemo --no-daemon --stacktrace
