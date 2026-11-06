@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -154,9 +155,21 @@ public final class CooperativasProximasActivity extends AppCompatActivity {
             conteudo.setOrientation(LinearLayout.VERTICAL);
             conteudo.setPadding(dp(16), dp(14), dp(16), dp(14));
 
+            LinearLayout cabecalhoCard = new LinearLayout(this);
+            cabecalhoCard.setOrientation(LinearLayout.HORIZONTAL);
+            cabecalhoCard.setGravity(android.view.Gravity.CENTER_VERTICAL);
+
+            ImageView iconeCaminhao = new ImageView(this);
+            iconeCaminhao.setImageResource(R.drawable.ic_caminhao_coleta);
+            iconeCaminhao.setContentDescription(getString(R.string.cooperativas_icone));
+            cabecalhoCard.addView(iconeCaminhao, new LinearLayout.LayoutParams(dp(32), dp(32)));
+
             TextView nome = texto(cooperativa.getNome(), 18, true);
             nome.setTextColor(getColor(R.color.verde_escuro_principal));
-            conteudo.addView(nome);
+            LinearLayout.LayoutParams nomeParams = new LinearLayout.LayoutParams(0, -2, 1f);
+            nomeParams.leftMargin = dp(10);
+            cabecalhoCard.addView(nome, nomeParams);
+            conteudo.addView(cabecalhoCard);
 
             String local = cooperativa.getTextoLocalizacao();
             TextView endereco = texto(
