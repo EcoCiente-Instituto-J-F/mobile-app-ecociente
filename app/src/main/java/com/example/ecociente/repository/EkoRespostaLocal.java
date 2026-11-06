@@ -27,7 +27,7 @@ public final class EkoRespostaLocal {
         } else {
             resposta = "Posso oferecer orientações gerais sobre reciclagem, compostagem e descarte de resíduos. Para respostas personalizadas, informações da sua conta ou dados atualizados, precisamos restabelecer a conexão com a IA.";
         }
-        return "Eko em modo offline — orientação local, não gerada pela IA.\\n\\n"
-                + resposta + "\\n\\nQuando a conexão voltar, envie a pergunta novamente para receber uma resposta completa.";
+        return "Eko em modo offline — orientação local, não gerada pela IA.\n\n"
+                + resposta + "\n\nQuando a conexão voltar, envie a pergunta novamente para receber uma resposta completa.";
     }
 }
