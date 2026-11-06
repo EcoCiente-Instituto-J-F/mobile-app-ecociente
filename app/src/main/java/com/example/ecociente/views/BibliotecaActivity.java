@@ -173,6 +173,10 @@ public class BibliotecaActivity extends AppCompatActivity {
                 return;
             }
             mostrarCursos(encontrados);
+            if (!encontrados.isEmpty() && encontrados.get(0).id < 0) {
+                estado.setText("Modo demonstração: aulas e cursos locais. O progresso não será sincronizado.");
+                estado.setVisibility(View.VISIBLE);
+            }
         });
     }
 
