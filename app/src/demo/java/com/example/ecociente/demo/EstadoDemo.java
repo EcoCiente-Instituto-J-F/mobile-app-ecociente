@@ -49,6 +49,12 @@ public final class EstadoDemo {
         salvar();
     }
 
+    // Grava o JPEG enviado (upload do avatar ou do descarte) e devolve a URL file:// dele.
+    @NonNull
+    public synchronized String gravarFoto(@NonNull byte[] jpeg) {
+        return armazem.gravarFoto(jpeg);
+    }
+
     // Apaga o arquivo e as fotos e recomeça da semente.
     public synchronized void resetar() {
         armazem.apagarTudo();

@@ -12,11 +12,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-// Estado inicial da demo. Hoje cobre conta, perfil, condomínio, pontos e agendamentos; cada área nova (pontos, feed, quiz...) acrescenta o seu bloco aqui.
+// Estado inicial da demo. Hoje cobre conta, perfil, condomínio, pontos, feed e agendamentos; cada área nova (pontos, feed, quiz...) acrescenta o seu bloco aqui.
 public final class SementeDemo {
 
     // Muda quando o formato do estado muda: um arquivo de outra versão é descartado e a semente volta.
-    static final int VERSAO = 2;
+    static final int VERSAO = 3;
 
     // Têm de ser iguais aos DEMO_EMAIL e DEMO_SENHA do build type `demo` em app/build.gradle.kts, que a tela de login preenche.
     public static final String EMAIL = "morador@ecociente.demo";
@@ -41,6 +41,7 @@ public final class SementeDemo {
             raiz.put("me", me());
             raiz.put("preferencias", new JSONObject());
             raiz.put("pontuacao", PontuacaoDemo.semente(agora));
+            raiz.put("feed", FeedDemo.semente(agora));
             raiz.put("agendamentos", agendamentos(agora));
             raiz.put("agendamentosSemana", semanaDe(agora));
 

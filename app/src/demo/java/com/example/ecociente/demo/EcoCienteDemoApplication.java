@@ -4,10 +4,13 @@ import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.example.ecociente.EcoCienteApplication;
+import com.example.ecociente.notifications.NotificacaoEcoCiente;
+import com.example.ecociente.notifications.TipoNotificacaoEcoCiente;
 import com.example.ecociente.repository.ContaAtual;
 import com.example.ecociente.repository.LembretesColeta;
 import java.io.File;
 import java.net.URL;
+import java.util.Collections;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +35,9 @@ public class EcoCienteDemoApplication extends EcoCienteApplication {
         EstadoDemo estado = new EstadoDemo(new ArmazemDemoArquivos(getFilesDir()), relogio);
         ApiDemo api = new ApiDemo(estado, relogio);
 
+        // Antes de qualquer pedido: uma aprovação vencida enquanto o app estava fechado sai já na primeira consulta.
+        api.definirOuvinte(this::avisarAprovacao);
+
         instalarTransporte(api);
 
         ContaAtual.usar(new ProvedorContaDemo(estado, () -> limparTudoMenosOEstado(estado)));
@@ -39,6 +45,15 @@ public class EcoCienteDemoApplication extends EcoCienteApplication {
         super.onCreate();
 
         agendarPendentes(api);
+    }
+
+    // Chamado fora da trava da API, na thread que processou a aprovação. Sem a permissão de notificações, o exibir não faz nada.
+    private void avisarAprovacao(boolean subiuNoRanking) {
+        NotificacaoEcoCiente.exibir(this, TipoNotificacaoEcoCiente.ECOREGISTRO_APROVADO, Collections.<String, String>emptyMap());
+
+        if (subiuNoRanking) {
+            NotificacaoEcoCiente.exibir(this, TipoNotificacaoEcoCiente.RANKING_SUBIU, Collections.<String, String>emptyMap());
+        }
     }
 
     // URL.setURLStreamHandlerFactory só aceita uma chamada por processo.
