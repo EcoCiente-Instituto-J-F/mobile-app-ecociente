@@ -81,7 +81,7 @@ final class RotasConta implements RotasDemo {
                             .put("usuarioId", me.optInt("id"))
                             .put("nome", me.optString("nome", ""))
                             .put("email", conta.optString("email", ""))
-                            .put("perfil", "MORADOR")
+                            .put("perfil", me.optString("perfil", "MORADOR"))
                             .toString());
 
         } catch (JSONException erro) {

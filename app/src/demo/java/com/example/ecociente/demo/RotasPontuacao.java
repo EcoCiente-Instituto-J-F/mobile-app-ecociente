@@ -11,7 +11,6 @@ import org.json.JSONObject;
 final class RotasPontuacao implements RotasDemo {
 
     private static final String HOST = "ds-pontuacao-api.onrender.com";
-    private static final String USUARIO = "/api/v1/pontuacoes/usuarios/" + SementeDemo.USUARIO_ID;
     private static final String RANKING = "/api/v1/rankings/moradores";
 
     private final EstadoDemo estado;
@@ -27,13 +26,14 @@ final class RotasPontuacao implements RotasDemo {
             return null;
         }
 
+        String USUARIO = "/api/v1/pontuacoes/usuarios/" + UsuariosMultiperfilDemo.usuarioId(estado.raiz());
         boolean outroUsuario = r.caminho.startsWith("/api/v1/pontuacoes/usuarios/") && !r.caminho.startsWith(USUARIO + "/");
-        boolean outraPosicao = r.caminho.startsWith(RANKING + "/") && !r.caminho.equals(RANKING + "/" + SementeDemo.USUARIO_ID + "/posicao");
+        boolean outraPosicao = r.caminho.startsWith(RANKING + "/") && !r.caminho.equals(RANKING + "/" + UsuariosMultiperfilDemo.usuarioId(estado.raiz()) + "/posicao");
 
         if (!(r.caminho.equals(USUARIO + "/saldo")
                 || r.caminho.equals(USUARIO + "/movimentacoes")
                 || r.caminho.equals(RANKING)
-                || r.caminho.equals(RANKING + "/" + SementeDemo.USUARIO_ID + "/posicao")
+                || r.caminho.equals(RANKING + "/" + UsuariosMultiperfilDemo.usuarioId(estado.raiz()) + "/posicao")
                 || outroUsuario
                 || outraPosicao)) {
             return null;
@@ -56,7 +56,7 @@ final class RotasPontuacao implements RotasDemo {
             return movimentacoes(r);
         }
 
-        if (!String.valueOf(SementeDemo.CONDOMINIO_ID).equals(r.query.get("condominioId"))) {
+        if (!String.valueOf(UsuariosMultiperfilDemo.condominioId(estado.raiz())).equals(r.query.get("condominioId"))) {
             return RespostaDemo.erro(404, "CONDOMINIO_NAO_ENCONTRADO");
         }
 

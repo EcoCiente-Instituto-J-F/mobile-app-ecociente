@@ -68,7 +68,7 @@ final class RotasFeed implements RotasDemo {
     // Aprovadas e, de outros moradores, as em análise (as que dá para votar). O descarte em análise do próprio morador só aparece em "minhas".
     @NonNull
     private RespostaDemo feed(@NonNull RequisicaoDemo r) {
-        if (!String.valueOf(SementeDemo.CONDOMINIO_ID).equals(r.query.get("condominioId"))) {
+        if (!String.valueOf(UsuariosMultiperfilDemo.condominioId(estado.raiz())).equals(r.query.get("condominioId"))) {
             return erro(403, "SEM_VINCULO_APROVADO");
         }
 
@@ -76,7 +76,7 @@ final class RotasFeed implements RotasDemo {
 
         for (JSONObject item : FeedDemo.postagens(estado.raiz())) {
             boolean aprovada = FeedDemo.APROVADA.equals(item.optString("statusValidacao"));
-            boolean votavel = FeedDemo.EM_ANALISE.equals(item.optString("statusValidacao")) && !FeedDemo.doUsuario(item);
+            boolean votavel = FeedDemo.EM_ANALISE.equals(item.optString("statusValidacao")) && !FeedDemo.doUsuario(estado.raiz(), item);
 
             if (aprovada || votavel) {
                 itens.add(item);
@@ -91,7 +91,7 @@ final class RotasFeed implements RotasDemo {
         List<JSONObject> itens = new ArrayList<>();
 
         for (JSONObject item : FeedDemo.postagens(estado.raiz())) {
-            if (FeedDemo.doUsuario(item)) {
+            if (FeedDemo.doUsuario(estado.raiz(), item)) {
                 itens.add(item);
             }
         }
@@ -168,7 +168,7 @@ final class RotasFeed implements RotasDemo {
 
         JSONObject raiz = estado.raiz();
 
-        if (corpo.optInt("condominioId", 0) != SementeDemo.CONDOMINIO_ID) {
+        if (corpo.optInt("condominioId", 0) != UsuariosMultiperfilDemo.condominioId(estado.raiz())) {
             return erro(400, "CONDOMINIO_ID_INVALIDO");
         }
 
@@ -216,7 +216,7 @@ final class RotasFeed implements RotasDemo {
             return erro(404, "POSTAGEM_NAO_ENCONTRADA");
         }
 
-        if (FeedDemo.doUsuario(postagem)) {
+        if (FeedDemo.doUsuario(estado.raiz(), postagem)) {
             return erro(403, "VOTO_NAO_PERMITIDO");
         }
 

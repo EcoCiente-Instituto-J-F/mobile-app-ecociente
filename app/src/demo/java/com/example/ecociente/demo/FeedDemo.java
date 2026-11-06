@@ -140,8 +140,8 @@ final class FeedDemo {
         return null;
     }
 
-    static boolean doUsuario(@NonNull JSONObject postagem) {
-        return postagem.optInt("autorId", 0) == SementeDemo.USUARIO_ID;
+    static boolean doUsuario(@NonNull JSONObject raiz, @NonNull JSONObject postagem) {
+        return postagem.optInt("autorId", 0) == UsuariosMultiperfilDemo.usuarioId(raiz);
     }
 
     static boolean hashJaUsado(@NonNull JSONObject raiz, @NonNull String hash) {
@@ -175,7 +175,7 @@ final class FeedDemo {
                                     urlFoto,
                                     EM_ANALISE,
                                     agora)
-                            .put("autorId", SementeDemo.USUARIO_ID)
+                            .put("autorId", UsuariosMultiperfilDemo.usuarioId(raiz))
                             .put("hashFoto", hash);
 
             bloco.getJSONArray("postagens").put(nova);
@@ -195,7 +195,7 @@ final class FeedDemo {
 
         try {
             for (JSONObject item : postagens(estado.raiz())) {
-                if (!doUsuario(item)
+                if (!doUsuario(estado.raiz(), item)
                         || !EM_ANALISE.equals(item.optString("statusValidacao"))
                         || agora - item.optLong("criadoEm", agora) < APROVACAO_MS) {
                     continue;

@@ -129,8 +129,8 @@ android {
             versionNameSuffix = "-demo"
 
             buildConfigField("boolean", "MODO_DEMO", "true")
-            buildConfigField("String", "DEMO_EMAIL", "\"morador@ecociente.demo\"")
-            buildConfigField("String", "DEMO_SENHA", "\"demo1234\"")
+            buildConfigField("String", "DEMO_EMAIL", "\"morador@ecociente.com.br\"")
+            buildConfigField("String", "DEMO_SENHA", "\"Ecociente2026.\"")
 
             // Hosts fixos: um env var ou .env de quem compila não pode levar a demo a um host que a FabricaConexoesDemo recusa.
             buildConfigField("String", "ECOCIENTE_MOBILE_API_BASE_URL", "\"https://ds-mobile-api.onrender.com\"")

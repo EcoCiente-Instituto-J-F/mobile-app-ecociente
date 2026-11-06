@@ -48,6 +48,7 @@ public final class EstadoDemo {
         if (escolhido == null || !ContaDemo.credenciaisConferem(escolhido, email, senha)) return false;
         try {
             String anterior = raiz.optString("usuarioAtivoDemo", "");
+            if (anterior.equals(chave)) return true;
             if (!anterior.isEmpty()) perfis.put(anterior, UsuariosMultiperfilDemo.snapshot(raiz));
             UsuariosMultiperfilDemo.aplicar(raiz, escolhido);
             raiz.put("usuarioAtivoDemo", chave);

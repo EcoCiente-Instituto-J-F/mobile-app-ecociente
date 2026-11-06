@@ -103,7 +103,7 @@ final class PontuacaoDemo {
             ranking.add(
                     new Participante(
                             id,
-                            id == SementeDemo.USUARIO_ID ? nomeDoUsuario : item.optString("nome", ""),
+                            id == UsuariosMultiperfilDemo.usuarioId(raiz) ? nomeDoUsuario : item.optString("nome", ""),
                             item.optInt("pontos", 0)));
         }
 
@@ -127,7 +127,7 @@ final class PontuacaoDemo {
 
     static int saldo(@NonNull JSONObject raiz) {
         for (Participante p : ranking(raiz)) {
-            if (p.usuarioId == SementeDemo.USUARIO_ID) {
+            if (p.usuarioId == UsuariosMultiperfilDemo.usuarioId(raiz)) {
                 return p.pontos;
             }
         }
@@ -140,7 +140,7 @@ final class PontuacaoDemo {
         List<Participante> ranking = ranking(raiz);
 
         for (int i = 0; i < ranking.size(); i++) {
-            if (ranking.get(i).usuarioId == SementeDemo.USUARIO_ID) {
+            if (ranking.get(i).usuarioId == UsuariosMultiperfilDemo.usuarioId(raiz)) {
                 return i + 1;
             }
         }
@@ -164,7 +164,7 @@ final class PontuacaoDemo {
             for (int i = 0; i < participantes.length(); i++) {
                 JSONObject item = participantes.getJSONObject(i);
 
-                if (item.optInt("usuarioId", 0) == SementeDemo.USUARIO_ID) {
+                if (item.optInt("usuarioId", 0) == UsuariosMultiperfilDemo.usuarioId(raiz)) {
                     item.put("pontos", item.optInt("pontos", 0) + pontos);
                 }
             }
