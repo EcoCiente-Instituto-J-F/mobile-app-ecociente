@@ -60,15 +60,21 @@ public final class SindicoValidacaoActivity extends AppCompatActivity {
         lista.removeAllViews();
         IndicadorCarregamento.mostrar(lista, R.string.validacao_carregando);
 
-        new PostagemRepository().emAnalise(this, PerfilApiRepository.condominioId(this), postagens -> {
+        new PerfilApiRepository().atualizar(this, () -> {
             if (isFinishing() || isDestroyed()) return;
-
-            if (postagens == null) {
+            int condominioId = PerfilApiRepository.condominioId(this);
+            if (condominioId <= 0) {
                 mostrarErro();
                 return;
             }
-
-            exibir(postagens);
+            new PostagemRepository().emAnalise(this, condominioId, postagens -> {
+                if (isFinishing() || isDestroyed()) return;
+                if (postagens == null) {
+                    mostrarErro();
+                    return;
+                }
+                exibir(postagens);
+            });
         });
     }
 

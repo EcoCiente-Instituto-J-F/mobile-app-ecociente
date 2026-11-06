@@ -195,7 +195,8 @@ public class FeedActivity extends AppCompatActivity {
             Glide.with(this).load(postagem.getFotoUrl()).into((ImageView) cartao.findViewById(R.id.fotoFeed));
 
             // Só dá para votar enquanto o descarte está em análise (janela de 24 h).
-            if (PostagemRepository.estaEmAnalise(postagem)) {
+            if (PostagemRepository.estaEmAnalise(postagem)
+                    && postagem.getUsuarioId() != com.example.ecociente.repository.AutenticacaoExternaRepository.usuarioIdSalvo(this)) {
                 configurarVoto(cartao, postagem);
             }
 

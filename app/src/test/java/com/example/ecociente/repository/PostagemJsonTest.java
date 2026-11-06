@@ -60,6 +60,51 @@ public class PostagemJsonTest {
     }
 
     @Test
+    public void aprovadaProvisoriaContinuaEmValidacaoComVotacaoAberta() throws Exception {
+        long agora = 1793960000000L;
+        JSONObject envelope = new JSONObject(
+                "{\"postagens\":[{\"id\":24,\"usuarioId\":63,\"autor\":\"Morador\","
+                        + "\"statusValidacao\":\"aprovada\","
+                        + "\"resolvidoEm\":null,"
+                        + "\"dataLimiteAnalise\":\"2030-11-07T05:44:32.045093Z\"}]}"
+        );
+        PostagemFeed postagem = PostagemJson.postagens(envelope, agora).get(0);
+        assertEquals("Em validação", postagem.getStatus());
+        assertTrue(postagem.votacaoAberta(agora));
+        assertEquals(63, postagem.getUsuarioId());
+        assertFalse(postagem.estaResolvida());
+    }
+
+    @Test
+    public void aprovacaoDefinitivaNaoPermiteNovoVoto() throws Exception {
+        JSONObject envelope = new JSONObject(
+                "{\"postagens\":[{\"id\":23,\"usuarioId\":63,"
+                        + "\"statusValidacao\":\"aprovada\","
+                        + "\"resolvidoEm\":\"2026-11-06T10:55:19.169543Z\","
+                        + "\"dataLimiteAnalise\":\"2026-11-06T10:55:11.727477Z\"}]}"
+        );
+        PostagemFeed postagem = PostagemJson.postagens(envelope, System.currentTimeMillis()).get(0);
+        assertEquals("Aprovada", postagem.getStatus());
+        assertTrue(postagem.estaResolvida());
+        assertFalse(postagem.votacaoAberta(0L));
+        assertTrue(postagem.estaResolvida());
+    }
+
+    @Test
+    public void prazoVencidoSemConclusaoNaoMostraAprovacaoFinal() throws Exception {
+        JSONObject envelope = new JSONObject(
+                "{\"postagens\":[{\"id\":22,\"usuarioId\":63,"
+                        + "\"statusValidacao\":\"aprovada\","
+                        + "\"resolvidoEm\":null,"
+                        + "\"dataLimiteAnalise\":\"2026-11-06T02:01:13.830865Z\"}]}"
+        );
+        PostagemFeed postagem = PostagemJson.postagens(envelope, System.currentTimeMillis()).get(0);
+        assertEquals("Aguardando encerramento", postagem.getStatus());
+        assertFalse(postagem.votacaoAberta(System.currentTimeMillis()));
+        assertFalse(postagem.estaResolvida());
+    }
+
+    @Test
     public void envelopeSemPostagensDevolveListaVazia() throws Exception {
         assertTrue(PostagemJson.postagens(new JSONObject("{\"total\":0}"), 0L).isEmpty());
     }

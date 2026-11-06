@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.text.ParseException;
 import java.util.Locale;
 import java.util.TimeZone;
 import org.json.JSONArray;
@@ -40,17 +41,52 @@ final class PostagemJson {
             lista.add(
                     new PostagemFeed(
                             item.optInt("id", i),
+                            item.optInt("usuarioId", 0),
                             item.optString("autor", ""),
                             item.optString("urlFoto", ""),
                             item.optString("categoria", ""),
-                            statusLegivel(item.optString("statusValidacao", "")),
-                            FormatoDataApi.relativa(item.optString("dataPostagem", null), agoraMs)));
+                            statusDaPostagem(item, agoraMs),
+                            FormatoDataApi.relativa(item.optString("dataPostagem", null), agoraMs),
+                            dataLimiteEmMs(item.optString("dataLimiteAnalise", null)),
+                            !item.isNull("resolvidoEm") && !item.optString("resolvidoEm", "").isEmpty(),
+                            dataLimiteEmMs(item.optString("dataLimiteAnalise", null)) > 0));
         }
 
         return lista;
     }
 
     // Categorias como itens de lista: título = nome, subtítulo = descrição, chave = id.
+    @NonNull
+    private static String statusDaPostagem(@NonNull JSONObject item, long agoraMs) {
+        String bruto = item.optString("statusValidacao", "");
+        String resolvidoEm = item.optString("resolvidoEm", "");
+        long limiteMs = dataLimiteEmMs(item.optString("dataLimiteAnalise", null));
+        if (!resolvidoEm.isEmpty() && !"null".equalsIgnoreCase(resolvidoEm)) {
+            return statusLegivel(bruto);
+        }
+        if (limiteMs > 0) {
+            return limiteMs > agoraMs ? "Em validação" : "Aguardando encerramento";
+        }
+        return statusLegivel(bruto);
+    }
+
+    private static long dataLimiteEmMs(@Nullable String texto) {
+        if (texto == null || texto.isEmpty() || "null".equalsIgnoreCase(texto)) return 0L;
+
+        String normalizado = texto.replaceFirst("(\\.\\d{3})\\d+", "$1");
+        String formato = normalizado.contains(".")
+                ? "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" : "yyyy-MM-dd'T'HH:mm:ssXXX";
+
+        try {
+            SimpleDateFormat data = new SimpleDateFormat(formato, Locale.US);
+            data.setLenient(false);
+            Date instante = data.parse(normalizado);
+            return instante == null ? 0L : instante.getTime();
+        } catch (ParseException e) {
+            return 0L;
+        }
+    }
+
     @NonNull
     static List<ItemLista> categorias(@NonNull JSONArray categorias) {
 
