@@ -95,7 +95,9 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.valorAulasConcluidas)).setText(String.valueOf(resumo.getReciclados()));
         ((TextView) findViewById(R.id.valorMoradoresNoApp)).setText(String.valueOf(resumo.getMoradores()));
         ((TextView) findViewById(R.id.valorPontosDoMes)).setText(String.valueOf(resumo.getPontosDoMes()));
-        ((TextView) findViewById(R.id.valorColetasRealizadas)).setText(String.valueOf(resumo.getColetasRealizadas()));
+        ((TextView) findViewById(R.id.valorColetasRealizadas)).setText(
+                resumo.isColetasDisponiveis() ? String.valueOf(resumo.getColetasRealizadas())
+                        : getString(R.string.sindico_sem_dado));
 
         String[] quizzes = resumo.getQuizzes();
         int[] notas = resumo.getNotasDosQuizzes();
@@ -132,8 +134,9 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
         SindicoDashboardGraficoView graficoCooperativas = findViewById(R.id.graficoCooperativasSindico);
         graficoCooperativas.setDados(cooperativas, coletas, cores, maximo(coletas));
         findViewById(R.id.textoSemColetasCooperativasDashboard).setVisibility(
-                cooperativas.length == 0 ? View.VISIBLE : View.GONE);
-        graficoCooperativas.setVisibility(cooperativas.length == 0 ? View.GONE : View.VISIBLE);
+                !resumo.isColetasDisponiveis() || cooperativas.length == 0 ? View.VISIBLE : View.GONE);
+        graficoCooperativas.setVisibility(
+                !resumo.isColetasDisponiveis() || cooperativas.length == 0 ? View.GONE : View.VISIBLE);
         StringBuilder coletasTexto = new StringBuilder();
         for (int i = 0; i < cooperativas.length; i++) {
             if (i > 0) coletasTexto.append(", ");
