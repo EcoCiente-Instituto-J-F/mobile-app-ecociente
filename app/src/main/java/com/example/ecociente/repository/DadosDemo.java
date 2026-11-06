@@ -14,6 +14,12 @@ public final class DadosDemo {
         String perfil();
         JSONObject perfilCompleto();
     }
+    @Nullable private static android.content.Context contexto;
+    public static void instalarContexto(@NonNull android.content.Context app) { contexto = app.getApplicationContext(); }
+    @NonNull public static android.content.Context contexto() {
+        if (contexto == null) throw new IllegalStateException("Contexto demo ainda nao instalado");
+        return contexto;
+    }
     private static volatile Fonte fonte;
     private DadosDemo() {}
     public static void instalar(@NonNull Fonte nova) { fonte = nova; }

@@ -56,6 +56,7 @@ public class EcoCienteDemoApplication extends EcoCienteApplication {
         // A lista de avisos guarda os lidos no estado: Sair e Excluir conta a recomeçam.
         Aviso.definirFonte(new AvisosDemo(estado)::lista);
 
+        com.example.ecociente.repository.DadosDemo.instalarContexto(this);
         com.example.ecociente.repository.DadosDemo.instalar(
                 new com.example.ecociente.repository.DadosDemo.Fonte() {
                     @Override public String token() {

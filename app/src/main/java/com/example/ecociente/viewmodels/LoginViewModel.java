@@ -15,6 +15,7 @@ import com.example.ecociente.model.TipoUsuario;
 import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.repository.CadastroRepository;
 import com.example.ecociente.repository.LoginRepository;
+import com.example.ecociente.repository.ContaAtual;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -46,6 +47,15 @@ public class LoginViewModel extends AndroidViewModel {
 
     @NonNull
     public LiveData<ResultadoLogin> entrarComEmail(@NonNull String email, @NonNull String senha) {
+
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) {
+            MutableLiveData<ResultadoLogin> resposta = new MutableLiveData<>();
+            ContaAtual.Provedor local = ContaAtual.substituto();
+            resposta.setValue(local == null
+                    ? ResultadoLogin.erro("A demostracao offline nao foi inicializada.")
+                    : local.entrar(email, senha));
+            return resposta;
+        }
 
         carregando.setValue(true);
 

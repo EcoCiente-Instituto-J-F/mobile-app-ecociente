@@ -17,8 +17,8 @@ import java.util.Map;
 public class CadastroRepository {
     private static final String TAG = "CadastroEcoCiente";
 
-    private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
-    private final FirebaseFirestore bancoFirestore = FirestoreProvider.obterInstancia();
+    private FirebaseAuth autenticacao() { return FirebaseAuth.getInstance(); }
+    private FirebaseFirestore bancoFirestore() { return FirestoreProvider.obterInstancia(); }
 
     @NonNull
     public LiveData<ResultadoCadastro> cadastrar(
@@ -49,7 +49,7 @@ public class CadastroRepository {
             @NonNull String nome,
             @NonNull Map<String, Object> dadosUsuario,
             @NonNull MutableLiveData<ResultadoCadastro> resultado) {
-        FirebaseUser usuario = autenticacao.getCurrentUser();
+        FirebaseUser usuario = autenticacao().getCurrentUser();
 
         if (usuario == null) {
             resultado.setValue(
@@ -98,7 +98,7 @@ public class CadastroRepository {
     // Se o Firestore falhar depois que a conta já foi criada no Auth, não deixamos uma conta "pela metade" - apaga a conta e reporta erro, pra manter Firebase, Firestore e o Postgres da API externa consistentes.
     private void desfazerContaCriada(@NonNull MutableLiveData<ResultadoCadastro> resultado) {
 
-        FirebaseUser usuario = autenticacao.getCurrentUser();
+        FirebaseUser usuario = autenticacao().getCurrentUser();
 
         String mensagemErro = "Não foi possível concluir seu cadastro. Tente novamente.";
 

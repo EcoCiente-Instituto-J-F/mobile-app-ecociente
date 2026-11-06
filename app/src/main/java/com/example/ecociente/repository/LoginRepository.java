@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 public class LoginRepository {
     private static final String TAG = "LoginEcoCiente";
-    private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
+    private FirebaseAuth autenticacao() { return FirebaseAuth.getInstance(); }
 
     @NonNull
     public LiveData<ResultadoLogin> signInWithEmailAndPassword(
@@ -83,12 +83,12 @@ public class LoginRepository {
             return;
         }
 
-        autenticacao.signOut();
+        autenticacao().signOut();
     }
 
     @NonNull
     private ResultadoLogin confirmarUsuarioLogado() {
-        if (autenticacao.getCurrentUser() == null) {
+        if (autenticacao().getCurrentUser() == null) {
             return ResultadoLogin.erro("Não foi possível identificar o usuário");
         }
 

@@ -40,8 +40,8 @@ public class PerfilRepository {
     public static final String CAMPO_FOTO_URL = "fotoUrl";
     public static final String CAMPO_FOTO_CONDOMINIO_URL = "fotoCondominioUrl";
 
-    private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
-    private final FirebaseFirestore bancoFirestore = FirestoreProvider.obterInstancia();
+    private FirebaseAuth autenticacao() { return FirebaseAuth.getInstance(); }
+    private FirebaseFirestore bancoFirestore() { return FirestoreProvider.obterInstancia(); }
 
     @Nullable
     public UsuarioLogado usuarioAtual() {
@@ -53,13 +53,12 @@ public class PerfilRepository {
 
         if (substituto != null) {
             substituto.sair();
-            AutenticacaoExternaRepository.encerrarSessao(
-                    FirebaseApp.getInstance().getApplicationContext());
+            AutenticacaoExternaRepository.encerrarSessao(DadosDemo.contexto());
             return;
         }
 
         PushRegistroRepository.encerrarSessao(FirebaseApp.getInstance().getApplicationContext());
-        autenticacao.signOut();
+        autenticacao().signOut();
 
         AutenticacaoExternaRepository.encerrarSessao(
                 FirebaseApp.getInstance().getApplicationContext());
@@ -218,7 +217,7 @@ public class PerfilRepository {
         try {
             DocumentSnapshot documento =
                     Tasks.await(
-                            bancoFirestore.collection(COLECAO_USUARIOS).document(uid).get(),
+                            bancoFirestore().collection(COLECAO_USUARIOS).document(uid).get(),
                             10,
                             TimeUnit.SECONDS);
 
@@ -274,15 +273,14 @@ public class PerfilRepository {
             ResultadoApi resposta = substituto.excluirConta(senhaAtual);
 
             if (resposta.isSucesso()) {
-                AutenticacaoExternaRepository.encerrarSessao(
-                        FirebaseApp.getInstance().getApplicationContext());
+                AutenticacaoExternaRepository.encerrarSessao(DadosDemo.contexto());
             }
 
             resultado.setValue(resposta);
             return resultado;
         }
 
-        FirebaseUser usuario = autenticacao.getCurrentUser();
+        FirebaseUser usuario = autenticacao().getCurrentUser();
 
         if (usuario == null || usuario.getEmail() == null) {
             resultado.setValue(ResultadoApi.erro("Não foi possível identificar o usuário."));
