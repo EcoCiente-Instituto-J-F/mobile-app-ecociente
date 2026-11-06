@@ -60,6 +60,16 @@ android {
         resValue("string", "educacao_api_base_url", mobileApiBaseUrl)
         buildConfigField("String", "ECOCIENTE_MOBILE_API_BASE_URL", "\"$mobileApiBaseUrl\"")
 
+        val pontuacaoLeituraBaseUrl = (System.getenv("ECOCIENTE_PONTUACAO_CONSULTAS_API_BASE_URL")
+            ?: propriedadesEnv.getProperty("ECOCIENTE_PONTUACAO_CONSULTAS_API_BASE_URL")
+            ?: "https://ds-pontuacao-api.onrender.com").trim().trimEnd('/')
+
+        require(pontuacaoLeituraBaseUrl.startsWith("https://")) {
+            "ECOCIENTE_PONTUACAO_CONSULTAS_API_BASE_URL deve usar HTTPS"
+        }
+
+        buildConfigField("String", "ECOCIENTE_PONTUACAO_CONSULTAS_API_BASE_URL", "\"$pontuacaoLeituraBaseUrl\"")
+
         val ekoChatUrl = (System.getenv("ECOCIENTE_EKO_CHAT_URL")
             ?: propriedadesEnv.getProperty("ECOCIENTE_EKO_CHAT_URL")
             ?: "https://api.52.71.117.143.sslip.io/api/v1/chat").trim()
