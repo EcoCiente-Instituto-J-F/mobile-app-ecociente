@@ -27,7 +27,7 @@ import java.util.concurrent.Executors;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-// ds-calendario-api: lista os agendamentos de acordo com o perfil do JWT (cooperativa ou síndico).
+// ds-calendario-api: lista, cria e atualiza agendamentos conforme o perfil do JWT.
 public class CalendarioExternoRepository {
 
     public interface Retorno {
@@ -61,6 +61,117 @@ public class CalendarioExternoRepository {
         String consulta = "?status=" + status.name() + "&page=" + pagina + "&size=" + TAMANHO_PAGINA;
 
         executar(contexto, URL_AGENDAMENTOS + consulta, retorno);
+    }
+
+    public void criar(
+            @NonNull Context contexto,
+            int condominioId,
+            int cooperativaId,
+            @NonNull String dataInicio,
+            @NonNull RetornoStatus retorno) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        EXECUTOR.execute(
+                () -> {
+                    ResultadoApi resultado;
+
+                    try {
+                        resultado = criarComRenovacao(
+                                contextoApp, condominioId, cooperativaId, dataInicio);
+
+                    } catch (Exception erro) {
+                        Log.e(TAG, "Falha ao criar solicitação de coleta", erro);
+                        resultado = ResultadoApi.erro(MENSAGEM_PADRAO);
+                    }
+
+                    ResultadoApi resultadoFinal = resultado;
+                    PRINCIPAL.post(() -> retorno.aoConcluir(resultadoFinal));
+                });
+    }
+
+    @NonNull
+    private ResultadoApi criarComRenovacao(
+            Context contexto,
+            int condominioId,
+            int cooperativaId,
+            String dataInicio) throws Exception {
+
+        String token = autenticacao.tokenParaUso(contexto);
+
+        if (token == null) {
+            return ResultadoApi.erro(MENSAGEM_SESSAO);
+        }
+
+        int codigo = enviarCriacao(token, condominioId, cooperativaId, dataInicio);
+
+        if (codigo == HttpURLConnection.HTTP_UNAUTHORIZED
+                || codigo == HttpURLConnection.HTTP_FORBIDDEN) {
+            String novoToken = autenticacao.renovarToken(contexto);
+
+            if (novoToken != null) {
+                codigo = enviarCriacao(novoToken, condominioId, cooperativaId, dataInicio);
+            }
+        }
+
+        if (codigo >= 200 && codigo < 300) {
+            return ResultadoApi.sucesso();
+        }
+
+        Log.w(TAG, "POST agendamento respondeu HTTP " + codigo);
+        return ResultadoApi.erro(mensagemDaCriacao(codigo));
+    }
+
+    private int enviarCriacao(
+            String token,
+            int condominioId,
+            int cooperativaId,
+            String dataInicio) throws Exception {
+
+        HttpURLConnection conexao =
+                (HttpURLConnection) new URL(URL_AGENDAMENTOS).openConnection();
+
+        try {
+            conexao.setRequestMethod("POST");
+            conexao.setRequestProperty("Content-Type", "application/json");
+            conexao.setRequestProperty("Accept", "application/json");
+            conexao.setRequestProperty("Authorization", "Bearer " + token);
+            conexao.setDoOutput(true);
+            conexao.setConnectTimeout(TIMEOUT_MS);
+            conexao.setReadTimeout(TIMEOUT_MS);
+
+            JSONObject corpo = new JSONObject()
+                    .put("condominioId", condominioId)
+                    .put("cooperativaId", cooperativaId)
+                    .put("dataInicio", dataInicio);
+
+            try (OutputStream saida = conexao.getOutputStream()) {
+                saida.write(corpo.toString().getBytes(StandardCharsets.UTF_8));
+            }
+
+            return conexao.getResponseCode();
+
+        } finally {
+            conexao.disconnect();
+        }
+    }
+
+    @NonNull
+    private String mensagemDaCriacao(int codigo) {
+        switch (codigo) {
+            case HttpURLConnection.HTTP_UNAUTHORIZED:
+                return MENSAGEM_SESSAO;
+            case HttpURLConnection.HTTP_FORBIDDEN:
+                return "Sua conta não tem permissão para solicitar coleta para este condomínio.";
+            case HttpURLConnection.HTTP_BAD_REQUEST:
+                return "Confira a data e o horário escolhidos e tente novamente.";
+            case HttpURLConnection.HTTP_NOT_FOUND:
+                return "O condomínio ou a cooperativa não foi encontrado.";
+            case HttpURLConnection.HTTP_CONFLICT:
+                return "Não foi possível registrar esta solicitação porque há um conflito de agendamento.";
+            default:
+                return "Não foi possível enviar a solicitação (HTTP " + codigo + ").";
+        }
     }
 
     public void alterarStatus(
