@@ -72,7 +72,7 @@ public class PostagemJsonTest {
         assertEquals("Em validação", postagem.getStatus());
         assertTrue(postagem.votacaoAberta(agora));
         assertEquals(63, postagem.getUsuarioId());
-        assertFalse(PostagemRepository.estaAprovada(postagem));
+        assertFalse(postagem.estaResolvida());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class PostagemJsonTest {
         assertEquals("Aprovada", postagem.getStatus());
         assertTrue(postagem.estaResolvida());
         assertFalse(postagem.votacaoAberta(0L));
-        assertTrue(PostagemRepository.estaAprovada(postagem));
+        assertTrue(postagem.estaResolvida());
     }
 
     @Test
