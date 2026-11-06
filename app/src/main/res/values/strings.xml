@@ -663,4 +663,7 @@
 
     <string name="demo_aviso_login">Versão de demonstração, dados fictícios</string>
     <string name="demo_indisponivel">Indisponível na demonstração</string>
+<string name="pontos_acumulados">Pontos acumulados</string>
+    <string name="pontos_extrato_atividades">Extrato de atividades</string>
+    <string name="pontos_carregar_mais">Carregar mais movimentações</string>
 </resources>
