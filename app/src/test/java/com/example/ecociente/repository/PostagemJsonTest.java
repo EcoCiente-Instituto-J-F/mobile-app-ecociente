@@ -101,7 +101,7 @@ public class PostagemJsonTest {
         PostagemFeed postagem = PostagemJson.postagens(envelope, System.currentTimeMillis()).get(0);
         assertEquals("Aguardando encerramento", postagem.getStatus());
         assertFalse(postagem.votacaoAberta(System.currentTimeMillis()));
-        assertFalse(PostagemRepository.estaAprovada(postagem));
+        assertFalse(postagem.estaResolvida());
     }
 
     @Test
