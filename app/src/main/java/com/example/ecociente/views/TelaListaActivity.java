@@ -593,10 +593,30 @@ public class TelaListaActivity extends AppCompatActivity {
 
         indicadorDeCarregamento(lista, R.string.ranking_carregando);
 
+        int condominioId = PerfilApiRepository.condominioId(this);
+        if (condominioId <= 0) {
+            new PerfilApiRepository().atualizar(this, () -> {
+                if (isFinishing() || isDestroyed()) {
+                    return;
+                }
+                int atualizado = PerfilApiRepository.condominioId(this);
+                if (atualizado <= 0) {
+                    lista.removeAllViews();
+                    erroComTentar(lista, R.string.ranking_erro);
+                    return;
+                }
+                consultarRanking(lista, atualizado);
+            });
+            return;
+        }
+        consultarRanking(lista, condominioId);
+    }
+
+    private void consultarRanking(LinearLayout lista, int condominioId) {
         new RankingExternoRepository()
                 .listarMoradores(
                         this,
-                        PerfilApiRepository.condominioId(this),
+                        condominioId,
                         20,
                         moradores -> {
                             if (isFinishing() || isDestroyed()) {
