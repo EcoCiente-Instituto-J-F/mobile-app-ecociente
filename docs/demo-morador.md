@@ -41,6 +41,8 @@ no armazenamento privado do Android.
 - Cadastro de cooperativas ficticias, dashboard e avaliacoes.
 - Conversas ficticias locais entre condominio e cooperativa.
 - Eko offline consultando base educacional e FAQ; nao e uma IA generativa.
+- Recuperacao de senha demo: codigo local de quatro digitos **2026**, sem envio de email real.
+- Botoes Google/Facebook simulam login do email digitado, sem OAuth real.
 - Imagens remotas substituidas por recursos locais existentes no aplicativo.
 - Requisicoes simuladas sem atraso artificial, sem dependencia AWS/Render/Firebase/Neon.
 
@@ -49,7 +51,7 @@ limpe os dados do aplicativo EcoCiente Demo nas configuracoes do Android.
 
 ## Limites
 
-Esta versao nao simula Google/Facebook, envio real de notificacao push,
+Esta versao nao usa OAuth real, nao faz cadastro de novas contas, nao envia notificacao push real,
 sincronizacao entre dispositivos nem mapas/rotas reais. Respostas sem rota
 ainda devem ser identificadas no log `EcoCienteDemo`. Nao usar credenciais
 de producao nesta versao. O APK precisa ser validado em um aparelho.
