@@ -8,7 +8,7 @@ final class UsuariosMultiperfilDemo {
     static final String COMUM = "comum@ecociente.com.br";
     static final String SINDICO = "sindico@ecociente.com.br";
     static final String COOPERATIVA = "cooperativa@ecociente.com.br";
-    static final String[] CAMPOS = {"conta", "me", "preferencias", "avisosLidos", "pontuacao", "feed", "educacao", "agendamentos", "agendamentosSemana"};
+    static final String[] CAMPOS = {"conta", "me", "preferencias", "avisosLidos", "pontuacao", "educacao"};
     private UsuariosMultiperfilDemo() {}
     static void configurar(JSONObject raiz) throws JSONException {
         JSONObject perfis = new JSONObject();

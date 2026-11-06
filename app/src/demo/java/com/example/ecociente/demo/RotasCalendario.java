@@ -31,15 +31,79 @@ final class RotasCalendario implements RotasDemo {
     @Nullable
     @Override
     public RespostaDemo tratar(@NonNull RequisicaoDemo r) {
-        if (!HOST.equals(r.host) || !(r.e("GET", CAMINHO) || r.e("GET", CAMINHO + "/proxima"))) {
-            return null;
-        }
+        if (!HOST.equals(r.host)) return null;
+        boolean listar = r.e("GET", CAMINHO);
+        boolean proxima = r.e("GET", CAMINHO + "/proxima");
+        boolean criar = r.e("POST", CAMINHO);
+        java.util.regex.Matcher status = java.util.regex.Pattern
+                .compile("^/api/v1/agendamentos/(\\d+)/status$").matcher(r.caminho);
+        boolean alterar = "PATCH".equals(r.metodo) && status.matches();
+        if (!listar && !proxima && !criar && !alterar) return null;
 
         if (!ContaDemo.tokenConfere(estado.raiz(), r.autorizacao)) {
             return RespostaDemo.erro(401, "NAO_AUTORIZADO");
         }
 
-        return r.caminho.equals(CAMINHO) ? listar(r) : proxima();
+        try {
+            if (criar) return criar(r);
+            if (alterar) return alterar(Integer.parseInt(status.group(1)), r);
+        } catch (JSONException erro) { throw new IllegalStateException(erro); }
+        return listar ? listar(r) : proxima();
+    }
+
+
+    @NonNull
+    private RespostaDemo criar(@NonNull RequisicaoDemo r) throws JSONException {
+        String perfil = ContaDemo.me(estado.raiz()).optString("perfil", "");
+        if (!"SINDICO".equals(perfil)) return RespostaDemo.erro(403, "PERFIL_NAO_PERMITIDO");
+        JSONObject entrada = r.corpoJson();
+        if (entrada == null) return RespostaDemo.erro(400, "REQUISICAO_INVALIDA");
+        int condominio = entrada.optInt("condominioId", 0);
+        int cooperativa = entrada.optInt("cooperativaId", 0);
+        String data = entrada.optString("dataInicio", "");
+        if (data.length() < 19 || condominio != 7 || cooperativa <= 0)
+            return RespostaDemo.erro(400, "AGENDAMENTO_INVALIDO");
+        String inicio = data.substring(0, 19);
+        if (inicio.compareTo(SementeDemo.formatarData(relogio.getAsLong())) <= 0)
+            return RespostaDemo.erro(400, "DATA_NO_PASSADO");
+        JSONArray todos = estado.raiz().getJSONArray("agendamentos");
+        int id = 1;
+        for (int i = 0; i < todos.length(); i++) id = Math.max(id, todos.getJSONObject(i).optInt("id", 0) + 1);
+        JSONObject item = new JSONObject().put("id", id).put("condominioId", condominio)
+                .put("condominioNome", "Condominio Jardim das Palmeiras")
+                .put("cooperativaId", cooperativa)
+                .put("cooperativaNome", "Cooperativa EcoCiente")
+                .put("dataInicio", inicio)
+                .put("dataFim", inicio).put("statusAgendamento", "AGENDADO")
+                .put("status", "AGENDADO").put("possuiRecorrencia", false)
+                .put("origemSolicitacao", "CONDOMINIO");
+        todos.put(item);
+        estado.salvar();
+        return new RespostaDemo(201, item.toString());
+    }
+
+    @NonNull
+    private RespostaDemo alterar(int id, @NonNull RequisicaoDemo r) throws JSONException {
+        String perfil = ContaDemo.me(estado.raiz()).optString("perfil", "");
+        if (!"COOPERATIVA".equals(perfil) && !"SINDICO".equals(perfil))
+            return RespostaDemo.erro(403, "PERFIL_NAO_PERMITIDO");
+        JSONObject pedido = r.corpoJson();
+        String novo = pedido == null ? "" : pedido.optString("status", "").toUpperCase(java.util.Locale.ROOT);
+        if (!("CONFIRMADO".equals(novo) || "RECUSADO".equals(novo) || "CANCELADO".equals(novo) || "REALIZADO".equals(novo)))
+            return RespostaDemo.erro(400, "STATUS_INVALIDO");
+        JSONArray todos = estado.raiz().getJSONArray("agendamentos");
+        for (int i = 0; i < todos.length(); i++) {
+            JSONObject item = todos.getJSONObject(i);
+            if (item.optInt("id", 0) != id) continue;
+            String atual = item.optString("statusAgendamento", "AGENDADO");
+            if (atual.equals(novo)) return new RespostaDemo(204, "");
+            if ("RECUSADO".equals(atual) || "CANCELADO".equals(atual))
+                return RespostaDemo.erro(409, "SOLICITACAO_FINALIZADA");
+            item.put("statusAgendamento", novo).put("status", novo);
+            estado.salvar();
+            return new RespostaDemo(204, "");
+        }
+        return RespostaDemo.erro(404, "AGENDAMENTO_NAO_ENCONTRADO");
     }
 
     // Mais recente primeiro, como a API real.

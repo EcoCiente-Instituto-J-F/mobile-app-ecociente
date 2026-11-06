@@ -41,6 +41,16 @@ public class EcoCienteDemoApplication extends EcoCienteApplication {
         // Antes de qualquer pedido: uma aprovação vencida enquanto o app estava fechado sai já na primeira consulta.
         api.definirOuvinte(this::avisarAprovacao);
 
+        com.example.ecociente.repository.TransporteDemoLocal.instalar((token, id, status) -> {
+            try {
+                byte[] corpo = new JSONObject().put("status", status.name()).toString()
+                        .getBytes(java.nio.charset.StandardCharsets.UTF_8);
+                return api.tratar("PATCH", "https://ds-mobile-api.onrender.com/api/v1/agendamentos/" + id + "/status",
+                        "Bearer " + token, corpo).codigo;
+            } catch (org.json.JSONException erro) {
+                return 400;
+            }
+        });
         instalarTransporte(api);
 
         // A lista de avisos guarda os lidos no estado: Sair e Excluir conta a recomeçam.

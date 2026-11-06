@@ -253,6 +253,9 @@ public class CalendarioExternoRepository {
     }
 
     private int enviarStatus(String token, int id, StatusAgendamento status) throws IOException, JSONException {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) {
+            return com.example.ecociente.repository.TransporteDemoLocal.alterarStatus(token, id, status);
+        }
 
         // HttpURLConnection não oferece suporte portátil ao método PATCH no Android.
         // OkHttp envia PATCH nativamente, sem alterar o contrato já utilizado pela API.
