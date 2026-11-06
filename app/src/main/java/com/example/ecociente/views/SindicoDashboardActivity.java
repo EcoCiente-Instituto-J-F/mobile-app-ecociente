@@ -67,6 +67,12 @@ public final class SindicoDashboardActivity extends AppCompatActivity {
             exibirSemDados();
             findViewById(R.id.botaoTentarDashboard).setVisibility(View.VISIBLE);
             AvisoFlutuante.mostrar(this, R.string.sindico_coleta_sem_condominio);
+            new PerfilApiRepository().atualizar(this, () -> {
+                if (!isFinishing() && !isDestroyed()
+                        && PerfilApiRepository.condominioId(this) > 0) {
+                    carregar();
+                }
+            });
             return;
         }
 
