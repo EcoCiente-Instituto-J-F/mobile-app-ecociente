@@ -52,7 +52,7 @@ public final class ProvedorContaDemo implements ContaAtual.Provedor {
         synchronized (estado) {
             JSONObject raiz = estado.raiz();
 
-            if (!ContaDemo.credenciaisConferem(raiz, email, senha)) {
+            if (!estado.selecionarConta(email, senha)) {
                 return ResultadoLogin.erro("E-mail ou senha incorretos");
             }
 
@@ -71,7 +71,7 @@ public final class ProvedorContaDemo implements ContaAtual.Provedor {
 
     @Override
     public void sair() {
-        recomecar();
+        estado.encerrarSessao();
     }
 
     @Nullable
@@ -97,8 +97,14 @@ public final class ProvedorContaDemo implements ContaAtual.Provedor {
             perfil.setCpf(me.optString("cpf", ""));
             perfil.setFotoUrl(me.optString("urlAvatar", ""));
             perfil.setFotoCondominioUrl(condominio == null ? "" : condominio.optString("urlFoto", ""));
-            perfil.setTipoPerfil(TipoPerfil.USUARIO);
-            perfil.setPossuiCodigoCondominio(true);
+            String tipo = me.optString("perfil", "MORADOR");
+            perfil.setTipoPerfil("SINDICO".equals(tipo) ? TipoPerfil.SINDICO : "COOPERATIVA".equals(tipo) ? TipoPerfil.COOPERATIVA : TipoPerfil.USUARIO);
+            perfil.setPossuiCodigoCondominio("MORADOR".equals(tipo) || "SINDICO".equals(tipo));
+            JSONObject cooperativa = me.optJSONObject("cooperativa");
+            if (cooperativa != null) {
+                perfil.setNomeCooperativa(cooperativa.optString("nome", ""));
+                perfil.setEmailCooperativa(cooperativa.optString("email", ""));
+            }
 
             if (endereco != null) {
                 perfil.setEndereco(endereco.optString("logradouro", ""));

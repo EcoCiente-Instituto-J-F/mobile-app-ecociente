@@ -40,6 +40,32 @@ public final class EstadoDemo {
         armazem.salvar(raiz.toString());
     }
 
+
+    public synchronized boolean selecionarConta(String email, String senha) {
+        String chave = ContaDemo.normalizarEmail(email);
+        JSONObject perfis = raiz.optJSONObject("perfisDemo");
+        JSONObject escolhido = perfis == null ? null : perfis.optJSONObject(chave);
+        if (escolhido == null || !ContaDemo.credenciaisConferem(escolhido, email, senha)) return false;
+        try {
+            String anterior = raiz.optString("usuarioAtivoDemo", "");
+            if (!anterior.isEmpty()) perfis.put(anterior, UsuariosMultiperfilDemo.snapshot(raiz));
+            UsuariosMultiperfilDemo.aplicar(raiz, escolhido);
+            raiz.put("usuarioAtivoDemo", chave);
+            salvar();
+            return true;
+        } catch (JSONException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+    public synchronized void encerrarSessao() {
+        try {
+            ContaDemo.conta(raiz).put("logado", false).put("token", "");
+            salvar();
+        } catch (JSONException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     // O instante atual segundo o relógio injetado.
     public long agora() {
         return relogio.getAsLong();

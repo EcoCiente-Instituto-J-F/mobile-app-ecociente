@@ -16,11 +16,11 @@ import org.json.JSONObject;
 public final class SementeDemo {
 
     // Muda quando o formato do estado muda: um arquivo de outra versão é descartado e a semente volta.
-    static final int VERSAO = 6;
+    static final int VERSAO = 7;
 
     // Têm de ser iguais aos DEMO_EMAIL e DEMO_SENHA do build type `demo` em app/build.gradle.kts, que a tela de login preenche.
-    public static final String EMAIL = "morador@ecociente.demo";
-    public static final String SENHA = "demo1234";
+    public static final String EMAIL = "morador@ecociente.com.br";
+    public static final String SENHA = "Ecociente2026.";
 
     public static final String UID = "demo-morador-42";
     public static final int USUARIO_ID = 42;
@@ -47,6 +47,7 @@ public final class SementeDemo {
             raiz.put("agendamentos", agendamentos(agora));
             raiz.put("agendamentosSemana", semanaDe(agora));
 
+            UsuariosMultiperfilDemo.configurar(raiz);
             return raiz;
 
         } catch (JSONException erro) {
