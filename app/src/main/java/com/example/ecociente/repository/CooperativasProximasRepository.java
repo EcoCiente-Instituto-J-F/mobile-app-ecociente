@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.example.ecociente.model.CooperativaProxima;
 
@@ -25,7 +26,8 @@ import java.util.concurrent.Executors;
 public final class CooperativasProximasRepository {
     private static final String TAG = "CooperativasProximas";
     private static final String ENDPOINT =
-            "https://ds-mobile-api.onrender.com/api/cooperativas?page=0&size=50";
+            "https://ds-mobile-api.onrender.com/api/cooperativas";
+    private static final int TAMANHO_PAGINA = 100;
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
@@ -35,12 +37,21 @@ public final class CooperativasProximasRepository {
 
     public static final class Resultado {
         public final List<CooperativaProxima> cooperativas;
-        public final String erro;
-        public Resultado(@NonNull List<CooperativaProxima> cooperativas, String erro) {
+        @Nullable public final Integer condominioId;
+        @Nullable public final String erro;
+
+        public Resultado(
+                @NonNull List<CooperativaProxima> cooperativas,
+                @Nullable Integer condominioId,
+                @Nullable String erro) {
             this.cooperativas = cooperativas;
+            this.condominioId = condominioId;
             this.erro = erro;
         }
-        public boolean sucesso() { return erro == null; }
+
+        public boolean sucesso() {
+            return erro == null;
+        }
     }
 
     public void listar(@NonNull Context context, @NonNull Callback callback) {
@@ -51,7 +62,9 @@ public final class CooperativasProximasRepository {
                 resultado = consultar(app);
             } catch (Exception e) {
                 Log.e(TAG, "Falha ao consultar cooperativas", e);
-                resultado = new Resultado(new ArrayList<>(),
+                resultado = new Resultado(
+                        new ArrayList<>(),
+                        null,
                         "Não foi possível carregar as cooperativas. Verifique sua conexão e tente novamente.");
             }
             Resultado finalResultado = resultado;
@@ -64,67 +77,125 @@ public final class CooperativasProximasRepository {
         AutenticacaoExternaRepository auth = new AutenticacaoExternaRepository();
         String token = auth.tokenParaUso(context);
         if (token == null) {
-            return new Resultado(new ArrayList<>(),
-                    "Sua sessão não está disponível. Entre novamente para continuar.");
+            return erroSessao();
         }
 
-        int status = 0;
-        String body = null;
+        List<CooperativaProxima> cooperativas = new ArrayList<>();
+        Integer condominioId = null;
+        int totalPaginas = 1;
+
+        for (int pagina = 0; pagina < totalPaginas; pagina++) {
+            RespostaHttp resposta = requisitarPagina(context, auth, token, pagina);
+            token = resposta.token;
+
+            if (resposta.codigo < 200 || resposta.codigo >= 300) {
+                Log.w(TAG, "GET cooperativas respondeu HTTP " + resposta.codigo);
+                String mensagem = resposta.codigo == 401 || resposta.codigo == 403
+                        ? "Sua sessão expirou ou não possui acesso às cooperativas."
+                        : "Não foi possível carregar as cooperativas (HTTP " + resposta.codigo + ").";
+                return new Resultado(new ArrayList<>(), null, mensagem);
+            }
+
+            JSONObject json = new JSONObject(resposta.corpo == null ? "{}" : resposta.corpo);
+            if (pagina == 0) {
+                if (!json.isNull("condominioId")) {
+                    int id = json.optInt("condominioId", 0);
+                    condominioId = id > 0 ? id : null;
+                }
+                totalPaginas = Math.max(1, json.optInt("totalPaginas", 1));
+            }
+
+            JSONArray array = json.optJSONArray("cooperativas");
+            if (array == null) {
+                continue;
+            }
+
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject item = array.optJSONObject(i);
+                if (item == null) {
+                    continue;
+                }
+
+                int id = item.optInt("id", 0);
+                String nome = item.optString("nome", "").trim();
+                if (id <= 0 || nome.isEmpty()) {
+                    continue;
+                }
+
+                Double media = item.isNull("mediaAvaliacoes")
+                        ? null
+                        : item.optDouble("mediaAvaliacoes");
+
+                cooperativas.add(new CooperativaProxima(
+                        id,
+                        nome,
+                        item.optString("email", "").trim(),
+                        item.optString("telefone", "").trim(),
+                        item.optString("enderecoCompleto", "").trim(),
+                        item.optString("cidade", "").trim(),
+                        item.optString("estado", "").trim(),
+                        media,
+                        item.optLong("totalAvaliacoes", 0)));
+            }
+        }
+
+        return new Resultado(cooperativas, condominioId, null);
+    }
+
+    @NonNull
+    private RespostaHttp requisitarPagina(
+            Context context,
+            AutenticacaoExternaRepository auth,
+            String tokenInicial,
+            int pagina) throws Exception {
+
+        String token = tokenInicial;
+        int codigo = 0;
+        String corpo = null;
+
         for (int tentativa = 0; tentativa < 2; tentativa++) {
-            HttpURLConnection connection = (HttpURLConnection) new URL(ENDPOINT).openConnection();
+            HttpURLConnection connection = (HttpURLConnection)
+                    new URL(ENDPOINT + "?page=" + pagina + "&size=" + TAMANHO_PAGINA)
+                            .openConnection();
             try {
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("Accept", "application/json");
                 connection.setRequestProperty("Authorization", "Bearer " + token);
-                connection.setConnectTimeout(30000);
-                connection.setReadTimeout(30000);
-                status = connection.getResponseCode();
-                if ((status == HttpURLConnection.HTTP_UNAUTHORIZED
-                        || status == HttpURLConnection.HTTP_FORBIDDEN) && tentativa == 0) {
+                connection.setConnectTimeout(30_000);
+                connection.setReadTimeout(30_000);
+                codigo = connection.getResponseCode();
+
+                if ((codigo == HttpURLConnection.HTTP_UNAUTHORIZED
+                        || codigo == HttpURLConnection.HTTP_FORBIDDEN)
+                        && tentativa == 0) {
                     String renovado = auth.renovarToken(context);
                     if (renovado != null) {
                         token = renovado;
                         continue;
                     }
                 }
-                InputStream stream = status >= 200 && status < 300
-                        ? connection.getInputStream() : connection.getErrorStream();
-                if (stream != null) body = ler(stream);
+
+                InputStream stream = codigo >= 200 && codigo < 300
+                        ? connection.getInputStream()
+                        : connection.getErrorStream();
+                if (stream != null) {
+                    corpo = ler(stream);
+                }
                 break;
             } finally {
                 connection.disconnect();
             }
         }
 
-        if (status < 200 || status >= 300) {
-            Log.w(TAG, "GET cooperativas respondeu HTTP " + status);
-            String mensagem = status == 401 || status == 403
-                    ? "Sua sessão expirou ou não possui acesso a cooperativas."
-                    : "Não foi possível carregar as cooperativas (HTTP " + status + ").";
-            return new Resultado(new ArrayList<>(), mensagem);
-        }
+        return new RespostaHttp(codigo, corpo, token);
+    }
 
-        JSONObject json = new JSONObject(body == null ? "{}" : body);
-        JSONArray array = json.optJSONArray("cooperativas");
-        List<CooperativaProxima> lista = new ArrayList<>();
-        if (array != null) {
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject item = array.optJSONObject(i);
-                if (item == null) continue;
-                int id = item.optInt("id", 0);
-                String nome = item.optString("nome", "").trim();
-                if (id <= 0 || nome.isEmpty()) continue;
-                Double media = item.isNull("mediaAvaliacoes")
-                        ? null : item.optDouble("mediaAvaliacoes");
-                lista.add(new CooperativaProxima(
-                        id, nome,
-                        item.optString("enderecoCompleto", ""),
-                        item.optString("cidade", ""),
-                        item.optString("estado", ""),
-                        media, item.optLong("totalAvaliacoes", 0)));
-            }
-        }
-        return new Resultado(lista, null);
+    @NonNull
+    private Resultado erroSessao() {
+        return new Resultado(
+                new ArrayList<>(),
+                null,
+                "Sua sessão não está disponível. Entre novamente para continuar.");
     }
 
     @NonNull
@@ -132,8 +203,22 @@ public final class CooperativasProximasRepository {
         try (InputStream in = input; ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             byte[] buffer = new byte[2048];
             int lidos;
-            while ((lidos = in.read(buffer)) != -1) out.write(buffer, 0, lidos);
+            while ((lidos = in.read(buffer)) != -1) {
+                out.write(buffer, 0, lidos);
+            }
             return out.toString(StandardCharsets.UTF_8.name());
+        }
+    }
+
+    private static final class RespostaHttp {
+        final int codigo;
+        @Nullable final String corpo;
+        @NonNull final String token;
+
+        RespostaHttp(int codigo, @Nullable String corpo, @NonNull String token) {
+            this.codigo = codigo;
+            this.corpo = corpo;
+            this.token = token;
         }
     }
 }
