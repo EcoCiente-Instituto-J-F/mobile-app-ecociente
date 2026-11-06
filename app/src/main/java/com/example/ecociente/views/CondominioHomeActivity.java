@@ -141,8 +141,8 @@ public class CondominioHomeActivity extends AppCompatActivity {
                 android.widget.TextView estado = findViewById(R.id.textoEstadoRankingHome);
                 estado.setVisibility(View.VISIBLE);
                 estado.setText(R.string.ranking_home_indisponivel);
-                if (PoliticaPreparacaoApi.deveRepetir(tentativasPreparacao, 3)) {
-                    reconexao.postDelayed(tentarNovamenteDados, 12_000L * tentativasPreparacao);
+                if (PoliticaPreparacaoApi.deveRepetir(tentativasPreparacao, 8)) {
+                    reconexao.postDelayed(tentarNovamenteDados, Math.min(45_000L, 15_000L * tentativasPreparacao));
                 }
                 return;
             }
