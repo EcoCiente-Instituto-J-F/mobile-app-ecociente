@@ -55,7 +55,20 @@ public class CondominioHomeActivity extends AppCompatActivity {
         new PermissaoNotificacoes(this).pedirSeNecessario();
 
         AquecimentoDasApis.aquecer(this);
-        new PerfilApiRepository().atualizarSeNecessario(this);
+        new PerfilApiRepository().atualizarSeNecessario(this, () -> {
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+            if (PerfilApiRepository.condominioId(this) > 0) {
+                carregarPodio();
+            } else {
+                new PerfilApiRepository().atualizar(this, () -> {
+                    if (!isFinishing() && !isDestroyed()) {
+                        carregarPodio();
+                    }
+                });
+            }
+        });
         carregarPontosNoCard(true);
 
         perfilViewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
@@ -76,8 +89,6 @@ public class CondominioHomeActivity extends AppCompatActivity {
         calendarioViewModel.getColetasDaSemana().observe(this, this::exibirSemana);
 
         calendarioViewModel.carregarSemana();
-
-        carregarPodio();
 
         motion.staggerIn(
                 findViewById(R.id.cabecalhoHomeCondominio),
