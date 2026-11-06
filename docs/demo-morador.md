@@ -21,11 +21,11 @@ Conta fictícia. Começa com 320 pontos, 4º lugar no ranking, nenhum descarte s
 
 ## O que é fictício e o que é real
 
-- Tudo o que o app pede à rede é respondido por dentro do app, sem internet.
-- O Eko responde por roteiro, não é IA. Ao apresentar, diga que está em **modo offline**.
+- Tudo o que o app pede à rede é respondido por dentro do app, sem internet, exceto a leitura de imagens do Cloudinary (próximo item).
+- O Eko responde por palavra-chave, não é IA. Ao apresentar, diga que está em **modo offline**.
 - As imagens do Cloudinary (guia, feed) carregam se houver internet e, sem ela, caem para a imagem de reserva.
 - A foto do descarte fica só no aparelho: o upload é local.
-- A aprovação do descarte leva 20 s a 25 s depois do registro; ela sai mesmo com o app em segundo plano.
+- A aprovação do descarte leva 20 s a 25 s depois do registro, enquanto o Android mantiver o app vivo; se o sistema o encerrar, a aprovação aparece ao reabrir.
 - O aviso de aprovação precisa da permissão de notificações do Android 13 ou superior.
 - Registrar descarte exige câmera (aparelho com câmera, e a permissão concedida).
 - Pontos do quiz: 40, 30 e 50 na primeira aprovação de cada um; repetir não pontua de novo.
@@ -40,7 +40,7 @@ Ligue o modo avião antes de abrir o app. Em nenhuma tela pode aparecer erro de 
 
 - [ ] Login com `morador@ecociente.demo` / `demo1234`; senha errada mostra erro.
 - [ ] Home e pódio: saldo 320 e 4º lugar.
-- [ ] Descarte: abre a câmera, registra a foto, aparece "Em análise" em Meus descartes; após 20 a 25 s chega a notificação, o saldo vai a 370 e a posição a 3º.
+- [ ] Descarte: abre a câmera, registra a foto, aparece "Em análise" em Meus descartes; após 20 a 25 s (com o app aberto ou em segundo plano e vivo; se o Android o encerrar, ao reabrir) chega a notificação, o saldo vai a 370 e a posição a 3º.
 - [ ] Feed e voto: lista de descartes de outros moradores; votar em um em análise; votar de novo é recusado.
 - [ ] Quiz: abrir um quiz, ser reprovado (sem pontos), refazer e ser aprovado (recompensa); histórico e revisão com gabarito.
 - [ ] Guia e favoritos: cursos e aulas abrem; favoritar e ver na lista de favoritos.
@@ -48,7 +48,7 @@ Ligue o modo avião antes de abrir o app. Em nenhuma tela pode aparecer erro de 
 - [ ] Ranking: lista de moradores com o usuário destacado.
 - [ ] Pontos: extrato com as movimentações, inclusive descarte e quiz.
 - [ ] Avisos: lista abre; marcar como lido persiste até o reset.
-- [ ] Eko: perguntar sobre onde descartar, pontos e coleta; a resposta vem do roteiro.
+- [ ] Eko: perguntar "onde jogo pilha", "óleo de cozinha", "vidro", "qual a próxima coleta", "quantos pontos eu tenho" e "minha posição no ranking". Outras perguntas (como "onde descartar") recebem a resposta genérica.
 - [ ] Perfil: editar nome, telefone e endereço (CEP `01001000`); salva.
 - [ ] Foto de perfil: trocar a foto e ver a nova no perfil.
 - [ ] Senha: trocar com a senha atual `demo1234`, sair e entrar com a nova.

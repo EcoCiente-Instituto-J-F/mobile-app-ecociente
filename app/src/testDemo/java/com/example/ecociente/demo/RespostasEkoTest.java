@@ -49,6 +49,16 @@ public class RespostasEkoTest {
     }
 
     @Test
+    public void pontoDeColeta_ehPerguntaDeColeta_enaoDeSaldo() {
+        String resposta = ouvir("qual o ponto de coleta?");
+
+        assertTrue(resposta.contains("coleta"));
+        assertFalse(resposta.contains("você tem"));
+        assertTrue(ouvir("qual a próxima coleta").contains("coleta"));
+        assertTrue(ouvir("quantos pontos eu tenho").contains("você tem"));
+    }
+
+    @Test
     public void ranking_trazAPosicaoAtual() {
         assertTrue(ouvir("posição no ranking").contains(estado.posicaoDoUsuario() + "º"));
     }

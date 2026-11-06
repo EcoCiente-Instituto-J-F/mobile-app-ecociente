@@ -29,6 +29,7 @@ public class DemoFluxoCompletoTest {
     private static final String PONTOS = "https://ds-pontuacao-api.onrender.com";
     private static final String CHAT_RENDER = "https://ia-eko.onrender.com/api/v1/chat";
     private static final String CHAT_PRINCIPAL = "https://api.52.71.117.143.sslip.io/api/v1/chat";
+    private static final String UPLOAD = "https://api.cloudinary.com/v1_1/ncwfxyfi/image/upload";
     private static final long AGORA = 1_700_000_000_000L;
 
     private final long[] relogio = {AGORA};
@@ -230,6 +231,10 @@ public class DemoFluxoCompletoTest {
         String registro =
                 PostagemJson.corpoCriar(7, 1, "file:///memoria/foto.jpg", "hash-rotas", PostagemJson.iso(relogio[0]));
         String dispositivo = "{\"instalacaoId\":\"i1\",\"token\":\"fcm\",\"preferencias\":{}}";
+        String upload =
+                "--L\r\nContent-Disposition: form-data; name=\"upload_preset\"\r\n\r\necociente_feed\r\n"
+                        + "--L\r\nContent-Disposition: form-data; name=\"file\"; filename=\"f.jpg\"\r\n"
+                        + "Content-Type: image/jpeg\r\n\r\nJPEG\r\n--L--\r\n";
         String chat = "{\"mensagem\":\"onde jogo pilha?\"}";
         String[][] rotas = {
             // Conta e perfil
@@ -270,6 +275,8 @@ public class DemoFluxoCompletoTest {
             // Health checks do aquecimento
             {"GET", MOBILE + "/", null},
             {"GET", PONTOS + "/", null},
+            // Upload da foto do descarte
+            {"POST", UPLOAD, upload},
             // Senha (por último: muda a senha da conta)
             {"POST", MOBILE + "/senhas/alterar",
                 "{\"senhaAtual\":\"" + SementeDemo.SENHA + "\",\"novaSenha\":\"nova12345\",\"confirmacaoSenha\":\"nova12345\"}"},

@@ -28,6 +28,11 @@ public final class RespostasEko {
                     : "Você ainda não aparece no ranking. Faça um descarte para entrar na disputa!";
         }
 
+        // Antes de "ponto": "ponto de coleta" é pergunta de coleta, não de saldo.
+        if (texto.contains("coleta")) {
+            return proximaColeta(estado);
+        }
+
         if (texto.contains("ponto")) {
             return "Você tem " + estado.saldo() + " pontos. Descartes aprovados e quizzes rendem mais pontos!";
         }
@@ -45,10 +50,6 @@ public final class RespostasEko {
         if (texto.contains("vidro")) {
             return "Vidro limpo vai na reciclagem. Se estiver quebrado, embrulhe em jornal e avise com uma etiqueta "
                     + "para proteger quem manuseia. Espelhos e cerâmica não são recicláveis.";
-        }
-
-        if (texto.contains("coleta")) {
-            return proximaColeta(estado);
         }
 
         return PADRAO;
