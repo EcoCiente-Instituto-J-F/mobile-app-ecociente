@@ -49,13 +49,16 @@ android {
         versionName = "1.0"
 
         // URL pública configurável, sem exigir um .env novo nos builds existentes.
-        resValue(
-            "string",
-            "educacao_api_base_url",
-            (System.getenv("ECOCIENTE_MOBILE_API_BASE_URL")
-                ?: propriedadesEnv.getProperty("ECOCIENTE_MOBILE_API_BASE_URL")
-                ?: "https://ds-mobile-api.onrender.com").trimEnd('/')
-        )
+        val mobileApiBaseUrl = (System.getenv("ECOCIENTE_MOBILE_API_BASE_URL")
+            ?: propriedadesEnv.getProperty("ECOCIENTE_MOBILE_API_BASE_URL")
+            ?: "https://ds-mobile-api.onrender.com").trim().trimEnd('/')
+
+        require(mobileApiBaseUrl.startsWith("https://")) {
+            "ECOCIENTE_MOBILE_API_BASE_URL deve usar HTTPS"
+        }
+
+        resValue("string", "educacao_api_base_url", mobileApiBaseUrl)
+        buildConfigField("String", "ECOCIENTE_MOBILE_API_BASE_URL", "\"$mobileApiBaseUrl\"")
 
         val ekoChatUrl = (System.getenv("ECOCIENTE_EKO_CHAT_URL")
             ?: propriedadesEnv.getProperty("ECOCIENTE_EKO_CHAT_URL")
