@@ -49,6 +49,8 @@ public class ChatActivity extends AppCompatActivity {
     private final List<ObjectAnimator> animacoesDigitacao = new ArrayList<>();
     private final Handler animadorTexto = new Handler(Looper.getMainLooper());
     private Runnable proximoTrecho;
+    private TextView textoEmAnimacao;
+    private String conteudoEmAnimacao;
     private boolean conversaIniciada;
     private int totalMensagensAnterior;
     private boolean animacaoTextoEmCurso;
@@ -235,6 +237,8 @@ public class ChatActivity extends AppCompatActivity {
 
         int caracteresPorPasso = Math.max(1, (int) Math.ceil(totalCaracteres / 110.0));
         animacaoTextoEmCurso = true;
+        textoEmAnimacao = destino;
+        conteudoEmAnimacao = texto;
         int[] indiceUtf16 = {0};
 
         proximoTrecho = new Runnable() {
@@ -255,6 +259,8 @@ public class ChatActivity extends AppCompatActivity {
                 } else {
                     animacaoTextoEmCurso = false;
                     proximoTrecho = null;
+                    textoEmAnimacao = null;
+                    conteudoEmAnimacao = null;
                 }
             }
         };
@@ -293,6 +299,8 @@ public class ChatActivity extends AppCompatActivity {
             proximoTrecho = null;
         }
         animacaoTextoEmCurso = false;
+        textoEmAnimacao = null;
+        conteudoEmAnimacao = null;
     }
 
     private void rolarParaUltimaMensagem() {
@@ -383,6 +391,9 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        if (animacaoTextoEmCurso && textoEmAnimacao != null && conteudoEmAnimacao != null) {
+            textoEmAnimacao.setText(conteudoEmAnimacao);
+        }
         interromperAnimacoes();
         super.onStop();
     }
