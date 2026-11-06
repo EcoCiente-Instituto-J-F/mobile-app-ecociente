@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.ecociente.model.FiltroGuia;
+import com.example.ecociente.model.DadosDemonstracaoEducacao;
 import com.example.ecociente.model.CursoEducativo;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.model.QuizResumo;
@@ -19,6 +20,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +36,9 @@ public class EducacaoRepository {
     // Trocar quando o deploy do ds-mobile-api estiver no ar.
     private static final String URL_BASE = ConfiguracaoServidores.MOBILE_API;
 
-    private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
+    private static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
+    private static final ExecutorService REDE = Executors.newFixedThreadPool(3);
+    private static final long PRAZO_MS = 10_000L;
 
     private static final Handler PRINCIPAL = new Handler(Looper.getMainLooper());
 
@@ -49,16 +56,30 @@ public class EducacaoRepository {
         void aoConcluir(boolean sucesso, @NonNull List<T> itens);
     }
 
-    /** Cursos e aulas reais para a Biblioteca nativa. Compartilha o cache da equipe. */
+    private <T> List<T> consultarComPrazo(Callable<List<T>> tarefa, List<T> demonstracao) {
+        Future<List<T>> consulta = REDE.submit(tarefa);
+        try {
+            List<T> encontrados = consulta.get(PRAZO_MS, TimeUnit.MILLISECONDS);
+            return encontrados == null || encontrados.isEmpty() ? demonstracao : encontrados;
+        } catch (TimeoutException erro) {
+            Log.w(TAG, "Consulta ultrapassou 10 segundos; ativando demonstracao");
+            consulta.cancel(true);
+            return demonstracao;
+        } catch (Exception erro) {
+            Log.w(TAG, "Consulta falhou; ativando demonstracao", erro);
+            consulta.cancel(true);
+            return demonstracao;
+        }
+    }
+
     public void listarCursos(@NonNull Context contexto, @NonNull Retorno<CursoEducativo> retorno) {
         Context app = contexto.getApplicationContext();
         EXECUTOR.execute(() -> {
-            List<CursoEducativo> saida = new ArrayList<>();
-            boolean sucesso = false;
-            try {
-                JSONArray itens = carregarCursosComAulas(app);
-                for (int i = 0; i < itens.length(); i++) {
-                    JSONObject cursoJson = itens.getJSONObject(i);
+            List<CursoEducativo> itens = consultarComPrazo(() -> {
+                JSONArray cursos = carregarCursosComAulas(app);
+                List<CursoEducativo> encontrados = new ArrayList<>();
+                for (int i = 0; i < cursos.length(); i++) {
+                    JSONObject cursoJson = cursos.getJSONObject(i);
                     JSONArray aulasJson = cursoJson.optJSONArray("aulas");
                     List<CursoEducativo.Aula> aulas = new ArrayList<>();
                     for (int j = 0; aulasJson != null && j < aulasJson.length(); j++) {
@@ -68,112 +89,84 @@ public class EducacaoRepository {
                                 aula.optString("conteudo"), aula.optInt("ordem", j + 1)));
                     }
                     aulas.sort(Comparator.comparingInt(a -> a.ordem));
-                    saida.add(new CursoEducativo(cursoJson.getInt("id"),
+                    encontrados.add(new CursoEducativo(cursoJson.getInt("id"),
                             cursoJson.optString("titulo"), cursoJson.optString("descricao"), aulas));
                 }
-                sucesso = true;
-                ultimoErro = "";
-            } catch (Exception erro) {
-                Log.w(TAG, "Não foi possível carregar a Biblioteca", erro);
-                ultimoErro = "Não foi possível carregar os conteúdos. Tente novamente.";
-            }
-            boolean finalSucesso = sucesso;
-            PRINCIPAL.post(() -> retorno.aoConcluir(finalSucesso, saida));
+                return encontrados;
+            }, DadosDemonstracaoEducacao.cursos());
+            boolean demonstracao = !itens.isEmpty() && itens.get(0).id < 0;
+            ultimoErro = demonstracao ? "Conteudo demonstrativo: API indisponivel ou lenta." : "";
+            PRINCIPAL.post(() -> retorno.aoConcluir(true, itens));
         });
     }
 
     public void listarQuizzes(@NonNull Context contexto, @NonNull Retorno<QuizResumo> retorno) {
-
-        Context contextoApp = contexto.getApplicationContext();
-
-        EXECUTOR.execute(
-                () -> {
-                    List<QuizResumo> quizzes = new ArrayList<>();
-                    boolean sucesso = false;
-
-                    try {
-                        JSONArray cursos = carregarCursosComAulas(contextoApp);
-
-                        for (int i = 0; i < cursos.length(); i++) {
-                            JSONObject curso = cursos.getJSONObject(i);
-
-                            JSONArray aulas = curso.getJSONArray("aulas");
-
-                            for (int j = 0; j < aulas.length(); j++) {
-                                JSONObject aula = aulas.getJSONObject(j);
-
-                                String corpo =
-                                        obter(contextoApp, "/api/aulas/" + aula.getInt("id") + "/quiz");
-
-                                if (corpo == null) {
-                                    continue;
-                                }
-
-                                quizzes.add(
-                                        QuizJson.montar(
-                                                curso.optString("titulo"),
-                                                aula.optString("titulo"),
-                                                new JSONObject(corpo)));
-                            }
+        Context app = contexto.getApplicationContext();
+        EXECUTOR.execute(() -> {
+            List<QuizResumo> itens = consultarComPrazo(() -> {
+                JSONArray cursos = carregarCursosComAulas(app);
+                List<QuizResumo> quizzes = new ArrayList<>();
+                for (int i = 0; i < cursos.length(); i++) {
+                    JSONObject curso = cursos.getJSONObject(i);
+                    JSONArray aulas = curso.optJSONArray("aulas");
+                    for (int j = 0; aulas != null && j < aulas.length(); j++) {
+                        JSONObject aula = aulas.getJSONObject(j);
+                        String corpo = obter(app, "/api/aulas/" + aula.getInt("id") + "/quiz");
+                        if (corpo != null) {
+                            quizzes.add(QuizJson.montar(
+                                    curso.optString("titulo"), aula.optString("titulo"),
+                                    new JSONObject(corpo)));
                         }
-
-                        sucesso = true;
-
-                    } catch (Exception erro) {
-                        Log.w(TAG, "Não foi possível carregar os quizzes", erro);
                     }
-
-                    boolean sucessoFinal = sucesso;
-
-                    PRINCIPAL.post(() -> retorno.aoConcluir(sucessoFinal, quizzes));
-                });
+                }
+                return quizzes;
+            }, DadosDemonstracaoEducacao.quizzes());
+            PRINCIPAL.post(() -> retorno.aoConcluir(true, itens));
+        });
     }
 
     public void listarGuia(@NonNull Context contexto, @NonNull Retorno<ItemLista> retorno) {
-
-        Context contextoApp = contexto.getApplicationContext();
-
-        EXECUTOR.execute(
-                () -> {
-                    List<ItemLista> itens = new ArrayList<>();
-                    boolean sucesso = false;
-
-                    try {
-                        JSONArray cursos = carregarCursosComAulas(contextoApp);
-
-                        for (int i = 0; i < cursos.length(); i++) {
-                            JSONObject curso = cursos.getJSONObject(i);
-
-                            JSONArray aulas = curso.getJSONArray("aulas");
-
-                            for (int j = 0; j < aulas.length(); j++) {
-                                JSONObject aula = aulas.getJSONObject(j);
-
-                                String tituloCurso = curso.optString("titulo");
-
-                                itens.add(
-                                        new ItemLista(
-                                                "aula:" + aula.optInt("id"),
-                                                aula.optString("titulo"),
-                                                tituloCurso,
-                                                "",
-                                                new String[][] {
-                                                    {"Curso", tituloCurso},
-                                                    {FiltroGuia.ROTULO_CONTEUDO, aula.optString("conteudo")}
-                                                }));
-                            }
-                        }
-
-                        sucesso = true;
-
-                    } catch (Exception erro) {
-                        Log.w(TAG, "Não foi possível carregar o guia", erro);
+        Context app = contexto.getApplicationContext();
+        EXECUTOR.execute(() -> {
+            List<ItemLista> demonstracao = itensDoGuia(DadosDemonstracaoEducacao.cursos());
+            List<ItemLista> itens = consultarComPrazo(() -> {
+                JSONArray cursos = carregarCursosComAulas(app);
+                List<ItemLista> guia = new ArrayList<>();
+                for (int i = 0; i < cursos.length(); i++) {
+                    JSONObject curso = cursos.getJSONObject(i);
+                    JSONArray aulas = curso.optJSONArray("aulas");
+                    for (int j = 0; aulas != null && j < aulas.length(); j++) {
+                        JSONObject aula = aulas.getJSONObject(j);
+                        String tituloCurso = curso.optString("titulo");
+                        guia.add(new ItemLista(
+                                "aula:" + aula.optInt("id"),
+                                aula.optString("titulo"), tituloCurso, "",
+                                new String[][] {
+                                    {"Curso", tituloCurso},
+                                    {FiltroGuia.ROTULO_CONTEUDO, aula.optString("conteudo")}
+                                }));
                     }
+                }
+                return guia;
+            }, demonstracao);
+            PRINCIPAL.post(() -> retorno.aoConcluir(true, itens));
+        });
+    }
 
-                    boolean sucessoFinal = sucesso;
-
-                    PRINCIPAL.post(() -> retorno.aoConcluir(sucessoFinal, itens));
-                });
+    private static List<ItemLista> itensDoGuia(List<CursoEducativo> cursos) {
+        List<ItemLista> itens = new ArrayList<>();
+        for (CursoEducativo curso : cursos) {
+            for (CursoEducativo.Aula aula : curso.aulas) {
+                itens.add(new ItemLista(
+                        "aula:" + aula.id,
+                        aula.titulo + " (Demonstração)", curso.titulo, "",
+                        new String[][] {
+                            {"Curso", curso.titulo},
+                            {FiltroGuia.ROTULO_CONTEUDO, aula.conteudo}
+                        }));
+            }
+        }
+        return itens;
     }
 
     @NonNull
@@ -188,6 +181,7 @@ public class EducacaoRepository {
         JSONArray cursos = obterArray(contexto, "/api/cursos");
 
         for (int i = 0; i < cursos.length(); i++) {
+            if (Thread.currentThread().isInterrupted()) throw new IOException("Consulta cancelada");
             JSONObject curso = cursos.getJSONObject(i);
 
             curso.put(
@@ -254,8 +248,8 @@ public class EducacaoRepository {
             conexao.setRequestProperty("Accept", "application/json");
             conexao.setRequestProperty("Authorization", "Bearer " + token);
             conexao.setUseCaches(false);
-            conexao.setConnectTimeout(180_000);
-            conexao.setReadTimeout(180_000);
+            conexao.setConnectTimeout(5_000);
+            conexao.setReadTimeout(10_000);
 
             int codigo = conexao.getResponseCode();
 
