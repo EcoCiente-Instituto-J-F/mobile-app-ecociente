@@ -38,7 +38,7 @@ import com.example.ecociente.ui.ItensBarra;
 import android.widget.ImageView;
 import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.ui.AvatarPerfil;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 
 public final class SindicoHomeActivity extends AppCompatActivity {
     private SindicoViewModel viewModel;
@@ -81,7 +81,7 @@ public final class SindicoHomeActivity extends AppCompatActivity {
         ImageView imagemPerfil = findViewById(R.id.imagemPerfilSindico);
         saudacao.setText(R.string.home_saudacao_sem_nome);
         PerfilViewModel perfilViewModel = new ViewModelProvider(this).get(PerfilViewModel.class);
-        FirebaseUser usuario = perfilViewModel.usuarioAtual();
+        UsuarioLogado usuario = perfilViewModel.usuarioAtual();
         if (usuario != null) {
             perfilViewModel.buscarPerfil(usuario.getUid()).observe(this, perfil -> {
                 String nome = PerfilUsuario.nomeExibicao(perfil, usuario).trim();

@@ -8,9 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.ecociente.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
+import com.example.ecociente.repository.ContaAtual;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -119,7 +118,7 @@ public final class FluxoEducativo {
     }
 
     private static SharedPreferences preferencias(@NonNull Context contexto) {
-        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        UsuarioLogado usuario = ContaAtual.usuario();
         String id = usuario == null ? "visitante" : usuario.getUid();
         String ambiente = DadosDemonstracaoEducacao.ATIVO ? "demo" : "local";
         return contexto.getSharedPreferences("ecociente_leitura_" + ambiente + "_v1_" + id,

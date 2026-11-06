@@ -3,8 +3,7 @@ package com.example.ecociente.repository;
 import android.content.Context;
 import android.content.SharedPreferences;
 import androidx.annotation.NonNull;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -49,7 +48,7 @@ public final class FavoritosRepository {
     @NonNull
     private static String chaveDoUsuario() {
 
-        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        UsuarioLogado usuario = ContaAtual.usuario();
 
         return usuario != null ? usuario.getUid() : SEM_USUARIO;
     }

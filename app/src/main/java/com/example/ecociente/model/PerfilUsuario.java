@@ -2,7 +2,6 @@ package com.example.ecociente.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
@@ -183,7 +182,7 @@ public class PerfilUsuario {
     // (ex.: acabou de logar com Google/Facebook) - nesse caso cai pro que
     // já está no FirebaseAuth em vez de mostrar campo vazio.
     @NonNull
-    public static String nomeExibicao(@Nullable PerfilUsuario perfil, @NonNull FirebaseUser usuario) {
+    public static String nomeExibicao(@Nullable PerfilUsuario perfil, @NonNull UsuarioLogado usuario) {
 
         String nome = perfil != null && !perfil.getNome().isEmpty() ? perfil.getNome() : usuario.getDisplayName();
 
@@ -191,7 +190,7 @@ public class PerfilUsuario {
     }
 
     @NonNull
-    public static String emailExibicao(@Nullable PerfilUsuario perfil, @NonNull FirebaseUser usuario) {
+    public static String emailExibicao(@Nullable PerfilUsuario perfil, @NonNull UsuarioLogado usuario) {
 
         String email = perfil != null && !perfil.getEmail().isEmpty() ? perfil.getEmail() : usuario.getEmail();
 

@@ -15,7 +15,7 @@ import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.example.ecociente.viewmodels.SenhaViewModel;
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 import java.util.regex.Pattern;
 import com.example.ecociente.ui.DialogoEco;
 
@@ -81,7 +81,7 @@ public class GerenciarSenhaActivity extends AppCompatActivity {
 
     private void carregarFotoPerfil() {
 
-        FirebaseUser usuario = viewModel.usuarioAtual();
+        UsuarioLogado usuario = viewModel.usuarioAtual();
 
         if (usuario == null) {
             return;

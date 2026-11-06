@@ -17,7 +17,7 @@ import com.example.ecociente.repository.PerfilRepository;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 import com.example.ecociente.ui.DialogoEco;
 import android.widget.FrameLayout;
 
@@ -165,7 +165,7 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
 
     private void carregarPerfil() {
 
-        FirebaseUser usuario = viewModel.usuarioAtual();
+        UsuarioLogado usuario = viewModel.usuarioAtual();
 
         if (usuario == null) {
             return;
@@ -178,7 +178,7 @@ public class InformacoesPessoaisActivity extends AppCompatActivity {
                 .observe(this, perfil -> preencherCampos(usuario, perfil));
     }
 
-    private void preencherCampos(FirebaseUser usuario, PerfilUsuario perfil) {
+    private void preencherCampos(UsuarioLogado usuario, PerfilUsuario perfil) {
 
         perfilAtual = perfil;
 

@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.example.ecociente.model.SessaoExterna;
+import com.example.ecociente.model.UsuarioLogado;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -151,7 +152,7 @@ public class AutenticacaoExternaRepository {
 
         EXECUTOR_ESPERA.execute(
                 () -> {
-                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    if (ContaAtual.usuario() != null) {
                         new AutenticacaoExternaRepository().tokenParaUso(contextoApp);
                         if (perfilSalvo(contextoApp) == null) {
                             new AutenticacaoExternaRepository().renovarToken(contextoApp);
@@ -438,7 +439,7 @@ public class AutenticacaoExternaRepository {
                 contextoApp.getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
 
         String cifrado = CredenciaisSeguras.cifrar(token);
-        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        UsuarioLogado usuario = ContaAtual.usuario();
         String uid = usuario == null ? null : usuario.getUid();
 
         // Sem Keystore não há como guardar com segurança: o token fica só na memória do login.
@@ -460,7 +461,7 @@ public class AutenticacaoExternaRepository {
                         .getApplicationContext()
                         .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE);
 
-        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        UsuarioLogado usuario = ContaAtual.usuario();
         String uid = preferencias.getString(CHAVE_FIREBASE_UID, null);
         if (usuario == null || !usuario.getUid().equals(uid)) {
             return null;

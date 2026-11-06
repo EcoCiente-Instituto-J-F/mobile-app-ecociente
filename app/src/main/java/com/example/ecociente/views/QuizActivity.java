@@ -21,6 +21,8 @@ import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.QuizResumo;
 import com.example.ecociente.model.DadosDemonstracaoEducacao;
 import com.example.ecociente.midias.MidiasEco;
+import com.example.ecociente.model.UsuarioLogado;
+import com.example.ecociente.repository.ContaAtual;
 import com.example.ecociente.repository.EducacaoRepository;
 import com.example.ecociente.repository.TentativaQuizRepository;
 import com.example.ecociente.ui.Navegacao;
@@ -31,7 +33,6 @@ import com.example.ecociente.ui.JanelaEdgeToEdge;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -45,7 +46,6 @@ public class QuizActivity extends AppCompatActivity {
 
     public static final String EXTRA_MORADOR = "quizMorador";
 
-    private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
     private final List<CardQuizView> cardsQuizzes = new ArrayList<>();
     private final Motion motion = new Motion();
 
@@ -72,7 +72,7 @@ public class QuizActivity extends AppCompatActivity {
 
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizQuizUsuarioComum));
 
-        if (!DadosDemonstracaoEducacao.ATIVO && autenticacao.getCurrentUser() == null) {
+        if (!DadosDemonstracaoEducacao.ATIVO && ContaAtual.usuario() == null) {
             finish();
             return;
         }
@@ -239,14 +239,15 @@ public class QuizActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if (!DadosDemonstracaoEducacao.ATIVO && autenticacao.getCurrentUser() != null) {
+        if (!DadosDemonstracaoEducacao.ATIVO && ContaAtual.usuario() != null) {
             carregarConclusoes();
         }
     }
 
     private void carregarConclusoes() {
 
-        String conta = autenticacao.getCurrentUser() == null ? "" : autenticacao.getCurrentUser().getUid();
+        UsuarioLogado usuario = ContaAtual.usuario();
+        String conta = usuario == null ? "" : usuario.getUid();
 
         if (!conta.equals(contaDasConclusoes)) {
             quizzesConcluidos.clear();

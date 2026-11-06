@@ -14,7 +14,7 @@ import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.google.android.material.switchmaterial.SwitchMaterial;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 
 public class NotificacoesActivity extends AppCompatActivity {
 
@@ -104,7 +104,7 @@ public class NotificacoesActivity extends AppCompatActivity {
 
     private void carregarPreferencias() {
 
-        FirebaseUser usuario = viewModel.usuarioAtual();
+        UsuarioLogado usuario = viewModel.usuarioAtual();
 
         if (usuario == null) {
             return;

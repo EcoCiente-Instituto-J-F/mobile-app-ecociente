@@ -13,7 +13,7 @@ import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.ResultadoPerfil;
 import com.example.ecociente.repository.NotificacaoMotivacionalRepository;
 import com.example.ecociente.repository.PerfilRepository;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 
 public class HomeViewModel extends ViewModel {
     private final PerfilRepository perfilRepositorio = new PerfilRepository();
@@ -48,7 +48,7 @@ public class HomeViewModel extends ViewModel {
     // Deixa o documento do usuário igual ao perfil que a API confirmou, para as outras telas.
     public void sincronizarPerfil(@NonNull PerfilAcesso.DestinoHome destino) {
 
-        FirebaseUser usuario = perfilRepositorio.usuarioAtual();
+        UsuarioLogado usuario = perfilRepositorio.usuarioAtual();
 
         if (usuario == null) {
             return;
@@ -77,7 +77,7 @@ public class HomeViewModel extends ViewModel {
 
     public void carregar() {
 
-        FirebaseUser usuario = perfilRepositorio.usuarioAtual();
+        UsuarioLogado usuario = perfilRepositorio.usuarioAtual();
 
         if (usuario == null) {
             estado.setValue(EstadoHome.de(EstadoHome.Tipo.SEM_LOGIN));
@@ -99,7 +99,7 @@ public class HomeViewModel extends ViewModel {
 
     public void recarregarFoto() {
 
-        FirebaseUser usuario = perfilRepositorio.usuarioAtual();
+        UsuarioLogado usuario = perfilRepositorio.usuarioAtual();
 
         if (usuario == null) {
             return;
@@ -133,7 +133,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     @NonNull
-    private EstadoHome interpretar(@NonNull FirebaseUser usuario, @NonNull ResultadoPerfil resultado) {
+    private EstadoHome interpretar(@NonNull UsuarioLogado usuario, @NonNull ResultadoPerfil resultado) {
 
         if (resultado.isFalha()) {
             return EstadoHome.de(EstadoHome.Tipo.ERRO_REDE);

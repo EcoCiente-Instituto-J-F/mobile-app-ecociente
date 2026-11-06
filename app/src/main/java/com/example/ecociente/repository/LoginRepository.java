@@ -18,6 +18,13 @@ public class LoginRepository {
             @NonNull String email, @NonNull String senha) {
         MutableLiveData<ResultadoLogin> resultado = new MutableLiveData<>();
 
+        ContaAtual.Provedor substituto = ContaAtual.substituto();
+
+        if (substituto != null) {
+            resultado.setValue(substituto.entrar(email, senha));
+            return resultado;
+        }
+
         autenticacao
                 .signInWithEmailAndPassword(email, senha)
                 .addOnCompleteListener(
@@ -69,6 +76,13 @@ public class LoginRepository {
     }
 
     public void sair() {
+        ContaAtual.Provedor substituto = ContaAtual.substituto();
+
+        if (substituto != null) {
+            substituto.sair();
+            return;
+        }
+
         autenticacao.signOut();
     }
 

@@ -26,6 +26,7 @@ import com.example.ecociente.midias.CarregadorMidias;
 import com.example.ecociente.model.CursoEducativo;
 import com.example.ecociente.model.DadosDemonstracaoEducacao;
 import com.example.ecociente.model.FluxoEducativo;
+import com.example.ecociente.repository.ContaAtual;
 import com.example.ecociente.repository.EducacaoRepository;
 import com.example.ecociente.ui.BarraNavegacaoView;
 import com.example.ecociente.ui.IndicadorCarregamento;
@@ -36,8 +37,7 @@ import com.example.ecociente.ui.Motion;
 import com.example.ecociente.ui.Navegacao;
 import com.google.android.material.card.MaterialCardView;
 import androidx.core.content.res.ResourcesCompat;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -82,7 +82,7 @@ public class BibliotecaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_biblioteca);
         InsetsSistema.aplicarComoPadding(findViewById(R.id.raizBiblioteca));
         morador = getIntent().getBooleanExtra(EXTRA_MORADOR, false);
-        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+        UsuarioLogado usuario = ContaAtual.usuario();
         if (usuario == null && !DadosDemonstracaoEducacao.ATIVO) {
             Navegacao.abrirLoginLimpandoPilha(this);
             return;

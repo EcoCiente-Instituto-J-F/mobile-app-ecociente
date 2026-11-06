@@ -14,7 +14,7 @@ import com.example.ecociente.repository.AtualizacaoExternaRepository;
 import com.example.ecociente.repository.ConsultaCepRepository;
 import com.example.ecociente.repository.FotoPerfilRepository;
 import com.example.ecociente.repository.PerfilRepository;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.repository.PerfilApiRepository;
 
@@ -27,7 +27,7 @@ public class PerfilViewModel extends ViewModelComCarregamento {
     private final ConsultaCepRepository consultaCep = new ConsultaCepRepository();
 
     @Nullable
-    public FirebaseUser usuarioAtual() {
+    public UsuarioLogado usuarioAtual() {
         return repositorio.usuarioAtual();
     }
 

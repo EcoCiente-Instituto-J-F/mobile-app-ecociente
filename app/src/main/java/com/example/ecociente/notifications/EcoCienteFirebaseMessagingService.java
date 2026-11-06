@@ -8,7 +8,7 @@ import com.example.ecociente.repository.PerfilRepository;
 import com.example.ecociente.model.PreferenciasNotificacao;
 import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.repository.PushRegistroRepository;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -39,7 +39,7 @@ public class EcoCienteFirebaseMessagingService extends FirebaseMessagingService 
         // Aparelho sem sessão não mostra aviso (o toque abriria uma tela restrita), e o aviso respeita
         // os interruptores do perfil (gerais e o grupo do tipo).
         PerfilRepository perfil = new PerfilRepository();
-        FirebaseUser usuario = perfil.usuarioAtual();
+        UsuarioLogado usuario = perfil.usuarioAtual();
 
         if (usuario == null || tipo == TipoNotificacaoEcoCiente.DESCONHECIDA) return;
         String destinatario = dados.get("usuarioId");

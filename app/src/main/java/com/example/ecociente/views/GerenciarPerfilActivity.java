@@ -30,7 +30,7 @@ import com.example.ecociente.ui.ItensBarra;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.PerfilViewModel;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 import java.io.File;
 import com.example.ecociente.ui.DialogoEco;
 import androidx.annotation.StringRes;
@@ -180,7 +180,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
     private void carregarPerfil() {
 
-        FirebaseUser usuario = viewModel.usuarioAtual();
+        UsuarioLogado usuario = viewModel.usuarioAtual();
 
         if (usuario == null) {
             return;
@@ -191,7 +191,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
                 .observe(this, perfil -> preencherCabecalho(usuario, perfil));
     }
 
-    private void preencherCabecalho(FirebaseUser usuario, PerfilUsuario perfil) {
+    private void preencherCabecalho(UsuarioLogado usuario, PerfilUsuario perfil) {
 
         boolean perfilDeCooperativa = perfil != null && PerfilAcesso.ehCooperativa(perfil.getTipoPerfil());
 
@@ -332,7 +332,7 @@ public class GerenciarPerfilActivity extends AppCompatActivity {
 
     private void enviarFoto(@Nullable Uri imagem) {
 
-        FirebaseUser usuario = viewModel.usuarioAtual();
+        UsuarioLogado usuario = viewModel.usuarioAtual();
 
         if (imagem == null || usuario == null) {
             return;

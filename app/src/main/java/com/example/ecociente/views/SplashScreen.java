@@ -16,7 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ecociente.R;
 import com.example.ecociente.repository.AquecimentoDasApis;
-import com.google.firebase.auth.FirebaseAuth;
+import com.example.ecociente.repository.ContaAtual;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -203,11 +203,7 @@ public class SplashScreen extends AppCompatActivity {
 
         destinoAberto = true;
 
-        boolean usuarioJaAutenticado =
-                FirebaseAuth
-                        .getInstance()
-                        .getCurrentUser()
-                        != null;
+        boolean usuarioJaAutenticado = ContaAtual.usuario() != null;
 
         Intent rota =
                 new Intent(

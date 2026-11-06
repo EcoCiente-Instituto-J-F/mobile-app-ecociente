@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.SessaoExterna;
+import com.example.ecociente.model.UsuarioLogado;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -27,6 +28,20 @@ public class SenhaUsuarioRepository {
     public LiveData<ResultadoApi> alterarSenha(
             @NonNull Context contexto, @NonNull String senhaAtual, @NonNull String novaSenha) {
         MutableLiveData<ResultadoApi> resultado = new MutableLiveData<>();
+
+        ContaAtual.Provedor substituto = ContaAtual.substituto();
+
+        if (substituto != null) {
+            ResultadoApi resposta = substituto.alterarSenha(senhaAtual, novaSenha);
+            UsuarioLogado atual = ContaAtual.usuario();
+
+            if (resposta.isSucesso() && atual != null && atual.getEmail() != null) {
+                AutenticacaoExternaRepository.atualizarSenhaSalva(contexto, atual.getEmail(), novaSenha);
+            }
+
+            resultado.setValue(resposta);
+            return resultado;
+        }
 
         FirebaseUser usuario = autenticacao.getCurrentUser();
 

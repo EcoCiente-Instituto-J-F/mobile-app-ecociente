@@ -27,7 +27,7 @@ import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.ui.SemanaColetasView;
 import com.example.ecociente.viewmodels.CalendarioViewModel;
 import com.example.ecociente.viewmodels.PerfilViewModel;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 import com.example.ecociente.repository.RankingExternoRepository;
 import com.example.ecociente.model.ItemLista;
 import com.example.ecociente.util.Iniciais;
@@ -259,7 +259,7 @@ public class CondominioHomeActivity extends AppCompatActivity {
 
     private void carregarPerfil() {
 
-        FirebaseUser usuario = perfilViewModel.usuarioAtual();
+        UsuarioLogado usuario = perfilViewModel.usuarioAtual();
 
         if (usuario == null) {
             return;
@@ -270,7 +270,7 @@ public class CondominioHomeActivity extends AppCompatActivity {
                 .observe(this, perfil -> preencherCabecalho(usuario, perfil));
     }
 
-    private void preencherCabecalho(FirebaseUser usuario, PerfilUsuario perfil) {
+    private void preencherCabecalho(UsuarioLogado usuario, PerfilUsuario perfil) {
 
         String nome = PerfilUsuario.nomeExibicao(perfil, usuario).trim();
 

@@ -26,7 +26,7 @@ import com.example.ecociente.model.SindicoDadosCondominio;
 import com.example.ecociente.model.SindicoItemUnidade;
 import com.example.ecociente.viewmodels.PerfilViewModel;
 import com.example.ecociente.viewmodels.SindicoUnidadesViewModel;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 
 import java.util.List;
 import com.example.ecociente.ui.JanelaEdgeToEdge;
@@ -200,7 +200,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
     // já aparece, e se o envio falhar ela continua só neste aparelho.
     private void enviarFotoDoCondominio(Uri imagem) {
         PerfilViewModel perfil = new ViewModelProvider(this).get(PerfilViewModel.class);
-        FirebaseUser usuario = perfil.usuarioAtual();
+        UsuarioLogado usuario = perfil.usuarioAtual();
 
         if (usuario == null) {
             return;
@@ -236,7 +236,7 @@ public final class SindicoUnidadesActivity extends AppCompatActivity {
     // Foto que o síndico já salvou: vem do documento dele quando a tela abre.
     private void carregarFotoSalva() {
         PerfilViewModel perfil = new ViewModelProvider(this).get(PerfilViewModel.class);
-        FirebaseUser usuario = perfil.usuarioAtual();
+        UsuarioLogado usuario = perfil.usuarioAtual();
 
         if (usuario == null) {
             return;

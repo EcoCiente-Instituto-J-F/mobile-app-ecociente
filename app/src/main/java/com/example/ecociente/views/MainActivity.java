@@ -793,10 +793,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             default:
-                com.google.firebase.auth.FirebaseUser usuario =
-                        com.google.firebase.auth.FirebaseAuth
-                                .getInstance()
-                                .getCurrentUser();
+                com.example.ecociente.model.UsuarioLogado usuario =
+                        com.example.ecociente.repository.ContaAtual.usuario();
 
                 String nome =
                         !estado.getNome().isEmpty()

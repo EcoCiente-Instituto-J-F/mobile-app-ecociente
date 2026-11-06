@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 public final class Aviso {
 
@@ -18,6 +19,8 @@ public final class Aviso {
     public final boolean deCooperativa;
     public final String remetente;
     public final String enviadoEm;
+
+    private static Supplier<List<Aviso>> fonte;
 
     private boolean lida;
 
@@ -50,11 +53,28 @@ public final class Aviso {
         lida = true;
     }
 
-    // Ainda não há API de avisos: a lista é vazia.
+    // Uma build pode registrar a fonte dos avisos. Sem fonte, e ainda sem API de avisos, a lista é vazia.
+    public static synchronized void definirFonte(@Nullable Supplier<List<Aviso>> novaFonte) {
+        fonte = novaFonte;
+    }
+
+    @NonNull
+    public static Aviso de(
+            int id,
+            String titulo,
+            String mensagem,
+            CategoriaAviso categoria,
+            boolean deCooperativa,
+            String remetente,
+            long horasAtras,
+            boolean lida) {
+        return new Aviso(id, titulo, mensagem, categoria, deCooperativa, remetente, horasAtras, lida);
+    }
+
     @NonNull
     public static synchronized List<Aviso> lista() {
 
-        return Collections.emptyList();
+        return fonte != null ? fonte.get() : Collections.emptyList();
     }
 
     public static int quantidadeNaoLidos() {

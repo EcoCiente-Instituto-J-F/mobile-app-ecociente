@@ -9,6 +9,7 @@ import com.example.ecociente.model.PerfilUsuario;
 import com.example.ecociente.model.PreferenciasNotificacao;
 import com.example.ecociente.model.ResultadoApi;
 import com.example.ecociente.model.ResultadoPerfil;
+import com.example.ecociente.model.UsuarioLogado;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
@@ -43,11 +44,20 @@ public class PerfilRepository {
     private final FirebaseFirestore bancoFirestore = FirestoreProvider.obterInstancia();
 
     @Nullable
-    public FirebaseUser usuarioAtual() {
-        return autenticacao.getCurrentUser();
+    public UsuarioLogado usuarioAtual() {
+        return ContaAtual.usuario();
     }
 
     public void encerrarSessao() {
+        ContaAtual.Provedor substituto = ContaAtual.substituto();
+
+        if (substituto != null) {
+            substituto.sair();
+            AutenticacaoExternaRepository.encerrarSessao(
+                    FirebaseApp.getInstance().getApplicationContext());
+            return;
+        }
+
         PushRegistroRepository.encerrarSessao(FirebaseApp.getInstance().getApplicationContext());
         autenticacao.signOut();
 
@@ -58,6 +68,13 @@ public class PerfilRepository {
     @NonNull
     public LiveData<PerfilUsuario> buscarPerfil(@NonNull String uid) {
         MutableLiveData<PerfilUsuario> resultado = new MutableLiveData<>();
+
+        ContaAtual.Provedor substituto = ContaAtual.substituto();
+
+        if (substituto != null) {
+            resultado.setValue(substituto.perfil(uid));
+            return resultado;
+        }
 
         bancoFirestore
                 .collection(COLECAO_USUARIOS)
@@ -79,6 +96,18 @@ public class PerfilRepository {
     @NonNull
     public LiveData<ResultadoPerfil> carregarPerfil(@NonNull String uid) {
         MutableLiveData<ResultadoPerfil> resultado = new MutableLiveData<>();
+
+        ContaAtual.Provedor substituto = ContaAtual.substituto();
+
+        if (substituto != null) {
+            PerfilUsuario perfil = substituto.perfil(uid);
+
+            resultado.setValue(
+                    perfil != null
+                            ? ResultadoPerfil.encontrado(perfil)
+                            : ResultadoPerfil.inexistente());
+            return resultado;
+        }
 
         bancoFirestore
                 .collection(COLECAO_USUARIOS)
@@ -128,6 +157,13 @@ public class PerfilRepository {
             @NonNull String uid, @NonNull String campo, @NonNull Object valor) {
         MutableLiveData<ResultadoApi> resultado = new MutableLiveData<>();
 
+        ContaAtual.Provedor substituto = ContaAtual.substituto();
+
+        if (substituto != null) {
+            resultado.setValue(substituto.atualizarCampo(uid, campo, valor));
+            return resultado;
+        }
+
         bancoFirestore
                 .collection(COLECAO_USUARIOS)
                 .document(uid)
@@ -146,6 +182,13 @@ public class PerfilRepository {
     @NonNull
     public LiveData<PreferenciasNotificacao> buscarPreferencias(@NonNull String uid) {
         MutableLiveData<PreferenciasNotificacao> resultado = new MutableLiveData<>();
+
+        ContaAtual.Provedor substituto = ContaAtual.substituto();
+
+        if (substituto != null) {
+            resultado.setValue(substituto.preferencias(uid));
+            return resultado;
+        }
 
         bancoFirestore
                 .collection(COLECAO_USUARIOS)
@@ -199,6 +242,13 @@ public class PerfilRepository {
             @NonNull String uid, @NonNull String chave, boolean valor) {
         MutableLiveData<ResultadoApi> resultado = new MutableLiveData<>();
 
+        ContaAtual.Provedor substituto = ContaAtual.substituto();
+
+        if (substituto != null) {
+            resultado.setValue(substituto.atualizarPreferencia(uid, chave, valor));
+            return resultado;
+        }
+
         bancoFirestore
                 .collection(COLECAO_USUARIOS)
                 .document(uid)
@@ -217,6 +267,20 @@ public class PerfilRepository {
     @NonNull
     public LiveData<ResultadoApi> excluirConta(@NonNull String senhaAtual) {
         MutableLiveData<ResultadoApi> resultado = new MutableLiveData<>();
+
+        ContaAtual.Provedor substituto = ContaAtual.substituto();
+
+        if (substituto != null) {
+            ResultadoApi resposta = substituto.excluirConta(senhaAtual);
+
+            if (resposta.isSucesso()) {
+                AutenticacaoExternaRepository.encerrarSessao(
+                        FirebaseApp.getInstance().getApplicationContext());
+            }
+
+            resultado.setValue(resposta);
+            return resultado;
+        }
 
         FirebaseUser usuario = autenticacao.getCurrentUser();
 

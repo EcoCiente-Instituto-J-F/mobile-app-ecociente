@@ -20,10 +20,10 @@ import androidx.core.view.WindowInsetsControllerCompat;
 import com.example.ecociente.R;
 import com.example.ecociente.model.QuizConteudo;
 import com.example.ecociente.model.DadosDemonstracaoEducacao;
+import com.example.ecociente.repository.ContaAtual;
 import com.example.ecociente.ui.AnimacaoEkoFrames;
 import com.example.ecociente.ui.Motion;
 import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,6 @@ public class InicioQuizActivity extends AppCompatActivity {
     public static final String EXTRA_CATEGORIA = "categoriaQuiz";
     public static final String EXTRA_PERGUNTAS = "perguntasQuiz";
 
-    private final FirebaseAuth autenticacao = FirebaseAuth.getInstance();
     private static final int MAX_FRAMES_QUIZ = 30;
     private static final long TEMPO_POSE_QUIZ_MS = 1500L;
     private static final long TEMPO_TRANSICAO_QUIZ_MS = 450L;
@@ -58,7 +57,7 @@ public class InicioQuizActivity extends AppCompatActivity {
 
         configurarInsetsDaTela();
 
-        if (!DadosDemonstracaoEducacao.ATIVO && autenticacao.getCurrentUser() == null) {
+        if (!DadosDemonstracaoEducacao.ATIVO && ContaAtual.usuario() == null) {
             finish();
             return;
         }

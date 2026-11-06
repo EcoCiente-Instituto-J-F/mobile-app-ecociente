@@ -27,7 +27,7 @@ import com.example.ecociente.ui.Motion;
 import com.example.ecociente.ui.Navegacao;
 import com.example.ecociente.viewmodels.CalendarioViewModel;
 import com.example.ecociente.viewmodels.PerfilViewModel;
-import com.google.firebase.auth.FirebaseUser;
+import com.example.ecociente.model.UsuarioLogado;
 import java.util.Collections;
 import java.util.List;
 
@@ -205,7 +205,7 @@ public class CooperativaHomeActivity extends AppCompatActivity {
 
     private void carregarPerfil() {
 
-        FirebaseUser usuario = viewModel.usuarioAtual();
+        UsuarioLogado usuario = viewModel.usuarioAtual();
 
         if (usuario == null) {
             return;
@@ -216,7 +216,7 @@ public class CooperativaHomeActivity extends AppCompatActivity {
                 .observe(this, perfil -> preencherCabecalho(usuario, perfil));
     }
 
-    private void preencherCabecalho(FirebaseUser usuario, PerfilUsuario perfil) {
+    private void preencherCabecalho(UsuarioLogado usuario, PerfilUsuario perfil) {
 
         String nome = PerfilUsuario.nomeExibicao(perfil, usuario).trim();
 
