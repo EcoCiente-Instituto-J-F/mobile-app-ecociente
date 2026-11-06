@@ -98,7 +98,7 @@
 
             android:text="@string/titulo_guia_home"
 
-            android:textColor="@color/preto_texto_home"
+            android:textColor="@color/verde_escuro_principal"
 
             android:textSize="10sp" />
 
