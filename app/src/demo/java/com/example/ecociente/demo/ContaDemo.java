@@ -34,6 +34,13 @@ final class ContaDemo {
         return me;
     }
 
+    // O cabeçalho Authorization traz o token que o /auth/login entregou.
+    static boolean tokenConfere(@NonNull JSONObject raiz, @Nullable String autorizacao) {
+        String token = conta(raiz).optString("token", "");
+
+        return !token.isEmpty() && ("Bearer " + token).equals(autorizacao);
+    }
+
     static boolean logado(@NonNull JSONObject raiz) {
         return conta(raiz).optBoolean("logado", false);
     }

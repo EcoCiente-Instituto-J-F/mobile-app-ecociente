@@ -19,7 +19,7 @@ public final class ApiDemo implements TratadorDemo {
 
     public ApiDemo(@NonNull EstadoDemo estado, @NonNull LongSupplier relogio) {
         this.estado = estado;
-        this.rotas = Arrays.asList(new RotasConta(estado, relogio));
+        this.rotas = Arrays.asList(new RotasConta(estado, relogio), new RotasPontuacao(estado), new RotasCalendario(estado, relogio));
     }
 
     // Uma trava só (o EstadoDemo) para pedidos da rede, do ProvedorContaDemo e do temporizador.

@@ -33,6 +33,22 @@ public final class EstadoDemo {
         armazem.salvar(raiz.toString());
     }
 
+    // Pontos do morador. Quem chama de fora da ApiDemo não precisa travar: os métodos já são synchronized.
+    public synchronized int saldo() {
+        return PontuacaoDemo.saldo(raiz);
+    }
+
+    // 1 para o primeiro do ranking; 0 se o morador não está nele.
+    public synchronized int posicaoDoUsuario() {
+        return PontuacaoDemo.posicaoDoUsuario(raiz);
+    }
+
+    // Soma pontos ao morador (origem POSTAGEM ou QUIZ), grava a movimentação e persiste.
+    public synchronized void creditar(@NonNull String origemTipo, int pontos) {
+        PontuacaoDemo.creditar(raiz, origemTipo, pontos, relogio.getAsLong());
+        salvar();
+    }
+
     // Apaga o arquivo e as fotos e recomeça da semente.
     public synchronized void resetar() {
         armazem.apagarTudo();
