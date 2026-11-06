@@ -34,6 +34,7 @@ public class EcoCienteDemoApplication extends EcoCienteApplication {
         LongSupplier relogio = System::currentTimeMillis;
 
         EstadoDemo estado = new EstadoDemo(new ArmazemDemoArquivos(getFilesDir()), relogio);
+        ConteudoEducativoDemo.inicializar(this);
         ApiDemo api = new ApiDemo(estado, relogio);
 
         // Antes de qualquer pedido: uma aprovação vencida enquanto o app estava fechado sai já na primeira consulta.
