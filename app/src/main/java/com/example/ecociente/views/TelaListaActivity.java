@@ -683,56 +683,91 @@ public class TelaListaActivity extends AppCompatActivity {
                         });
     }
 
-    // Saldo e histórico de pontos do usuário (ds-pontuacao-api).
+    private int proximaPaginaExtrato = 0;
+    private boolean ultimaPaginaExtrato = false;
+    private boolean carregandoExtrato = false;
+
     private void carregarPontos(LinearLayout lista) {
+        lista.removeAllViews();
+        proximaPaginaExtrato = 0;
+        ultimaPaginaExtrato = false;
+        carregandoExtrato = false;
 
-        indicadorDeCarregamento(lista, R.string.pontos_carregando_historico);
+        View cabecalho = LayoutInflater.from(this).inflate(R.layout.cabecalho_extrato_pontos, lista, false);
+        lista.addView(cabecalho);
 
-        PontuacaoRepository repositorio = new PontuacaoRepository();
+        TextView saldoTexto = cabecalho.findViewById(R.id.valorSaldoExtrato);
+        LinearLayout movimentos = cabecalho.findViewById(R.id.listaMovimentacoesExtrato);
 
-        repositorio.saldo(
-                this,
-                saldo ->
-                        repositorio.movimentacoes(
-                                this,
-                                0,
-                                20,
-                                pagina -> {
-                                    if (isFinishing() || isDestroyed()) {
-                                        return;
-                                    }
+        new PontuacaoRepository().saldo(this, saldo -> {
+            if (isFinishing() || isDestroyed()) return;
+            saldoTexto.setText(saldo == null
+                    ? getString(R.string.pontos_indisponivel)
+                    : NumberFormat.getIntegerInstance(new Locale("pt", "BR")).format(saldo));
+            if (saldo == null) {
+                saldoTexto.setTextSize(18);
+                cabecalho.findViewById(R.id.descricaoSaldoExtrato).setOnClickListener(view -> carregarPontos(lista));
+            }
+        });
 
-                                    lista.removeAllViews();
+        carregarPaginaExtrato(movimentos, 0);
+    }
 
-                                    if (saldo == null && pagina == null) {
-                                        erroComTentar(lista, R.string.pontos_erro);
-                                        return;
-                                    }
+    private void carregarPaginaExtrato(@NonNull LinearLayout movimentos, int pagina) {
+        if (carregandoExtrato || ultimaPaginaExtrato) return;
+        carregandoExtrato = true;
 
-                                    java.util.List<ItemLista> itens = new java.util.ArrayList<>();
+        if (pagina == 0) {
+            IndicadorCarregamento.mostrar(movimentos, R.string.pontos_carregando_historico);
+        }
 
-                                    itens.add(
-                                            new ItemLista(
-                                                    getString(R.string.pontos_saldo_atual),
-                                                    "",
-                                                    saldo == null
-                                                            ? getString(R.string.pontos_indisponivel)
-                                                            : formatarPontos(saldo)));
+        new PontuacaoRepository().movimentacoes(this, pagina, 20, resultado -> {
+            if (isFinishing() || isDestroyed()) return;
+            carregandoExtrato = false;
 
-                                    if (pagina != null) {
-                                        for (MovimentacaoPontos movimentacao : pagina.itens) {
-                                            itens.add(itemDaMovimentacao(movimentacao));
-                                        }
-                                    }
+            if (pagina == 0) movimentos.removeAllViews();
 
-                                    exibirItens(lista, itens);
+            if (resultado == null) {
+                EstadoTela.erro(movimentos, R.string.pontos_erro_historico,
+                        () -> carregarPaginaExtrato(movimentos, pagina));
+                return;
+            }
 
-                                    if (pagina == null) {
-                                        erroComTentar(lista, R.string.pontos_erro_historico);
-                                    } else if (pagina.itens.isEmpty()) {
-                                        textoDeEstado(lista, R.string.pontos_sem_movimentacao);
-                                    }
-                                }));
+            for (MovimentacaoPontos movimentacao : resultado.itens) {
+                View linha = LayoutInflater.from(this).inflate(R.layout.item_movimentacao_extrato, movimentos, false);
+                ItemLista item = itemDaMovimentacao(movimentacao);
+                ((TextView) linha.findViewById(R.id.tituloMovimentacaoExtrato)).setText(item.titulo);
+                ((TextView) linha.findViewById(R.id.dataMovimentacaoExtrato)).setText(item.subtitulo);
+                ((TextView) linha.findViewById(R.id.valorMovimentacaoExtrato)).setText(item.destaque);
+                movimentos.addView(linha);
+
+                View divisor = new View(this);
+                divisor.setBackgroundColor(getColor(R.color.cinza_borda_clara_home));
+                LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, Math.max(1,
+                        Math.round(getResources().getDisplayMetrics().density)));
+                parametros.setMargins(86, 0, 24, 0);
+                movimentos.addView(divisor, parametros);
+            }
+
+            ultimaPaginaExtrato = resultado.ultimaPagina;
+            proximaPaginaExtrato = pagina + 1;
+            if (resultado.itens.isEmpty() && pagina == 0) {
+                EstadoTela.vazio(movimentos, R.string.pontos_sem_movimentacao);
+            }
+
+            if (!ultimaPaginaExtrato) {
+                com.google.android.material.button.MaterialButton mais =
+                        (com.google.android.material.button.MaterialButton) LayoutInflater.from(this)
+                                .inflate(R.layout.botao_dialogo, movimentos, false);
+                mais.setText(R.string.pontos_carregar_mais);
+                movimentos.addView(mais);
+                mais.setOnClickListener(view -> {
+                    movimentos.removeView(mais);
+                    carregarPaginaExtrato(movimentos, proximaPaginaExtrato);
+                });
+            }
+        });
     }
 
     // Quizzes que o usuário concluiu (ds-mobile-api): título, quando terminou e percentual de acertos.
