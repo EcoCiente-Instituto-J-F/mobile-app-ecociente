@@ -90,13 +90,15 @@ public final class CooperativasProximasActivity extends AppCompatActivity {
 
         viewModel.getEnviandoSolicitacao().observe(this, enviando -> {
             boolean ativo = Boolean.TRUE.equals(enviando);
+            boolean possuiCondominio = viewModel.getCondominioId().getValue() != null;
             for (MaterialButton botao : botoesSolicitar) {
-                if (botao.isEnabled() || ativo) {
-                    botao.setEnabled(!ativo && viewModel.getCondominioId().getValue() != null);
-                    botao.setText(ativo
-                            ? R.string.enviando
-                            : R.string.cooperativa_solicitar_coleta);
-                }
+                boolean enviado = Boolean.TRUE.equals(botao.getTag());
+                botao.setEnabled(!ativo && possuiCondominio && !enviado);
+                botao.setText(ativo
+                        ? R.string.enviando
+                        : enviado
+                                ? R.string.cooperativa_solicitacao_enviada
+                                : R.string.cooperativa_solicitar_coleta);
             }
         });
 
@@ -204,6 +206,7 @@ public final class CooperativasProximasActivity extends AppCompatActivity {
 
             Integer condominioId = viewModel.getCondominioId().getValue();
             boolean possuiCondominio = condominioId != null && condominioId > 0;
+            solicitar.setTag(Boolean.FALSE);
             solicitar.setEnabled(possuiCondominio);
             solicitar.setContentDescription(possuiCondominio
                     ? getString(R.string.cooperativa_solicitar_coleta)
@@ -275,15 +278,18 @@ public final class CooperativasProximasActivity extends AppCompatActivity {
     }
 
     private MaterialButton botaoSecundario(int textoId) {
-        MaterialButton botao = new MaterialButton(this, null,
-                com.google.android.material.R.attr.materialButtonOutlinedStyle);
+        MaterialButton botao = new MaterialButton(this);
         botao.setText(textoId);
         botao.setAllCaps(false);
         botao.setTextSize(12);
         botao.setMinHeight(dp(40));
         botao.setInsetTop(0);
         botao.setInsetBottom(0);
+        botao.setCornerRadius(dp(10));
         botao.setStrokeColorResource(R.color.verde_escuro_principal);
+        botao.setStrokeWidth(dp(1));
+        botao.setBackgroundTintList(
+                android.content.res.ColorStateList.valueOf(getColor(R.color.branco)));
         botao.setTextColor(getColor(R.color.verde_escuro_principal));
         return botao;
     }
@@ -409,6 +415,7 @@ public final class CooperativasProximasActivity extends AppCompatActivity {
 
     private void tratarResultadoSolicitacao(ResultadoApi resultado, MaterialButton botao) {
         if (resultado.isSucesso()) {
+            botao.setTag(Boolean.TRUE);
             botao.setText(R.string.cooperativa_solicitacao_enviada);
             botao.setEnabled(false);
             Toast.makeText(
