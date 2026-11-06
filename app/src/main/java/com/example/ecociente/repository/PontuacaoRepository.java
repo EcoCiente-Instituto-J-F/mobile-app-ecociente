@@ -18,7 +18,7 @@ public class PontuacaoRepository {
 
     private static final String TAG = "Pontuacao";
 
-    private static final String URL_BASE = ConfiguracaoServidores.PONTUACAO_API;
+    private static final String URL_BASE = ConfiguracaoServidores.PONTUACAO_CONSULTAS_API;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 

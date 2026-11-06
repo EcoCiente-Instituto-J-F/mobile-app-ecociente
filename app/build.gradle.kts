@@ -51,7 +51,7 @@ android {
         // URL pública configurável, sem exigir um .env novo nos builds existentes.
         val mobileApiBaseUrl = (System.getenv("ECOCIENTE_MOBILE_API_BASE_URL")
             ?: propriedadesEnv.getProperty("ECOCIENTE_MOBILE_API_BASE_URL")
-            ?: "https://ds-mobile-api.onrender.com").trim().trimEnd('/')
+            ?: "https://mobile.52.71.117.143.sslip.io").trim().trimEnd('/')
 
         require(mobileApiBaseUrl.startsWith("https://")) {
             "ECOCIENTE_MOBILE_API_BASE_URL deve usar HTTPS"
@@ -59,6 +59,16 @@ android {
 
         resValue("string", "educacao_api_base_url", mobileApiBaseUrl)
         buildConfigField("String", "ECOCIENTE_MOBILE_API_BASE_URL", "\"$mobileApiBaseUrl\"")
+
+        val pontuacaoLeituraBaseUrl = (System.getenv("ECOCIENTE_PONTUACAO_CONSULTAS_API_BASE_URL")
+            ?: propriedadesEnv.getProperty("ECOCIENTE_PONTUACAO_CONSULTAS_API_BASE_URL")
+            ?: mobileApiBaseUrl).trim().trimEnd('/')
+
+        require(pontuacaoLeituraBaseUrl.startsWith("https://")) {
+            "ECOCIENTE_PONTUACAO_CONSULTAS_API_BASE_URL deve usar HTTPS"
+        }
+
+        buildConfigField("String", "ECOCIENTE_PONTUACAO_CONSULTAS_API_BASE_URL", "\"$pontuacaoLeituraBaseUrl\"")
 
         val ekoChatUrl = (System.getenv("ECOCIENTE_EKO_CHAT_URL")
             ?: propriedadesEnv.getProperty("ECOCIENTE_EKO_CHAT_URL")

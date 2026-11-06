@@ -1,6 +1,6 @@
 package com.example.ecociente.repository;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -18,8 +18,9 @@ public class AquecimentoDasApisTest {
     }
 
     @Test
-    public void cooperativaNaoAcordaAPontuacao() {
-        assertFalse(AquecimentoDasApis.servidoresDo("COOPERATIVA").contains(ConfiguracaoServidores.PONTUACAO_API + "/"));
-        assertTrue(AquecimentoDasApis.servidoresDo("MORADOR").contains(ConfiguracaoServidores.PONTUACAO_API + "/"));
+    public void aquecimentoEvitaDuplicacaoQuandoPontuacaoUsaMobile() {
+        assertEquals(1, AquecimentoDasApis.servidoresDo("COOPERATIVA").size());
+        int esperado = ConfiguracaoServidores.MOBILE_API.equals(ConfiguracaoServidores.PONTUACAO_CONSULTAS_API) ? 1 : 2;
+        assertEquals(esperado, AquecimentoDasApis.servidoresDo("MORADOR").size());
     }
 }

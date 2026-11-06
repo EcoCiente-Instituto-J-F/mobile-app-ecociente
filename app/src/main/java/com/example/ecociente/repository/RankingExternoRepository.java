@@ -20,7 +20,7 @@ public class RankingExternoRepository {
     private static final String TAG = "RankingExterno";
 
     // Trocar pela URL do deploy da ds-pontuacao-api.
-    private static final String URL_BASE = ConfiguracaoServidores.PONTUACAO_API;
+    private static final String URL_BASE = ConfiguracaoServidores.PONTUACAO_CONSULTAS_API;
 
     private static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor();
 
@@ -153,6 +153,8 @@ public class RankingExternoRepository {
                 () -> {
                     List<ItemLista> moradores = null;
 
+                    Log.d(TAG, "Consulta ranking moradores: base=" + URL_BASE + ", condominioId=" + condominioId);
+
                     try {
                         String corpo =
                                 ApiAutenticada.obter(
@@ -161,7 +163,11 @@ public class RankingExternoRepository {
                                                 + "&limit=" + limite);
 
                         if (corpo != null) {
-                            moradores = RankingJson.moradores(new JSONObject(corpo));
+                            JSONObject json = new JSONObject(corpo);
+                            moradores = RankingJson.moradores(json);
+                            JSONObject ciclo = json.optJSONObject("ciclo");
+                            Log.d(TAG, "Ranking moradores: itens=" + moradores.size()
+                                    + ", ciclo=" + (ciclo == null ? "indisponivel" : ciclo.optString("id", "indisponivel")));
                         }
                     } catch (Exception erro) {
                         Log.w(TAG, "Não foi possível carregar o ranking de moradores", erro);

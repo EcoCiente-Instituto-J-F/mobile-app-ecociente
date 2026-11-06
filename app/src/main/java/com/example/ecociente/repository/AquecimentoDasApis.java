@@ -17,7 +17,7 @@ public final class AquecimentoDasApis {
     private static final String TAG = "Aquecimento";
 
     private static final String MOBILE = ConfiguracaoServidores.MOBILE_API + "/";
-    private static final String PONTUACAO = ConfiguracaoServidores.PONTUACAO_API + "/";
+    private static final String PONTUACAO = ConfiguracaoServidores.PONTUACAO_CONSULTAS_API + "/";
 
     // Acordar de novo antes disso não adianta: o serviço ainda está de pé.
     private static final long INTERVALO_MS = 10 * 60_000L;
@@ -60,7 +60,7 @@ public final class AquecimentoDasApis {
         servidores.add(MOBILE);
 
         // Ranking e pontos ainda são de outro serviço; a cooperativa não os usa.
-        if (!"COOPERATIVA".equals(perfil)) {
+        if (!"COOPERATIVA".equals(perfil) && !MOBILE.equals(PONTUACAO)) {
             servidores.add(PONTUACAO);
         }
 
