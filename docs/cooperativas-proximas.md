@@ -1,70 +1,53 @@
-# Tela de cooperativas próximas — diagnóstico e limites da integração
+# Cooperativas da região do condomínio
 
 ## Implementado nesta branch
 
-- Tela Android `CooperativasProximasActivity`, acessível pela Home do condomínio.
-- Consulta autenticada ao endpoint real `GET https://ds-mobile-api.onrender.com/api/cooperativas?page=0&size=50`.
-- Parsing dos campos retornados pela API: `id`, `nome`, `enderecoCompleto`, `cidade`, `estado`, `mediaAvaliacoes` e `totalAvaliacoes`.
-- Busca local por nome, endereço, cidade e estado.
-- Estados de carregamento, erro, lista vazia e busca sem resultados.
-- Cartões com avaliação real quando disponível.
-- Distância explicitamente marcada como indisponível quando não há coordenadas.
-- Nenhum dado de cooperativa ou avaliação é mockado.
+- Tela Android acessível pela Home do condomínio.
+- Consulta autenticada à API real `GET /api/cooperativas?page=0&size=100`.
+- Paginação automática: carrega todas as páginas informadas pela API.
+- A API retorna o `condominioId` ativo associado ao usuário autenticado; o aplicativo não fixa nem infere o ID.
+- Busca por nome, endereço, cidade e estado, sem diferenciar maiúsculas/minúsculas ou acentuação.
+- Cartões com endereço, avaliação média, quantidade de avaliações e contato quando os dados são fornecidos pela API.
+- Ações de telefone, e-mail e abertura do endereço no Google Maps, somente quando há dados para isso.
+- Estados de carregamento, erro, tentativa novamente, lista vazia e busca sem resultados.
+- Atualização da lista por gesto de puxar para baixo.
+- Seleção de data e horário futuros.
+- Confirmação antes do envio.
+- Criação da solicitação pelo endpoint existente `POST /api/v1/agendamentos`, usando os IDs reais retornados pela API.
+- A solicitação é criada como pendente (`AGENDADO)); a cooperativa continua responsável por aceitar (`CONFIRMADO`) ou recusar (`RECUSADO)) no fluxo existente.
 
-## Contratos verificados no backend ds-mobile-api
+## Dependência do backend
 
-### Listagem
+A branch da API `feat/condominio-id-cooperativas-proximas` adiciona `condominioId` à resposta de `GET /api/cooperativas`.
 
-`GET /api/cooperativas?page=0&size=50`
+Exemplo de parte da resposta:
 
-A resposta é `CooperativasResponseDto`, com:
-- `total`
-- `pagina`
-- `tamanho`
-- `totalPaginas`
-- `cooperativas[]`
+```json
+{
+  "total": 1,
+  "pagina": 0,
+  "tamanho": 100,
+  "totalPaginas": 1,
+  "condominioId": 6,
+  "cooperativas": []
+}
+```
 
-Cada cooperativa contém:
-- `id`
-- `nome`
-- `email`
-- `telefone`
-- `cep`
-- `logradouro`
-- `numero`
-- `complemento`
-- `cidade`
-- `estado`
-- `enderecoCompleto`
-- `mediaAvaliacoes`
-- `totalAvaliacoes`
+O `condominioId` é resolvido usando o usuário autenticado no JWT:
 
-O endpoint exige autenticação e o backend restringe a consulta a síndico com condomínio ativo.
+`tb_usuarios.id_usuario → tb_sindicos.usuario_id → tb_sindicos.id_sindico → tb_condominios.sindico_id → tb_condominios.id_condominio`.
 
-### Criação de coleta
+Para o registro validado no banco durante esta tarefa, o usuário 61 está associado ao síndico 6 e ao condomínio ativo 6 (Residencial EcoCiente). O Android não contém esse ID como constante.
 
-O backend possui `POST /api/v1/agendamentos`, com contrato `CriarColetaRequestDto`:
-- `condominioId` (obrigatório)
-- `cooperativaId` (obrigatório)
-- `dataInicio` (obrigatório, OffsetDateTime futuro)
-- `dataFim` (opcional, OffsetDateTime não anterior ao início)
+**Importante:** o backend precisa ser integrado e implantado a partir da branch acima para o aplicativo receber o novo campo. Enquanto a API implantada não retornar `condominioId`, o botão de solicitação fica desabilitado, em vez de enviar um ID incorreto.
 
-A tela ainda não envia solicitações porque, no fluxo atual do aplicativo inspecionado, não foi identificada uma fonte confiável para obter o `condominioId` associado ao usuário autenticado. Enviar um ID inferido ou fixo poderia criar coleta para o condomínio errado. Por segurança, o CTA aparece desabilitado com explicação; nenhuma solicitação é enviada.
+## Limitações reais dos dados
 
-## Funcionalidades bloqueadas por falta de dados/integração
+- A API lista cooperativas da mesma cidade/estado do condomínio. Ela não calcula distância em quilômetros.
+- O serviço ainda não entrega latitude/longitude; por isso a tela abre o endereço no Google Maps, mas não exibe distância ou mapa com pins próprios.
+- O bairro só pode ser pesquisado quando estiver presente no endereço devolvido pela API.
+- Contato e avaliação são exibidos somente quando existem na resposta; nenhum dado é fabricado.
 
-- **Distância real:** a resposta de listagem não contém latitude/longitude. A tela não exibe valores inventados e mostra “Distância indisponível”.
-- **Mapa:** não há coordenadas para posicionar pins com precisão. A tela não abre mapa vazio nem cria coordenadas artificiais.
-- **Bairro separado:** o DTO não fornece campo `bairro`; a busca procura bairro somente se o texto estiver incluído em `enderecoCompleto`.
+## Validação pendente
 
-## Próximos passos para concluir o fluxo
-
-1. Disponibilizar no app, por endpoint ou perfil autenticado, o identificador real do condomínio ativo do síndico.
-2. Integrar formulário de data/horário e enviar o contrato real de `POST /api/v1/agendamentos`.
-3. Confirmar no backend o endpoint/consulta para acompanhar o status por cooperativa e condomínio.
-4. Se a distância e o mapa forem requisitos, fornecer coordenadas oficiais da cooperativa ou aprovar formalmente o uso de geocodificação de endereços, sempre identificando coordenadas estimadas.
-5. Testar em dispositivo/emulador e validar o build Gradle.
-
-## Observação de validação
-
-As alterações foram gravadas na branch `feat/correcoes-sindico-cooperativa`. O build Android e os testes instrumentados ainda precisam ser executados em ambiente Gradle com as variáveis e arquivos locais exigidos pelo projeto.
+As alterações foram gravadas nas branches indicadas. Não foi possível executar o build Gradle, testes de dispositivo ou chamadas autenticadas contra o Render nesta sessão. Esses testes precisam ocorrer após o backend ser integrado/implantado e com as variáveis locais de build disponíveis.
