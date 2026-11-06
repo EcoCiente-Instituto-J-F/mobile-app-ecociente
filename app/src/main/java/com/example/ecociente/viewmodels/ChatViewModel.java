@@ -85,8 +85,15 @@ public class ChatViewModel extends ViewModel {
                 Log.w(TAG, "Falha no Eko", causa);
                 if (causa instanceof IOException && causa.getMessage() != null
                         && causa.getMessage().contains("HTTP 429")) {
-                    adicionarMensagem(MensagemChat.doEko(
-                            "Limite de mensagens do Eko atingido. Sua cota diaria renova a meia-noite, no horario de Brasilia. Esta mensagem nao consumiu uma resposta da IA."));
+                    String motivo = causa.getMessage();
+                    String aviso = motivo.contains("limite_rate")
+                            ? "Muitas mensagens em sequência. Aguarde um minuto para tentar novamente."
+                            : motivo.contains("limite_session")
+                                    ? "Esta conversa atingiu o limite. Inicie uma nova conversa para continuar."
+                                    : motivo.contains("limite_daily")
+                                            ? "Você atingiu sua cota diária do Eko. O limite renova à meia-noite, horário de Brasília."
+                                            : "O Eko limitou temporariamente as mensagens. Tente novamente mais tarde.";
+                    adicionarMensagem(MensagemChat.doEko(aviso));
                 } else if (causa instanceof IOException && causa.getMessage() != null
                         && (causa.getMessage().contains("HTTP 401")
                         || causa.getMessage().contains("HTTP 403"))) {
