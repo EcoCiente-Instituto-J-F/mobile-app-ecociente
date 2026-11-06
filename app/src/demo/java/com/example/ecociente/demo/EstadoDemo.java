@@ -33,6 +33,11 @@ public final class EstadoDemo {
         armazem.salvar(raiz.toString());
     }
 
+    // O instante atual segundo o relógio injetado.
+    public long agora() {
+        return relogio.getAsLong();
+    }
+
     // Pontos do morador. Quem chama de fora da ApiDemo não precisa travar: os métodos já são synchronized.
     public synchronized int saldo() {
         return PontuacaoDemo.saldo(raiz);

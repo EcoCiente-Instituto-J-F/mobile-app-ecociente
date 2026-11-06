@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.example.ecociente.EcoCienteApplication;
+import com.example.ecociente.model.Aviso;
 import com.example.ecociente.notifications.NotificacaoEcoCiente;
 import com.example.ecociente.notifications.TipoNotificacaoEcoCiente;
 import com.example.ecociente.repository.ContaAtual;
@@ -39,6 +40,9 @@ public class EcoCienteDemoApplication extends EcoCienteApplication {
         api.definirOuvinte(this::avisarAprovacao);
 
         instalarTransporte(api);
+
+        // Uma lista só, para marcarComoLida valer enquanto o processo viver.
+        Aviso.definirFonte(AvisosDemo::lista);
 
         ContaAtual.usar(new ProvedorContaDemo(estado, () -> limparTudoMenosOEstado(estado)));
 

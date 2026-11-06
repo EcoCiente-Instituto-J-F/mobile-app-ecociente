@@ -33,7 +33,8 @@ public final class ApiDemo implements TratadorDemo {
                         new RotasFeed(estado, relogio),
                         new RotasEducacao(estado),
                         new RotasQuiz(estado, relogio),
-                        new RotasUpload(estado));
+                        new RotasUpload(estado),
+                        new RotasDiversas(estado));
     }
 
     // Quem é avisado quando um descarte do morador é aprovado.
