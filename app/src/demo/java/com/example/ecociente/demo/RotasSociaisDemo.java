@@ -10,6 +10,7 @@ import org.json.JSONObject;
 
 final class RotasSociaisDemo implements RotasDemo {
     private static final String MOBILE = "ds-mobile-api.onrender.com";
+    private static final String PONTUACAO = "ds-pontuacao-api.onrender.com";
     private static final Pattern CONDOMINIO_DASH = Pattern.compile("^/api/condominios/(\\d+)/dashboard$");
     private static final Pattern CONDOMINIO_FEED = Pattern.compile("^/api/condominios/(\\d+)/postagens/em-analise$");
     private static final Pattern COOP_CONDOMINIOS = Pattern.compile("^/api/cooperativas/(\\d+)/condominios$");
@@ -17,6 +18,8 @@ final class RotasSociaisDemo implements RotasDemo {
     private static final Pattern AVALIAR = Pattern.compile("^/api/agendamentos/(\\d+)/avaliacao$");
     private static final Pattern CONVERSA_MENSAGENS = Pattern.compile("^/api/conversas/(\\d+)/mensagens$");
     private static final Pattern CONVERSA_LEITURA = Pattern.compile("^/api/conversas/(\\d+)/leitura$");
+    private static final Pattern DECIDIR = Pattern.compile("^/api/v1/postagens/(\\d+)/decisao$");
+    private static final Pattern TORRE_POSICAO = Pattern.compile("^/api/v1/rankings/torres/(\\d+)/posicao$");
     private final EstadoDemo estado;
 
     RotasSociaisDemo(@NonNull EstadoDemo estado) { this.estado = estado; }
@@ -24,6 +27,21 @@ final class RotasSociaisDemo implements RotasDemo {
     @Nullable
     @Override
     public RespostaDemo tratar(@NonNull RequisicaoDemo r) {
+        if (PONTUACAO.equals(r.host)) {
+            if (!ContaDemo.tokenConfere(estado.raiz(), r.autorizacao))
+                return RespostaDemo.erro(401, "NAO_AUTORIZADO");
+            try {
+                Matcher decisao = DECIDIR.matcher(r.caminho);
+                Matcher torre = TORRE_POSICAO.matcher(r.caminho);
+                if (decisao.matches() && "PATCH".equals(r.metodo))
+                    return decidir(Integer.parseInt(decisao.group(1)), r);
+                if (r.e("GET", "/api/v1/rankings/torres"))
+                    return rankingTorres(r);
+                if (torre.matches() && "GET".equals(r.metodo))
+                    return posicaoTorre(Integer.parseInt(torre.group(1)));
+            } catch (JSONException e) { throw new IllegalStateException(e); }
+            return null;
+        }
         if (!MOBILE.equals(r.host)) return null;
         Matcher dash = CONDOMINIO_DASH.matcher(r.caminho);
         Matcher feed = CONDOMINIO_FEED.matcher(r.caminho);
@@ -95,8 +113,6 @@ final class RotasSociaisDemo implements RotasDemo {
                 .put(new JSONObject().put("quiz", "Reciclagem").put("notaMedia", 92))
                 .put(new JSONObject().put("quiz", "Consumo consciente").put("notaMedia", 78));
         long pontos = 1720;
-        JSONArray postagens = FeedDemo.postagens(estado.raiz()).isEmpty() ? new JSONArray() : null;
-        if (postagens != null) pontos = 1720;
         return json(200, new JSONObject().put("totalMoradores", 128)
                 .put("materiais", new JSONObject().put("reciclados", 150).put("porCategoria", categorias))
                 .put("pontos", new JSONObject().put("mesAtual", pontos))
@@ -263,6 +279,44 @@ final class RotasSociaisDemo implements RotasDemo {
         c.put("ultimaMensagemEm", data).put("naoLidas", 0);
         estado.salvar();
         return json(201, mensagem);
+    }
+
+
+    private RespostaDemo decidir(int id, RequisicaoDemo r) throws JSONException {
+        if (!"SINDICO".equals(ContaDemo.me(estado.raiz()).optString("perfil")))
+            return RespostaDemo.erro(403, "PERFIL_NAO_PERMITIDO");
+        JSONObject req = r.corpoJson();
+        if (req == null) return RespostaDemo.erro(400, "REQUISICAO_INVALIDA");
+        boolean aprovar = req.optBoolean("aprovar", req.optBoolean("aprovado", true));
+        for (JSONObject p : FeedDemo.postagens(estado.raiz())) {
+            if (p.optInt("id") != id) continue;
+            if (!FeedDemo.EM_ANALISE.equals(p.optString("statusValidacao")))
+                return RespostaDemo.erro(409, "DECISAO_JA_REGISTRADA");
+            p.put("statusValidacao", aprovar ? FeedDemo.APROVADA : "reprovada");
+            if (aprovar && FeedDemo.doUsuario(estado.raiz(), p)) estado.creditar("POSTAGEM", 50);
+            estado.salvar();
+            return new RespostaDemo(204, "");
+        }
+        return RespostaDemo.erro(404, "POSTAGEM_NAO_ENCONTRADA");
+    }
+
+    private RespostaDemo rankingTorres(RequisicaoDemo r) throws JSONException {
+        int condominio = UsuariosMultiperfilDemo.condominioId(estado.raiz());
+        if (condominio <= 0 || !String.valueOf(condominio).equals(r.query.get("condominioId")))
+            return RespostaDemo.erro(404, "CONDOMINIO_NAO_ENCONTRADO");
+        JSONArray lista = new JSONArray()
+                .put(new JSONObject().put("id", 2).put("nome", "Torre B").put("pontos", 1320).put("posicao", 1))
+                .put(new JSONObject().put("id", 1).put("nome", "Torre A").put("pontos", 1150).put("posicao", 2))
+                .put(new JSONObject().put("id", 3).put("nome", "Torre C").put("pontos", 980).put("posicao", 3));
+        return json(200, new JSONObject().put("ranking", lista));
+    }
+
+    private RespostaDemo posicaoTorre(int id) throws JSONException {
+        int pontos = id == 2 ? 1320 : id == 1 ? 1150 : id == 3 ? 980 : 0;
+        if (pontos == 0) return RespostaDemo.erro(404, "TORRE_NAO_ENCONTRADA");
+        int pos = id == 2 ? 1 : id == 1 ? 2 : 3;
+        return json(200, new JSONObject().put("posicao", pos).put("pontos", pontos)
+                .put("totalParticipantes", 3));
     }
 
     private static RespostaDemo json(int status, JSONObject obj) { return new RespostaDemo(status, obj.toString()); }

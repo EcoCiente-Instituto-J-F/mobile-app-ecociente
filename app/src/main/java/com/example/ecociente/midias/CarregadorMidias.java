@@ -50,6 +50,16 @@ public final class CarregadorMidias {
                 if (!midia.caminho.startsWith("midias/") || midia.caminho.contains(".."))
                     throw new IllegalArgumentException("Asset invalido");
                 modelo = Uri.parse("file:///android_asset/" + midia.caminho);
+            } else if (com.example.ecociente.BuildConfig.MODO_DEMO) {
+                if (midia.ehGifEko() || midia.animada) {
+                    modelo = R.drawable.eko_comemoracao;
+                } else {
+                    int[] imagens = foto
+                            ? new int[] {R.drawable.img_greenplastic, R.drawable.img_greenpapers, R.drawable.img_greenrecyclecontainer}
+                            : new int[] {R.drawable.img_greenrecyclecontainer, R.drawable.img_greenpapers,
+                                    R.drawable.img_greenplastic, R.drawable.quiz_sustentabilidade_inicio};
+                    modelo = imagens[Math.floorMod(midia.id.hashCode(), imagens.length)];
+                }
             } else {
                 modelo = EnderecoMidia.cloudinary(midia, foto);
             }
