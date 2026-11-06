@@ -16,7 +16,7 @@ import org.json.JSONObject;
 public final class SementeDemo {
 
     // Muda quando o formato do estado muda: um arquivo de outra versão é descartado e a semente volta.
-    static final int VERSAO = 3;
+    static final int VERSAO = 4;
 
     // Têm de ser iguais aos DEMO_EMAIL e DEMO_SENHA do build type `demo` em app/build.gradle.kts, que a tela de login preenche.
     public static final String EMAIL = "morador@ecociente.demo";

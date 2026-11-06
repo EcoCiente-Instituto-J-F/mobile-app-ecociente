@@ -41,16 +41,18 @@ final class FeedDemo {
                         .put(categoria(4, "Metal", "Latas de alumínio e de aço, tampas e arames.", 15))
                         .put(categoria(5, "Orgânico", "Restos de comida, cascas e borra de café.", 5));
 
-        // Do mais antigo ao mais novo. Nenhum é do morador; o último segue em análise, para dar o que votar.
+        // Do mais antigo ao mais novo. Nenhum é do morador; os três últimos seguem em análise (a tela do feed só mostra Aprovar/Denunciar nesses) e nunca são aprovados sozinhos.
         JSONArray postagens =
                 new JSONArray()
                         .put(postagem(1, "Letícia Prado", "Plástico", 1, FOTO_PLASTICO, APROVADA, agora - 50 * HORA))
                         .put(postagem(2, "Thiago Barros", "Metal", 4, FOTO_CONTAINER, APROVADA, agora - 26 * HORA))
                         .put(postagem(3, "Camila Duarte", "Papel", 2, FOTO_PAPEL, APROVADA, agora - 5 * HORA))
                         .put(postagem(4, "Rafael Mendes", "Plástico", 1, FOTO_PLASTICO, APROVADA, agora - 2 * HORA))
-                        .put(postagem(5, "Camila Duarte", "Papel", 2, FOTO_PAPEL, EM_ANALISE, agora - 20 * MINUTO));
+                        .put(postagem(5, "Camila Duarte", "Papel", 2, FOTO_PAPEL, EM_ANALISE, agora - 20 * MINUTO))
+                        .put(postagem(6, "Thiago Barros", "Plástico", 1, FOTO_PLASTICO, EM_ANALISE, agora - 45 * MINUTO))
+                        .put(postagem(7, "Rafael Mendes", "Metal", 4, FOTO_CONTAINER, EM_ANALISE, agora - 90 * MINUTO));
 
-        return new JSONObject().put("categorias", categorias).put("postagens", postagens).put("proximoId", 6);
+        return new JSONObject().put("categorias", categorias).put("postagens", postagens).put("proximoId", 8);
     }
 
     private static JSONObject categoria(int id, String nome, String descricao, int pontosBase) throws JSONException {
@@ -186,7 +188,7 @@ final class FeedDemo {
         }
     }
 
-    // Aprova os descartes do morador em análise há APROVACAO_MS ou mais, na ordem em que foram feitos: cada um vira "aprovada" e credita os pontos, tudo numa gravação só. Devolve, para cada aprovação, se o morador subiu no ranking.
+    // Aprova os descartes do morador em análise há APROVACAO_MS ou mais, na ordem em que foram feitos: cada um credita os pontos e vira "aprovada", com uma gravação do estado para cada passo. Só mexe nos do morador (autorId igual ao da conta); os de outros ficam em análise. Devolve, para cada aprovação, se o morador subiu no ranking.
     @NonNull
     static List<Boolean> aprovarVencidas(@NonNull EstadoDemo estado, long agora) {
         List<Boolean> subidas = new ArrayList<>();
@@ -201,8 +203,10 @@ final class FeedDemo {
 
                 int antes = estado.posicaoDoUsuario();
 
-                item.put("statusValidacao", APROVADA);
+                // Primeiro os pontos: se falhar, o descarte continua em análise em vez de ficar aprovado sem pontos.
                 estado.creditar("POSTAGEM", PONTOS_POR_DESCARTE);
+                item.put("statusValidacao", APROVADA);
+                estado.salvar();
 
                 int depois = estado.posicaoDoUsuario();
 

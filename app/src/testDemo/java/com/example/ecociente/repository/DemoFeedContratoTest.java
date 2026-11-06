@@ -172,6 +172,57 @@ public class DemoFeedContratoTest {
     }
 
     @Test
+    public void feed_semente_temPostagensDeOutrosEmAnalise() throws Exception {
+        int emAnalise = 0;
+
+        for (PostagemFeed p : feed()) {
+            if (PostagemJson.statusLegivel("em_analise").equals(p.getStatus())) {
+                emAnalise++;
+
+                assertTrue(p.getFotoUrl().startsWith(PREFIXO_FOTO));
+                assertFalse(p.getAutor().equals(SementeDemo.NOME));
+            }
+        }
+
+        assertTrue(emAnalise >= 2);
+    }
+
+    @Test
+    public void emAnaliseDeOutros_naoAprovaNemCreditaComOTempo() throws Exception {
+        int antes = 0;
+
+        for (PostagemFeed p : feed()) {
+            if (PostagemJson.statusLegivel("em_analise").equals(p.getStatus())) {
+                antes++;
+            }
+        }
+
+        relogio[0] = AGORA + 3_600_000;
+        api.processarPendentes();
+
+        int depois = 0;
+
+        for (PostagemFeed p : feed()) {
+            if (PostagemJson.statusLegivel("em_analise").equals(p.getStatus())) {
+                depois++;
+            }
+        }
+
+        assertTrue(antes >= 2);
+        assertEquals(antes, depois);
+        assertEquals(320, estado.saldo());
+        assertTrue(aprovacoes.isEmpty());
+    }
+
+    @Test
+    public void votar_emSeededEmAnalise_funciona_eRepetirDevolveJaRegistrado() throws Exception {
+        int id = idDeUmaEmAnaliseDeOutro();
+
+        assertTrue(votar(id, PostagemJson.corpoVoto(false, 3)).codigo < 300);
+        assertEquals("VOTO_JA_REGISTRADO", codigo(votar(id, PostagemJson.corpoVoto(true, 0))));
+    }
+
+    @Test
     public void categorias_temIdsPositivos() throws Exception {
         RespostaDemo r = obter("/api/categorias-residuos");
 
