@@ -67,17 +67,39 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         barra.setOnItemClickListener(
                 indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM));
         atualizarRanking();
-        carregarRanking();
+        carregarRankingComPerfil();
     }
 
-    private void carregarRanking() {
+    private void carregarRankingComPerfil() {
+        int condominioId = PerfilApiRepository.condominioId(this);
+        if (condominioId > 0) {
+            carregarRanking(condominioId);
+            return;
+        }
+
+        new PerfilApiRepository().atualizar(this, () -> {
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+            int atualizado = PerfilApiRepository.condominioId(this);
+            if (atualizado <= 0) {
+                erroNoRanking = true;
+                erroNosMoradores = true;
+                atualizarRanking();
+                return;
+            }
+            carregarRanking(atualizado);
+        });
+    }
+
+    private void carregarRanking(int condominioId) {
         erroNoRanking = false;
         erroNosMoradores = false;
 
         new RankingExternoRepository()
                 .listarMoradoresNoRanking(
                         this,
-                        PerfilApiRepository.condominioId(this),
+                        condominioId,
                         100,
                         posicoes -> {
                             if (isFinishing() || isDestroyed()) return;
@@ -93,7 +115,7 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         new RankingExternoRepository()
                 .listarTorres(
                         this,
-                        PerfilApiRepository.condominioId(this),
+                        condominioId,
                         20,
                         posicoes -> {
                             if (isFinishing() || isDestroyed()) return;
@@ -152,7 +174,7 @@ public final class SindicoRankingActivity extends AppCompatActivity {
                     erroNoRanking = false;
                     erroNosMoradores = false;
                     atualizarRanking();
-                    carregarRanking();
+                    carregarRankingComPerfil();
                 });
             } else {
                 EstadoTela.vazio(lista, R.string.sindico_ranking_vazio);

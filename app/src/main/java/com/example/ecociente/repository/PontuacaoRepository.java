@@ -76,12 +76,18 @@ public class PontuacaoRepository {
     public void posicaoNoRanking(@NonNull Context contexto, @NonNull Retorno<PosicaoNoRanking> retorno) {
 
         int usuarioId = AutenticacaoExternaRepository.usuarioIdSalvo(contexto);
+        int condominioId = PerfilApiRepository.condominioId(contexto);
+
+        if (usuarioId <= 0 || condominioId <= 0) {
+            PRINCIPAL.post(() -> retorno.aoConcluir(null));
+            return;
+        }
 
         executar(
                 contexto,
                 usuarioId,
                 "/api/v1/rankings/moradores/" + usuarioId + "/posicao?condominioId="
-                        + PerfilApiRepository.condominioId(contexto),
+                        + condominioId,
                 corpo -> PontuacaoJson.posicao(new JSONObject(corpo)),
                 retorno);
     }

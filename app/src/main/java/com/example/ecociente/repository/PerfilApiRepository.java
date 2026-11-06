@@ -204,6 +204,9 @@ public class PerfilApiRepository {
             if (condominio != null) {
                 editor.putInt(CHAVE_CONDOMINIO_ID, condominio.id);
                 editor.putString(CHAVE_CONDOMINIO_NOME, condominio.nome);
+            } else {
+                editor.remove(CHAVE_CONDOMINIO_ID);
+                editor.remove(CHAVE_CONDOMINIO_NOME);
             }
 
             editor.putString(CHAVE_DADOS_DO_PERFIL, corpo);
@@ -212,6 +215,8 @@ public class PerfilApiRepository {
 
             if (cooperativaId > 0) {
                 editor.putInt(CHAVE_COOPERATIVA_ID, cooperativaId);
+            } else {
+                editor.remove(CHAVE_COOPERATIVA_ID);
             }
 
             editor.putLong(CHAVE_ATUALIZADO_EM, System.currentTimeMillis()).apply();

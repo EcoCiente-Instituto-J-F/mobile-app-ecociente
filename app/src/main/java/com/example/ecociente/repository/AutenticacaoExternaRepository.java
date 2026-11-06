@@ -36,6 +36,7 @@ public class AutenticacaoExternaRepository {
     private static final String CHAVE_PERFIL = "perfil";
     private static final String CHAVE_USUARIO_ID = "usuarioId";
     private static final String CHAVE_FIREBASE_UID = "firebaseUid";
+    private static final String CHAVE_TOKEN_EMITIDO_EM = "tokenEmitidoEmMs";
 
     private static final Object TRAVA = new Object();
 
@@ -123,12 +124,17 @@ public class AutenticacaoExternaRepository {
 
         aguardarLoginEmAndamento();
 
-        String salvo = obterTokenSalvo(contexto);
-        FirebaseUser atual = FirebaseAuth.getInstance().getCurrentUser();
-        if (salvo != null && atual != null && atual.getUid().equals(uidSalvo(contexto))) {
-            return salvo;
+        synchronized (TRAVA) {
+            String salvo = obterTokenSalvo(contexto);
+            long emitidoEm = contexto.getApplicationContext()
+                    .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
+                    .getLong(CHAVE_TOKEN_EMITIDO_EM, 0L);
+
+            if (salvo != null && !PoliticaValidadeSessao.deveRenovar(emitidoEm, System.currentTimeMillis())) {
+                return salvo;
+            }
+            return renovarToken(contexto);
         }
-        return renovarToken(contexto);
     }
 
     public static boolean loginEmAndamento() {
@@ -145,8 +151,11 @@ public class AutenticacaoExternaRepository {
 
         EXECUTOR_ESPERA.execute(
                 () -> {
-                    if (perfilSalvo(contextoApp) == null) {
-                        new AutenticacaoExternaRepository().renovarToken(contextoApp);
+                    if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                        new AutenticacaoExternaRepository().tokenParaUso(contextoApp);
+                        if (perfilSalvo(contextoApp) == null) {
+                            new AutenticacaoExternaRepository().renovarToken(contextoApp);
+                        }
                     }
 
                     PRINCIPAL.post(aoConcluir);
@@ -196,10 +205,14 @@ public class AutenticacaoExternaRepository {
         Context contextoApp = contexto.getApplicationContext();
 
         synchronized (TRAVA) {
-            String[] credenciais = CredenciaisSeguras.ler(contextoApp);
+            String renovadoViaFirebase = renovarPeloFirebase(contextoApp);
+            if (renovadoViaFirebase != null) {
+                return renovadoViaFirebase;
+            }
 
+            String[] credenciais = CredenciaisSeguras.ler(contextoApp);
             if (credenciais == null || credenciais.length < 2) {
-                return renovarPeloFirebase(contextoApp);
+                return null;
             }
 
             try {
@@ -431,9 +444,11 @@ public class AutenticacaoExternaRepository {
         // Sem Keystore não há como guardar com segurança: o token fica só na memória do login.
         if (cifrado != null) {
             preferencias.edit().putString(CHAVE_TOKEN, cifrado)
-                    .putString(CHAVE_FIREBASE_UID, uid).apply();
+                    .putString(CHAVE_FIREBASE_UID, uid)
+                    .putLong(CHAVE_TOKEN_EMITIDO_EM, System.currentTimeMillis()).apply();
         } else {
-            preferencias.edit().remove(CHAVE_TOKEN).remove(CHAVE_FIREBASE_UID).apply();
+            preferencias.edit().remove(CHAVE_TOKEN).remove(CHAVE_FIREBASE_UID)
+                    .remove(CHAVE_TOKEN_EMITIDO_EM).apply();
         }
     }
 
