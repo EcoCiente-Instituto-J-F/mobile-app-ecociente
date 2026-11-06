@@ -408,6 +408,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void buscarTokenFCM() {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) return;
 
         Log.d(
                 TAG_FCM,

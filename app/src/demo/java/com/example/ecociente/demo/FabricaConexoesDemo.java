@@ -79,7 +79,7 @@ public final class FabricaConexoesDemo implements URLStreamHandlerFactory {
         }
 
         if (HOST_IMAGENS.equals(host)) {
-            return abrirImagem.apply(url);
+            return new ConexaoRecusada(url);
         }
 
         return new ConexaoRecusada(url);

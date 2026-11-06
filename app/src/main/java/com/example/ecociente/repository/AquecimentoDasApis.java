@@ -33,6 +33,7 @@ public final class AquecimentoDasApis {
 
     // Só acorda o que o perfil salvo vai usar. Sem perfil (primeiro acesso), só a autenticação.
     public static synchronized void aquecer(@NonNull Context contexto) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) return;
 
         long agora = System.currentTimeMillis();
 

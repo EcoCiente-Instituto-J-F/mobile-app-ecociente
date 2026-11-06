@@ -116,7 +116,7 @@ public class EcoCienteApplication extends Application implements Application.Act
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-        PushRegistroRepository.sincronizar(activity.getApplicationContext());
+        if (!BuildConfig.MODO_DEMO) PushRegistroRepository.sincronizar(activity.getApplicationContext());
     }
 
     @Override

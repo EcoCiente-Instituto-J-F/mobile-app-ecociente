@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public final class ConexaoDemo extends ConexaoBasica {
 
     // Atraso do app; os testes passam 0.
-    public static final long ATRASO_MS = 300;
+    public static final long ATRASO_MS = 0;
 
     private static final Logger LOG = Logger.getLogger("EcoCienteDemo");
 
