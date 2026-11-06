@@ -24,6 +24,15 @@ final class DashboardSindicoJson {
             @NonNull JSONObject dashboard,
             @NonNull List<Solicitacao> coletas,
             @NonNull Map<Integer, String> nomesDasCooperativas) {
+        return resumir(dashboard, coletas, nomesDasCooperativas, true);
+    }
+
+    @NonNull
+    static ResumoDashboard resumir(
+            @NonNull JSONObject dashboard,
+            @NonNull List<Solicitacao> coletas,
+            @NonNull Map<Integer, String> nomesDasCooperativas,
+            boolean coletasDisponiveis) {
 
         JSONObject materiais = dashboard.optJSONObject("materiais");
         JSONObject pontos = dashboard.optJSONObject("pontos");
@@ -116,7 +125,8 @@ final class DashboardSindicoJson {
                 nomesMateriais,
                 percentuais,
                 nomesCooperativas,
-                coletasPorCooperativa);
+                coletasPorCooperativa,
+                coletasDisponiveis);
     }
 
     // Cabe sob a barra do gráfico: até 12 caracteres.
