@@ -28,7 +28,7 @@ public class CadastroRepository {
             @NonNull Map<String, Object> dadosUsuario) {
         MutableLiveData<ResultadoCadastro> resultado = new MutableLiveData<>();
 
-        autenticacao
+        autenticacao()
                 .createUserWithEmailAndPassword(email, senha)
                 .addOnCompleteListener(
                         tarefa -> {
@@ -78,7 +78,7 @@ public class CadastroRepository {
             @NonNull String uid,
             @NonNull Map<String, Object> dadosUsuario,
             @NonNull MutableLiveData<ResultadoCadastro> resultado) {
-        bancoFirestore
+        bancoFirestore()
                 .collection("usuarios")
                 .document(uid)
                 .set(dadosUsuario)

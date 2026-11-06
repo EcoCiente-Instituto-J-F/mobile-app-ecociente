@@ -25,7 +25,7 @@ public class LoginRepository {
             return resultado;
         }
 
-        autenticacao
+        autenticacao()
                 .signInWithEmailAndPassword(email, senha)
                 .addOnCompleteListener(
                         tarefa -> {
@@ -47,7 +47,7 @@ public class LoginRepository {
             @NonNull AuthCredential credencial, @NonNull String nomeProvedor) {
         MutableLiveData<ResultadoLogin> resultado = new MutableLiveData<>();
 
-        autenticacao
+        autenticacao()
                 .signInWithCredential(credencial)
                 .addOnCompleteListener(
                         tarefa -> {

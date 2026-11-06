@@ -75,7 +75,7 @@ public class PerfilRepository {
             return resultado;
         }
 
-        bancoFirestore
+        bancoFirestore()
                 .collection(COLECAO_USUARIOS)
                 .document(uid)
                 .get()
@@ -108,7 +108,7 @@ public class PerfilRepository {
             return resultado;
         }
 
-        bancoFirestore
+        bancoFirestore()
                 .collection(COLECAO_USUARIOS)
                 .document(uid)
                 .get()
@@ -163,7 +163,7 @@ public class PerfilRepository {
             return resultado;
         }
 
-        bancoFirestore
+        bancoFirestore()
                 .collection(COLECAO_USUARIOS)
                 .document(uid)
                 .update(campo, valor)
@@ -189,7 +189,7 @@ public class PerfilRepository {
             return resultado;
         }
 
-        bancoFirestore
+        bancoFirestore()
                 .collection(COLECAO_USUARIOS)
                 .document(uid)
                 .get()
@@ -248,7 +248,7 @@ public class PerfilRepository {
             return resultado;
         }
 
-        bancoFirestore
+        bancoFirestore()
                 .collection(COLECAO_USUARIOS)
                 .document(uid)
                 .update(CAMPO_PREFERENCIAS + "." + chave, valor)
@@ -332,7 +332,7 @@ public class PerfilRepository {
             @NonNull String uid,
             @NonNull MutableLiveData<ResultadoApi> resultado) {
 
-        bancoFirestore
+        bancoFirestore()
                 .collection(COLECAO_USUARIOS)
                 .document(uid)
                 .delete()
