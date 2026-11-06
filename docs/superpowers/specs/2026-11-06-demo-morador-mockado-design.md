@@ -57,8 +57,9 @@ Tela → ViewModel → Repository → HttpURLConnection ──► ConexaoDemo �
   `getResponseCode()`, chama `ApiDemo.tratar(metodo, url, corpo, token)` depois de cerca de 300 ms.
 - Hosts tratados: `ds-mobile-api`, `ds-pontuacao-api`, `ia-eko`, o endereço do Eko em `eko_chat_url`,
   `api.cloudinary.com` (upload) e ViaCEP.
-- `res.cloudinary.com` (leitura de imagem): a conexão faz o GET com OkHttp, que já é dependência e não passa pelo
-  `URL`. Sem internet, dá `IOException` e o `CarregadorMidias` usa o drawable de fallback.
+- `res.cloudinary.com` (leitura de imagem): decisão do Heitor, as mídias continuam vindo do Cloudinary real. A
+  conexão faz o GET com OkHttp, que já é dependência e não passa pelo `URL`. Sem internet, dá `IOException` e o
+  `CarregadorMidias` usa o drawable de fallback. Upload nunca sai do aparelho.
 - Qualquer outro host recebe `IOException`. É isso que garante o critério 2.
 - `CalendarioExternoRepository.alterarStatus` usa OkHttp direto, mas só é chamado por síndico e cooperativa.
 
