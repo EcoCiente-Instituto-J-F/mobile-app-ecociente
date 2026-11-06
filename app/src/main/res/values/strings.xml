@@ -326,4 +326,32 @@
     <string name="aba_nao_lidos">Não lidos</string>
     <string name="aba_arquivadas">Arquivadas</string>
     <string name="sem_conversas">Nenhuma conversa aqui.</string>
+
+    <!-- Cooperativas próximas -->
+    <string name="cooperativas_titulo">Cooperativas da sua região</string>
+    <string name="cooperativas_icone">Caminhão de coleta seletiva</string>
+    <string name="cooperativas_subtitulo">Opções que atendem à cidade e ao estado do seu condomínio.</string>
+    <string name="cooperativas_busca_hint">Buscar por nome, endereço ou cidade</string>
+    <string name="cooperativas_contagem">%1$d cooperativas encontradas</string>
+    <string name="cooperativas_vazio">Não encontramos cooperativas disponíveis para a região do seu condomínio.</string>
+    <string name="cooperativas_busca_sem_resultado">Nenhuma cooperativa corresponde à sua busca. Tente outro termo.</string>
+    <string name="cooperativa_endereco_indisponivel">Endereço não informado</string>
+    <string name="cooperativa_avaliacao_formato">Nota média: %1$.1f · %2$d avaliações</string>
+    <string name="cooperativa_sem_avaliacoes">Ainda sem avaliações</string>
+    <string name="cooperativa_atende_regiao">Atendimento listado para a região do condomínio. Distância exata não disponível.</string>
+    <string name="cooperativa_ligar">Ligar</string>
+    <string name="cooperativa_email">E-mail</string>
+    <string name="cooperativa_ver_mapa">Ver endereço</string>
+    <string name="cooperativa_contato_indisponivel">Contato não informado pela cooperativa.</string>
+    <string name="cooperativa_acao_indisponivel">Não há aplicativo disponível para esta ação.</string>
+    <string name="cooperativa_solicitar_coleta">Solicitar coleta</string>
+    <string name="cooperativa_condominio_indisponivel">Não foi possível identificar o condomínio da sua sessão. Atualize a tela ou entre novamente.</string>
+    <string name="cooperativa_data_deve_ser_futura">Escolha uma data e um horário futuros.</string>
+    <string name="cooperativa_confirmar_solicitacao_titulo">Confirmar solicitação</string>
+    <string name="cooperativa_confirmar_solicitacao_mensagem">Enviar pedido de coleta para %1$s em %2$s? A solicitação ficará pendente até a cooperativa responder.</string>
+    <string name="cooperativa_confirmar_solicitacao">Enviar pedido</string>
+    <string name="cooperativa_solicitacao_enviada">Solicitação enviada</string>
+    <string name="cooperativa_solicitacao_enviada_mensagem">Pedido enviado. A cooperativa precisa aprovar a solicitação.</string>
+    <string name="cooperativa_erro_solicitacao_titulo">Não foi possível solicitar</string>
+
 </resources>
