@@ -12,7 +12,7 @@ import org.json.JSONObject;
 final class FeedDemo {
 
     // Quanto o descarte do morador fica "Em análise" antes de ser aprovado sozinho.
-    static final long APROVACAO_MS = 20_000;
+    static final long APROVACAO_MS = 1_500;
 
     // Fixo, qualquer que seja a categoria (o `pontosBase` da categoria é só informativo).
     static final int PONTOS_POR_DESCARTE = 50;

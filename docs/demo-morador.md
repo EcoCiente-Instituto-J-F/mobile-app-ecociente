@@ -1,58 +1,55 @@
-# Demo do morador
+# EcoCiente Demo — Aplicativo mockado offline
 
-APK de apresentação do fluxo do morador, sem rede nem Firebase: uma API falsa roda dentro do app (`app/src/demo`). Os dados são fictícios. O comportamento ainda não foi conferido em aparelho: o checklist abaixo é para isso.
+Build type **demo** na branch `feat/demo-morador-mockado`. Toda identidade visual,
+telas e animacoes sao as originais do aplicativo EcoCiente. As APIs sao simuladas
+localmente; nenhum banco de dados ou servidor externo e necessario para os fluxos mockados.
 
-## Gerar e instalar
+## Contas ficticias de demonstracao
 
-```bash
-./gradlew assembleDemo       # Windows: .\gradlew.bat assembleDemo
-./gradlew installDemo        # instala no aparelho conectado; Windows: .\gradlew.bat installDemo
-./gradlew testDemoUnitTest   # testes da demo; Windows: .\gradlew.bat testDemoUnitTest
+| Perfil | E-mail | Senha |
+|---|---|---|
+| Comum | comum@ecociente.com.br | Ecociente2026. |
+| Sindico | sindico@ecociente.com.br | Ecociente2026. |
+| Cooperativa | cooperativa@ecociente.com.br | Ecociente2026. |
+| Morador | morador@ecociente.com.br | Ecociente2026. |
+
+## Compilar
+
+Windows PowerShell na raiz do projeto:
+
+```powershell
+git fetch origin
+git switch feat/demo-morador-mockado
+git pull --ff-only
+.\gradlew.bat assembleDemo
 ```
 
-APK: `app/build/outputs/apk/demo/app-demo.apk`. O `applicationId` termina em `.demo`, então convive com o app normal.
+**Instale apenas o APK demo** em `app/build/outputs/apk/demo/app-demo.apk`.
+O `assembleDebug` produz o aplicativo normal, e NAO a simulacao.
 
-## Login
+O app demo tem id `com.example.ecociente.demo`; pode ser instalado ao lado
+do aplicativo original. No primeiro login, o estado demonstrativo e criado
+no armazenamento privado do Android.
 
-- E-mail: `morador@ecociente.demo`
-- Senha: `demo1234`
+## Funcionamento
 
-Conta fictícia. Começa com 320 pontos, 4º lugar no ranking, nenhum descarte seu e nenhum quiz concluído.
+- Login de quatro perfis, senha incorreta recusada, sessao local.
+- Curso, aula, quiz, gabarito, historico e pontuacao offline.
+- Feed de postagens, descarte com foto, votos e avaliacao do sindico simulados.
+- Ranking de moradores e torres, extrato e mudancas de saldo.
+- Solicitar e confirmar coletas e consultar calendario.
+- Cadastro de cooperativas ficticias, dashboard e avaliacoes.
+- Conversas ficticias locais entre condominio e cooperativa.
+- Eko offline consultando base educacional e FAQ; nao e uma IA generativa.
+- Imagens remotas substituidas por recursos locais existentes no aplicativo.
+- Requisicoes simuladas sem atraso artificial, sem dependencia AWS/Render/Firebase/Neon.
 
-## O que é fictício e o que é real
+O estado persiste no dispositivo. Para reiniciar completamente a demonstracao,
+limpe os dados do aplicativo EcoCiente Demo nas configuracoes do Android.
 
-- Tudo o que o app pede à rede é respondido por dentro do app, sem internet, exceto a leitura de imagens do Cloudinary (próximo item).
-- O Eko responde por palavra-chave, não é IA. Ao apresentar, diga que está em **modo offline**.
-- As imagens do Cloudinary (guia, feed) carregam se houver internet e, sem ela, caem para a imagem de reserva.
-- A foto do descarte fica só no aparelho: o upload é local.
-- A aprovação do descarte leva 20 s a 25 s depois do registro, enquanto o Android mantiver o app vivo; se o sistema o encerrar, a aprovação aparece ao reabrir.
-- O aviso de aprovação precisa da permissão de notificações do Android 13 ou superior.
-- Registrar descarte exige câmera (aparelho com câmera, e a permissão concedida).
-- Pontos do quiz: 40, 30 e 50 na primeira aprovação de cada um; repetir não pontua de novo.
+## Limites
 
-## Reset
-
-O estado fica salvo no aparelho e continua de onde parou, mesmo fechando o app. Ele volta ao começo (320 pontos, 4º lugar, sem descarte e sem quiz) só com **Sair** ou **Excluir conta**, que também apagam favoritos, progresso de leitura, preferências e lembretes de coleta. Antes de cada apresentação: Sair e entrar de novo. Para zerar na marra: limpar os dados do app nas configurações do Android.
-
-## Checklist manual (modo avião)
-
-Ligue o modo avião antes de abrir o app. Em nenhuma tela pode aparecer erro de rede.
-
-- [ ] Login com `morador@ecociente.demo` / `demo1234`; senha errada mostra erro.
-- [ ] Home e pódio: saldo 320 e 4º lugar.
-- [ ] Descarte: abre a câmera, registra a foto, aparece "Em análise" em Meus descartes; após 20 a 25 s (com o app aberto ou em segundo plano e vivo; se o Android o encerrar, ao reabrir) chega a notificação, o saldo vai a 370 e a posição a 3º.
-- [ ] Feed e voto: lista de descartes de outros moradores; votar em um em análise; votar de novo é recusado.
-- [ ] Quiz: abrir um quiz, ser reprovado (sem pontos), refazer e ser aprovado (recompensa); histórico e revisão com gabarito.
-- [ ] Guia e favoritos: cursos e aulas abrem; favoritar e ver na lista de favoritos.
-- [ ] Calendário e lembrete: próxima coleta e meses com coletas; ativar lembrete de uma coleta.
-- [ ] Ranking: lista de moradores com o usuário destacado.
-- [ ] Pontos: extrato com as movimentações, inclusive descarte e quiz.
-- [ ] Avisos: lista abre; marcar como lido persiste até o reset.
-- [ ] Eko: perguntar "onde jogo pilha", "óleo de cozinha", "vidro", "qual a próxima coleta", "quantos pontos eu tenho" e "minha posição no ranking". Outras perguntas (como "onde descartar") recebem a resposta genérica.
-- [ ] Perfil: editar nome, telefone e endereço (CEP `01001000`); salva.
-- [ ] Foto de perfil: trocar a foto e ver a nova no perfil.
-- [ ] Senha: trocar com a senha atual `demo1234`, sair e entrar com a nova.
-- [ ] Sair e reset: após Sair e novo login, volta a 320 pontos, 4º lugar, sem descarte e sem quiz concluído, e sem favoritos.
-- [ ] Sem erro de rede em nenhuma das telas acima.
-
-Se uma tela mostrar erro, o log (`adb logcat -s EcoCienteDemo`) registra "Demo sem rota" com o método e o caminho.
+Esta versao nao simula Google/Facebook, envio real de notificacao push,
+sincronizacao entre dispositivos nem mapas/rotas reais. Respostas sem rota
+ainda devem ser identificadas no log `EcoCienteDemo`. Nao usar credenciais
+de producao nesta versao. O APK precisa ser validado em um aparelho.

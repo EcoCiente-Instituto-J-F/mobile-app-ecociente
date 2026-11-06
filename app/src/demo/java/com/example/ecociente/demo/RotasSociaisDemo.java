@@ -11,6 +11,8 @@ import org.json.JSONObject;
 final class RotasSociaisDemo implements RotasDemo {
     private static final String MOBILE = "ds-mobile-api.onrender.com";
     private static final String PONTUACAO = "ds-pontuacao-api.onrender.com";
+    private static final Pattern CONDOMINIO_PERFIL = Pattern.compile("^/api/condominios/(\\d+)$");
+    private static final Pattern CONDOMINIO_ENDERECO = Pattern.compile("^/api/condominios/(\\d+)/endereco$");
     private static final Pattern CONDOMINIO_DASH = Pattern.compile("^/api/condominios/(\\d+)/dashboard$");
     private static final Pattern CONDOMINIO_FEED = Pattern.compile("^/api/condominios/(\\d+)/postagens/em-analise$");
     private static final Pattern COOP_CONDOMINIOS = Pattern.compile("^/api/cooperativas/(\\d+)/condominios$");
@@ -43,6 +45,8 @@ final class RotasSociaisDemo implements RotasDemo {
             return null;
         }
         if (!MOBILE.equals(r.host)) return null;
+        Matcher condominio = CONDOMINIO_PERFIL.matcher(r.caminho);
+        Matcher endereco = CONDOMINIO_ENDERECO.matcher(r.caminho);
         Matcher dash = CONDOMINIO_DASH.matcher(r.caminho);
         Matcher feed = CONDOMINIO_FEED.matcher(r.caminho);
         Matcher condominios = COOP_CONDOMINIOS.matcher(r.caminho);
@@ -51,6 +55,7 @@ final class RotasSociaisDemo implements RotasDemo {
         Matcher mensagens = CONVERSA_MENSAGENS.matcher(r.caminho);
         Matcher leitura = CONVERSA_LEITURA.matcher(r.caminho);
         boolean identificado = r.caminho.equals("/api/cooperativas") || r.caminho.equals("/api/conversas")
+                || condominio.matches() || endereco.matches()
                 || dash.matches() || feed.matches() || condominios.matches() || avaliacoes.matches()
                 || avaliar.matches() || mensagens.matches() || leitura.matches();
         if (!identificado) return null;
@@ -58,6 +63,8 @@ final class RotasSociaisDemo implements RotasDemo {
             return RespostaDemo.erro(401, "NAO_AUTORIZADO");
         try {
             if (r.e("GET", "/api/cooperativas")) return cooperativas();
+            if (condominio.matches() && "PATCH".equals(r.metodo)) return atualizarCondominio(Integer.parseInt(condominio.group(1)), r, false);
+            if (endereco.matches() && "PATCH".equals(r.metodo)) return atualizarCondominio(Integer.parseInt(endereco.group(1)), r, true);
             if (dash.matches() && "GET".equals(r.metodo)) return dashboard(Integer.parseInt(dash.group(1)));
             if (feed.matches() && "GET".equals(r.metodo)) return feedEmAnalise(Integer.parseInt(feed.group(1)));
             if (condominios.matches() && "GET".equals(r.metodo)) return condominiosAtendidos();
@@ -72,6 +79,32 @@ final class RotasSociaisDemo implements RotasDemo {
         } catch (JSONException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+
+    private RespostaDemo atualizarCondominio(int id, RequisicaoDemo r, boolean endereco) throws JSONException {
+        if (!"SINDICO".equals(ContaDemo.me(estado.raiz()).optString("perfil", "")))
+            return RespostaDemo.erro(403, "PERFIL_NAO_PERMITIDO");
+        if (id != 7) return RespostaDemo.erro(404, "CONDOMINIO_NAO_ENCONTRADO");
+        JSONObject corpo = r.corpoJson();
+        if (corpo == null) return RespostaDemo.erro(400, "REQUISICAO_INVALIDA");
+        JSONArray lista = ContaDemo.me(estado.raiz()).optJSONArray("condominios");
+        JSONObject condominio = lista == null ? null : lista.optJSONObject(0);
+        if (condominio == null) return RespostaDemo.erro(404, "CONDOMINIO_NAO_ENCONTRADO");
+        if (endereco) {
+            JSONObject atual = condominio.optJSONObject("endereco");
+            if (atual == null) { atual = new JSONObject(); condominio.put("endereco", atual); }
+            for (String chave : new String[] {"cep", "numero", "logradouro", "complemento", "cidade", "estado"}) {
+                if (corpo.has(chave)) atual.put(chave, corpo.optString(chave, ""));
+            }
+        } else {
+            if (corpo.has("nome")) condominio.put("nome", corpo.optString("nome", ""));
+            if (corpo.has("urlFoto")) condominio.put("urlFoto", corpo.optString("urlFoto", ""));
+            if (corpo.has("tipoCondominioId")) condominio.put("tipoCondominio",
+                    corpo.optInt("tipoCondominioId", 1) == 2 ? "Comercial" : "Residencial");
+        }
+        estado.salvar();
+        return json(200, condominio);
     }
 
     private RespostaDemo cooperativas() throws JSONException {

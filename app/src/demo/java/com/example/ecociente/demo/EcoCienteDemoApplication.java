@@ -24,7 +24,7 @@ public class EcoCienteDemoApplication extends EcoCienteApplication {
 
     private static final String TAG = "EcoCienteDemo";
 
-    private static final long INTERVALO_PENDENTES_S = 5;
+    private static final long INTERVALO_PENDENTES_S = 1;
 
     private static boolean transporteInstalado;
 
