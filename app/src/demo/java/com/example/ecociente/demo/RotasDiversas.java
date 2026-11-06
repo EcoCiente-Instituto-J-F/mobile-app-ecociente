@@ -39,6 +39,8 @@ final class RotasDiversas implements RotasDemo {
             return null;
         }
 
+        if (r.e("POST", "/senhas/esqueceu")) return solicitarCodigo(r);
+        if (r.e("POST", "/senhas/redefinir")) return redefinirSenha(r);
         if (r.e("POST", "/senhas/alterar")) {
             return alterarSenha(r);
         }
@@ -117,6 +119,41 @@ final class RotasDiversas implements RotasDemo {
 
         } catch (JSONException erro) {
             throw new IllegalStateException(erro);
+        }
+    }
+
+
+    @NonNull
+    private RespostaDemo solicitarCodigo(@NonNull RequisicaoDemo r) {
+        JSONObject entrada = r.corpoJson();
+        if (entrada == null || entrada.optString("email", "").trim().isEmpty())
+            return RespostaDemo.erro(400, "REQUISICAO_INVALIDA");
+        return new RespostaDemo(204, "");
+    }
+
+    @NonNull
+    private RespostaDemo redefinirSenha(@NonNull RequisicaoDemo r) {
+        JSONObject entrada = r.corpoJson();
+        if (entrada == null) return RespostaDemo.erro(400, "REQUISICAO_INVALIDA");
+        String email = ContaDemo.normalizarEmail(entrada.optString("email", ""));
+        String codigo = entrada.optString("token", "");
+        String senha = entrada.optString("novaSenha", "");
+        String confirmacao = entrada.optString("confirmacaoSenha", "");
+        if (!"2026".equals(codigo))
+            return erroComMensagem(400, "CODIGO_INVALIDO", "Código incorreto ou expirado.");
+        if (senha.isEmpty() || !senha.equals(confirmacao))
+            return erroComMensagem(400, "SENHA_INVALIDA", "Confira a nova senha.");
+        JSONObject contas = estado.raiz().optJSONObject("perfisDemo");
+        JSONObject perfil = contas == null ? null : contas.optJSONObject(email);
+        if (perfil == null) return erroComMensagem(400, "CODIGO_INVALIDO", "Código inválido.");
+        try {
+            ContaDemo.conta(perfil).put("senha", senha);
+            if (email.equals(estado.raiz().optString("usuarioAtivoDemo", "")))
+                ContaDemo.conta(estado.raiz()).put("senha", senha);
+            estado.salvar();
+            return new RespostaDemo(204, "");
+        } catch (JSONException e) {
+            throw new IllegalStateException(e);
         }
     }
 

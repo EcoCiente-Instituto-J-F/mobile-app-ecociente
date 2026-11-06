@@ -185,13 +185,10 @@ public class LoginFragment extends Fragment {
         campoSenha.setText(BuildConfig.DEMO_SENHA);
 
 
-        View.OnClickListener indisponivel =
-                clique -> AvisoFlutuante.mostrar(requireActivity(), R.string.demo_indisponivel);
-
         botaoFacebook.setEnabled(true);
-        botaoGoogle.setOnClickListener(indisponivel);
-        botaoFacebook.setOnClickListener(indisponivel);
-        view.findViewById(R.id.textoEsqueceuSenha).setOnClickListener(indisponivel);
+        botaoGoogle.setOnClickListener(clique -> fazerLoginComEmail());
+        botaoFacebook.setOnClickListener(clique -> fazerLoginComEmail());
+        view.findViewById(R.id.textoEsqueceuSenha).setOnClickListener(clique -> irParaEsqueciSenha());
     }
 
     private void irParaEsqueciSenha() {

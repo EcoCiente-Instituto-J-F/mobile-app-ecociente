@@ -62,7 +62,11 @@ public class EsqueciSenhaEmailFragment extends Fragment {
                                 return;
                             }
 
-                            mostrarMensagem("Se o email existir, você receberá um código");
+                            if (com.example.ecociente.BuildConfig.MODO_DEMO) {
+                                mostrarMensagem("Código offline de demonstração: 2026");
+                            } else {
+                                mostrarMensagem("Se o email existir, você receberá um código");
+                            }
                             Navigation.findNavController(requireView())
                                     .navigate(R.id.acaoParaCodigo);
                         });

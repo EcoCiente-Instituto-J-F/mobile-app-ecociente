@@ -59,6 +59,11 @@ public class EsqueciSenhaCodigoFragment extends Fragment {
         configurarAvancoAutomatico(digito4, digito3, null);
 
         botaoVerificar.setOnClickListener(clique -> guardarCodigoEAvancar());
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) {
+            view.post(() -> {
+                if (isAdded()) mostrarMensagem("Código offline de demonstração: 2026");
+            });
+        }
     }
 
     // Ao digitar um dígito, pula pro próximo campo; ao apagar num campo vazio, volta pro anterior.
