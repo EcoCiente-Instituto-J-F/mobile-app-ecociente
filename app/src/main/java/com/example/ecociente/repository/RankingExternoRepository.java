@@ -105,6 +105,12 @@ public class RankingExternoRepository {
     public void listarMoradoresNoRanking(
             @NonNull Context contexto, int condominioId, int limite, @NonNull Retorno retorno) {
 
+        if (condominioId <= 0) {
+            Log.w(TAG, "Consulta de moradores cancelada: condominioId invalido");
+            PRINCIPAL.post(() -> retorno.aoConcluir(null));
+            return;
+        }
+
         Context contextoApp = contexto.getApplicationContext();
 
         EXECUTOR.execute(
@@ -134,6 +140,12 @@ public class RankingExternoRepository {
     // GET /api/v1/rankings/moradores: ranking semanal dos moradores do condomínio.
     public void listarMoradores(
             @NonNull Context contexto, int condominioId, int limite, @NonNull RetornoMoradores retorno) {
+
+        if (condominioId <= 0) {
+            Log.w(TAG, "Consulta de ranking cancelada: condominioId invalido");
+            PRINCIPAL.post(() -> retorno.aoConcluir(null));
+            return;
+        }
 
         Context contextoApp = contexto.getApplicationContext();
 
