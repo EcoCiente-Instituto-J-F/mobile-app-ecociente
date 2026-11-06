@@ -96,7 +96,23 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
 
     private void configurarPorDestino(View raiz) {
 
-        if (destino != Destino.SINDICO) {
+        BarraNavegacaoView barra = findViewById(R.id.barraInferiorCentral);
+
+        barra.setVisibility(View.VISIBLE);
+        Navegacao.marcarNaBarra(this, barra, ItensBarra.HOME);
+        barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
+
+        if (destino == Destino.COOPERATIVA) {
+            barra.configurar(ItensBarra.cooperativa());
+            barra.setOnItemClickListener(
+                    indice -> Navegacao.irParaItemDaCooperativa(this, indice, ItensBarra.NENHUM));
+            return;
+        }
+
+        if (destino == Destino.CONDOMINIO) {
+            barra.configurar(ItensBarra.morador());
+            barra.setOnItemClickListener(
+                    indice -> Navegacao.irParaItemDoUsuario(this, indice, ItensBarra.NENHUM, true));
             return;
         }
 
@@ -112,12 +128,7 @@ public class CentralNotificacoesActivity extends AppCompatActivity {
                             exibir();
                         });
 
-        BarraNavegacaoView barra = findViewById(R.id.barraInferiorCentral);
-
-        barra.setVisibility(View.VISIBLE);
         barra.configurar(ItensBarra.sindico());
-        Navegacao.marcarNaBarra(this, barra, ItensBarra.HOME);
-        barra.setOnAssistenteClickListener(view -> startActivity(new Intent(this, ChatActivity.class)));
         barra.setOnItemClickListener(
                 indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM));
 

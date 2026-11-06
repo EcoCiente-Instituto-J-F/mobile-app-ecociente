@@ -508,7 +508,9 @@ public class MainActivity extends AppCompatActivity {
                         ),
                         Dimensoes.dpParaPx(
                                 this,
-                                48
+                                // Abaixo da altura do cabecalhoHome (64dp), senao o indicador
+                                // de atualizacao fica sobreposto a logo/sino/avatar ao arrastar.
+                                86
                         )
                 );
     }
