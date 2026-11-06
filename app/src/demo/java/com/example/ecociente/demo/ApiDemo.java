@@ -31,6 +31,8 @@ public final class ApiDemo implements TratadorDemo {
                         new RotasPontuacao(estado),
                         new RotasCalendario(estado, relogio),
                         new RotasFeed(estado, relogio),
+                        new RotasEducacao(estado),
+                        new RotasQuiz(estado, relogio),
                         new RotasUpload(estado));
     }
 
