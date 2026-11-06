@@ -173,6 +173,10 @@ public class BibliotecaActivity extends AppCompatActivity {
                 return;
             }
             mostrarCursos(encontrados);
+            if (!encontrados.isEmpty() && encontrados.get(0).id < 0) {
+                estado.setText("Modo demonstração: aulas e cursos locais. O progresso não será sincronizado.");
+                estado.setVisibility(View.VISIBLE);
+            }
         });
     }
 
@@ -265,8 +269,8 @@ public class BibliotecaActivity extends AppCompatActivity {
         ilustra.setContentDescription("Ilustração do conteúdo de sustentabilidade");
         FrameLayout.LayoutParams lpImagem = new FrameLayout.LayoutParams(-1, dp(91), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
         imagemTopo.addView(ilustra, lpImagem);
-        TextView etiqueta = texto(DadosDemonstracaoEducacao.ATIVO
-                ? DadosDemonstracaoEducacao.tipoConteudo(curso.id) : "Guia",
+        TextView etiqueta = texto(curso.id < 0
+                ? "DEMO · " + DadosDemonstracaoEducacao.tipoConteudo(curso.id) : "Guia",
                 11, R.color.verde_escuro_principal, true);
         etiqueta.setPadding(dp(7), dp(3), dp(7), dp(3));
         etiqueta.setBackground(fundo(R.color.verde_fundo_icone_opcao, 7));

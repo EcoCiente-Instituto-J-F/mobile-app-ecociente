@@ -24,7 +24,7 @@ import java.nio.charset.StandardCharsets;
 public class ChatRepository {
 
     private static final int TIMEOUT_CONEXAO_MS = 10_000;
-    private static final int TIMEOUT_RESPOSTA_MS = 120_000;
+    private static final int TIMEOUT_RESPOSTA_MS = 12_000;
 
     private final AutenticacaoExternaRepository autenticacao = new AutenticacaoExternaRepository();
 
@@ -62,6 +62,16 @@ public class ChatRepository {
         }
 
         if (resposta.codigo < 200 || resposta.codigo >= 300) {
+            if (resposta.codigo == 429) {
+                String codigoLimite = "";
+                try {
+                    JSONObject detalhe = new JSONObject(resposta.conteudo).optJSONObject("detail");
+                    if (detalhe != null) codigoLimite = detalhe.optString("codigo", "");
+                } catch (JSONException ignorado) {
+                    codigoLimite = "";
+                }
+                throw new IOException("Eko respondeu HTTP 429: " + codigoLimite);
+            }
             throw new IOException("Eko respondeu HTTP " + resposta.codigo);
         }
 
