@@ -2,11 +2,14 @@ package com.example.ecociente.demo;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +37,17 @@ public final class ArmazemDemoArquivos implements ArmazemDemo {
         }
 
         try {
-            return new String(Files.readAllBytes(arquivo.toPath()), StandardCharsets.UTF_8);
+            try (InputStream entrada = new FileInputStream(arquivo);
+                    ByteArrayOutputStream saida = new ByteArrayOutputStream()) {
+                byte[] buffer = new byte[4096];
+                int lidos;
+
+                while ((lidos = entrada.read(buffer)) != -1) {
+                    saida.write(buffer, 0, lidos);
+                }
+
+                return saida.toString("UTF-8");
+            }
 
         } catch (IOException erro) {
             LOG.log(Level.WARNING, "Não foi possível ler o estado da demo", erro);
@@ -45,8 +58,18 @@ public final class ArmazemDemoArquivos implements ArmazemDemo {
     @Override
     public synchronized void salvar(@NonNull String json) {
         try {
-            Files.write(temporario.toPath(), json.getBytes(StandardCharsets.UTF_8));
-            Files.move(temporario.toPath(), arquivo.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            escrever(temporario, json.getBytes(StandardCharsets.UTF_8));
+
+            // O rename sobre um arquivo existente é atômico no Android; se falhar, apaga e tenta de novo.
+            if (!temporario.renameTo(arquivo)) {
+                if (arquivo.exists() && !arquivo.delete()) {
+                    throw new IOException("Não foi possível substituir " + arquivo);
+                }
+
+                if (!temporario.renameTo(arquivo)) {
+                    throw new IOException("Não foi possível renomear " + temporario);
+                }
+            }
 
         } catch (IOException erro) {
             // O estado continua valendo na memória; só não sobrevive ao fechar o app.
@@ -78,12 +101,19 @@ public final class ArmazemDemoArquivos implements ArmazemDemo {
 
             File foto = new File(pastaFotos, "foto_" + UUID.randomUUID() + ".jpg");
 
-            Files.write(foto.toPath(), jpeg);
+            escrever(foto, jpeg);
 
             return foto.toURI().toString().replaceFirst("^file:/(?!/)", "file:///");
 
         } catch (IOException erro) {
             throw new IllegalStateException("Não foi possível gravar a foto da demo", erro);
+        }
+    }
+
+    private static void escrever(@NonNull File destino, @NonNull byte[] dados) throws IOException {
+        try (OutputStream saida = new FileOutputStream(destino)) {
+            saida.write(dados);
+            saida.flush();
         }
     }
 

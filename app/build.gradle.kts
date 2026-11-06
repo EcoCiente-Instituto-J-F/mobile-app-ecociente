@@ -127,7 +127,7 @@ android {
 
             buildConfigField("boolean", "MODO_DEMO", "true")
             buildConfigField("String", "DEMO_EMAIL", "\"morador@ecociente.demo\"")
-            buildConfigField("String", "DEMO_SENHA", "\"Demo@2026\"")
+            buildConfigField("String", "DEMO_SENHA", "\"demo1234\"")
         }
     }
 

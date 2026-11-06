@@ -13,7 +13,7 @@ public final class SementeDemo {
 
     // Têm de ser iguais aos DEMO_EMAIL e DEMO_SENHA do build type `demo` em app/build.gradle.kts, que a tela de login preenche.
     public static final String EMAIL = "morador@ecociente.demo";
-    public static final String SENHA = "Demo@2026";
+    public static final String SENHA = "demo1234";
 
     public static final String UID = "demo-morador-42";
     public static final int USUARIO_ID = 42;
