@@ -33,7 +33,9 @@ import androidx.credentials.exceptions.GetCredentialCancellationException;
 import androidx.credentials.exceptions.GetCredentialException;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import com.example.ecociente.BuildConfig;
 import com.example.ecociente.R;
+import com.example.ecociente.ui.AvisoFlutuante;
 import com.example.ecociente.ui.FieldFeedback;
 import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.LoginViewModel;
@@ -65,6 +67,7 @@ public class LoginFragment extends Fragment {
     private MaterialCardView containerSenha;
     private TextView erroEmail;
     private TextView erroSenha;
+    private TextView textoAvisoDemo;
     private ProgressBar indicadorCarregamento;
     private Motion motion;
     private CredentialManager gerenciadorCredenciais;
@@ -92,6 +95,7 @@ public class LoginFragment extends Fragment {
         configurarCliques();
         configurarFeedbackDeCampos();
         recuperarEmailPreenchido();
+        configurarModoDemo(view);
         motion.staggerIn(view.findViewById(R.id.tituloLogin), containerEmail, containerSenha, botaoLogin, botaoGoogle, botaoFacebook);
     }
 
@@ -106,6 +110,7 @@ public class LoginFragment extends Fragment {
         containerSenha = view.findViewById(R.id.containerSenha);
         erroEmail = view.findViewById(R.id.erroEmailLogin);
         erroSenha = view.findViewById(R.id.erroSenhaLogin);
+        textoAvisoDemo = view.findViewById(R.id.textoAvisoDemo);
         indicadorCarregamento = view.findViewById(R.id.indicadorCarregamentoLogin);
         motion = new Motion();
     }
@@ -170,6 +175,26 @@ public class LoginFragment extends Fragment {
         if (!emailSalvo.isEmpty()) {
             campoEmail.setText(emailSalvo);
         }
+    }
+
+    // Só no build `demo`: credenciais preenchidas, aviso na tela e o que não existe offline (Google, Facebook, esqueci a senha) responde "Indisponível". O login em si segue o fluxo normal. Roda por último para valer sobre os cliques e o estado do botão do Facebook.
+    private void configurarModoDemo(@NonNull View view) {
+        if (!BuildConfig.MODO_DEMO) {
+            return;
+        }
+
+        campoEmail.setText(BuildConfig.DEMO_EMAIL);
+        campoSenha.setText(BuildConfig.DEMO_SENHA);
+
+        textoAvisoDemo.setVisibility(View.VISIBLE);
+
+        View.OnClickListener indisponivel =
+                clique -> AvisoFlutuante.mostrar(requireActivity(), R.string.demo_indisponivel);
+
+        botaoFacebook.setEnabled(true);
+        botaoGoogle.setOnClickListener(indisponivel);
+        botaoFacebook.setOnClickListener(indisponivel);
+        view.findViewById(R.id.textoEsqueceuSenha).setOnClickListener(indisponivel);
     }
 
     private void irParaEsqueciSenha() {
@@ -486,6 +511,7 @@ public class LoginFragment extends Fragment {
         containerSenha = null;
         erroEmail = null;
         erroSenha = null;
+        textoAvisoDemo = null;
         indicadorCarregamento = null;
         motion = null;
 

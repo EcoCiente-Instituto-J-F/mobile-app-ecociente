@@ -26,6 +26,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import com.example.ecociente.BuildConfig;
 import com.example.ecociente.R;
 import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.model.TipoPerfil;
@@ -290,6 +291,11 @@ public class Login extends AppCompatActivity {
         abaCadastro.setOnClickListener(
                 view -> {
                     if (!navegacaoHabilitada) {
+                        return;
+                    }
+
+                    if (BuildConfig.MODO_DEMO) {
+                        AvisoFlutuante.mostrar(this, R.string.demo_indisponivel);
                         return;
                     }
 

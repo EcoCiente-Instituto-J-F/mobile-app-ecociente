@@ -70,6 +70,11 @@ android {
         testInstrumentationRunner =
             "androidx.test.runner.AndroidJUnitRunner"
 
+        // Só o build type `demo` liga o modo demonstração; nos demais a tela de login não muda.
+        buildConfigField("boolean", "MODO_DEMO", "false")
+        buildConfigField("String", "DEMO_EMAIL", "\"\"")
+        buildConfigField("String", "DEMO_SENHA", "\"\"")
+
         // Chave da Routes API (distância até as cooperativas). Opcional: sem ela o app usa o Geocoder.
         resValue(
             "string",
@@ -98,6 +103,7 @@ android {
 
     buildFeatures {
         resValues = true
+        buildConfig = true
     }
 
     buildTypes {
@@ -108,6 +114,20 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+
+        // APK de apresentação: API falsa dentro do processo, sem rede nem Firebase (código em src/demo).
+        // Gera-se com ./gradlew assembleDemo. As credenciais abaixo têm de ser iguais a SementeDemo.EMAIL e SENHA.
+        create("demo") {
+            initWith(getByName("debug"))
+            matchingFallbacks += listOf("debug")
+
+            applicationIdSuffix = ".demo"
+            versionNameSuffix = "-demo"
+
+            buildConfigField("boolean", "MODO_DEMO", "true")
+            buildConfigField("String", "DEMO_EMAIL", "\"morador@ecociente.demo\"")
+            buildConfigField("String", "DEMO_SENHA", "\"Demo@2026\"")
         }
     }
 

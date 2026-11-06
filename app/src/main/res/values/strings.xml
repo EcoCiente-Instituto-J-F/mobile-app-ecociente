@@ -660,4 +660,7 @@
     <string name="condominios_carregando">Carregando condomínios atendidos…</string>
     <string name="condominios_erro">Não foi possível carregar os condomínios atendidos. Verifique a conexão e tente novamente.</string>
     <string name="condominios_vazio">Esta cooperativa ainda não possui condomínios atendidos confirmados.</string>
+
+    <string name="demo_aviso_login">Versão de demonstração, dados fictícios</string>
+    <string name="demo_indisponivel">Indisponível na demonstração</string>
 </resources>
