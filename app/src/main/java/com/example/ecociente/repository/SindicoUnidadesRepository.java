@@ -30,8 +30,14 @@ public final class SindicoUnidadesRepository {
     // Lê o que o usuário atual já cadastrou. Trocar de conta troca também os dados.
     public synchronized void carregar(Context contexto) {
 
-        FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
-        String chave = usuario != null ? usuario.getUid() : "sem_usuario";
+        String chave;
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) {
+            com.example.ecociente.model.UsuarioLogado usuario = ContaAtual.usuario();
+            chave = usuario != null ? usuario.getUid() : "sem_usuario";
+        } else {
+            FirebaseUser usuario = FirebaseAuth.getInstance().getCurrentUser();
+            chave = usuario != null ? usuario.getUid() : "sem_usuario";
+        }
 
         if (preferencias != null && chave.equals(chaveDoUsuario)) {
             return;
