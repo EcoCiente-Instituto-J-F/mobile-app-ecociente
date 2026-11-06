@@ -33,6 +33,7 @@ public final class ApiDemo implements TratadorDemo {
                         new RotasFeed(estado, relogio),
                         new RotasEducacao(estado),
                         new RotasQuiz(estado, relogio),
+                        new RotasSociaisDemo(estado),
                         new RotasUpload(estado),
                         new RotasDiversas(estado));
     }
