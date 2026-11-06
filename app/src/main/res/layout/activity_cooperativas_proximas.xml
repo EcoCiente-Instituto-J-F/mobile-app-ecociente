@@ -41,11 +41,6 @@
             android:textColor="@color/verde_escuro_principal"
             android:textSize="21sp" />
 
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:contentDescription="@string/cooperativas_icone"
-            android:src="@drawable/ic_caminhao_coleta" />
     </LinearLayout>
 
     <TextView
