@@ -16,6 +16,7 @@ import com.example.ecociente.repository.AquecimentoDasApis;
 import com.example.ecociente.notifications.PermissaoNotificacoes;
 import com.example.ecociente.repository.PerfilApiRepository;
 import com.example.ecociente.repository.AutenticacaoExternaRepository;
+import com.example.ecociente.repository.PoliticaPreparacaoApi;
 import com.example.ecociente.repository.PontuacaoRepository;
 import com.example.ecociente.ui.AvatarPerfil;
 import com.example.ecociente.ui.BarraNavegacaoView;
