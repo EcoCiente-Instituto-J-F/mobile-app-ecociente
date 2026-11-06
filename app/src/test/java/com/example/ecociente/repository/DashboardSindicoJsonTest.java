@@ -131,4 +131,24 @@ public class DashboardSindicoJsonTest {
         assertEquals("Coop Sol", DashboardSindicoJson.abreviar("  Coop Sol "));
         assertEquals("Cooperativa…", DashboardSindicoJson.abreviar("Cooperativa Estrela"));
     }
+    @Test
+    public void calendarioIndisponivelMantemIndicadoresSemInventarColetas() throws Exception {
+        ResumoDashboard resumo = DashboardSindicoJson.resumir(
+                new JSONObject(RESPOSTA), Collections.emptyList(), new HashMap<>(), false);
+
+        assertEquals(120, resumo.getReciclados());
+        assertEquals(35, resumo.getMoradores());
+        assertEquals(150, resumo.getPontosDoMes());
+        org.junit.Assert.assertFalse(resumo.isColetasDisponiveis());
+    }
+
+    @Test
+    public void listaVaziaComSucessoEhDiferenteDeFalha() throws Exception {
+        ResumoDashboard resumo = DashboardSindicoJson.resumir(
+                new JSONObject(RESPOSTA), Collections.emptyList(), new HashMap<>(), true);
+
+        assertEquals(0, resumo.getColetasRealizadas());
+        org.junit.Assert.assertTrue(resumo.isColetasDisponiveis());
+    }
+
 }
