@@ -2,6 +2,9 @@ package com.example.ecociente.views;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +25,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.ecociente.R;
 import com.example.ecociente.model.MensagemChat;
+import com.example.ecociente.ui.Motion;
 import com.example.ecociente.viewmodels.ChatViewModel;
 import com.google.android.material.card.MaterialCardView;
 
 import java.util.List;
+import java.util.ArrayList;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -41,8 +46,12 @@ public class ChatActivity extends AppCompatActivity {
     private LinearLayout containerMensagensChat;
     private NestedScrollView rolagemMensagensChat;
     private ChatViewModel viewModel;
-    private ObjectAnimator animacaoDigitacao;
+    private final List<ObjectAnimator> animacoesDigitacao = new ArrayList<>();
+    private final Handler animadorTexto = new Handler(Looper.getMainLooper());
+    private Runnable proximoTrecho;
     private boolean conversaIniciada;
+    private int totalMensagensAnterior;
+    private boolean animacaoTextoEmCurso;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -56,6 +65,7 @@ public class ChatActivity extends AppCompatActivity {
         configurarInsetsDoSistema();
         configurarAcoes();
         observarEstadoDoChat();
+        Motion.entrar(this, R.id.estadoInicialChat, R.id.botaoSairChat);
     }
 
     private void inicializarComponentes() {
@@ -96,6 +106,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private void configurarAcoes() {
         botaoEnviarChat.setOnClickListener(view -> enviarMensagem());
+        Motion.pressFeedback(botaoEnviarChat);
+        Motion.pressFeedback(botaoVoltarChat);
         botaoVoltarChat.setOnClickListener(view -> voltarParaInicioChat());
         botaoSairChat.setOnClickListener(view -> finish());
 
@@ -118,6 +130,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void configurarSugestao(int idCard, String mensagem) {
         MaterialCardView card = findViewById(idCard);
+        Motion.pressFeedback(card);
         card.setOnClickListener(
                 view -> {
                     campoMensagemChat.setText(mensagem);
@@ -144,7 +157,7 @@ public class ChatActivity extends AppCompatActivity {
                     botaoEnviarChat.setEnabled(!enviando);
                     botaoEnviarChat.setAlpha(enviando ? 0.55f : 1f);
                     List<MensagemChat> mensagensAtuais = viewModel.getMensagens().getValue();
-                    if (mensagensAtuais != null) {
+                    if (mensagensAtuais != null && !animacaoTextoEmCurso) {
                         renderizarMensagens(mensagensAtuais);
                     }
                 });
@@ -171,52 +184,123 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void renderizarMensagens(List<MensagemChat> mensagens) {
-        if (animacaoDigitacao != null) {
-            animacaoDigitacao.cancel();
-            animacaoDigitacao = null;
-        }
+        boolean chegouResposta = mensagens.size() > totalMensagensAnterior
+                && !mensagens.isEmpty()
+                && mensagens.get(mensagens.size() - 1).getAutor() == MensagemChat.Autor.EKO
+                && mensagens.get(mensagens.size() - 1).getTipo() == MensagemChat.Tipo.TEXTO;
+        totalMensagensAnterior = mensagens.size();
+
+        interromperAnimacoes();
         containerMensagensChat.removeAllViews();
 
-        for (MensagemChat mensagem : mensagens) {
+        int ultimoIndice = mensagens.size() - 1;
+        for (int indice = 0; indice < mensagens.size(); indice++) {
+            MensagemChat mensagem = mensagens.get(indice);
             if (mensagem.getAutor() == MensagemChat.Autor.USUARIO) {
                 adicionarMensagemUsuarioNaTela(mensagem.getTexto());
             } else {
                 String texto = mensagem.getTipo() == MensagemChat.Tipo.ERRO_CONEXAO
                         ? getString(R.string.chat_erro_conexao)
                         : mensagem.getTexto();
-                adicionarMensagemEkoNaTela(texto);
+                View linha = adicionarMensagemEkoNaTela(chegouResposta && indice == ultimoIndice ? "" : texto);
+                if (chegouResposta && indice == ultimoIndice) {
+                    linha.setAlpha(0f);
+                    linha.setTranslationY(dpParaPx(12));
+                    linha.animate().alpha(1f).translationY(0f).setDuration(Motion.ENTER_MS).start();
+                    if (animacoesAtivas()) {
+                        iniciarExibicaoGradual(linha.findViewById(R.id.textoMensagemEko), texto);
+                    } else {
+                        ((TextView) linha.findViewById(R.id.textoMensagemEko)).setText(texto);
+                    }
+                }
             }
         }
 
         boolean aguardandoResposta = Boolean.TRUE.equals(viewModel.getEnvioEmAndamento().getValue());
         boolean ultimaMensagemDoUsuario = !mensagens.isEmpty()
-                && mensagens.get(mensagens.size() - 1).getAutor() == MensagemChat.Autor.USUARIO;
+                && mensagens.get(ultimoIndice).getAutor() == MensagemChat.Autor.USUARIO;
         if (aguardandoResposta && ultimaMensagemDoUsuario) {
             adicionarIndicadorDigitacaoEko();
         }
+        rolarParaUltimaMensagem();
+    }
 
-        rolagemMensagensChat.post(
-                () -> rolagemMensagensChat.fullScroll(View.FOCUS_DOWN));
+    private boolean animacoesAtivas() {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.O || ValueAnimator.areAnimatorsEnabled();
+    }
+
+    private void iniciarExibicaoGradual(TextView destino, String texto) {
+        int totalCaracteres = texto.codePointCount(0, texto.length());
+        if (totalCaracteres == 0) return;
+
+        int caracteresPorPasso = Math.max(1, (int) Math.ceil(totalCaracteres / 110.0));
+        animacaoTextoEmCurso = true;
+        int[] indiceUtf16 = {0};
+
+        proximoTrecho = new Runnable() {
+            @Override
+            public void run() {
+                if (isFinishing() || isDestroyed()) {
+                    animacaoTextoEmCurso = false;
+                    return;
+                }
+                int caracteresRestantes = texto.codePointCount(indiceUtf16[0], texto.length());
+                int avancar = Math.min(caracteresPorPasso, caracteresRestantes);
+                indiceUtf16[0] = texto.offsetByCodePoints(indiceUtf16[0], avancar);
+                destino.setText(texto.substring(0, indiceUtf16[0]));
+                rolarParaUltimaMensagem();
+
+                if (indiceUtf16[0] < texto.length()) {
+                    animadorTexto.postDelayed(this, 23L);
+                } else {
+                    animacaoTextoEmCurso = false;
+                    proximoTrecho = null;
+                }
+            }
+        };
+        animadorTexto.post(proximoTrecho);
     }
 
     private void adicionarIndicadorDigitacaoEko() {
-        View linhaMensagem = LayoutInflater.from(this)
-                .inflate(R.layout.item_mensagem_eko, containerMensagensChat, false);
-        TextView textoMensagem = linhaMensagem.findViewById(R.id.textoMensagemEko);
-        textoMensagem.setText("...");
-        textoMensagem.setTextSize(16);
-        textoMensagem.setTextColor(getColor(R.color.verde_botao_enviar_chat));
-        textoMensagem.setLetterSpacing(0.18f);
-        textoMensagem.setContentDescription("Eko está digitando");
+        View linha = LayoutInflater.from(this).inflate(
+                R.layout.item_digitacao_eko, containerMensagensChat, false);
+        containerMensagensChat.addView(linha);
 
-        containerMensagensChat.addView(linhaMensagem);
+        if (!animacoesAtivas()) return;
 
-        animacaoDigitacao = ObjectAnimator.ofFloat(
-                textoMensagem, View.ALPHA, 0.35f, 1f);
-        animacaoDigitacao.setDuration(650);
-        animacaoDigitacao.setRepeatCount(ValueAnimator.INFINITE);
-        animacaoDigitacao.setRepeatMode(ValueAnimator.REVERSE);
-        animacaoDigitacao.start();
+        int[] ids = {
+                R.id.pontoDigitacaoEko1,
+                R.id.pontoDigitacaoEko2,
+                R.id.pontoDigitacaoEko3
+        };
+        for (int i = 0; i < ids.length; i++) {
+            View ponto = linha.findViewById(ids[i]);
+            ObjectAnimator salto = ObjectAnimator.ofFloat(
+                    ponto, View.TRANSLATION_Y, 0f, -dpParaPx(9), 0f);
+            salto.setDuration(750L);
+            salto.setStartDelay(i * 160L);
+            salto.setRepeatCount(ValueAnimator.INFINITE);
+            salto.start();
+            animacoesDigitacao.add(salto);
+        }
+    }
+
+    private void interromperAnimacoes() {
+        for (ObjectAnimator animacao : animacoesDigitacao) animacao.cancel();
+        animacoesDigitacao.clear();
+        if (proximoTrecho != null) {
+            animadorTexto.removeCallbacks(proximoTrecho);
+            proximoTrecho = null;
+        }
+        animacaoTextoEmCurso = false;
+    }
+
+    private void rolarParaUltimaMensagem() {
+        rolagemMensagensChat.post(() -> {
+            if (!isFinishing() && !isDestroyed()) {
+                rolagemMensagensChat.fullScroll(View.FOCUS_DOWN);
+            }
+        });
     }
 
     private void adicionarMensagemUsuarioNaTela(String mensagem) {
@@ -227,12 +311,13 @@ public class ChatActivity extends AppCompatActivity {
         containerMensagensChat.addView(linhaMensagem);
     }
 
-    private void adicionarMensagemEkoNaTela(String mensagem) {
+    private View adicionarMensagemEkoNaTela(String mensagem) {
         View linhaMensagem = LayoutInflater.from(this)
                 .inflate(R.layout.item_mensagem_eko, containerMensagensChat, false);
         TextView textoMensagem = linhaMensagem.findViewById(R.id.textoMensagemEko);
         textoMensagem.setText(mensagem);
         containerMensagensChat.addView(linhaMensagem);
+        return linhaMensagem;
     }
 
     private void transicionarParaConversa() {
@@ -274,6 +359,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void voltarParaInicioChat() {
         esconderTeclado();
+        interromperAnimacoes();
         conversaIniciada = false;
         estadoConversaChat.animate().cancel();
         estadoInicialChat.animate().cancel();
@@ -293,6 +379,18 @@ public class ChatActivity extends AppCompatActivity {
             teclado.hideSoftInputFromWindow(campoMensagemChat.getWindowToken(), 0);
         }
         campoMensagemChat.clearFocus();
+    }
+
+    @Override
+    protected void onStop() {
+        interromperAnimacoes();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        interromperAnimacoes();
+        super.onDestroy();
     }
 
     private float dpParaPx(int dp) {
