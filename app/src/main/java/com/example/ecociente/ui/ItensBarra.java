@@ -27,7 +27,7 @@ public final class ItensBarra {
     public static ItemBarra[] morador() {
         return new ItemBarra[] {
             usuario()[HOME],
-            usuario()[SEGUNDO],
+            new ItemBarra(R.string.cursos, R.drawable.icon_guia_verde, R.drawable.icon_guia_cinza),
             usuario()[TERCEIRO],
             par(R.string.feed, R.drawable.ic_nav_feed_verde, R.drawable.ic_nav_feed_cinza)
         };
