@@ -132,6 +132,9 @@ public class QuizActivity extends AppCompatActivity {
                     }
 
                     mostrarListaCarregada(itens);
+                    if (!itens.isEmpty() && itens.get(0).getId() < 0) {
+                        textoQuantidadeQuizzes.setText("Quizzes de demonstração — sem pontos oficiais");
+                    }
                 });
     }
 
