@@ -55,6 +55,16 @@ O CI executa testes unitários, lint e build:
 ./gradlew assembleDebug
 ```
 
+## Demo do morador
+
+O build `demo` gera um APK que roda o fluxo do morador sem rede nem Firebase, com dados fictícios e uma API falsa dentro do app (`app/src/demo`):
+
+```bash
+./gradlew assembleDemo       # Windows: .\gradlew.bat assembleDemo
+```
+
+Login `morador@ecociente.demo` / `demo1234`. Detalhes, regra de reset e checklist de validação em [docs/demo-morador.md](docs/demo-morador.md).
+
 ## Estrutura do projeto
 
 ```

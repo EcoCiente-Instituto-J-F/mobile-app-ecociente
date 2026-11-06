@@ -27,7 +27,7 @@ Regras para manter o app consistente. Valem para qualquer tela ou código novo.
 ## Segurança
 
 14. Nada de senha, token, chave ou segredo no código, no chat ou nos commits. Credenciais ficam no `CredenciaisSeguras` (Keystore).
-15. Dado de exemplo fica restrito a `DadosDemonstracao` e às classes de modelo e repositório. Quando existir API, o exemplo sai.
+15. Dado de exemplo fica restrito a `DadosDemonstracao` e às classes de modelo e repositório. Quando existir API, o exemplo sai. O build `demo` é a exceção: dados fictícios em `app/src/demo`, fora dos APKs `debug` e `release`.
 
 ## Git
 
