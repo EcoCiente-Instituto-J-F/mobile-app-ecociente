@@ -1,5 +1,7 @@
 package com.example.ecociente.repository;
 
+import com.example.ecociente.BuildConfig;
+
 /**
  * Enderecos dos servicos HTTP consumidos pelo app. Mudou um servidor? Mude so aqui.
  *
@@ -8,7 +10,8 @@ package com.example.ecociente.repository;
  */
 public final class ConfiguracaoServidores {
 
-    public static final String MOBILE_API = "https://ds-mobile-api.onrender.com";
+    public static final String MOBILE_API_RENDER = "https://ds-mobile-api.onrender.com";
+    public static final String MOBILE_API = BuildConfig.ECOCIENTE_MOBILE_API_BASE_URL;
     public static final String PONTUACAO_API = "https://ds-pontuacao-api.onrender.com";
     public static final String CHAT_IA_RENDER = "https://ia-eko.onrender.com/api/v1/chat";
     public static final String CHAT_IA = CHAT_IA_RENDER;
