@@ -1,7 +1,6 @@
 package com.example.ecociente.views;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -101,11 +100,7 @@ public class CondominioHomeActivity extends AppCompatActivity {
         if (calendarioViewModel.getColetasDaSemana().getValue() != null) {
             calendarioViewModel.carregarSemana();
         }
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         iniciarAnimacaoEkoCursos();
     }
 
