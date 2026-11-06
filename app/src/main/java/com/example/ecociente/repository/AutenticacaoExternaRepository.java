@@ -122,6 +122,7 @@ public class AutenticacaoExternaRepository {
     // Só chamar fora da thread principal: pode esperar o login terminar.
     @Nullable
     public String tokenParaUso(@NonNull Context contexto) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) return DadosDemo.token();
 
         aguardarLoginEmAndamento();
 
@@ -139,6 +140,7 @@ public class AutenticacaoExternaRepository {
     }
 
     public static boolean loginEmAndamento() {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) return false;
 
         synchronized (ESPERA) {
             return loginsEmAndamento > 0;
@@ -147,6 +149,10 @@ public class AutenticacaoExternaRepository {
 
     // Sessão antiga do Firebase (app aberto sem passar pelo login): ainda não há perfil da API guardado. Se há credenciais guardadas, refaz o login em segundo plano para obtê-lo.
     public static void garantirPerfil(@NonNull Context contexto, @NonNull Runnable aoConcluir) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) {
+            PRINCIPAL.post(aoConcluir);
+            return;
+        }
 
         Context contextoApp = contexto.getApplicationContext();
 
@@ -202,6 +208,7 @@ public class AutenticacaoExternaRepository {
 
     @Nullable
     public String renovarToken(@NonNull Context contexto) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) return DadosDemo.token();
 
         Context contextoApp = contexto.getApplicationContext();
 
@@ -246,6 +253,7 @@ public class AutenticacaoExternaRepository {
     }
 
     public static boolean temCredenciaisSalvas(@NonNull Context contexto) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) return ContaAtual.usuario() != null;
 
         String[] credenciais = CredenciaisSeguras.ler(contexto.getApplicationContext());
 
@@ -278,6 +286,7 @@ public class AutenticacaoExternaRepository {
     // Perfil que a API devolveu no último login (SINDICO, COOPERATIVA...): é o dado do Postgres, usado para escolher a home quando o Firestore está com outro tipoPerfil.
     @Nullable
     public static String perfilSalvo(@NonNull Context contexto) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) return DadosDemo.perfil();
 
         return contexto.getApplicationContext()
                 .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
@@ -286,6 +295,7 @@ public class AutenticacaoExternaRepository {
 
     // Id do usuário no Postgres (vem no login). Trocar de conta apaga o que era do usuário anterior.
     public static int usuarioIdSalvo(@NonNull Context contexto) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) return DadosDemo.usuarioId();
         return contexto.getApplicationContext()
                 .getSharedPreferences(PREFERENCIAS, Context.MODE_PRIVATE)
                 .getInt(CHAVE_USUARIO_ID, 0);

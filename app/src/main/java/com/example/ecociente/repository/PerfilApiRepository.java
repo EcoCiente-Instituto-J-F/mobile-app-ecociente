@@ -38,11 +38,13 @@ public class PerfilApiRepository {
 
     // Id do condomínio do usuário; 0 enquanto a API não informar um (sem vínculo ou sem resposta).
     public static int condominioId(@NonNull Context contexto) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) return DadosDemo.condominioId();
         return Math.max(0, preferencias(contexto).getInt(CHAVE_CONDOMINIO_ID, 0));
     }
 
     // Id da cooperativa do usuário (perfil COOPERATIVA); 0 se a API ainda não informou.
     public static int cooperativaId(@NonNull Context contexto) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) return DadosDemo.cooperativaId();
         return preferencias(contexto).getInt(CHAVE_COOPERATIVA_ID, 0);
     }
 
@@ -50,7 +52,7 @@ public class PerfilApiRepository {
     @NonNull
     public static PerfilDaApi dadosDoPerfil(@NonNull Context contexto) {
 
-        String corpo = preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
+        String corpo = com.example.ecociente.BuildConfig.MODO_DEMO ? DadosDemo.perfilJson() : preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
 
         if (corpo == null) {
             return PerfilDaApi.vazio();
@@ -70,7 +72,7 @@ public class PerfilApiRepository {
     @Nullable
     public static SindicoDadosCondominio dadosDoCondominio(@NonNull Context contexto) {
 
-        String corpo = preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
+        String corpo = com.example.ecociente.BuildConfig.MODO_DEMO ? DadosDemo.perfilJson() : preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
 
         if (corpo == null) {
             return null;
@@ -90,7 +92,7 @@ public class PerfilApiRepository {
     @NonNull
     public static String fotoDoCondominio(@NonNull Context contexto) {
 
-        String corpo = preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
+        String corpo = com.example.ecociente.BuildConfig.MODO_DEMO ? DadosDemo.perfilJson() : preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
 
         if (corpo == null) {
             return "";
@@ -110,7 +112,7 @@ public class PerfilApiRepository {
     @NonNull
     public static List<SindicoItemUnidade> torresDoCondominio(@NonNull Context contexto) {
 
-        String corpo = preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
+        String corpo = com.example.ecociente.BuildConfig.MODO_DEMO ? DadosDemo.perfilJson() : preferencias(contexto).getString(CHAVE_DADOS_DO_PERFIL, null);
 
         if (corpo == null) {
             return Collections.emptyList();
@@ -129,6 +131,7 @@ public class PerfilApiRepository {
     // Nome do condomínio vindo da API; null se ainda não veio.
     @Nullable
     public static String condominioNome(@NonNull Context contexto) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) return DadosDemo.condominioNome();
         String nome = preferencias(contexto).getString(CHAVE_CONDOMINIO_NOME, null);
 
         return nome == null || nome.trim().isEmpty() ? null : nome;
@@ -154,6 +157,10 @@ public class PerfilApiRepository {
 
     // `aoConcluir` roda na thread principal quando a consulta termina, com sucesso ou não, e na hora se o que está guardado ainda vale.
     public void atualizarSeNecessario(@NonNull Context contexto, @Nullable Runnable aoConcluir) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) {
+            if (aoConcluir != null) PRINCIPAL.post(aoConcluir);
+            return;
+        }
 
         Context contextoApp = contexto.getApplicationContext();
 
@@ -171,6 +178,10 @@ public class PerfilApiRepository {
 
     // Consulta a API mesmo que o que está guardado ainda valha (por exemplo, quando falta um dado).
     public void atualizar(@NonNull Context contexto, @NonNull Runnable aoConcluir) {
+        if (com.example.ecociente.BuildConfig.MODO_DEMO) {
+            PRINCIPAL.post(aoConcluir);
+            return;
+        }
         executar(contexto.getApplicationContext(), aoConcluir);
     }
 

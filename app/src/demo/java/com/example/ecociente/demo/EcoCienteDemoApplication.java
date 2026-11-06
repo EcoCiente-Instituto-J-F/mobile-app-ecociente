@@ -56,6 +56,40 @@ public class EcoCienteDemoApplication extends EcoCienteApplication {
         // A lista de avisos guarda os lidos no estado: Sair e Excluir conta a recomeçam.
         Aviso.definirFonte(new AvisosDemo(estado)::lista);
 
+        com.example.ecociente.repository.DadosDemo.instalar(
+                new com.example.ecociente.repository.DadosDemo.Fonte() {
+                    @Override public String token() {
+                        synchronized (estado) {
+                            return ContaDemo.conta(estado.raiz()).optString("token", "");
+                        }
+                    }
+                    @Override public int usuarioId() {
+                        synchronized (estado) { return UsuariosMultiperfilDemo.usuarioId(estado.raiz()); }
+                    }
+                    @Override public int condominioId() {
+                        synchronized (estado) { return UsuariosMultiperfilDemo.condominioId(estado.raiz()); }
+                    }
+                    @Override public int cooperativaId() {
+                        synchronized (estado) {
+                            JSONObject coop = ContaDemo.me(estado.raiz()).optJSONObject("cooperativa");
+                            return coop == null ? 0 : coop.optInt("id", 0);
+                        }
+                    }
+                    @Override public String perfil() {
+                        synchronized (estado) {
+                            return ContaDemo.me(estado.raiz()).optString("perfil", "");
+                        }
+                    }
+                    @Override public JSONObject perfilCompleto() {
+                        synchronized (estado) {
+                            try {
+                                return new JSONObject(ContaDemo.me(estado.raiz()).toString());
+                            } catch (org.json.JSONException erro) {
+                                throw new IllegalStateException(erro);
+                            }
+                        }
+                    }
+                });
         ContaAtual.usar(new ProvedorContaDemo(estado, () -> limparTudoMenosOEstado(estado)));
 
         super.onCreate();

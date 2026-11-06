@@ -58,6 +58,7 @@ public final class ProvedorContaDemo implements ContaAtual.Provedor {
 
             try {
                 ContaDemo.conta(raiz).put("logado", true);
+                ContaDemo.conta(raiz).put("token", "demo-local-" + UsuariosMultiperfilDemo.usuarioId(raiz));
 
             } catch (JSONException erro) {
                 throw new IllegalStateException(erro);

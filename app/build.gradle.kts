@@ -110,6 +110,16 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            applicationIdSuffix = ".demo"
+            versionNameSuffix = "-demo"
+            buildConfigField("boolean", "MODO_DEMO", "true")
+            buildConfigField("String", "DEMO_EMAIL", "\"morador@ecociente.com.br\"")
+            buildConfigField("String", "DEMO_SENHA", "\"Ecociente2026.\"")
+            buildConfigField("String", "ECOCIENTE_MOBILE_API_BASE_URL", "\"https://ds-mobile-api.onrender.com\"")
+            resValue("string", "educacao_api_base_url", "https://ds-mobile-api.onrender.com")
+            resValue("string", "eko_chat_url", "https://api.52.71.117.143.sslip.io/api/v1/chat")
+        }
         release {
             isMinifyEnabled = false
 
@@ -136,6 +146,15 @@ android {
             buildConfigField("String", "ECOCIENTE_MOBILE_API_BASE_URL", "\"https://ds-mobile-api.onrender.com\"")
             resValue("string", "educacao_api_base_url", "https://ds-mobile-api.onrender.com")
             resValue("string", "eko_chat_url", "https://api.52.71.117.143.sslip.io/api/v1/chat")
+        }
+    }
+
+    sourceSets {
+        getByName("debug") {
+            java.srcDir("src/demo/java")
+            assets.srcDir("src/demo/assets")
+            res.srcDir("src/demo/res")
+            manifest.srcFile("src/demo/AndroidManifest.xml")
         }
     }
 
