@@ -111,7 +111,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/nunito_bold"
-                        android:textColor="@color/rosa_ecociente"
+                        android:textColor="@color/verde_escuro_principal"
                         android:textSize="22sp"
                         tools:text="Olá, Julio!" />
 
