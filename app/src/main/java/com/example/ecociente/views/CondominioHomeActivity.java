@@ -1,6 +1,8 @@
 package com.example.ecociente.views;
 
 import android.content.Intent;
+import android.content.ActivityNotFoundException;
+import android.widget.Toast;
 import android.graphics.drawable.AnimationDrawable;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -228,8 +230,8 @@ public class CondominioHomeActivity extends AppCompatActivity {
         acao.setGravity(Gravity.BOTTOM | Gravity.START);
         conteudo.addView(acao, acaoParams);
 
-        card.setContentDescription(curso.titulo + ". Abrir aba de cursos");
-        card.setOnClickListener(view -> abrirCursos(curso.id));
+        card.setContentDescription(curso.titulo + ". Abrir aba Guia");
+        card.setOnClickListener(view -> abrirAbaGuia());
         return card;
     }
 
@@ -298,7 +300,7 @@ public class CondominioHomeActivity extends AppCompatActivity {
         barra.setOnItemClickListener(
                 indice -> {
                     if (indice == ItensBarra.SEGUNDO) {
-                        abrirCursos(0);
+                        abrirAbaGuia();
                     } else if (indice == ItensBarra.TERCEIRO) {
                         abrirQuizzes();
                     }
@@ -343,12 +345,17 @@ public class CondominioHomeActivity extends AppCompatActivity {
         textoErroSemana.setVisibility(sucesso ? View.GONE : View.VISIBLE);
     }
 
-    private void abrirCursos(int cursoId) {
-        Intent rota = new Intent(this, CursosActivity.class);
-        if (cursoId > 0) {
-            rota.putExtra(CursosActivity.EXTRA_CURSO_ID, cursoId);
+    private void abrirAbaGuia() {
+        Intent rota = new Intent().setClassName(
+                this, "com.example.ecociente.views.BibliotecaActivity");
+        rota.putExtra("bibliotecaMorador", true);
+        try {
+            Navegacao.abrirPelaBarra(this, rota, ItensBarra.HOME);
+        } catch (ActivityNotFoundException erro) {
+            Toast.makeText(this,
+                    "A aba Guia ainda não está disponível nesta versão do aplicativo.",
+                    Toast.LENGTH_LONG).show();
         }
-        Navegacao.abrirPelaBarra(this, rota, ItensBarra.HOME);
     }
 
     private void abrirQuizzes() {
