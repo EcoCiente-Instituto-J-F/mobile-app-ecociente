@@ -59,6 +59,10 @@ public class AutenticacaoExternaRepository {
         void aoConcluir(@Nullable SessaoExterna sessao, boolean credenciaisRecusadas);
     }
 
+    public interface RetornoPreparacao {
+        void aoConcluir(boolean pronta);
+    }
+
     public void autenticar(
             @NonNull Context contexto,
             @NonNull String email,
@@ -160,6 +164,29 @@ public class AutenticacaoExternaRepository {
 
                     PRINCIPAL.post(aoConcluir);
                 });
+    }
+
+    // Prepara a sessão externa uma única vez e informa se há JWT e usuarioId válidos.
+    // A consulta ao perfil/ranking deve acontecer somente depois deste callback.
+    public static void garantirPerfilComResultado(
+            @NonNull Context contexto, @NonNull RetornoPreparacao retorno) {
+
+        Context contextoApp = contexto.getApplicationContext();
+
+        EXECUTOR_ESPERA.execute(() -> {
+            String token = null;
+            try {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    token = new AutenticacaoExternaRepository().tokenParaUso(contextoApp);
+                }
+            } catch (RuntimeException erro) {
+                Log.w(TAG, "Não foi possível preparar a sessão externa", erro);
+            }
+
+            boolean pronta = token != null && !token.trim().isEmpty()
+                    && usuarioIdSalvo(contextoApp) > 0;
+            PRINCIPAL.post(() -> retorno.aoConcluir(pronta));
+        });
     }
 
     // Espera, fora da thread principal, o login terminar (ou o limite) e avisa na principal.

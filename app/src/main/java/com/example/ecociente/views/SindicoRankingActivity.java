@@ -2,9 +2,12 @@ package com.example.ecociente.views;
 
 import com.example.ecociente.ui.EstadoTela;
 import com.example.ecociente.repository.PerfilApiRepository;
+import com.example.ecociente.repository.AutenticacaoExternaRepository;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -34,6 +37,13 @@ public final class SindicoRankingActivity extends AppCompatActivity {
 
     private static final String ESTADO_MORADORES = "rankingPorMorador";
     private boolean porMorador;
+
+    private static final int MAX_TENTATIVAS_PREPARACAO_RANKING = 3;
+    private final Handler handlerPreparacaoRanking = new Handler(Looper.getMainLooper());
+    private final Runnable tentarPrepararRanking = this::prepararSessaoERanking;
+    private boolean telaAtiva;
+    private boolean preparandoRanking;
+    private int tentativasPreparacaoRanking;
 
     @Override
     protected void onCreate(Bundle estadoSalvo) {
@@ -67,29 +77,96 @@ public final class SindicoRankingActivity extends AppCompatActivity {
         barra.setOnItemClickListener(
                 indice -> Navegacao.irParaItemDoSindico(this, indice, ItensBarra.NENHUM));
         atualizarRanking();
-        carregarRankingComPerfil();
     }
 
-    private void carregarRankingComPerfil() {
-        int condominioId = PerfilApiRepository.condominioId(this);
-        if (condominioId > 0) {
-            carregarRanking(condominioId);
+    @Override
+    protected void onStart() {
+        super.onStart();
+        telaAtiva = true;
+        tentativasPreparacaoRanking = 0;
+        prepararSessaoERanking();
+    }
+
+    @Override
+    protected void onStop() {
+        telaAtiva = false;
+        handlerPreparacaoRanking.removeCallbacks(tentarPrepararRanking);
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        handlerPreparacaoRanking.removeCallbacks(tentarPrepararRanking);
+        super.onDestroy();
+    }
+
+    private void prepararSessaoERanking() {
+        if (!telaAtiva || preparandoRanking || isFinishing() || isDestroyed()) {
             return;
         }
 
-        new PerfilApiRepository().atualizar(this, () -> {
-            if (isFinishing() || isDestroyed()) {
+        preparandoRanking = true;
+        tentativasPreparacaoRanking++;
+
+        AutenticacaoExternaRepository.garantirPerfilComResultado(this, pronta -> {
+            if (isFinishing() || isDestroyed() || !telaAtiva) {
+                preparandoRanking = false;
                 return;
             }
-            int atualizado = PerfilApiRepository.condominioId(this);
-            if (atualizado <= 0) {
-                erroNoRanking = true;
-                erroNosMoradores = true;
-                atualizarRanking();
+
+            if (!pronta) {
+                concluirPreparacaoRanking(false);
                 return;
             }
-            carregarRanking(atualizado);
+
+            new PerfilApiRepository().atualizarSeNecessario(this, () -> {
+                if (isFinishing() || isDestroyed() || !telaAtiva) {
+                    preparandoRanking = false;
+                    return;
+                }
+
+                int condominioId = PerfilApiRepository.condominioId(this);
+                if (condominioId > 0) {
+                    concluirPreparacaoRanking(true);
+                    carregarRanking(condominioId);
+                    return;
+                }
+
+                // Se o cache ainda não tem vínculo, consulta /me novamente com a sessão pronta.
+                new PerfilApiRepository().atualizar(this, () -> {
+                    if (isFinishing() || isDestroyed() || !telaAtiva) {
+                        preparandoRanking = false;
+                        return;
+                    }
+
+                    int atualizado = PerfilApiRepository.condominioId(this);
+                    if (atualizado > 0) {
+                        concluirPreparacaoRanking(true);
+                        carregarRanking(atualizado);
+                    } else {
+                        concluirPreparacaoRanking(false);
+                    }
+                });
+            });
         });
+    }
+
+    private void concluirPreparacaoRanking(boolean sucesso) {
+        preparandoRanking = false;
+        if (sucesso) {
+            tentativasPreparacaoRanking = 0;
+            return;
+        }
+
+        if (telaAtiva && tentativasPreparacaoRanking < MAX_TENTATIVAS_PREPARACAO_RANKING) {
+            long atrasoMs = 10_000L * tentativasPreparacaoRanking;
+            handlerPreparacaoRanking.postDelayed(tentarPrepararRanking, atrasoMs);
+            return;
+        }
+
+        erroNoRanking = true;
+        erroNosMoradores = true;
+        atualizarRanking();
     }
 
     private void carregarRanking(int condominioId) {
@@ -174,7 +251,8 @@ public final class SindicoRankingActivity extends AppCompatActivity {
                     erroNoRanking = false;
                     erroNosMoradores = false;
                     atualizarRanking();
-                    carregarRankingComPerfil();
+                    tentativasPreparacaoRanking = 0;
+                    prepararSessaoERanking();
                 });
             } else {
                 EstadoTela.vazio(lista, R.string.sindico_ranking_vazio);
