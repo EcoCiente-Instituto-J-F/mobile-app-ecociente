@@ -3,6 +3,9 @@ package com.example.ecociente.views;
 import com.example.ecociente.repository.AquecimentoDasApis;
 import com.example.ecociente.notifications.PermissaoNotificacoes;
 import com.example.ecociente.repository.PerfilApiRepository;
+import com.example.ecociente.repository.AutenticacaoExternaRepository;
+import android.os.Handler;
+import android.os.Looper;
 import com.example.ecociente.ui.Motion;
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,7 +44,14 @@ import com.example.ecociente.ui.AvatarPerfil;
 import com.google.firebase.auth.FirebaseUser;
 
 public final class SindicoHomeActivity extends AppCompatActivity {
+    private static final int MAX_TENTATIVAS_PREPARACAO_RANKING = 3;
+
     private SindicoViewModel viewModel;
+    private final Handler handlerPreparacaoRanking = new Handler(Looper.getMainLooper());
+    private final Runnable tentarPrepararRanking = this::prepararRanking;
+    private boolean telaAtiva;
+    private boolean preparandoRanking;
+    private int tentativasPreparacaoRanking;
 
     private CalendarioViewModel calendarioViewModel;
     private SemanaColetasView semana;
@@ -49,9 +59,26 @@ public final class SindicoHomeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        telaAtiva = true;
+        tentativasPreparacaoRanking = 0;
+        prepararRanking();
+
         if (calendarioViewModel != null && calendarioViewModel.getColetasDaSemana().getValue() != null) {
             calendarioViewModel.carregarSemana();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        telaAtiva = false;
+        handlerPreparacaoRanking.removeCallbacks(tentarPrepararRanking);
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        handlerPreparacaoRanking.removeCallbacks(tentarPrepararRanking);
+        super.onDestroy();
     }
 
     @Override
@@ -240,7 +267,68 @@ public final class SindicoHomeActivity extends AppCompatActivity {
                     SindicoPosicaoRanking.pontos(posicoes));
         });
 
-        viewModel.carregarRankingTorres(5);
+    }
+
+    // Primeiro valida a sessão externa, depois atualiza o perfil e só então consulta o ranking.
+    private void prepararRanking() {
+        if (!telaAtiva || preparandoRanking || viewModel == null || isFinishing() || isDestroyed()) {
+            return;
+        }
+
+        preparandoRanking = true;
+        tentativasPreparacaoRanking++;
+
+        AutenticacaoExternaRepository.garantirPerfilComResultado(this, pronta -> {
+            if (isFinishing() || isDestroyed() || !telaAtiva) {
+                preparandoRanking = false;
+                return;
+            }
+
+            if (!pronta) {
+                concluirPreparacaoRanking(false);
+                return;
+            }
+
+            new PerfilApiRepository().atualizarSeNecessario(this, () -> {
+                if (isFinishing() || isDestroyed() || !telaAtiva) {
+                    preparandoRanking = false;
+                    return;
+                }
+
+                if (PerfilApiRepository.condominioId(this) > 0) {
+                    concluirPreparacaoRanking(true);
+                    viewModel.carregarRankingTorres(5);
+                    return;
+                }
+
+                // Cache sem vínculo pode estar desatualizado: força uma leitura autenticada de /me.
+                new PerfilApiRepository().atualizar(this, () -> {
+                    if (isFinishing() || isDestroyed() || !telaAtiva) {
+                        preparandoRanking = false;
+                        return;
+                    }
+
+                    boolean possuiCondominio = PerfilApiRepository.condominioId(this) > 0;
+                    concluirPreparacaoRanking(possuiCondominio);
+                    if (possuiCondominio) {
+                        viewModel.carregarRankingTorres(5);
+                    }
+                });
+            });
+        });
+    }
+
+    private void concluirPreparacaoRanking(boolean sucesso) {
+        preparandoRanking = false;
+        if (sucesso) {
+            tentativasPreparacaoRanking = 0;
+            return;
+        }
+
+        if (telaAtiva && tentativasPreparacaoRanking < MAX_TENTATIVAS_PREPARACAO_RANKING) {
+            long atrasoMs = 10_000L * tentativasPreparacaoRanking;
+            handlerPreparacaoRanking.postDelayed(tentarPrepararRanking, atrasoMs);
+        }
     }
 
     private void exibirRanking(String[] blocos, String[] iniciais, int[] pontos) {
